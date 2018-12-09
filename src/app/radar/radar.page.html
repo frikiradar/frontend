@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Radar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p padding>Estos son los resultados obtenidos en un radio de 25km con un porcentaje (%) de coincidencia más alto.</p>
+  <ion-list>
+    <ion-item (click)="showProfile()">
+      <ion-avatar slot="start">
+        <img src="/src/images/users/j-chan.png">
+      </ion-avatar>
+      <ion-label>
+        <h2>Jay-chan, 27</h2>
+        <h3>Madrid, a 3km</h3>
+        <p>Visitando la ciudad por unas semanas...</p>
+      </ion-label>
+      <ion-note slot="end">95%</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="/src/images/users/leia.png">
+      </ion-avatar>
+      <ion-label>
+        <h2>Leia, 33</h2>
+        <h3>Madrid, a 4.7km</h3>
+        <p>Buscando el amor en las galaxias</p>
+      </ion-label>
+      <ion-note slot="end">90%</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="/src/images/users/joy.png">
+      </ion-avatar>
+      <ion-label>
+        <h2>Joy Nurse, 30</h2>
+        <h3>Madrid, a 5km</h3>
+        <p>Me encanta cuidar animales enfermos 🦁</p>
+      </ion-label>
+      <ion-note slot="end">88%</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="/src/images/users/harley.png">
+      </ion-avatar>
+      <ion-label>
+        <h2>Harley Queen, 29</h2>
+        <h3>Madrid, a 1.2km</h3>
+        <p>Me encantaría hacer locuras contigo!!</p>
+      </ion-label>
+      <ion-note slot="end">86%</ion-note>
+    </ion-item>
+  </ion-list>
+
+  <div id="radar-range" padding>
+    <ion-range min="0" max="5" step="1" snaps="true">
+        <ion-icon slot="end" name="globe"></ion-icon>
+    </ion-range>
+    <ion-grid id="range-distance">
+        <ion-row>
+          <ion-col>5km</ion-col>
+          <ion-col>25km</ion-col>
+          <ion-col>100km</ion-col>
+          <ion-col>500km</ion-col>
+          <ion-col>1000km</ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

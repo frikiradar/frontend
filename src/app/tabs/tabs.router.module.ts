@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TabsPage } from './tabs.page';
-import { HomePage } from '../home/home.page';
-import { AboutPage } from '../about/about.page';
-import { ContactPage } from '../contact/contact.page';
+import { RadarPage } from '../radar/radar.page';
+import { ChatPage } from '../chat/chat.page';
+import { NotificationsPage } from '../notifications/notifications.page';
 
 const routes: Routes = [
   {
@@ -13,29 +13,29 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/tabs/(home:home)',
+        redirectTo: '/tabs/(radar:radar)',
         pathMatch: 'full',
       },
       {
-        path: 'home',
-        outlet: 'home',
-        component: HomePage
+        path: 'radar',
+        outlet: 'radar',
+        component: RadarPage,
       },
       {
-        path: 'about',
-        outlet: 'about',
-        component: AboutPage
+        path: 'chat',
+        outlet: 'chat',
+        component: ChatPage
       },
       {
-        path: 'contact',
-        outlet: 'contact',
-        component: ContactPage
+        path: 'notifications',
+        outlet: 'notifications',
+        component: NotificationsPage
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/(home:home)',
+    redirectTo: '/tabs/(radar:radar)',
     pathMatch: 'full'
   }
 ];

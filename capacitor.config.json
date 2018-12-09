@@ -1,0 +1,6 @@
+{
+  "appId": "com.frikiradar.app",
+  "appName": "FrikiRadar",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}
