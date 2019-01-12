@@ -1,15 +1,15 @@
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { IonicModule } from "@ionic/angular";
 
-import { TabsPageRoutingModule } from './tabs.router.module';
+import { TabsPageRoutingModule } from "./tabs.router.module";
 
-import { TabsPage } from './tabs.page';
-import { RadarPageModule } from '../radar/radar.module';
-import { ChatPageModule } from '../chat/chat.module';
-import { NotificationsPageModule } from '../notifications/notifications.module';
+import { ChatPageModule } from "../pages/chat/chat.module";
+import { NotificationsPageModule } from "../pages/notifications/notifications.module";
+import { RadarPageModule } from "../pages/radar/radar.module";
+import { TabsPage } from "./tabs.page";
 
 @NgModule({
   imports: [

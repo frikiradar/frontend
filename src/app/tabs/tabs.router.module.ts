@@ -1,42 +1,42 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
 
-import { TabsPage } from './tabs.page';
-import { RadarPage } from '../radar/radar.page';
-import { ChatPage } from '../chat/chat.page';
-import { NotificationsPage } from '../notifications/notifications.page';
+import { ChatPage } from "../pages/chat/chat.page";
+import { NotificationsPage } from "../pages/notifications/notifications.page";
+import { RadarPage } from "../pages/radar/radar.page";
+import { TabsPage } from "./tabs.page";
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: "tabs",
     component: TabsPage,
     children: [
       {
-        path: '',
-        redirectTo: '/tabs/(radar:radar)',
-        pathMatch: 'full',
+        path: "",
+        redirectTo: "/app/tabs/(radar:radar)",
+        pathMatch: "full"
       },
       {
-        path: 'radar',
-        outlet: 'radar',
-        component: RadarPage,
+        path: "radar",
+        outlet: "radar",
+        component: RadarPage
       },
       {
-        path: 'chat',
-        outlet: 'chat',
+        path: "chat",
+        outlet: "chat",
         component: ChatPage
       },
       {
-        path: 'notifications',
-        outlet: 'notifications',
+        path: "notifications",
+        outlet: "notifications",
         component: NotificationsPage
       }
     ]
   },
   {
-    path: '',
-    redirectTo: '/tabs/(radar:radar)',
-    pathMatch: 'full'
+    path: "",
+    redirectTo: "/app/tabs/(radar:radar)",
+    pathMatch: "full"
   }
 ];
 

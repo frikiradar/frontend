@@ -1,0 +1,57 @@
+<ion-content padding>
+  <img
+    src="./assets/img/logo/logo_transparente.png"
+    style="width: 150px; display: block; margin-left: auto; margin-right: auto;"
+  />
+  <h1>Hola,</h1>
+  <h3>Te doy la bienvenida a FrikiRadar</h3>
+
+  <div id="login">
+    <h3>Ya tengo una cuenta</h3>
+    <form (ngSubmit)="submitLogin()">
+      <ion-item>
+        <ion-input
+          required
+          type="text"
+          placeholder="Nombre de usuario o correo electrónico"
+          [(ngModel)]="loginForm.username"
+          name="username"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          required
+          type="password"
+          placeholder="Contraseña"
+          [(ngModel)]="loginForm.password"
+          name="password"
+        ></ion-input>
+      </ion-item>
+      <ion-button color="primary" type="submit" expand="full"
+        >Iniciar sesión</ion-button
+      >
+    </form>
+    <p text-center>
+      No tengo una cuenta,
+      <a href="#" (click)="registerPrompt()">quiero registrarme</a>
+    </p>
+  </div>
+  <div id="loginvia">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <a href="#"> <img src="./assets/img/layout/google.png" /> </a>
+        </ion-col>
+        <ion-col>
+          <a href="#"> <img src="./assets/img/layout/twitch.png" /> </a>
+        </ion-col>
+        <ion-col>
+          <a href="#"> <img src="./assets/img/layout/facebook.png" /> </a>
+        </ion-col>
+        <ion-col>
+          <a href="#"> <img src="./assets/img/layout/steam.png" /> </a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

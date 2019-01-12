@@ -1,5 +1,8 @@
 {
-  "name": "frontend",
-  "integrations": {},
+  "name": "FrikiRadar",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
   "type": "angular"
 }

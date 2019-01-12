@@ -1,0 +1,62 @@
+ion-card {
+    &.from {
+        margin-left: 40px;
+        color: #353535;
+    }
+
+    &.to {
+        margin-right: 40px;
+    }
+
+    border-radius: 30px;
+
+    ion-note {
+        float: right;
+        color: #353535;
+    }
+}
+
+ion-footer {
+    ion-textarea {
+        background: white;
+        border-radius: 30px;
+        margin-left: 50px;
+        height: 40px;
+        padding-right: 40px;
+    }
+
+    ion-label {
+        position: absolute;
+        z-index: 2;
+        right: 20px;
+        width: 30px !important;
+        min-width: 0px !important;
+        margin: 2px 0 !important;
+
+        ion-icon {
+            font-size: 30px;
+        }
+    }
+
+    #emoji-button {
+        height: 40px;
+        position: absolute;
+        top: 6px;
+
+        ion-icon {
+            background-color: white;
+            border-radius: 80px;
+            font-size: 40px;
+        }
+    }
+}
+
+::ng-deep {
+    emoji-picker {
+        position: relative !important;
+
+        emoji-content {
+            width: 100% !important;
+        }
+    }
+}

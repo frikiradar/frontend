@@ -10,7 +10,7 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-ion-content, ion-toolbar, ion-tab-bar {
+ion-content, ion-toolbar, ion-tab-bar, ion-list {
     --background: #1a1a1a;
     color: white;
 }
@@ -26,4 +26,11 @@ ion-item {
 
 .button-native {
     text-transform: lowercase;
+}
+
+ion-header {
+    ion-avatar {
+        width: 32px;
+        height: 32px;
+    }
 }
