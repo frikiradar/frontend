@@ -89,7 +89,7 @@ deploy-prod:
   tags:
     - deploy-frontend
   script:
-    - cp -af dist/ /var/www/vhosts/frikiradar.com/httpdocs/app/
+    - cp -af dist/ /root/frontend-static/
   only:
     - master
   environment:
