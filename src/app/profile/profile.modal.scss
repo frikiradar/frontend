@@ -1,0 +1,20 @@
+ion-list {
+  background: transparent;
+
+  ion-icon {
+    color: white;
+    margin-right: 15px;
+  }
+
+  ion-label {
+    --color: white;
+  }
+}
+
+ion-toolbar {
+  --opacity: 0;
+}
+
+ion-content {
+  position: absolute;
+}

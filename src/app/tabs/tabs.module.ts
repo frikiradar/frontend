@@ -6,9 +6,9 @@ import { IonicModule } from "@ionic/angular";
 
 import { TabsPageRoutingModule } from "./tabs.router.module";
 
-import { ChatPageModule } from "../pages/chat/chat.module";
-import { NotificationsPageModule } from "../pages/notifications/notifications.module";
-import { RadarPageModule } from "../pages/radar/radar.module";
+import { ChatPageModule } from "../chat/chat.module";
+import { NotificationsPageModule } from "../notifications/notifications.module";
+import { RadarPageModule } from "../radar/radar.module";
 import { TabsPage } from "./tabs.page";
 
 @NgModule({

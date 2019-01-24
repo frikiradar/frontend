@@ -1,0 +1,119 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Mi Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <form (submit)="submitProfile()" [formGroup]="profileForm">
+    <ion-item>
+      <ion-textarea
+        placeholder="Descripción"
+        formControlName="description"
+      ></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>Fecha de nacimiento</ion-label>
+      <ion-datetime
+        min="1900-01"
+        max="{{ (today | date: 'y') - 18 }}"
+        cancel-text="Cancelar"
+        done-text="Hecho"
+        displayFormat="DD MMM de YYYY"
+        monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+        formControlName="birthday"
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Identidad de género</ion-label>
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="gender"
+      >
+        <ion-select-option value="">Sin indicar</ion-select-option>
+        <ion-select-option
+          *ngFor="let gender of userSvc.getGenders()"
+          [value]="gender"
+          >{{ gender }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Orientación sexual</ion-label>
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="orientation"
+      >
+        <ion-select-option value="" selected>Sin indicar</ion-select-option>
+        <ion-select-option
+          *ngFor="let orientation of userSvc.getOrientations()"
+          [value]="orientation"
+          >{{ orientation }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Pronombre</ion-label>
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="pronoun"
+      >
+        <ion-select-option value="" selected>Sin indicar</ion-select-option>
+        <ion-select-option
+          *ngFor="let pronoun of userSvc.getPronouns()"
+          [value]="pronoun"
+          >{{ pronoun }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Tipo de relación</ion-label>
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="relationship"
+      >
+        <ion-select-option value="" selected>Sin indicar</ion-select-option>
+        <ion-select-option
+          *ngFor="let type of userSvc.getRelationships()"
+          [value]="type"
+          >{{ type }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="status"
+      >
+        <ion-select-option value="" selected>Sin indicar</ion-select-option>
+        <ion-select-option
+          *ngFor="let status of userSvc.getStatus()"
+          [value]="status"
+          >{{ status }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-button
+      color="primary"
+      type="submit"
+      [disabled]="!profileForm.valid"
+      expand="block"
+      >Guardar cambios</ion-button
+    >
+  </form>
+</ion-content>

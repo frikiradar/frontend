@@ -1,18 +1,15 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
+import { AuthGuard } from "./guards/auth.guard";
+
 const routes: Routes = [
-  { path: "", loadChildren: "./pages/login/login.module#LoginPageModule" },
-  { path: "app", loadChildren: "./tabs/tabs.module#TabsPageModule" },
   {
-    path: "app/profile",
-    loadChildren: "./pages/profile/profile.module#ProfilePageModule"
+    path: "",
+    loadChildren: "./tabs/tabs.module#TabsPageModule",
+    canActivate: [AuthGuard]
   },
-  {
-    path: "chat-dialog",
-    loadChildren:
-      "./pages/chat/chat-dialog/chat-dialog.module#ChatDialogPageModule"
-  }
+  { path: "login", loadChildren: "./login/login.module#LoginPageModule" }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

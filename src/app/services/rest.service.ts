@@ -11,13 +11,13 @@ const httpOptions = {
   providedIn: "root"
 })
 export class RestService {
-  private root = environment.root;
+  private apiUrl = environment.apiUrl;
 
   constructor(public http: HttpClient) {}
 
   get(endpoint: string) {
     return new Promise(resolve => {
-      this.http.get(`${this.root}/${endpoint}`).subscribe(
+      this.http.get(`${this.apiUrl}${endpoint}`).subscribe(
         data => {
           resolve(data);
         },
@@ -29,16 +29,19 @@ export class RestService {
   }
 
   post(endpoint: string, data) {
-    return this.http.post(`${this.root}/${endpoint}`, JSON.stringify(data), {
-      headers: new HttpHeaders().set("Authorization", "token"),
-      params: new HttpParams().set("id", "3")
-    });
+    return this.http.post(
+      `${this.apiUrl}${endpoint}`,
+      JSON.stringify(data),
+      httpOptions
+    );
   }
 
   put(endpoint: string, data) {
-    return this.http.put(`${this.root}/${endpoint}`, JSON.stringify(data), {
-      headers: new HttpHeaders().set("Authorization", "token"),
-      params: new HttpParams().set("id", "3")
+    return this.http.put(`${this.apiUrl}${endpoint}`, JSON.stringify(data), {
+      headers: httpOptions.headers.set(
+        "Authorization",
+        `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
+      )
     });
   }
 }

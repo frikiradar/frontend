@@ -1,49 +1,78 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
 import { environment } from "../../environments/environment";
+import { User } from "./../models/user";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
 };
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class AuthService {
-  private root = environment.root;
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
 
-  constructor(public http: HttpClient) {}
-
-  login(username: string, password: string) {
-    return this.http
-      .post(`${this.root}login`, { username, password }, httpOptions)
-      .pipe(
-        map((r: { token: string }) => localStorage.setItem("token", r.token))
-      );
+  constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User>(
+      JSON.parse(localStorage.getItem("currentUser"))
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  register(username: string, email: string, password: string) {
+  public get currentUserValue(): User {
+    return this.currentUserSubject.value;
+  }
+
+  async login(username: string, password: string) {
+    try {
+      const token = await this.http
+        .post(
+          `${environment.root}api/login`,
+          { username, password },
+          httpOptions
+        )
+        .pipe(
+          map((data: { token: string }) => {
+            return data.token;
+          })
+        )
+        .toPromise();
+
+      return await this.getAuthUser(token);
+    } catch (e) {
+      throw new Error("Credenciales incorrectas");
+    }
+  }
+
+  getAuthUser(token?: string) {
+    if (!token) {
+      token = JSON.parse(localStorage.getItem("currentUser")).token;
+    }
+
     return this.http
-      .post(`${this.root}register`, { username, email, password }, httpOptions)
+      .get(`${environment.root}api/v1/user`, {
+        headers: httpOptions.headers.set("Authorization", `Bearer ${token}`)
+      })
       .pipe(
-        map((r: { token: string }) => localStorage.setItem("token", r.token))
-      );
+        map((user: User) => {
+          user.token = token;
+          localStorage.setItem("currentUser", JSON.stringify(user));
+          return user;
+        })
+      )
+      .toPromise();
+  }
+
+  doLogin(user: User) {
+    this.currentUserSubject.next(user);
   }
 
   logout() {
-    return new Promise((resolve, reject) => {
-      httpOptions.headers.append("X-Auth-Token", localStorage.getItem("token"));
-
-      this.http.post(`${this.root}/logout`, {}, httpOptions).subscribe(
-        res => {
-          localStorage.clear();
-        },
-        err => {
-          reject(err);
-        }
-      );
-    });
+    // remove user from local storage to log user out
+    localStorage.removeItem("currentUser");
+    this.currentUserSubject.next(undefined);
   }
 }

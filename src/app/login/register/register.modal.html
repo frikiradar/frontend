@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <h1>¿Cómo? ¿Que aún no tienes una cuenta?</h1>
+  <h4>
+    Pasa, pasa. ¡Ya te queda muy muy poco para comenzar a conocer frikis en tu
+    zona!
+  </h4>
+
+  <form (ngSubmit)="submitRegister()">
+    <ion-item>
+      <ion-input
+        required
+        type="text"
+        placeholder="Nombre de usuario"
+        [(ngModel)]="registerForm.username"
+        name="username"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        required
+        type="email"
+        placeholder="Correo electrónico"
+        [(ngModel)]="registerForm.email"
+        name="email"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        required
+        type="password"
+        placeholder="Contraseña"
+        [(ngModel)]="registerForm.password"
+        name="password"
+      ></ion-input>
+    </ion-item>
+    <ion-button color="primary" type="submit" expand="block" class="dismiss"
+      >Registrarme</ion-button
+    >
+  </form>
+</ion-content>

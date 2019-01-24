@@ -1,7 +1,10 @@
 import { Component } from "@angular/core";
-
+import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
 import { Platform } from "@ionic/angular";
+
+import { User } from "./models/user";
+import { AuthService } from "./services/auth.service";
 
 const { StatusBar, SplashScreen } = Plugins;
 
@@ -10,8 +13,15 @@ const { StatusBar, SplashScreen } = Plugins;
   templateUrl: "app.component.html"
 })
 export class AppComponent {
-  constructor(private platform: Platform) {
+  currentUser: User;
+
+  constructor(
+    private router: Router,
+    private platform: Platform,
+    private auth: AuthService
+  ) {
     this.initializeApp();
+    this.auth.currentUser.subscribe(x => (this.currentUser = x));
   }
 
   initializeApp() {

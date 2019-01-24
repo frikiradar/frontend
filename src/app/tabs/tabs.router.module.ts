@@ -1,9 +1,5 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-
-import { ChatPage } from "../pages/chat/chat.page";
-import { NotificationsPage } from "../pages/notifications/notifications.page";
-import { RadarPage } from "../pages/radar/radar.page";
 import { TabsPage } from "./tabs.page";
 
 const routes: Routes = [
@@ -12,30 +8,43 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: "",
-        redirectTo: "/app/tabs/(radar:radar)",
-        pathMatch: "full"
-      },
-      {
         path: "radar",
-        outlet: "radar",
-        component: RadarPage
+        children: [
+          {
+            path: "",
+            loadChildren: "../radar/radar.module#RadarPageModule"
+          }
+        ]
       },
       {
         path: "chat",
-        outlet: "chat",
-        component: ChatPage
+        children: [
+          {
+            path: "",
+            loadChildren: "../chat/chat.module#ChatPageModule"
+          }
+        ]
       },
       {
         path: "notifications",
-        outlet: "notifications",
-        component: NotificationsPage
+        children: [
+          {
+            path: "",
+            loadChildren:
+              "../notifications/notifications.module#NotificationsPageModule"
+          }
+        ]
+      },
+      {
+        path: "",
+        redirectTo: "/tabs/radar",
+        pathMatch: "full"
       }
     ]
   },
   {
     path: "",
-    redirectTo: "/app/tabs/(radar:radar)",
+    redirectTo: "/tabs/radar",
     pathMatch: "full"
   }
 ];

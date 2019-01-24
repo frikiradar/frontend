@@ -10,27 +10,68 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-ion-content, ion-toolbar, ion-tab-bar, ion-list {
-    --background: #1a1a1a;
-    color: white;
+ion-content,
+ion-toolbar,
+ion-tab-bar,
+ion-list {
+  --background: #1a1a1a;
+  color: white;
+  a {
+    text-decoration: none;
+  }
+  display: inherit;
 }
 
-h1,h2,h3,h4,h5,p {
-    color: white;
-    font-weight: normal;
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  color: white;
+  font-weight: normal;
 }
 
 ion-item {
-    --background: transparent;
+  --background: transparent;
 }
 
 .button-native {
-    text-transform: lowercase;
+  text-transform: lowercase;
 }
 
 ion-header {
-    ion-avatar {
-        width: 32px;
-        height: 32px;
-    }
+  ion-avatar {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+[padding] {
+  --background: #1a1a1a;
+  --padding-start: var(--ion-padding, 32px);
+  --padding-end: var(--ion-padding, 32px);
+  --padding-top: var(--ion-padding, 32px);
+  --padding-bottom: var(--ion-padding, 32px);
+}
+
+ion-input,
+ion-textarea,
+ion-select,
+ion-datetime {
+  --placeholder-color: #9c2c51 !important;
+  --color: #e91e63 !important;
+  color: #e91e63 !important;
+  --placeholder-opacity: 1 !important;
+}
+
+form {
+  ion-item {
+    --padding-start: 0px !important;
+    --highlight-color-invalid: #e91e63;
+    --background-focused: transparent;
+  }
+  ion-label {
+    --color: white !important;
+  }
 }
