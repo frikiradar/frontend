@@ -13,13 +13,13 @@ cache:
 before_script:
   - npm ci
 
-build-pre:
+build-dev:
   stage: build
   retry: 1
   except:
     - master
   script:
-    - npm run ng build -- --configuration=pre --progress false --output-path=dist
+    - npm run ng build -- --configuration=dev --progress false --output-path=dist
   artifacts:
     paths:
       - dist/
@@ -66,19 +66,19 @@ lint:
     paths:
       - codeclimate.json
 
-deploy-pre:
+deploy-dev:
   stage: deploy
   retry: 1
   dependencies:
-    - build-pre
+    - build-dev
   tags:
-    - deploy
+    - deploy-dev-frontend
   script:
     - cp -af dist/ /root/frontend-static/
   only:
     - develop
   environment:
-    name: pre
+    name: dev
     url: https://dev.frikiradar.com
 
 deploy-prod:
@@ -87,9 +87,9 @@ deploy-prod:
   dependencies:
     - build-pro
   tags:
-    - deploy-prod
+    - deploy-frontend
   script:
-    - cp -af dist/ /root/frontend-static/
+    - cp -af dist/ /var/www/vhosts/frikiradar.com/httpdocs/app
   only:
     - master
   environment:
