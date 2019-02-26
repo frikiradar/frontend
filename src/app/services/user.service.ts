@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
 import { RestService } from "./rest.service";
+import { UploadService } from "./upload.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -11,12 +12,20 @@ const httpOptions = {
 
 @Injectable({ providedIn: "root" })
 export class UserService {
-  constructor(private http: HttpClient, private rest: RestService) {}
+  constructor(
+    private http: HttpClient,
+    private rest: RestService,
+    private uploadSvc: UploadService
+  ) {}
 
   async register(username: string, email: string, password: string) {
     try {
-      return await this.rest
-        .post("register", { username, email, password })
+      return await this.http
+        .post(
+          `${environment.root}api/register`,
+          { username, email, password },
+          httpOptions
+        )
         .toPromise();
     } catch (e) {
       throw new Error("Ya hay un usuario registrado con estos datos");
@@ -27,15 +36,16 @@ export class UserService {
     try {
       return await this.rest.put("user", user).toPromise();
     } catch (e) {
-      throw new Error("Ya hay un usuario registrado con estos datos");
+      throw new Error("No se puede actualizar el usuario");
     }
   }
 
   async uploadAvatar(file: File) {
-    const formData: FormData = new FormData();
-    formData.append("avatar", file, file.name);
     try {
-      return await this.rest.post("avatar", formData).toPromise();
+      const formData: FormData = new FormData();
+      formData.set("avatar", file);
+
+      return await this.uploadSvc.upload("avatar", formData).toPromise();
     } catch (e) {
       throw new Error("Error al subir el avatar");
     }
@@ -91,6 +101,15 @@ export class UserService {
       "Pangénero",
       "Poligénero",
       "Intergénero"
+    ];
+  }
+
+  getConnections() {
+    return [
+      "Amistad",
+      "Sexo ocasional",
+      "Amistad con derechos",
+      "Pareja formal"
     ];
   }
 }

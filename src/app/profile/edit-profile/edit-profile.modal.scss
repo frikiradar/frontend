@@ -1,0 +1,41 @@
+ion-segment-button {
+  --background: #1a1a1a;
+  background: #1a1a1a;
+  --color: white;
+  text-transform: none;
+}
+
+ion-list {
+  background: transparent;
+
+  .category-header ion-icon {
+    color: white;
+    margin-right: 5px;
+  }
+}
+
+ion-slide {
+  display: block;
+}
+
+.swiper-slide {
+  text-align: left;
+}
+
+form ion-icon {
+  color: white;
+  margin-right: 10px;
+}
+
+#file-input {
+  display: none;
+}
+
+#camera-icon {
+  position: relative;
+  float: right;
+  margin-top: -60px;
+  padding: 10px;
+  color: #ffffff;
+  opacity: 0.4;
+}

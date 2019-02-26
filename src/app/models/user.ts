@@ -1,3 +1,5 @@
+import { Tag } from "./tags";
+
 export interface User {
   id: number;
   username: string;
@@ -9,9 +11,19 @@ export interface User {
   pronoun: string;
   relationship: string;
   status: string;
+
+  lovegender: string[];
+  minage: number;
+  maxage: number;
+  connection: string[];
+
   latitude: number;
   longitude: number;
 
   password?: string;
   token?: string;
+
+  tags: Tag[];
+
+  avatar: string;
 }
