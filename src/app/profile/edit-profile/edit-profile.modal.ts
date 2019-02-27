@@ -1,13 +1,14 @@
 import { Component, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { Plugins } from "@capacitor/core";
+// import { Crop } from "@ionic-native/crop/ngx";
 import {
   ActionSheetController,
   IonInput,
   IonSegment,
   IonSlides,
   ModalController,
-  PickerController,
-  ToastController
+  PickerController
 } from "@ionic/angular";
 
 import { Tag } from "../../models/tags";
@@ -15,6 +16,8 @@ import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
 import { AuthService } from "./../../services/auth.service";
 import { TagService } from "./../../services/tag.service";
+
+const { Toast } = Plugins;
 
 @Component({
   selector: "app-edit-profile",
@@ -49,8 +52,7 @@ export class EditProfileModal {
     private tagSvc: TagService,
     private auth: AuthService,
     private picker: PickerController,
-    public sheet: ActionSheetController,
-    private toast: ToastController
+    public sheet: ActionSheetController
   ) {
     this.profileForm = fb.group({
       description: [""],
@@ -98,17 +100,13 @@ export class EditProfileModal {
       this.user = await this.userSvc.updateUser(this.user);
       this.tags = this.user.tags;
 
-      const toast = await this.toast.create({
-        message: "Cambios guardados correctamente",
-        duration: 1000
+      await Toast.show({
+        text: "Cambios guardados correctamente"
       });
-      toast.present();
     } catch (e) {
-      const toast = await this.toast.create({
-        message: `Error al guardar los cambios ${e}`,
-        duration: 1000
+      await Toast.show({
+        text: `Error al guardar los cambios ${e}`
       });
-      toast.present();
     }
     this.closeModal();
   }
@@ -246,11 +244,9 @@ export class EditProfileModal {
     try {
       this.user = await this.userSvc.updateUser(this.user);
     } catch (e) {
-      const toast = await this.toast.create({
-        message: `Error al guardar la etiqueta ${e}`,
-        duration: 1000
+      await Toast.show({
+        text: `Error al guardar la etiqueta ${e}`
       });
-      toast.present();
     }
   }
 

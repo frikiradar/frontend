@@ -1,15 +1,13 @@
 import { Component } from "@angular/core";
-import {
-  AlertController,
-  ModalController,
-  NavParams,
-  ToastController
-} from "@ionic/angular";
+import { Plugins } from "@capacitor/core";
+import { AlertController, ModalController, NavParams } from "@ionic/angular";
 
 import { Router } from "@angular/router";
 import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "./../../services/user.service";
+
+const { Toast } = Plugins;
 
 @Component({
   selector: "register-modal",
@@ -29,8 +27,7 @@ export class RegisterModal {
     public modal: ModalController,
     private userSvc: UserService,
     private alert: AlertController,
-    private auth: AuthService,
-    private toast: ToastController
+    private auth: AuthService
   ) {
     this.registerForm.username = this.navParams.get("username");
   }
@@ -63,11 +60,9 @@ export class RegisterModal {
 
   async registerSuccess(user: User) {
     this.auth.doLogin(user);
-    const toast = await this.toast.create({
-      message: "Registro realizado correctamente",
-      duration: 1000
+    await Toast.show({
+      text: "Registro realizado correctamente"
     });
-    toast.present();
     this.router.navigate(["/"]);
     this.modal.dismiss();
   }

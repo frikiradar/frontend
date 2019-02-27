@@ -1,14 +1,13 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import {
-  AlertController,
-  ModalController,
-  ToastController
-} from "@ionic/angular";
+import { Plugins } from "@capacitor/core";
+import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
 import { RegisterModal } from "./register/register.modal";
+
+const { Toast } = Plugins;
 
 @Component({
   selector: "app-login",
@@ -24,7 +23,6 @@ export class LoginPage {
   constructor(
     private router: Router,
     private auth: AuthService,
-    private toast: ToastController,
     private alert: AlertController,
     private modal: ModalController
   ) {
@@ -55,11 +53,9 @@ export class LoginPage {
 
   async loginSuccess(user: User) {
     this.auth.doLogin(user);
-    const toast = await this.toast.create({
-      message: "Accediendo a FrikiRadar",
-      duration: 1000
+    await Toast.show({
+      text: "Accediendo a FrikiRadar"
     });
-    toast.present();
     this.router.navigate(["/"]);
   }
 

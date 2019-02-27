@@ -4,8 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 export const environment = {
   production: false,
-  root: "http://localhost:8000/",
-  apiUrl: "http://localhost:8000/api/v1/"
+  root: "https://app.frikiradar.com/",
+  apiUrl: "https://app.frikiradar.com/api/v1/"
 };
 
 /*
