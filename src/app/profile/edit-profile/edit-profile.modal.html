@@ -10,8 +10,11 @@
 </ion-header>
 <ion-content fullscreen>
   <div>
-    <img src="./assets/img/users/albertoi.jpg" />
-    <input
+    <img [src]="image" />
+    <ion-button (click)="takePicture()">
+      <ion-icon name="camera" size="large"></ion-icon>
+    </ion-button>
+    <!----<input
       type="file"
       accept="image/*"
       capture="camera"
@@ -21,7 +24,7 @@
     />
     <label for="file-input" icon-only button id="camera-icon">
       <ion-icon name="camera" size="large"></ion-icon>
-    </label>
+    </label>-->
   </div>
   <ion-segment
     (ionChange)="showSegment($event.detail.value)"

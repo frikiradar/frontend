@@ -1,7 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { Plugins } from "@capacitor/core";
-// import { Crop } from "@ionic-native/crop/ngx";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { CameraResultType, Plugins } from "@capacitor/core";
 import {
   ActionSheetController,
   IonInput,
@@ -17,7 +17,7 @@ import { UserService } from "../../services/user.service";
 import { AuthService } from "./../../services/auth.service";
 import { TagService } from "./../../services/tag.service";
 
-const { Toast } = Plugins;
+const { Toast, Camera } = Plugins;
 
 @Component({
   selector: "app-edit-profile",
@@ -38,6 +38,8 @@ export class EditProfileModal {
   @ViewChild("music")
   music: IonInput;
 
+  image: SafeResourceUrl = "./assets/img/users/albertoi.jpg";
+
   public profileForm: FormGroup;
   public today: number = Date.now();
   private user: Partial<User>;
@@ -52,7 +54,8 @@ export class EditProfileModal {
     private tagSvc: TagService,
     private auth: AuthService,
     private picker: PickerController,
-    public sheet: ActionSheetController
+    public sheet: ActionSheetController,
+    private sanitizer: DomSanitizer
   ) {
     this.profileForm = fb.group({
       description: [""],
@@ -248,6 +251,16 @@ export class EditProfileModal {
         text: `Error al guardar la etiqueta ${e}`
       });
     }
+  }
+
+  async takePicture() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      resultType: CameraResultType.Uri,
+      saveToGallery: true
+    });
+
+    this.image = this.sanitizer.bypassSecurityTrustUrl(image.base64Data);
   }
 
   async uploadAvatar(files: FileList) {
