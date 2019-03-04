@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
+import { DownloadService } from "./download.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
@@ -15,7 +16,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private rest: RestService,
-    private uploadSvc: UploadService
+    private uploadSvc: UploadService,
+    private downloadSvc: DownloadService
   ) {}
 
   async register(username: string, email: string, password: string) {
@@ -41,13 +43,18 @@ export class UserService {
   }
 
   async uploadAvatar(file: File) {
-    try {
-      const formData: FormData = new FormData();
-      formData.set("avatar", file);
+    const formData: FormData = new FormData();
+    formData.set("avatar", file);
+    return await this.uploadSvc.upload("avatar", formData);
+  }
 
-      return await this.uploadSvc.upload("avatar", formData).toPromise();
+  async getAvatar(id: number) {
+    try {
+      // comprobar si pido el user de sesión y esta en localstorage sino
+      // pedirlo al endpoint
+      return await this.downloadSvc.download("avatar", id);
     } catch (e) {
-      throw new Error("Error al subir el avatar");
+      return "./assets/img/users/default.jpg";
     }
   }
 
@@ -57,8 +64,17 @@ export class UserService {
       .toPromise();
   }
 
-  getAll() {
-    return this.http.get<User[]>(`${environment.root}/users`);
+  async getRadarUsers(ratio: number) {
+    const users = await this.http
+      .get<User[]>(`${environment.apiUrl}radar/${ratio}`)
+      .toPromise();
+    users.map(user => {
+      this.getAvatar(user.id).then(avatar => {
+        user.avatar = avatar;
+      });
+    });
+
+    console.log(users);
   }
 
   getOrientations() {

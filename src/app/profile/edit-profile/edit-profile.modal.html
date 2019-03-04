@@ -11,9 +11,15 @@
 <ion-content fullscreen>
   <div>
     <img [src]="image" />
-    <ion-button (click)="takePicture()">
+    <ion-label
+      for="file-input"
+      icon-only
+      button
+      id="camera-icon"
+      (click)="openPictureSheet()"
+    >
       <ion-icon name="camera" size="large"></ion-icon>
-    </ion-button>
+    </ion-label>
     <!----<input
       type="file"
       accept="image/*"

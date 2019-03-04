@@ -6,19 +6,18 @@ import { environment } from "../../environments/environment";
 @Injectable({
   providedIn: "root"
 })
-export class UploadService {
+export class DownloadService {
   private apiUrl = environment.apiUrl;
 
   constructor(public http: HttpClient) {}
 
-  async upload(endpoint: string, data: FormData) {
+  async download(endpoint: string, id: number) {
     const params = new HttpParams();
 
     const blob = await this.http
-      .post(`${this.apiUrl}${endpoint}`, data, {
+      .get(`${this.apiUrl}${endpoint}/${id}`, {
         responseType: "blob",
-        params,
-        reportProgress: true
+        params
       })
       .toPromise();
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
 import { ModalController, PopoverController } from "@ionic/angular";
@@ -52,10 +53,13 @@ export class PopoverComponent {
   styleUrls: ["./radar.page.scss"]
 })
 export class RadarPage implements OnInit {
+  image: SafeResourceUrl = "./assets/img/users/default.jpg";
+
   constructor(
     private userSvc: UserService,
     public popover: PopoverController,
-    private modal: ModalController
+    private modal: ModalController,
+    private sanitizer: DomSanitizer
   ) {}
 
   async ngOnInit() {
@@ -64,6 +68,12 @@ export class RadarPage implements OnInit {
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
       this.userSvc.setCoordinates(longitude, latitude);
+
+      const id = JSON.parse(localStorage.getItem("currentUser")).id;
+      const img = await this.userSvc.getAvatar(id);
+      this.image = this.sanitizer.bypassSecurityTrustUrl(img);
+
+      this.userSvc.getRadarUsers(100000);
     } catch (e) {
       console.log(e);
     }

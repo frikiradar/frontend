@@ -1,7 +1,10 @@
 import { Component, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { CameraResultType, Plugins } from "@capacitor/core";
+import { CameraResultType, CameraSource, Plugins } from "@capacitor/core";
+import { Base64 } from "@ionic-native/base64/ngx";
+import { Crop } from "@ionic-native/crop/ngx";
+
 import {
   ActionSheetController,
   IonInput,
@@ -16,6 +19,7 @@ import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
 import { AuthService } from "./../../services/auth.service";
 import { TagService } from "./../../services/tag.service";
+import { UtilsService } from "./../../services/utils.service";
 
 const { Toast, Camera } = Plugins;
 
@@ -38,7 +42,7 @@ export class EditProfileModal {
   @ViewChild("music")
   music: IonInput;
 
-  image: SafeResourceUrl = "./assets/img/users/albertoi.jpg";
+  image: SafeResourceUrl = "./assets/img/users/default.jpg";
 
   public profileForm: FormGroup;
   public today: number = Date.now();
@@ -55,6 +59,9 @@ export class EditProfileModal {
     private auth: AuthService,
     private picker: PickerController,
     public sheet: ActionSheetController,
+    private crop: Crop,
+    private base64: Base64,
+    private utils: UtilsService,
     private sanitizer: DomSanitizer
   ) {
     this.profileForm = fb.group({
@@ -89,6 +96,10 @@ export class EditProfileModal {
       });
 
       this.tags = user.tags;
+
+      this.userSvc.getAvatar(this.user.id).then(img => {
+        this.image = this.sanitizer.bypassSecurityTrustUrl(img);
+      });
     });
   }
 
@@ -104,11 +115,11 @@ export class EditProfileModal {
       this.tags = this.user.tags;
 
       await Toast.show({
-        text: "Cambios guardados correctamente"
+        text: "Cambios guardados correctamente."
       });
     } catch (e) {
       await Toast.show({
-        text: `Error al guardar los cambios ${e}`
+        text: `Error al guardar los cambios ${e}.`
       });
     }
     this.closeModal();
@@ -248,27 +259,64 @@ export class EditProfileModal {
       this.user = await this.userSvc.updateUser(this.user);
     } catch (e) {
       await Toast.show({
-        text: `Error al guardar la etiqueta ${e}`
+        text: `Error al guardar la etiqueta ${e}.`
       });
     }
   }
 
-  async takePicture() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      resultType: CameraResultType.Uri,
-      saveToGallery: true
+  async openPictureSheet() {
+    const actionSheet = await this.sheet.create({
+      buttons: [
+        {
+          text: "Desde la cámara",
+          icon: "camera",
+          handler: () => {
+            this.takePicture("camera");
+          }
+        },
+        {
+          text: "Desde tus fotos",
+          icon: "images",
+          handler: () => {
+            this.takePicture("gallery");
+          }
+        }
+      ]
     });
-
-    this.image = this.sanitizer.bypassSecurityTrustUrl(image.base64Data);
+    await actionSheet.present();
   }
 
-  async uploadAvatar(files: FileList) {
+  async takePicture(mode: string) {
+    const image = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: mode === "camera" ? CameraSource.Camera : CameraSource.Photos
+    });
+
     try {
-      const avatar = files.item(0);
-      await this.userSvc.uploadAvatar(avatar);
-    } catch (err) {
-      throw new Error(`${err.status}  - ${err.statusText}`);
+      const newImage = await this.crop.crop(image.path, {
+        quality: 90,
+        targetWidth: 1024,
+        targetHeight: 1024
+      });
+      const base64File = await this.base64.encodeFile(newImage);
+      const avatar = new File(
+        [this.utils.base64toBlob(base64File)],
+        "avatar.png"
+      );
+      try {
+        const img = await this.userSvc.uploadAvatar(avatar);
+
+        this.image = this.sanitizer.bypassSecurityTrustUrl(img);
+        await Toast.show({
+          text: `Imagen actualizada correctamente.`
+        });
+      } catch (e) {
+        await Toast.show({
+          text: `Error al actualizar la imagen.`
+        });
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 
