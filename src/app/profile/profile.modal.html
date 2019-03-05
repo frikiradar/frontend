@@ -20,29 +20,62 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <img src="./assets/img/users/foto.jpg" />
+  <img [src]="user?.avatar" />
   <div padding>
-    <h1>Jay-chan</h1>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus luctus
-      arcu at venenatis sagittis. Sed eget eleifend lorem, eu tincidunt dui.
-    </p>
+    <h1>{{ user?.username }}</h1>
+    <p>{{ user?.description }}</p>
     <ion-list>
       <ion-item>
-        <ion-icon name="headset"></ion-icon>
-        <ion-label text-wrap>Lacrimosa, Lame inmortelle, Xandria</ion-label>
+        <ion-icon name="logo-game-controller-b"></ion-icon>
+        <ion-item lines="none">
+          <ion-label text-wrap>
+            <ion-chip
+              *ngFor="let tag of getTagsCategory('games')"
+              color="secondary"
+            >
+              <ion-label>{{ tag.name }}</ion-label>
+            </ion-chip>
+          </ion-label>
+        </ion-item>
       </ion-item>
       <ion-item>
         <ion-icon name="film"></ion-icon>
-        <ion-label text-wrap
-          >Elfen Lied, Your name, Full metal alchemist</ion-label
-        >
+        <ion-item lines="none">
+          <ion-label text-wrap>
+            <ion-chip
+              *ngFor="let tag of getTagsCategory('films')"
+              color="secondary"
+            >
+              <ion-label>{{ tag.name }}</ion-label>
+            </ion-chip>
+          </ion-label>
+        </ion-item>
       </ion-item>
       <ion-item>
-        <ion-icon name="logo-game-controller-b"></ion-icon>
-        <ion-label text-wrap
-          >Legend of Zelda, Super Mario, Resident Evil</ion-label
-        >
+        <ion-icon name="book"></ion-icon>
+        <ion-item lines="none">
+          <ion-label text-wrap>
+            <ion-chip
+              *ngFor="let tag of getTagsCategory('books')"
+              color="secondary"
+            >
+              <ion-label>{{ tag.name }}</ion-label>
+            </ion-chip>
+          </ion-label>
+        </ion-item>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="headset"></ion-icon>
+        <ion-item lines="none">
+          <ion-label text-wrap>
+            <ion-chip
+              *ngFor="let tag of getTagsCategory('music')"
+              color="secondary"
+            >
+              <ion-label>{{ tag.name }}</ion-label>
+            </ion-chip>
+          </ion-label>
+        </ion-item>
       </ion-item>
     </ion-list>
   </div>

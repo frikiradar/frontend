@@ -298,6 +298,7 @@ export class EditProfileModal {
         targetWidth: 1024,
         targetHeight: 1024
       });
+
       const base64File = await this.base64.encodeFile(newImage);
       const avatar = new File(
         [this.utils.base64toBlob(base64File)],

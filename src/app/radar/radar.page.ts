@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { ModalController, PopoverController } from "@ionic/angular";
+import { IonRange, ModalController, PopoverController } from "@ionic/angular";
 
+import { User } from "../models/user";
 import { EditProfileModal } from "./../profile/edit-profile/edit-profile.modal";
 import { ProfileModal } from "./../profile/profile.modal";
 import { AuthService } from "./../services/auth.service";
@@ -53,16 +54,23 @@ export class PopoverComponent {
   styleUrls: ["./radar.page.scss"]
 })
 export class RadarPage implements OnInit {
+  @ViewChild("range")
+  range: IonRange;
+
   image: SafeResourceUrl = "./assets/img/users/default.jpg";
+  public showSkeleton = true;
+  ratio = 25;
+  users: User[];
 
   constructor(
-    private userSvc: UserService,
+    public userSvc: UserService,
     public popover: PopoverController,
     private modal: ModalController,
     private sanitizer: DomSanitizer
   ) {}
 
   async ngOnInit() {
+    this.range.value = 1;
     try {
       const coordinates = await Geolocation.getCurrentPosition();
       const longitude = coordinates.coords.longitude;
@@ -70,13 +78,18 @@ export class RadarPage implements OnInit {
       this.userSvc.setCoordinates(longitude, latitude);
 
       const id = JSON.parse(localStorage.getItem("currentUser")).id;
-      const img = await this.userSvc.getAvatar(id);
+      const img = await this.userSvc.getAvatar(id, false);
       this.image = this.sanitizer.bypassSecurityTrustUrl(img);
 
-      this.userSvc.getRadarUsers(100000);
+      this.users = await this.getRadarUsers(this.ratio);
+      this.showSkeleton = false;
     } catch (e) {
       console.log(e);
     }
+  }
+
+  async getRadarUsers(ratio: number) {
+    return await this.userSvc.getRadarUsers(ratio);
   }
 
   async showPopover(ev: Event) {
@@ -88,11 +101,39 @@ export class RadarPage implements OnInit {
     return await popover.present();
   }
 
-  async showProfileModal() {
-    this.popover.dismiss();
+  async showProfileModal(id: User["id"]) {
     const modal = await this.modal.create({
-      component: ProfileModal
+      component: ProfileModal,
+      componentProps: { id }
     });
     await modal.present();
+    // this.popover.dismiss();
+  }
+
+  async changeRatio(value: number) {
+    this.showSkeleton = true;
+    switch (value) {
+      case 0:
+        this.ratio = 5;
+        break;
+      case 1:
+        this.ratio = 25;
+        break;
+      case 2:
+        this.ratio = 100;
+        break;
+      case 3:
+        this.ratio = 500;
+        break;
+      case 4:
+        this.ratio = 1000;
+        break;
+      case 5:
+        this.ratio = 100000;
+        break;
+    }
+
+    this.users = await this.getRadarUsers(this.ratio);
+    this.showSkeleton = false;
   }
 }

@@ -11,6 +11,7 @@ export interface User {
   pronoun: string;
   relationship: string;
   status: string;
+  age: number;
 
   lovegender: string[];
   minage: number;
@@ -19,6 +20,7 @@ export interface User {
 
   latitude: number;
   longitude: number;
+  distance: number;
 
   password?: string;
   token?: string;

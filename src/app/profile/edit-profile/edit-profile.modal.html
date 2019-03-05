@@ -11,26 +11,9 @@
 <ion-content fullscreen>
   <div>
     <img [src]="image" />
-    <ion-label
-      for="file-input"
-      icon-only
-      button
-      id="camera-icon"
-      (click)="openPictureSheet()"
-    >
+    <ion-label icon-only button id="camera-icon" (click)="openPictureSheet()">
       <ion-icon name="camera" size="large"></ion-icon>
     </ion-label>
-    <!----<input
-      type="file"
-      accept="image/*"
-      capture="camera"
-      id="file-input"
-      name="avatar"
-      (change)="uploadAvatar($event.target.files)"
-    />
-    <label for="file-input" icon-only button id="camera-icon">
-      <ion-icon name="camera" size="large"></ion-icon>
-    </label>-->
   </div>
   <ion-segment
     (ionChange)="showSegment($event.detail.value)"

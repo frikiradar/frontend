@@ -1,9 +1,12 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: "root"
 })
 export class UtilsService {
+  constructor(public http: HttpClient) {}
+
   base64toBlob(b64Data: string) {
     const contentType =
       b64Data
@@ -29,5 +32,31 @@ export class UtilsService {
     }
 
     return new Blob(byteArrays, { type: contentType });
+  }
+
+  blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  getBase64Image(imgUrl: string): Promise<string> {
+    return new Promise<string>(resolve => {
+      const img = new Image();
+      img.src = imgUrl;
+      img.setAttribute("crossOrigin", "anonymous");
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        const dataURL = canvas.toDataURL("image/png");
+        resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+      };
+    });
   }
 }

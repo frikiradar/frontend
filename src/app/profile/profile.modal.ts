@@ -1,41 +1,32 @@
-import { Component } from "@angular/core";
-import { ModalController, PopoverController } from "@ionic/angular";
+import { Component, Input, OnInit } from "@angular/core";
+import { ModalController, NavParams, PopoverController } from "@ionic/angular";
 
-@Component({
-  selector: "app-popover",
-  template: `
-    <ion-list>
-      <ion-item button (click)="editProfileModal()"
-        ><ion-label>Reportar</ion-label></ion-item
-      >
-      <ion-item lines="none" button (click)="logout()"
-        ><ion-label>Bloquear</ion-label></ion-item
-      >
-    </ion-list>
-  `
-})
-export class PopoverComponent {
-  constructor(
-    private popover: PopoverController,
-  ) {}
-
-}
+import { User } from "../models/user";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-profile",
   templateUrl: "./profile.modal.html",
   styleUrls: ["./profile.modal.scss"]
 })
-export class ProfileModal {
-  constructor(public modal: ModalController, public popover: PopoverController) {}
+export class ProfileModal implements OnInit {
+  user: User;
 
-  async showOptions(ev: Event) {
-    const popover = await this.popover.create({
-      component: PopoverComponent,
-      event: ev,
-      translucent: true
-    });
-    return await popover.present();
+  constructor(
+    private navParams: NavParams,
+    public modal: ModalController,
+    public popover: PopoverController,
+    private userSvc: UserService
+  ) {}
+
+  async ngOnInit() {
+    this.user = await this.userSvc.getUser(this.navParams.get("id"));
+  }
+
+  getTagsCategory(category: string) {
+    if (this.user && this.user.tags) {
+      return this.user.tags.filter(t => t.category.name === category);
+    }
   }
 
   closeModal() {

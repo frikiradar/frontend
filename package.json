@@ -75,9 +75,9 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-crop": {},
       "com-badrit-base64": {},
-      "cordova-plugin-device": {}
+      "cordova-plugin-device": {},
+      "cordova-plugin-crop": {}
     }
   }
 }
