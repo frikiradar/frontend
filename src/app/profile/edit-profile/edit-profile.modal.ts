@@ -46,7 +46,7 @@ export class EditProfileModal {
 
   public profileForm: FormGroup;
   public today: number = Date.now();
-  private user: Partial<User>;
+  private user: User;
   public tags: Tag[];
   public tagsInput: string;
   public list: { name: string; total: number }[];
@@ -79,28 +79,25 @@ export class EditProfileModal {
       tags: [""]
     });
 
-    this.auth.getAuthUser().then((user: User) => {
-      this.user = user;
-      this.profileForm.patchValue({
-        description: user.description,
-        birthday: user.birthday,
-        gender: user.gender,
-        orientation: user.orientation,
-        pronoun: user.pronoun,
-        relationship: user.relationship,
-        status: user.status,
-        lovegender: user.lovegender,
-        minage: user.minage,
-        maxage: user.maxage,
-        connection: user.connection
-      });
-
-      this.tags = user.tags;
-
-      this.userSvc.getAvatar(this.user.id).then(img => {
-        this.image = this.sanitizer.bypassSecurityTrustUrl(img);
-      });
+    this.user = this.auth.currentUserValue;
+    this.profileForm.patchValue({
+      description: this.user.description,
+      birthday: this.user.birthday,
+      gender: this.user.gender,
+      orientation: this.user.orientation,
+      pronoun: this.user.pronoun,
+      relationship: this.user.relationship,
+      status: this.user.status,
+      lovegender: this.user.lovegender,
+      minage: this.user.minage,
+      maxage: this.user.maxage,
+      connection: this.user.connection
     });
+
+    this.tags = this.user.tags;
+    if (this.user.avatar) {
+      this.image = this.user.avatar;
+    }
   }
 
   async submitProfile() {
@@ -305,9 +302,7 @@ export class EditProfileModal {
         "avatar.png"
       );
       try {
-        const img = await this.userSvc.uploadAvatar(avatar);
-
-        this.image = this.sanitizer.bypassSecurityTrustUrl(img);
+        this.image = await this.userSvc.uploadAvatar(avatar);
         await Toast.show({
           text: `Imagen actualizada correctamente.`
         });
@@ -322,6 +317,6 @@ export class EditProfileModal {
   }
 
   closeModal() {
-    this.modal.dismiss();
+    this.modal.dismiss(this.image);
   }
 }

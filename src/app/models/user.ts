@@ -1,3 +1,4 @@
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { Tag } from "./tags";
 
 export interface User {
@@ -20,6 +21,7 @@ export interface User {
 
   latitude: number;
   longitude: number;
+  location: string;
   distance: number;
 
   password?: string;
@@ -27,5 +29,5 @@ export interface User {
 
   tags: Tag[];
 
-  avatar: string;
+  avatar: SafeResourceUrl;
 }

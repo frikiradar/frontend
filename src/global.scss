@@ -22,6 +22,11 @@ ion-list {
   display: inherit;
 }
 
+ion-footer {
+  background: #1a1a1a;
+  color: white;
+}
+
 h1,
 h2,
 h3,
@@ -63,6 +68,11 @@ ion-datetime {
   --color: #e91e63 !important;
   color: #e91e63 !important;
   --placeholder-opacity: 1 !important;
+  --padding-start: 0;
+}
+
+ion-datetime {
+  color: #9c2c51 !important;
 }
 
 form {

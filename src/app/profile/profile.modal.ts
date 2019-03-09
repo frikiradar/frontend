@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { ModalController, NavParams, PopoverController } from "@ionic/angular";
 
 import { User } from "../models/user";
@@ -11,6 +12,7 @@ import { UserService } from "../services/user.service";
 })
 export class ProfileModal implements OnInit {
   user: User;
+  image: SafeResourceUrl = "./assets/img/users/default.jpg";
 
   constructor(
     private navParams: NavParams,
@@ -21,6 +23,9 @@ export class ProfileModal implements OnInit {
 
   async ngOnInit() {
     this.user = await this.userSvc.getUser(this.navParams.get("id"));
+    if (this.user.avatar) {
+      this.image = this.user.avatar;
+    }
   }
 
   getTagsCategory(category: string) {

@@ -10,7 +10,7 @@
 </ion-header>
 <ion-content fullscreen>
   <div>
-    <img [src]="image" />
+    <ion-img [src]="image"></ion-img>
     <ion-label icon-only button id="camera-icon" (click)="openPictureSheet()">
       <ion-icon name="camera" size="large"></ion-icon>
     </ion-label>
@@ -216,6 +216,7 @@
                 #games
                 placeholder="Videojuegos favoritos"
                 clearInput="true"
+                autocapitalize="words"
                 (ionChange)="searchTag($event.detail.value, 'games')"
                 [debounce]="500"
                 (keyup.enter)="
@@ -247,6 +248,7 @@
                 #films
                 placeholder="Películas, series o animes favoritos"
                 clearInput="true"
+                autocapitalize="words"
                 (ionChange)="searchTag($event.detail.value, 'films')"
                 [debounce]="500"
                 (keyup.enter)="
@@ -277,6 +279,7 @@
                 #books
                 placeholder="Cómics, mangas o libros"
                 clearInput="true"
+                autocapitalize="words"
                 (ionChange)="searchTag($event.detail.value, 'books')"
                 [debounce]="500"
                 (keyup.enter)="
@@ -307,6 +310,7 @@
                 #music
                 placeholder="Música, artistas o canciones favoritas"
                 clearInput="true"
+                autocapitalize="words"
                 (ionChange)="searchTag($event.detail.value, 'music')"
                 [debounce]="500"
                 (keyup.enter)="

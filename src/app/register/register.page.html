@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="back()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <h1>¿Cómo? ¿Que aún no tienes una cuenta?</h1>
+  <h4>
+    Pasa, ¡ya te queda muy muy poco para comenzar a conocer frikis en tu zona!
+  </h4>
+
+  <form (submit)="submitRegister()" [formGroup]="registerForm">
+    <ion-item>
+      <ion-input
+        required
+        type="text"
+        autocapitalize="words"
+        placeholder="Nombre de usuario"
+        formControlName="username"
+        name="username"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        required
+        type="email"
+        autocomplete="email"
+        placeholder="Correo electrónico"
+        formControlName="email"
+        name="email"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        required
+        type="password"
+        placeholder="Contraseña"
+        formControlName="password"
+        name="password"
+      ></ion-input>
+      <ion-icon name="eye-off"></ion-icon>
+    </ion-item>
+    <ion-item>
+      <ion-datetime
+        min="1900-01"
+        max="{{ (today | date: 'y') - 18 }}"
+        cancel-text="Cancelar"
+        done-text="Hecho"
+        displayFormat="DD MMM de YYYY"
+        placeholder="Fecha de Nacimiento"
+        monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+        formControlName="birthday"
+      ></ion-datetime>
+    </ion-item>
+    <ion-button
+      color="primary"
+      type="submit"
+      expand="block"
+      class="dismiss"
+      [disabled]="!registerForm.valid"
+      >Registrarme</ion-button
+    >
+  </form>
+</ion-content>

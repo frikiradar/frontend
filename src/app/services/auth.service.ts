@@ -40,7 +40,6 @@ export class AuthService {
           })
         )
         .toPromise();
-
       return await this.getAuthUser(token);
     } catch (e) {
       throw new Error("Credenciales incorrectas");
@@ -51,7 +50,6 @@ export class AuthService {
     if (!token) {
       token = JSON.parse(localStorage.getItem("currentUser")).token;
     }
-
     return this.http
       .get(`${environment.root}api/v1/user`, {
         headers: httpOptions.headers.set("Authorization", `Bearer ${token}`)
@@ -66,13 +64,14 @@ export class AuthService {
       .toPromise();
   }
 
-  doLogin(user: User) {
+  setAuthUser(user: User) {
     this.currentUserSubject.next(user);
   }
 
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem("currentUser");
+    sessionStorage.clear();
     this.currentUserSubject.next(undefined);
   }
 }

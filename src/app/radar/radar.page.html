@@ -2,7 +2,9 @@
   <ion-toolbar>
     <ion-buttons slot="secondary">
       <ion-button (click)="showPopover($event)">
-        <ion-avatar> <img [src]="image" /> </ion-avatar>
+        <ion-avatar>
+          <ion-img [src]="image"></ion-img>
+        </ion-avatar>
       </ion-button>
     </ion-buttons>
     <ion-title>Radar</ion-title>
@@ -16,7 +18,9 @@
   </p>
   <ion-list *ngIf="showSkeleton; else radarItems">
     <ion-item *ngFor="let i of [].constructor(8)">
-      <ion-avatar slot="start"> </ion-avatar>
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
       <ion-label>
         <h2>
           <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
@@ -38,17 +42,20 @@
         (click)="showProfileModal(user.id)"
       >
         <ion-avatar slot="start">
-          <img [src]="user.avatar" />
+          <ion-skeleton-text animated *ngIf="!user.avatar"></ion-skeleton-text>
+          <ion-img [src]="user.avatar" *ngIf="user.avatar"></ion-img>
         </ion-avatar>
         <ion-label>
           <h2>{{ user.username }}, {{ user.age }}</h2>
-          <h3>Madrid, a {{ user.distance }}km</h3>
+          <h3>{{ user.location }}, a {{ user.distance }}km</h3>
           <p>{{ user.description }}</p>
         </ion-label>
         <ion-note slot="end">90%</ion-note>
       </ion-item>
     </ion-list>
   </ng-template>
+</ion-content>
+<ion-footer translucent>
   <div id="radar-range" padding>
     <ion-range
       #range
@@ -71,4 +78,4 @@
       </ion-row>
     </ion-grid>
   </div>
-</ion-content>
+</ion-footer>

@@ -22,6 +22,6 @@ export class UploadService {
       })
       .toPromise();
 
-    return URL.createObjectURL(blob);
+    return blob;
   }
 }

@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { DomSanitizer } from "@angular/platform-browser";
 import { Base64 } from "@ionic-native/base64/ngx";
 
 import { environment } from "../../environments/environment";
@@ -8,6 +9,7 @@ import { AuthService } from "./auth.service";
 import { DownloadService } from "./download.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
+import { UtilsService } from "./utils.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -20,16 +22,22 @@ export class UserService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private downloadSvc: DownloadService,
-    private base64: Base64,
-    private auth: AuthService
+    private auth: AuthService,
+    private utils: UtilsService,
+    private sanitizer: DomSanitizer
   ) {}
 
-  async register(username: string, email: string, password: string) {
+  async register(
+    username: string,
+    email: string,
+    birthday: string,
+    password: string
+  ) {
     try {
       return await this.http
         .post(
           `${environment.root}api/register`,
-          { username, email, password },
+          { username, email, birthday, password },
           httpOptions
         )
         .toPromise();
@@ -41,16 +49,17 @@ export class UserService {
   async getUser(id: User["id"]): Promise<User> {
     try {
       const user = (await this.rest.get(`user/${id}`)) as User;
-      user.avatar = await this.getAvatar(user.id);
+      const avatar = await this.getAvatar(user.id);
+      user.avatar = this.sanitizer.bypassSecurityTrustUrl(avatar);
       return user;
     } catch (e) {
       throw new Error("No se puede obtener el usuario");
     }
   }
 
-  async updateUser(user: Partial<User>) {
+  async updateUser(user: User): Promise<User> {
     try {
-      return await this.rest.put("user", user).toPromise();
+      return (await this.rest.put("user", user).toPromise()) as User;
     } catch (e) {
       throw new Error("No se puede actualizar el usuario");
     }
@@ -59,28 +68,37 @@ export class UserService {
   async uploadAvatar(file: File) {
     const formData: FormData = new FormData();
     formData.set("avatar", file);
-    const avatar = await this.uploadSvc.upload("avatar", formData);
-    const base64File = await this.base64.encodeFile(avatar);
-    localStorage.setItem("avatar", base64File);
+    const blob = await this.uploadSvc.upload("avatar", formData);
+    const avatar = await this.utils.blobToBase64(blob);
+    const user = this.auth.currentUserValue;
+    user.avatar = avatar;
+    localStorage.setItem("currentUser", JSON.stringify(user));
     return avatar;
   }
 
-  async getAvatar(id: number, getFromCache = true) {
+  async getAvatar(id: number) {
     const authId = this.auth.currentUserValue.id;
+    let avatar = "";
     try {
-      if (localStorage.getItem("avatar") && getFromCache && authId === id) {
-        return localStorage.getItem("avatar");
+      if (id !== authId && sessionStorage.getItem(`${id}`)) {
+        avatar = sessionStorage.getItem(`${id}`);
       } else {
-        const avatar = await this.downloadSvc.download("avatar", id);
+        avatar = await this.downloadSvc.download("avatar", id);
         if (id === authId) {
-          localStorage.setItem("avatar", avatar);
+          const user = this.auth.currentUserValue;
+          user.avatar = avatar;
+          localStorage.setItem("currentUser", JSON.stringify(user));
+          this.auth.setAuthUser(user);
+        } else {
+          sessionStorage.setItem(`${id}`, avatar);
         }
-
-        return avatar;
       }
     } catch (e) {
-      return "./assets/img/users/default.jpg";
+      avatar = "./assets/img/users/default.jpg";
+      sessionStorage.setItem(`${id}`, avatar);
     }
+
+    return avatar;
   }
 
   async setCoordinates(longitude, latitude) {
@@ -89,17 +107,8 @@ export class UserService {
       .toPromise();
   }
 
-  async getRadarUsers(ratio: number) {
-    const users = await this.http
-      .get<User[]>(`${environment.apiUrl}radar/${ratio}`)
-      .toPromise();
-    users.map(async user => {
-      user.avatar = await this.getAvatar(user.id);
-      user.distance = Math.round(user.distance);
-      user.age = Math.trunc(user.age);
-    });
-
-    return users;
+  getRadarUsers(ratio: number) {
+    return this.http.get<User[]>(`${environment.apiUrl}radar/${ratio}`);
   }
 
   getOrientations() {

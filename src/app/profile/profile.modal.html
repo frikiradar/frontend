@@ -12,7 +12,7 @@
       <ion-button>
         <ion-icon slot="icon-only" name="heart-empty"></ion-icon>
       </ion-button>
-      <ion-button (click)="showOptions()">
+      <ion-button>
         <ion-icon slot="icon-only" name="more"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -20,62 +20,57 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <img [src]="user?.avatar" />
+  <img [src]="image" />
   <div padding>
     <h1>{{ user?.username }}</h1>
     <p>{{ user?.description }}</p>
     <ion-list>
       <ion-item>
         <ion-icon name="logo-game-controller-b"></ion-icon>
-        <ion-item lines="none">
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('games')"
-              color="secondary"
-            >
-              <ion-label>{{ tag.name }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
+        <ion-label text-wrap>
+          <ion-chip
+            *ngFor="let tag of getTagsCategory('games')"
+            color="secondary"
+          >
+            <ion-label>{{ tag.name }}</ion-label>
+          </ion-chip>
+        </ion-label>
       </ion-item>
       <ion-item>
         <ion-icon name="film"></ion-icon>
-        <ion-item lines="none">
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('films')"
-              color="secondary"
-            >
-              <ion-label>{{ tag.name }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
+
+        <ion-label text-wrap>
+          <ion-chip
+            *ngFor="let tag of getTagsCategory('films')"
+            color="secondary"
+          >
+            <ion-label>{{ tag.name }}</ion-label>
+          </ion-chip>
+        </ion-label>
       </ion-item>
       <ion-item>
         <ion-icon name="book"></ion-icon>
-        <ion-item lines="none">
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('books')"
-              color="secondary"
-            >
-              <ion-label>{{ tag.name }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
+
+        <ion-label text-wrap>
+          <ion-chip
+            *ngFor="let tag of getTagsCategory('books')"
+            color="secondary"
+          >
+            <ion-label>{{ tag.name }}</ion-label>
+          </ion-chip>
+        </ion-label>
       </ion-item>
       <ion-item>
         <ion-icon name="headset"></ion-icon>
-        <ion-item lines="none">
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('music')"
-              color="secondary"
-            >
-              <ion-label>{{ tag.name }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
+
+        <ion-label text-wrap>
+          <ion-chip
+            *ngFor="let tag of getTagsCategory('music')"
+            color="secondary"
+          >
+            <ion-label>{{ tag.name }}</ion-label>
+          </ion-chip>
+        </ion-label>
       </ion-item>
     </ion-list>
   </div>

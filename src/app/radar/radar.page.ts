@@ -40,11 +40,12 @@ export class PopoverComponent {
   }
 
   async editProfileModal() {
-    this.popover.dismiss();
     const modal = await this.modal.create({
       component: EditProfileModal
     });
     await modal.present();
+    const image = (await modal.onDidDismiss()).data;
+    this.popover.dismiss(image);
   }
 }
 
@@ -66,7 +67,8 @@ export class RadarPage implements OnInit {
     public userSvc: UserService,
     public popover: PopoverController,
     private modal: ModalController,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private auth: AuthService
   ) {}
 
   async ngOnInit() {
@@ -77,19 +79,28 @@ export class RadarPage implements OnInit {
       const latitude = coordinates.coords.latitude;
       this.userSvc.setCoordinates(longitude, latitude);
 
-      const id = JSON.parse(localStorage.getItem("currentUser")).id;
-      const img = await this.userSvc.getAvatar(id, false);
-      this.image = this.sanitizer.bypassSecurityTrustUrl(img);
+      const id = this.auth.currentUserValue.id;
+      this.image = await this.userSvc.getAvatar(id);
 
-      this.users = await this.getRadarUsers(this.ratio);
-      this.showSkeleton = false;
+      this.getRadarUsers(this.ratio);
     } catch (e) {
       console.log(e);
     }
   }
 
   async getRadarUsers(ratio: number) {
-    return await this.userSvc.getRadarUsers(ratio);
+    this.userSvc.getRadarUsers(ratio).subscribe(users => {
+      users.map(async user => {
+        user.avatar = await this.userSvc.getAvatar(user.id);
+        user.distance = Math.round(user.distance);
+        user.age = Math.trunc(user.age);
+      });
+
+      setTimeout(() => {
+        this.showSkeleton = false;
+        this.users = users;
+      }, 400);
+    });
   }
 
   async showPopover(ev: Event) {
@@ -98,7 +109,8 @@ export class RadarPage implements OnInit {
       event: ev,
       translucent: true
     });
-    return await popover.present();
+    await popover.present();
+    this.image = (await popover.onDidDismiss()).data;
   }
 
   async showProfileModal(id: User["id"]) {
@@ -133,7 +145,6 @@ export class RadarPage implements OnInit {
         break;
     }
 
-    this.users = await this.getRadarUsers(this.ratio);
-    this.showSkeleton = false;
+    this.getRadarUsers(this.ratio);
   }
 }

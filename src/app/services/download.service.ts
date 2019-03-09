@@ -12,17 +12,14 @@ export class DownloadService {
 
   constructor(public http: HttpClient, private utils: UtilsService) {}
 
-  async download(endpoint: string, id: number) {
+  async download(endpoint: string, id: number): Promise<string> {
     const params = new HttpParams();
 
-    const blob = await this.http
-      .get(`${this.apiUrl}${endpoint}/${id}`, {
-        responseType: "blob",
+    const download = await this.http
+      .get<string>(`${this.apiUrl}${endpoint}/${id}`, {
         params
       })
       .toPromise();
-
-    // return URL.createObjectURL(blob);
-    return await this.utils.blobToBase64(blob);
+    return download;
   }
 }
