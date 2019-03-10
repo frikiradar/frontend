@@ -1,9 +1,14 @@
-import { Component, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators
+} from "@angular/forms";
 import { CameraResultType, CameraSource, Plugins } from "@capacitor/core";
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
+import { WebView } from "@ionic-native/ionic-webview/ngx";
 
 import {
   ActionSheetController,
@@ -28,7 +33,15 @@ const { Toast, Camera } = Plugins;
   templateUrl: "./edit-profile.modal.html",
   styleUrls: ["./edit-profile.modal.scss"]
 })
-export class EditProfileModal {
+export class EditProfileModal implements OnInit {
+  get minage() {
+    return this.profileForm.get("minage");
+  }
+
+  get maxage() {
+    return this.profileForm.get("maxage");
+  }
+
   @ViewChild("slider")
   slider: IonSlides;
   @ViewChild("segment")
@@ -42,11 +55,9 @@ export class EditProfileModal {
   @ViewChild("music")
   music: IonInput;
 
-  image: SafeResourceUrl = "./assets/img/users/default.jpg";
-
   public profileForm: FormGroup;
   public today: number = Date.now();
-  private user: User;
+  public user: User;
   public tags: Tag[];
   public tagsInput: string;
   public list: { name: string; total: number }[];
@@ -62,9 +73,9 @@ export class EditProfileModal {
     private crop: Crop,
     private base64: Base64,
     private utils: UtilsService,
-    private sanitizer: DomSanitizer
+    private webview: WebView
   ) {
-    this.profileForm = fb.group({
+    this.profileForm = this.fb.group({
       description: [""],
       birthday: [""],
       gender: [""],
@@ -74,12 +85,18 @@ export class EditProfileModal {
       status: [""],
       lovegender: [""],
       minage: [""],
-      maxage: [""],
+      maxage: new FormControl(
+        { value: "", disabled: true },
+        Validators.required
+      ),
       connection: [""],
       tags: [""]
     });
+  }
 
-    this.user = this.auth.currentUserValue;
+  async ngOnInit() {
+    this.user = await this.auth.getAuthUser();
+
     this.profileForm.patchValue({
       description: this.user.description,
       birthday: this.user.birthday,
@@ -95,8 +112,12 @@ export class EditProfileModal {
     });
 
     this.tags = this.user.tags;
-    if (this.user.avatar) {
-      this.image = this.user.avatar;
+    this.user.avatar = this.user.avatar
+      ? this.user.avatar
+      : "../../../assets/img/users/default.jpg";
+
+    if (this.minage.value) {
+      this.profileForm.get("maxage").enable();
     }
   }
 
@@ -152,9 +173,15 @@ export class EditProfileModal {
     });
   }
 
-  async openPicker() {
+  async openPicker(typeage: string) {
     let ages = [];
-    for (let i = 18; i <= 65; i++) {
+    let min = 18;
+    const max = 65;
+
+    if (typeage === "maxage") {
+      min = this.minage.value;
+    }
+    for (let i = min; i <= max; i++) {
       ages = [...ages, { value: i, text: `${i}` }];
     }
 
@@ -163,21 +190,21 @@ export class EditProfileModal {
         {
           text: "Hecho",
           handler: (data: {
-            minage: { text: string; value: number; columnIndex: number };
-            maxage: { text: string; value: number; columnIndex: number };
+            age: { text: string; value: number; columnIndex: number };
           }) => {
-            this.profileForm.get("minage").setValue(data.minage.value);
-            this.profileForm.get("maxage").setValue(data.maxage.value);
+            if (typeage === "minage") {
+              this.profileForm.get("maxage").enable();
+              if (data.age.value > this.maxage.value) {
+                this.profileForm.get("maxage").setValue(data.age.value);
+              }
+            }
+            this.profileForm.get(typeage).setValue(data.age.value);
           }
         }
       ],
       columns: [
         {
-          name: "minage",
-          options: ages
-        },
-        {
-          name: "maxage",
+          name: "age",
           options: ages
         }
       ]
@@ -224,7 +251,7 @@ export class EditProfileModal {
       !this.tags.some(t => t.name === name && t.category.name === catName)
     ) {
       const category = { name: catName };
-      this.tags = [...this.tags, ...[{ name, category }]];
+      this.tags = [...this.tags, ...[{ name: name.trim(), category }]];
       this.submitTags();
     }
     this.music.value = this.games.value = this.films.value = this.books.value =
@@ -285,38 +312,46 @@ export class EditProfileModal {
 
   async takePicture(mode: string) {
     const image = await Camera.getPhoto({
+      quality: 70,
       resultType: CameraResultType.Uri,
       source: mode === "camera" ? CameraSource.Camera : CameraSource.Photos
     });
 
     try {
       const newImage = await this.crop.crop(image.path, {
-        quality: 90,
-        targetWidth: 1024,
-        targetHeight: 1024
+        quality: 70,
+        targetWidth: 512,
+        targetHeight: 512
       });
 
-      const base64File = await this.base64.encodeFile(newImage);
-      const avatar = new File(
-        [this.utils.base64toBlob(base64File)],
-        "avatar.png"
-      );
-      try {
-        this.image = await this.userSvc.uploadAvatar(avatar);
-        await Toast.show({
-          text: `Imagen actualizada correctamente.`
-        });
-      } catch (e) {
-        await Toast.show({
-          text: `Error al actualizar la imagen.`
-        });
-      }
+      /*const base64File = await this.utils.getBase64Image(
+        this.webview.convertFileSrc(newImage)
+      );*/
+
+      this.base64.encodeFile(newImage).then(async base64File => {
+        const avatar = new File(
+          [this.utils.base64toBlob(base64File)],
+          "avatar.png"
+        );
+        try {
+          this.user.avatar = await this.userSvc.uploadAvatar(avatar);
+          await Toast.show({
+            text: `Imagen actualizada correctamente.`
+          });
+        } catch (e) {
+          await Toast.show({
+            text: `Error al actualizar la imagen.`
+          });
+        }
+      });
     } catch (e) {
-      console.error(e);
+      await Toast.show({
+        text: `Error al recortar la imagen.`
+      });
     }
   }
 
   closeModal() {
-    this.modal.dismiss(this.image);
+    this.modal.dismiss();
   }
 }

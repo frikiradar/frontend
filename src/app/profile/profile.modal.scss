@@ -6,7 +6,7 @@ ion-list {
     margin-right: 15px;
   }
 
-  ion-label {
+  &.info ion-label {
     --color: white;
   }
 }
@@ -17,4 +17,23 @@ ion-toolbar {
 
 ion-content {
   position: absolute;
+}
+
+.resume {
+  padding-top: 0;
+  padding-bottom: 0;
+
+  h1,
+  h3 {
+    margin: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+
+  .location {
+    font-size: 14px;
+    color: #e91e63 !important;
+  }
 }

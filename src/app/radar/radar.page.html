@@ -3,7 +3,7 @@
     <ion-buttons slot="secondary">
       <ion-button (click)="showPopover($event)">
         <ion-avatar>
-          <ion-img [src]="image"></ion-img>
+          <ion-img [src]="user?.avatar"></ion-img>
         </ion-avatar>
       </ion-button>
     </ion-buttons>
@@ -39,7 +39,7 @@
       <ion-item
         button
         *ngFor="let user of users"
-        (click)="showProfileModal(user.id)"
+        (click)="showProfileModal(user)"
       >
         <ion-avatar slot="start">
           <ion-skeleton-text animated *ngIf="!user.avatar"></ion-skeleton-text>

@@ -55,7 +55,8 @@ export class UtilsService {
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0);
         const dataURL = canvas.toDataURL("image/png");
-        resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+        // resolve(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+        resolve(dataURL);
       };
     });
   }

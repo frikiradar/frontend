@@ -14,14 +14,11 @@ export class UploadService {
   async upload(endpoint: string, data: FormData) {
     const params = new HttpParams();
 
-    const blob = await this.http
-      .post(`${this.apiUrl}${endpoint}`, data, {
-        responseType: "blob",
+    return await this.http
+      .post<string>(`${this.apiUrl}${endpoint}`, data, {
         params,
         reportProgress: true
       })
       .toPromise();
-
-    return blob;
   }
 }

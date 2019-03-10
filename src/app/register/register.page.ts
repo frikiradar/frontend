@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
-  Validators,
-  FormControl
+  Validators
 } from "@angular/forms";
 import { Plugins } from "@capacitor/core";
 import { AlertController } from "@ionic/angular";
@@ -47,7 +47,7 @@ export class RegisterPage implements OnInit {
       username: new FormControl("", [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(15),
+        Validators.maxLength(20),
         Validators.pattern("[a-zA-Z0-9 ]+")
       ]),
       email: new FormControl("", [
@@ -67,15 +67,15 @@ export class RegisterPage implements OnInit {
   async submitRegister() {
     try {
       await this.userSvc.register(
-        this.username.value,
-        this.email.value,
-        this.birthday.value,
-        this.password.value
+        this.username.value.trim(),
+        this.email.value.trim(),
+        this.birthday.value.trim(),
+        this.password.value.trim()
       );
 
       const user = await this.auth.login(
-        this.username.value,
-        this.password.value
+        this.username.value.trim(),
+        this.password.value.trim()
       );
       this.registerSuccess(user);
     } catch (error) {

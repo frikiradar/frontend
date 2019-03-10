@@ -16,43 +16,42 @@
 
   <form (submit)="submitRegister()" [formGroup]="registerForm">
     <ion-item>
+      <ion-label position="floating">Nombre de usuario</ion-label>
       <ion-input
         required
         type="text"
         autocapitalize="words"
-        placeholder="Nombre de usuario"
         formControlName="username"
         name="username"
       ></ion-input>
     </ion-item>
     <ion-item>
+      <ion-label position="floating">Correo electrónico</ion-label>
       <ion-input
         required
         type="email"
         autocomplete="email"
-        placeholder="Correo electrónico"
         formControlName="email"
         name="email"
       ></ion-input>
     </ion-item>
     <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
       <ion-input
         required
         type="password"
-        placeholder="Contraseña"
         formControlName="password"
         name="password"
       ></ion-input>
-      <ion-icon name="eye-off"></ion-icon>
     </ion-item>
     <ion-item>
+      <ion-label position="floating">Fecha de nacimiento</ion-label>
       <ion-datetime
         min="1900-01"
         max="{{ (today | date: 'y') - 18 }}"
         cancel-text="Cancelar"
         done-text="Hecho"
         displayFormat="DD MMM de YYYY"
-        placeholder="Fecha de Nacimiento"
         monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
         formControlName="birthday"
       ></ion-datetime>

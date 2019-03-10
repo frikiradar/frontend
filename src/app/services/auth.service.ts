@@ -65,6 +65,9 @@ export class AuthService {
   }
 
   setAuthUser(user: User) {
+    if (!user.token) {
+      user.token = JSON.parse(localStorage.getItem("currentUser")).token;
+    }
     this.currentUserSubject.next(user);
   }
 

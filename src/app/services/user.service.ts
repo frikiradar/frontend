@@ -9,7 +9,6 @@ import { AuthService } from "./auth.service";
 import { DownloadService } from "./download.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
-import { UtilsService } from "./utils.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -23,7 +22,6 @@ export class UserService {
     private uploadSvc: UploadService,
     private downloadSvc: DownloadService,
     private auth: AuthService,
-    private utils: UtilsService,
     private sanitizer: DomSanitizer
   ) {}
 
@@ -48,10 +46,7 @@ export class UserService {
 
   async getUser(id: User["id"]): Promise<User> {
     try {
-      const user = (await this.rest.get(`user/${id}`)) as User;
-      const avatar = await this.getAvatar(user.id);
-      user.avatar = this.sanitizer.bypassSecurityTrustUrl(avatar);
-      return user;
+      return (await this.rest.get(`user/${id}`)) as User;
     } catch (e) {
       throw new Error("No se puede obtener el usuario");
     }
@@ -59,7 +54,9 @@ export class UserService {
 
   async updateUser(user: User): Promise<User> {
     try {
-      return (await this.rest.put("user", user).toPromise()) as User;
+      user = (await this.rest.put("user", user).toPromise()) as User;
+      this.auth.setAuthUser(user);
+      return user;
     } catch (e) {
       throw new Error("No se puede actualizar el usuario");
     }
@@ -68,36 +65,10 @@ export class UserService {
   async uploadAvatar(file: File) {
     const formData: FormData = new FormData();
     formData.set("avatar", file);
-    const blob = await this.uploadSvc.upload("avatar", formData);
-    const avatar = await this.utils.blobToBase64(blob);
+    const avatar = await this.uploadSvc.upload("avatar", formData);
     const user = this.auth.currentUserValue;
     user.avatar = avatar;
     localStorage.setItem("currentUser", JSON.stringify(user));
-    return avatar;
-  }
-
-  async getAvatar(id: number) {
-    const authId = this.auth.currentUserValue.id;
-    let avatar = "";
-    try {
-      if (id !== authId && sessionStorage.getItem(`${id}`)) {
-        avatar = sessionStorage.getItem(`${id}`);
-      } else {
-        avatar = await this.downloadSvc.download("avatar", id);
-        if (id === authId) {
-          const user = this.auth.currentUserValue;
-          user.avatar = avatar;
-          localStorage.setItem("currentUser", JSON.stringify(user));
-          this.auth.setAuthUser(user);
-        } else {
-          sessionStorage.setItem(`${id}`, avatar);
-        }
-      }
-    } catch (e) {
-      avatar = "./assets/img/users/default.jpg";
-      sessionStorage.setItem(`${id}`, avatar);
-    }
-
     return avatar;
   }
 
@@ -138,8 +109,8 @@ export class UserService {
 
   getGenders() {
     return [
-      "Hombre cisgénero",
-      "Mujer cisgénero",
+      "Hombre",
+      "Mujer",
       "Hombre transgénero",
       "Mujer transgénero",
       "Agénero",

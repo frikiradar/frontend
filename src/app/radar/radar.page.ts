@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
 import { IonRange, ModalController, PopoverController } from "@ionic/angular";
@@ -40,12 +39,11 @@ export class PopoverComponent {
   }
 
   async editProfileModal() {
+    this.popover.dismiss();
     const modal = await this.modal.create({
       component: EditProfileModal
     });
-    await modal.present();
-    const image = (await modal.onDidDismiss()).data;
-    this.popover.dismiss(image);
+    modal.present();
   }
 }
 
@@ -58,48 +56,48 @@ export class RadarPage implements OnInit {
   @ViewChild("range")
   range: IonRange;
 
-  image: SafeResourceUrl = "./assets/img/users/default.jpg";
   public showSkeleton = true;
   ratio = 25;
+  user: User;
   users: User[];
 
   constructor(
     public userSvc: UserService,
     public popover: PopoverController,
     private modal: ModalController,
-    private sanitizer: DomSanitizer,
     private auth: AuthService
   ) {}
 
   async ngOnInit() {
     this.range.value = 1;
+    this.user = this.auth.currentUserValue;
+    this.user.avatar = this.user.avatar
+      ? this.user.avatar
+      : "../../assets/img/users/default.jpg";
+
+    this.getRadarUsers();
     try {
       const coordinates = await Geolocation.getCurrentPosition();
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
       this.userSvc.setCoordinates(longitude, latitude);
-
-      const id = this.auth.currentUserValue.id;
-      this.image = await this.userSvc.getAvatar(id);
-
-      this.getRadarUsers(this.ratio);
     } catch (e) {
-      console.log(e);
+      this.userSvc.setCoordinates(0, 0);
     }
   }
 
-  async getRadarUsers(ratio: number) {
-    this.userSvc.getRadarUsers(ratio).subscribe(users => {
+  async getRadarUsers() {
+    this.userSvc.getRadarUsers(this.ratio).subscribe(users => {
       users.map(async user => {
-        user.avatar = await this.userSvc.getAvatar(user.id);
-        user.distance = Math.round(user.distance);
-        user.age = Math.trunc(user.age);
+        user.avatar = user.avatar
+          ? user.avatar
+          : "../../assets/img/users/default.jpg";
       });
 
       setTimeout(() => {
         this.showSkeleton = false;
         this.users = users;
-      }, 400);
+      }, 250);
     });
   }
 
@@ -110,13 +108,15 @@ export class RadarPage implements OnInit {
       translucent: true
     });
     await popover.present();
-    this.image = (await popover.onDidDismiss()).data;
+    popover.onDidDismiss().then(() => {
+      this.getRadarUsers();
+    });
   }
 
-  async showProfileModal(id: User["id"]) {
+  async showProfileModal(user: User) {
     const modal = await this.modal.create({
       component: ProfileModal,
-      componentProps: { id }
+      componentProps: { user }
     });
     await modal.present();
     // this.popover.dismiss();
@@ -145,6 +145,6 @@ export class RadarPage implements OnInit {
         break;
     }
 
-    this.getRadarUsers(this.ratio);
+    this.getRadarUsers();
   }
 }
