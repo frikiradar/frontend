@@ -51,24 +51,34 @@ export class LoginPage {
   }
 
   async submitLogin() {
-    try {
-      const user = await this.auth.login(
-        this.username.value,
-        this.password.value
-      );
+    if (this.loginForm.valid) {
+      try {
+        const user = await this.auth.login(
+          this.username.value,
+          this.password.value
+        );
 
-      this.loginSuccess(user);
-      this.loginForm.reset();
-    } catch (e) {
-      this.loginForm.reset({ password: "" });
-      this.loginError();
+        this.loginSuccess(user);
+        this.loginForm.reset();
+      } catch (e) {
+        this.loginForm.get("password").setValue("");
+        this.loginError();
+      }
+    } else {
+      const alert = await this.alert.create({
+        header: "¿Te has dado cuenta?",
+        message: "Para dos cosas que te pedimos y las pones mal... 🙄",
+        buttons: ["Tendré más cuidado"]
+      });
+
+      await alert.present();
     }
   }
 
   async loginSuccess(user: User) {
     this.auth.setAuthUser(user);
     await Toast.show({
-      text: "Accediendo a FrikiRadar"
+      text: "Permiso concedido. Accediendo a FrikiRadar..."
     });
     this.router.navigate(["/"]);
   }
@@ -76,8 +86,9 @@ export class LoginPage {
   async loginError() {
     const alert = await this.alert.create({
       header: "Error de autenticación",
-      message: "Revisa los datos introducidos",
-      buttons: ["OK"]
+      message:
+        "El nombre/email o contraseña que has introducido no son correctos.",
+      buttons: ["Oki doki"]
     });
 
     await alert.present();

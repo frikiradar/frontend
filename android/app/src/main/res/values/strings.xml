@@ -3,6 +3,6 @@
     <string name="app_name">FrikiRadar</string>
     <string name="title_activity_main">FrikiRadar</string>
     <string name="package_name">com.frikiradar.app</string>
-    <string name="fileprovider_authority">io.ionic.starter.fileprovider</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="fileprovider_authority">com.frikiradar.app.fileprovider</string>
+    <string name="custom_url_scheme">com.frikiradar.app</string>
 </resources>

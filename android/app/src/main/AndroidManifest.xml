@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.ionic.starter">
+    package="com.frikiradar.app">
 
     <application
         android:allowBackup="true"
@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:name="io.ionic.starter.MainActivity"
+            android:name="com.frikiradar.app.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch">
 
@@ -55,7 +55,4 @@
     <!-- Navigator.getUserMedia -->
     <!-- Video -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- Audio -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 </manifest>

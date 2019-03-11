@@ -65,21 +65,31 @@ export class RegisterPage implements OnInit {
   ngOnInit() {}
 
   async submitRegister() {
-    try {
-      await this.userSvc.register(
-        this.username.value.trim(),
-        this.email.value.trim(),
-        this.birthday.value.trim(),
-        this.password.value.trim()
-      );
+    if (this.registerForm.valid) {
+      try {
+        await this.userSvc.register(
+          this.username.value.trim(),
+          this.email.value.trim(),
+          this.birthday.value.trim(),
+          this.password.value.trim()
+        );
 
-      const user = await this.auth.login(
-        this.username.value.trim(),
-        this.password.value.trim()
-      );
-      this.registerSuccess(user);
-    } catch (error) {
-      this.registerError(error);
+        const user = await this.auth.login(
+          this.username.value.trim(),
+          this.password.value.trim()
+        );
+        this.registerSuccess(user);
+      } catch (error) {
+        this.registerError(error);
+      }
+    } else {
+      const alert = await this.alert.create({
+        header: "Revisa la información",
+        message: "Para cuatro cosas que te pedimos y las pones mal... 🙄",
+        buttons: ["Tendré más cuidado"]
+      });
+
+      await alert.present();
     }
   }
 
@@ -96,7 +106,7 @@ export class RegisterPage implements OnInit {
     const alert = await this.alert.create({
       header: "Error de registro",
       message: error,
-      buttons: ["OK"]
+      buttons: ["Ok"]
     });
 
     await alert.present();
