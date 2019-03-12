@@ -48,7 +48,7 @@ export class RegisterPage implements OnInit {
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(20),
-        Validators.pattern("[a-zA-Z0-9 ]+")
+        Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+")
       ]),
       email: new FormControl("", [
         Validators.required,
