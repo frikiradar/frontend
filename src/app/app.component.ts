@@ -26,16 +26,15 @@ export class AppComponent {
     this.auth.currentUser.subscribe(authUser => {
       this.currentUser = authUser;
 
-      if (!authUser.id) {
-        return;
-      }
-      LogRocket.identify(`${authUser.id}`, {
-        name: authUser.username,
-        email: authUser.email
+      if (authUser && authUser.id) {
+        LogRocket.identify(`${authUser.id}`, {
+          name: authUser.username,
+          email: authUser.email
 
-        // Add your own custom user variables here, ie:
-        // subscriptionType: 'pro'
-      });
+          // Add your own custom user variables here, ie:
+          // subscriptionType: 'pro'
+        });
+      }
     });
   }
 
