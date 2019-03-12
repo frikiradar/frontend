@@ -42,6 +42,7 @@
     "cordova-plugin-device": "2.0.2",
     "core-js": "^2.6.5",
     "jwt-decode": "^2.2.0",
+    "logrocket": "^0.6.19",
     "prettier": "^1.16.4",
     "rxjs": "6.4.0",
     "zone.js": "^0.8.29"
