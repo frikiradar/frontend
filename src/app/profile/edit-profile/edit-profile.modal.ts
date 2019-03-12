@@ -320,30 +320,27 @@ export class EditProfileModal implements OnInit {
     try {
       const newImage = await this.crop.crop(image.path, {
         quality: 70,
-        targetWidth: 512,
-        targetHeight: 512
+        targetWidth: -1,
+        targetHeight: -1
       });
 
       /*const base64File = await this.utils.getBase64Image(
         this.webview.convertFileSrc(newImage)
       );*/
 
-      this.base64.encodeFile(newImage).then(async base64File => {
-        const avatar = new File(
-          [this.utils.base64toBlob(base64File)],
-          "avatar.png"
-        );
-        try {
-          this.user.avatar = await this.userSvc.uploadAvatar(avatar);
-          await Toast.show({
-            text: `Imagen actualizada correctamente.`
-          });
-        } catch (e) {
-          await Toast.show({
-            text: `Error al actualizar la imagen.`
-          });
-        }
-      });
+      const base64File = await this.base64.encodeFile(newImage);
+      const blob: Blob = this.utils.base64toBlob(base64File);
+      const avatar: File = new File([blob], "avatar.png");
+      try {
+        this.user.avatar = await this.userSvc.uploadAvatar(avatar);
+        await Toast.show({
+          text: `Imagen actualizada correctamente.`
+        });
+      } catch (e) {
+        await Toast.show({
+          text: `Error al actualizar la imagen.`
+        });
+      }
     } catch (e) {
       await Toast.show({
         text: `Error al recortar la imagen.`

@@ -8,30 +8,16 @@ export class UtilsService {
   constructor(public http: HttpClient) {}
 
   base64toBlob(b64Data: string) {
-    const contentType =
-      b64Data
-        .split(",")[0]
-        .split(":")[1]
-        .split(";")[0] || "";
-    const sliceSize = 1024;
-
-    const byteCharacters = atob(b64Data.split(",")[1]);
-    const byteArrays = [];
-
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-      const byteNumbers = new Array(slice.length);
-
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-
-      const byteArray = new Uint8Array(byteNumbers);
-
-      byteArrays.push(byteArray);
+    const bytes: string = atob(
+      b64Data.replace(/^data:image\/(png|jpg|\*);charset=utf-8;base64,/, "")
+    );
+    const byteNumbers = new Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) {
+      byteNumbers[i] = bytes.charCodeAt(i);
     }
+    const byteArray = new Uint8Array(byteNumbers);
 
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob([byteArray], { type: "image/png" });
   }
 
   blobToBase64(blob: Blob): Promise<string> {
