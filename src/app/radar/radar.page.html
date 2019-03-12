@@ -47,7 +47,16 @@
         </ion-avatar>
         <ion-label>
           <h2>{{ user.username }}, {{ user.age }}</h2>
-          <h3>{{ user.location }}, a {{ user.distance }}km</h3>
+          <h3>
+            <span *ngIf="user.location"
+              >{{ user.location
+              }}<span *ngIf="user.location && user.distance !== undefined"
+                >, a
+              </span></span
+            ><span *ngIf="user.distance !== undefined"
+              >{{ user.distance }}km</span
+            >
+          </h3>
           <p>{{ user.description }}</p>
         </ion-label>
         <ion-note slot="end">90%</ion-note>
@@ -63,6 +72,7 @@
       max="5"
       step="1"
       snaps="true"
+      [debounce]="250"
       (ionChange)="changeRatio($event.detail.value)"
     >
       <ion-icon slot="end" name="globe"></ion-icon>

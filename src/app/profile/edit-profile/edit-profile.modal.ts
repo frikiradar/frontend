@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
-  FormGroup,
   FormControl,
+  FormGroup,
   Validators
 } from "@angular/forms";
-import { CameraResultType, CameraSource, Plugins } from "@capacitor/core";
+import { Plugins } from "@capacitor/core";
+import { Camera } from "@ionic-native/camera/ngx";
+
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
@@ -26,7 +28,7 @@ import { AuthService } from "./../../services/auth.service";
 import { TagService } from "./../../services/tag.service";
 import { UtilsService } from "./../../services/utils.service";
 
-const { Toast, Camera } = Plugins;
+const { Toast } = Plugins;
 
 @Component({
   selector: "app-edit-profile",
@@ -73,7 +75,8 @@ export class EditProfileModal implements OnInit {
     private crop: Crop,
     private base64: Base64,
     private utils: UtilsService,
-    private webview: WebView
+    private webview: WebView,
+    private camera: Camera
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -314,22 +317,26 @@ export class EditProfileModal implements OnInit {
   }
 
   async takePicture(mode: string) {
-    const image = await Camera.getPhoto({
-      quality: 70,
-      resultType: CameraResultType.Uri,
-      source: mode === "camera" ? CameraSource.Camera : CameraSource.Photos
+    const image = await this.camera.getPicture({
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      sourceType:
+        mode === "camera"
+          ? this.camera.PictureSourceType.CAMERA
+          : this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      mediaType: this.camera.MediaType.PICTURE,
+      saveToPhotoAlbum: mode === "camera" ? true : false,
+      cameraDirection: 1,
+      correctOrientation: true
     });
 
     try {
-      const newImage = await this.crop.crop(image.path, {
+      const newImage = await this.crop.crop(image, {
         quality: 70,
         targetWidth: -1,
         targetHeight: -1
       });
-
-      /*const base64File = await this.utils.getBase64Image(
-        this.webview.convertFileSrc(newImage)
-      );*/
 
       const base64File = await this.base64.encodeFile(newImage);
       const blob: Blob = this.utils.base64toBlob(base64File);
@@ -345,9 +352,7 @@ export class EditProfileModal implements OnInit {
         });
       }
     } catch (e) {
-      await Toast.show({
-        text: `Error al recortar la imagen.`
-      });
+      console.error(`Error al recortar la imagen. ${e}`);
     }
   }
 

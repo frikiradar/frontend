@@ -78,7 +78,7 @@ export class LoginPage {
   async loginSuccess(user: User) {
     this.auth.setAuthUser(user);
     await Toast.show({
-      text: "Permiso concedido. Accediendo a FrikiRadar..."
+      text: "¡Acceso concedido!"
     });
     this.router.navigate(["/"]);
   }

@@ -24,15 +24,18 @@
   <div padding>
     <ion-list padding class="resume">
       <h1>{{ user?.username }}, {{ user?.age }}</h1>
-      <h3 class="location">{{ user?.location }}, a {{ user?.distance }}km</h3>
+      <h3 class="location">
+        <span *ngIf="user.location">{{ user.location }}</span
+        ><span *ngIf="user.location && user.distance !== undefined">, a </span
+        ><span *ngIf="user.distance !== undefined">{{ user.distance }}km</span>
+      </h3>
       <p>{{ user?.description }}</p>
     </ion-list>
     <ion-list class="info">
       <ion-item *ngIf="user.gender" lines="none">
         <ion-label
-          >Identidad de género: {{ user.gender }} ({{
-            user.pronoun
-          }})</ion-label
+          >Identidad de género: {{ user.gender }}
+          <span *ngIf="user.pronoun">({{ user.pronoun }})</span></ion-label
         >
       </ion-item>
       <ion-item *ngIf="user.orientation" lines="none">
