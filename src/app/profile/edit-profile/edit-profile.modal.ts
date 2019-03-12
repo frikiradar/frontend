@@ -250,8 +250,11 @@ export class EditProfileModal implements OnInit {
       name &&
       !this.tags.some(t => t.name === name && t.category.name === catName)
     ) {
-      const category = { name: catName };
-      this.tags = [...this.tags, ...[{ name: name.trim(), category }]];
+      const tags = name.split(",").map((t: string) => {
+        return { name: t.trim(), category: { name: catName } };
+      });
+
+      this.tags = [...this.tags, ...tags];
       this.submitTags();
     }
     this.music.value = this.games.value = this.films.value = this.books.value =
