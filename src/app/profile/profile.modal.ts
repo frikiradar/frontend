@@ -1,7 +1,13 @@
 import { Component, OnInit } from "@angular/core";
-import { ModalController, NavParams, PopoverController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  NavParams,
+  PopoverController
+} from "@ionic/angular";
 
 import { User } from "../models/user";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-profile",
@@ -14,11 +20,15 @@ export class ProfileModal implements OnInit {
   constructor(
     private navParams: NavParams,
     public modal: ModalController,
-    public popover: PopoverController
+    public popover: PopoverController,
+    private alert: AlertController,
+    private userSvc: UserService
   ) {}
 
   async ngOnInit() {
-    this.user = this.navParams.get("user");
+    const id = this.navParams.get("id");
+    this.user = await this.userSvc.getUser(id);
+
     this.user.avatar = this.user.avatar
       ? this.user.avatar
       : "./assets/img/users/default.jpg";
@@ -28,6 +38,16 @@ export class ProfileModal implements OnInit {
     if (this.user && this.user.tags) {
       return this.user.tags.filter(t => t.category.name === category);
     }
+  }
+
+  async test() {
+    const alert = await this.alert.create({
+      header: "Función aún no disponible",
+      message: "Esta acción se encuentra aún en desarrollo.",
+      buttons: ["Gracias por avisar"]
+    });
+
+    await alert.present();
   }
 
   closeModal() {

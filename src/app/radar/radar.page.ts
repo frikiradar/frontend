@@ -113,10 +113,10 @@ export class RadarPage implements OnInit {
     });
   }
 
-  async showProfileModal(user: User) {
+  async showProfileModal(id: User["id"]) {
     const modal = await this.modal.create({
       component: ProfileModal,
-      componentProps: { user }
+      componentProps: { id }
     });
     await modal.present();
     // this.popover.dismiss();

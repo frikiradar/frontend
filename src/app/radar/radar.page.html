@@ -39,7 +39,7 @@
       <ion-item
         button
         *ngFor="let user of users"
-        (click)="showProfileModal(user)"
+        (click)="showProfileModal(user.id)"
       >
         <ion-avatar slot="start">
           <ion-skeleton-text animated *ngIf="!user.avatar"></ion-skeleton-text>

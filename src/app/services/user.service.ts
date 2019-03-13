@@ -104,7 +104,7 @@ export class UserService {
   }
 
   getStatus() {
-    return ["Soltero", "Casado", "Saliendo con alguien"];
+    return ["Soltero", "Saliendo con alguien", "Pareja estable", "Casado"];
   }
 
   getGenders() {
