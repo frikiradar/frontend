@@ -13,7 +13,10 @@
 
 <ion-content>
   <p padding>
-    Estos son los resultados obtenidos <span *ngIf="ratio <= 1000"> un radio de {{ratio}}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un porcentaje de coincidencia más alto.
+    Estos son los resultados obtenidos
+    <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span
+    ><span *ngIf="ratio > 1000">mundialmente</span> con un porcentaje de
+    coincidencia más alto.
   </p>
   <ion-list *ngIf="showSkeleton; else radarItems">
     <ion-item *ngFor="let i of [].constructor(8)">
@@ -58,7 +61,7 @@
           </h3>
           <p>{{ user.description }}</p>
         </ion-label>
-        <ion-note slot="end">90%</ion-note>
+        <ion-note slot="end">{{ user.match }}%</ion-note>
       </ion-item>
     </ion-list>
   </ng-template>

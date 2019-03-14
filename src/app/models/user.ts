@@ -29,5 +29,7 @@ export interface User {
 
   tags: Tag[];
 
+  match: number;
+
   avatar: SafeResourceUrl;
 }
