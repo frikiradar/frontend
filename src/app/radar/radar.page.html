@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header no-border>
   <ion-toolbar>
     <ion-buttons slot="secondary">
       <ion-button (click)="showPopover($event)">
@@ -13,8 +13,7 @@
 
 <ion-content>
   <p padding>
-    Estos son los resultados obtenidos en un radio de 25km con un porcentaje (%)
-    de coincidencia más alto.
+    Estos son los resultados obtenidos <span *ngIf="ratio <= 1000"> un radio de {{ratio}}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un porcentaje de coincidencia más alto.
   </p>
   <ion-list *ngIf="showSkeleton; else radarItems">
     <ion-item *ngFor="let i of [].constructor(8)">

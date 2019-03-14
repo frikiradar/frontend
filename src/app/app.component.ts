@@ -39,8 +39,10 @@ export class AppComponent {
   }
 
   initializeApp() {
+    StatusBar.setBackgroundColor({ color: "#1a1a1a" });
+    SplashScreen.show();
+
     this.platform.ready().then(() => {
-      StatusBar.setBackgroundColor({ color: "#1a1a1a" });
       SplashScreen.hide();
     });
   }
