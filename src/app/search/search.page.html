@@ -1,24 +1,29 @@
-<ion-header no-border>
+<ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="menu.open()">
-        <ion-avatar>
-          <ion-img [src]="user?.avatar"></ion-img>
-        </ion-avatar>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Radar</ion-title>
+    <ion-searchbar
+      animated
+      debounce="500"
+      placeholder="Busco frikis a los que les guste..."
+      [debounce]="500"
+      (keyup.enter)="search($event.target.value)"
+      spellcheck="false"
+    ></ion-searchbar>
+    <ion-segment (ionChange)="changeOrder($event.detail.value)">
+      <ion-segment-button layout="icon-start" value="distance" checked>
+        <ion-label>Distancia</ion-label>
+        <ion-icon name="navigate"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button layout="icon-start" value="match">
+        <ion-label>Afinidad</ion-label>
+        <ion-icon name="heart"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div *ngIf="users?.length || showSkeleton; else noUsers">
-    <p padding>
-      Estos son los resultados obtenidos
-      <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span
-      ><span *ngIf="ratio > 1000">mundialmente</span> con un porcentaje de
-      coincidencia más alto.
-    </p>
+    <p text-center>Total de resultados: {{ users?.length }}</p>
     <ion-list *ngIf="showSkeleton; else radarItems">
       <ion-item *ngFor="let i of [].constructor(8)">
         <ion-avatar slot="start">
@@ -72,37 +77,11 @@
   </div>
   <ng-template #noUsers>
     <div class="full-center" padding>
-      <ion-icon name="body"></ion-icon>
+      <ion-icon name="search"></ion-icon>
       <h2>Sin resultados</h2>
       <p>
-        Ajusta el radio de búsqueda o cambia tus preferencias para mejorar los
-        resultados.
+        Cambia las palabras de búsqueda para mejorar los resultados.
       </p>
     </div>
   </ng-template>
 </ion-content>
-<ion-footer translucent>
-  <div id="radar-range" padding>
-    <ion-range
-      #range
-      min="0"
-      max="5"
-      step="1"
-      snaps="true"
-      [debounce]="250"
-      (ionChange)="changeRatio($event.detail.value)"
-    >
-      <ion-icon slot="end" name="globe"></ion-icon>
-    </ion-range>
-    <ion-grid id="range-distance">
-      <ion-row>
-        <ion-col>5km</ion-col>
-        <ion-col>25km</ion-col>
-        <ion-col>100km</ion-col>
-        <ion-col>500km</ion-col>
-        <ion-col>1000km</ion-col>
-        <ion-col></ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-</ion-footer>

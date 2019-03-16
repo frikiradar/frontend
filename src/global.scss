@@ -19,11 +19,11 @@ ion-list {
   a {
     text-decoration: none;
   }
-  display: inherit;
 }
 
-ion-footer {
-  background: #1a1a1a;
+ion-footer,
+ion-list {
+  background: #1a1a1a !important;
   color: white;
 }
 
@@ -80,4 +80,29 @@ form {
   ion-label {
     --color: white !important;
   }
+}
+
+.full-center {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  p {
+    margin: 0;
+  }
+
+  ion-icon {
+    color: white;
+    font-size: 48px;
+  }
+}
+
+ion-segment-button {
+  --background: #1a1a1a;
+  background: #1a1a1a;
+  --color: white;
+  text-transform: none;
 }

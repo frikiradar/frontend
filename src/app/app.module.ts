@@ -14,11 +14,12 @@ import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { MenuComponent } from "./menu/menu.component";
 import { ProfileModal } from "./profile/profile.modal";
 
 @NgModule({
-  declarations: [AppComponent, ProfileModal, ChatModal],
-  entryComponents: [ProfileModal, ChatModal],
+  declarations: [AppComponent, ProfileModal, ChatModal, MenuComponent],
+  entryComponents: [ProfileModal, ChatModal, MenuComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

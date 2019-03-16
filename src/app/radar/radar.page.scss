@@ -1,25 +1,29 @@
 ion-content {
-  ion-item {
-    --background: #1a1a1a;
-    --border-color: #e91e63;
+  ion-list {
+    padding: 0;
 
-    ion-avatar {
-      width: 64px;
-      height: 64px;
+    ion-item {
+      --background: #1a1a1a;
+      --border-color: #e91e63;
+
+      ion-avatar {
+        width: 64px;
+        height: 64px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      p {
+        color: #bbbbbb;
+      }
     }
 
-    h2 {
-      font-size: 22px;
-    }
-
-    p {
-      color: #dddddd;
+    ion-item:first-child {
+      --background: #e91e63;
     }
   }
-}
-
-.list-md:not(.list-inset):not(.list-md-lines-none) .item:first-child {
-  --background: #e91e63;
 }
 
 ion-range {
@@ -52,6 +56,6 @@ ion-range {
 
 ion-note {
   margin: 0;
-  --color: white;
+  --color: #bbbbbb;
   font-size: 14px;
 }

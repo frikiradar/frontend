@@ -1,51 +1,14 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { IonRange, ModalController, PopoverController } from "@ionic/angular";
+import { IonRange, MenuController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
-import { EditProfileModal } from "./../profile/edit-profile/edit-profile.modal";
+import { UserService } from "../services/user.service";
 import { ProfileModal } from "./../profile/profile.modal";
 import { AuthService } from "./../services/auth.service";
-import { UserService } from "./../services/user.service";
 
 const { Geolocation } = Plugins;
-
-@Component({
-  selector: "app-popover",
-  template: `
-    <ion-list>
-      <ion-item button (click)="editProfileModal()"
-        ><ion-label>Mi perfil</ion-label></ion-item
-      >
-      <ion-item lines="none" button (click)="logout()"
-        ><ion-label>Cerrar sesión</ion-label></ion-item
-      >
-    </ion-list>
-  `
-})
-export class PopoverComponent {
-  constructor(
-    private router: Router,
-    private auth: AuthService,
-    private popover: PopoverController,
-    private modal: ModalController
-  ) {}
-
-  logout() {
-    this.auth.logout();
-    this.router.navigate(["/login"]);
-    this.popover.dismiss();
-  }
-
-  async editProfileModal() {
-    this.popover.dismiss();
-    const modal = await this.modal.create({
-      component: EditProfileModal
-    });
-    modal.present();
-  }
-}
 
 @Component({
   selector: "app-radar",
@@ -63,7 +26,7 @@ export class RadarPage implements OnInit {
 
   constructor(
     public userSvc: UserService,
-    public popover: PopoverController,
+    public menu: MenuController,
     private modal: ModalController,
     private auth: AuthService
   ) {}
@@ -87,30 +50,13 @@ export class RadarPage implements OnInit {
   }
 
   async getRadarUsers() {
-    this.userSvc.getRadarUsers(this.ratio).subscribe(users => {
-      users.map(async user => {
-        user.avatar = user.avatar
-          ? user.avatar
-          : "../../assets/img/users/default.jpg";
-      });
-
-      setTimeout(() => {
-        this.showSkeleton = false;
-        this.users = users;
-      }, 250);
+    this.users = await this.userSvc.getRadarUsers(this.ratio).toPromise();
+    this.users.map(async user => {
+      user.avatar = user.avatar
+        ? user.avatar
+        : "../../assets/img/users/default.jpg";
     });
-  }
-
-  async showPopover(ev: Event) {
-    const popover = await this.popover.create({
-      component: PopoverComponent,
-      event: ev,
-      translucent: true
-    });
-    await popover.present();
-    popover.onDidDismiss().then(() => {
-      this.getRadarUsers();
-    });
+    this.showSkeleton = false;
   }
 
   async showProfileModal(id: User["id"]) {
@@ -119,7 +65,6 @@ export class RadarPage implements OnInit {
       componentProps: { id }
     });
     await modal.present();
-    // this.popover.dismiss();
   }
 
   async changeRatio(value: number) {

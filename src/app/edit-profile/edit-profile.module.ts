@@ -2,14 +2,15 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
+
 import { IonicModule } from "@ionic/angular";
 
-import { RadarPage } from "./radar.page";
+import { EditProfilePage } from "./edit-profile.page";
 
 const routes: Routes = [
   {
     path: "",
-    component: RadarPage
+    component: EditProfilePage
   }
 ];
 
@@ -17,10 +18,10 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [RadarPage]
+  declarations: [EditProfilePage]
 })
-export class RadarPageModule {}
+export class EditProfilePageModule {}

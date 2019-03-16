@@ -5,13 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { Camera } from "@ionic-native/camera/ngx";
-
 import { Base64 } from "@ionic-native/base64/ngx";
+import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
-import { WebView } from "@ionic-native/ionic-webview/ngx";
-
 import {
   ActionSheetController,
   IonInput,
@@ -21,21 +19,21 @@ import {
   PickerController
 } from "@ionic/angular";
 
-import { Tag } from "../../models/tags";
-import { User } from "../../models/user";
-import { UserService } from "../../services/user.service";
-import { AuthService } from "./../../services/auth.service";
-import { TagService } from "./../../services/tag.service";
-import { UtilsService } from "./../../services/utils.service";
+import { Tag } from "../models/tags";
+import { User } from "../models/user";
+import { UserService } from "../services/user.service";
+import { AuthService } from "./../services/auth.service";
+import { TagService } from "./../services/tag.service";
+import { UtilsService } from "./../services/utils.service";
 
 const { Toast } = Plugins;
 
 @Component({
   selector: "app-edit-profile",
-  templateUrl: "./edit-profile.modal.html",
-  styleUrls: ["./edit-profile.modal.scss"]
+  templateUrl: "./edit-profile.page.html",
+  styleUrls: ["./edit-profile.page.scss"]
 })
-export class EditProfileModal implements OnInit {
+export class EditProfilePage implements OnInit {
   get minage() {
     return this.profileForm.get("minage");
   }
@@ -75,8 +73,8 @@ export class EditProfileModal implements OnInit {
     private crop: Crop,
     private base64: Base64,
     private utils: UtilsService,
-    private webview: WebView,
-    private camera: Camera
+    private camera: Camera,
+    private router: Router
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -143,7 +141,7 @@ export class EditProfileModal implements OnInit {
         text: `Error al guardar los cambios ${e}.`
       });
     }
-    this.closeModal();
+    this.back();
   }
 
   async showSegment(event: string) {
@@ -356,7 +354,7 @@ export class EditProfileModal implements OnInit {
     }
   }
 
-  closeModal() {
-    this.modal.dismiss();
+  back() {
+    this.router.navigate(["/tabs/radar"]);
   }
 }

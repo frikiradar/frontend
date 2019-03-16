@@ -6,6 +6,7 @@ import {
   PopoverController
 } from "@ionic/angular";
 
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 
@@ -16,6 +17,7 @@ import { UserService } from "../services/user.service";
 })
 export class ProfileModal implements OnInit {
   user: User;
+  avatar: SafeResourceUrl;
 
   constructor(
     private navParams: NavParams,
@@ -23,15 +25,16 @@ export class ProfileModal implements OnInit {
     public popover: PopoverController,
     private alert: AlertController,
     private userSvc: UserService
-  ) {}
+  ) {
+    this.avatar = "../../assets/img/users/default.jpg";
+  }
 
   async ngOnInit() {
     const id = this.navParams.get("id");
     this.user = await this.userSvc.getUser(id);
-
-    this.user.avatar = this.user.avatar
-      ? this.user.avatar
-      : "./assets/img/users/default.jpg";
+    if (this.user.avatar) {
+      this.avatar = this.user.avatar;
+    }
   }
 
   getTagsCategory(category: string) {
