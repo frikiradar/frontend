@@ -14,7 +14,14 @@ const routes: Routes = [
     path: "register",
     loadChildren: "./register/register.module#RegisterPageModule"
   },
-  { path: 'edit-profile', loadChildren: './edit-profile/edit-profile.module#EditProfilePageModule' }
+  {
+    path: "edit-profile",
+    loadChildren: "./edit-profile/edit-profile.module#EditProfilePageModule"
+  },
+  {
+    path: "profile/:id",
+    loadChildren: "./profile/profile.module#ProfilePageModule"
+  }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

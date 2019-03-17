@@ -1,12 +1,12 @@
 <ion-header translucent no-border>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="closeModal()">
+      <ion-button (click)="back()">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="test()">
+      <ion-button (click)="showChat(user?.id)">
         <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
       </ion-button>
       <ion-button (click)="test()">

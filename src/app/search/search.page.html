@@ -1,29 +1,27 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-searchbar
-      animated
-      debounce="500"
-      placeholder="Busco frikis a los que les guste..."
-      [debounce]="500"
-      (keyup.enter)="search($event.target.value)"
-      spellcheck="false"
-    ></ion-searchbar>
-    <ion-segment (ionChange)="changeOrder($event.detail.value)">
-      <ion-segment-button layout="icon-start" value="distance" checked>
-        <ion-label>Distancia</ion-label>
-        <ion-icon name="navigate"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button layout="icon-start" value="match">
-        <ion-label>Afinidad</ion-label>
-        <ion-icon name="heart"></ion-icon>
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
+  <ion-searchbar
+    animated
+    debounce="500"
+    placeholder="Busco frikis a los que les guste..."
+    [debounce]="500"
+    (keyup.enter)="search($event.target.value)"
+    spellcheck="false"
+  ></ion-searchbar>
+  <ion-segment (ionChange)="changeOrder($event.detail.value)">
+    <ion-segment-button layout="icon-start" value="distance" checked>
+      <ion-label>Distancia</ion-label>
+      <ion-icon name="navigate"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button layout="icon-start" value="match">
+      <ion-label>Afinidad</ion-label>
+      <ion-icon name="heart"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
 <ion-content>
   <div *ngIf="users?.length || showSkeleton; else noUsers">
-    <p text-center>Total de resultados: {{ users?.length }}</p>
+    <p text-center>{{ users?.length }} usuarios encontrados</p>
     <ion-list *ngIf="showSkeleton; else radarItems">
       <ion-item *ngFor="let i of [].constructor(8)">
         <ion-avatar slot="start">

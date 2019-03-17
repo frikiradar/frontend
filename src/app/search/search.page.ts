@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { IonSearchbar, ModalController } from "@ionic/angular";
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { User } from "../models/user";
-import { ProfileModal } from "../profile/profile.modal";
 import { RestService } from "./../services/rest.service";
 
 @Component({
@@ -16,7 +15,7 @@ export class SearchPage implements OnInit {
   users: User[];
   showSkeleton = false;
 
-  constructor(private modal: ModalController, private rest: RestService) {}
+  constructor(private rest: RestService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -75,11 +74,7 @@ export class SearchPage implements OnInit {
   }*/
 
   async showProfileModal(id: User["id"]) {
-    const modal = await this.modal.create({
-      component: ProfileModal,
-      componentProps: { id }
-    });
-    await modal.present();
+    this.router.navigate(["/profile", id]);
   }
 
   changeOrder(order: string) {

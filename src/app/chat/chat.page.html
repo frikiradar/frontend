@@ -4,30 +4,21 @@
 
 <ion-content>
   <ion-list>
-    <ion-col>
-      <div>
-        <p class="ion-text-center">Sección aún no funcional</p>
-      </div>
-    </ion-col>
-    <ion-item button (click)="showChat()">
+    <ion-item
+      button
+      (click)="showChat(chat.user.id)"
+      *ngFor="let chat of chats"
+    >
       <ion-avatar slot="start">
-        <img src="./assets/img/users/j-chan.png" />
+        <img [src]="chat.user.avatar" />
       </ion-avatar>
       <ion-label>
-        <h2>Jay-chan</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <h2>{{ chat.user.username }}</h2>
+        <p>{{ chat.text }}</p>
       </ion-label>
-      <ion-note slot="end">19:46</ion-note>
-    </ion-item>
-    <ion-item button>
-      <ion-avatar slot="start">
-        <img src="./assets/img/users/leia.png" />
-      </ion-avatar>
-      <ion-label>
-        <h2>Leia</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      </ion-label>
-      <ion-note slot="end">mar 4 dic 2018</ion-note>
+      <ion-note slot="end">{{
+        chat.time_creation | date: "shortTime"
+      }}</ion-note>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { IonRange, MenuController, ModalController } from "@ionic/angular";
+import { IonRange, MenuController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
-import { ProfileModal } from "./../profile/profile.modal";
 import { AuthService } from "./../services/auth.service";
 
 const { Geolocation } = Plugins;
@@ -27,8 +26,8 @@ export class RadarPage implements OnInit {
   constructor(
     public userSvc: UserService,
     public menu: MenuController,
-    private modal: ModalController,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -50,21 +49,21 @@ export class RadarPage implements OnInit {
   }
 
   async getRadarUsers() {
-    this.users = await this.userSvc.getRadarUsers(this.ratio).toPromise();
-    this.users.map(async user => {
+    const users = await this.userSvc.getRadarUsers(this.ratio).toPromise();
+    users.map(async user => {
       user.avatar = user.avatar
         ? user.avatar
         : "../../assets/img/users/default.jpg";
     });
-    this.showSkeleton = false;
+
+    setTimeout(() => {
+      this.showSkeleton = false;
+      this.users = users;
+    }, 250);
   }
 
   async showProfileModal(id: User["id"]) {
-    const modal = await this.modal.create({
-      component: ProfileModal,
-      componentProps: { id }
-    });
-    await modal.present();
+    this.router.navigate(["/profile", id]);
   }
 
   async changeRatio(value: number) {

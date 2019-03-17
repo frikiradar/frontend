@@ -40,10 +40,10 @@ export class AppComponent {
 
   initializeApp() {
     StatusBar.setBackgroundColor({ color: "#1a1a1a" });
-    SplashScreen.show();
+    // SplashScreen.show();
 
     this.platform.ready().then(() => {
-      SplashScreen.hide();
+      // SplashScreen.hide();
     });
   }
 }

@@ -1,37 +1,40 @@
+import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import {
   AlertController,
   ModalController,
-  NavParams,
   PopoverController
 } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
+import { ChatModal } from "../chat/chat-modal/chat.modal";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-profile",
-  templateUrl: "./profile.modal.html",
-  styleUrls: ["./profile.modal.scss"]
+  templateUrl: "./profile.page.html",
+  styleUrls: ["./profile.page.scss"]
 })
-export class ProfileModal implements OnInit {
+export class ProfilePage implements OnInit {
   user: User;
   avatar: SafeResourceUrl;
 
   constructor(
-    private navParams: NavParams,
     public modal: ModalController,
     public popover: PopoverController,
     private alert: AlertController,
-    private userSvc: UserService
+    private userSvc: UserService,
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.avatar = "../../assets/img/users/default.jpg";
   }
 
   async ngOnInit() {
-    const id = this.navParams.get("id");
-    this.user = await this.userSvc.getUser(id);
+    const id = this.route.snapshot.paramMap.get("id");
+    this.user = await this.userSvc.getUser(+id);
     if (this.user.avatar) {
       this.avatar = this.user.avatar;
     }
@@ -41,6 +44,14 @@ export class ProfileModal implements OnInit {
     if (this.user && this.user.tags) {
       return this.user.tags.filter(t => t.category.name === category);
     }
+  }
+
+  async showChat(id: User["id"]) {
+    const modal = await this.modal.create({
+      component: ChatModal,
+      componentProps: { id }
+    });
+    await modal.present();
   }
 
   async test() {
@@ -53,7 +64,7 @@ export class ProfileModal implements OnInit {
     await alert.present();
   }
 
-  closeModal() {
-    this.modal.dismiss();
+  back() {
+    this.location.back();
   }
 }
