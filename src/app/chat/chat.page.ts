@@ -12,6 +12,7 @@ import { ChatModal } from "./chat-modal/chat.modal";
 })
 export class ChatPage implements OnInit {
   chats;
+  showSkeleton = true;
 
   constructor(private modal: ModalController, private rest: RestService) {}
 
@@ -21,6 +22,7 @@ export class ChatPage implements OnInit {
 
   async getChats() {
     this.chats = await this.rest.get(`chats`);
+    this.showSkeleton = false;
   }
 
   async showChat(id: User["id"]) {
@@ -30,6 +32,7 @@ export class ChatPage implements OnInit {
     });
 
     modal.onDidDismiss().then(() => {
+      // this.showSkeleton = true;
       this.getChats();
     });
     await modal.present();
