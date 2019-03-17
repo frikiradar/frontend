@@ -21,6 +21,10 @@ ion-list {
   }
 }
 
+ion-chip {
+  display: inline-grid;
+}
+
 ion-footer,
 ion-list {
   background: #1a1a1a !important;

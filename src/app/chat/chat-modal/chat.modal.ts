@@ -67,15 +67,22 @@ export class ChatModal implements OnInit {
 
   async sendMessage() {
     if (this.text.value.trim()) {
-      /*this.messages = [
+      this.messages = [
         ...this.messages,
-        ...[{ touser: this.user.id, text: this.text.value.trim() }]
-      ];*/
+        ...[
+          {
+            touser: this.user.id,
+            text: this.text.value.trim(),
+            time_creation: new Date()
+          }
+        ]
+      ];
 
+      // TODO: Marcar como enviado cuando lo reciba de vuelta
       const message = (await this.rest
         .put("chat", { touser: this.user.id, text: this.text.value.trim() })
         .toPromise()) as Chat;
-      this.messages = [...this.messages, ...[message]];
+
       this.text.value = "";
     }
   }
