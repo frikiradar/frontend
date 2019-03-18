@@ -1,18 +1,33 @@
+@import "../../../theme/variables.scss";
+
 ion-card {
+  border-radius: 25px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
   &.from {
     margin-left: 40px;
-    color: #353535;
+    --color: white;
+    --background: #6d0b28;
+
+    &+ .to {
+      margin-top: 8px;
+    }
   }
 
   &.to {
     margin-right: 40px;
-  }
+    --color: white;
+    --background: #9a1c42;
 
-  border-radius: 30px;
+    &+ .from {
+      margin-top: 8px;
+    }
+  }
 
   ion-note {
     float: right;
-    color: #353535;
+    color: #bbbbbb;
   }
 }
 
@@ -20,11 +35,12 @@ ion-footer {
   ion-item {
     background: white;
     border-radius: 30px;
-    margin: 0 10px;
   }
 
   ion-textarea {
     height: 40px;
+    --placeholder-color: #555555 !important;
+    color: #353535 !important;
   }
 
   ion-label {

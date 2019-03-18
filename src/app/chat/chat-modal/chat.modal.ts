@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import {
+  AlertController,
   IonContent,
   IonTextarea,
   ModalController,
@@ -19,11 +20,13 @@ import { UserService } from "./../../services/user.service";
   templateUrl: "./chat.modal.html",
   styleUrls: ["./chat.modal.scss"]
 })
-export class ChatModal implements OnInit {
-  @ViewChild("text")
-  text: IonTextarea;
+export class ChatModal {
+  @ViewChild("textarea")
+  textarea: IonTextarea;
   @ViewChild("chatlist")
   chatlist: IonContent;
+
+  source: EventSource;
 
   user: User;
   messages: Chat[] = [];
@@ -34,12 +37,13 @@ export class ChatModal implements OnInit {
     private auth: AuthService,
     private navParams: NavParams,
     private userSvc: UserService,
-    private rest: RestService
-  ) {
-    this.avatar = "../../assets/img/users/default.jpg";
-  }
+    private rest: RestService,
+    private alert: AlertController
+  ) {}
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
+    this.avatar = "../../../assets/img/users/default.jpg";
+
     const id = this.navParams.get("id");
     this.user = await this.userSvc.getUser(id);
     if (this.user.avatar) {
@@ -47,32 +51,57 @@ export class ChatModal implements OnInit {
     }
 
     this.messages = (await this.rest.get(`chat/${id}`)) as Chat[];
-    setTimeout(() => {
-      this.chatlist.scrollToBottom();
-    }, 100);
+    this.scrollDown();
+    this.textarea.setFocus();
 
     const min = Math.min(this.auth.currentUserValue.id, this.user.id);
     const max = Math.max(this.auth.currentUserValue.id, this.user.id);
     const topic = `${min}_${max}`;
 
-    const source = new EventSource(`${environment.pushUrl}?topic=${topic}`);
+    this.source = new EventSource(`${environment.pushUrl}?topic=${topic}`);
 
-    source.addEventListener("message", (res: any) => {
+    this.source.addEventListener("message", (res: any) => {
       const message = JSON.parse(res.data) as Chat;
       if (message.fromuser !== this.auth.currentUserValue.id) {
         this.messages = [...this.messages, message];
+        this.scrollDown();
+      }
+    });
+
+    this.source.addEventListener("error", async error => {
+      if (error.type === "error") {
+        const alert = await this.alert.create({
+          header: `Ups, error al conectar`,
+          message:
+            "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: "Ok, seré paciente",
+              handler: () => {
+                this.closeModal();
+              }
+            }
+          ]
+        });
+
+        await alert.present();
       }
     });
   }
 
   async sendMessage() {
-    if (this.text.value.trim()) {
+    if (this.textarea.value.trim()) {
+      const text = this.textarea.value.trim();
+      this.scrollDown(0);
+      this.textarea.value = "";
+
       this.messages = [
         ...this.messages,
         ...[
           {
             touser: this.user.id,
-            text: this.text.value.trim(),
+            text,
             time_creation: new Date()
           }
         ]
@@ -80,16 +109,19 @@ export class ChatModal implements OnInit {
 
       // TODO: Marcar como enviado cuando lo reciba de vuelta
       const message = (await this.rest
-        .put("chat", { touser: this.user.id, text: this.text.value.trim() })
+        .put("chat", { touser: this.user.id, text })
         .toPromise()) as Chat;
-
-      this.text.value = "";
     }
   }
 
-  scrollDown() {}
+  scrollDown(delay = 100) {
+    setTimeout(() => {
+      this.chatlist.scrollToBottom();
+    }, delay);
+  }
 
   closeModal() {
+    this.source.close();
     this.modal.dismiss();
   }
 }
