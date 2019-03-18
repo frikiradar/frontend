@@ -71,7 +71,7 @@ export class SearchPage {
     }
   }*/
 
-  async showProfileModal(id: User["id"]) {
+  async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
   }
 

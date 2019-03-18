@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { Router } from "@angular/router";
 
 import { User } from "../models/user";
 import { RestService } from "../services/rest.service";
 import { Chat } from "./../models/chat";
-import { ChatModal } from "./chat-modal/chat.modal";
 
 @Component({
   selector: "app-chat",
@@ -15,7 +14,7 @@ export class ChatPage {
   chats: Chat[];
   showSkeleton = true;
 
-  constructor(private modal: ModalController, private rest: RestService) {}
+  constructor(private router: Router, private rest: RestService) {}
 
   async ionViewWillEnter() {
     this.getChats();
@@ -35,15 +34,6 @@ export class ChatPage {
   }
 
   async showChat(id: User["id"]) {
-    const modal = await this.modal.create({
-      component: ChatModal,
-      componentProps: { id }
-    });
-
-    modal.onDidDismiss().then(() => {
-      // this.showSkeleton = true;
-      this.getChats();
-    });
-    await modal.present();
+    this.router.navigate(["/chat", id]);
   }
 }

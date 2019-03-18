@@ -1,21 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="closeModal()">
+      <ion-button (click)="back()">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
-    </ion-buttons>
-    <ion-title>
-      <ion-item lines="none">
-        <ion-avatar slot="start">
+      <ion-button (click)="showProfile(user.id)">
+        <ion-avatar>
           <ion-img [src]="avatar"></ion-img>
         </ion-avatar>
         <ion-label>
           <h2>{{ user?.username }}</h2>
           <!--<p>En línea</p>-->
         </ion-label>
-      </ion-item>
-    </ion-title>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -36,13 +34,19 @@
     <ion-item lines="none">
       <ion-textarea
         placeholder="Escribe tu mensaje aquí"
-        autocapitalize="words"
+        autocapitalize="on"
         (keyup.enter)="sendMessage()"
-        #textarea>
+        #textarea
+        autofocus
+      >
       </ion-textarea>
     </ion-item>
     <ion-buttons ion-activatable slot="end">
-      <ion-button color="primary" (click)="sendMessage()" [disabled]="!textarea?.value?.trim()">
+      <ion-button
+        color="primary"
+        (click)="sendMessage()"
+        [disabled]="!textarea?.value?.trim()"
+      >
         <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>

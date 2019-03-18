@@ -15,7 +15,6 @@ import {
   IonInput,
   IonSegment,
   IonSlides,
-  ModalController,
   PickerController
 } from "@ionic/angular";
 
@@ -63,7 +62,6 @@ export class EditProfilePage {
   public list: { name: string; total: number }[];
 
   constructor(
-    public modal: ModalController,
     public fb: FormBuilder,
     public userSvc: UserService,
     private tagSvc: TagService,

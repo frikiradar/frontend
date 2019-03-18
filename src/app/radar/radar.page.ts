@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
 import { IonRange, MenuController } from "@ionic/angular";
@@ -14,7 +14,7 @@ const { Geolocation } = Plugins;
   templateUrl: "./radar.page.html",
   styleUrls: ["./radar.page.scss"]
 })
-export class RadarPage {
+export class RadarPage implements OnInit {
   @ViewChild("range")
   range: IonRange;
 
@@ -27,10 +27,10 @@ export class RadarPage {
     public userSvc: UserService,
     public menu: MenuController,
     private auth: AuthService,
-    private router: Router
+    public router: Router
   ) {}
 
-  async ionViewWillEnter() {
+  async ngOnInit() {
     this.range.value = 1;
     this.user = this.auth.currentUserValue;
     this.user.avatar = this.user.avatar
@@ -62,7 +62,7 @@ export class RadarPage {
     }, 250);
   }
 
-  async showProfileModal(id: User["id"]) {
+  async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
   }
 

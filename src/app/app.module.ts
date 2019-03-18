@@ -14,15 +14,14 @@ import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { ChatModal } from "./chat/chat-modal/chat.modal";
 import { MenuComponent } from "./menu/menu.component";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
 registerLocaleData(localeEs, "es");
 
 @NgModule({
-  declarations: [AppComponent, ChatModal, MenuComponent],
-  entryComponents: [ChatModal, MenuComponent],
+  declarations: [AppComponent, MenuComponent],
+  entryComponents: [MenuComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

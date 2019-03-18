@@ -1,4 +1,10 @@
-@import "../../../theme/variables.scss";
+@import "../../theme/variables.scss";
+
+ion-label h2 {
+  text-transform: none;
+  margin-left: 10px;
+  letter-spacing: normal;
+}
 
 ion-card {
   border-radius: 25px;

@@ -7,7 +7,7 @@
         </ion-avatar>
       </ion-button>
     </ion-buttons>
-    <ion-title>Radar</ion-title>
+    <ion-title>Frikiradar</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -42,7 +42,7 @@
         <ion-item
           button
           *ngFor="let user of users"
-          (click)="showProfileModal(user.id)"
+          (click)="showProfile(user.id)"
         >
           <ion-avatar slot="start">
             <ion-skeleton-text
@@ -72,7 +72,7 @@
   </div>
   <ng-template #noUsers>
     <div class="full-center" padding>
-      <ion-icon name="body"></ion-icon>
+      <ion-icon name="pin"></ion-icon>
       <h2>Sin resultados</h2>
       <p>
         Ajusta el radio de búsqueda o cambia tus preferencias para mejorar los

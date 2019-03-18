@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: "profile/:id",
     loadChildren: "./profile/profile.module#ProfilePageModule"
+  },
+  {
+    path: "chat/:id",
+    loadChildren: "./chat-user/chat-user.module#ChatUserPageModule"
   }
 ];
 @NgModule({

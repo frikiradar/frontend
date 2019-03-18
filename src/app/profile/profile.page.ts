@@ -1,14 +1,9 @@
 import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import {
-  AlertController,
-  ModalController,
-  PopoverController
-} from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AlertController, PopoverController } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { ChatModal } from "../chat/chat-modal/chat.modal";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 
@@ -22,12 +17,12 @@ export class ProfilePage implements OnInit {
   avatar: SafeResourceUrl;
 
   constructor(
-    public modal: ModalController,
     public popover: PopoverController,
     private alert: AlertController,
     private userSvc: UserService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) {
     this.avatar = "../../assets/img/users/default.jpg";
   }
@@ -47,11 +42,7 @@ export class ProfilePage implements OnInit {
   }
 
   async showChat(id: User["id"]) {
-    const modal = await this.modal.create({
-      component: ChatModal,
-      componentProps: { id }
-    });
-    await modal.present();
+    this.router.navigate(["/chat", id]);
   }
 
   async test() {

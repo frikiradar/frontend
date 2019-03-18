@@ -45,7 +45,7 @@
         <ion-item
           button
           *ngFor="let user of users"
-          (click)="showProfileModal(user.id)"
+          (click)="showProfile(user.id)"
         >
           <ion-avatar slot="start">
             <ion-skeleton-text

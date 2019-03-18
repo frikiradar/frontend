@@ -1,26 +1,22 @@
+import { Location } from "@angular/common";
 import { Component, ViewChild } from "@angular/core";
-import {
-  AlertController,
-  IonContent,
-  IonTextarea,
-  ModalController,
-  NavParams
-} from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AlertController, IonContent, IonTextarea } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { environment } from "../../../environments/environment";
-import { Chat } from "../../models/chat";
-import { User } from "../../models/user";
-import { RestService } from "../../services/rest.service";
-import { AuthService } from "./../../services/auth.service";
-import { UserService } from "./../../services/user.service";
+import { environment } from "../../environments/environment";
+import { Chat } from "../models/chat";
+import { User } from "../models/user";
+import { RestService } from "../services/rest.service";
+import { AuthService } from "./../services/auth.service";
+import { UserService } from "./../services/user.service";
 
 @Component({
-  selector: "app-chat-modal",
-  templateUrl: "./chat.modal.html",
-  styleUrls: ["./chat.modal.scss"]
+  selector: "app-chat-user",
+  templateUrl: "./chat-user.page.html",
+  styleUrls: ["./chat-user.page.scss"]
 })
-export class ChatModal {
+export class ChatUserPage {
   @ViewChild("textarea")
   textarea: IonTextarea;
   @ViewChild("chatlist")
@@ -33,26 +29,26 @@ export class ChatModal {
   avatar: SafeResourceUrl;
 
   constructor(
-    public modal: ModalController,
     private auth: AuthService,
-    private navParams: NavParams,
     private userSvc: UserService,
     private rest: RestService,
-    private alert: AlertController
+    private alert: AlertController,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
   ) {}
 
   async ionViewWillEnter() {
-    this.avatar = "../../../assets/img/users/default.jpg";
+    this.avatar = "../../assets/img/users/default.jpg";
 
-    const id = this.navParams.get("id");
-    this.user = await this.userSvc.getUser(id);
+    const id = this.route.snapshot.paramMap.get("id");
+    this.user = await this.userSvc.getUser(+id);
     if (this.user.avatar) {
       this.avatar = this.user.avatar;
     }
 
     this.messages = (await this.rest.get(`chat/${id}`)) as Chat[];
     this.scrollDown();
-    this.textarea.setFocus();
 
     const min = Math.min(this.auth.currentUserValue.id, this.user.id);
     const max = Math.max(this.auth.currentUserValue.id, this.user.id);
@@ -79,7 +75,7 @@ export class ChatModal {
             {
               text: "Ok, seré paciente",
               handler: () => {
-                this.closeModal();
+                this.back();
               }
             }
           ]
@@ -95,6 +91,7 @@ export class ChatModal {
       const text = this.textarea.value.trim();
       this.scrollDown(0);
       this.textarea.value = "";
+      this.textarea.setFocus();
 
       this.messages = [
         ...this.messages,
@@ -120,8 +117,12 @@ export class ChatModal {
     }, delay);
   }
 
-  closeModal() {
+  async showProfile(id: User["id"]) {
+    this.router.navigate(["/profile", id]);
+  }
+
+  back() {
     this.source.close();
-    this.modal.dismiss();
+    this.location.back();
   }
 }
