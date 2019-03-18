@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { User } from "../models/user";
@@ -9,15 +9,13 @@ import { RestService } from "./../services/rest.service";
   templateUrl: "./search.page.html",
   styleUrls: ["./search.page.scss"]
 })
-export class SearchPage implements OnInit {
+export class SearchPage {
   order = "distance";
   query: string;
   users: User[];
   showSkeleton = false;
 
   constructor(private rest: RestService, private router: Router) {}
-
-  ngOnInit() {}
 
   async search(query?: string) {
     if (!query) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
 import { IonRange, MenuController } from "@ionic/angular";
@@ -14,7 +14,7 @@ const { Geolocation } = Plugins;
   templateUrl: "./radar.page.html",
   styleUrls: ["./radar.page.scss"]
 })
-export class RadarPage implements OnInit {
+export class RadarPage {
   @ViewChild("range")
   range: IonRange;
 
@@ -30,7 +30,7 @@ export class RadarPage implements OnInit {
     private router: Router
   ) {}
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     this.range.value = 1;
     this.user = this.auth.currentUserValue;
     this.user.avatar = this.user.avatar
