@@ -1,9 +1,7 @@
 <ion-header translucent no-border>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="back()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
+      <ion-back-button defaultHref="tabs/radar"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="showChat(user?.id)">

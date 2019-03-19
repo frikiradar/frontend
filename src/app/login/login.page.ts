@@ -27,6 +27,7 @@ export class LoginPage {
   get password() {
     return this.loginForm.get("password");
   }
+  public clearPassword = false;
 
   constructor(
     private router: Router,
@@ -67,7 +68,7 @@ export class LoginPage {
     } else {
       const alert = await this.alert.create({
         header: "¿Te has dado cuenta?",
-        message: "Para dos cosas que te pedimos y las pones mal... 🙄",
+        message: "Para dos cosas que te pedimos y las pones mal... 🤭",
         buttons: ["Tendré más cuidado"]
       });
 

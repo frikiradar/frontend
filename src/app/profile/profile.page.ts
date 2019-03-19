@@ -1,4 +1,3 @@
-import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AlertController, PopoverController } from "@ionic/angular";
@@ -21,7 +20,6 @@ export class ProfilePage implements OnInit {
     private alert: AlertController,
     private userSvc: UserService,
     private route: ActivatedRoute,
-    private location: Location,
     private router: Router
   ) {
     this.avatar = "../../assets/img/users/default.jpg";
@@ -53,9 +51,5 @@ export class ProfilePage implements OnInit {
     });
 
     await alert.present();
-  }
-
-  back() {
-    this.location.back();
   }
 }

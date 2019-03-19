@@ -1,8 +1,8 @@
 <ion-header no-border>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="back()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      <ion-button>
+        <ion-back-button defaultHref="/"></ion-back-button>
       </ion-button>
     </ion-buttons>
     <ion-title>Registro</ion-title>
@@ -22,9 +22,12 @@
         type="text"
         autocapitalize="words"
         formControlName="username"
+        debounce="500"
         name="username"
       ></ion-input>
     </ion-item>
+    <div class="error-message" *ngIf="username.invalid && username.value"><ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3 caracteres y máximo de 15.</div>
+    <div class="error-message" *ngIf="username.invalid && username.value"><ion-icon name="information-circle-outline"></ion-icon>Letras, números, guiones (-_) y puntos(.).</div>
     <ion-item>
       <ion-label position="floating">Correo electrónico</ion-label>
       <ion-input
@@ -32,18 +35,27 @@
         type="email"
         autocomplete="email"
         formControlName="email"
+        debounce="500"
         name="email"
       ></ion-input>
     </ion-item>
+    <div class="error-message" *ngIf="email.invalid && email.value"><ion-icon name="information-circle-outline"></ion-icon>Introduce una dirección de correo electrónico válida.</div>
     <ion-item>
       <ion-label position="floating">Contraseña</ion-label>
       <ion-input
         required
-        type="password"
+        [type]="clearPassword ? 'text' : 'password'"
         formControlName="password"
+        debounce="500"
         name="password"
       ></ion-input>
+      <ion-buttons slot="end" *ngIf="!password.pristine">
+        <ion-button (click)="clearPassword = !clearPassword">
+        <ion-icon slot="icon-only" [name]="clearPassword ? 'eye' : 'eye-off'"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-item>
+    <div class="error-message" *ngIf="password.invalid && password.value"><ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo de 8 caracteres.</div>
     <ion-item>
       <ion-label position="floating">Fecha de nacimiento</ion-label>
       <ion-datetime

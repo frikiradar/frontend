@@ -94,7 +94,7 @@ export class EditProfilePage {
   }
 
   async ionViewWillEnter() {
-    this.user = await this.auth.getAuthUser();
+    this.user = this.auth.currentUserValue;
 
     this.profileForm.patchValue({
       description: this.user.description,

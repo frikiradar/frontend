@@ -1,9 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="back()">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
+      <ion-back-button defaultHref="tabs/chat"></ion-back-button>
       <ion-button (click)="showProfile(user.id)">
         <ion-avatar>
           <ion-img [src]="avatar"></ion-img>

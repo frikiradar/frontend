@@ -24,10 +24,15 @@
         <ion-label position="floating">Contraseña</ion-label>
         <ion-input
           required
-          type="password"
+          [type]="clearPassword ? 'text' : 'password'"
           formControlName="password"
           name="password"
         ></ion-input>
+        <ion-buttons slot="end" *ngIf="!password.pristine">
+            <ion-button (click)="clearPassword = !clearPassword">
+            <ion-icon slot="icon-only" [name]="clearPassword ? 'eye' : 'eye-off'"></ion-icon>
+            </ion-button>
+          </ion-buttons>
       </ion-item>
       <ion-button color="primary" type="submit" expand="block" class="dismiss"
         >Iniciar sesión</ion-button

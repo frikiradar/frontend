@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -20,7 +20,7 @@ const { Toast } = Plugins;
   templateUrl: "./register.page.html",
   styleUrls: ["./register.page.scss"]
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage {
   public registerForm: FormGroup;
   get username() {
     return this.registerForm.get("username");
@@ -35,6 +35,7 @@ export class RegisterPage implements OnInit {
     return this.registerForm.get("password");
   }
   public today: number = Date.now();
+  public clearPassword = false;
 
   constructor(
     private router: Router,
@@ -61,8 +62,6 @@ export class RegisterPage implements OnInit {
       ])
     });
   }
-
-  ngOnInit() {}
 
   async submitRegister() {
     if (this.registerForm.valid) {
@@ -99,7 +98,6 @@ export class RegisterPage implements OnInit {
       text: "Registro realizado correctamente"
     });
     this.router.navigate(["/"]);
-    this.back();
   }
 
   async registerError(error: string) {
@@ -110,9 +108,5 @@ export class RegisterPage implements OnInit {
     });
 
     await alert.present();
-  }
-
-  back() {
-    this.router.navigate(["/"]);
   }
 }

@@ -66,6 +66,7 @@ export class ChatUserPage {
 
     this.source.addEventListener("error", async error => {
       if (error.type === "error") {
+        this.source.close();
         const alert = await this.alert.create({
           header: `Ups, error al conectar`,
           message:
@@ -122,7 +123,6 @@ export class ChatUserPage {
   }
 
   back() {
-    this.source.close();
     this.location.back();
   }
 }
