@@ -71,6 +71,13 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
+  isAdmin(user?: User) {
+    if (!user) {
+      user = this.currentUserValue;
+    }
+    return user.roles.includes("ROLE_ADMIN");
+  }
+
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem("currentUser");

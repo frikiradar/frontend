@@ -32,4 +32,5 @@ export interface User {
   match: number;
 
   avatar: SafeResourceUrl;
+  roles: string[];
 }

@@ -1,12 +1,9 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
-import { Base64 } from "@ionic-native/base64/ngx";
 
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
 import { AuthService } from "./auth.service";
-import { DownloadService } from "./download.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
@@ -20,9 +17,7 @@ export class UserService {
     private http: HttpClient,
     private rest: RestService,
     private uploadSvc: UploadService,
-    private downloadSvc: DownloadService,
-    private auth: AuthService,
-    private sanitizer: DomSanitizer
+    private auth: AuthService
   ) {}
 
   async register(

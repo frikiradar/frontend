@@ -56,7 +56,7 @@ export class ChatUserPage {
     const max = Math.max(this.auth.currentUserValue.id, this.user.id);
     const channel = `${min}_${max}`;
 
-    this.source = this.chatSvc.init(channel);
+    this.source = this.chatSvc.register(channel);
     this.source.addEventListener("message", (res: any) => {
       const message = JSON.parse(res.data) as Chat;
 

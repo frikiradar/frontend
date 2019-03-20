@@ -8,15 +8,10 @@ import { RestService } from "./rest.service";
   providedIn: "root"
 })
 export class ChatService {
-  source: EventSource;
   constructor(private rest: RestService) {}
 
-  init(channel: string) {
-    try {
-      return new EventSource(`${environment.pushUrl}?topic=${channel}`);
-    } catch (e) {
-      this.source.close();
-    }
+  register(channel: string) {
+    return new EventSource(`${environment.pushUrl}?topic=${channel}`);
   }
 
   async getChats() {

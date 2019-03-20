@@ -7,7 +7,7 @@ import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 
-const { Geolocation } = Plugins;
+const { Geolocation, Device } = Plugins;
 
 @Component({
   selector: "app-radar",
@@ -37,15 +37,18 @@ export class RadarPage implements OnInit {
       ? this.user.avatar
       : "../../assets/img/users/default.jpg";
 
-    this.getRadarUsers();
-    try {
-      const coordinates = await Geolocation.getCurrentPosition();
-      const longitude = coordinates.coords.longitude;
-      const latitude = coordinates.coords.latitude;
-      this.userSvc.setCoordinates(longitude, latitude);
-    } catch (e) {
-      this.userSvc.setCoordinates(0, 0);
+    if ((await Device.getInfo()).platform !== "web") {
+      try {
+        const coordinates = await Geolocation.getCurrentPosition();
+        const longitude = coordinates.coords.longitude;
+        const latitude = coordinates.coords.latitude;
+        this.userSvc.setCoordinates(longitude, latitude);
+      } catch (e) {
+        this.userSvc.setCoordinates(0, 0);
+      }
     }
+
+    this.getRadarUsers();
   }
 
   async getRadarUsers() {

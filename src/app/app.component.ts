@@ -7,7 +7,7 @@ import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
 import { PushService } from "./services/push.service";
 
-const { StatusBar, SplashScreen } = Plugins;
+const { StatusBar, SplashScreen, Device } = Plugins;
 LogRocket.init("hlejka/frikiradar");
 
 @Component({
@@ -26,10 +26,12 @@ export class AppComponent {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      StatusBar.setBackgroundColor({ color: "#1a1a1a" });
-      SplashScreen.hide();
-      this.push.init();
+    this.platform.ready().then(async () => {
+      if ((await Device.getInfo()).platform !== "web") {
+        StatusBar.setBackgroundColor({ color: "#1a1a1a" });
+        SplashScreen.hide();
+        this.push.init();
+      }
 
       LogRocket.init("hlejka/frikiradar");
 
