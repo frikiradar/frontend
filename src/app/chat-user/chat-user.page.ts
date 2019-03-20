@@ -7,6 +7,7 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 import { environment } from "../../environments/environment";
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
+import { ChatService } from "../services/chat.service";
 import { RestService } from "../services/rest.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
@@ -35,7 +36,8 @@ export class ChatUserPage {
     private alert: AlertController,
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private chatSvc: ChatService
   ) {}
 
   async ionViewWillEnter() {
@@ -47,17 +49,17 @@ export class ChatUserPage {
       this.avatar = this.user.avatar;
     }
 
-    this.messages = (await this.rest.get(`chat/${id}`)) as Chat[];
+    this.messages = await this.chatSvc.getMessages(+id);
     this.scrollDown();
 
     const min = Math.min(this.auth.currentUserValue.id, this.user.id);
     const max = Math.max(this.auth.currentUserValue.id, this.user.id);
-    const topic = `${min}_${max}`;
+    const channel = `${min}_${max}`;
 
-    this.source = new EventSource(`${environment.pushUrl}?topic=${topic}`);
-
+    this.source = this.chatSvc.init(channel);
     this.source.addEventListener("message", (res: any) => {
       const message = JSON.parse(res.data) as Chat;
+
       if (message.fromuser !== this.auth.currentUserValue.id) {
         this.messages = [...this.messages, message];
         this.scrollDown();
@@ -106,9 +108,7 @@ export class ChatUserPage {
       ];
 
       // TODO: Marcar como enviado cuando lo reciba de vuelta
-      const message = (await this.rest
-        .put("chat", { touser: this.user.id, text })
-        .toPromise()) as Chat;
+      const message = this.chatSvc.sendMessage(this.user.id, text);
     }
   }
 

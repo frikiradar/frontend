@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
 import { Platform } from "@ionic/angular";
 import * as LogRocket from "logrocket";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
+import { PushService } from "./services/push.service";
 
 const { StatusBar, SplashScreen } = Plugins;
 LogRocket.init("hlejka/frikiradar");
@@ -18,32 +18,31 @@ export class AppComponent {
   currentUser: User;
 
   constructor(
-    private router: Router,
     private platform: Platform,
-    private auth: AuthService
+    private auth: AuthService,
+    private push: PushService
   ) {
     this.initializeApp();
-    this.auth.currentUser.subscribe(authUser => {
-      this.currentUser = authUser;
-
-      if (authUser && authUser.id) {
-        LogRocket.identify(`${authUser.id}`, {
-          name: authUser.username,
-          email: authUser.email
-
-          // Add your own custom user variables here, ie:
-          // subscriptionType: 'pro'
-        });
-      }
-    });
   }
 
   initializeApp() {
-    StatusBar.setBackgroundColor({ color: "#1a1a1a" });
-    // SplashScreen.show();
-
     this.platform.ready().then(() => {
-      // SplashScreen.hide();
+      StatusBar.setBackgroundColor({ color: "#1a1a1a" });
+      SplashScreen.hide();
+      this.push.init();
+
+      LogRocket.init("hlejka/frikiradar");
+
+      this.auth.currentUser.subscribe(authUser => {
+        this.currentUser = authUser;
+
+        if (authUser && authUser.id) {
+          LogRocket.identify(`${authUser.id}`, {
+            name: authUser.username,
+            email: authUser.email
+          });
+        }
+      });
     });
   }
 }

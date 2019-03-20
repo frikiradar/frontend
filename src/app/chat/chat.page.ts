@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { User } from "../models/user";
 import { RestService } from "../services/rest.service";
 import { Chat } from "./../models/chat";
+import { ChatService } from "./../services/chat.service";
 
 @Component({
   selector: "app-chat",
@@ -14,22 +15,18 @@ export class ChatPage {
   chats: Chat[];
   showSkeleton = true;
 
-  constructor(private router: Router, private rest: RestService) {}
+  constructor(
+    private router: Router,
+    private rest: RestService,
+    private chatSvc: ChatService
+  ) {}
 
   async ionViewWillEnter() {
     this.getChats();
   }
 
   async getChats() {
-    const chats = (await this.rest.get(`chats`)) as Chat[];
-    chats.map(
-      chat =>
-        (chat.user.avatar = chat.user.avatar
-          ? chat.user.avatar
-          : "../../assets/img/users/default.jpg")
-    );
-
-    this.chats = chats;
+    this.chats = await this.chatSvc.getChats();
     this.showSkeleton = false;
   }
 
