@@ -7,7 +7,7 @@ import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 
-const { Geolocation, Device } = Plugins;
+const { Device, App, Toast } = Plugins;
 
 @Component({
   selector: "app-radar",
@@ -22,6 +22,7 @@ export class RadarPage implements OnInit {
   ratio = 25;
   user: User;
   users: User[];
+  backButtonCount = 0;
 
   constructor(
     public userSvc: UserService,
@@ -33,22 +34,33 @@ export class RadarPage implements OnInit {
   async ngOnInit() {
     this.range.value = 1;
     this.user = this.auth.currentUserValue;
-    this.user.avatar = this.user.avatar
-      ? this.user.avatar
-      : "../../assets/img/users/default.jpg";
 
-    if ((await Device.getInfo()).platform !== "web") {
-      try {
-        const coordinates = await Geolocation.getCurrentPosition();
-        const longitude = coordinates.coords.longitude;
-        const latitude = coordinates.coords.latitude;
-        this.userSvc.setCoordinates(longitude, latitude);
-      } catch (e) {
-        this.userSvc.setCoordinates(0, 0);
-      }
-    }
+    this.user.avatar =
+      this.user && this.user.avatar
+        ? this.user.avatar
+        : "../../assets/img/users/default.jpg";
 
     this.getRadarUsers();
+    if ((await Device.getInfo()).platform !== "web") {
+      App.addListener("backButton", () => {
+        if (this.router.url === "/tabs/radar") {
+          this.backButtonCount++;
+
+          switch (this.backButtonCount) {
+            case 1:
+              Toast.show({
+                text: "Pulsa de nuevo para salir de la aplicación."
+              });
+              break;
+
+            default:
+              App.exitApp();
+          }
+        } else {
+          this.backButtonCount = 0;
+        }
+      });
+    }
   }
 
   async getRadarUsers() {

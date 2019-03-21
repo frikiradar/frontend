@@ -1,3 +1,15 @@
+ion-toolbar {
+  --opacity: 0.4;
+
+  &.show-background {
+    --opacity: 1;
+  }
+}
+
+ion-content {
+  position: absolute;
+}
+
 ion-list {
   background: transparent;
 

@@ -16,6 +16,7 @@ ion-tab-bar,
 ion-list {
   --background: #1a1a1a;
   color: white;
+
   a {
     text-decoration: none;
   }
@@ -77,13 +78,25 @@ form {
     --highlight-color-invalid: #e91e63;
     --background-focused: transparent;
   }
+
   ion-label {
     --color: white !important;
   }
 
   ion-buttons {
     margin-bottom: -28px;
+    margin-right: -12px;
     color: #e91e63;
+  }
+
+  ion-button[type=submit] {
+    margin-top: 20px;
+  }
+
+  .error-message {
+    color: #e91e63;
+    font-size: 12px;
+    display: inline-flex;
   }
 }
 

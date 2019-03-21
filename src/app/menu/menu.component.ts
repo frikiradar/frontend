@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { MenuController } from "@ionic/angular";
 
@@ -10,11 +11,18 @@ import { AuthService } from "../services/auth.service";
   styleUrls: ["./menu.component.scss"]
 })
 export class MenuComponent {
+  avatar: SafeResourceUrl;
+
   constructor(
     private menu: MenuController,
     public auth: AuthService,
     private router: Router
-  ) {}
+  ) {
+    this.avatar =
+      this.auth.currentUserValue && this.auth.currentUserValue.avatar
+        ? this.auth.currentUserValue.avatar
+        : "../../assets/img/users/default.jpg";
+  }
 
   editProfile() {
     this.router.navigate(["/edit-profile"]);

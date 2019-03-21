@@ -1,3 +1,9 @@
-form ion-label {
-  --color: #9c2c51 !important;
+form {
+  ion-item {
+    --border-color: white;
+  }
+
+  ion-label {
+    --color: #9c2c51 !important;
+  }
 }

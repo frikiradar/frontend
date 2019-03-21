@@ -4,11 +4,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AlertController, IonContent, IonTextarea } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { environment } from "../../environments/environment";
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
 import { ChatService } from "../services/chat.service";
-import { RestService } from "../services/rest.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
 
@@ -32,7 +30,6 @@ export class ChatUserPage {
   constructor(
     private auth: AuthService,
     private userSvc: UserService,
-    private rest: RestService,
     private alert: AlertController,
     private router: Router,
     private route: ActivatedRoute,

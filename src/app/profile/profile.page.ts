@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AlertController, PopoverController } from "@ionic/angular";
+import { ScrollDetail } from "@ionic/core";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { User } from "../models/user";
@@ -12,15 +13,16 @@ import { UserService } from "../services/user.service";
   styleUrls: ["./profile.page.scss"]
 })
 export class ProfilePage implements OnInit {
-  user: User;
-  avatar: SafeResourceUrl;
+  public user: User;
+  public avatar: SafeResourceUrl;
+  public showToolbar = false;
 
   constructor(
     public popover: PopoverController,
     private alert: AlertController,
     private userSvc: UserService,
     private route: ActivatedRoute,
-    private router: Router
+    public router: Router
   ) {
     this.avatar = "../../assets/img/users/default.jpg";
   }
@@ -51,5 +53,12 @@ export class ProfilePage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  onScroll($event: CustomEvent<ScrollDetail>) {
+    if ($event && $event.detail && $event.detail.scrollTop) {
+      const scrollTop = $event.detail.scrollTop;
+      this.showToolbar = scrollTop >= 150;
+    }
   }
 }

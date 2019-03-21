@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { IonSearchbar } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { RestService } from "./../services/rest.service";
@@ -9,13 +10,27 @@ import { RestService } from "./../services/rest.service";
   templateUrl: "./search.page.html",
   styleUrls: ["./search.page.scss"]
 })
-export class SearchPage {
+export class SearchPage implements OnInit {
+  @ViewChild("searchBar")
+  searchBar: IonSearchbar;
+
   order = "distance";
   query: string;
   users: User[];
   showSkeleton = false;
 
-  constructor(private rest: RestService, private router: Router) {}
+  constructor(
+    private rest: RestService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  async ngOnInit() {
+    if (this.route.snapshot.paramMap.get("query")) {
+      this.query = this.route.snapshot.paramMap.get("query");
+      this.searchBar.value = this.query;
+    }
+  }
 
   async search(query?: string) {
     if (!query) {

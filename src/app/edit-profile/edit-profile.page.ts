@@ -17,6 +17,7 @@ import {
   IonSlides,
   PickerController
 } from "@ionic/angular";
+import { ScrollDetail } from "@ionic/core";
 
 import { Tag } from "../models/tags";
 import { User } from "../models/user";
@@ -54,6 +55,7 @@ export class EditProfilePage {
   @ViewChild("music")
   music: IonInput;
 
+  public showToolbar = false;
   public profileForm: FormGroup;
   public today: number = Date.now();
   public user: User;
@@ -349,6 +351,13 @@ export class EditProfilePage {
       }
     } catch (e) {
       console.error(`Error al recortar la imagen. ${e}`);
+    }
+  }
+
+  onScroll($event: CustomEvent<ScrollDetail>) {
+    if ($event && $event.detail && $event.detail.scrollTop) {
+      const scrollTop = $event.detail.scrollTop;
+      this.showToolbar = scrollTop >= 150;
     }
   }
 
