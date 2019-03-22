@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { MenuController } from "@ionic/angular";
@@ -10,14 +10,16 @@ import { AuthService } from "../services/auth.service";
   templateUrl: "menu.component.html",
   styleUrls: ["./menu.component.scss"]
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
   avatar: SafeResourceUrl;
 
   constructor(
     private menu: MenuController,
     public auth: AuthService,
     private router: Router
-  ) {
+  ) {}
+
+  async ngOnInit() {
     this.avatar =
       this.auth.currentUserValue && this.auth.currentUserValue.avatar
         ? this.auth.currentUserValue.avatar
