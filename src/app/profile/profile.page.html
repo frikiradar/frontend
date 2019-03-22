@@ -43,7 +43,7 @@
       <ion-item *ngIf="user?.relationship" lines="none">
         <ion-label>Tipo de relación: {{ user.relationship }}</ion-label>
       </ion-item>
-      <ion-item *ngIf="user?.connection">
+      <ion-item *ngIf="user?.connection.length">
         <ion-label>Buscando: {{ user.connection.join(', ') }}</ion-label>
       </ion-item>
     </ion-list>

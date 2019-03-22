@@ -37,13 +37,14 @@ export class PushService {
     );
 
     PushNotifications.addListener("registrationError", (error: any) => {
-      // console.log("error on register " + JSON.stringify(error));
+      // console.log("error on register", error);
     });
 
     PushNotifications.addListener(
       "pushNotificationReceived",
       (notification: PushNotification) => {
-        // console.log("notification " + JSON.stringify(notification));
+        // alert("notification " + JSON.stringify(notification));
+        // console.log("notification", notification);
         this.notifications.push(notification);
       }
     );
@@ -51,7 +52,7 @@ export class PushService {
     PushNotifications.addListener(
       "pushNotificationActionPerformed",
       (notification: PushNotificationActionPerformed) => {
-        // console.log("notification " + JSON.stringify(notification));
+        // console.log ("notification performed", notification);
         this.notifications.push(notification);
       }
     );
@@ -70,7 +71,7 @@ export class PushService {
       this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`;
 
     const device = (await this.rest
-      .post("device", {
+      .put("device", {
         token,
         id: this.deviceInfo.uuid,
         name
