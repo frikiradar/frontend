@@ -23,7 +23,11 @@
     </ion-list>
     <ng-template #notificationItems>
       <ion-list *ngIf="notifications?.length; else noNotifications">
-        <ion-item button (click)="goToUrl(notification.url)" *ngFor="let notification of notifications">
+        <ion-item
+          button
+          (click)="goToUrl(notification.url)"
+          *ngFor="let notification of notifications"
+        >
           <ion-avatar slot="start">
             <img [src]="notification.user.avatar" />
           </ion-avatar>
@@ -40,7 +44,7 @@
   </div>
   <ng-template #noNotifications>
     <div class="full-center" padding>
-      <ion-icon name="notification"></ion-icon>
+      <ion-icon name="notifications-off"></ion-icon>
       <h2>Sin notificaciones</h2>
       <p>
         No tienes notificaciones pendientes en este momento.

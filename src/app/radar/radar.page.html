@@ -13,12 +13,12 @@
 
 <ion-content>
   <div *ngIf="users?.length || showSkeleton; else noUsers">
-    <p padding>
+    <!--<p padding>
       Estos son los resultados obtenidos
       <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un
       porcentaje de
       coincidencia más alto.
-    </p>
+    </p>-->
     <ion-list *ngIf="showSkeleton; else radarItems">
       <ion-item *ngFor="let i of [].constructor(8)">
         <ion-avatar slot="start">
@@ -39,17 +39,29 @@
     </ion-list>
     <ng-template #radarItems>
       <ion-list>
-        <ion-item button *ngFor="let user of users" (click)="showProfile(user.id)">
+        <ion-item
+          button
+          *ngFor="let user of users"
+          (click)="showProfile(user.id)"
+        >
           <ion-avatar slot="start">
-            <ion-skeleton-text animated *ngIf="!user.avatar"></ion-skeleton-text>
+            <ion-skeleton-text
+              animated
+              *ngIf="!user.avatar"
+            ></ion-skeleton-text>
             <ion-img [src]="user.avatar" *ngIf="user.avatar"></ion-img>
           </ion-avatar>
           <ion-label>
             <h2>{{ user.username }}, {{ user.age }}</h2>
             <h3>
-              <span *ngIf="user.location">{{ user?.location
-                }}<span *ngIf="user.location && user.distance !== undefined">, a
-                </span></span><span *ngIf="user.distance !== undefined">{{ user.distance }}km</span>
+              <span *ngIf="user.location"
+                >{{ user?.location
+                }}<span *ngIf="user.location && user.distance !== undefined"
+                  >, a
+                </span></span
+              ><span *ngIf="user.distance !== undefined"
+                >{{ user.distance }}km</span
+              >
             </h3>
             <p>{{ user.description }}</p>
           </ion-label>
@@ -71,8 +83,15 @@
 </ion-content>
 <ion-footer translucent>
   <div id="radar-range" padding>
-    <ion-range #range min="0" max="5" step="1" snaps="true" [debounce]="250"
-      (ionChange)="changeRatio($event.detail.value)">
+    <ion-range
+      #range
+      min="0"
+      max="5"
+      step="1"
+      snaps="true"
+      [debounce]="250"
+      (ionChange)="changeRatio($event.detail.value)"
+    >
       <ion-icon slot="end" name="globe"></ion-icon>
     </ion-range>
     <ion-grid id="range-distance">

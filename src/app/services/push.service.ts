@@ -61,6 +61,7 @@ export class PushService {
   }
 
   async setDevice(token: string) {
+    this.deviceInfo = await Device.getInfo();
     const name = `${this.deviceInfo.manufacturer} ${
       this.deviceInfo.model
     } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
@@ -73,6 +74,7 @@ export class PushService {
         name
       })
       .toPromise()) as Device;
+    localStorage.setItem("currentDevice", JSON.stringify(device));
   }
 
   async getCurrentDevice() {

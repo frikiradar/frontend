@@ -6,27 +6,33 @@ ion-label h2 {
   letter-spacing: normal;
 }
 
-ion-card {
-  border-radius: 25px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+.bubble {
+  ion-card {
+    border-radius: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 
   &.from {
-    margin-left: 40px;
-    --color: white;
-    --background: #6d0b28;
+    ion-card {
+      margin-left: 40px;
+      --color: white;
+      --background: #6d0b28;
+    }
 
-    & + .to {
+    & + .to ion-card {
       margin-top: 8px;
     }
   }
 
   &.to {
-    margin-right: 40px;
-    --color: white;
-    --background: #9a1c42;
+    ion-card {
+      margin-right: 40px;
+      --color: white;
+      --background: #9a1c42;
+    }
 
-    & + .from {
+    & + .from ion-card {
       margin-top: 8px;
     }
   }
@@ -40,10 +46,20 @@ ion-card {
   }
 }
 
+ion-chip {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: fit-content;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 ion-footer {
   ion-item {
     background: white;
     border-radius: 30px;
+    margin-left: 8px;
   }
 
   ion-textarea {
