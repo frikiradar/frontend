@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { User } from "../models/user";
-import { RestService } from "../services/rest.service";
 import { Chat } from "./../models/chat";
 import { ChatService } from "./../services/chat.service";
 
@@ -15,11 +14,7 @@ export class ChatPage {
   chats: Chat[];
   showSkeleton = true;
 
-  constructor(
-    private router: Router,
-    private rest: RestService,
-    private chatSvc: ChatService
-  ) {}
+  constructor(private router: Router, private chatSvc: ChatService) {}
 
   async ionViewWillEnter() {
     this.getChats();
