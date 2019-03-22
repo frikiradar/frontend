@@ -22,17 +22,13 @@ export class PushService {
   constructor(private rest: RestService) {}
 
   async init() {
-    const device = await this.getCurrentDevice();
-
     PushNotifications.register();
 
     PushNotifications.addListener(
       "registration",
       (token: PushNotificationToken) => {
         // console.log("token", token.value);
-        if (!device) {
-          this.setDevice(token.value);
-        }
+        this.setDevice(token.value);
       }
     );
 
