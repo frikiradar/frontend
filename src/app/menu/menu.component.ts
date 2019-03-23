@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { MenuController } from "@ionic/angular";
 
 import { AuthService } from "../services/auth.service";
+import { UtilsService } from "../services/utils.service";
 
 @Component({
   selector: "app-menu",
@@ -16,7 +17,8 @@ export class MenuComponent implements OnInit {
   constructor(
     private menu: MenuController,
     public auth: AuthService,
-    private router: Router
+    private router: Router,
+    public utils: UtilsService
   ) {}
 
   async ngOnInit() {

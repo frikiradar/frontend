@@ -9,8 +9,8 @@ ion-label h2 {
 .bubble {
   ion-card {
     border-radius: 25px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
   }
 
   &.from {
@@ -18,6 +18,8 @@ ion-label h2 {
       margin-left: 40px;
       --color: white;
       --background: #6d0b28;
+      float: right;
+      clear: both;
     }
 
     & + .to ion-card {
@@ -30,6 +32,8 @@ ion-label h2 {
       margin-right: 40px;
       --color: white;
       --background: #9a1c42;
+      float: left;
+      clear: both;
     }
 
     & + .from ion-card {
@@ -37,11 +41,15 @@ ion-label h2 {
     }
   }
 
+  .text {
+    margin-right: 10px;
+  }
+
   ion-note {
     float: right;
     font-size: 10px;
     position: relative;
-    bottom: -12px;
+    bottom: -8px;
     color: #bbbbbb;
   }
 }
@@ -53,6 +61,7 @@ ion-chip {
   width: fit-content;
   margin-top: 20px;
   margin-bottom: 20px;
+  clear: both;
 }
 
 ion-footer {

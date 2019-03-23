@@ -26,9 +26,8 @@
       color="primary"
       class="center"
       *ngIf="
-        messages[i - 1] &&
-        (message.time_creation | date: 'shortDate') !==
-          (messages[i - 1].time_creation | date: 'shortDate')
+        (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')
       "
     >
       <ion-label color="secondary">{{
@@ -37,7 +36,9 @@
     </ion-chip>
     <ion-card>
       <ion-card-content>
-        {{ message.text }}
+        <span class="text">
+          {{ message.text }}
+        </span>
         <ion-note>{{ message.time_creation | date: "shortTime" }}</ion-note>
       </ion-card-content>
     </ion-card>

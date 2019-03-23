@@ -19,7 +19,6 @@ export class ProfilePage implements OnInit {
 
   constructor(
     public popover: PopoverController,
-    private alert: AlertController,
     private userSvc: UserService,
     private route: ActivatedRoute,
     public router: Router
@@ -43,16 +42,6 @@ export class ProfilePage implements OnInit {
 
   async showChat(id: User["id"]) {
     this.router.navigate(["/chat", id]);
-  }
-
-  async test() {
-    const alert = await this.alert.create({
-      header: "Función aún no disponible",
-      message: "Esta acción se encuentra aún en desarrollo.",
-      buttons: ["Gracias por avisar"]
-    });
-
-    await alert.present();
   }
 
   onScroll($event: CustomEvent<ScrollDetail>) {

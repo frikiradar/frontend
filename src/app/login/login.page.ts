@@ -7,10 +7,11 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { AlertController } from "@ionic/angular";
+import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
+import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 
 const { Toast } = Plugins;
 
@@ -33,6 +34,7 @@ export class LoginPage {
     private router: Router,
     private auth: AuthService,
     private alert: AlertController,
+    private modal: ModalController,
     public fb: FormBuilder
   ) {
     if (localStorage.getItem("currentUser")) {
@@ -93,5 +95,13 @@ export class LoginPage {
     });
 
     await alert.present();
+  }
+
+  async forgotPassword() {
+    const modal = await this.modal.create({
+      component: ForgotPasswordModal,
+      componentProps: { username: this.username }
+    });
+    return await modal.present();
   }
 }

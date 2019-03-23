@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -33,7 +33,7 @@ const { Toast } = Plugins;
   templateUrl: "./edit-profile.page.html",
   styleUrls: ["./edit-profile.page.scss"]
 })
-export class EditProfilePage {
+export class EditProfilePage implements OnInit {
   get minage() {
     return this.profileForm.get("minage");
   }
@@ -95,8 +95,8 @@ export class EditProfilePage {
     });
   }
 
-  async ionViewWillEnter() {
-    this.user = this.auth.currentUserValue;
+  async ngOnInit() {
+    this.user = await this.auth.getAuthUser();
 
     this.profileForm.patchValue({
       description: this.user.description,

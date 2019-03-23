@@ -1,6 +1,8 @@
 <ion-content padding>
-  <img src="./assets/img/logo/logo_transparente.png"
-    style="width: 150px; display: block; margin-left: auto; margin-right: auto;" />
+  <img
+    src="./assets/img/logo/logo_transparente.png"
+    style="width: 150px; display: block; margin-left: auto; margin-right: auto;"
+  />
   <h1>Hola,</h1>
   <h3>Te doy la bienvenida a FrikiRadar</h3>
 
@@ -8,24 +10,45 @@
     <h3>Ya tengo una cuenta</h3>
     <form (submit)="submitLogin()" [formGroup]="loginForm" autocomplete="off">
       <ion-item>
-        <ion-label position="floating">Nombre de usuario o correo electrónico</ion-label>
-        <ion-input required type="text" formControlName="username" name="username" autocomplete="off"></ion-input>
+        <ion-label position="floating"
+          >Nombre de usuario o correo electrónico</ion-label
+        >
+        <ion-input
+          required
+          type="text"
+          formControlName="username"
+          name="username"
+          autocomplete="off"
+        ></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Contraseña</ion-label>
-        <ion-input required [type]="clearPassword ? 'text' : 'password'" formControlName="password" name="password"
-          autocomplete="off">
+        <ion-input
+          required
+          [type]="clearPassword ? 'text' : 'password'"
+          formControlName="password"
+          name="password"
+          autocomplete="off"
+        >
         </ion-input>
         <ion-buttons slot="end" *ngIf="!password.pristine">
           <ion-button (click)="clearPassword = !clearPassword">
-            <ion-icon slot="icon-only" [name]="clearPassword ? 'eye' : 'eye-off'"></ion-icon>
+            <ion-icon
+              slot="icon-only"
+              [name]="clearPassword ? 'eye' : 'eye-off'"
+            ></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-item>
-      <ion-button color="primary" type="submit" expand="block" class="dismiss">Iniciar sesión</ion-button>
+      <ion-button color="primary" type="submit" expand="block" class="dismiss"
+        >Iniciar sesión</ion-button
+      >
     </form>
     <p text-center>
       No tengo una cuenta, <a routerLink="/register">quiero registrarme</a>
+    </p>
+    <p text-center id="forgot-password">
+      <a (click)="forgotPassword()">He olvidado mi contraseña</a>
     </p>
   </div>
   <!--

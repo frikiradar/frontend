@@ -64,17 +64,21 @@ export class RadarPage implements OnInit {
   }
 
   async getRadarUsers() {
-    const users = await this.userSvc.getRadarUsers(this.ratio).toPromise();
-    users.map(async user => {
-      user.avatar = user.avatar
-        ? user.avatar
-        : "../../assets/img/users/default.jpg";
-    });
+    try {
+      const users = await this.userSvc.getRadarUsers(this.ratio).toPromise();
+      users.map(async user => {
+        user.avatar = user.avatar
+          ? user.avatar
+          : "../../assets/img/users/default.jpg";
+      });
 
-    setTimeout(() => {
-      this.showSkeleton = false;
-      this.users = users;
-    }, 250);
+      setTimeout(() => {
+        this.showSkeleton = false;
+        this.users = users;
+      }, 250);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async showProfile(id: User["id"]) {

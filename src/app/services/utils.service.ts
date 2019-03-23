@@ -1,11 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { AlertController } from "@ionic/angular";
 
 @Injectable({
   providedIn: "root"
 })
 export class UtilsService {
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient, private alert: AlertController) {}
 
   base64toBlob(b64Data: string) {
     const bytes: string = atob(
@@ -45,5 +46,15 @@ export class UtilsService {
         resolve(dataURL);
       };
     });
+  }
+
+  async test() {
+    const alert = await this.alert.create({
+      header: "Función aún no disponible",
+      message: "Esta acción se encuentra aún en desarrollo.",
+      buttons: ["Gracias por avisar"]
+    });
+
+    await alert.present();
   }
 }

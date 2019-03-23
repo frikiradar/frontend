@@ -34,21 +34,7 @@ export class AppComponent {
         StatusBar.setBackgroundColor({ color: "#1a1a1a" });
         SplashScreen.hide();
         this.push.init();
-
-        const alertNetwork = await this.alert.create({
-          header: "Sin conexión a internet",
-          message:
-            "No tienes conexión a internet en estos momentos. Podrás seguir utilizando la aplicación en cuanto vuelvas a tener red.",
-          backdropDismiss: false
-        });
-
-        Network.addListener("networkStatusChange", async status => {
-          if (!status.connected) {
-            await alertNetwork.present();
-          } else {
-            await alertNetwork.dismiss();
-          }
-        });
+        this.networkStatus();
       }
 
       LogRocket.init("hlejka/frikiradar");
@@ -72,6 +58,27 @@ export class AppComponent {
           }
         }
       });
+    });
+  }
+
+  async networkStatus() {
+    const alertNetwork = await this.alert.create({
+      header: "Sin conexión a internet",
+      message:
+        "No tienes conexión a internet en estos momentos. Podrás seguir utilizando la aplicación en cuanto vuelvas a tener red.",
+      backdropDismiss: false
+    });
+
+    if (!(await Network.getStatus()).connected) {
+      await alertNetwork.present();
+    }
+
+    Network.addListener("networkStatusChange", async status => {
+      if (!status.connected) {
+        await alertNetwork.present();
+      } else {
+        await alertNetwork.dismiss();
+      }
     });
   }
 }
