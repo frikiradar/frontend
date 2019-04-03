@@ -8,13 +8,9 @@
         <ion-icon name="contact" slot="start"></ion-icon>
         <ion-label>Editar perfil</ion-label>
       </ion-item>
-      <ion-item button lines="none" (click)="utils.test()">
-        <ion-icon name="settings" slot="start"></ion-icon>
-        <ion-label>Configuración</ion-label>
-      </ion-item>
-      <ion-item button lines="none" (click)="utils.test()">
+      <ion-item button lines="none" (click)="router.navigate(['settings']); menu.close()">
         <ion-icon name="lock" slot="start"></ion-icon>
-        <ion-label>Privacidad</ion-label>
+        <ion-label>Seguridad y privacidad</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>

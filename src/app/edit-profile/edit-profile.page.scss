@@ -1,8 +1,16 @@
 ion-toolbar {
   --opacity: 0.4;
 
+  ion-title {
+    display: none;
+  }
+
   &.show-background {
     --opacity: 1;
+
+    ion-title {
+      display: block;
+    }
   }
 }
 

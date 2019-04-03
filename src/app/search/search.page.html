@@ -17,7 +17,7 @@
   <div *ngIf="users?.length || showSkeleton; else noUsers">
     <p text-center>{{ users?.length }} usuarios encontrados</p>
     <ion-list *ngIf="showSkeleton; else radarItems">
-      <ion-item *ngFor="let i of [].constructor(8)">
+      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-avatar>
@@ -36,7 +36,7 @@
     </ion-list>
     <ng-template #radarItems>
       <ion-list>
-        <ion-item button *ngFor="let user of users" (click)="showProfile(user.id)">
+        <ion-item button *ngFor="let user of users" (click)="showProfile(user.id)" lines="full">
           <ion-avatar slot="start">
             <ion-skeleton-text animated *ngIf="!user.avatar"></ion-skeleton-text>
             <ion-img [src]="user.avatar" *ngIf="user.avatar"></ion-img>

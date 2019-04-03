@@ -22,7 +22,6 @@ export class RadarPage implements OnInit {
   ratio = 25;
   user: User;
   users: User[];
-  backButtonCount = 0;
 
   constructor(
     public userSvc: UserService,
@@ -41,26 +40,6 @@ export class RadarPage implements OnInit {
         : "../../assets/img/users/default.jpg";
 
     this.getRadarUsers();
-    if ((await Device.getInfo()).platform !== "web") {
-      App.addListener("backButton", () => {
-        if (this.router.url === "/tabs/radar") {
-          this.backButtonCount++;
-
-          switch (this.backButtonCount) {
-            case 1:
-              Toast.show({
-                text: "Pulsa de nuevo para salir de la aplicación."
-              });
-              break;
-
-            default:
-              App.exitApp();
-          }
-        } else {
-          this.backButtonCount = 0;
-        }
-      });
-    }
   }
 
   async getRadarUsers() {

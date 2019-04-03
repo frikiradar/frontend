@@ -25,6 +25,10 @@ const routes: Routes = [
   {
     path: "chat/:id",
     loadChildren: "./chat-user/chat-user.module#ChatUserPageModule"
+  },
+  {
+    path: "settings",
+    loadChildren: "./settings/settings.module#SettingsPageModule"
   }
 ];
 @NgModule({

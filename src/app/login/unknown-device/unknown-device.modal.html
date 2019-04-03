@@ -1,0 +1,22 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="close()">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Dispositivo desconocido</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+    <h4>¡Te hemos enviado un código de seguridad al email!</h4>
+    <p>
+        Introduce el código de seguridad para verificar tu dispositivo.
+    </p>
+    <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
+        <ion-item id="code">
+            <ion-input autocapitalize="characters" autocomplete="off" formControlName="code" maxlength="4" name="code" placeholder="Código de seguridad" required type="text"></ion-input>
+        </ion-item>
+        <ion-button [disabled]="codeForm.invalid" class="dismiss" color="primary" expand="block" type="submit">Verificar dispositivo</ion-button>
+    </form>
+</ion-content>

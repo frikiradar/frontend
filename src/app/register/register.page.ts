@@ -22,18 +22,6 @@ const { Toast } = Plugins;
 })
 export class RegisterPage {
   public registerForm: FormGroup;
-  get username() {
-    return this.registerForm.get("username");
-  }
-  get email() {
-    return this.registerForm.get("email");
-  }
-  get birthday() {
-    return this.registerForm.get("birthday");
-  }
-  get password() {
-    return this.registerForm.get("password");
-  }
   public today: number = Date.now();
   public clearPassword = false;
 
@@ -67,15 +55,15 @@ export class RegisterPage {
     if (this.registerForm.valid) {
       try {
         await this.userSvc.register(
-          this.username.value.trim(),
-          this.email.value.trim(),
-          this.birthday.value.trim(),
-          this.password.value.trim()
+          this.registerForm.get("username").value.trim(),
+          this.registerForm.get("email").value.trim(),
+          this.registerForm.get("birthday").value.split("T")[0],
+          this.registerForm.get("password").value.trim()
         );
 
         const user = await this.auth.login(
-          this.username.value.trim(),
-          this.password.value.trim()
+          this.registerForm.get("username").value.trim(),
+          this.registerForm.get("password").value.trim()
         );
         this.registerSuccess(user);
       } catch (error) {

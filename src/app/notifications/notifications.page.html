@@ -7,7 +7,7 @@
 <ion-content>
   <div *ngIf="notifications?.length || showSkeleton; else noNotifications">
     <ion-list *ngIf="showSkeleton; else notificationItems">
-      <ion-item *ngFor="let i of [].constructor(8)">
+      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-avatar>
@@ -27,6 +27,7 @@
           button
           (click)="goToUrl(notification.url)"
           *ngFor="let notification of notifications"
+          lines="full"
         >
           <ion-avatar slot="start">
             <img [src]="notification.user.avatar" />

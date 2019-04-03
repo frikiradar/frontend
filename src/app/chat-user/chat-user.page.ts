@@ -1,7 +1,13 @@
 import { Location } from "@angular/common";
-import { Component, ViewChild } from "@angular/core";
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AlertController, IonContent, IonTextarea } from "@ionic/angular";
+import { AlertController, IonTextarea } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Chat } from "../models/chat";
@@ -15,11 +21,14 @@ import { UserService } from "./../services/user.service";
   templateUrl: "./chat-user.page.html",
   styleUrls: ["./chat-user.page.scss"]
 })
-export class ChatUserPage {
+export class ChatUserPage implements OnInit, AfterViewChecked {
   @ViewChild("textarea")
   textarea: IonTextarea;
   @ViewChild("chatlist")
-  chatlist: IonContent;
+  set _chatlist(c: ElementRef) {
+    this.chatlist = c.nativeElement;
+  }
+  chatlist: HTMLElement;
 
   source: EventSource;
 
@@ -37,7 +46,7 @@ export class ChatUserPage {
     private chatSvc: ChatService
   ) {}
 
-  async ionViewWillEnter() {
+  async ngOnInit() {
     this.avatar = "../../assets/img/users/default.jpg";
 
     const id = this.route.snapshot.paramMap.get("id");
@@ -46,7 +55,7 @@ export class ChatUserPage {
       this.avatar = this.user.avatar;
     }
 
-    this.messages = await this.chatSvc.getMessages(+id);
+    this.messages = (await this.chatSvc.getMessages(+id)).reverse();
     this.scrollDown();
 
     const min = Math.min(this.auth.currentUserValue.id, this.user.id);
@@ -65,8 +74,8 @@ export class ChatUserPage {
 
     this.source.addEventListener("error", async error => {
       if (error.type === "error") {
-        this.source.close();
-        const alert = await this.alert.create({
+        // this.source.close();
+        /*const alert = await this.alert.create({
           header: `Ups, error al conectar`,
           message:
             "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
@@ -81,15 +90,21 @@ export class ChatUserPage {
           ]
         });
 
-        await alert.present();
+        await alert.present();*/
       }
     });
+
+    this.textarea.setFocus();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollDown();
   }
 
   async sendMessage() {
     if (this.textarea.value.trim()) {
       const text = this.textarea.value.trim();
-      this.scrollDown(0);
+      this.scrollDown();
       this.textarea.value = "";
       this.textarea.setFocus();
 
@@ -109,10 +124,11 @@ export class ChatUserPage {
     }
   }
 
-  scrollDown(delay = 100) {
-    setTimeout(() => {
-      this.chatlist.scrollToBottom();
-    }, delay);
+  scrollDown() {
+    if (!this.chatlist) {
+      return;
+    }
+    this.chatlist.scrollTop = this.chatlist.scrollHeight;
   }
 
   async showProfile(id: User["id"]) {

@@ -10,6 +10,7 @@ import { Plugins } from "@capacitor/core";
 import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
+import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 
@@ -35,7 +36,8 @@ export class LoginPage {
     private auth: AuthService,
     private alert: AlertController,
     private modal: ModalController,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private userSvc: UserService
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -64,7 +66,6 @@ export class LoginPage {
         this.loginSuccess(user);
         this.loginForm.reset();
       } catch (e) {
-        this.loginForm.get("password").setValue("");
         this.loginError();
       }
     } else {

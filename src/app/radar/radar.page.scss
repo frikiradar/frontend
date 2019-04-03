@@ -1,7 +1,6 @@
 ion-content {
   ion-list {
     ion-item {
-      --background: #1a1a1a;
       --border-color: #e91e63;
 
       ion-avatar {
@@ -16,10 +15,10 @@ ion-content {
       p {
         color: #bbbbbb;
       }
-    }
 
-    ion-item:first-child {
-      --background: #e91e63;
+      &:first-child {
+        --background: #e91e63;
+      }
     }
   }
 }

@@ -15,9 +15,9 @@ export class MenuComponent implements OnInit {
   avatar: SafeResourceUrl;
 
   constructor(
-    private menu: MenuController,
+    public menu: MenuController,
     public auth: AuthService,
-    private router: Router,
+    public router: Router,
     public utils: UtilsService
   ) {}
 

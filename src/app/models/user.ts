@@ -26,11 +26,21 @@ export interface User {
 
   password?: string;
   token?: string;
+  devices: {
+    id: number;
+    active: boolean;
+    device_id: string;
+    device_name: string;
+    last_update: Date;
+    token: string;
+  }[];
 
   tags: Tag[];
 
   match: number;
 
   avatar: SafeResourceUrl;
+  loaded: boolean;
   roles: string[];
+  active: boolean;
 }

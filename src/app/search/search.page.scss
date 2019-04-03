@@ -6,6 +6,10 @@ ion-searchbar input {
   border-radius: 8px;
 }
 
+ion-item {
+  --border-color: #e91e63;
+}
+
 ion-note,
 p {
   color: #bbbbbb;

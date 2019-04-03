@@ -14,14 +14,21 @@ import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { ActivateAccountModal } from "./login/activate-account/activate-account.modal";
+import { UnknownDeviceModal } from "./login/unknown-device/unknown-device.modal";
 import { MenuComponent } from "./menu/menu.component";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
 registerLocaleData(localeEs, "es");
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent],
-  entryComponents: [MenuComponent],
+  declarations: [
+    AppComponent,
+    MenuComponent,
+    ActivateAccountModal,
+    UnknownDeviceModal
+  ],
+  entryComponents: [MenuComponent, ActivateAccountModal, UnknownDeviceModal],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

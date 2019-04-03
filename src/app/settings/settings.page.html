@@ -1,0 +1,56 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button>
+                <ion-back-button defaultHref="/"></ion-back-button>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Privacidad y seguridad</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item-group>
+            <ion-item-divider color="primary">
+                <ion-icon name="lock" slot="start"></ion-icon>
+                <ion-label>Seguridad</ion-label>
+            </ion-item-divider>
+            <!--<ion-item (click)="router.navigate(['settings/account'])" button lines="full">
+                <ion-icon name="person" slot="start"></ion-icon>
+                <ion-label>Mi cuenta</ion-label>
+            </ion-item>-->
+            <ion-item (click)="passwordModal()" button lines="full">
+                <ion-icon name="key" slot="start"></ion-icon>
+                <ion-label>Cambiar contraseña</ion-label>
+            </ion-item>
+            <!--<ion-item (click)="notificationsModal()" button lines="full">
+                <ion-icon name="notifications" slot="start"></ion-icon>
+                <ion-label>Notificaciones</ion-label>
+            </ion-item>-->
+            <ion-item (click)="devicesModal()" button lines="full">
+                <ion-icon name="notifications" slot="start"></ion-icon>
+                <ion-label>Dispositivos y notificaciones</ion-label>
+            </ion-item>
+        </ion-item-group>
+
+        <ion-item-group>
+            <ion-item-divider color="primary">
+                <ion-icon name="eye-off" slot="start"></ion-icon>
+                <ion-label>Privacidad</ion-label>
+            </ion-item-divider>
+            <ion-item (click)="router.navigate(['settings/account'])" button lines="full">
+                <ion-icon name="locate" slot="start"></ion-icon>
+                <ion-label>Ubicación</ion-label>
+            </ion-item>
+            <ion-item (click)="router.navigate(['settings/account'])" button lines="full">
+                <ion-icon name="hand" slot="start"></ion-icon>
+                <ion-label>Usuarios bloqueados</ion-label>
+            </ion-item>
+            <ion-item (click)="router.navigate(['settings/account'])" button lines="full">
+              <ion-icon name="chatbubbles" slot="start"></ion-icon>
+              <ion-label>Mensajes directos</ion-label>
+          </ion-item>
+        </ion-item-group>
+    </ion-list>
+</ion-content>

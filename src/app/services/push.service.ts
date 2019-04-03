@@ -8,7 +8,7 @@ import {
 } from "@capacitor/core";
 
 import { Device } from "./../models/device";
-import { RestService } from "./rest.service";
+import { DeviceService } from "./device.service";
 
 const { PushNotifications, Device } = Plugins;
 
@@ -19,7 +19,7 @@ export class PushService {
   notifications: any = [];
   deviceInfo: DeviceInfo;
 
-  constructor(private rest: RestService) {}
+  constructor(private device: DeviceService) {}
 
   async init() {
     PushNotifications.register();
@@ -28,7 +28,7 @@ export class PushService {
       "registration",
       (token: PushNotificationToken) => {
         // console.log("token", token.value);
-        this.setDevice(token.value);
+        this.device.setDevice(token.value);
       }
     );
 
@@ -52,40 +52,5 @@ export class PushService {
         this.notifications.push(notification);
       }
     );
-  }
-
-  async getDevices(): Promise<Device[]> {
-    const devices = (await this.rest.get("devices")) as Device[];
-    // console.log("devices", devices);
-    return devices;
-  }
-
-  async setDevice(token: string) {
-    this.deviceInfo = await Device.getInfo();
-    const name = `${this.deviceInfo.manufacturer} ${
-      this.deviceInfo.model
-    } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
-      this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`;
-
-    const device = (await this.rest
-      .put("device", {
-        token,
-        id: this.deviceInfo.uuid,
-        name
-      })
-      .toPromise()) as Device;
-    localStorage.setItem("currentDevice", JSON.stringify(device));
-  }
-
-  async getCurrentDevice() {
-    const devices = await this.getDevices();
-    this.deviceInfo = await Device.getInfo();
-    const device =
-      devices.length &&
-      devices.filter((d: Device) => {
-        return (d.id = this.deviceInfo.uuid);
-      })[0];
-
-    return device ? device : false;
   }
 }

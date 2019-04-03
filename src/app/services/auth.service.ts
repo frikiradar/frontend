@@ -68,6 +68,11 @@ export class AuthService {
     if (!user.token) {
       user.token = JSON.parse(localStorage.getItem("currentUser")).token;
     }
+    if (!user.avatar) {
+      user.avatar = JSON.parse(localStorage.getItem("currentUser")).avatar;
+    }
+
+    localStorage.setItem("currentUser", JSON.stringify(user));
     this.currentUserSubject.next(user);
   }
 

@@ -17,7 +17,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #chatlist>
+<ion-content>
+  <div #chatlist  style="overflow: scroll; height: 100%;">
   <span
     class="bubble {{ message.fromuser == user.id ? 'to' : 'from' }}"
     *ngFor="let message of messages; let i = index"
@@ -43,6 +44,7 @@
       </ion-card-content>
     </ion-card>
   </span>
+  </div>
 </ion-content>
 
 <ion-footer>

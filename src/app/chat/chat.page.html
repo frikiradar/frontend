@@ -5,7 +5,7 @@
 <ion-content>
   <div *ngIf="chats?.length || showSkeleton; else noChats">
     <ion-list *ngIf="showSkeleton; else chatItems">
-      <ion-item *ngFor="let i of [].constructor(8)">
+      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-avatar>
@@ -25,6 +25,7 @@
           button
           (click)="showChat(chat.user.id)"
           *ngFor="let chat of chats"
+          lines="full"
         >
           <ion-avatar slot="start">
             <img [src]="chat.user.avatar" />

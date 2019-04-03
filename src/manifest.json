@@ -1,8 +1,8 @@
 {
-  "name": "app",
-  "short_name": "app",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "FrikiRadar, la app de citas y chat para frikis",
+  "short_name": "FrikiRadar",
+  "theme_color": "#1a1a1a",
+  "background_color": "#1a1a1a",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",

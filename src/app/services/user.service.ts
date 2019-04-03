@@ -77,6 +77,47 @@ export class UserService {
     return this.http.get<User[]>(`${environment.apiUrl}radar/${ratio}`);
   }
 
+  activateUser(verification_code: string) {
+    return this.rest
+      .put("activation", { verification_code })
+      .toPromise() as Promise<User>;
+  }
+
+  async resendActivationEmail() {
+    return await this.rest.get("activation");
+  }
+
+  requestPassword(username: string) {
+    return this.http
+      .post<User>(`${environment.root}api/recover`, {
+        username
+      })
+      .toPromise();
+  }
+
+  recoverPassword(
+    username: string,
+    password: string,
+    verification_code: string
+  ) {
+    return this.http
+      .put<User>(`${environment.root}api/recover`, {
+        username,
+        password,
+        verification_code
+      })
+      .toPromise();
+  }
+
+  changePassword(old_password: string, new_password: string) {
+    return this.rest
+      .put("password", {
+        old_password,
+        new_password
+      })
+      .toPromise() as Promise<User>;
+  }
+
   getOrientations() {
     return [
       "Heterosexual",

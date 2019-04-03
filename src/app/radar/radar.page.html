@@ -3,7 +3,9 @@
     <ion-buttons slot="start">
       <ion-button (click)="menu.open()">
         <ion-avatar>
-          <ion-img [src]="user?.avatar"></ion-img>
+          <ion-img
+            [src]="user?.avatar || '../../assets/img/users/default.jpg'"
+          ></ion-img>
         </ion-avatar>
       </ion-button>
     </ion-buttons>
@@ -20,7 +22,7 @@
       coincidencia más alto.
     </p>-->
     <ion-list *ngIf="showSkeleton; else radarItems">
-      <ion-item *ngFor="let i of [].constructor(8)">
+      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-avatar>
@@ -43,13 +45,15 @@
           button
           *ngFor="let user of users"
           (click)="showProfile(user.id)"
+          lines="full"
         >
           <ion-avatar slot="start">
             <ion-skeleton-text
               animated
               *ngIf="!user.avatar"
             ></ion-skeleton-text>
-            <ion-img [src]="user.avatar" *ngIf="user.avatar"></ion-img>
+            <img [src]="user.avatar" (load)="user.loaded = true" [hidden]="!user.loaded"/>
+            <img src="../../assets/img/users/default.jpg" [hidden]="user.loaded"/>
           </ion-avatar>
           <ion-label>
             <h2>{{ user.username }}, {{ user.age }}</h2>

@@ -1,0 +1,36 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Cuenta no activada</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <h4>¡Te hemos enviado un código de seguridad al email!</h4>
+  <p>
+    Introduce el código de seguridad para activar tu cuenta.
+  </p>
+  <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
+    <ion-item id="code">
+      <ion-input
+        autocomplete="off"
+        formControlName="code"
+        maxlength="4"
+        autocapitalize="characters"
+        placeholder="Código de seguridad"
+        type="text"
+      ></ion-input>
+    </ion-item>
+    <ion-button
+      class="dismiss"
+      color="primary"
+      expand="block"
+      type="submit"
+      [disabled]="codeForm.invalid"
+      >Activar la cuenta</ion-button
+    >
+  </form>
+</ion-content>

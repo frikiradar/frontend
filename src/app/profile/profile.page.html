@@ -7,15 +7,15 @@
       <ion-button (click)="showChat(user?.id)">
         <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
       </ion-button>
-      <ion-button (click)="test()">
+      <ion-button (click)="utils.test()">
         <ion-icon slot="icon-only" name="heart-empty"></ion-icon>
       </ion-button>
-      <ion-button (click)="test()">
+      <ion-button (click)="utils.test()">
         <ion-icon slot="icon-only" name="more"></ion-icon>
       </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+    </ion-buttons> 
+  </ion-toolbar> 
+</ion-header> 
 
 <ion-content fullscreen [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <img [src]="avatar" />
