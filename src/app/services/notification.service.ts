@@ -15,9 +15,9 @@ export class NotificationService {
   }
 
   async getNotifications() {
-    const notifications = (await this.rest.get(
-      `notifications`
-    )) as Notification[];
+    const notifications = (await this.rest
+      .get(`notifications`)
+      .toPromise()) as Notification[];
     notifications.map(
       notification =>
         (notification.user.avatar = notification.user.avatar

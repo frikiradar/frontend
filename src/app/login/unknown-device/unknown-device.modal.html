@@ -15,7 +15,7 @@
     </p>
     <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
         <ion-item id="code">
-            <ion-input autocapitalize="characters" autocomplete="off" formControlName="code" maxlength="4" name="code" placeholder="Código de seguridad" required type="text"></ion-input>
+            <ion-input autocapitalize="characters" autocomplete="off" formControlName="code" maxlength="6" name="code" placeholder="Código de seguridad" required type="text"></ion-input>
         </ion-item>
         <ion-button [disabled]="codeForm.invalid" class="dismiss" color="primary" expand="block" type="submit">Verificar dispositivo</ion-button>
     </form>

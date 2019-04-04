@@ -31,7 +31,7 @@ export class AccountModal {
       code: new FormControl("", [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(4)
+        Validators.maxLength(6)
       ])
     });
   }

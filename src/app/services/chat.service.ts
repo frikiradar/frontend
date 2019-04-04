@@ -15,7 +15,7 @@ export class ChatService {
   }
 
   async getChats() {
-    const chats = (await this.rest.get(`chats`)) as Chat[];
+    const chats = (await this.rest.get(`chats`).toPromise()) as Chat[];
     chats.map(
       chat =>
         (chat.user.avatar = chat.user.avatar
@@ -27,7 +27,7 @@ export class ChatService {
   }
 
   async getMessages(id: number) {
-    return (await this.rest.get(`chat/${id}`)) as Chat[];
+    return (await this.rest.get(`chat/${id}`).toPromise()) as Chat[];
   }
 
   async sendMessage(id: number, text: string) {

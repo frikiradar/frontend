@@ -31,7 +31,7 @@ export class UnknownDeviceModal {
       code: new FormControl("", [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(4)
+        Validators.maxLength(6)
       ])
     });
     this.device.unknownDevice();
@@ -48,11 +48,10 @@ export class UnknownDeviceModal {
       this.modal.dismiss();
     } catch (e) {
       this.codeForm.get("code").setValue("");
-      this.device.unknownDevice();
 
       const alert = await this.alert.create({
         header: "Código de seguridad no válido",
-        message: "Te hemos enviado un nuevo código al correo electrónico.",
+        message: "Revisa el código introducido y vuelve a intentarlo.",
         buttons: ["Ok, gracias"]
       });
 

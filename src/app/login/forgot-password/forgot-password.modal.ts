@@ -47,7 +47,7 @@ export class ForgotPasswordModal {
       code: new FormControl("", [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(4)
+        Validators.maxLength(6)
       ]),
       password: new FormControl("", [
         Validators.required,
@@ -95,12 +95,9 @@ export class ForgotPasswordModal {
       this.recoverSuccess(user);
       this.passwordForm.reset();
     } catch (e) {
-      await this.userSvc.requestPassword(
-        this.requestForm.get("username").value
-      );
       const alert = await this.alert.create({
         header: "Código de seguridad no válido",
-        message: "Te hemos enviado un nuevo código al correo electrónico.",
+        message: "Revisa el código introducido y vuelve a intentarlo.",
         buttons: ["Ok, gracias"]
       });
 

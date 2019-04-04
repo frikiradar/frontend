@@ -1,4 +1,6 @@
 import { SafeResourceUrl } from "@angular/platform-browser";
+
+import { Device } from "./device";
 import { Tag } from "./tags";
 
 export interface User {
@@ -26,14 +28,7 @@ export interface User {
 
   password?: string;
   token?: string;
-  devices: {
-    id: number;
-    active: boolean;
-    device_id: string;
-    device_name: string;
-    last_update: Date;
-    token: string;
-  }[];
+  devices: Device[];
 
   tags: Tag[];
 
@@ -43,4 +38,8 @@ export interface User {
   loaded: boolean;
   roles: string[];
   active: boolean;
+
+  /*configuration*/
+  hide_location?: boolean;
+  block_messages?: boolean;
 }

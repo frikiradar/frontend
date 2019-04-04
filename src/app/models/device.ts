@@ -7,6 +7,5 @@ export interface Device {
   device_name: string;
   last_update: Date;
   token: string;
-  user?: User;
   current?: boolean;
 }

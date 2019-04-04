@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="tabs/radar"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="showChat(user?.id)">
+      <ion-button *ngIf="!user?.block_messages" (click)="showChat(user?.id)">
         <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
       </ion-button>
       <ion-button (click)="utils.test()">

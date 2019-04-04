@@ -16,16 +16,7 @@ export class RestService {
   constructor(public http: HttpClient) {}
 
   get(endpoint: string) {
-    return new Promise(resolve => {
-      this.http.get(`${this.apiUrl}${endpoint}`).subscribe(
-        data => {
-          resolve(data);
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    });
+    return this.http.get(`${this.apiUrl}${endpoint}`, httpOptions);
   }
 
   post(endpoint: string, data) {
@@ -42,6 +33,19 @@ export class RestService {
     }
 
     return this.http.put(`${this.apiUrl}${endpoint}`, JSON.stringify(data), {
+      headers: httpOptions.headers.set(
+        "Authorization",
+        `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
+      )
+    });
+  }
+
+  delete(endpoint: string) {
+    if (!localStorage.getItem("currentUser")) {
+      return;
+    }
+
+    return this.http.delete(`${this.apiUrl}${endpoint}`, {
       headers: httpOptions.headers.set(
         "Authorization",
         `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`

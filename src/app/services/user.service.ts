@@ -41,7 +41,7 @@ export class UserService {
 
   async getUser(id: User["id"]): Promise<User> {
     try {
-      return (await this.rest.get(`user/${id}`)) as User;
+      return (await this.rest.get(`user/${id}`).toPromise()) as User;
     } catch (e) {
       throw new Error("No se puede obtener el usuario");
     }

@@ -58,9 +58,9 @@
           <ion-label>
             <h2>{{ user.username }}, {{ user.age }}</h2>
             <h3>
-              <span *ngIf="user.location"
+              <span *ngIf="user.location && !user.hide_location"
                 >{{ user?.location
-                }}<span *ngIf="user.location && user.distance !== undefined"
+                }}<span *ngIf="user.location && user.distance !== undefined  && !user.hide_location"
                   >, a
                 </span></span
               ><span *ngIf="user.distance !== undefined"

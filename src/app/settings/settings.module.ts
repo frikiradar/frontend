@@ -5,8 +5,9 @@ import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
 import { AccountModal } from "./account/account.modal";
+import { BanUsersModal } from "./ban-users/ban-users.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
-import { DevicesModal } from "./devices/devices.modal";
+import { DevicesSettingsModal } from "./devices/devices.modal";
 import { SettingsPage } from "./settings.page";
 
 const routes: Routes = [
@@ -24,7 +25,18 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [SettingsPage, AccountModal, ChangePasswordModal, DevicesModal],
-  entryComponents: [AccountModal, ChangePasswordModal, DevicesModal]
+  declarations: [
+    SettingsPage,
+    AccountModal,
+    ChangePasswordModal,
+    DevicesSettingsModal,
+    BanUsersModal
+  ],
+  entryComponents: [
+    AccountModal,
+    ChangePasswordModal,
+    DevicesSettingsModal,
+    BanUsersModal
+  ]
 })
 export class SettingsPageModule {}

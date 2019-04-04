@@ -23,7 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (err.status === 401 && localStorage.getItem("currentUser")) {
           // auto logout if 401 response returned from api
           this.auth.logout();
-          location.reload(true);
+          location.reload();
         }
 
         const error = err.error.message || err.statusText;

@@ -1,15 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from "@angular/forms";
-import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { AlertController, ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 
 import { Device } from "./../../models/device";
+import { AuthService } from "./../../services/auth.service";
 import { DeviceService } from "./../../services/device.service";
 
 const { Toast } = Plugins;
@@ -19,13 +13,13 @@ const { Toast } = Plugins;
   templateUrl: "./devices.modal.html",
   styleUrls: ["./devices.modal.scss"]
 })
-export class DevicesModal implements OnInit {
+export class DevicesSettingsModal implements OnInit {
   public devices: Device[];
 
   constructor(
     private modal: ModalController,
     private devicesSvc: DeviceService,
-    private alert: AlertController
+    private auth: AuthService
   ) {}
 
   async ngOnInit() {
@@ -42,6 +36,9 @@ export class DevicesModal implements OnInit {
   async removeDevice(device: Device) {
     this.devices = this.devices.filter(d => d.id !== device.id);
 
+    const user = await this.devicesSvc.removeDevice(device);
+    this.auth.setAuthUser(user);
+
     await Toast.show({
       text: "¡Dispositivo eliminado!"
     });
@@ -53,6 +50,9 @@ export class DevicesModal implements OnInit {
         d.active = !device.active;
       }
     });
+
+    const user = await this.devicesSvc.switchDevice(device);
+    this.auth.setAuthUser(user);
 
     if (!device.active) {
       await Toast.show({

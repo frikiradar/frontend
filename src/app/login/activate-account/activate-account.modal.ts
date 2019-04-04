@@ -33,7 +33,7 @@ export class ActivateAccountModal {
       code: new FormControl("", [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(4)
+        Validators.maxLength(6)
       ])
     });
 
@@ -50,11 +50,10 @@ export class ActivateAccountModal {
       this.modal.dismiss();
     } catch (e) {
       this.codeForm.get("code").setValue("");
-      this.userSvc.resendActivationEmail();
 
       const alert = await this.alert.create({
         header: "Código de seguridad no válido",
-        message: "Te hemos enviado un nuevo código al correo electrónico.",
+        message: "Revisa el código introducido y vuelve a intentarlo.",
         buttons: ["Ok, gracias"]
       });
 

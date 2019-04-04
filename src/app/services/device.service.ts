@@ -17,9 +17,7 @@ export class DeviceService {
   constructor(private rest: RestService, private auth: AuthService) {}
 
   async getDevices(): Promise<Device[]> {
-    const devices = this.auth.currentUserValue.devices;
-    // console.log("devices", devices);
-    return devices;
+    return this.rest.get(`devices`).toPromise() as Promise<Device[]>;
   }
 
   async setDevice(token?: string) {
@@ -59,5 +57,15 @@ export class DeviceService {
     return this.rest
       .put("unknown-device", { verification_code })
       .toPromise() as Promise<User>;
+  }
+
+  removeDevice(device: Device) {
+    return this.rest.delete(`device/${device.id}`).toPromise() as Promise<User>;
+  }
+
+  switchDevice(device: Device) {
+    return this.rest.get(`switch-device/${device.id}`).toPromise() as Promise<
+      User
+    >;
   }
 }
