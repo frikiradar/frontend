@@ -83,8 +83,8 @@ export class UserService {
       .toPromise() as Promise<User>;
   }
 
-  async resendActivationEmail() {
-    return await this.rest.get("activation");
+  resendActivationEmail() {
+    return this.rest.get("activation");
   }
 
   requestPassword(username: string) {

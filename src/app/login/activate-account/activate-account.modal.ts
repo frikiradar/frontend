@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -17,7 +17,7 @@ import { UserService } from "./../../services/user.service";
   templateUrl: "./activate-account.modal.html",
   styleUrls: ["./activate-account.modal.scss"]
 })
-export class ActivateAccountModal {
+export class ActivateAccountModal implements OnInit {
   public codeForm: FormGroup;
 
   constructor(
@@ -36,8 +36,10 @@ export class ActivateAccountModal {
         Validators.maxLength(6)
       ])
     });
+  }
 
-    this.userSvc.resendActivationEmail();
+  async ngOnInit() {
+    await this.userSvc.resendActivationEmail().toPromise();
   }
 
   async submitCode() {

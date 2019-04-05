@@ -77,20 +77,28 @@ export class AppComponent {
           }
 
           if (!authUser.active) {
+            // El usuario no está activo
             const modal = await this.modal.create({
               component: ActivateAccountModal,
               backdropDismiss: false
             });
             return await modal.present();
-          } else if (
-            !(await this.device.getCurrentDevice()) &&
-            this.auth.currentUserValue.devices.length
-          ) {
-            const modal = await this.modal.create({
-              component: UnknownDeviceModal,
-              backdropDismiss: false
-            });
-            return await modal.present();
+          } else {
+            // El dispositivo utilizado es desconocido
+            const device = await this.device.getCurrentDevice();
+            const devices = await this.device.getDevices();
+            if (
+              devices.length &&
+              !devices.some(d => d.device_id === device.device_id)
+            ) {
+              const modal = await this.modal.create({
+                component: UnknownDeviceModal,
+                backdropDismiss: false
+              });
+              return await modal.present();
+            } else if (!devices.length) {
+              this.device.setDevice();
+            }
           }
 
           if ((await Device.getInfo()).platform !== "web") {

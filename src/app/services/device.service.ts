@@ -16,8 +16,16 @@ export class DeviceService {
 
   constructor(private rest: RestService, private auth: AuthService) {}
 
-  async getDevices(): Promise<Device[]> {
-    return this.rest.get(`devices`).toPromise() as Promise<Device[]>;
+  async getDevices(forceApi = false): Promise<Device[]> {
+    if (
+      this.auth.currentUserValue.devices &&
+      this.auth.currentUserValue.devices.length &&
+      !forceApi
+    ) {
+      return this.auth.currentUserValue.devices;
+    } else {
+      return (await this.rest.get(`devices`).toPromise()) as Device[];
+    }
   }
 
   async setDevice(token?: string) {
@@ -27,35 +35,41 @@ export class DeviceService {
     } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
       this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`;
 
-    const device = (await this.rest
+    const user = (await this.rest
       .put("device", {
         id: this.deviceInfo.uuid,
         name,
         token
       })
-      .toPromise()) as Device;
-    localStorage.setItem("currentDevice", JSON.stringify(device));
+      .toPromise()) as User;
+    this.auth.setAuthUser(user);
   }
 
-  async getCurrentDevice() {
-    const devices = await this.getDevices();
+  async getCurrentDevice(): Promise<Device> {
     this.deviceInfo = await Device.getInfo();
-    const device =
-      devices.length &&
-      devices.filter((d: Device) => {
-        return d.device_id === this.deviceInfo.uuid;
-      })[0];
+    const device: Device = {
+      device_id: this.deviceInfo.uuid,
+      device_name: `${this.deviceInfo.manufacturer} ${
+        this.deviceInfo.model
+      } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
+        this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`
+    };
 
-    return device ? device : false;
+    const devices = await this.getDevices();
+    if (devices.some(d => d.device_id === device.device_id)) {
+      return devices.find(d => d.device_id === device.device_id);
+    } else {
+      return device;
+    }
   }
 
   unknownDevice() {
     return this.rest.get("unknown-device");
   }
 
-  verifyDevice(verification_code: string) {
+  verifyDevice(verification_code: string, device: Device) {
     return this.rest
-      .put("unknown-device", { verification_code })
+      .put("unknown-device", { verification_code, device })
       .toPromise() as Promise<User>;
   }
 

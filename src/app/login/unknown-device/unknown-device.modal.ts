@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -16,7 +16,7 @@ import { DeviceService } from "./../../services/device.service";
   templateUrl: "./unknown-device.modal.html",
   styleUrls: ["./unknown-device.modal.scss"]
 })
-export class UnknownDeviceModal {
+export class UnknownDeviceModal implements OnInit {
   public codeForm: FormGroup;
 
   constructor(
@@ -34,16 +34,20 @@ export class UnknownDeviceModal {
         Validators.maxLength(6)
       ])
     });
-    this.device.unknownDevice();
+  }
+
+  async ngOnInit() {
+    await this.device.unknownDevice().toPromise();
   }
 
   async submitCode() {
     try {
+      const device = await this.device.getCurrentDevice();
       const user = await this.device.verifyDevice(
-        this.codeForm.get("code").value.toUpperCase()
+        this.codeForm.get("code").value.toUpperCase(),
+        device
       );
 
-      this.device.setDevice();
       this.auth.setAuthUser(user);
       this.modal.dismiss();
     } catch (e) {

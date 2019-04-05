@@ -23,7 +23,7 @@ export class DevicesSettingsModal implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.devices = await this.devicesSvc.getDevices();
+    this.devices = await this.devicesSvc.getDevices(true);
     const currentDevice = await this.devicesSvc.getCurrentDevice();
 
     if (currentDevice) {
