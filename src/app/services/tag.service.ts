@@ -1,15 +1,10 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 import { RestService } from "./rest.service";
 
-const httpOptions = {
-  headers: new HttpHeaders({ "Content-Type": "application/json" })
-};
-
 @Injectable({ providedIn: "root" })
 export class TagService {
-  constructor(private http: HttpClient, private rest: RestService) {}
+  constructor(private rest: RestService) {}
 
   async searchTag(tag: string, category: string) {
     try {

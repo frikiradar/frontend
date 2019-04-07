@@ -5,7 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
 import { AccountModal } from "./account/account.modal";
-import { BanUsersModal } from "./ban-users/ban-users.modal";
+import { BlockUsersModal } from "./block-users/block-users.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
 import { SettingsPage } from "./settings.page";
@@ -30,13 +30,13 @@ const routes: Routes = [
     AccountModal,
     ChangePasswordModal,
     DevicesSettingsModal,
-    BanUsersModal
+    BlockUsersModal
   ],
   entryComponents: [
     AccountModal,
     ChangePasswordModal,
     DevicesSettingsModal,
-    BanUsersModal
+    BlockUsersModal
   ]
 })
 export class SettingsPageModule {}

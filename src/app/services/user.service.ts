@@ -14,30 +14,10 @@ const httpOptions = {
 @Injectable({ providedIn: "root" })
 export class UserService {
   constructor(
-    private http: HttpClient,
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService
   ) {}
-
-  async register(
-    username: string,
-    email: string,
-    birthday: string,
-    password: string
-  ) {
-    try {
-      return await this.http
-        .post(
-          `${environment.root}api/register`,
-          { username, email, birthday, password },
-          httpOptions
-        )
-        .toPromise();
-    } catch (e) {
-      throw new Error("Ya hay un usuario registrado con estos datos");
-    }
-  }
 
   async getUser(id: User["id"]): Promise<User> {
     try {
@@ -74,7 +54,7 @@ export class UserService {
   }
 
   getRadarUsers(ratio: number) {
-    return this.http.get<User[]>(`${environment.apiUrl}radar/${ratio}`);
+    return this.rest.get(`radar/${ratio}`).toPromise() as Promise<User[]>;
   }
 
   activateUser(verification_code: string) {
@@ -88,8 +68,8 @@ export class UserService {
   }
 
   requestPassword(username: string) {
-    return this.http
-      .post<User>(`${environment.root}api/recover`, {
+    return this.rest
+      .post(`recover`, {
         username
       })
       .toPromise();
@@ -100,8 +80,8 @@ export class UserService {
     password: string,
     verification_code: string
   ) {
-    return this.http
-      .put<User>(`${environment.root}api/recover`, {
+    return this.rest
+      .put(`recover`, {
         username,
         password,
         verification_code
@@ -116,6 +96,30 @@ export class UserService {
         new_password
       })
       .toPromise() as Promise<User>;
+  }
+
+  getLikes() {
+    return this.rest.get("likes").toPromise() as Promise<User[]>;
+  }
+
+  like(id: User["id"]) {
+    return this.rest.put("like", { user: id }).toPromise() as Promise<User>;
+  }
+
+  unlike(id: User["id"]) {
+    return this.rest.delete(`like/${id}`).toPromise() as Promise<User>;
+  }
+
+  getBlocks() {
+    return this.rest.get("blocks").toPromise() as Promise<User[]>;
+  }
+
+  block(id: User["id"], note?: string) {
+    return this.rest.put("block", { user: id, note }).toPromise();
+  }
+
+  unblock(id: User["id"]) {
+    return this.rest.delete(`block/${id}`).toPromise() as Promise<User[]>;
   }
 
   getOrientations() {

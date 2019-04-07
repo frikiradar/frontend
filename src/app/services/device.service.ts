@@ -30,19 +30,27 @@ export class DeviceService {
 
   async setDevice(token?: string) {
     this.deviceInfo = await Device.getInfo();
-    const name = `${this.deviceInfo.manufacturer} ${
-      this.deviceInfo.model
-    } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
-      this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`;
 
-    const user = (await this.rest
-      .put("device", {
-        id: this.deviceInfo.uuid,
-        name,
-        token
-      })
-      .toPromise()) as User;
-    this.auth.setAuthUser(user);
+    if (
+      !this.auth.currentUserValue.devices.some(
+        d => d.device_id === this.deviceInfo.uuid
+      )
+    ) {
+      const name = `${this.deviceInfo.manufacturer} ${
+        this.deviceInfo.model
+      } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
+        this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`;
+
+      const user = (await this.rest
+        .put("device", {
+          id: this.deviceInfo.uuid,
+          name,
+          token
+        })
+        .toPromise()) as User;
+
+      this.auth.setAuthUser(user);
+    }
   }
 
   async getCurrentDevice(): Promise<Device> {

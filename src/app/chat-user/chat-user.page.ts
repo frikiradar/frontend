@@ -7,7 +7,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AlertController, IonTextarea } from "@ionic/angular";
+import { IonTextarea } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Chat } from "../models/chat";
@@ -33,13 +33,14 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
   source: EventSource;
 
   user: User;
+  userId: User["id"];
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
+  loading = true;
 
   constructor(
     private auth: AuthService,
     private userSvc: UserService,
-    private alert: AlertController,
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
@@ -49,17 +50,21 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
   async ngOnInit() {
     this.avatar = "../../assets/img/users/default.jpg";
 
-    const id = this.route.snapshot.paramMap.get("id");
-    this.user = await this.userSvc.getUser(+id);
-    if (this.user.avatar) {
-      this.avatar = this.user.avatar;
-    }
+    this.userId = +this.route.snapshot.paramMap.get("id");
 
-    this.messages = (await this.chatSvc.getMessages(+id)).reverse();
+    try {
+      this.user = await this.userSvc.getUser(this.userId);
+      this.loading = false;
+      if (this.user && this.user.avatar) {
+        this.avatar = this.user.avatar;
+      }
+    } catch (e) {}
+
+    this.messages = (await this.chatSvc.getMessages(this.userId)).reverse();
     this.scrollDown();
 
-    const min = Math.min(this.auth.currentUserValue.id, this.user.id);
-    const max = Math.max(this.auth.currentUserValue.id, this.user.id);
+    const min = Math.min(this.auth.currentUserValue.id, this.userId);
+    const max = Math.max(this.auth.currentUserValue.id, this.userId);
     const channel = `${min}_${max}`;
 
     this.source = this.chatSvc.register(channel);
@@ -74,23 +79,24 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
 
     this.source.addEventListener("error", async error => {
       if (error.type === "error") {
+        console.error(error);
         // this.source.close();
         /*const alert = await this.alert.create({
-          header: `Ups, error al conectar`,
-          message:
-            "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
-          backdropDismiss: false,
-          buttons: [
-            {
-              text: "Ok, seré paciente",
-              handler: () => {
-                this.back();
+            header: `Ups, error al conectar`,
+            message:
+              "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
+            backdropDismiss: false,
+            buttons: [
+              {
+                text: "Ok, seré paciente",
+                handler: () => {
+                  this.back();
+                }
               }
-            }
-          ]
-        });
-
-        await alert.present();*/
+            ]
+          });
+  
+          await alert.present();*/
       }
     });
 

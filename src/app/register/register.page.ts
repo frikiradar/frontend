@@ -54,7 +54,7 @@ export class RegisterPage {
   async submitRegister() {
     if (this.registerForm.valid) {
       try {
-        await this.userSvc.register(
+        await this.auth.register(
           this.registerForm.get("username").value.trim(),
           this.registerForm.get("email").value.trim(),
           this.registerForm.get("birthday").value.split("T")[0],

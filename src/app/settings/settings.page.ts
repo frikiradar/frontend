@@ -5,7 +5,7 @@ import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { AccountModal } from "./account/account.modal";
-import { BanUsersModal } from "./ban-users/ban-users.modal";
+import { BlockUsersModal } from "./block-users/block-users.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
 
@@ -42,9 +42,9 @@ export class SettingsPage implements OnInit {
     return await modal.present();
   }
 
-  async banUsersModal() {
+  async blockUsersModal() {
     const modal = await this.modal.create({
-      component: BanUsersModal
+      component: BlockUsersModal
     });
     return await modal.present();
   }

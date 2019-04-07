@@ -4,12 +4,12 @@
       <ion-button (click)="back()">
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
-      <ion-button (click)="showProfile(user.id)">
+      <ion-button (click)="showProfile(userId)">
         <ion-avatar>
           <ion-img [src]="avatar"></ion-img>
         </ion-avatar>
         <ion-label>
-          <h2>{{ user?.username }}</h2>
+          <h2>{{ user ? user.username : 'Usuario desconocido' }}</h2>
           <!--<p>En línea</p>-->
         </ion-label>
       </ion-button>
@@ -20,7 +20,7 @@
 <ion-content>
   <div #chatlist  style="overflow: scroll; height: 100%;">
   <span
-    class="bubble {{ message.fromuser == user.id ? 'to' : 'from' }}"
+    class="bubble {{ message.fromuser == userId ? 'to' : 'from' }}"
     *ngFor="let message of messages; let i = index"
   >
     <ion-chip
@@ -51,11 +51,12 @@
   <ion-toolbar>
     <ion-item lines="none">
       <ion-textarea
-        placeholder="Escribe tu mensaje aquí"
+        [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'"
         autocapitalize="on"
         (keyup.enter)="sendMessage()"
         #textarea
         autofocus
+        [disabled]="!user"
       >
       </ion-textarea>
     </ion-item>

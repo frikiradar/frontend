@@ -33,6 +33,8 @@ export interface User {
   tags: Tag[];
 
   match: number;
+  like: boolean;
+  block: boolean;
 
   avatar: SafeResourceUrl;
   loaded: boolean;

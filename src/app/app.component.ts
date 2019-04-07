@@ -96,8 +96,6 @@ export class AppComponent {
                 backdropDismiss: false
               });
               return await modal.present();
-            } else if (!devices.length) {
-              this.device.setDevice();
             }
           }
 

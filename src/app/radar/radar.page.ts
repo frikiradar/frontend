@@ -44,7 +44,7 @@ export class RadarPage implements OnInit {
 
   async getRadarUsers() {
     try {
-      const users = await this.userSvc.getRadarUsers(this.ratio).toPromise();
+      const users = await this.userSvc.getRadarUsers(this.ratio);
       users.map(async user => {
         user.avatar = user.avatar
           ? user.avatar

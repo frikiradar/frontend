@@ -32,12 +32,11 @@ export class RestService {
       return;
     }
 
-    return this.http.put(`${this.apiUrl}${endpoint}`, JSON.stringify(data), {
-      headers: httpOptions.headers.set(
-        "Authorization",
-        `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
-      )
-    });
+    return this.http.put(
+      `${this.apiUrl}${endpoint}`,
+      JSON.stringify(data),
+      httpOptions
+    );
   }
 
   delete(endpoint: string) {
@@ -45,11 +44,6 @@ export class RestService {
       return;
     }
 
-    return this.http.delete(`${this.apiUrl}${endpoint}`, {
-      headers: httpOptions.headers.set(
-        "Authorization",
-        `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
-      )
-    });
+    return this.http.delete(`${this.apiUrl}${endpoint}`, httpOptions);
   }
 }

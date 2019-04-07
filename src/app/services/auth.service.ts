@@ -5,6 +5,7 @@ import { map } from "rxjs/operators";
 
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
+import { RestService } from "./rest.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
@@ -15,7 +16,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private rest: RestService) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("currentUser"))
     );
@@ -24,6 +25,25 @@ export class AuthService {
 
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
+  }
+
+  async register(
+    username: string,
+    email: string,
+    birthday: string,
+    password: string
+  ) {
+    try {
+      return await this.http
+        .post(
+          `${environment.root}api/register`,
+          { username, email, birthday, password },
+          httpOptions
+        )
+        .toPromise();
+    } catch (e) {
+      throw new Error("Ya hay un usuario registrado con estos datos");
+    }
   }
 
   async login(username: string, password: string) {
@@ -40,24 +60,25 @@ export class AuthService {
           })
         )
         .toPromise();
-      return await this.getAuthUser(token);
+      localStorage.setItem("currentUser", JSON.stringify({ token }));
+      this.currentUserSubject.next({ token } as User);
+      return await this.getAuthUser();
     } catch (e) {
       throw new Error("Credenciales incorrectas");
     }
   }
 
-  getAuthUser(token?: string) {
-    if (!token) {
-      token = JSON.parse(localStorage.getItem("currentUser")).token;
-    }
-    return this.http
-      .get(`${environment.root}api/v1/user`, {
-        headers: httpOptions.headers.set("Authorization", `Bearer ${token}`)
-      })
+  getAuthUser() {
+    const token = JSON.parse(localStorage.getItem("currentUser")).token;
+
+    return this.rest
+      .get("user")
       .pipe(
         map((user: User) => {
-          user.token = token;
-          localStorage.setItem("currentUser", JSON.stringify(user));
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify({ ...user, token })
+          );
           return user;
         })
       )

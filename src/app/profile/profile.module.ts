@@ -2,10 +2,9 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
-
 import { IonicModule } from "@ionic/angular";
 
-import { ProfilePage } from "./profile.page";
+import { ProfilePage, ProfilePopover } from "./profile.page";
 
 const routes: Routes = [
   {
@@ -21,6 +20,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProfilePage]
+  declarations: [ProfilePage, ProfilePopover],
+  entryComponents: [ProfilePopover]
 })
 export class ProfilePageModule {}

@@ -59,7 +59,7 @@
                 </ion-label>
                 <ion-checkbox slot="end" [(ngModel)]="!user.block_messages" (ngModelChange)="onChangeCheck('block_messages', $event)"></ion-checkbox>
           </ion-item>
-          <ion-item (click)="banUsersModal()" button lines="full">
+          <ion-item (click)="blockUsersModal()" button lines="full">
             <ion-icon name="hand" slot="start"></ion-icon>
             <ion-label>Usuarios bloqueados</ion-label>
         </ion-item>
