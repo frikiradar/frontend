@@ -5,9 +5,12 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Router } from "@angular/router";
+import {
+  AlertController,
+  ModalController,
+  NavController
+} from "@ionic/angular";
 
-import { AlertController, ModalController } from "@ionic/angular";
 import { AuthService } from "./../../services/auth.service";
 import { DeviceService } from "./../../services/device.service";
 import { UserService } from "./../../services/user.service";
@@ -27,7 +30,7 @@ export class ActivateAccountModal implements OnInit {
     private auth: AuthService,
     private device: DeviceService,
     private alert: AlertController,
-    private router: Router
+    private nav: NavController
   ) {
     this.codeForm = fb.group({
       code: new FormControl("", [
@@ -65,7 +68,6 @@ export class ActivateAccountModal implements OnInit {
 
   close() {
     this.auth.logout();
-    this.router.navigate(["/login"]);
     this.modal.dismiss();
   }
 }

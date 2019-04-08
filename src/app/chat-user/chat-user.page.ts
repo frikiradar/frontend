@@ -7,7 +7,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IonTextarea } from "@ionic/angular";
+import { IonTextarea, NavController } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Chat } from "../models/chat";
@@ -43,7 +43,7 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
     private userSvc: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location,
+    private nav: NavController,
     private chatSvc: ChatService
   ) {}
 
@@ -142,6 +142,6 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
   }
 
   back() {
-    this.location.back();
+    this.nav.navigateBack(["/tabs/chat"]);
   }
 }

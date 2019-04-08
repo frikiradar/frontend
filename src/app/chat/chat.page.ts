@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { NavController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { Chat } from "./../models/chat";
@@ -14,7 +14,7 @@ export class ChatPage {
   chats: Chat[];
   showSkeleton = true;
 
-  constructor(private router: Router, private chatSvc: ChatService) {}
+  constructor(private nav: NavController, private chatSvc: ChatService) {}
 
   async ionViewWillEnter() {
     this.getChats();
@@ -26,6 +26,6 @@ export class ChatPage {
   }
 
   async showChat(id: User["id"]) {
-    this.router.navigate(["/chat", id]);
+    this.nav.navigateRoot(["/chat", id]);
   }
 }

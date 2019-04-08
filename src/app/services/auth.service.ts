@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { NavController } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
@@ -16,7 +17,11 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient, private rest: RestService) {
+  constructor(
+    private http: HttpClient,
+    private rest: RestService,
+    private nav: NavController
+  ) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("currentUser"))
     );
@@ -109,5 +114,6 @@ export class AuthService {
     localStorage.removeItem("currentUser");
     sessionStorage.clear();
     this.currentUserSubject.next(undefined);
+    this.nav.navigateRoot(["/login"]);
   }
 }

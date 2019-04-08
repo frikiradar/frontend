@@ -65,7 +65,6 @@ export class UnknownDeviceModal implements OnInit {
 
   close() {
     this.auth.logout();
-    this.router.navigate(["/login"]);
     this.modal.dismiss();
   }
 }

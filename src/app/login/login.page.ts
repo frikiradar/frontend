@@ -7,10 +7,13 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { AlertController, ModalController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  NavController
+} from "@ionic/angular";
 
 import { User } from "../models/user";
-import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 
@@ -37,7 +40,7 @@ export class LoginPage {
     private alert: AlertController,
     private modal: ModalController,
     public fb: FormBuilder,
-    private userSvc: UserService
+    private nav: NavController
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -84,7 +87,7 @@ export class LoginPage {
     await Toast.show({
       text: "¡Acceso concedido!"
     });
-    this.router.navigate(["/"]);
+    this.nav.navigateRoot(["/tabs/radar"]);
   }
 
   async loginError() {

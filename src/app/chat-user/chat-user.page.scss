@@ -22,7 +22,7 @@ ion-label h2 {
       clear: both;
     }
 
-    & + .to ion-card {
+    &+.to ion-card {
       margin-top: 8px;
     }
   }
@@ -36,13 +36,14 @@ ion-label h2 {
       clear: both;
     }
 
-    & + .from ion-card {
+    &+.from ion-card {
       margin-top: 8px;
     }
   }
 
   .text {
     margin-right: 10px;
+    word-break: break-word;
   }
 
   ion-note {

@@ -6,12 +6,10 @@ import {
   Validators
 } from "@angular/forms";
 import { Plugins } from "@capacitor/core";
-import { AlertController } from "@ionic/angular";
+import { AlertController, NavController } from "@ionic/angular";
 
-import { Router } from "@angular/router";
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
-import { UserService } from "./../services/user.service";
 
 const { Toast } = Plugins;
 
@@ -26,11 +24,10 @@ export class RegisterPage {
   public clearPassword = false;
 
   constructor(
-    private router: Router,
-    private userSvc: UserService,
     private alert: AlertController,
     private auth: AuthService,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private nav: NavController
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [
@@ -85,7 +82,7 @@ export class RegisterPage {
     await Toast.show({
       text: "Registro realizado correctamente"
     });
-    this.router.navigate(["/"]);
+    this.nav.navigateRoot(["/tabs/radar"]);
   }
 
   async registerError(error: string) {
