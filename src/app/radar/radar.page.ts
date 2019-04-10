@@ -4,10 +4,11 @@ import { Plugins } from "@capacitor/core";
 import { IonRange, MenuController } from "@ionic/angular";
 
 import { User } from "../models/user";
+import { PushService } from "../services/push.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 
-const { Device, App, Toast } = Plugins;
+const { Device, Geolocation } = Plugins;
 
 @Component({
   selector: "app-radar",
@@ -24,22 +25,40 @@ export class RadarPage implements OnInit {
   users: User[];
 
   constructor(
+    private push: PushService,
     public userSvc: UserService,
     public menu: MenuController,
     private auth: AuthService,
     public router: Router
-  ) {}
+  ) {
+    this.getRadarUsers();
+  }
 
   async ngOnInit() {
     this.range.value = 1;
     this.user = this.auth.currentUserValue;
 
-    this.user.avatar =
-      this.user && this.user.avatar
-        ? this.user.avatar
-        : "../../assets/img/users/default.jpg";
+    if (this.user && this.user.id) {
+      if (!this.user.roles.includes("ROLE_ADMIN")) {
+        try {
+          const coordinates = await Geolocation.getCurrentPosition();
+          const longitude = coordinates.coords.longitude;
+          const latitude = coordinates.coords.latitude;
+          this.userSvc.setCoordinates(longitude, latitude);
+        } catch (e) {
+          this.userSvc.setCoordinates(0, 0);
+        }
+      }
 
-    this.getRadarUsers();
+      this.user.avatar =
+        this.user && this.user.avatar
+          ? this.user.avatar
+          : "../../assets/img/users/default.jpg";
+
+      if ((await Device.getInfo()).platform !== "web") {
+        this.push.init();
+      }
+    }
   }
 
   async getRadarUsers() {
@@ -51,10 +70,8 @@ export class RadarPage implements OnInit {
           : "../../assets/img/users/default.jpg";
       });
 
-      setTimeout(() => {
-        this.showSkeleton = false;
-        this.users = users;
-      }, 250);
+      this.showSkeleton = false;
+      this.users = users;
     } catch (e) {
       console.log(e);
     }
@@ -88,5 +105,9 @@ export class RadarPage implements OnInit {
     }
 
     this.getRadarUsers();
+  }
+
+  search() {
+    this.router.navigate(["/search"]);
   }
 }

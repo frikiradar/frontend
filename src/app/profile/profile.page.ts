@@ -2,7 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { AlertController, NavParams, PopoverController } from "@ionic/angular";
+import {
+  AlertController,
+  NavController,
+  NavParams,
+  PopoverController
+} from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 
 import { User } from "../models/user";
@@ -97,7 +102,8 @@ export class ProfilePage implements OnInit {
     private userSvc: UserService,
     private route: ActivatedRoute,
     public router: Router,
-    public utils: UtilsService
+    public utils: UtilsService,
+    private nav: NavController
   ) {
     this.avatar = "../../assets/img/users/default.jpg";
   }
@@ -147,5 +153,9 @@ export class ProfilePage implements OnInit {
       const scrollTop = $event.detail.scrollTop;
       this.showToolbar = scrollTop >= 150;
     }
+  }
+
+  back() {
+    this.nav.back();
   }
 }

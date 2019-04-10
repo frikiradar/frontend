@@ -3,11 +3,5 @@
   "appName": "FrikiRadar",
   "bundledWebRuntime": false,
   "webDir": "www",
-  "linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh",
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 3000,
-      "scaleType": "CENTER_CROP"
-    }
-  }
+  "linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh"
 }

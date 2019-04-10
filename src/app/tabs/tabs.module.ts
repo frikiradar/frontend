@@ -7,7 +7,7 @@ import { IonicModule } from "@ionic/angular";
 import { TabsPageRoutingModule } from "./tabs.router.module";
 
 import { ChatPageModule } from "../chat/chat.module";
-import { NotificationsPageModule } from "../notifications/notifications.module";
+import { LikesPageModule } from "../likes/likes.module";
 import { RadarPageModule } from "../radar/radar.module";
 import { TabsPage } from "./tabs.page";
 
@@ -19,7 +19,7 @@ import { TabsPage } from "./tabs.page";
     TabsPageRoutingModule,
     RadarPageModule,
     ChatPageModule,
-    NotificationsPageModule
+    LikesPageModule
   ],
   declarations: [TabsPage]
 })

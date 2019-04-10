@@ -1,11 +1,11 @@
 <ion-header no-border>
   <ion-toolbar>
-    <ion-title>Avisos</ion-title>
+    <ion-title>Likes</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div *ngIf="notifications?.length || showSkeleton; else noNotifications">
+  <div *ngIf="likes?.length || showSkeleton; else noNotifications">
     <ion-list *ngIf="showSkeleton; else notificationItems">
       <ion-item *ngFor="let i of [].constructor(8)" lines="full">
         <ion-avatar slot="start">
@@ -22,22 +22,22 @@
       </ion-item>
     </ion-list>
     <ng-template #notificationItems>
-      <ion-list *ngIf="notifications?.length; else noNotifications">
+      <ion-list *ngIf="likes?.length; else noNotifications">
         <ion-item
           button
-          (click)="goToUrl(notification.url)"
-          *ngFor="let notification of notifications"
+          (click)="viewProfile(like.user.id)"
+          *ngFor="let like of likes"
           lines="full"
         >
           <ion-avatar slot="start">
-            <img [src]="notification.user.avatar" />
+            <img [src]="like.user.avatar" />
           </ion-avatar>
           <ion-label>
-            <h2>{{ notification.user.username }}</h2>
-            <p>{{ notification.text }}</p>
+            <h2>{{ like.user.username }}</h2>
+            <p>{{ like.user.description }}</p>
           </ion-label>
           <ion-note slot="end">{{
-            notification.time_creation | date: "shortTime"
+            like.date | date: "short"
           }}</ion-note>
         </ion-item>
       </ion-list>
@@ -45,10 +45,10 @@
   </div>
   <ng-template #noNotifications>
     <div class="full-center" padding>
-      <ion-icon name="notifications-off"></ion-icon>
-      <h2>Sin notificaciones</h2>
+      <ion-icon name="heart-dislike"></ion-icon>
+      <h2>Sin likes</h2>
       <p>
-        No tienes notificaciones pendientes en este momento.
+        Aún no has recibido ningún like de otro usuario.
       </p>
     </div>
   </ng-template>

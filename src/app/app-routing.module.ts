@@ -27,6 +27,14 @@ const routes: Routes = [
     loadChildren: "./chat-user/chat-user.module#ChatUserPageModule"
   },
   {
+    path: "search",
+    loadChildren: "./search/search.module#SearchPageModule"
+  },
+  {
+    path: "search/:query",
+    loadChildren: "./search/search.module#SearchPageModule"
+  },
+  {
     path: "settings",
     loadChildren: "./settings/settings.module#SettingsPageModule"
   }

@@ -1,7 +1,9 @@
 <ion-header no-border>
   <ion-toolbar [class.show-background]="showToolbar">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="tabs/radar"></ion-back-button>
+      <ion-button (click)="back()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="user">
       <ion-button *ngIf="!user?.block_messages" (click)="showChat()">
@@ -18,97 +20,123 @@
 </ion-header> 
 
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <div  *ngIf="user || loading; else noUser">
-    <img [src]="avatar" />
-    <div padding>
-      <ion-list padding class="resume">
-        <h1>{{ user?.username }}, {{ user?.age }}</h1>
-        <h3 class="location">
-          <span *ngIf="user?.location">{{ user.location }}</span
-          ><span *ngIf="user?.location && user?.distance !== undefined">, a </span
-          ><span *ngIf="user?.distance !== undefined"
-            >{{ user?.distance }}km</span
-          >
-        </h3>
-        <p>{{ user?.description }}</p>
-      </ion-list>
-      <ion-list class="info">
-        <ion-item *ngIf="user?.gender" lines="none">
-          <ion-label
-            >Identidad de género: {{ user.gender }}
-            <span *ngIf="user?.pronoun">({{ user.pronoun }})</span></ion-label
-          >
-        </ion-item>
-        <ion-item *ngIf="user?.orientation" lines="none">
-          <ion-label>Orientación sexual: {{ user.orientation }}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="user?.status" lines="none">
-          <ion-label>Estado: {{ user.status }}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="user?.relationship" lines="none">
-          <ion-label>Tipo de relación: {{ user.relationship }}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="user?.connection?.length">
-          <ion-label>Buscando: {{ user.connection.join(", ") }}</ion-label>
-        </ion-item>
-      </ion-list>
-      <ion-list class="tags">
-        <ion-item *ngIf="getTagsCategory('games')?.length">
-          <ion-icon name="logo-game-controller-b"></ion-icon>
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('games')"
-              color="secondary"
-            >
-              <ion-label (click)="router.navigate(['/tabs/search', tag.name])">{{
-                tag.name
-              }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
-        <ion-item *ngIf="getTagsCategory('films')?.length">
-          <ion-icon name="film"></ion-icon>
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('films')"
-              color="secondary"
-            >
-              <ion-label (click)="router.navigate(['/tabs/search', tag.name])">{{
-                tag.name
-              }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
-        <ion-item *ngIf="getTagsCategory('books')?.length">
-          <ion-icon name="book"></ion-icon>
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('books')"
-              color="secondary"
-            >
-              <ion-label (click)="router.navigate(['/tabs/search', tag.name])">{{
-                tag.name
-              }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
-        <ion-item *ngIf="getTagsCategory('music')?.length" lines="none">
-          <ion-icon name="headset"></ion-icon>
-          <ion-label text-wrap>
-            <ion-chip
-              *ngFor="let tag of getTagsCategory('music')"
-              color="secondary"
-            >
-              <ion-label (click)="router.navigate(['/tabs/search', tag.name])">{{
-                tag.name
-              }}</ion-label>
-            </ion-chip>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </div>
+  <div *ngIf="user || loading; else noUser">
+    <ion-skeleton-text animated style="width: 100%; height: 100vw" slot="start" [hidden]="user.loaded"></ion-skeleton-text>
+    <ion-list *ngIf="loading; else profile">
+      <ion-item lines="none">
+        <ion-label>
+          <h1>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </h1>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <span *ngFor="let i of [].constructor(20)">
+            <p>
+              <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 95%"></ion-skeleton-text>
+            </p>
+          </span>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    <ng-template #profile>
+      <img [src]="avatar" (load)="user.loaded = true" [hidden]="!user.loaded"/>
+      <div padding>
+          <ion-list padding class="resume">
+            <h1>{{ user?.username }}, {{ user?.age }}</h1>
+            <h3 class="location">
+              <span *ngIf="user?.location">{{ user.location }}</span
+              ><span *ngIf="user?.location && user?.distance !== undefined">, a </span
+              ><span *ngIf="user?.distance !== undefined"
+                >{{ user?.distance }}km</span
+              >
+            </h3>
+            <p>{{ user?.description }}</p>
+          </ion-list>
+          <ion-list class="info">
+            <ion-item *ngIf="user?.gender" lines="none">
+              <ion-label
+                >Identidad de género: {{ user.gender }}
+                <span *ngIf="user?.pronoun">({{ user.pronoun }})</span></ion-label
+              >
+            </ion-item>
+            <ion-item *ngIf="user?.orientation" lines="none">
+              <ion-label>Orientación sexual: {{ user.orientation }}</ion-label>
+            </ion-item>
+            <ion-item *ngIf="user?.status" lines="none">
+              <ion-label>Estado: {{ user.status }}</ion-label>
+            </ion-item>
+            <ion-item *ngIf="user?.relationship" lines="none">
+              <ion-label>Tipo de relación: {{ user.relationship }}</ion-label>
+            </ion-item>
+            <ion-item *ngIf="user?.connection?.length">
+              <ion-label>Buscando: {{ user.connection.join(", ") }}</ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-list class="tags">
+            <ion-item *ngIf="getTagsCategory('games')?.length">
+              <ion-icon name="logo-game-controller-b"></ion-icon>
+              <ion-label text-wrap>
+                <ion-chip
+                  *ngFor="let tag of getTagsCategory('games')"
+                  color="secondary"
+                >
+                  <ion-label (click)="router.navigate(['/search', tag.name])">{{
+                    tag.name
+                  }}</ion-label>
+                </ion-chip>
+              </ion-label>
+            </ion-item>
+            <ion-item *ngIf="getTagsCategory('films')?.length">
+              <ion-icon name="film"></ion-icon>
+              <ion-label text-wrap>
+                <ion-chip
+                  *ngFor="let tag of getTagsCategory('films')"
+                  color="secondary"
+                >
+                  <ion-label (click)="router.navigate(['/search', tag.name])">{{
+                    tag.name
+                  }}</ion-label>
+                </ion-chip>
+              </ion-label>
+            </ion-item>
+            <ion-item *ngIf="getTagsCategory('books')?.length">
+              <ion-icon name="book"></ion-icon>
+              <ion-label text-wrap>
+                <ion-chip
+                  *ngFor="let tag of getTagsCategory('books')"
+                  color="secondary"
+                >
+                  <ion-label (click)="router.navigate(['/search', tag.name])">{{
+                    tag.name
+                  }}</ion-label>
+                </ion-chip>
+              </ion-label>
+            </ion-item>
+            <ion-item *ngIf="getTagsCategory('music')?.length" lines="none">
+              <ion-icon name="headset"></ion-icon>
+              <ion-label text-wrap>
+                <ion-chip
+                  *ngFor="let tag of getTagsCategory('music')"
+                  color="secondary"
+                >
+                  <ion-label (click)="router.navigate(['/search', tag.name])">{{
+                    tag.name
+                  }}</ion-label>
+                </ion-chip>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+    </ng-template>
   </div>
-
   <ng-template #noUser>
       <div class="full-center" padding>
         <ion-icon name="body"></ion-icon>

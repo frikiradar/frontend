@@ -34,7 +34,8 @@ export class DeviceService {
     if (
       !this.auth.currentUserValue.devices.some(
         d => d.device_id === this.deviceInfo.uuid
-      )
+      ) ||
+      token
     ) {
       const name = `${this.deviceInfo.manufacturer} ${
         this.deviceInfo.model

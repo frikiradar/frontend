@@ -142,6 +142,6 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
   }
 
   back() {
-    this.nav.navigateBack(["/tabs/chat"]);
+    this.nav.back();
   }
 }

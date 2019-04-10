@@ -44,12 +44,11 @@ const routes: Routes = [
         ]
       },
       {
-        path: "notifications",
+        path: "likes",
         children: [
           {
             path: "",
-            loadChildren:
-              "../notifications/notifications.module#NotificationsPageModule"
+            loadChildren: "../likes/likes.module#LikesPageModule"
           }
         ]
       },
