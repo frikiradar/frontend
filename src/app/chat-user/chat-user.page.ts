@@ -1,4 +1,3 @@
-import { Location } from "@angular/common";
 import {
   AfterViewChecked,
   Component,
@@ -8,6 +7,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IonTextarea, NavController } from "@ionic/angular";
+import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Chat } from "../models/chat";

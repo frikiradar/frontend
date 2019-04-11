@@ -1,7 +1,10 @@
 {
   "appId": "com.frikiradar.app",
   "appName": "FrikiRadar",
-  "bundledWebRuntime": false,
+  "bundledWebRuntime": true,
   "webDir": "www",
-  "linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh"
+  "linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh",
+  "server": {
+    "hostname": "frikiradar"
+  }
 }

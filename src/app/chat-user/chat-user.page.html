@@ -18,54 +18,36 @@
 </ion-header>
 
 <ion-content>
-  <div #chatlist  style="overflow: scroll; height: 100%;">
-  <span
-    class="bubble {{ message.fromuser == userId ? 'to' : 'from' }}"
-    *ngFor="let message of messages; let i = index"
-  >
-    <ion-chip
-      color="primary"
-      class="center"
-      *ngIf="
+  <div #chatlist style="overflow: scroll; height: 100%;">
+    <span class="bubble {{ message.fromuser == userId ? 'to' : 'from' }}"
+      *ngFor="let message of messages; let i = index">
+      <ion-chip color="primary" class="center" *ngIf="
         (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate')
-      "
-    >
-      <ion-label color="secondary">{{
+      ">
+        <ion-label color="secondary">{{
         message.time_creation | date: "fullDate"
       }}</ion-label>
-    </ion-chip>
-    <ion-card>
-      <ion-card-content>
-        <span class="text">
-          {{ message.text }}
-        </span>
-        <ion-note>{{ message.time_creation | date: "shortTime" }}</ion-note>
-      </ion-card-content>
-    </ion-card>
-  </span>
+      </ion-chip>
+      <ion-card>
+        <ion-card-content>
+          <span class="text" [innerHTML]="message.text | linkify"> </span>
+          <ion-note>{{ message.time_creation | date: "shortTime" }}</ion-note>
+        </ion-card-content>
+      </ion-card>
+    </span>
   </div>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
     <ion-item lines="none">
-      <ion-textarea
-        [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'"
-        autocapitalize="on"
-        (keyup.enter)="sendMessage()"
-        #textarea
-        autofocus
-        [disabled]="!user"
-      >
+      <ion-textarea [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'" autocapitalize="on"
+        (keyup.enter)="sendMessage()" #textarea autofocus [disabled]="!user">
       </ion-textarea>
     </ion-item>
     <ion-buttons ion-activatable slot="end">
-      <ion-button
-        color="primary"
-        (click)="sendMessage()"
-        [disabled]="!textarea?.value?.trim()"
-      >
+      <ion-button color="primary" (click)="sendMessage()" [disabled]="!textarea?.value?.trim()">
         <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>
