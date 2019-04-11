@@ -7,7 +7,6 @@ import {
   PushNotificationToken
 } from "@capacitor/core";
 
-import { Device } from "./../models/device";
 import { DeviceService } from "./device.service";
 
 const { PushNotifications, Device } = Plugins;
@@ -40,7 +39,7 @@ export class PushService {
       "pushNotificationReceived",
       (notification: PushNotification) => {
         // alert("notification " + JSON.stringify(notification));
-        // console.log("notification", notification);
+        console.log("notification", notification);
         this.notifications.push(notification);
       }
     );
@@ -48,7 +47,7 @@ export class PushService {
     PushNotifications.addListener(
       "pushNotificationActionPerformed",
       (notification: PushNotificationActionPerformed) => {
-        // console.log ("notification performed", notification);
+        console.log("notification performed", notification);
         this.notifications.push(notification);
       }
     );

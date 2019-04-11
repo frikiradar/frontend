@@ -136,6 +136,27 @@ export class ProfilePage implements OnInit {
     this.user = this.user.like
       ? await this.userSvc.unlike(this.user.id)
       : await this.userSvc.like(this.user.id);
+
+    this.user.loaded = true;
+
+    if (this.user.like) {
+      if (this.user.block_messages) {
+        await Toast.show({
+          text: `¡Le has entregado tu kokoro a ${
+            this.user.username
+          }! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
+          duration: "long"
+        });
+      } else {
+        await Toast.show({
+          text: `¡Le has entregado tu kokoro a ${this.user.username}!`
+        });
+      }
+    } else {
+      await Toast.show({
+        text: `Le has retirado tu kokoro a ${this.user.username}`
+      });
+    }
   }
 
   async showPopover(event: Event) {

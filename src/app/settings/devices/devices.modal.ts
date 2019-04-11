@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Plugins } from "@capacitor/core";
-import { ModalController } from "@ionic/angular";
+import { AlertController, ModalController } from "@ionic/angular";
 
 import { Device } from "./../../models/device";
 import { AuthService } from "./../../services/auth.service";
@@ -18,6 +18,7 @@ export class DevicesSettingsModal implements OnInit {
 
   constructor(
     private modal: ModalController,
+    private alert: AlertController,
     private devicesSvc: DeviceService,
     private auth: AuthService
   ) {}
@@ -34,14 +35,21 @@ export class DevicesSettingsModal implements OnInit {
   }
 
   async removeDevice(device: Device) {
-    this.devices = this.devices.filter(d => d.id !== device.id);
+    if (!device.current) {
+      this.devices = this.devices.filter(d => d.id !== device.id);
 
-    const user = await this.devicesSvc.removeDevice(device);
-    this.auth.setAuthUser(user);
+      const user = await this.devicesSvc.removeDevice(device);
+      this.auth.setAuthUser(user);
 
-    await Toast.show({
-      text: "¡Dispositivo eliminado!"
-    });
+      await Toast.show({
+        text: "¡Dispositivo eliminado!"
+      });
+    } else {
+      (await this.alert.create({
+        message: "¡No puedes eliminar tu dispositivo actual!",
+        buttons: ["Entendido"]
+      })).present();
+    }
   }
 
   async switchNotifications(device: Device) {

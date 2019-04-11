@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Plugins } from "@capacitor/core";
-import { AlertController, ModalController, Platform } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  NavController,
+  Platform
+} from "@ionic/angular";
 import * as LogRocket from "logrocket";
 
 import { ActivateAccountModal } from "./login/activate-account/activate-account.modal";
@@ -27,7 +32,8 @@ export class AppComponent {
     private device: DeviceService,
     private alert: AlertController,
     private modal: ModalController,
-    private router: Router
+    private router: Router,
+    private nav: NavController
   ) {
     this.initializeApp();
   }
@@ -37,13 +43,10 @@ export class AppComponent {
       if ((await Device.getInfo()).platform !== "web") {
         SplashScreen.hide();
         StatusBar.setBackgroundColor({ color: "#1a1a1a" });
+        this.networkStatus();
+        this.backButtonStatus();
       }
     });
-  }
-
-  ionViewDidEnter() {
-    this.networkStatus();
-    this.backButtonStatus();
 
     this.auth.currentUser.subscribe(async authUser => {
       this.currentUser = authUser;
@@ -121,9 +124,7 @@ export class AppComponent {
               App.exitApp();
           }
         } else {
-          /*if (this.router.url.match(/\/chat\d*(?:\/+\d+)*$/gm)) {
-            this.nav.back()
-          }*/
+          this.nav.back();
           this.backButtonCount = 0;
         }
       });

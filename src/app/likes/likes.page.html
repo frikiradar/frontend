@@ -1,55 +1,50 @@
 <ion-header no-border>
-  <ion-toolbar>
-    <ion-title>Likes</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Kokoro</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div *ngIf="likes?.length || showSkeleton; else noNotifications">
-    <ion-list *ngIf="showSkeleton; else notificationItems">
-      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
-        <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-label>
-          <h2>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h2>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-    <ng-template #notificationItems>
-      <ion-list *ngIf="likes?.length; else noNotifications">
-        <ion-item
-          button
-          (click)="viewProfile(like.user.id)"
-          *ngFor="let like of likes"
-          lines="full"
-        >
-          <ion-avatar slot="start">
-            <img [src]="like.user.avatar" />
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ like.user.username }}</h2>
-            <p>{{ like.user.description }}</p>
-          </ion-label>
-          <ion-note slot="end">{{
+    <div *ngIf="likes?.length || showSkeleton; else noNotifications">
+        <ion-list *ngIf="showSkeleton; else notificationItems">
+            <ion-item *ngFor="let i of [].constructor(8)" lines="full">
+                <ion-avatar slot="start">
+                    <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-avatar>
+                <ion-label>
+                    <h2>
+                        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                    </h2>
+                    <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+        <ng-template #notificationItems>
+            <ion-list *ngIf="likes?.length; else noNotifications">
+                <ion-item (click)="viewProfile(like.user.id)" *ngFor="let like of likes" button lines="full">
+                    <ion-avatar slot="start">
+                        <img [src]="like.user.avatar" />
+                    </ion-avatar>
+                    <ion-label>
+                        <h2>{{ like.user.username }}</h2>
+                        <p>{{ like.user.description }}</p>
+                    </ion-label>
+                    <ion-note slot="end">{{
             like.date | date: "short"
           }}</ion-note>
-        </ion-item>
-      </ion-list>
-    </ng-template>
-  </div>
-  <ng-template #noNotifications>
-    <div class="full-center" padding>
-      <ion-icon name="heart-dislike"></ion-icon>
-      <h2>Sin likes</h2>
-      <p>
-        Aún no has recibido ningún like de otro usuario.
-      </p>
+                </ion-item>
+            </ion-list>
+        </ng-template>
     </div>
-  </ng-template>
+    <ng-template #noNotifications>
+        <div class="full-center" padding>
+            <ion-icon name="heart-dislike"></ion-icon>
+            <h2>Sin kokoro</h2>
+            <p>
+                Aún no has recibido ningún kokoro de otro usuario.
+            </p>
+        </div>
+    </ng-template>
 </ion-content>
