@@ -5,6 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
+import { SharedModule } from "../shared/shared.module";
 import { ChatUserPage } from "./chat-user.page";
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    NgxLinkifyjsModule
+    NgxLinkifyjsModule,
+    SharedModule
   ],
   declarations: [ChatUserPage]
 })

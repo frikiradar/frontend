@@ -44,12 +44,6 @@ export class SearchPage implements OnInit {
         .post("search", { query: query.trim(), order: this.order })
         .toPromise()) as User[];
 
-      this.users.map(async user => {
-        user.avatar = user.avatar
-          ? user.avatar
-          : "../../assets/img/users/default.jpg";
-      });
-
       this.showSkeleton = false;
     }
   }

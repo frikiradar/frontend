@@ -30,9 +30,7 @@ export class RadarPage implements OnInit {
     public menu: MenuController,
     private auth: AuthService,
     public router: Router
-  ) {
-    this.getRadarUsers();
-  }
+  ) {}
 
   async ngOnInit() {
     this.range.value = 1;
@@ -44,16 +42,14 @@ export class RadarPage implements OnInit {
           const coordinates = await Geolocation.getCurrentPosition();
           const longitude = coordinates.coords.longitude;
           const latitude = coordinates.coords.latitude;
-          this.userSvc.setCoordinates(longitude, latitude);
+          this.user = await this.userSvc.setCoordinates(longitude, latitude);
         } catch (e) {
-          this.userSvc.setCoordinates(0, 0);
+          this.user = await this.userSvc.setCoordinates(0, 0);
         }
-      }
+        this.auth.setAuthUser(this.user);
 
-      this.user.avatar =
-        this.user && this.user.avatar
-          ? this.user.avatar
-          : "../../assets/img/users/default.jpg";
+        this.getRadarUsers();
+      }
 
       if ((await Device.getInfo()).platform !== "web") {
         this.push.init();
@@ -64,16 +60,11 @@ export class RadarPage implements OnInit {
   async getRadarUsers() {
     try {
       const users = await this.userSvc.getRadarUsers(this.ratio);
-      users.map(async user => {
-        user.avatar = user.avatar
-          ? user.avatar
-          : "../../assets/img/users/default.jpg";
-      });
 
       this.showSkeleton = false;
       this.users = users;
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 

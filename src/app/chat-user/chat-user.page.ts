@@ -48,16 +48,11 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
   ) {}
 
   async ngOnInit() {
-    this.avatar = "../../assets/img/users/default.jpg";
-
     this.userId = +this.route.snapshot.paramMap.get("id");
 
     try {
       this.user = await this.userSvc.getUser(this.userId);
       this.loading = false;
-      if (this.user && this.user.avatar) {
-        this.avatar = this.user.avatar;
-      }
     } catch (e) {}
 
     this.messages = (await this.chatSvc.getMessages(this.userId)).reverse();

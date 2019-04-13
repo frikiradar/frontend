@@ -8,8 +8,7 @@
 </ion-header>
 <ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div>
-    <img [src]="user?.avatar" (load)="user.loaded = true" [hidden]="!user?.loaded" />
-    <img src="../../assets/img/users/default.jpg" [hidden]="user?.loaded" />
+    <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
     <ion-label icon-only button id="camera-icon" (click)="openPictureSheet()">
       <ion-icon name="camera" size="large"></ion-icon>
     </ion-label>

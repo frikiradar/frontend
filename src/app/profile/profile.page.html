@@ -22,8 +22,6 @@
 
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div *ngIf="user || loading; else noUser">
-    <ion-skeleton-text animated style="width: 100%; height: 100vw" slot="start" [hidden]="user?.loaded">
-    </ion-skeleton-text>
     <ion-list *ngIf="loading; else profile">
       <ion-item lines="none">
         <ion-label>
@@ -49,7 +47,7 @@
       </ion-item>
     </ion-list>
     <ng-template #profile>
-      <img [src]="avatar" (load)="user.loaded = true" [hidden]="!user?.loaded" />
+      <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
       <div padding>
         <ion-list padding class="resume">
           <h1>{{ user?.username }}, {{ user?.age }}</h1>

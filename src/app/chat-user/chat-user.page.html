@@ -6,7 +6,7 @@
       </ion-button>
       <ion-button (click)="showProfile(userId)">
         <ion-avatar>
-          <ion-img [src]="avatar"></ion-img>
+          <img [src]="user?.avatar" default="/assets/img/users/default.jpg">
         </ion-avatar>
         <ion-label>
           <h2>{{ user ? user.username : 'Usuario desconocido' }}</h2>

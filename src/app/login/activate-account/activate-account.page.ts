@@ -11,24 +11,22 @@ import {
   NavController
 } from "@ionic/angular";
 
-import { AuthService } from "./../../services/auth.service";
-import { DeviceService } from "./../../services/device.service";
-import { UserService } from "./../../services/user.service";
+import { AuthService } from "../../services/auth.service";
+import { DeviceService } from "../../services/device.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
-  selector: "activate-account-modal",
-  templateUrl: "./activate-account.modal.html",
-  styleUrls: ["./activate-account.modal.scss"]
+  selector: "activate-account-app",
+  templateUrl: "./activate-account.page.html",
+  styleUrls: ["./activate-account.page.scss"]
 })
-export class ActivateAccountModal implements OnInit {
+export class ActivateAccountPage implements OnInit {
   public codeForm: FormGroup;
 
   constructor(
     public fb: FormBuilder,
-    private modal: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
-    private device: DeviceService,
     private alert: AlertController,
     private nav: NavController
   ) {
@@ -51,8 +49,7 @@ export class ActivateAccountModal implements OnInit {
         this.codeForm.get("code").value.toUpperCase()
       );
       this.auth.setAuthUser(user);
-      this.device.setDevice();
-      this.modal.dismiss();
+      this.nav.navigateRoot(["/tabs/radar"]);
     } catch (e) {
       this.codeForm.get("code").setValue("");
 
@@ -68,6 +65,5 @@ export class ActivateAccountModal implements OnInit {
 
   close() {
     this.auth.logout();
-    this.modal.dismiss();
   }
 }

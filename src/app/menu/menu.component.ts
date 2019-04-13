@@ -22,10 +22,7 @@ export class MenuComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.avatar =
-      this.auth.currentUserValue && this.auth.currentUserValue.avatar
-        ? this.auth.currentUserValue.avatar
-        : "../../assets/img/users/default.jpg";
+    this.avatar = this.auth.currentUserValue.avatar;
   }
 
   editProfile() {

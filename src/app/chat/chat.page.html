@@ -1,5 +1,7 @@
 <ion-header no-border>
-  <ion-toolbar> <ion-title>Chat</ion-title> </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>Chat</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -21,14 +23,9 @@
     </ion-list>
     <ng-template #chatItems>
       <ion-list *ngIf="chats?.length; else noChats">
-        <ion-item
-          button
-          (click)="showChat(chat.user.id)"
-          *ngFor="let chat of chats"
-          lines="full"
-        >
+        <ion-item button (click)="showChat(chat.user.id)" *ngFor="let chat of chats" lines="full">
           <ion-avatar slot="start">
-            <img [src]="chat.user.avatar" />
+            <img [src]="chat.user.avatar" default="/assets/img/users/default.jpg" />
           </ion-avatar>
           <ion-label>
             <h2>{{ chat.user.username }}</h2>

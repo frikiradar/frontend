@@ -3,9 +3,7 @@
     <ion-buttons slot="start">
       <ion-button (click)="menu.open()">
         <ion-avatar>
-          <ion-img
-            [src]="user?.avatar || '../../assets/img/users/default.jpg'"
-          ></ion-img>
+          <img [src]="user?.avatar" default="/assets/img/users/default.jpg">
         </ion-avatar>
       </ion-button>
     </ion-buttons>
@@ -46,31 +44,16 @@
     </ion-list>
     <ng-template #radarItems>
       <ion-list>
-        <ion-item
-          button
-          *ngFor="let user of users"
-          (click)="showProfile(user.id)"
-          lines="full"
-        >
+        <ion-item button *ngFor="let user of users" (click)="showProfile(user.id)" lines="full">
           <ion-avatar slot="start">
-            <ion-skeleton-text
-              animated
-              *ngIf="!user.avatar"
-            ></ion-skeleton-text>
-            <img [src]="user.avatar" (load)="user.loaded = true" [hidden]="!user.loaded"/>
-            <img src="../../assets/img/users/default.jpg" [hidden]="user.loaded"/>
+            <img [src]="user.avatar" default="/assets/img/users/default.jpg" />
           </ion-avatar>
           <ion-label>
             <h2>{{ user.username }}, {{ user.age }}</h2>
             <h3>
-              <span *ngIf="user.location && !user.hide_location"
-                >{{ user?.location
-                }}<span *ngIf="user.location && user.distance !== undefined  && !user.hide_location"
-                  >, a
-                </span></span
-              ><span *ngIf="user.distance !== undefined"
-                >{{ user.distance }}km</span
-              >
+              <span *ngIf="user.location && !user.hide_location">{{ user?.location
+                }}<span *ngIf="user.location && user.distance !== undefined  && !user.hide_location">, a
+                </span></span><span *ngIf="user.distance !== undefined">{{ user.distance }}km</span>
             </h3>
             <p>{{ user.description }}</p>
           </ion-label>
@@ -92,15 +75,8 @@
 </ion-content>
 <ion-footer translucent>
   <div id="radar-range" padding>
-    <ion-range
-      #range
-      min="0"
-      max="5"
-      step="1"
-      snaps="true"
-      [debounce]="250"
-      (ionChange)="changeRatio($event.detail.value)"
-    >
+    <ion-range #range min="0" max="5" step="1" snaps="true" [debounce]="250"
+      (ionChange)="changeRatio($event.detail.value)">
     </ion-range>
     <ion-grid id="range-distance">
       <ion-row>

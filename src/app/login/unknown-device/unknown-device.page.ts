@@ -5,18 +5,21 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Router } from "@angular/router";
-import { AlertController, ModalController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  NavController
+} from "@ionic/angular";
 
-import { AuthService } from "./../../services/auth.service";
-import { DeviceService } from "./../../services/device.service";
+import { AuthService } from "../../services/auth.service";
+import { DeviceService } from "../../services/device.service";
 
 @Component({
-  selector: "unknown-device-modal",
-  templateUrl: "./unknown-device.modal.html",
-  styleUrls: ["./unknown-device.modal.scss"]
+  selector: "unknown-device-app",
+  templateUrl: "./unknown-device.page.html",
+  styleUrls: ["./unknown-device.page.scss"]
 })
-export class UnknownDeviceModal implements OnInit {
+export class UnknownDevicePage implements OnInit {
   public codeForm: FormGroup;
 
   constructor(
@@ -24,7 +27,7 @@ export class UnknownDeviceModal implements OnInit {
     private modal: ModalController,
     private auth: AuthService,
     private alert: AlertController,
-    private router: Router,
+    private nav: NavController,
     private device: DeviceService
   ) {
     this.codeForm = fb.group({
@@ -49,7 +52,7 @@ export class UnknownDeviceModal implements OnInit {
       );
 
       this.auth.setAuthUser(user);
-      this.modal.dismiss();
+      this.nav.navigateRoot(["/tabs/radar"]);
     } catch (e) {
       this.codeForm.get("code").setValue("");
 
@@ -65,6 +68,5 @@ export class UnknownDeviceModal implements OnInit {
 
   close() {
     this.auth.logout();
-    this.modal.dismiss();
   }
 }

@@ -16,12 +16,6 @@ export class ChatService {
 
   async getChats() {
     const chats = (await this.rest.get(`chats`).toPromise()) as Chat[];
-    chats.map(
-      chat =>
-        (chat.user.avatar = chat.user.avatar
-          ? chat.user.avatar
-          : "../../assets/img/users/default.jpg")
-    );
 
     return chats;
   }

@@ -11,12 +11,6 @@ export class LikeService {
 
   async getLikes() {
     const likes = (await this.rest.get(`likes`).toPromise()) as Like[];
-    likes.map(
-      like =>
-        (like.user.avatar = like.user.avatar
-          ? like.user.avatar
-          : "../../assets/img/users/default.jpg")
-    );
 
     return likes;
   }

@@ -37,7 +37,6 @@ export interface User {
   block: boolean;
 
   avatar: SafeResourceUrl;
-  loaded: boolean;
   roles: string[];
   active: boolean;
 

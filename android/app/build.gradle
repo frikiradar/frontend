@@ -6,8 +6,8 @@ android {
         applicationId "com.frikiradar.app"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 23
-        versionName "0.2.3"
+        versionCode 24
+        versionName "0.2.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

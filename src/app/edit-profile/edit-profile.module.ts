@@ -7,6 +7,7 @@ import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
 import { IonicModule } from "@ionic/angular";
 
+import { SharedModule } from "../shared/shared.module";
 import { EditProfilePage } from "./edit-profile.page";
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule
   ],
   declarations: [EditProfilePage],
   providers: [Crop, Base64, Camera]

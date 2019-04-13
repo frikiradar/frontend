@@ -113,9 +113,6 @@ export class EditProfilePage implements OnInit {
     });
 
     this.tags = this.user.tags;
-    this.user.avatar = this.user.avatar
-      ? this.user.avatar
-      : "../../../assets/img/users/default.jpg";
 
     if (this.minage.value) {
       this.profileForm.get("maxage").enable();

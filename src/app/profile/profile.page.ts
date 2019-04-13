@@ -68,6 +68,9 @@ export class ProfilePopover {
           handler: async data => {
             try {
               await this.userSvc.block(this.user.id, data.note);
+              await Toast.show({
+                text: `Usuario bloqueado correctamente`
+              });
               this.router.navigate(["/"]);
             } catch (e) {
               await Toast.show({
@@ -104,9 +107,7 @@ export class ProfilePage implements OnInit {
     public router: Router,
     public utils: UtilsService,
     private nav: NavController
-  ) {
-    this.avatar = "../../assets/img/users/default.jpg";
-  }
+  ) {}
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get("id");
@@ -136,8 +137,6 @@ export class ProfilePage implements OnInit {
     this.user = this.user.like
       ? await this.userSvc.unlike(this.user.id)
       : await this.userSvc.like(this.user.id);
-
-    this.user.loaded = true;
 
     if (this.user.like) {
       if (this.user.block_messages) {

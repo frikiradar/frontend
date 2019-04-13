@@ -48,9 +48,9 @@ export class UserService {
   }
 
   async setCoordinates(longitude, latitude) {
-    return await this.rest
+    return (await this.rest
       .put("coordinates", { longitude, latitude })
-      .toPromise();
+      .toPromise()) as Promise<User>;
   }
 
   getRadarUsers(ratio: number) {
