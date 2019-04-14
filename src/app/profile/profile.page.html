@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="user">
-      <ion-button *ngIf="!user?.block_messages" (click)="showChat()">
+      <ion-button *ngIf="!user?.block_messages || user.from_like" (click)="showChat()">
         <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
       </ion-button>
       <ion-button (click)="switchLike()">

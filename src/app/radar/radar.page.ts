@@ -47,9 +47,9 @@ export class RadarPage implements OnInit {
           this.user = await this.userSvc.setCoordinates(0, 0);
         }
         this.auth.setAuthUser(this.user);
-
-        this.getRadarUsers();
       }
+
+      this.getRadarUsers();
 
       if ((await Device.getInfo()).platform !== "web") {
         this.push.init();

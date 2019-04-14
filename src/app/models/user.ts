@@ -34,6 +34,7 @@ export interface User {
 
   match: number;
   like: boolean;
+  from_like: boolean;
   block: boolean;
 
   avatar: SafeResourceUrl;
