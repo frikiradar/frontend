@@ -15,9 +15,10 @@ import {
 
 import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
+import { PushService } from "./../services/push.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 
-const { Toast } = Plugins;
+const { Toast, Device } = Plugins;
 
 @Component({
   selector: "app-login",
@@ -40,7 +41,8 @@ export class LoginPage {
     private alert: AlertController,
     private modal: ModalController,
     public fb: FormBuilder,
-    private nav: NavController
+    private nav: NavController,
+    private push: PushService
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -83,6 +85,9 @@ export class LoginPage {
   }
 
   async loginSuccess(user: User) {
+    if ((await Device.getInfo()).platform !== "web") {
+      this.push.init();
+    }
     this.auth.setAuthUser(user);
     await Toast.show({
       text: "¡Acceso concedido!"

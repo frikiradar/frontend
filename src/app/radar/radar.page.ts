@@ -4,11 +4,10 @@ import { Plugins } from "@capacitor/core";
 import { IonRange, MenuController } from "@ionic/angular";
 
 import { User } from "../models/user";
-import { PushService } from "../services/push.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 
-const { Device, Geolocation } = Plugins;
+const { Geolocation } = Plugins;
 
 @Component({
   selector: "app-radar",
@@ -25,7 +24,6 @@ export class RadarPage implements OnInit {
   users: User[];
 
   constructor(
-    private push: PushService,
     public userSvc: UserService,
     public menu: MenuController,
     private auth: AuthService,
@@ -50,10 +48,6 @@ export class RadarPage implements OnInit {
       }
 
       this.getRadarUsers();
-
-      if ((await Device.getInfo()).platform !== "web") {
-        this.push.init();
-      }
     }
   }
 

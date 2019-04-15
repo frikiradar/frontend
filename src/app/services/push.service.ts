@@ -9,7 +9,7 @@ import {
 
 import { DeviceService } from "./device.service";
 
-const { PushNotifications, Device } = Plugins;
+const { PushNotifications } = Plugins;
 
 @Injectable({
   providedIn: "root"
