@@ -1,8 +1,9 @@
-#login {
-  margin-top: 80px;
+ion-content {
+  display: flex;
+  flex-direction: column;
 }
 
-#loginvia {
+#login-footer {
   text-align: center;
 
   img {

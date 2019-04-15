@@ -10,7 +10,7 @@
         <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
       </ion-button>
       <ion-button (click)="switchLike()">
-        <ion-icon slot="icon-only" [color]="user?.like ? 'primary' : 'light'"
+        <ion-icon [@pulse]="user.like" slot="icon-only" [color]="user?.like ? 'primary' : 'light'"
           [name]="user?.like ? 'heart' : 'heart-empty'"></ion-icon>
       </ion-button>
       <ion-button (click)="showPopover($event)">

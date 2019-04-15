@@ -59,4 +59,6 @@
     <!-- Navigator.getUserMedia -->
     <!-- Video -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Vibration -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 </manifest>

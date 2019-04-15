@@ -4,6 +4,7 @@ import localeEs from "@angular/common/locales/es";
 import { LOCALE_ID, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
@@ -35,7 +36,8 @@ registerLocaleData(localeEs, "es");
       enabled: environment.production
     }),
     NgxLinkifyjsModule.forRoot(),
-    SharedModule
+    SharedModule,
+    BrowserAnimationsModule
   ],
   providers: [
     StatusBar,
