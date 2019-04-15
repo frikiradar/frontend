@@ -6,5 +6,12 @@
   "linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh",
   "server": {
     "hostname": "frikiradar"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showDuration": 10000
+    }
   }
 }
