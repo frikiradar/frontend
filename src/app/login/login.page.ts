@@ -108,4 +108,8 @@ export class LoginPage {
     });
     return await modal.present();
   }
+
+  async loginFacebook() {
+    alert("yeah");
+  }
 }

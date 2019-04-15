@@ -1,7 +1,8 @@
+import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
+import { HapticsImpactStyle, Plugins } from "@capacitor/core";
 import {
   AlertController,
   NavController,
@@ -9,12 +10,13 @@ import {
   PopoverController
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
+import { pulse } from "ng-animate";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 
-const { Toast } = Plugins;
+const { Toast, Haptics } = Plugins;
 
 @Component({
   selector: "profile-popover",
@@ -92,13 +94,15 @@ export class ProfilePopover {
 @Component({
   selector: "app-profile",
   templateUrl: "./profile.page.html",
-  styleUrls: ["./profile.page.scss"]
+  styleUrls: ["./profile.page.scss"],
+  animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])]
 })
 export class ProfilePage implements OnInit {
   public user: User;
   public avatar: SafeResourceUrl;
   public showToolbar = false;
   public loading = true;
+  public pulse: any;
 
   constructor(
     public popover: PopoverController,
@@ -134,6 +138,8 @@ export class ProfilePage implements OnInit {
   }
 
   async switchLike() {
+    Haptics.impact({ style: HapticsImpactStyle.Light });
+    Haptics.vibrate();
     this.user = this.user.like
       ? await this.userSvc.unlike(this.user.id)
       : await this.userSvc.like(this.user.id);
