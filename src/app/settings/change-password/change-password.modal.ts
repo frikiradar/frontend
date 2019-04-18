@@ -5,14 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
+import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, ModalController } from "@ionic/angular";
 
 import { AuthService } from "./../../services/auth.service";
 import { UserService } from "./../../services/user.service";
-
-const { Toast } = Plugins;
 
 @Component({
   selector: "change-password-modal",
@@ -30,7 +27,7 @@ export class ChangePasswordModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private router: Router
+    private toast: Toast
   ) {
     this.passForm = fb.group({
       oldPassword: new FormControl("", [
@@ -53,9 +50,10 @@ export class ChangePasswordModal {
 
       this.auth.setAuthUser(user);
 
-      await Toast.show({
-        text: "¡Contraseña cambiada correctamente!"
-      });
+      this.toast
+        .show("¡Contraseña cambiada correctamente!", "short", "bottom")
+        .subscribe();
+
       this.modal.dismiss();
     } catch (e) {
       const alert = await this.alert.create({

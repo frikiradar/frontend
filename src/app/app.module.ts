@@ -7,7 +7,15 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { ServiceWorkerModule } from "@angular/service-worker";
+import { Device } from "@ionic-native/device/ngx";
+import { Facebook } from "@ionic-native/facebook/ngx";
+import { FCM } from "@ionic-native/fcm/ngx";
+import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { Network } from "@ionic-native/network/ngx";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { Toast } from "@ionic-native/toast/ngx";
+import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
@@ -44,7 +52,15 @@ registerLocaleData(localeEs, "es");
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: "es" }
+    { provide: LOCALE_ID, useValue: "es" },
+    Facebook,
+    Device,
+    Toast,
+    Network,
+    Vibration,
+    Geolocation,
+    SplashScreen,
+    FCM
   ],
   bootstrap: [AppComponent]
 })

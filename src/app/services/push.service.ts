@@ -1,55 +1,46 @@
 import { Injectable } from "@angular/core";
-import {
-  DeviceInfo,
-  Plugins,
-  PushNotification,
-  PushNotificationActionPerformed,
-  PushNotificationToken
-} from "@capacitor/core";
+import { Router } from "@angular/router";
+import { FCM, NotificationData } from "@ionic-native/fcm/ngx";
 
 import { DeviceService } from "./device.service";
-
-const { PushNotifications } = Plugins;
 
 @Injectable({
   providedIn: "root"
 })
 export class PushService {
   notifications: any = [];
-  deviceInfo: DeviceInfo;
 
-  constructor(private device: DeviceService) {}
+  constructor(
+    private device: DeviceService,
+    private fcm: FCM,
+    private router: Router
+  ) {}
 
   async init() {
-    PushNotifications.register();
+    // this.fcm.subscribeToTopic('marketing');
+    // this.fcm.unsubscribeFromTopic('marketing');
 
-    PushNotifications.addListener(
-      "registration",
-      (token: PushNotificationToken) => {
-        // console.log("token", token.value);
-        this.device.setDevice(token.value);
-      }
-    );
-
-    PushNotifications.addListener("registrationError", (error: any) => {
-      // console.log("error on register", error);
+    this.fcm.getToken().then(token => {
+      this.device.setDevice(token);
     });
 
-    PushNotifications.addListener(
-      "pushNotificationReceived",
-      (notification: PushNotification) => {
-        // alert("notification " + JSON.stringify(notification));
-        console.log("notification", notification);
-        this.notifications.push(notification);
+    this.fcm.onNotification().subscribe(
+      (data: NotificationData) => {
+        // console.log(data);
+        if (data.wasTapped) {
+          this.router.navigate([data.url]);
+        } else {
+          // console.log("Received in foreground");
+          // Añadir indicadores de mensaje nuevo y to la pesca
+        }
+      },
+      error => {
+        console.error("Error in notification", error);
       }
     );
 
-    PushNotifications.addListener(
-      "pushNotificationActionPerformed",
-      (notification: PushNotificationActionPerformed) => {
-        console.log("notification performed", notification);
-        this.notifications.push(notification);
-      }
-    );
+    this.fcm.onTokenRefresh().subscribe(token => {
+      this.device.setDevice(token);
+    });
   }
 }

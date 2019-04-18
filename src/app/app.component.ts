@@ -1,12 +1,15 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
+import { Network } from "@ionic-native/network/ngx";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, NavController, Platform } from "@ionic/angular";
 import * as LogRocket from "logrocket";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
-const { StatusBar, SplashScreen, Device, Network, App, Toast } = Plugins;
+
 LogRocket.init("hlejka/frikiradar");
 
 @Component({
@@ -22,16 +25,20 @@ export class AppComponent {
     private auth: AuthService,
     private alert: AlertController,
     private router: Router,
-    private nav: NavController
+    private nav: NavController,
+    private statusBar: StatusBar,
+    private toast: Toast,
+    private network: Network,
+    private splashScreen: SplashScreen
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(async () => {
-      if ((await Device.getInfo()).platform !== "web") {
-        SplashScreen.hide();
-        StatusBar.setBackgroundColor({ color: "#1a1a1a" });
+      if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
+        this.splashScreen.hide();
+        this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.networkStatus();
         this.backButtonStatus();
       }
@@ -60,34 +67,34 @@ export class AppComponent {
       backdropDismiss: false
     });
 
-    if (!(await Network.getStatus()).connected) {
-      await alertNetwork.present();
-    }
+    this.network.onConnect().subscribe(async () => {
+      await alertNetwork.dismiss();
+    });
 
-    Network.addListener("networkStatusChange", async status => {
-      if (!status.connected) {
-        await alertNetwork.present();
-      } else {
-        await alertNetwork.dismiss();
-      }
+    this.network.onDisconnect().subscribe(async () => {
+      await alertNetwork.present();
     });
   }
 
   async backButtonStatus() {
-    if ((await Device.getInfo()).platform !== "web") {
-      App.addListener("backButton", async () => {
+    if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
+      this.platform.backButton.subscribe(() => {
         if (this.router.url.includes("/tabs/")) {
           this.backButtonCount++;
 
           switch (this.backButtonCount) {
             case 1:
-              Toast.show({
-                text: "Pulsa de nuevo para salir de la aplicación."
-              });
+              this.toast
+                .show(
+                  "Pulsa de nuevo para salir de la aplicación",
+                  "short",
+                  "bottom"
+                )
+                .subscribe();
               break;
 
             default:
-              App.exitApp();
+              navigator["app"].exitApp();
           }
         } else {
           this.nav.back();

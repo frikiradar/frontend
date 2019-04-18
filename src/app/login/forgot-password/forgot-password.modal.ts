@@ -6,14 +6,12 @@ import {
   Validators
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
-
+import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, ModalController, NavParams } from "@ionic/angular";
+
 import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
 import { AuthService } from "./../../services/auth.service";
-
-const { Toast } = Plugins;
 
 @Component({
   selector: "forgot-password-modal",
@@ -34,7 +32,8 @@ export class ForgotPasswordModal {
     private userSvc: UserService,
     private alert: AlertController,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private toast: Toast
   ) {
     this.requestForm = fb.group({
       username: new FormControl("", [
@@ -107,9 +106,7 @@ export class ForgotPasswordModal {
 
   async recoverSuccess(user: User) {
     this.auth.setAuthUser(user);
-    await Toast.show({
-      text: "¡Acceso concedido!"
-    });
+    this.toast.show("Acceso concedido", "short", "bottom").subscribe();
     this.router.navigate(["/"]);
     this.close();
   }

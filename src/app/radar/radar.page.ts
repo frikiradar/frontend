@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
+import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { IonRange, MenuController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
-
-const { Geolocation } = Plugins;
 
 @Component({
   selector: "app-radar",
@@ -27,7 +25,8 @@ export class RadarPage implements OnInit {
     public userSvc: UserService,
     public menu: MenuController,
     private auth: AuthService,
-    public router: Router
+    public router: Router,
+    private geolocation: Geolocation
   ) {}
 
   async ngOnInit() {
@@ -37,7 +36,7 @@ export class RadarPage implements OnInit {
     if (this.user && this.user.id) {
       if (!this.user.roles.includes("ROLE_ADMIN")) {
         try {
-          const coordinates = await Geolocation.getCurrentPosition();
+          const coordinates = await this.geolocation.getCurrentPosition();
           const longitude = coordinates.coords.longitude;
           const latitude = coordinates.coords.latitude;
           this.user = await this.userSvc.setCoordinates(longitude, latitude);

@@ -6,10 +6,10 @@ import {
   Validators
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
+import { Toast } from "@ionic-native/toast/ngx";
 import {
   ActionSheetController,
   IonInput,
@@ -25,8 +25,6 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { TagService } from "./../services/tag.service";
 import { UtilsService } from "./../services/utils.service";
-
-const { Toast } = Plugins;
 
 @Component({
   selector: "app-edit-profile",
@@ -74,7 +72,8 @@ export class EditProfilePage implements OnInit {
     private base64: Base64,
     private utils: UtilsService,
     private camera: Camera,
-    private router: Router
+    private router: Router,
+    private toast: Toast
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -126,17 +125,19 @@ export class EditProfilePage implements OnInit {
       ...{ tags: this.tags }
     } as User;
 
+    this.user.birthday = this.user.birthday.split("T")[0];
+
     try {
       this.user = await this.userSvc.updateUser(this.user);
       this.tags = this.user.tags;
 
-      await Toast.show({
-        text: "Cambios guardados correctamente."
-      });
+      this.toast
+        .show("Cambios guardados correctamente.", "long", "bottom")
+        .subscribe();
     } catch (e) {
-      await Toast.show({
-        text: `Error al guardar los cambios ${e}.`
-      });
+      this.toast
+        .show(`Error al guardar los cambios ${e}.`, "long", "bottom")
+        .subscribe();
     }
     this.back();
   }
@@ -283,9 +284,9 @@ export class EditProfilePage implements OnInit {
     try {
       this.user = await this.userSvc.updateUser(this.user);
     } catch (e) {
-      await Toast.show({
-        text: `Error al guardar la etiqueta ${e}.`
-      });
+      this.toast
+        .show(`Error al guardar la etiqueta ${e}.`, "long", "bottom")
+        .subscribe();
     }
   }
 
@@ -338,13 +339,14 @@ export class EditProfilePage implements OnInit {
       const avatar: File = new File([blob], "avatar.png");
       try {
         this.user.avatar = await this.userSvc.uploadAvatar(avatar);
-        await Toast.show({
-          text: `Imagen actualizada correctamente.`
-        });
+        this.toast
+          .show(`Imagen actualizada correctamente.`, "long", "center")
+          .subscribe();
       } catch (e) {
-        await Toast.show({
-          text: `Error al actualizar la imagen.`
-        });
+        this.toast
+          .show(`Error al actualizar la imagen.`, "long", "center")
+          .subscribe();
+        console.error(e);
       }
     } catch (e) {
       console.error(`Error al recortar la imagen. ${e}`);

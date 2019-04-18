@@ -1,11 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { Plugins } from "@capacitor/core";
+import { Toast } from "@ionic-native/toast/ngx";
 import { ModalController } from "@ionic/angular";
-
 import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
-
-const { Toast } = Plugins;
 
 @Component({
   selector: "block-users-modal",
@@ -15,7 +12,11 @@ const { Toast } = Plugins;
 export class BlockUsersModal implements OnInit {
   public users: User[];
 
-  constructor(private modal: ModalController, private userSvc: UserService) {}
+  constructor(
+    private modal: ModalController,
+    private userSvc: UserService,
+    private toast: Toast
+  ) {}
 
   async ngOnInit() {
     this.users = await this.userSvc.getBlocks();
@@ -23,9 +24,9 @@ export class BlockUsersModal implements OnInit {
 
   async unblock(user: User) {
     this.users = await this.userSvc.unblock(user.id);
-    await Toast.show({
-      text: `Usuario desbloqueado correctamente`
-    });
+    this.toast
+      .show(`Usuario desbloqueado correctamente`, "short", "bottom")
+      .subscribe();
   }
 
   close() {

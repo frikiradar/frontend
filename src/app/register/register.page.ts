@@ -5,13 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Plugins } from "@capacitor/core";
+import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, NavController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
-
-const { Toast } = Plugins;
 
 @Component({
   selector: "app-register",
@@ -27,7 +25,8 @@ export class RegisterPage {
     private alert: AlertController,
     private auth: AuthService,
     public fb: FormBuilder,
-    private nav: NavController
+    private nav: NavController,
+    private toast: Toast
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [
@@ -79,9 +78,9 @@ export class RegisterPage {
 
   async registerSuccess(user: User) {
     this.auth.setAuthUser(user);
-    await Toast.show({
-      text: "Registro realizado correctamente"
-    });
+    this.toast
+      .show("Registro realizado correctamente", "short", "bottom")
+      .subscribe();
     this.nav.navigateRoot(["/tabs/radar"]);
   }
 

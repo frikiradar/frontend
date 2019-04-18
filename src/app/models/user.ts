@@ -8,7 +8,7 @@ export interface User {
   username: string;
   email: string;
   description: string;
-  birthday: Date;
+  birthday: string;
   gender: string;
   orientation: string;
   pronoun: string;

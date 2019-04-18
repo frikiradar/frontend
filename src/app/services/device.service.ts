@@ -1,20 +1,20 @@
 import { Injectable } from "@angular/core";
-import { DeviceInfo, Plugins } from "@capacitor/core";
+import { Device as DeviceInfo } from "@ionic-native/device/ngx";
 
 import { User } from "../models/user";
 import { Device } from "./../models/device";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 
-const { Device } = Plugins;
-
 @Injectable({
   providedIn: "root"
 })
 export class DeviceService {
-  deviceInfo: DeviceInfo;
-
-  constructor(private rest: RestService, private auth: AuthService) {}
+  constructor(
+    private rest: RestService,
+    private auth: AuthService,
+    private device: DeviceInfo
+  ) {}
 
   async getDevices(forceApi = false): Promise<Device[]> {
     if (
@@ -29,39 +29,39 @@ export class DeviceService {
   }
 
   async setDevice(token?: string) {
-    this.deviceInfo = await Device.getInfo();
+    if (this.device.uuid !== null) {
+      const name = `${this.device.manufacturer} ${
+        this.device.model
+      } (${this.device.platform.charAt(0).toUpperCase() +
+        this.device.platform.slice(1)} ${this.device.version})`;
 
-    const name = `${this.deviceInfo.manufacturer} ${
-      this.deviceInfo.model
-    } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
-      this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`;
+      const user = (await this.rest
+        .put("device", {
+          id: this.device.uuid,
+          name,
+          token
+        })
+        .toPromise()) as User;
 
-    const user = (await this.rest
-      .put("device", {
-        id: this.deviceInfo.uuid,
-        name,
-        token
-      })
-      .toPromise()) as User;
-
-    this.auth.setAuthUser(user);
+      this.auth.setAuthUser(user);
+    }
   }
 
   async getCurrentDevice(): Promise<Device> {
-    this.deviceInfo = await Device.getInfo();
-    const device: Device = {
-      device_id: this.deviceInfo.uuid,
-      device_name: `${this.deviceInfo.manufacturer} ${
-        this.deviceInfo.model
-      } (${this.deviceInfo.platform.charAt(0).toUpperCase() +
-        this.deviceInfo.platform.slice(1)} ${this.deviceInfo.osVersion})`
-    };
-
-    const devices = await this.getDevices();
-    if (devices.some(d => d.device_id === device.device_id)) {
-      return devices.find(d => d.device_id === device.device_id);
-    } else {
-      return device;
+    if (this.device.uuid !== null) {
+      const device: Device = {
+        device_id: this.device.uuid,
+        device_name: `${this.device.manufacturer} ${
+          this.device.model
+        } (${this.device.platform.charAt(0).toUpperCase() +
+          this.device.platform.slice(1)} ${this.device.version})`
+      };
+      const devices = await this.getDevices();
+      if (devices.some(d => d.device_id === device.device_id)) {
+        return devices.find(d => d.device_id === device.device_id);
+      } else {
+        return device;
+      }
     }
   }
 

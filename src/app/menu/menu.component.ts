@@ -22,6 +22,9 @@ export class MenuComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    if (!this.auth.currentUserValue) {
+      return;
+    }
     this.avatar = this.auth.currentUserValue.avatar;
   }
 
@@ -37,6 +40,7 @@ export class MenuComponent implements OnInit {
 
   logout() {
     this.auth.logout();
+    this.menu.enable(false);
     this.menu.close();
   }
 }

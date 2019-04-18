@@ -2,7 +2,8 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { HapticsImpactStyle, Plugins } from "@capacitor/core";
+import { Toast } from "@ionic-native/toast/ngx";
+import { Vibration } from "@ionic-native/vibration/ngx";
 import {
   AlertController,
   NavController,
@@ -15,8 +16,6 @@ import { pulse } from "ng-animate";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
-
-const { Toast, Haptics } = Plugins;
 
 @Component({
   selector: "profile-popover",
@@ -41,7 +40,8 @@ export class ProfilePopover {
     private alert: AlertController,
     private data: NavParams,
     private router: Router,
-    private userSvc: UserService
+    private userSvc: UserService,
+    private toast: Toast
   ) {
     this.user = this.data.get("user");
   }
@@ -70,15 +70,14 @@ export class ProfilePopover {
           handler: async data => {
             try {
               await this.userSvc.block(this.user.id, data.note);
-              await Toast.show({
-                text: `Usuario bloqueado correctamente`
-              });
+              this.toast
+                .show(`Usuario bloqueado correctamente`, "short", "bottom")
+                .subscribe();
               this.router.navigate(["/"]);
             } catch (e) {
-              await Toast.show({
-                text: `Error al bloquear al usuario ${e}`
-              });
-
+              this.toast
+                .show(`Error al bloquear al usuario ${e}`, "short", "bottom")
+                .subscribe();
               alert.present();
             }
           }
@@ -110,7 +109,9 @@ export class ProfilePage implements OnInit {
     private route: ActivatedRoute,
     public router: Router,
     public utils: UtilsService,
-    private nav: NavController
+    private nav: NavController,
+    private toast: Toast,
+    private vibration: Vibration
   ) {}
 
   async ngOnInit() {
@@ -138,29 +139,39 @@ export class ProfilePage implements OnInit {
   }
 
   async switchLike() {
-    Haptics.impact({ style: HapticsImpactStyle.Light });
-    Haptics.vibrate();
+    this.vibration.vibrate(50);
     this.user = this.user.like
       ? await this.userSvc.unlike(this.user.id)
       : await this.userSvc.like(this.user.id);
 
     if (this.user.like) {
       if (this.user.block_messages) {
-        await Toast.show({
-          text: `¡Le has entregado tu kokoro a ${
-            this.user.username
-          }! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
-          duration: "long"
-        });
+        this.toast
+          .show(
+            `¡Le has entregado tu kokoro a ${
+              this.user.username
+            }! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
+            "long",
+            "center"
+          )
+          .subscribe();
       } else {
-        await Toast.show({
-          text: `¡Le has entregado tu kokoro a ${this.user.username}!`
-        });
+        this.toast
+          .show(
+            `¡Le has entregado tu kokoro a ${this.user.username}!`,
+            "long",
+            "center"
+          )
+          .subscribe();
       }
     } else {
-      await Toast.show({
-        text: `Le has retirado tu kokoro a ${this.user.username}`
-      });
+      this.toast
+        .show(
+          `Le has retirado tu kokoro a ${this.user.username}`,
+          "long",
+          "center"
+        )
+        .subscribe();
     }
   }
 

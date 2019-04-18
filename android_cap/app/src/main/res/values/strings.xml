@@ -5,4 +5,6 @@
     <string name="package_name">com.frikiradar.app</string>
     <string name="fileprovider_authority">com.frikiradar.app.fileprovider</string>
     <string name="custom_url_scheme">com.frikiradar.app</string>
+    <string name="fb_app_id">2308182012762454</string>
+    <string name="fb_app_name">FrikiRadar</string>
 </resources>

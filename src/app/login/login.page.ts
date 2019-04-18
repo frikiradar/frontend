@@ -6,19 +6,19 @@ import {
   Validators
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
+import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
+import { Toast } from "@ionic-native/toast/ngx";
 import {
   AlertController,
   ModalController,
-  NavController
+  NavController,
+  Platform
 } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
 import { PushService } from "./../services/push.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
-
-const { Toast, Device } = Plugins;
 
 @Component({
   selector: "app-login",
@@ -40,15 +40,18 @@ export class LoginPage {
     private auth: AuthService,
     private alert: AlertController,
     private modal: ModalController,
-    public fb: FormBuilder,
+    public formBuilder: FormBuilder,
     private nav: NavController,
-    private push: PushService
+    private push: PushService,
+    private fb: Facebook,
+    private toast: Toast,
+    private platform: Platform
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
     }
 
-    this.loginForm = fb.group({
+    this.loginForm = formBuilder.group({
       username: new FormControl("", [
         Validators.required,
         Validators.minLength(3)
@@ -85,13 +88,11 @@ export class LoginPage {
   }
 
   async loginSuccess(user: User) {
-    if ((await Device.getInfo()).platform !== "web") {
+    if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
       this.push.init();
     }
     this.auth.setAuthUser(user);
-    await Toast.show({
-      text: "¡Acceso concedido!"
-    });
+    this.toast.show("¡Acceso concedido!", "short", "bottom").subscribe();
     this.nav.navigateRoot(["/tabs/radar"]);
   }
 
@@ -115,6 +116,11 @@ export class LoginPage {
   }
 
   async loginFacebook() {
-    alert("yeah");
+    this.fb
+      .login(["public_profile", "email"])
+      .then((res: FacebookLoginResponse) =>
+        console.log("Logged into Facebook!", res)
+      )
+      .catch(e => console.error("Error logging into Facebook", e));
   }
 }
