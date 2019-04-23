@@ -17,59 +17,49 @@
   <form (submit)="submitRegister()" [formGroup]="registerForm">
     <ion-item>
       <ion-label position="floating">Nombre de usuario</ion-label>
-      <ion-input
-        required
-        type="text"
-        autocapitalize="words"
-        formControlName="username"
-        debounce="500"
-        name="username"
-      ></ion-input>
+      <ion-input required type="text" autocapitalize="words" formControlName="username" debounce="500" name="username">
+      </ion-input>
     </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('username').invalid && registerForm.get('username').value"><ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3 caracteres y máximo de 15.</div>
-    <div class="error-message" *ngIf="registerForm.get('username').invalid && registerForm.get('username').value"><ion-icon name="information-circle-outline"></ion-icon>Letras, números, guiones (-_) y puntos(.).</div>
+    <div class="error-message" *ngIf="registerForm.get('username').invalid && registerForm.get('username').value">
+      <ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3 caracteres y máximo de 15.
+    </div>
+    <div class="error-message" *ngIf="registerForm.get('username').invalid && registerForm.get('username').value">
+      <ion-icon name="information-circle-outline"></ion-icon>Letras, números, guiones (-_) y puntos(.).
+    </div>
     <ion-item>
       <ion-label position="floating">Correo electrónico</ion-label>
-      <ion-input
-        required
-        type="email"
-        autocomplete="email"
-        formControlName="email"
-        debounce="500"
-        name="email"
-      ></ion-input>
+      <ion-input required type="email" autocomplete="email" formControlName="email" debounce="500" name="email">
+      </ion-input>
     </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('email').invalid && registerForm.get('email').value"><ion-icon name="information-circle-outline"></ion-icon>Introduce una dirección de correo electrónico válida.</div>
+    <div class="error-message" *ngIf="registerForm.get('email').invalid && registerForm.get('email').value">
+      <ion-icon name="information-circle-outline"></ion-icon>Introduce una dirección de correo electrónico válida.
+    </div>
     <ion-item>
       <ion-label position="floating">Contraseña</ion-label>
-      <ion-input
-        required
-        [type]="clearPassword ? 'text' : 'password'"
-        formControlName="password"
-        debounce="500"
-        name="password"
-      ></ion-input>
+      <ion-input required [type]="clearPassword ? 'text' : 'password'" formControlName="password" debounce="500"
+        name="password"></ion-input>
       <ion-buttons slot="end" *ngIf="!registerForm.get('password').pristine">
         <ion-button (click)="clearPassword = !clearPassword">
-        <ion-icon slot="icon-only" [name]="clearPassword ? 'eye' : 'eye-off'"></ion-icon>
+          <ion-icon slot="icon-only" [name]="clearPassword ? 'eye' : 'eye-off'"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('password').invalid && registerForm.get('password').value"><ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo de 8 caracteres.</div>
+    <div class="error-message" *ngIf="registerForm.get('password').invalid && registerForm.get('password').value">
+      <ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo de 8 caracteres.
+    </div>
+    <ion-item>
+      <ion-label>Identidad de género</ion-label>
+      <ion-select interface="action-sheet" cancel-text="Cancelar" placeholder="Selecciona uno" formControlName="gender">
+        <ion-select-option *ngFor="let gender of userSvc.getGenders()" [value]="gender">{{ gender }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
     <ion-item>
       <ion-label position="floating">Fecha de nacimiento</ion-label>
-      <ion-datetime
-        min="1900-01"
-        max="{{ (today | date: 'y') - 18 }}"
-        cancel-text="Cancelar"
-        done-text="Hecho"
-        displayFormat="DD MMM de YYYY"
-        monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-        formControlName="birthday"
-      ></ion-datetime>
+      <ion-datetime min="1900-01" max="{{ (today | date: 'y') - 18 }}" cancel-text="Cancelar" done-text="Hecho"
+        displayFormat="DD MMM de YYYY" monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+        formControlName="birthday"></ion-datetime>
     </ion-item>
-    <ion-button color="primary" type="submit" expand="block" class="dismiss"
-      >Registrarme</ion-button
-    >
+    <ion-button color="primary" type="submit" expand="block" class="dismiss">Registrarme</ion-button>
   </form>
 </ion-content>

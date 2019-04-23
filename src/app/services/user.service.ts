@@ -149,10 +149,10 @@ export class UserService {
 
   getGenders() {
     return [
-      "Hombre",
       "Mujer",
-      "Hombre transgénero",
+      "Hombre",
       "Mujer transgénero",
+      "Hombre transgénero",
       "Agénero",
       "Andrógino",
       "Género fluido",

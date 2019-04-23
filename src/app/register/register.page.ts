@@ -10,6 +10,7 @@ import { AlertController, NavController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-register",
@@ -26,7 +27,8 @@ export class RegisterPage {
     private auth: AuthService,
     public fb: FormBuilder,
     private nav: NavController,
-    private toast: Toast
+    private toast: Toast,
+    public userSvc: UserService
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [

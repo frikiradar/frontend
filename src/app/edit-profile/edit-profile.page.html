@@ -46,7 +46,6 @@
             <ion-label>Identidad de género</ion-label>
             <ion-select interface="action-sheet" cancel-text="Cancelar" placeholder="Selecciona uno"
               formControlName="gender">
-              <ion-select-option value="">Sin indicar</ion-select-option>
               <ion-select-option *ngFor="let gender of userSvc.getGenders()" [value]="gender">{{ gender }}
               </ion-select-option>
             </ion-select>
@@ -55,7 +54,6 @@
             <ion-label>Orientación sexual</ion-label>
             <ion-select interface="action-sheet" cancel-text="Cancelar" placeholder="Selecciona uno"
               formControlName="orientation">
-              <ion-select-option value="" selected>Sin indicar</ion-select-option>
               <ion-select-option *ngFor="let orientation of userSvc.getOrientations()" [value]="orientation">
                 {{ orientation }}</ion-select-option>
             </ion-select>
