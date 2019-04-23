@@ -44,4 +44,5 @@ export interface User {
   /*configuration*/
   hide_location?: boolean;
   block_messages?: boolean;
+  two_step?: boolean;
 }

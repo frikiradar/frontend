@@ -292,6 +292,8 @@ export class EditProfilePage implements OnInit {
 
   async openPictureSheet() {
     const actionSheet = await this.sheet.create({
+      header:
+        "Consejo: Si pones una foto tuya transmitirás mucha más confianza.",
       buttons: [
         {
           text: "Desde la cámara",

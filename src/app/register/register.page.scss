@@ -1,4 +1,10 @@
 form {
+  ion-slide {
+    display: block;
+    text-align: inherit;
+    height: 85vh;
+  }
+
   ion-item {
     --border-color: white;
   }
