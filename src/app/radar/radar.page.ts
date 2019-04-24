@@ -95,7 +95,7 @@ export class RadarPage implements OnInit {
   async loadUsers(event: any) {
     this.page++;
     const users = await this.userSvc.getRadarUsers(this.ratio, this.page);
-    this.users = [...users, ...this.users];
+    this.users = [...this.users, ...users];
     event.target.complete();
 
     if (this.users.length < 15) {
