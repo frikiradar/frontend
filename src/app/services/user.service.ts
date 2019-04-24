@@ -53,8 +53,10 @@ export class UserService {
       .toPromise()) as Promise<User>;
   }
 
-  getRadarUsers(ratio: number) {
-    return this.rest.get(`radar/${ratio}`).toPromise() as Promise<User[]>;
+  getRadarUsers(ratio: number, page = 1) {
+    return this.rest.get(`radar/${ratio}?page=${page}`).toPromise() as Promise<
+      User[]
+    >;
   }
 
   activateUser(verification_code: string) {

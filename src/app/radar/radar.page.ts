@@ -18,6 +18,7 @@ export class RadarPage implements OnInit {
 
   public showSkeleton = true;
   ratio = 25;
+  page = 1;
   user: User;
   users: User[];
 
@@ -87,8 +88,19 @@ export class RadarPage implements OnInit {
         this.ratio = 100000;
         break;
     }
-
+    this.page = 1;
     this.getRadarUsers();
+  }
+
+  async loadUsers(event: any) {
+    this.page++;
+    const users = await this.userSvc.getRadarUsers(this.ratio, this.page);
+    this.users = [...users, ...this.users];
+    event.target.complete();
+
+    if (this.users.length < 15) {
+      event.target.disabled = true;
+    }
   }
 
   search() {
