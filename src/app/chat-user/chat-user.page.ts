@@ -1,13 +1,6 @@
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
-} from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IonTextarea, NavController } from "@ionic/angular";
-import { NgxLinkifyjsModule } from "ngx-linkifyjs";
+import { IonContent, IonTextarea, NavController } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Chat } from "../models/chat";
@@ -21,14 +14,11 @@ import { UserService } from "./../services/user.service";
   templateUrl: "./chat-user.page.html",
   styleUrls: ["./chat-user.page.scss"]
 })
-export class ChatUserPage implements OnInit, AfterViewChecked {
+export class ChatUserPage implements OnInit {
   @ViewChild("textarea")
   textarea: IonTextarea;
   @ViewChild("chatlist")
-  set _chatlist(c: ElementRef) {
-    this.chatlist = c.nativeElement;
-  }
-  chatlist: HTMLElement;
+  chatlist: IonContent;
 
   source: EventSource;
 
@@ -37,9 +27,10 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
   loading = true;
+  page = 1;
 
   constructor(
-    private auth: AuthService,
+    public auth: AuthService,
     private userSvc: UserService,
     private router: Router,
     private route: ActivatedRoute,
@@ -55,7 +46,11 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
       this.loading = false;
     } catch (e) {}
 
-    this.messages = (await this.chatSvc.getMessages(this.userId)).reverse();
+    this.messages = (await this.chatSvc.getMessages(
+      this.userId,
+      true,
+      this.page
+    )).reverse();
     this.scrollDown();
 
     const min = Math.min(this.auth.currentUserValue.id, this.userId);
@@ -63,13 +58,27 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
     const channel = `${min}_${max}`;
 
     this.source = this.chatSvc.register(channel);
-    this.source.addEventListener("message", (res: any) => {
-      const message = JSON.parse(res.data) as Chat;
+    this.source.addEventListener("message", async (res: any) => {
+      let message = JSON.parse(res.data) as Chat;
+      if (this.messages.some(m => m.id === message.id)) {
+        // Si ya existe el mensaje lo actualizamos
+        this.messages.map(m => {
+          if (m.id === message.id) {
+            m = message;
+          }
+        });
+      } else {
+        if (message.fromuser.id === this.user.id) {
+          // marcamos como leido
+          message = await this.chatSvc.readChat(message.id);
+        } else {
+          // borramos los enviando...
+          this.messages = this.messages.filter(m => !m.sending);
+        }
 
-      if (message.fromuser !== this.auth.currentUserValue.id) {
         this.messages = [...this.messages, message];
-        this.scrollDown();
       }
+      this.scrollDown();
     });
 
     this.source.addEventListener("error", async error => {
@@ -98,8 +107,10 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
     this.textarea.setFocus();
   }
 
-  ngAfterViewChecked() {
-    this.scrollDown();
+  ionViewDidLoad() {
+    setTimeout(() => {
+      this.scrollDown();
+    }, 100);
   }
 
   async sendMessage() {
@@ -113,15 +124,22 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
         ...this.messages,
         ...[
           {
-            touser: this.user.id,
+            touser: { id: this.user.id },
+            fromuser: { id: this.auth.currentUserValue.id },
             text,
-            time_creation: new Date()
+            time_creation: new Date(),
+            sending: true
           }
         ]
       ];
 
       // TODO: Marcar como enviado cuando lo reciba de vuelta
-      const message = this.chatSvc.sendMessage(this.user.id, text);
+      const message = await this.chatSvc.sendMessage(this.user.id, text);
+      /*this.messages.map(m => {
+        if (m.id === message.id) {
+          m = message;
+        }
+      });*/
     }
   }
 
@@ -129,7 +147,18 @@ export class ChatUserPage implements OnInit, AfterViewChecked {
     if (!this.chatlist) {
       return;
     }
-    this.chatlist.scrollTop = this.chatlist.scrollHeight;
+
+    this.chatlist.scrollToBottom(0);
+  }
+
+  async loadChats(event) {
+    this.page++;
+    const messages = (await this.chatSvc.getMessages(
+      this.userId,
+      false,
+      this.page
+    )).reverse();
+    this.messages = [...messages, ...this.messages];
   }
 
   async showProfile(id: User["id"]) {

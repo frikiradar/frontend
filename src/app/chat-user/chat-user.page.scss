@@ -52,6 +52,11 @@ ion-label h2 {
     position: relative;
     bottom: -8px;
     color: #bbbbbb;
+
+    ion-icon {
+      font-size: 14px;
+      vertical-align: text-bottom;
+    }
   }
 }
 
@@ -73,9 +78,12 @@ ion-footer {
   }
 
   ion-textarea {
-    height: 40px;
+    height: 42px;
     --placeholder-color: #555555 !important;
     color: #353535 !important;
+    padding: 0;
+    margin: 0;
+    margin-top: 5px;
   }
 
   ion-label {

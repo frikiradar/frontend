@@ -1,9 +1,11 @@
 import { User } from "./user";
 
 export interface Chat {
-  touser: number;
+  touser: Partial<User>;
   text: string;
-  fromuser?: number;
+  fromuser?: Partial<User>;
   time_creation?: Date;
-  user?: User;
+  time_read?: Date;
+  id?: number;
+  sending?: boolean;
 }
