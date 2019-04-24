@@ -1,6 +1,14 @@
 :host {
   ion-header {
     background: #1a1a1a !important;
+
+    #info {
+      padding: 5px 20px;
+      background: #1a1a1a99;
+      position: relative;
+      top: -37px;
+      margin-bottom: -32px;
+    }
   }
 
   ion-item,

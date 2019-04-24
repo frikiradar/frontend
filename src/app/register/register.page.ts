@@ -41,37 +41,59 @@ export class RegisterPage {
         Validators.required,
         Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$")
       ]),
-      birthday: new FormControl("", Validators.required),
       password: new FormControl("", [
         Validators.required,
         Validators.minLength(8)
-      ])
+      ]),
+      birthday: new FormControl("", Validators.required),
+      gender: new FormControl("", Validators.required)
     });
   }
 
   async submitRegister() {
     if (this.registerForm.valid) {
-      try {
-        await this.auth.register(
-          this.registerForm.get("username").value.trim(),
-          this.registerForm.get("email").value.trim(),
-          this.registerForm.get("birthday").value.split("T")[0],
-          this.registerForm.get("password").value.trim()
-        );
+      const alert = await this.alert.create({
+        header: `Aviso`,
+        message: `Te llegará un email con un código de confirmación a la dirección ${this.registerForm
+          .get("email")
+          .value.trim()} ¿Es correcta?`,
+        buttons: [
+          {
+            text: "Ups, me confundí",
+            role: "cancel",
+            cssClass: "secondary"
+          },
+          {
+            text: "¡Es correcta!",
+            handler: async () => {
+              try {
+                await this.auth.register(
+                  this.registerForm.get("username").value.trim(),
+                  this.registerForm.get("email").value.trim(),
+                  this.registerForm.get("password").value.trim(),
+                  this.registerForm.get("birthday").value.split("T")[0],
+                  this.registerForm.get("gender").value.trim()
+                );
 
-        const user = await this.auth.login(
-          this.registerForm.get("username").value.trim(),
-          this.registerForm.get("password").value.trim()
-        );
-        this.registerSuccess(user);
-      } catch (error) {
-        this.registerError(error);
-      }
+                const user = await this.auth.login(
+                  this.registerForm.get("username").value.trim(),
+                  this.registerForm.get("password").value.trim()
+                );
+                this.registerSuccess(user);
+              } catch (error) {
+                this.registerError(error);
+              }
+            }
+          }
+        ]
+      });
+
+      await alert.present();
     } else {
       const alert = await this.alert.create({
         header: "Revisa la información",
-        message: "Para cuatro cosas que te pedimos y las pones mal... 🙄",
-        buttons: ["Tendré más cuidado"]
+        message: "Es necesario rellenar todos los campos.",
+        buttons: ["Ok, Tendré más cuidado"]
       });
 
       await alert.present();

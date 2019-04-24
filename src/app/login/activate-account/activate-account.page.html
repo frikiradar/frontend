@@ -15,22 +15,11 @@
   </p>
   <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
     <ion-item id="code">
-      <ion-input
-        autocomplete="off"
-        formControlName="code"
-        maxlength="6"
-        autocapitalize="characters"
-        placeholder="Código de seguridad"
-        type="text"
-      ></ion-input>
+      <ion-input autocomplete="off" formControlName="code" maxlength="6" autocapitalize="characters"
+        placeholder="Código de seguridad" type="text"></ion-input>
     </ion-item>
-    <ion-button
-      class="dismiss"
-      color="primary"
-      expand="block"
-      type="submit"
-      [disabled]="codeForm.invalid"
-      >Activar la cuenta</ion-button
-    >
+    <ion-button class="dismiss" color="primary" expand="block" type="submit" [disabled]="codeForm.invalid">Activar la
+      cuenta</ion-button>
   </form>
+  <p color="primary" text-center (click)="resendCode()">No he recibido mi código</p>
 </ion-content>

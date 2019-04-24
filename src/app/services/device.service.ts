@@ -65,14 +65,8 @@ export class DeviceService {
     }
   }
 
-  unknownDevice() {
-    return this.rest.get("unknown-device");
-  }
-
-  verifyDevice(verification_code: string, device: Device) {
-    return this.rest
-      .put("unknown-device", { verification_code, device })
-      .toPromise() as Promise<User>;
+  unknownDevice(device: Device) {
+    return this.rest.put("unknown-device", { device });
   }
 
   removeDevice(device: Device) {

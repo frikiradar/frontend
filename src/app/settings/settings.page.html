@@ -41,11 +41,8 @@
             inicies una nueva sesión.
           </p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="user.two_step"
-          (ngModelChange)="onChangeCheck('two_step', $event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="user.two_step" (ngModelChange)="onChangeCheck('two_step', !$event)">
+        </ion-checkbox>
       </ion-item>
     </ion-item-group>
 
@@ -60,11 +57,8 @@
           <h2>Localización exacta</h2>
           <p>Mostrar el nombre del lugar donde me encuentro.</p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="!user.hide_location"
-          (ngModelChange)="onChangeCheck('hide_location', $event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="!user.hide_location"
+          (ngModelChange)="onChangeCheck('hide_location', $event)"></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
         <ion-icon name="chatbubbles" slot="start"></ion-icon>
@@ -75,11 +69,8 @@
             que me gusta.
           </p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="!user.block_messages"
-          (ngModelChange)="onChangeCheck('block_messages', $event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="!user.block_messages"
+          (ngModelChange)="onChangeCheck('block_messages', $event)"></ion-checkbox>
       </ion-item>
       <ion-item (click)="blockUsersModal()" button lines="full">
         <ion-icon name="hand" slot="start"></ion-icon>

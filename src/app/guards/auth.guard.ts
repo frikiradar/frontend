@@ -39,12 +39,11 @@ export class AuthGuard implements CanActivate {
           devices.length &&
           !devices.some(d => d.device_id === device.device_id)
         ) {
-          this.nav.navigateRoot(["/login/unknown-device"]);
-          return false;
-        } else {
-          this.device.setDevice();
-          return true;
+          // dispositivo desconocido, enviar email avisando
+          await this.device.unknownDevice(device).toPromise();
         }
+        this.device.setDevice();
+        return true;
       }
     }
 

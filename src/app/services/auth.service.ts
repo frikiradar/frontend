@@ -35,14 +35,15 @@ export class AuthService {
   async register(
     username: string,
     email: string,
+    password: string,
     birthday: string,
-    password: string
+    gender: string
   ) {
     try {
       return await this.http
         .post(
           `${environment.root}api/register`,
-          { username, email, birthday, password },
+          { username, email, password, birthday, gender },
           httpOptions
         )
         .toPromise();
@@ -100,6 +101,16 @@ export class AuthService {
 
     localStorage.setItem("currentUser", JSON.stringify(user));
     this.currentUserSubject.next(user);
+  }
+
+  twoStepCode() {
+    return this.rest.get("two-step");
+  }
+
+  verifyLogin(verification_code: string) {
+    return this.rest
+      .put("two-step", { verification_code })
+      .toPromise() as Promise<User>;
   }
 
   isAdmin(user?: User) {

@@ -91,9 +91,13 @@ export class LoginPage {
     if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
       this.push.init();
     }
-    this.auth.setAuthUser(user);
-    this.toast.show("¡Acceso concedido!", "short", "bottom").subscribe();
-    this.nav.navigateRoot(["/tabs/radar"]);
+    if (user.two_step) {
+      this.nav.navigateRoot(["/login/two-step"]);
+    } else {
+      this.auth.setAuthUser(user);
+      this.toast.show("¡Acceso concedido!", "short", "bottom").subscribe();
+      this.nav.navigateRoot(["/tabs/radar"]);
+    }
   }
 
   async loginError() {

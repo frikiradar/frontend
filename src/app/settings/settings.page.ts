@@ -4,7 +4,6 @@ import { AlertController, ModalController } from "@ionic/angular";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
-import { AccountModal } from "./account/account.modal";
 import { BlockUsersModal } from "./block-users/block-users.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";

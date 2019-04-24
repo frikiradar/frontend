@@ -5,30 +5,23 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import {
-  AlertController,
-  ModalController,
-  NavController
-} from "@ionic/angular";
+import { AlertController, NavController } from "@ionic/angular";
 
 import { AuthService } from "../../services/auth.service";
-import { DeviceService } from "../../services/device.service";
 
 @Component({
-  selector: "unknown-device-app",
-  templateUrl: "./unknown-device.page.html",
-  styleUrls: ["./unknown-device.page.scss"]
+  selector: "two-step-app",
+  templateUrl: "./two-step.page.html",
+  styleUrls: ["./two-step.page.scss"]
 })
-export class UnknownDevicePage implements OnInit {
+export class TwoStepPage implements OnInit {
   public codeForm: FormGroup;
 
   constructor(
     public fb: FormBuilder,
-    private modal: ModalController,
     private auth: AuthService,
     private alert: AlertController,
-    private nav: NavController,
-    private device: DeviceService
+    private nav: NavController
   ) {
     this.codeForm = fb.group({
       code: new FormControl("", [
@@ -40,15 +33,13 @@ export class UnknownDevicePage implements OnInit {
   }
 
   async ngOnInit() {
-    await this.device.unknownDevice().toPromise();
+    await this.auth.twoStepCode().toPromise();
   }
 
   async submitCode() {
     try {
-      const device = await this.device.getCurrentDevice();
-      const user = await this.device.verifyDevice(
-        this.codeForm.get("code").value.toUpperCase(),
-        device
+      const user = await this.auth.verifyLogin(
+        this.codeForm.get("code").value.toUpperCase()
       );
 
       this.auth.setAuthUser(user);

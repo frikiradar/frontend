@@ -7,7 +7,7 @@ import { IonicModule } from "@ionic/angular";
 import { ActivateAccountPage } from "./activate-account/activate-account.page";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 import { LoginPage } from "./login.page";
-import { UnknownDevicePage } from "./unknown-device/unknown-device.page";
+import { TwoStepPage } from "./two-step/two-step.page";
 
 const routes: Routes = [
   {
@@ -19,8 +19,8 @@ const routes: Routes = [
     component: ActivateAccountPage
   },
   {
-    path: "unknown-device",
-    component: UnknownDevicePage
+    path: "two-step",
+    component: TwoStepPage
   }
 ];
 
@@ -36,7 +36,7 @@ const routes: Routes = [
     LoginPage,
     ForgotPasswordModal,
     ActivateAccountPage,
-    UnknownDevicePage
+    TwoStepPage
   ],
   entryComponents: [ForgotPasswordModal]
 })

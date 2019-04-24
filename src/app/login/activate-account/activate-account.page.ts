@@ -1,18 +1,14 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators
 } from "@angular/forms";
-import {
-  AlertController,
-  ModalController,
-  NavController
-} from "@ionic/angular";
+import { Toast } from "@ionic-native/toast/ngx";
+import { AlertController, NavController } from "@ionic/angular";
 
 import { AuthService } from "../../services/auth.service";
-import { DeviceService } from "../../services/device.service";
 import { UserService } from "../../services/user.service";
 
 @Component({
@@ -20,7 +16,7 @@ import { UserService } from "../../services/user.service";
   templateUrl: "./activate-account.page.html",
   styleUrls: ["./activate-account.page.scss"]
 })
-export class ActivateAccountPage implements OnInit {
+export class ActivateAccountPage {
   public codeForm: FormGroup;
 
   constructor(
@@ -28,7 +24,8 @@ export class ActivateAccountPage implements OnInit {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private nav: NavController
+    private nav: NavController,
+    private toast: Toast
   ) {
     this.codeForm = fb.group({
       code: new FormControl("", [
@@ -37,10 +34,6 @@ export class ActivateAccountPage implements OnInit {
         Validators.maxLength(6)
       ])
     });
-  }
-
-  async ngOnInit() {
-    await this.userSvc.resendActivationEmail().toPromise();
   }
 
   async submitCode() {
@@ -61,6 +54,17 @@ export class ActivateAccountPage implements OnInit {
 
       alert.present();
     }
+  }
+
+  async resendCode() {
+    await this.userSvc.resendActivationEmail().toPromise();
+    this.toast
+      .show(
+        "Te hemos enviado un nuevo código de verificación al email",
+        "short",
+        "bottom"
+      )
+      .subscribe();
   }
 
   close() {
