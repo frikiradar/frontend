@@ -14,4 +14,8 @@ export class LikeService {
 
     return likes;
   }
+
+  async readLike(id: number) {
+    return (await this.rest.get(`read-like/${id}`).toPromise()) as Like;
+  }
 }

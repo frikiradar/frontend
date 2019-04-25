@@ -8,4 +8,5 @@ export interface Chat {
   time_read?: Date;
   id?: number;
   sending?: boolean;
+  count?: number;
 }

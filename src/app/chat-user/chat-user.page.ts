@@ -72,7 +72,7 @@ export class ChatUserPage implements OnInit {
 
     setTimeout(() => {
       this.scrollDown();
-    }, 100);
+    }, 500);
 
     const min = Math.min(this.auth.currentUserValue.id, this.userId);
     const max = Math.max(this.auth.currentUserValue.id, this.userId);
@@ -99,7 +99,9 @@ export class ChatUserPage implements OnInit {
 
         this.messages = [...this.messages, message];
       }
-      this.scrollDown();
+      setTimeout(() => {
+        this.scrollDown();
+      }, 100);
     });
 
     this.source.addEventListener("error", async error => {
@@ -131,7 +133,6 @@ export class ChatUserPage implements OnInit {
   async sendMessage() {
     if (this.textarea.value.trim()) {
       const text = this.textarea.value.trim();
-      this.scrollDown();
       this.textarea.value = "";
       this.textarea.setFocus();
 
@@ -148,13 +149,8 @@ export class ChatUserPage implements OnInit {
         ]
       ];
 
-      // TODO: Marcar como enviado cuando lo reciba de vuelta
-      const message = await this.chatSvc.sendMessage(this.user.id, text);
-      /*this.messages.map(m => {
-        if (m.id === message.id) {
-          m = message;
-        }
-      });*/
+      this.scrollDown();
+      this.chatSvc.sendMessage(this.user.id, text);
     }
   }
 

@@ -24,7 +24,8 @@ export class LikesPage {
     this.showSkeleton = false;
   }
 
-  async viewProfile(url: string) {
-    this.router.navigate(["/profile/", url]);
+  async viewProfile(id: number) {
+    await this.likeSvc.readLike(id);
+    this.router.navigate(["/profile/", id]);
   }
 }

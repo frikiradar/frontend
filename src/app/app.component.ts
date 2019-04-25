@@ -42,20 +42,19 @@ export class AppComponent {
         this.networkStatus();
         this.backButtonStatus();
       }
-    });
+      LogRocket.init("hlejka/frikiradar");
+      this.auth.currentUser.subscribe(async authUser => {
+        this.currentUser = authUser;
 
-    this.auth.currentUser.subscribe(async authUser => {
-      this.currentUser = authUser;
-
-      if (authUser && authUser.id) {
-        if (!authUser.roles.includes("ROLE_ADMIN")) {
-          LogRocket.init("hlejka/frikiradar");
-          LogRocket.identify(`${authUser.id}`, {
-            name: authUser.username,
-            email: authUser.email
-          });
+        if (authUser && authUser.id) {
+          if (!authUser.roles.includes("ROLE_ADMIN")) {
+            LogRocket.identify(`${authUser.id}`, {
+              name: authUser.username,
+              email: authUser.email
+            });
+          }
         }
-      }
+      });
     });
   }
 
