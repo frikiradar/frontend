@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "431880368798",
+    "firebase_url": "https://frikiradar-1551914200548.firebaseio.com",
+    "project_id": "frikiradar-1551914200548",
+    "storage_bucket": "frikiradar-1551914200548.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431880368798:android:3f4538e6c5a3785d",
+        "android_client_info": {
+          "package_name": "com.frikiradar.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAQqXh7W6djpH6j5FwZaAmX9hfrTdqirk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { MenuController, NavController } from "@ionic/angular";
@@ -11,7 +11,7 @@ import { UtilsService } from "../services/utils.service";
   templateUrl: "menu.component.html",
   styleUrls: ["./menu.component.scss"]
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent {
   avatar: SafeResourceUrl;
 
   constructor(
@@ -21,13 +21,6 @@ export class MenuComponent implements OnInit {
     private router: Router,
     private nav: NavController
   ) {}
-
-  async ngOnInit() {
-    if (!this.auth.currentUserValue) {
-      return;
-    }
-    this.avatar = this.auth.currentUserValue.avatar;
-  }
 
   editProfile() {
     this.nav.navigateRoot(["/edit-profile"]);

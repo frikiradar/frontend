@@ -5,10 +5,11 @@ import {
   Router,
   RouterStateSnapshot
 } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { NavController, Platform } from "@ionic/angular";
 
 import { DeviceService } from "../services/device.service";
 import { AuthService } from "./../services/auth.service";
+import { PushService } from "./../services/push.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthGuard implements CanActivate {
@@ -16,7 +17,9 @@ export class AuthGuard implements CanActivate {
     private router: Router,
     private auth: AuthService,
     private device: DeviceService,
-    private nav: NavController
+    private nav: NavController,
+    private push: PushService,
+    private platform: Platform
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -37,12 +40,17 @@ export class AuthGuard implements CanActivate {
 
         if (
           devices.length &&
-          !devices.some(d => d.device_id === device.device_id)
+          !devices.some(d => d.device_name === device.device_name)
         ) {
           // dispositivo desconocido, enviar email avisando
           await this.device.unknownDevice(device).toPromise();
         }
-        this.device.setDevice();
+        if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
+          this.push.init();
+        } else {
+          this.device.setDevice();
+        }
+
         return true;
       }
     }

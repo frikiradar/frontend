@@ -11,13 +11,11 @@ import { Toast } from "@ionic-native/toast/ngx";
 import {
   AlertController,
   ModalController,
-  NavController,
-  Platform
+  NavController
 } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
-import { PushService } from "./../services/push.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 
 @Component({
@@ -40,12 +38,10 @@ export class LoginPage {
     private auth: AuthService,
     private alert: AlertController,
     private modal: ModalController,
+    private toast: Toast,
     public formBuilder: FormBuilder,
     private nav: NavController,
-    private push: PushService,
-    private fb: Facebook,
-    private toast: Toast,
-    private platform: Platform
+    private fb: Facebook
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -88,9 +84,6 @@ export class LoginPage {
   }
 
   async loginSuccess(user: User) {
-    if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
-      this.push.init();
-    }
     if (user.two_step) {
       this.nav.navigateRoot(["/login/two-step"]);
     } else {

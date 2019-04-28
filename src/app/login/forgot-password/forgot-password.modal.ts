@@ -63,9 +63,7 @@ export class ForgotPasswordModal {
 
   async submitRequest() {
     try {
-      await this.userSvc.requestPassword(
-        this.requestForm.get("username").value
-      );
+      await this.auth.requestPassword(this.requestForm.get("username").value);
       this.step = 2;
     } catch (e) {
       const alert = await this.alert.create({
@@ -80,7 +78,7 @@ export class ForgotPasswordModal {
 
   async submitPassword() {
     try {
-      await this.userSvc.recoverPassword(
+      await this.auth.recoverPassword(
         this.requestForm.get("username").value,
         this.passwordForm.get("password").value,
         this.passwordForm.get("code").value.toUpperCase()

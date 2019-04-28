@@ -54,3 +54,15 @@ ion-note {
   --color: #bbbbbb;
   font-size: 14px;
 }
+
+ion-spinner {
+  * {
+    stroke: blue !important;
+  }
+
+  &.spinner-circles circle,
+  &.spinner-bubbles circle,
+  &.spinner-dots circle {
+    fill: blue !important;
+  }
+}

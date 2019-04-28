@@ -113,6 +113,30 @@ export class AuthService {
       .toPromise() as Promise<User>;
   }
 
+  requestPassword(username: string) {
+    return this.http
+      .post(`${environment.root}api/recover`, { username }, httpOptions)
+      .toPromise();
+  }
+
+  recoverPassword(
+    username: string,
+    password: string,
+    verification_code: string
+  ) {
+    return this.http
+      .put(
+        `${environment.root}api/recover`,
+        {
+          username,
+          password,
+          verification_code
+        },
+        httpOptions
+      )
+      .toPromise();
+  }
+
   isAdmin(user?: User) {
     if (!user) {
       user = this.currentUserValue;

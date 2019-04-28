@@ -1,6 +1,9 @@
 import { Component } from "@angular/core";
 
-import { NotificationService } from "../services/notification.service";
+import {
+  Notification,
+  NotificationService
+} from "../services/notification.service";
 
 @Component({
   selector: "app-tabs",
@@ -8,15 +11,14 @@ import { NotificationService } from "../services/notification.service";
   styleUrls: ["tabs.page.scss"]
 })
 export class TabsPage {
-  public counters: { radar: number; chats: number; likes: number };
+  public counters: Notification;
 
   constructor(private notificationSvc: NotificationService) {}
 
   async ionViewWillEnter() {
-    this.counters = (await this.notificationSvc.getUnread()) as {
-      radar: number;
-      chats: number;
-      likes: number;
-    };
+    this.counters = (await this.notificationSvc.getUnread()) as Notification;
+    this.notificationSvc.setNotification(this.counters);
+
+    this.notificationSvc.notification.subscribe(notification => this.counters);
   }
 }

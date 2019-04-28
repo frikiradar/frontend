@@ -1,6 +1,6 @@
-<ion-menu side="start" contentId="content">
+<ion-menu side="start" contentId="content" *ngIf="auth.currentUserValue && auth.currentUserValue.id">
   <ion-header no-border>
-    <img [src]="avatar" default="/assets/img/users/default.jpg">
+    <img [src]="auth.currentUserValue.avatar" default="/assets/img/users/default.jpg">
     <div id="info">
       <span>{{auth.currentUserValue.username}}</span>
     </div>

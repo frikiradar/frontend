@@ -5,12 +5,9 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, NavController, Platform } from "@ionic/angular";
-import * as LogRocket from "logrocket";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
-
-LogRocket.init("hlejka/frikiradar");
 
 @Component({
   selector: "app-root",
@@ -21,7 +18,6 @@ export class AppComponent {
   backButtonCount = 0;
 
   constructor(
-    private platform: Platform,
     private auth: AuthService,
     private alert: AlertController,
     private router: Router,
@@ -29,31 +25,20 @@ export class AppComponent {
     private statusBar: StatusBar,
     private toast: Toast,
     private network: Network,
-    private splashScreen: SplashScreen
+    private splashScreen: SplashScreen,
+    private platform: Platform
   ) {
     this.initializeApp();
   }
 
-  initializeApp() {
+  async initializeApp() {
     this.platform.ready().then(async () => {
-      if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
-        this.splashScreen.hide();
-        this.statusBar.backgroundColorByHexString("#1a1a1a");
-        this.networkStatus();
-        this.backButtonStatus();
-      }
-      LogRocket.init("hlejka/frikiradar");
+      this.splashScreen.hide();
+      this.statusBar.backgroundColorByHexString("#1a1a1a");
+      this.networkStatus();
+      this.backButtonStatus();
       this.auth.currentUser.subscribe(async authUser => {
         this.currentUser = authUser;
-
-        if (authUser && authUser.id) {
-          if (!authUser.roles.includes("ROLE_ADMIN")) {
-            LogRocket.identify(`${authUser.id}`, {
-              name: authUser.username,
-              email: authUser.email
-            });
-          }
-        }
       });
     });
   }
@@ -76,30 +61,28 @@ export class AppComponent {
   }
 
   async backButtonStatus() {
-    if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
-      this.platform.backButton.subscribe(() => {
-        if (this.router.url.includes("/tabs/")) {
-          this.backButtonCount++;
+    this.platform.backButton.subscribe(() => {
+      if (this.router.url.includes("/tabs/")) {
+        this.backButtonCount++;
 
-          switch (this.backButtonCount) {
-            case 1:
-              this.toast
-                .show(
-                  "Pulsa de nuevo para salir de la aplicación",
-                  "short",
-                  "bottom"
-                )
-                .subscribe();
-              break;
+        switch (this.backButtonCount) {
+          case 1:
+            this.toast
+              .show(
+                "Pulsa de nuevo para salir de la aplicación",
+                "short",
+                "bottom"
+              )
+              .subscribe();
+            break;
 
-            default:
-              navigator["app"].exitApp();
-          }
-        } else {
-          this.nav.back();
-          this.backButtonCount = 0;
+          default:
+            navigator["app"].exitApp();
         }
-      });
-    }
+      } else {
+        this.nav.back();
+        this.backButtonCount = 0;
+      }
+    });
   }
 }

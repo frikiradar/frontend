@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Plugins } from "@capacitor/core";
+import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import {
+  AlertController,
   IonContent,
   IonInfiniteScroll,
   IonTextarea,
@@ -15,8 +16,6 @@ import { User } from "../models/user";
 import { ChatService } from "../services/chat.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
-
-const { Clipboard } = Plugins;
 
 @Component({
   selector: "app-chat-user",
@@ -41,6 +40,7 @@ export class ChatUserPage implements OnInit {
   page = 1;
   showOptions = false;
   selectedMessage: Chat;
+  conErrors = 0;
 
   constructor(
     public auth: AuthService,
@@ -49,7 +49,9 @@ export class ChatUserPage implements OnInit {
     private route: ActivatedRoute,
     private nav: NavController,
     private chatSvc: ChatService,
-    private toast: Toast
+    private toast: Toast,
+    private alert: AlertController,
+    private clipboard: Clipboard
   ) {}
 
   async ngOnInit() {
@@ -80,6 +82,7 @@ export class ChatUserPage implements OnInit {
 
     this.source = this.chatSvc.register(channel);
     this.source.addEventListener("message", async (res: any) => {
+      this.conErrors = 0;
       let message = JSON.parse(res.data) as Chat;
       if (this.messages.some(m => m.id === message.id)) {
         // Si ya existe el mensaje lo actualizamos
@@ -105,26 +108,31 @@ export class ChatUserPage implements OnInit {
     });
 
     this.source.addEventListener("error", async error => {
-      if (error.type === "error") {
+      this.conErrors++;
+      if (error.type === "error" && this.conErrors) {
         console.error(error);
-        // this.source.close();
-        /*const alert = await this.alert.create({
-            header: `Ups, error al conectar`,
-            message:
-              "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
-            backdropDismiss: false,
-            buttons: [
-              {
-                text: "Ok, seré paciente",
-                handler: () => {
-                  this.back();
-                }
+        this.source.close();
+        const alert = await this.alert.create({
+          header: `Ups, error al conectar`,
+          message:
+            "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: "Ok, seré paciente",
+              handler: () => {
+                this.back();
               }
-            ]
-          });
-  
-          await alert.present();*/
+            }
+          ]
+        });
+
+        await alert.present();
       }
+    });
+
+    this.source.addEventListener("open", async error => {
+      this.conErrors = 0;
     });
 
     this.textarea.setFocus();
@@ -187,9 +195,7 @@ export class ChatUserPage implements OnInit {
   }
 
   async copy() {
-    Clipboard.write({
-      string: this.selectedMessage.text
-    });
+    this.clipboard.copy(this.selectedMessage.text);
 
     this.toast.show("Copiado al portapapeles", "short", "center").subscribe();
     this.showOptions = false;

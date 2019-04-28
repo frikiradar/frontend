@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-import { ServiceWorkerModule } from "@angular/service-worker";
+import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
@@ -19,7 +19,6 @@ import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
-import { environment } from "../environments/environment";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
@@ -40,9 +39,6 @@ registerLocaleData(localeEs, "es");
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: environment.production
-    }),
     NgxLinkifyjsModule.forRoot(),
     SharedModule,
     BrowserAnimationsModule
@@ -60,7 +56,8 @@ registerLocaleData(localeEs, "es");
     Vibration,
     Geolocation,
     SplashScreen,
-    FCM
+    FCM,
+    Clipboard
   ],
   bootstrap: [AppComponent]
 })

@@ -69,28 +69,6 @@ export class UserService {
     return this.rest.get("activation");
   }
 
-  requestPassword(username: string) {
-    return this.rest
-      .post(`recover`, {
-        username
-      })
-      .toPromise();
-  }
-
-  recoverPassword(
-    username: string,
-    password: string,
-    verification_code: string
-  ) {
-    return this.rest
-      .put(`recover`, {
-        username,
-        password,
-        verification_code
-      })
-      .toPromise();
-  }
-
   changePassword(old_password: string, new_password: string) {
     return this.rest
       .put("password", {
