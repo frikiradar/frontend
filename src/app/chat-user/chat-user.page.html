@@ -32,7 +32,7 @@
     <ion-infinite-scroll-content loadingSpinner="dots">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  <span class="bubble {{ message.fromuser.id == userId ? 'to' : 'from' }}"
+  <span class="bubble {{ message.fromuser?.id == userId ? 'to' : 'from' }}"
     *ngFor="let message of messages; let i = index">
     <ion-chip color="primary" class="center" *ngIf="
           (message?.time_creation | date: 'shortDate') !==
@@ -48,7 +48,7 @@
         <span class="text" [innerHTML]="message.text | linkify"> </span>
         <ion-note>
           {{ message.time_creation | date: "shortTime" }}
-          <span *ngIf="message.fromuser.id == auth.currentUserValue.id">
+          <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
             <ion-icon *ngIf="message.sending" name="time"></ion-icon>
             <ion-icon *ngIf="!message.sending && !message.time_read" name="checkmark"></ion-icon>
             <ion-icon *ngIf="message.time_read" color="secondary" name="done-all"></ion-icon>
