@@ -1,25 +1,21 @@
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  Router,
   RouterStateSnapshot
 } from "@angular/router";
-import { NavController, Platform } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 
 import { DeviceService } from "../services/device.service";
 import { AuthService } from "./../services/auth.service";
-import { PushService } from "./../services/push.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthGuard implements CanActivate {
   constructor(
-    private router: Router,
     private auth: AuthService,
     private device: DeviceService,
     private nav: NavController,
-    private push: PushService,
-    private platform: Platform
+    private ngZone: NgZone
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -28,7 +24,10 @@ export class AuthGuard implements CanActivate {
       // logged in so return true
       if (!currentUser.active) {
         // El usuario no está activo
-        this.nav.navigateRoot(["/login/activate-account"]);
+        this.ngZone
+          .run(() => this.nav.navigateRoot(["/login/activate-account"]))
+          .then();
+
         return false;
       } else {
         // El dispositivo utilizado es desconocido
@@ -45,18 +44,16 @@ export class AuthGuard implements CanActivate {
           // dispositivo desconocido, enviar email avisando
           await this.device.unknownDevice(device).toPromise();
         }
-        if (!this.platform.is("desktop") && !this.platform!.is("mobileweb")) {
-          this.push.init();
-        } else {
-          this.device.setDevice();
-        }
+        this.device.setDevice();
 
         return true;
       }
     }
 
     // not logged in so redirect to login page with the return url
-    this.router.navigate(["/login"], { queryParams: { returnUrl: state.url } });
+    this.nav.navigateRoot(["/login"], {
+      queryParams: { returnUrl: state.url }
+    });
     return false;
   }
 }

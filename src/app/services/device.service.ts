@@ -43,7 +43,9 @@ export class DeviceService {
         })
         .toPromise()) as User;
 
-      this.auth.setAuthUser(user);
+      if (!token) {
+        this.auth.setAuthUser(user);
+      }
     }
   }
 

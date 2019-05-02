@@ -59,6 +59,9 @@
           <p>{{ user?.description }}</p>
         </ion-list>
         <ion-list class="info">
+          <ion-item lines="none">
+            <ion-label>Afinidad: {{ user.match }}%</ion-label>
+          </ion-item>
           <ion-item *ngIf="user?.gender" lines="none">
             <ion-label>Identidad de género: {{ user.gender }}
               <span *ngIf="user?.pronoun">({{ user.pronoun }})</span></ion-label>

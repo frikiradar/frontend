@@ -36,7 +36,9 @@ export class RadarPage implements OnInit {
     if (this.user && this.user.id) {
       if (!this.user.roles.includes("ROLE_ADMIN")) {
         try {
-          const coordinates = await this.geolocation.getCurrentPosition();
+          const coordinates = await this.geolocation.getCurrentPosition({
+            enableHighAccuracy: true
+          });
           const longitude = coordinates.coords.longitude;
           const latitude = coordinates.coords.latitude;
           this.user = await this.userSvc.setCoordinates(longitude, latitude);

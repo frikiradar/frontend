@@ -1,15 +1,16 @@
 ion-item {
-    --background: #1a1a1a;
-    --border-color: #e91e63;
+  --background: #1a1a1a;
+  --border-color: #e91e63;
 
-    p {
-        color: #dddddd;
-    }
+  p {
+    color: #dddddd;
+  }
 
-    ion-badge {
-        position: absolute;
-        left: 45px;
-        border-radius: 15px;
-        z-index: 1;
-    }
+  ion-badge {
+    position: absolute;
+    left: 45px;
+    border-radius: 15px;
+    z-index: 1;
+    width: 20px;
+  }
 }

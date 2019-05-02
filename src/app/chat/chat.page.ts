@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { User } from "../models/user";
@@ -10,13 +10,13 @@ import { ChatService } from "./../services/chat.service";
   templateUrl: "./chat.page.html",
   styleUrls: ["./chat.page.scss"]
 })
-export class ChatPage implements OnInit {
+export class ChatPage {
   chats: Chat[];
   showSkeleton = true;
 
   constructor(private router: Router, private chatSvc: ChatService) {}
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     this.chats = await this.chatSvc.getChats();
     this.showSkeleton = false;
   }

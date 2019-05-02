@@ -42,7 +42,7 @@ export class ActivateAccountPage {
         this.codeForm.get("code").value.toUpperCase()
       );
       this.auth.setAuthUser(user);
-      this.nav.navigateRoot(["/tabs/radar"]);
+      this.nav.navigateRoot(["/"]);
     } catch (e) {
       this.codeForm.get("code").setValue("");
 

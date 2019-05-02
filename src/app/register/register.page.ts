@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -28,7 +28,8 @@ export class RegisterPage {
     public fb: FormBuilder,
     private nav: NavController,
     private toast: Toast,
-    public userSvc: UserService
+    public userSvc: UserService,
+    private ngZone: NgZone
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [
@@ -105,7 +106,8 @@ export class RegisterPage {
     this.toast
       .show("Registro realizado correctamente", "short", "bottom")
       .subscribe();
-    this.nav.navigateRoot(["/tabs/radar"]);
+
+    this.ngZone.run(() => this.nav.navigateRoot(["/tabs/radar"])).then();
   }
 
   async registerError(error: string) {

@@ -8,6 +8,7 @@ import { AlertController, NavController, Platform } from "@ionic/angular";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
+import { PushService } from "./services/push.service";
 
 @Component({
   selector: "app-root",
@@ -26,7 +27,8 @@ export class AppComponent {
     private toast: Toast,
     private network: Network,
     private splashScreen: SplashScreen,
-    private platform: Platform
+    private platform: Platform,
+    private push: PushService
   ) {
     this.initializeApp();
   }
@@ -39,6 +41,10 @@ export class AppComponent {
       this.backButtonStatus();
       this.auth.currentUser.subscribe(async authUser => {
         this.currentUser = authUser;
+
+        if (this.platform.is("android") || this.platform.is("ios")) {
+          this.push.init();
+        }
       });
     });
   }

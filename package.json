@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "^7.2.2",
     "@angular/router": "^7.2.2",
     "@angular/service-worker": "^7.2.14",
-    "@capacitor/core": "^1.0.0-beta.19",
+    "@capacitor/core": "^1.0.0-beta.22",
     "@ionic-native/base64": "^5.5.1",
     "@ionic-native/camera": "^5.5.1",
     "@ionic-native/clipboard": "^5.5.1",
@@ -43,12 +43,12 @@
     "@ionic-native/vibration": "^5.5.1",
     "@ionic/angular": "^4.3.1",
     "com-badrit-base64": "0.2.0",
-    "cordova-android": "8.0.0",
+    "cordova-android": "^8.0.0",
     "cordova-clipboard": "1.2.1",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-crop": "0.4.0",
     "cordova-plugin-facebook4": "4.2.1",
-    "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
+    "cordova-plugin-fcm-with-dependency-updated-apns": "1.2.0",
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-navigationbar-color": "0.0.8",
     "cordova-plugin-network-information": "2.0.1",
@@ -120,9 +120,9 @@
       "cordova-plugin-vibration": {},
       "cordova-clipboard": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-fcm-with-dependecy-updated": {},
       "cordova-plugin-navigationbar-color": {},
-      "cordova-plugin-crop": {}
+      "cordova-plugin-crop": {},
+      "cordova-plugin-fcm-with-dependency-updated-apns": {}
     },
     "platforms": [
       "android"

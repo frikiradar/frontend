@@ -326,7 +326,9 @@ export class EditProfilePage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE,
       saveToPhotoAlbum: mode === "camera" ? true : false,
       cameraDirection: 1,
-      correctOrientation: true
+      correctOrientation: true,
+      targetHeight: 1024,
+      targetWidth: 1024
     });
 
     try {
@@ -351,7 +353,7 @@ export class EditProfilePage implements OnInit {
         console.error(e);
       }
     } catch (e) {
-      console.error(`Error al recortar la imagen. ${e}`);
+      console.error("Error al recortar la imagen.", e);
     }
   }
 
