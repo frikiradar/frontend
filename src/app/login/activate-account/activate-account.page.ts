@@ -8,6 +8,7 @@ import {
 import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, NavController } from "@ionic/angular";
 
+import { User } from "src/app/models/user";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 
@@ -18,6 +19,9 @@ import { UserService } from "../../services/user.service";
 })
 export class ActivateAccountPage {
   public codeForm: FormGroup;
+  public emailForm: FormGroup;
+  public user: User;
+  public changingEmail = false
 
   constructor(
     public fb: FormBuilder,
@@ -27,6 +31,8 @@ export class ActivateAccountPage {
     private nav: NavController,
     private toast: Toast
   ) {
+    this.user = this.auth.currentUserValue
+
     this.codeForm = fb.group({
       code: new FormControl("", [
         Validators.required,
@@ -34,14 +40,21 @@ export class ActivateAccountPage {
         Validators.maxLength(6)
       ])
     });
+
+    this.emailForm = fb.group({
+      email: new FormControl("", [
+        Validators.required,
+        Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$"),
+      ]),
+    });
   }
 
   async submitCode() {
     try {
-      const user = await this.userSvc.activateUser(
+      this.user = await this.userSvc.activateUser(
         this.codeForm.get("code").value.toUpperCase()
       );
-      this.auth.setAuthUser(user);
+      this.auth.setAuthUser(this.user);
       this.nav.navigateRoot(["/"]);
     } catch (e) {
       this.codeForm.get("code").setValue("");
@@ -65,6 +78,30 @@ export class ActivateAccountPage {
         "bottom"
       )
       .subscribe();
+  }
+
+  async changeEmail() {
+    try {
+      this.user = await this.userSvc.changeEmail(
+        this.user.email,
+        this.emailForm.get("email").value
+      );
+      this.auth.setAuthUser(this.user);
+      this.resendCode()
+      this.changingEmail = false
+    } catch (e) {
+      const alert = await this.alert.create({
+        header: "Error al cambiar el email",
+        message: "Revisa el email introducido y vuelve a intentarlo.",
+        buttons: ["Ok, gracias"]
+      });
+
+      alert.present();
+    }
+  }
+
+  back() {
+    this.changingEmail = false
   }
 
   close() {

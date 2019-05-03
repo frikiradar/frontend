@@ -17,7 +17,7 @@ export class UserService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService
-  ) {}
+  ) { }
 
   async getUser(id: User["id"]): Promise<User> {
     try {
@@ -74,6 +74,15 @@ export class UserService {
       .put("password", {
         old_password,
         new_password
+      })
+      .toPromise() as Promise<User>;
+  }
+
+  changeEmail(old_email: string, new_email: string) {
+    return this.rest
+      .put("email", {
+        old_email,
+        new_email
       })
       .toPromise() as Promise<User>;
   }

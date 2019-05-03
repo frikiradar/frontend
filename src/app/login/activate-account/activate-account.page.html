@@ -1,5 +1,5 @@
 <ion-header no-border>
-  <ion-toolbar>
+  <ion-toolbar *ngIf="!changingEmail">
     <ion-buttons slot="start">
       <ion-button (click)="close()">
         <ion-icon name="close"></ion-icon>
@@ -7,19 +7,53 @@
     </ion-buttons>
     <ion-title>Cuenta no activada</ion-title>
   </ion-toolbar>
+  <ion-toolbar *ngIf="changingEmail">
+    <ion-buttons slot="start">
+      <ion-button (click)="back()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Cambiar correo electrónico</ion-title>
+  </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <h4>¡Te hemos enviado un código de seguridad al email!</h4>
-  <p>
-    Introduce el código de seguridad para activar tu cuenta.
-  </p>
-  <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
-    <ion-item id="code">
-      <ion-input autocomplete="off" formControlName="code" maxlength="6" autocapitalize="characters"
-        placeholder="Código de seguridad" type="text"></ion-input>
-    </ion-item>
-    <ion-button class="dismiss" color="primary" expand="block" type="submit" [disabled]="codeForm.invalid">Activar la
-      cuenta</ion-button>
-  </form>
-  <p color="primary" text-center (click)="resendCode()">No he recibido mi código</p>
+  <div *ngIf="!changingEmail">
+    <h4>Te hemos enviado un código de seguridad al email {{user.email}}</h4>
+    <p>
+      Introduce el código de seguridad para activar tu cuenta.
+    </p>
+    <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
+      <ion-item id="code">
+        <ion-input autocomplete="off" formControlName="code" maxlength="6" autocapitalize="characters"
+          placeholder="Código de seguridad" type="text"></ion-input>
+      </ion-item>
+      <ion-button class="dismiss" color="primary" expand="block" type="submit" [disabled]="codeForm.invalid">Activar la
+        cuenta</ion-button>
+    </form>
+    <p color="primary" text-center (click)="resendCode()">No he recibido mi código</p>
+  </div>
+  <div *ngIf="changingEmail">
+    <h4>¡Revisa tu dirección de correo!</h4>
+    <p>Asegúrate de introducirla correctamente.</p>
+    <form (submit)="changeEmail()" [formGroup]="emailForm" autocomplete="off" *ngIf="changingEmail">
+      <ion-item>
+        <ion-label position="floating">Correo electrónico</ion-label>
+        <ion-input required type="email" autocomplete="email" formControlName="email" debounce="500" name="email"
+          [value]="user.email">
+        </ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="
+              emailForm.get('email').invalid && emailForm.get('email').value
+            ">
+        <ion-icon name="information-circle-outline"></ion-icon>Introduce una
+        dirección de correo electrónico válida.
+      </div>
+      <ion-button class="dismiss" color="primary" expand="block" type="submit"
+        [disabled]="emailForm.invalid || emailForm.pristine">Confirmar
+        cambio</ion-button>
+    </form>
+  </div>
 </ion-content>
+<ion-footer *ngIf="!changingEmail">
+  <p color="primary" text-center (click)="changingEmail = true">El email no es correcto</p>
+</ion-footer>
