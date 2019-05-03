@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
@@ -28,7 +29,8 @@ export class AppComponent {
     private network: Network,
     private splashScreen: SplashScreen,
     private platform: Platform,
-    private push: PushService
+    private push: PushService,
+    private launchReview: LaunchReview
   ) {
     this.initializeApp();
   }
@@ -46,6 +48,11 @@ export class AppComponent {
           this.push.init();
         }
       });
+
+      // Veces abierto
+      if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
+        this.countOpenTimes();
+      }
     });
   }
 
@@ -90,5 +97,53 @@ export class AppComponent {
         this.backButtonCount = 0;
       }
     });
+  }
+
+  async countOpenTimes() {
+    let config = JSON.parse(localStorage.getItem("config"));
+    let openTimes: number;
+    if (config) {
+      openTimes = config.openTimes ? ++config.openTimes : 1;
+      config.openTimes = openTimes;
+    } else {
+      openTimes = this.auth.currentUserValue.num_logins++;
+      config = { openTimes };
+    }
+    localStorage.setItem("config", JSON.stringify(config));
+
+    if (openTimes >= 2 && !config.review) {
+      const alert = await this.alert.create({
+        header: "¡Únete a la batalla!",
+        message:
+          "¿Qué te parece FrikiRadar? Déjanos tu valoración de 5 estrellas y una sugerencia para que cada vez más personas formen parte de esta gran comunidad.",
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: "Sí, ¡cuenta conmigo! 🏹",
+            handler: () => {
+              config.review = true;
+              localStorage.setItem("config", JSON.stringify(config));
+              if (this.launchReview.isRatingSupported()) {
+                this.launchReview.rating().then();
+              } else {
+                this.launchReview.launch().then();
+              }
+            }
+          },
+          {
+            text: "La próxima vez mejor 🙏"
+          },
+          {
+            text: "Mmm, mejor no 🙈",
+            handler: () => {
+              config.review = true;
+              localStorage.setItem("config", JSON.stringify(config));
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    }
   }
 }

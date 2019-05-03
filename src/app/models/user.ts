@@ -45,4 +45,6 @@ export interface User {
   hide_location?: boolean;
   block_messages?: boolean;
   two_step?: boolean;
+
+  num_logins: number;
 }

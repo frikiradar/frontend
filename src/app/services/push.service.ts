@@ -46,9 +46,14 @@ export class PushService {
       }
     );
 
-    this.fcm.onTokenRefresh().subscribe(token => {
-      console.log(token);
-      this.device.setDevice(token);
-    });
+    this.fcm.onTokenRefresh().subscribe(
+      token => {
+        console.log(token);
+        this.device.setDevice(token);
+      },
+      error => {
+        console.error("Error in tokenRefresh", error);
+      }
+    );
   }
 }
