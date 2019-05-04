@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
-import { Facebook } from "@ionic-native/facebook/ngx";
+// import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { ImagePicker } from "@ionic-native/image-picker/ngx";
@@ -51,7 +51,7 @@ registerLocaleData(localeEs, "es");
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: "es" },
-    Facebook,
+    // Facebook,
     Device,
     Toast,
     Network,

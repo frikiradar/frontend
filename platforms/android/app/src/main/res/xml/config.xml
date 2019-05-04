@@ -1,26 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.frikiradar.app" version="0.3.7" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.frikiradar.app" version="0.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Base64">
         <param name="android-package" value="com.badrit.Base64.Base64Plugin" />
     </feature>
     <feature name="Clipboard">
         <param name="android-package" value="com.verso.cordova.clipboard.Clipboard" />
     </feature>
+    <feature name="LaunchReview">
+        <param name="android-package" value="uk.co.workingedge.phonegap.plugin.LaunchReview" />
+    </feature>
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
+    <feature name="CropPlugin">
+        <param name="android-package" value="com.jeduan.crop.CropPlugin" />
     </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>
-    <feature name="FacebookConnectPlugin">
-        <param name="android-package" value="org.apache.cordova.facebook.ConnectPlugin" />
+    <feature name="FCMPlugin">
+        <param name="android-package" value="com.gae.scaffolder.plugin.FCMPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <access origin="https://m.facebook.com" />
-    <access origin="https://graph.facebook.com" />
-    <access origin="https://api.facebook.com" />
-    <access origin="https://*.fbcdn.net" />
-    <access origin="https://*.akamaihd.net" />
     <feature name="Geolocation">
         <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
     </feature>
@@ -39,25 +40,15 @@
         <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="ImagePicker">
+        <param name="android-package" value="com.synconset.ImagePicker" />
+    </feature>
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
     <feature name="Toast">
         <param name="android-package" value="nl.xservices.plugins.Toast" />
-    </feature>
-    <feature name="CropPlugin">
-        <param name="android-package" value="com.jeduan.crop.CropPlugin" />
-    </feature>
-    <feature name="FCMPlugin">
-        <param name="android-package" value="com.gae.scaffolder.plugin.FCMPlugin" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="LaunchReview">
-        <param name="android-package" value="uk.co.workingedge.phonegap.plugin.LaunchReview" />
-    </feature>
-    <feature name="ImagePicker">
-        <param name="android-package" value="com.synconset.ImagePicker" />
     </feature>
     <feature name="Keyboard">
         <param name="android-package" onload="true" value="io.ionic.keyboard.IonicKeyboard" />
@@ -84,8 +75,13 @@
     <allow-navigation href="data:*" />
     <allow-intent href="market:*" />
     <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
-        <application android:icon="@mipmap/ic_launcher" android:usesCleartextTraffic="true" />
+        <application android:usesCleartextTraffic="true" />
     </edit-config>
+    <config-file parent="/manifest/application" target="AndroidManifest.xml">
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_stat_name" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity android:label="@string/multi_app_name" android:name="com.synconset.MultiImageChooserActivity" android:theme="@style/Theme.AppCompat.Light" />
+    </config-file>
     <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
     <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
@@ -105,18 +101,18 @@
     <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
     <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     <preference name="loglevel" value="DEBUG" />
-    <preference name="android-minSdkVersion" value="23" />
     <preference name="webView" value="com.ionicframework.cordova.webview.IonicWebViewEngine" />
     <preference name="Hostname" value="frikiradar" />
     <preference name="ScrollEnabled" value="false" />
+    <preference name="android-minSdkVersion" value="23" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
-    <preference name="FadeSplashScreenDuration" value="1000" />
+    <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="3000" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="NavigationBarBackgroundColor" value="#1a1a1a" />
+    <preference name="SplashScreenDelay" value="3000" />
     <preference name="Scheme" value="https" />
     <preference name="MixedContentMode" value="0" />
 </widget>

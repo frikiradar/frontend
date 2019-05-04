@@ -6,7 +6,7 @@ import {
   Validators
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
+// import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import {
   AlertController,
@@ -40,9 +40,9 @@ export class LoginPage {
     private modal: ModalController,
     private toast: Toast,
     public formBuilder: FormBuilder,
-    private nav: NavController,
-    private fb: Facebook
-  ) {
+    private nav: NavController
+  ) // private fb: Facebook
+  {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
     }
@@ -113,11 +113,11 @@ export class LoginPage {
   }
 
   async loginFacebook() {
-    this.fb
+    /*  this.fb
       .login(["public_profile", "email"])
       .then((res: FacebookLoginResponse) =>
         console.log("Logged into Facebook!", res)
       )
-      .catch(e => console.error("Error logging into Facebook", e));
+      .catch(e => console.error("Error logging into Facebook", e));*/
   }
 }

@@ -17,6 +17,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-launch-review.LaunchReview",
+      "file": "plugins/cordova-launch-review/www/launchreview.js",
+      "pluginId": "cordova-launch-review",
+      "clobbers": [
+        "LaunchReview"
+      ]
+    },
+    {
       "id": "cordova-plugin-camera.Camera",
       "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
       "pluginId": "cordova-plugin-camera",
@@ -49,6 +57,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-crop.CropPlugin",
+      "file": "plugins/cordova-plugin-crop/www/crop.js",
+      "pluginId": "cordova-plugin-crop",
+      "clobbers": [
+        "plugins.crop"
+      ]
+    },
+    {
       "id": "cordova-plugin-device.device",
       "file": "plugins/cordova-plugin-device/www/device.js",
       "pluginId": "cordova-plugin-device",
@@ -57,11 +73,11 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
-      "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
-      "pluginId": "cordova-plugin-facebook4",
+      "id": "cordova-plugin-fcm-with-dependecy-updated.FCMPlugin",
+      "file": "plugins/cordova-plugin-fcm-with-dependecy-updated/www/FCMPlugin.js",
+      "pluginId": "cordova-plugin-fcm-with-dependecy-updated",
       "clobbers": [
-        "facebookConnectPlugin"
+        "FCMPlugin"
       ]
     },
     {
@@ -136,52 +152,30 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-x-toast.Toast",
-      "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
-      "pluginId": "cordova-plugin-x-toast",
-      "clobbers": [
-        "window.plugins.toast"
-      ]
-    },
-    {
-      "id": "cordova-plugin-crop.CropPlugin",
-      "file": "plugins/cordova-plugin-crop/www/crop.js",
-      "pluginId": "cordova-plugin-crop",
-      "clobbers": [
-        "plugins.crop"
-      ]
-    },
-    {
-      "id": "cordova-plugin-fcm-with-dependency-updated-apns.FCMPlugin",
-      "file": "plugins/cordova-plugin-fcm-with-dependency-updated-apns/www/FCMPlugin.js",
-      "pluginId": "cordova-plugin-fcm-with-dependency-updated-apns",
-      "clobbers": [
-        "FCMPlugin"
-      ]
-    },
-    {
-      "id": "cordova-launch-review.LaunchReview",
-      "file": "plugins/cordova-launch-review/www/launchreview.js",
-      "pluginId": "cordova-launch-review",
-      "clobbers": [
-        "LaunchReview"
-      ]
-    },
-    {
       "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
       "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
       "pluginId": "cordova-plugin-telerik-imagepicker",
       "clobbers": [
         "plugins.imagePicker"
       ]
+    },
+    {
+      "id": "cordova-plugin-x-toast.Toast",
+      "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+      "pluginId": "cordova-plugin-x-toast",
+      "clobbers": [
+        "window.plugins.toast"
+      ]
     }
   ];
   module.exports.metadata = {
     "com-badrit-base64": "0.2.0",
     "cordova-clipboard": "1.2.1",
+    "cordova-launch-review": "3.1.1",
     "cordova-plugin-camera": "4.0.3",
+    "cordova-plugin-crop": "0.3.1",
     "cordova-plugin-device": "2.0.2",
-    "cordova-plugin-facebook4": "4.2.1",
+    "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-ionic-keyboard": "2.1.3",
     "cordova-plugin-ionic-webview": "4.0.1",
@@ -189,12 +183,9 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-network-information": "2.0.1",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-telerik-imagepicker": "2.3.2",
     "cordova-plugin-vibration": "3.1.0",
     "cordova-plugin-whitelist": "1.3.3",
-    "cordova-plugin-x-toast": "2.7.2",
-    "cordova-plugin-crop": "0.3.1",
-    "cordova-plugin-fcm-with-dependency-updated-apns": "1.0.0",
-    "cordova-launch-review": "3.1.1",
-    "cordova-plugin-telerik-imagepicker": "2.3.2"
+    "cordova-plugin-x-toast": "2.7.2"
   };
 });

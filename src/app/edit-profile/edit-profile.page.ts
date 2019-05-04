@@ -301,14 +301,14 @@ export class EditProfilePage implements OnInit {
           text: "Desde la cámara",
           icon: "camera",
           handler: () => {
-            this.takePhoto();
+            this.takePicture("camera");
           }
         },
         {
           text: "Desde tus fotos",
           icon: "images",
           handler: () => {
-            this.takePicture();
+            this.takePicture("gallery");
           }
         }
       ]
@@ -316,57 +316,43 @@ export class EditProfilePage implements OnInit {
     await actionSheet.present();
   }
 
-  async takePicture() {
-    const images = await this.imagePicker.getPictures({
-      maximumImagesCount: 1,
-      outputType: 0
-    });
+  async takePicture(mode: string) {
+    let image: any;
 
-    try {
-      const newImage = await this.crop.crop(images[0], {
-        quality: 50,
-        targetWidth: 512,
-        targetHeight: 512
-      });
+    switch (mode) {
+      case "camera":
+        image = await this.camera.getPicture({
+          quality: 70,
+          destinationType: this.camera.DestinationType.FILE_URI,
+          encodingType: this.camera.EncodingType.JPEG,
+          sourceType:
+            mode === "camera"
+              ? this.camera.PictureSourceType.CAMERA
+              : this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+          mediaType: this.camera.MediaType.PICTURE,
+          saveToPhotoAlbum: mode === "camera" ? true : false,
+          cameraDirection: 1,
+          correctOrientation: true,
+          targetWidth: 1024
+        });
 
-      const base64File = await this.base64.encodeFile(newImage);
-      const blob: Blob = this.utils.base64toBlob(base64File);
-      const avatar: File = new File([blob], "avatar.png");
-      try {
-        this.user.avatar = await this.userSvc.uploadAvatar(avatar);
-        this.toast
-          .show(`Imagen actualizada correctamente.`, "long", "center")
-          .subscribe();
-      } catch (e) {
-        this.toast
-          .show(`Error al actualizar la imagen.`, "long", "center")
-          .subscribe();
-        console.error(e);
-      }
-    } catch (e) {
-      console.error("Error al recortar la imagen.", e);
+        break;
+      case "gallery":
+        image = (await this.imagePicker.getPictures({
+          maximumImagesCount: 1,
+          outputType: 0,
+          width: 1024,
+          quality: 70
+        }))[0];
+
+        break;
     }
-  }
-
-  async takePhoto() {
-    const image = await this.camera.getPicture({
-      quality: 50,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      sourceType: this.camera.PictureSourceType.CAMERA,
-      mediaType: this.camera.MediaType.PICTURE,
-      saveToPhotoAlbum: true,
-      cameraDirection: 1,
-      correctOrientation: true,
-      targetHeight: 512,
-      targetWidth: 512
-    });
 
     try {
       const newImage = await this.crop.crop(image, {
-        quality: 50,
-        targetWidth: 512,
-        targetHeight: 512
+        quality: 100,
+        targetWidth: -1,
+        targetHeight: -1
       });
 
       const base64File = await this.base64.encodeFile(newImage);

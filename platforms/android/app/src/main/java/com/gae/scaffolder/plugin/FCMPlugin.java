@@ -17,24 +17,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Map;
 
-import android.app.NotificationManager;
-import android.app.NotificationChannel;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-
-import android.graphics.Color;
-import android.provider.Settings;
-import android.os.Bundle;
-import android.view.View;
-
-
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
-
-
-
 public class FCMPlugin extends CordovaPlugin {
  
 	private static final String TAG = "FCMPlugin";
@@ -44,8 +26,6 @@ public class FCMPlugin extends CordovaPlugin {
 	public static String tokenRefreshCallBack = "FCMPlugin.onTokenRefreshReceived";
 	public static Boolean notificationCallBackReady = false;
 	public static Map<String, Object> lastPush = null;
-
-
 	 
 	public FCMPlugin() {}
 	
@@ -86,7 +66,7 @@ public class FCMPlugin extends CordovaPlugin {
 				notificationCallBackReady = true;
 				cordova.getActivity().runOnUiThread(new Runnable() {
 					public void run() {
-						if(lastPush != null) FCMPlugin.sendPushPayload( lastPush,null,null );
+						if(lastPush != null) FCMPlugin.sendPushPayload( lastPush );
 						lastPush = null;
 						callbackContext.success();
 					}
@@ -141,14 +121,10 @@ public class FCMPlugin extends CordovaPlugin {
 		return true;
 	}
 	
-	public static void sendPushPayload(Map<String, Object> payload,RemoteMessage remoteMessage,Context context) {
+	public static void sendPushPayload(Map<String, Object> payload) {
 		Log.d(TAG, "==> FCMPlugin sendPushPayload");
 		Log.d(TAG, "\tnotificationCallBackReady: " + notificationCallBackReady);
 		Log.d(TAG, "\tgWebView: " + gWebView);
-		if( gWebView == null && remoteMessage!=null && context!=null){
-			showNotification(remoteMessage,context);
-			return;
-		}
 	    try {
 		    JSONObject jo = new JSONObject();
 			for (String key : payload.keySet()) {
@@ -168,54 +144,6 @@ public class FCMPlugin extends CordovaPlugin {
 			lastPush = payload;
 		}
 	}
-
-	public static void showNotification(RemoteMessage remoteMessage,Context context){
-		NotificationManager mNotificationManager;
-    	NotificationCompat.Builder mBuilder;
-    	String NOTIFICATION_CHANNEL_ID = "10001";
-        Intent resultIntent = new Intent(context , FCMPluginActivity.class);
-        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        String  title="New Message";
-        String  body=null;
-        
-        if(remoteMessage!=null && remoteMessage.getData()!=null){
-            Log.d(TAG,"hello");
-           for (String key : remoteMessage.getData().keySet()) {
-             resultIntent.putExtra(key, remoteMessage.getData().get(key).toString());
-            Log.d(TAG,"key"+key+"value"+remoteMessage.getData().get(key).toString());
-             if(body==null && key.equals("twi_body")){
-                 body=remoteMessage.getData().get(key).toString();
-             }
-            }
-        }
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
-        0,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-        mBuilder = new NotificationCompat.Builder(context);
-        mBuilder.setSmallIcon(context.getApplicationInfo().icon);
-        mBuilder.setContentTitle(title)
-        .setContentText(body)
-        .setAutoCancel(true)
-        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-        .setContentIntent(resultPendingIntent);
-
-        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
-        {
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-        NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "NOTIFICATION_CHANNEL_NAME", importance);
-        notificationChannel.enableLights(true);
-        notificationChannel.setLightColor(Color.RED);
-        notificationChannel.enableVibration(true);
-        notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-        assert mNotificationManager != null;
-        mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
-        mNotificationManager.createNotificationChannel(notificationChannel);
-        }
-        assert mNotificationManager != null;
-        mNotificationManager.notify(0, mBuilder.build());
-    }
 
 	public static void sendTokenRefresh(String token) {
 		Log.d(TAG, "==> FCMPlugin sendRefreshToken");
