@@ -11,6 +11,7 @@ import { Device } from "@ionic-native/device/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { ImagePicker } from "@ionic-native/image-picker/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -59,7 +60,8 @@ registerLocaleData(localeEs, "es");
     SplashScreen,
     FCM,
     Clipboard,
-    LaunchReview
+    LaunchReview,
+    ImagePicker
   ],
   bootstrap: [AppComponent]
 })

@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
+import { ImagePicker } from "@ionic-native/image-picker/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import {
   ActionSheetController,
@@ -72,6 +73,7 @@ export class EditProfilePage implements OnInit {
     private base64: Base64,
     private utils: UtilsService,
     private camera: Camera,
+    private imagePicker: ImagePicker,
     private router: Router,
     private toast: Toast
   ) {
@@ -299,14 +301,14 @@ export class EditProfilePage implements OnInit {
           text: "Desde la cámara",
           icon: "camera",
           handler: () => {
-            this.takePicture("camera");
+            this.takePhoto();
           }
         },
         {
           text: "Desde tus fotos",
           icon: "images",
           handler: () => {
-            this.takePicture("gallery");
+            this.takePicture();
           }
         }
       ]
@@ -314,28 +316,57 @@ export class EditProfilePage implements OnInit {
     await actionSheet.present();
   }
 
-  async takePicture(mode: string) {
+  async takePicture() {
+    const images = await this.imagePicker.getPictures({
+      maximumImagesCount: 1,
+      outputType: 0
+    });
+
+    try {
+      const newImage = await this.crop.crop(images[0], {
+        quality: 50,
+        targetWidth: 512,
+        targetHeight: 512
+      });
+
+      const base64File = await this.base64.encodeFile(newImage);
+      const blob: Blob = this.utils.base64toBlob(base64File);
+      const avatar: File = new File([blob], "avatar.png");
+      try {
+        this.user.avatar = await this.userSvc.uploadAvatar(avatar);
+        this.toast
+          .show(`Imagen actualizada correctamente.`, "long", "center")
+          .subscribe();
+      } catch (e) {
+        this.toast
+          .show(`Error al actualizar la imagen.`, "long", "center")
+          .subscribe();
+        console.error(e);
+      }
+    } catch (e) {
+      console.error("Error al recortar la imagen.", e);
+    }
+  }
+
+  async takePhoto() {
     const image = await this.camera.getPicture({
-      quality: 100,
+      quality: 50,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
-      sourceType:
-        mode === "camera"
-          ? this.camera.PictureSourceType.CAMERA
-          : this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      sourceType: this.camera.PictureSourceType.CAMERA,
       mediaType: this.camera.MediaType.PICTURE,
-      saveToPhotoAlbum: mode === "camera" ? true : false,
+      saveToPhotoAlbum: true,
       cameraDirection: 1,
       correctOrientation: true,
-      targetHeight: 1024,
-      targetWidth: 1024
+      targetHeight: 512,
+      targetWidth: 512
     });
 
     try {
       const newImage = await this.crop.crop(image, {
-        quality: 70,
-        targetWidth: -1,
-        targetHeight: -1
+        quality: 50,
+        targetWidth: 512,
+        targetHeight: 512
       });
 
       const base64File = await this.base64.encodeFile(newImage);

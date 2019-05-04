@@ -34,6 +34,7 @@
     "@ionic-native/facebook": "^5.5.1",
     "@ionic-native/fcm": "^5.5.1",
     "@ionic-native/geolocation": "^5.5.1",
+    "@ionic-native/image-picker": "^5.5.1",
     "@ionic-native/ionic-webview": "^5.5.1",
     "@ionic-native/launch-review": "^5.5.1",
     "@ionic-native/navigation-bar": "^5.5.1",
@@ -54,6 +55,7 @@
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-navigationbar-color": "0.0.8",
     "cordova-plugin-network-information": "2.0.1",
+    "cordova-plugin-telerik-imagepicker": "2.3.2",
     "cordova-plugin-vibration": "3.1.0",
     "cordova-plugin-x-toast": "2.7.2",
     "core-js": "^2.5.4",
@@ -125,7 +127,8 @@
       "cordova-plugin-navigationbar-color": {},
       "cordova-plugin-crop": {},
       "cordova-plugin-fcm-with-dependency-updated-apns": {},
-      "cordova-launch-review": {}
+      "cordova-launch-review": {},
+      "cordova-plugin-telerik-imagepicker": {}
     },
     "platforms": [
       "android"
