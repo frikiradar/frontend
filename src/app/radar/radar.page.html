@@ -16,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content #radarlist>
   <div *ngIf="users?.length || showSkeleton; else noUsers">
     <!--<p padding>
       Estos son los resultados obtenidos

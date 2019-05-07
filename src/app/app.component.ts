@@ -155,7 +155,7 @@ export class AppComponent {
     const alert = await this.alert.create({
       header: "En desarrollo",
       message:
-        "Ayúdanos en nuestro reto para ser la aplicación de citas para frikis nº1 😎. Cuéntale a tus amigos y envíanos errores o sugerencias hola@frikiradar.com ¡Te obsequiaremos con una cuenta premium gratuita! 😁",
+        "Ayúdanos en nuestro reto para ser la aplicación de citas para frikis nº1. Cuéntale a tus amigos y envíanos errores o sugerencias a hola@frikiradar.com ¡Te obsequiaremos con una cuenta premium gratuita! 😁",
       buttons: [
         {
           text: "¡Comenzar la aventura!"

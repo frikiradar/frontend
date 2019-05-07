@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { IonRange, MenuController } from "@ionic/angular";
+import { IonContent, IonRange, MenuController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -15,6 +15,8 @@ import { AuthService } from "./../services/auth.service";
 export class RadarPage implements OnInit {
   @ViewChild("range")
   range: IonRange;
+  @ViewChild("radarlist")
+  radarlist: IonContent;
 
   public showSkeleton = true;
   ratio = 25;
@@ -98,7 +100,9 @@ export class RadarPage implements OnInit {
         this.ratio = 100000;
         break;
     }
-    this.page = 1;
+    this.page = 0;
+    this.users = [];
+    this.radarlist.scrollToTop(0);
     this.getRadarUsers();
   }
 
