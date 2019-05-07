@@ -18,9 +18,9 @@ export class RadarPage implements OnInit {
 
   public showSkeleton = true;
   ratio = 25;
-  page = 1;
+  page = 0;
   user: User;
-  users: User[];
+  users: User[] = [];
 
   constructor(
     public userSvc: UserService,
@@ -52,12 +52,21 @@ export class RadarPage implements OnInit {
     }
   }
 
-  async getRadarUsers() {
+  async getRadarUsers(event?: any) {
     try {
-      const users = await this.userSvc.getRadarUsers(this.ratio);
+      this.page++;
+      const users = await this.userSvc.getRadarUsers(this.ratio, this.page);
 
       this.showSkeleton = false;
-      this.users = users;
+      this.users = [...this.users, ...users];
+
+      if (event) {
+        event.target.complete();
+
+        if (this.users.length < 15) {
+          event.target.disabled = true;
+        }
+      }
     } catch (e) {
       console.error(e);
     }
@@ -91,17 +100,6 @@ export class RadarPage implements OnInit {
     }
     this.page = 1;
     this.getRadarUsers();
-  }
-
-  async loadUsers(event: any) {
-    this.page++;
-    const users = await this.userSvc.getRadarUsers(this.ratio, this.page);
-    this.users = [...this.users, ...users];
-    event.target.complete();
-
-    if (this.users.length < 15) {
-      event.target.disabled = true;
-    }
   }
 
   search() {

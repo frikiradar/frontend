@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 
 import {
   Notification,
@@ -10,15 +10,21 @@ import {
   templateUrl: "tabs.page.html",
   styleUrls: ["tabs.page.scss"]
 })
-export class TabsPage {
+export class TabsPage implements OnInit {
   public counters: Notification;
 
-  constructor(private notificationSvc: NotificationService) {}
+  constructor(
+    private notificationSvc: NotificationService,
+    public detectorRef: ChangeDetectorRef
+  ) {}
 
-  async ionViewWillEnter() {
+  async ngOnInit() {
     this.counters = (await this.notificationSvc.getUnread()) as Notification;
     this.notificationSvc.setNotification(this.counters);
 
-    this.notificationSvc.notification.subscribe(notification => this.counters);
+    this.notificationSvc.notification.subscribe(notification => {
+      this.counters = notification;
+      this.detectorRef.detectChanges();
+    });
   }
 }

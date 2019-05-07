@@ -18,24 +18,6 @@ const routes: Routes = [
         ]
       },
       {
-        path: "search",
-        children: [
-          {
-            path: "",
-            loadChildren: "../search/search.module#SearchPageModule"
-          }
-        ]
-      },
-      {
-        path: "search/:query",
-        children: [
-          {
-            path: "",
-            loadChildren: "../search/search.module#SearchPageModule"
-          }
-        ]
-      },
-      {
         path: "chat",
         children: [
           {

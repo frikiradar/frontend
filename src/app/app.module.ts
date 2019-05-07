@@ -3,7 +3,10 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import localeEs from "@angular/common/locales/es";
 import { LOCALE_ID, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { BrowserModule } from "@angular/platform-browser";
+import {
+  BrowserModule,
+  HAMMER_GESTURE_CONFIG
+} from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -12,7 +15,9 @@ import { Device } from "@ionic-native/device/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { ImagePicker } from "@ionic-native/image-picker/ngx";
+import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
+import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
@@ -21,6 +26,7 @@ import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
+import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
@@ -51,6 +57,7 @@ registerLocaleData(localeEs, "es");
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: "es" },
+    { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
     // Facebook,
     Device,
     Toast,
@@ -61,7 +68,9 @@ registerLocaleData(localeEs, "es");
     FCM,
     Clipboard,
     LaunchReview,
-    ImagePicker
+    ImagePicker,
+    Keyboard,
+    LocalNotifications
   ],
   bootstrap: [AppComponent]
 })

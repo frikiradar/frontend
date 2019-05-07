@@ -37,14 +37,16 @@ export class AppComponent {
 
   async initializeApp() {
     this.platform.ready().then(async () => {
-      this.splashScreen.hide();
-      this.statusBar.backgroundColorByHexString("#1a1a1a");
+      if (this.platform.is("cordova")) {
+        this.splashScreen.hide();
+        this.statusBar.backgroundColorByHexString("#1a1a1a");
+      }
       this.networkStatus();
       this.backButtonStatus();
       this.auth.currentUser.subscribe(async authUser => {
         this.currentUser = authUser;
 
-        if (this.platform.is("android") || this.platform.is("ios")) {
+        if (this.platform.is("cordova")) {
           this.push.init();
         }
       });
@@ -52,6 +54,8 @@ export class AppComponent {
       // Veces abierto
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
         this.countOpenTimes();
+      } else {
+        this.betaAdvertisement();
       }
     });
   }
@@ -145,5 +149,20 @@ export class AppComponent {
 
       await alert.present();
     }
+  }
+
+  async betaAdvertisement() {
+    const alert = await this.alert.create({
+      header: "En desarrollo",
+      message:
+        "Ayúdanos en nuestro reto para ser la aplicación de citas para frikis nº1 😎. Cuéntale a tus amigos y envíanos errores o sugerencias hola@frikiradar.com ¡Te obsequiaremos con una cuenta premium gratuita! 😁",
+      buttons: [
+        {
+          text: "¡Comenzar la aventura!"
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

@@ -59,7 +59,7 @@
           </ion-label>
           <ion-note slot="end">{{ user.match }}%</ion-note>
         </ion-item>
-        <ion-infinite-scroll threshold="50%" (ionInfinite)="loadUsers($event)" position="bottom">
+        <ion-infinite-scroll threshold="50%" (ionInfinite)="getRadarUsers($event)" position="bottom">
           <ion-infinite-scroll-content loadingSpinner="dots">
           </ion-infinite-scroll-content>
         </ion-infinite-scroll>

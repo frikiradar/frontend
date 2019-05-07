@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
+import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import {
   AlertController,
   IonContent,
   IonInfiniteScroll,
   IonTextarea,
-  NavController
+  NavController,
+  Platform
 } from "@ionic/angular";
 
 import { SafeResourceUrl } from "@angular/platform-browser";
@@ -51,7 +53,9 @@ export class ChatUserPage implements OnInit {
     private chatSvc: ChatService,
     private toast: Toast,
     private alert: AlertController,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    public keyboard: Keyboard,
+    private platform: Platform
   ) {}
 
   async ngOnInit() {
@@ -72,9 +76,7 @@ export class ChatUserPage implements OnInit {
       this.infiniteScroll.disabled = true;
     }
 
-    setTimeout(() => {
-      this.scrollDown();
-    }, 500);
+    this.scrollDown(500);
 
     const min = Math.min(this.auth.currentUserValue.id, this.userId);
     const max = Math.max(this.auth.currentUserValue.id, this.userId);
@@ -99,17 +101,14 @@ export class ChatUserPage implements OnInit {
           // borramos los enviando...
           this.messages = this.messages.filter(m => !m.sending);
         }
-
-        this.messages = [...this.messages, message];
       }
-      setTimeout(() => {
-        this.scrollDown();
-      }, 100);
+      this.messages = [...this.messages, message];
+      this.scrollDown();
     });
 
     this.source.addEventListener("error", async error => {
       this.conErrors++;
-      if (error.type === "error" && this.conErrors) {
+      if (error.type === "error" && this.conErrors >= 2) {
         console.error(error);
         this.source.close();
         const alert = await this.alert.create({
@@ -133,6 +132,18 @@ export class ChatUserPage implements OnInit {
 
     this.source.addEventListener("open", async error => {
       this.conErrors = 0;
+    });
+
+    window.addEventListener("keyboardDidShow", event => {
+      this.scrollDown();
+    });
+
+    window.addEventListener("keyboardDidHide", event => {
+      this.scrollDown();
+    });
+
+    this.platform.backButton.subscribe(() => {
+      this.source.close();
     });
 
     this.textarea.setFocus();
@@ -162,12 +173,13 @@ export class ChatUserPage implements OnInit {
     }
   }
 
-  scrollDown() {
+  scrollDown(delay = 1) {
     if (!this.chatlist) {
       return;
     }
-
-    this.chatlist.scrollToBottom(0);
+    setTimeout(() => {
+      this.chatlist.scrollToBottom(0);
+    }, delay);
   }
 
   async loadChats(event: any) {
@@ -203,5 +215,6 @@ export class ChatUserPage implements OnInit {
 
   back() {
     this.nav.back();
+    this.source.close();
   }
 }

@@ -16,7 +16,8 @@ import {
   IonInput,
   IonSegment,
   IonSlides,
-  PickerController
+  PickerController,
+  Platform
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 
@@ -75,7 +76,8 @@ export class EditProfilePage implements OnInit {
     private camera: Camera,
     private imagePicker: ImagePicker,
     private router: Router,
-    private toast: Toast
+    private toast: Toast,
+    private platform: Platform
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -293,6 +295,10 @@ export class EditProfilePage implements OnInit {
   }
 
   async openPictureSheet() {
+    if (this.platform.is("cordova")) {
+      await this.imagePicker.requestReadPermission();
+    }
+
     const actionSheet = await this.sheet.create({
       header:
         "Consejo: Si pones una foto tuya transmitirás mucha más confianza.",
@@ -338,13 +344,22 @@ export class EditProfilePage implements OnInit {
 
         break;
       case "gallery":
-        image = (await this.imagePicker.getPictures({
-          maximumImagesCount: 1,
-          outputType: 0,
-          width: 1024,
-          quality: 70
-        }))[0];
-
+        if (await this.imagePicker.hasReadPermission()) {
+          image = (await this.imagePicker.getPictures({
+            maximumImagesCount: 1,
+            outputType: 0,
+            width: 1024,
+            quality: 70
+          }))[0];
+        } else {
+          this.toast
+            .show(
+              `No has dado permisos para leer tu galería.`,
+              "short",
+              "bottom"
+            )
+            .subscribe();
+        }
         break;
     }
 
