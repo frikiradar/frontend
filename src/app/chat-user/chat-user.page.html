@@ -42,8 +42,7 @@
           message.time_creation | date: "fullDate"
         }}</ion-label>
     </ion-chip>
-    <ion-card (press)="selectMessage(message)">
-      <ion-ripple-effect></ion-ripple-effect>
+    <ion-card button (press)="selectMessage(message)">
       <ion-card-content>
         <span class="text" [innerHTML]="message.text | linkify"> </span>
         <ion-note>
@@ -63,7 +62,7 @@
   <ion-toolbar>
     <ion-item lines="none">
       <ion-textarea [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'" autocapitalize="on"
-        (keyup.enter)="sendMessage()" #textarea autofocus [disabled]="!user">
+        (keyup.enter)="sendMessage()" #textarea autofocus autoGrow rows="1" [disabled]="!user">
       </ion-textarea>
     </ion-item>
     <ion-buttons ion-activatable slot="end">

@@ -77,12 +77,9 @@ ion-footer {
   }
 
   ion-textarea {
-    height: 42px;
     --placeholder-color: #555555 !important;
     color: #353535 !important;
-    padding: 0;
-    margin: 0;
-    margin-top: 5px;
+    margin: 2px 0;
   }
 
   ion-label {

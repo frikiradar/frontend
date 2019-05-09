@@ -171,8 +171,8 @@ android {
     defaultConfig {
         versionCode cdvVersionCode ?: new BigInteger("" + privateHelpers.extractIntFromManifest("versionCode"))
         applicationId privateHelpers.extractStringFromManifest("package")
-        targetSdkVersion 28
         minSdkVersion 23
+        targetSdkVersion 28
 
         if (cdvMinSdkVersion != null) {
             minSdkVersion cdvMinSdkVersion
