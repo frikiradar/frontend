@@ -48,6 +48,36 @@ export class SettingsPage implements OnInit {
     return await modal.present();
   }
 
+  async usernameModal() {
+    const alert = await this.alert.create({
+      header: "Función en desarrollo",
+      message: "Solicítalo por correo a hola@frikiradar.com",
+      buttons: ["¡Ok!"]
+    });
+
+    alert.present();
+  }
+
+  async emailModal() {
+    const alert = await this.alert.create({
+      header: "Función en desarrollo",
+      message: "Solicítalo por correo a hola@frikiradar.com",
+      buttons: ["¡Ok!"]
+    });
+
+    alert.present();
+  }
+
+  async disableAccountModal() {
+    const alert = await this.alert.create({
+      header: "Función en desarrollo",
+      message: "Solicítalo por correo a hola@frikiradar.com",
+      buttons: ["¡Ok!"]
+    });
+
+    alert.present();
+  }
+
   async onChangeCheck(property: keyof User, value: boolean) {
     this.user[property] = !value;
 

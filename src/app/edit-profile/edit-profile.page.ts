@@ -6,6 +6,7 @@ import {
   Validators
 } from "@angular/forms";
 import { Router } from "@angular/router";
+import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
@@ -77,7 +78,8 @@ export class EditProfilePage implements OnInit {
     private imagePicker: ImagePicker,
     private router: Router,
     private toast: Toast,
-    private platform: Platform
+    private platform: Platform,
+    private androidPermissions: AndroidPermissions
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -295,8 +297,11 @@ export class EditProfilePage implements OnInit {
   }
 
   async openPictureSheet() {
-    if (this.platform.is("cordova")) {
-      await this.imagePicker.requestReadPermission();
+    if (this.platform.is("android")) {
+      await this.androidPermissions.requestPermissions([
+        this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+        this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
+      ]);
     }
 
     const actionSheet = await this.sheet.create({

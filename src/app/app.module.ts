@@ -9,6 +9,7 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
+import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
 // import { Facebook } from "@ionic-native/facebook/ngx";
@@ -70,7 +71,8 @@ registerLocaleData(localeEs, "es");
     LaunchReview,
     ImagePicker,
     Keyboard,
-    LocalNotifications
+    LocalNotifications,
+    AndroidPermissions
   ],
   bootstrap: [AppComponent]
 })

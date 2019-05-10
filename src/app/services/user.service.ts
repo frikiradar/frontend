@@ -17,7 +17,7 @@ export class UserService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService
-  ) { }
+  ) {}
 
   async getUser(id: User["id"]): Promise<User> {
     try {
