@@ -69,6 +69,15 @@ export class UserService {
     return this.rest.get("activation");
   }
 
+  disableUser(password: string, note: string) {
+    return this.rest
+      .put("disable", {
+        password,
+        note
+      })
+      .toPromise() as Promise<User>;
+  }
+
   changePassword(old_password: string, new_password: string) {
     return this.rest
       .put("password", {

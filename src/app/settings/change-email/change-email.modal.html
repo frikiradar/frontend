@@ -1,0 +1,32 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="close()">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Cambiar correo electrónico</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+    <h4>¿Quieres cambiar tu correo electrónico?</h4>
+    <p>Asegúrate de introducir una nueva dirección correo electrónico válida.</p>
+
+    <form (submit)="submitForm()" [formGroup]="emailForm" autocomplete="off">
+        <ion-item>
+            <ion-label position="floating">Correo electrónico</ion-label>
+            <ion-input required type="email" autocomplete="email" formControlName="email" debounce="500" name="email"
+                [value]="user.email">
+            </ion-input>
+        </ion-item>
+        <div class="error-message" *ngIf="
+                    emailForm.get('email').invalid && emailForm.get('email').value
+                  ">
+            <ion-icon name="information-circle-outline"></ion-icon>Introduce una
+            dirección de correo electrónico válida.
+        </div>
+        <ion-button class="dismiss" color="primary" expand="block" type="submit"
+            [disabled]="emailForm.invalid || emailForm.pristine">Confirmar
+            cambio</ion-button>
+    </form>
+</ion-content>

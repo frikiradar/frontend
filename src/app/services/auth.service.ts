@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Device as deviceInfo } from "@ionic-native/device/ngx";
 import { NavController } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -20,7 +21,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private rest: RestService,
-    private nav: NavController
+    private nav: NavController,
+    private device: deviceInfo
   ) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("currentUser"))
@@ -144,10 +146,16 @@ export class AuthService {
     return user.roles.includes("ROLE_ADMIN");
   }
 
-  logout() {
+  async logout() {
+    // Desactivamos las notificaciones
+    this.rest.get(`turnoff-device/${this.device.uuid}`).toPromise();
+
+    // Eliminamos la sesión y configuraciones
     localStorage.removeItem("currentUser");
     sessionStorage.clear();
     this.currentUserSubject.next(undefined);
+
+    // Regresamos a la página de login
     this.nav.navigateRoot(["/login"]);
   }
 }

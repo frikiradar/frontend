@@ -4,10 +4,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
-import { AccountModal } from "./account/account.modal";
 import { BlockUsersModal } from "./block-users/block-users.modal";
+import { ChangeEmailModal } from "./change-email/change-email.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
+import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
+import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { SettingsPage } from "./settings.page";
 
 const routes: Routes = [
@@ -27,14 +29,18 @@ const routes: Routes = [
   ],
   declarations: [
     SettingsPage,
-    AccountModal,
     ChangePasswordModal,
+    ChangeEmailModal,
+    ChangeUsernameModal,
+    DisableAccountModal,
     DevicesSettingsModal,
     BlockUsersModal
   ],
   entryComponents: [
-    AccountModal,
     ChangePasswordModal,
+    ChangeEmailModal,
+    ChangeUsernameModal,
+    DisableAccountModal,
     DevicesSettingsModal,
     BlockUsersModal
   ]

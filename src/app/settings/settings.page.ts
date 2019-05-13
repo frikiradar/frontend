@@ -5,8 +5,11 @@ import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { BlockUsersModal } from "./block-users/block-users.modal";
+import { ChangeEmailModal } from "./change-email/change-email.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
+import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
+import { DisableAccountModal } from "./disable-account/disable-account.modal";
 
 @Component({
   selector: "app-settings",
@@ -49,33 +52,24 @@ export class SettingsPage implements OnInit {
   }
 
   async usernameModal() {
-    const alert = await this.alert.create({
-      header: "Función en desarrollo",
-      message: "Solicítalo por correo a hola@frikiradar.com",
-      buttons: ["¡Ok!"]
+    const modal = await this.modal.create({
+      component: ChangeUsernameModal
     });
-
-    alert.present();
+    return await modal.present();
   }
 
   async emailModal() {
-    const alert = await this.alert.create({
-      header: "Función en desarrollo",
-      message: "Solicítalo por correo a hola@frikiradar.com",
-      buttons: ["¡Ok!"]
+    const modal = await this.modal.create({
+      component: ChangeEmailModal
     });
-
-    alert.present();
+    return await modal.present();
   }
 
   async disableAccountModal() {
-    const alert = await this.alert.create({
-      header: "Función en desarrollo",
-      message: "Solicítalo por correo a hola@frikiradar.com",
-      buttons: ["¡Ok!"]
+    const modal = await this.modal.create({
+      component: DisableAccountModal
     });
-
-    alert.present();
+    return await modal.present();
   }
 
   async onChangeCheck(property: keyof User, value: boolean) {
