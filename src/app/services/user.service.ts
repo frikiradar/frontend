@@ -96,6 +96,14 @@ export class UserService {
       .toPromise() as Promise<User>;
   }
 
+  changeUsername(new_username: string) {
+    return this.rest
+      .put("username", {
+        new_username
+      })
+      .toPromise() as Promise<User>;
+  }
+
   getLikes() {
     return this.rest.get("likes").toPromise() as Promise<User[]>;
   }

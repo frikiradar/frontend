@@ -8,6 +8,7 @@ import {
 import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, ModalController } from "@ionic/angular";
 
+import { User } from "src/app/models/user";
 import { AuthService } from "./../../services/auth.service";
 import { UserService } from "./../../services/user.service";
 
@@ -17,9 +18,10 @@ import { UserService } from "./../../services/user.service";
   styleUrls: ["./change-username.modal.scss"]
 })
 export class ChangeUsernameModal {
-  public passForm: FormGroup;
+  public usernameForm: FormGroup;
   public clearOldPassword = false;
   public clearPassword = false;
+  public user: User;
 
   constructor(
     public fb: FormBuilder,
@@ -29,37 +31,41 @@ export class ChangeUsernameModal {
     private alert: AlertController,
     private toast: Toast
   ) {
-    this.passForm = fb.group({
-      oldPassword: new FormControl("", [
+    this.user = this.auth.currentUserValue;
+
+    this.usernameForm = fb.group({
+      username: new FormControl("", [
         Validators.required,
-        Validators.minLength(8)
-      ]),
-      password: new FormControl("", [
-        Validators.required,
-        Validators.minLength(8)
+        Validators.minLength(3),
+        Validators.maxLength(20),
+        Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+")
       ])
     });
   }
 
   async submitForm() {
     try {
-      const user = await this.userSvc.changePassword(
-        this.passForm.get("oldPassword").value,
-        this.passForm.get("password").value
+      const user = await this.userSvc.changeUsername(
+        this.usernameForm.get("username").value
       );
 
       this.auth.setAuthUser(user);
 
       this.toast
-        .show("¡Contraseña cambiada correctamente!", "short", "bottom")
+        .show(
+          "¡Nombre de usuario cambiado correctamente! Vuelve a iniciar sesión.",
+          "short",
+          "bottom"
+        )
         .subscribe();
 
       this.modal.dismiss();
+      this.auth.logout();
     } catch (e) {
       const alert = await this.alert.create({
-        header: "La contraseña actual introducida no es válida",
-        message: "Revísala y vuelve a intentarlo.",
-        buttons: ["¡Vale!"]
+        header: "Ha habido un error",
+        message: "Ya hay alguien utilizando este nombre de usuario.",
+        buttons: ["¡Ok, probaré otro!"]
       });
 
       alert.present();

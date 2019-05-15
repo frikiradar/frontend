@@ -58,7 +58,8 @@ export class ChangeEmailModal {
     } catch (e) {
       const alert = await this.alert.create({
         header: "Ha habido un error",
-        message: "Vuelve a intentarlo transcurridos unos minutos.",
+        message:
+          "¿Es posible que este correo ya esté en uso? Vuelve a intentarlo transcurridos unos minutos.",
         buttons: ["¡De acuerdo!"]
       });
 
