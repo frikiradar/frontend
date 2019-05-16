@@ -33,6 +33,7 @@ export interface User {
   tags: Tag[];
 
   match: number;
+  radar: boolean;
   like: boolean;
   from_like: boolean;
   block: boolean;

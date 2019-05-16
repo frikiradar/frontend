@@ -47,6 +47,7 @@
         <ion-item button *ngFor="let user of users" (click)="showProfile(user.id)" lines="full">
           <ion-avatar slot="start">
             <img [src]="user.avatar" default="/assets/img/users/default.jpg" />
+            <ion-badge color="primary" *ngIf="user?.radar">&nbsp;</ion-badge>
           </ion-avatar>
           <ion-label>
             <h2>{{ user.username }}, {{ user.age }}</h2>
