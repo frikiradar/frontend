@@ -20,6 +20,7 @@ import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Network } from "@ionic-native/network/ngx";
+import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
@@ -72,7 +73,8 @@ registerLocaleData(localeEs, "es");
     ImagePicker,
     Keyboard,
     LocalNotifications,
-    AndroidPermissions
+    AndroidPermissions,
+    SocialSharing
   ],
   bootstrap: [AppComponent]
 })

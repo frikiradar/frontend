@@ -1,14 +1,30 @@
 <ion-header no-border>
   <ion-toolbar [class.show-background]="showToolbar">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="tabs/radar"></ion-back-button>
+      <ion-back-button text="" defaultHref="tabs/radar"></ion-back-button>
     </ion-buttons>
     <ion-title>Mi Perfil</ion-title>
+    <ion-buttons slot="end" *ngIf="activeImage > 0">
+      <ion-button (click)="deleteImage()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+      <ion-button (click)="setAvatar()">
+        <ion-icon slot="icon-only" name="star-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div>
-    <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
+    <ion-slides #imageSlider [pager]="user?.images?.length"
+      (ionSlideDidChange)="setActiveImage(imageSlider.getActiveIndex())">
+      <ion-slide>
+        <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
+      </ion-slide>
+      <ion-slide *ngFor="let image of user?.images">
+        <img [src]="image" default="/assets/img/users/default.jpg" />
+      </ion-slide>
+    </ion-slides>
     <ion-label icon-only button id="camera-icon" (click)="openPictureSheet()">
       <ion-icon name="camera" size="large"></ion-icon>
     </ion-label>
@@ -168,6 +184,24 @@
               <ion-label text-wrap>
                 <ion-chip *ngFor="let tag of getTagsCategory('books')" color="secondary">
                   <ion-icon name="close-circle" (click)="removeTag(tag.name, 'books')"></ion-icon>
+                  <ion-label>{{ tag.name }}</ion-label>
+                </ion-chip>
+              </ion-label>
+            </ion-item>
+          </ion-item-group>
+
+          <ion-item-group>
+            <ion-item class="category-header">
+              <ion-icon src="/assets/icons/outline-casino-24px.svg"></ion-icon>
+              <ion-input #role placeholder="Juegos de mesa, rol y cartas" clearInput="true" autocapitalize="words"
+                (ionChange)="searchTag($event.detail.value, 'role')" [debounce]="500" (keyup.enter)="
+                  inputTag($event.target.value, 'role'); role.value = ''
+                "></ion-input>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label text-wrap>
+                <ion-chip *ngFor="let tag of getTagsCategory('role')" color="secondary">
+                  <ion-icon name="close-circle" (click)="removeTag(tag.name, 'role')"></ion-icon>
                   <ion-label>{{ tag.name }}</ion-label>
                 </ion-chip>
               </ion-label>

@@ -43,6 +43,8 @@ export class AppComponent {
       }
       this.networkStatus();
       this.backButtonStatus();
+
+      this.auth.setAuthUser(await this.auth.getAuthUser());
       this.auth.currentUser.subscribe(async authUser => {
         this.currentUser = authUser;
 

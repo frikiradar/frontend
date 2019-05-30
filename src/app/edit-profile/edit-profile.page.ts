@@ -45,6 +45,8 @@ export class EditProfilePage implements OnInit {
 
   @ViewChild("slider")
   slider: IonSlides;
+  @ViewChild("imageSlider")
+  imageSlider: IonSlides;
   @ViewChild("segment")
   segment: IonSegment;
   @ViewChild("games")
@@ -55,6 +57,8 @@ export class EditProfilePage implements OnInit {
   books: IonInput;
   @ViewChild("music")
   music: IonInput;
+  @ViewChild("role")
+  role: IonInput;
 
   public showToolbar = false;
   public profileForm: FormGroup;
@@ -63,6 +67,7 @@ export class EditProfilePage implements OnInit {
   public tags: Tag[];
   public tagsInput: string;
   public list: { name: string; total: number }[];
+  public activeImage = 0;
 
   constructor(
     public fb: FormBuilder,
@@ -262,7 +267,7 @@ export class EditProfilePage implements OnInit {
       this.tags = [...this.tags, ...tags];
       this.submitTags();
     }
-    this.music.value = this.games.value = this.films.value = this.books.value =
+    this.role.value = this.music.value = this.games.value = this.films.value = this.books.value =
       "";
   }
 
@@ -392,6 +397,25 @@ export class EditProfilePage implements OnInit {
     } catch (e) {
       console.error("Error al recortar la imagen.", e);
     }
+  }
+
+  async setAvatar() {
+    const image = this.user.images[this.activeImage - 1];
+    this.user = await this.userSvc.setAvatar(image);
+    this.imageSlider.slideTo(0);
+  }
+
+  async deleteImage() {
+    const image = this.user.images[this.activeImage - 1];
+    this.user = await this.userSvc.deleteAvatar(image);
+    await this.imageSlider.update();
+    this.imageSlider.slideTo(0);
+  }
+
+  setActiveImage(i: Promise<number>) {
+    i.then(index => {
+      this.activeImage = index;
+    });
   }
 
   onScroll($event: CustomEvent<ScrollDetail>) {

@@ -47,7 +47,14 @@
       </ion-item>
     </ion-list>
     <ng-template #profile>
-      <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
+      <ion-slides [pager]="user?.images?.length">
+        <ion-slide>
+          <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
+        </ion-slide>
+        <ion-slide *ngFor="let image of user?.images">
+          <img [src]="image" default="/assets/img/users/default.jpg" />
+        </ion-slide>
+      </ion-slides>
       <div padding>
         <ion-list padding class="resume">
           <h1>{{ user?.username }}, {{ user?.age }}</h1>
@@ -85,8 +92,8 @@
             <ion-label text-wrap>
               <ion-chip *ngFor="let tag of getTagsCategory('games')" color="secondary">
                 <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                    tag.name
-                  }}</ion-label>
+                  tag.name
+                }}</ion-label>
               </ion-chip>
             </ion-label>
           </ion-item>
@@ -95,8 +102,8 @@
             <ion-label text-wrap>
               <ion-chip *ngFor="let tag of getTagsCategory('films')" color="secondary">
                 <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                    tag.name
-                  }}</ion-label>
+                  tag.name
+                }}</ion-label>
               </ion-chip>
             </ion-label>
           </ion-item>
@@ -105,8 +112,8 @@
             <ion-label text-wrap>
               <ion-chip *ngFor="let tag of getTagsCategory('books')" color="secondary">
                 <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                    tag.name
-                  }}</ion-label>
+                  tag.name
+                }}</ion-label>
               </ion-chip>
             </ion-label>
           </ion-item>
@@ -115,8 +122,8 @@
             <ion-label text-wrap>
               <ion-chip *ngFor="let tag of getTagsCategory('music')" color="secondary">
                 <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                    tag.name
-                  }}</ion-label>
+                  tag.name
+                }}</ion-label>
               </ion-chip>
             </ion-label>
           </ion-item>

@@ -77,7 +77,11 @@ export class AuthService {
   }
 
   getAuthUser() {
-    const token = JSON.parse(localStorage.getItem("currentUser")).token;
+    if (!this.currentUserValue) {
+      return;
+    }
+
+    const token = this.currentUserValue.token;
 
     return this.rest
       .get("user")
@@ -94,11 +98,12 @@ export class AuthService {
   }
 
   setAuthUser(user: User) {
-    if (!user.token) {
-      user.token = JSON.parse(localStorage.getItem("currentUser")).token;
+    if (!user) {
+      return false;
     }
-    if (!user.avatar) {
-      user.avatar = JSON.parse(localStorage.getItem("currentUser")).avatar;
+
+    if (!user.token) {
+      user.token = this.currentUserValue.token;
     }
 
     localStorage.setItem("currentUser", JSON.stringify(user));

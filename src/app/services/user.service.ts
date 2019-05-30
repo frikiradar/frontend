@@ -1,15 +1,11 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { SafeResourceUrl } from "@angular/platform-browser";
 
-import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
-
-const httpOptions = {
-  headers: new HttpHeaders({ "Content-Type": "application/json" })
-};
 
 @Injectable({ providedIn: "root" })
 export class UserService {
@@ -45,6 +41,30 @@ export class UserService {
     user.avatar = avatar;
     localStorage.setItem("currentUser", JSON.stringify(user));
     return avatar;
+  }
+
+  async setAvatar(src: SafeResourceUrl) {
+    try {
+      const user = (await this.rest
+        .put("avatar", { avatar: src })
+        .toPromise()) as User;
+      this.auth.setAuthUser(user);
+      return user;
+    } catch (e) {
+      throw new Error("No se puede actualizar el usuario");
+    }
+  }
+
+  async deleteAvatar(src: SafeResourceUrl) {
+    try {
+      const user = (await this.rest
+        .put("delete-avatar", { avatar: src })
+        .toPromise()) as User;
+      this.auth.setAuthUser(user);
+      return user;
+    } catch (e) {
+      throw new Error("No se puede actualizar el usuario");
+    }
   }
 
   async setCoordinates(longitude, latitude) {

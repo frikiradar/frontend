@@ -1,12 +1,12 @@
 ion-toolbar {
-  --opacity: 0.4;
+  --background: #1a1a1aaa;
 
   ion-title {
     display: none;
   }
 
   &.show-background {
-    --opacity: 1;
+    --background: #1a1a1a;
 
     ion-title {
       display: block;
@@ -51,6 +51,27 @@ form ion-icon {
   padding: 10px;
   color: #ffffff;
   opacity: 0.8;
+  z-index: 1;
+}
+
+.fav-icon {
+  position: relative;
+  float: right;
+  margin-top: -100px;
+  padding: 10px;
+  color: #ffffff;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.del-icon {
+  position: relative;
+  float: right;
+  margin-top: -140px;
+  padding: 10px;
+  color: #ffffff;
+  opacity: 0.8;
+  z-index: 1;
 }
 
 #description {
