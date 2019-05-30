@@ -15,7 +15,7 @@ export class UploadService {
     const params = new HttpParams();
 
     return await this.http
-      .post<string>(`${this.apiUrl}${endpoint}`, data, {
+      .post(`${this.apiUrl}${endpoint}`, data, {
         params,
         reportProgress: true
       })

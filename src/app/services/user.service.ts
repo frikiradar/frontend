@@ -36,11 +36,9 @@ export class UserService {
   async uploadAvatar(file: File) {
     const formData: FormData = new FormData();
     formData.set("avatar", file);
-    const avatar = await this.uploadSvc.upload("avatar", formData);
-    const user = this.auth.currentUserValue;
-    user.avatar = avatar;
+    const user = (await this.uploadSvc.upload("avatar", formData)) as User;
     localStorage.setItem("currentUser", JSON.stringify(user));
-    return avatar;
+    return user;
   }
 
   async setAvatar(src: SafeResourceUrl) {

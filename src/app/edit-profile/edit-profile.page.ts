@@ -384,7 +384,7 @@ export class EditProfilePage implements OnInit {
       const blob: Blob = this.utils.base64toBlob(base64File);
       const avatar: File = new File([blob], "avatar.png");
       try {
-        this.user.avatar = await this.userSvc.uploadAvatar(avatar);
+        this.user = await this.userSvc.uploadAvatar(avatar);
         this.toast
           .show(`Imagen actualizada correctamente.`, "long", "center")
           .subscribe();
