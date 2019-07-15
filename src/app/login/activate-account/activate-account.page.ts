@@ -21,7 +21,7 @@ export class ActivateAccountPage {
   public codeForm: FormGroup;
   public emailForm: FormGroup;
   public user: User;
-  public changingEmail = false
+  public changingEmail = false;
 
   constructor(
     public fb: FormBuilder,
@@ -31,7 +31,7 @@ export class ActivateAccountPage {
     private nav: NavController,
     private toast: Toast
   ) {
-    this.user = this.auth.currentUserValue
+    this.user = this.auth.currentUserValue;
 
     this.codeForm = fb.group({
       code: new FormControl("", [
@@ -44,8 +44,8 @@ export class ActivateAccountPage {
     this.emailForm = fb.group({
       email: new FormControl("", [
         Validators.required,
-        Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$"),
-      ]),
+        Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$")
+      ])
     });
   }
 
@@ -55,7 +55,7 @@ export class ActivateAccountPage {
         this.codeForm.get("code").value.toUpperCase()
       );
       this.auth.setAuthUser(this.user);
-      this.nav.navigateRoot(["/"]);
+      this.nav.navigateRoot(["/edit-profile"]);
     } catch (e) {
       this.codeForm.get("code").setValue("");
 
@@ -87,8 +87,8 @@ export class ActivateAccountPage {
         this.emailForm.get("email").value
       );
       this.auth.setAuthUser(this.user);
-      this.resendCode()
-      this.changingEmail = false
+      this.resendCode();
+      this.changingEmail = false;
     } catch (e) {
       const alert = await this.alert.create({
         header: "Error al cambiar el email",
@@ -101,7 +101,7 @@ export class ActivateAccountPage {
   }
 
   back() {
-    this.changingEmail = false
+    this.changingEmail = false;
   }
 
   close() {

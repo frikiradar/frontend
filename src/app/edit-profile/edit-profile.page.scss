@@ -1,16 +1,8 @@
 ion-toolbar {
   --background: #1a1a1aaa;
 
-  ion-title {
-    display: none;
-  }
-
   &.show-background {
     --background: #1a1a1a;
-
-    ion-title {
-      display: block;
-    }
   }
 }
 
@@ -76,4 +68,11 @@ form ion-icon {
 
 #description {
   --border-color: white;
+}
+
+ion-footer ion-tab-button:not(.tab-selected) {
+  ion-icon,
+  ion-label {
+    color: white;
+  }
 }

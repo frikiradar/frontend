@@ -47,8 +47,6 @@ export class EditProfilePage implements OnInit {
   slider: IonSlides;
   @ViewChild("imageSlider")
   imageSlider: IonSlides;
-  @ViewChild("segment")
-  segment: IonSegment;
   @ViewChild("games")
   games: IonInput;
   @ViewChild("films")
@@ -68,6 +66,7 @@ export class EditProfilePage implements OnInit {
   public tagsInput: string;
   public list: { name: string; total: number }[];
   public activeImage = 0;
+  public activeTab = "info";
 
   constructor(
     public fb: FormBuilder,
@@ -161,9 +160,6 @@ export class EditProfilePage implements OnInit {
       case "tags":
         this.slider.slideTo(1);
         break;
-      case "interesting":
-        this.slider.slideTo(2);
-        break;
     }
   }
 
@@ -171,13 +167,10 @@ export class EditProfilePage implements OnInit {
     i.then(index => {
       switch (index) {
         case 0:
-          this.segment.value = "info";
+          this.activeTab = "info";
           break;
         case 1:
-          this.segment.value = "tags";
-          break;
-        case 2:
-          this.segment.value = "interesting";
+          this.activeTab = "tags";
           break;
       }
     });
