@@ -9,6 +9,7 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
+// import { AdMob } from "@ionic-native/admob-plus/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
@@ -74,7 +75,8 @@ registerLocaleData(localeEs, "es");
     Keyboard,
     LocalNotifications,
     AndroidPermissions,
-    SocialSharing
+    SocialSharing,
+    // AdMob
   ],
   bootstrap: [AppComponent]
 })

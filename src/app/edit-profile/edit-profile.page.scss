@@ -1,13 +1,13 @@
+ion-header {
+  position: absolute;
+}
+
 ion-toolbar {
   --background: #1a1a1aaa;
 
   &.show-background {
     --background: #1a1a1a;
   }
-}
-
-ion-content {
-  position: absolute;
 }
 
 ion-list {

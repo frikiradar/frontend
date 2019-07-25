@@ -2,6 +2,7 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
+// import { AdMob } from "@ionic-native/admob-plus/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
@@ -111,7 +112,8 @@ export class ProfilePage implements OnInit {
     public utils: UtilsService,
     private nav: NavController,
     private toast: Toast,
-    private vibration: Vibration
+    private vibration: Vibration,
+    // private admob: AdMob
   ) {}
 
   async ngOnInit() {
@@ -146,6 +148,9 @@ export class ProfilePage implements OnInit {
 
     if (this.user.like) {
       if (this.user.block_messages) {
+        /*this.admob.banner.show({
+          id: "ca-app-pub-8367506635932865/5790990999"
+        });*/
         this.toast
           .show(
             `¡Le has entregado tu kokoro a ${

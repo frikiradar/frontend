@@ -90,11 +90,11 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
-apply from: "../cordova-plugin-badge/app-badge.gradle"
-apply from: "../cordova-plugin-fcm-with-dependecy-updated/app-FCMPlugin.gradle"
-apply from: "../cordova-plugin-local-notification/app-localnotification.gradle"
 apply from: "../cordova-plugin-telerik-imagepicker/app-ignorelinterrors.gradle"
 apply from: "../cordova-plugin-telerik-imagepicker/app-androidtarget.gradle"
+apply from: "../cordova-plugin-badge/app-badge.gradle"
+apply from: "../cordova-plugin-local-notification/app-localnotification.gradle"
+apply from: "../cordova-plugin-fcm-with-dependecy-updated/app-FCMPlugin.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras1 = file('build-extras.gradle').exists()
@@ -171,8 +171,8 @@ android {
     defaultConfig {
         versionCode cdvVersionCode ?: new BigInteger("" + privateHelpers.extractIntFromManifest("versionCode"))
         applicationId privateHelpers.extractStringFromManifest("package")
-        minSdkVersion 23
         targetSdkVersion 28
+        minSdkVersion 23
 
         if (cdvMinSdkVersion != null) {
             minSdkVersion cdvMinSdkVersion
@@ -273,13 +273,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
+    implementation "com.android.support:support-annotations:27.+"
+    implementation "com.android.support:appcompat-v7:23+"
     implementation "com.android.support:support-v4:24.1.1+"
     implementation "com.soundcloud.android:android-crop:1.0.0@aar"
+    implementation "com.android.support:support-v4:26.+"
     implementation "com.google.firebase:firebase-core:10.+"
     implementation "com.google.firebase:firebase-messaging:10.+"
-    implementation "com.android.support:support-annotations:27.+"
-    implementation "com.android.support:support-v4:26.+"
-    implementation "com.android.support:appcompat-v7:23+"
+    implementation "com.google.android.gms:play-services-base:11.0.4"
+    implementation "com.google.android.gms:play-services-ads:11.0.4"
     // SUB-PROJECT DEPENDENCIES END
 }
 
