@@ -24,6 +24,7 @@
     "@angular/router": "^7.2.2",
     "@ionic-native/admob-free": "^5.10.0",
     "@ionic-native/android-permissions": "^5.10.0",
+    "@ionic-native/app-version": "^5.10.0",
     "@ionic-native/base64": "^5.10.0",
     "@ionic-native/camera": "^5.10.0",
     "@ionic-native/clipboard": "^5.10.0",
@@ -50,6 +51,7 @@
     "cordova-launch-review": "3.1.1",
     "cordova-plugin-admob-free": "^0.27.0",
     "cordova-plugin-android-permissions": "1.0.0",
+    "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-crop": "0.4.0",
@@ -135,7 +137,8 @@
       "cordova-plugin-fcm-with-dependecy-updated": {},
       "cordova-plugin-admob-free": {
         "ADMOB_APP_ID": "ca-app-pub-8367506635932865~6771177979"
-      }
+      },
+      "cordova-plugin-app-version": {}
     },
     "platforms": [
       "android"

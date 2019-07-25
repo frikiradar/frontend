@@ -243,6 +243,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
         "AdMob",
         "plugins.AdMob"
       ]
+    },
+    {
+      "id": "cordova-plugin-app-version.AppVersionPlugin",
+      "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
+      "pluginId": "cordova-plugin-app-version",
+      "clobbers": [
+        "cordova.getAppVersion"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -271,6 +279,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
     "cordova-promise-polyfill": "0.0.2",
     "cordova-admob-sdk": "0.24.1",
-    "cordova-plugin-admob-free": "0.27.0"
+    "cordova-plugin-admob-free": "0.27.0",
+    "cordova-plugin-app-version": "0.1.9"
   };
 });

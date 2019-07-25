@@ -112,8 +112,7 @@ export class ProfilePage implements OnInit {
     public utils: UtilsService,
     private nav: NavController,
     private toast: Toast,
-    private vibration: Vibration,
-    // private admob: AdMob
+    private vibration: Vibration // private admob: AdMob
   ) {}
 
   async ngOnInit() {

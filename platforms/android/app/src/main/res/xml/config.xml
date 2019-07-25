@@ -149,4 +149,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="Scheme" value="https" />
     <preference name="MixedContentMode" value="0" />
+    <feature name="AppVersion">
+        <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
+    </feature>
 </widget>

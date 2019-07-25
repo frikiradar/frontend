@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { AppVersion } from "@ionic-native/app-version/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -9,6 +10,7 @@ import { AlertController, NavController, Platform } from "@ionic/angular";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
+import { ConfigService } from "./services/config.service";
 import { PushService } from "./services/push.service";
 
 @Component({
@@ -30,7 +32,9 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private platform: Platform,
     private push: PushService,
-    private launchReview: LaunchReview
+    private config: ConfigService,
+    private launchReview: LaunchReview,
+    private appVersion: AppVersion
   ) {
     this.initializeApp();
   }
@@ -41,6 +45,7 @@ export class AppComponent {
         this.splashScreen.hide();
         this.statusBar.backgroundColorByHexString("#1a1a1a");
       }
+      this.loadConfig();
       this.networkStatus();
       this.backButtonStatus();
 
@@ -166,5 +171,55 @@ export class AppComponent {
     });
 
     await alert.present();
+  }
+
+  async loadConfig() {
+    const maintenanceAlert = await this.alert.create({
+      header: "En mantenimiento",
+      message:
+        "😅 Ups... Estamos haciendo ajustes en nuestros servidores. Por favor, regresa en unos minutos. No te preocupes, todo continuará tal y como estaba.",
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: "Oki doki",
+          handler: () => {
+            navigator["app"].exitApp();
+          }
+        }
+      ]
+    });
+
+    try {
+      const config: {
+        maintenance: boolean;
+        min_version: string;
+      } = (await this.config.getConfig()) as any;
+
+      if (
+        this.platform.is("cordova") &&
+        (await this.appVersion.getVersionCode()) < +config.min_version
+      ) {
+        const versionAlert = await this.alert.create({
+          header: "Versión obsoleta",
+          message:
+            "La versión de FrikiRadar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
+          backdropDismiss: false,
+          buttons: [
+            {
+              text: "ACTUALIZAR",
+              handler: () => {
+                this.launchReview.launch().then();
+              }
+            }
+          ]
+        });
+
+        versionAlert.present();
+      } else if (config.maintenance) {
+        maintenanceAlert.present();
+      }
+    } catch (e) {
+      maintenanceAlert.present();
+    }
   }
 }
