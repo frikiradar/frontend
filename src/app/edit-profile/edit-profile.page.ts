@@ -414,7 +414,7 @@ export class EditProfilePage implements OnInit {
   onScroll($event: CustomEvent<ScrollDetail>) {
     if ($event && $event.detail && $event.detail.scrollTop) {
       const scrollTop = $event.detail.scrollTop;
-      this.showToolbar = scrollTop >= 150;
+      this.showToolbar = scrollTop >= 50;
     }
   }
 

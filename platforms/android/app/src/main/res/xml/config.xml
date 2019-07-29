@@ -59,9 +59,8 @@
         <param name="android-package" value="com.gae.scaffolder.plugin.FCMPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="AdMob">
-        <param name="android-package" value="name.ratson.cordova.admob.AdMob" />
-        <param name="onload" value="true" />
+    <feature name="AppVersion">
+        <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
     </feature>
     <allow-navigation href="http://localhost/*" />
     <allow-navigation href="https://localhost/*" />
@@ -128,12 +127,12 @@
     <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     <resource-file src="resources/android/fcm_push_icon.png" target="app/src/main/res/drawable/notification_icon.png" />
     <resource-file src="resources/values/colors.xml" target="/app/src/main/res/values/colors.xml" />
-    <icon background="@color/background" density="ldpi" foreground="resources/android/icon/ldpi-foreground.png" />
-    <icon background="@color/background" density="mdpi" foreground="resources/android/icon/mdpi-foreground.png" />
-    <icon background="@color/background" density="hdpi" foreground="resources/android/icon/hdpi-foreground.png" />
-    <icon background="@color/background" density="xhdpi" foreground="resources/android/icon/xhdpi-foreground.png" />
-    <icon background="@color/background" density="xxhdpi" foreground="resources/android/icon/xxhdpi-foreground.png" />
-    <icon background="@color/background" density="xxxhdpi" foreground="resources/android/icon/xxxhdpi-foreground.png" />
+    <icon background="resources/android/icon/ldpi-background.png" density="ldpi" foreground="resources/android/icon/ldpi-foreground.png" />
+    <icon background="resources/android/icon/mdpi-background.png" density="mdpi" foreground="resources/android/icon/mdpi-foreground.png" />
+    <icon background="resources/android/icon/hdpi-background.png" density="hdpi" foreground="resources/android/icon/hdpi-foreground.png" />
+    <icon background="resources/android/icon/xhdpi-background.png" density="xhdpi" foreground="resources/android/icon/xhdpi-foreground.png" />
+    <icon background="resources/android/icon/xxhdpi-background.png" density="xxhdpi" foreground="resources/android/icon/xxhdpi-foreground.png" />
+    <icon background="resources/android/icon/xxxhdpi-background.png" density="xxxhdpi" foreground="resources/android/icon/xxxhdpi-foreground.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="webView" value="com.ionicframework.cordova.webview.IonicWebViewEngine" />
     <preference name="Hostname" value="frikiradar" />
@@ -146,10 +145,8 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="NavigationBarBackgroundColor" value="#1a1a1a" />
-    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="SplashScreenDelay" value="30000" />
+    <preference name="AutoHideSplashScreen" value="false" />
     <preference name="Scheme" value="https" />
     <preference name="MixedContentMode" value="0" />
-    <feature name="AppVersion">
-        <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
-    </feature>
 </widget>

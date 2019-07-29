@@ -224,27 +224,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-promise-polyfill.Promise",
-      "file": "plugins/cordova-promise-polyfill/www/Promise.js",
-      "pluginId": "cordova-promise-polyfill",
-      "runs": true
-    },
-    {
-      "id": "cordova-promise-polyfill.promise.min",
-      "file": "plugins/cordova-promise-polyfill/www/promise.min.js",
-      "pluginId": "cordova-promise-polyfill"
-    },
-    {
-      "id": "cordova-plugin-admob-free.AdMob",
-      "file": "plugins/cordova-plugin-admob-free/www/admob.js",
-      "pluginId": "cordova-plugin-admob-free",
-      "clobbers": [
-        "admob",
-        "AdMob",
-        "plugins.AdMob"
-      ]
-    },
-    {
       "id": "cordova-plugin-app-version.AppVersionPlugin",
       "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
       "pluginId": "cordova-plugin-app-version",
@@ -277,9 +256,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-x-socialsharing": "5.4.7",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
-    "cordova-promise-polyfill": "0.0.2",
-    "cordova-admob-sdk": "0.24.1",
-    "cordova-plugin-admob-free": "0.27.0",
     "cordova-plugin-app-version": "0.1.9"
   };
 });

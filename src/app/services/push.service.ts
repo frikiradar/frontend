@@ -58,7 +58,7 @@ export class PushService {
               title: data.title,
               text: data.body,
               sound: "file://assets/sounds/bipbip.mp3",
-              smallIcon: "res://ic_stat_name",
+              smallIcon: "res://notification_icon",
               icon: data.icon,
               foreground: true
             });

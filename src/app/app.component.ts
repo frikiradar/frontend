@@ -41,10 +41,6 @@ export class AppComponent {
 
   async initializeApp() {
     this.platform.ready().then(async () => {
-      if (this.platform.is("cordova")) {
-        this.splashScreen.hide();
-        this.statusBar.backgroundColorByHexString("#1a1a1a");
-      }
       this.loadConfig();
       this.networkStatus();
       this.backButtonStatus();
@@ -57,6 +53,11 @@ export class AppComponent {
           this.push.init();
         }
       });
+
+      if (this.platform.is("cordova")) {
+        this.statusBar.backgroundColorByHexString("#1a1a1a");
+        this.splashScreen.hide();
+      }
 
       // Veces abierto
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
@@ -194,7 +195,6 @@ export class AppComponent {
         maintenance: boolean;
         min_version: string;
       } = (await this.config.getConfig()) as any;
-
       if (
         this.platform.is("cordova") &&
         (await this.appVersion.getVersionCode()) < +config.min_version

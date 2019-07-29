@@ -82,7 +82,7 @@
           <p>{{ user?.description }}</p>
         </ion-list>
         <ion-list class="info">
-          <ion-item lines="none">
+          <ion-item lines="none" *ngIf="user?.last_login">
             <ion-label
               >Última conexión: {{ user.last_login | niceDate }}</ion-label
             >
