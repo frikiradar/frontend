@@ -6,37 +6,51 @@ import { AuthGuard } from "./guards/auth.guard";
 const routes: Routes = [
   {
     path: "",
-    loadChildren: "./tabs/tabs.module#TabsPageModule",
+    loadChildren: () =>
+      import("./tabs/tabs.module").then(m => m.TabsPageModule),
     canActivate: [AuthGuard]
   },
-  { path: "login", loadChildren: "./login/login.module#LoginPageModule" },
+  {
+    path: "login",
+    loadChildren: () =>
+      import("./login/login.module").then(m => m.LoginPageModule)
+  },
   {
     path: "register",
-    loadChildren: "./register/register.module#RegisterPageModule"
+    loadChildren: () =>
+      import("./register/register.module").then(m => m.RegisterPageModule)
   },
   {
     path: "edit-profile",
-    loadChildren: "./edit-profile/edit-profile.module#EditProfilePageModule"
+    loadChildren: () =>
+      import("./edit-profile/edit-profile.module").then(
+        m => m.EditProfilePageModule
+      )
   },
   {
     path: "profile/:id",
-    loadChildren: "./profile/profile.module#ProfilePageModule"
+    loadChildren: () =>
+      import("./profile/profile.module").then(m => m.ProfilePageModule)
   },
   {
     path: "chat/:id",
-    loadChildren: "./chat-user/chat-user.module#ChatUserPageModule"
+    loadChildren: () =>
+      import("./chat-user/chat-user.module").then(m => m.ChatUserPageModule)
   },
   {
     path: "search",
-    loadChildren: "./search/search.module#SearchPageModule"
+    loadChildren: () =>
+      import("./search/search.module").then(m => m.SearchPageModule)
   },
   {
     path: "search/:query",
-    loadChildren: "./search/search.module#SearchPageModule"
+    loadChildren: () =>
+      import("./search/search.module").then(m => m.SearchPageModule)
   },
   {
     path: "settings",
-    loadChildren: "./settings/settings.module#SettingsPageModule"
+    loadChildren: () =>
+      import("./settings/settings.module").then(m => m.SettingsPageModule)
   }
 ];
 @NgModule({

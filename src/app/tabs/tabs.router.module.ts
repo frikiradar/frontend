@@ -13,7 +13,8 @@ const routes: Routes = [
         children: [
           {
             path: "",
-            loadChildren: "../radar/radar.module#RadarPageModule"
+            loadChildren: () =>
+              import("../radar/radar.module").then(m => m.RadarPageModule)
           }
         ]
       },
@@ -22,7 +23,8 @@ const routes: Routes = [
         children: [
           {
             path: "",
-            loadChildren: "../chat/chat.module#ChatPageModule"
+            loadChildren: () =>
+              import("../chat/chat.module").then(m => m.ChatPageModule)
           }
         ]
       },
@@ -31,7 +33,8 @@ const routes: Routes = [
         children: [
           {
             path: "",
-            loadChildren: "../likes/likes.module#LikesPageModule"
+            loadChildren: () =>
+              import("../likes/likes.module").then(m => m.LikesPageModule)
           }
         ]
       },

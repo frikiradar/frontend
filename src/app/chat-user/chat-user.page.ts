@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
@@ -12,7 +13,6 @@ import {
   Platform
 } from "@ionic/angular";
 
-import { SafeResourceUrl } from "@angular/platform-browser";
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
 import { ChatService } from "../services/chat.service";
