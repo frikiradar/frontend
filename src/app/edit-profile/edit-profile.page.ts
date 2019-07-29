@@ -43,19 +43,19 @@ export class EditProfilePage implements OnInit {
     return this.profileForm.get("maxage");
   }
 
-  @ViewChild("slider")
+  @ViewChild("slider", { static: true })
   slider: IonSlides;
-  @ViewChild("imageSlider")
+  @ViewChild("imageSlider", { static: true })
   imageSlider: IonSlides;
-  @ViewChild("games")
+  @ViewChild("games", { static: true })
   games: IonInput;
-  @ViewChild("films")
+  @ViewChild("films", { static: true })
   films: IonInput;
-  @ViewChild("books")
+  @ViewChild("books", { static: true })
   books: IonInput;
-  @ViewChild("music")
+  @ViewChild("music", { static: true })
   music: IonInput;
-  @ViewChild("role")
+  @ViewChild("role", { static: true })
   role: IonInput;
 
   public showToolbar = false;

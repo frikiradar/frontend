@@ -25,11 +25,11 @@ import { UserService } from "./../services/user.service";
   styleUrls: ["./chat-user.page.scss"]
 })
 export class ChatUserPage implements OnInit {
-  @ViewChild("textarea")
+  @ViewChild("textarea", { static: true })
   textarea: IonTextarea;
-  @ViewChild("chatlist")
+  @ViewChild("chatlist", { static: true })
   chatlist: IonContent;
-  @ViewChild(IonInfiniteScroll)
+  @ViewChild(IonInfiniteScroll, { static: true })
   infiniteScroll: IonInfiniteScroll;
 
   source: EventSource;

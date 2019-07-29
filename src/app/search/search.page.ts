@@ -11,7 +11,7 @@ import { RestService } from "./../services/rest.service";
   styleUrls: ["./search.page.scss"]
 })
 export class SearchPage implements OnInit {
-  @ViewChild("searchBar")
+  @ViewChild("searchBar", {static: true})
   searchBar: IonSearchbar;
 
   order = "distance";

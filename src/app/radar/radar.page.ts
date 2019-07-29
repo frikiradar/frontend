@@ -13,9 +13,9 @@ import { AuthService } from "./../services/auth.service";
   styleUrls: ["./radar.page.scss"]
 })
 export class RadarPage implements OnInit {
-  @ViewChild("range")
+  @ViewChild("range", { static: true })
   range: IonRange;
-  @ViewChild("radarlist")
+  @ViewChild("radarlist", { static: true })
   radarlist: IonContent;
 
   public showSkeleton = true;
