@@ -81,6 +81,12 @@
         displayFormat="DD MMM de YYYY" monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
         formControlName="birthday"></ion-datetime>
     </ion-item>
+    <ion-item lines="none">
+      <ion-label>Me interesa recibir correos electrónicos promocionales e informativos de FrikiRadar.</ion-label>
+      <ion-checkbox checked="false" slot="start" formControlName="mailing"></ion-checkbox>
+      <ion-icon color="light" name="mail" slot="end"></ion-icon>
+    </ion-item>
     <ion-button color="primary" type="submit" expand="block" class="dismiss">Registrarme</ion-button>
   </form>
+  <p>Al crear una cuenta, aceptas las <a target="_blank" href="https://frikiradar.com/tos/">Condiciones del servicio</a> y la <a target="_blank" href="https://frikiradar.com/politica-de-privacidad/">Política de privacidad</a> de FrikiRadar.</p>
 </ion-content>

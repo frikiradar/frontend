@@ -1,28 +1,60 @@
 <ion-header no-border>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-button (click)="close()">
-                <ion-icon name="close"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-title>Dispositivos y notificaciones</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Dispositivos y notificaciones</ion-title>
+  </ion-toolbar>
 </ion-header>
 <ion-content>
-    <p padding>Estos son los dispositivos con los que has iniciado sesión alguna vez en FrikiRadar. Puedes eliminarlos o pausar las notificaciones.</p>
-    <ion-list>
-        <ion-item *ngFor="let device of devices" lines="full">
-            <ion-buttons>
-                <ion-button (click)="switchNotifications(device)" [disabled]="!device.token">
-                    <ion-icon [name]="device.active && device.token ? 'notifications' : 'notifications-off'" slot="icon-only"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-            <ion-label>{{device.device_name}}</ion-label>
-            <ion-buttons>
-                <ion-button (click)="removeDevice(device)">
-                    <ion-icon [color]="device.current ? 'primary': 'light'" [name]="device.current ? 'phone-portrait' : 'trash'" slot="icon-only"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-        </ion-item>
-    </ion-list>
+  <ion-item lines="full">
+    <ion-buttons>
+      <ion-button (click)="switchMailing()">
+        <ion-icon
+          [name]="user.mailing ? 'notifications' : 'notifications-off'"
+          slot="icon-only"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-icon color="light" name="mail" slot="end"></ion-icon>
+    <p>
+      Notificaciones de correo electrónico promocionales e informativas de
+      FrikiRadar.
+    </p>
+  </ion-item>
+  <p padding>
+    Estos son los dispositivos con los que has iniciado sesión alguna vez en
+    FrikiRadar. Puedes eliminarlos o pausar las notificaciones.
+  </p>
+  <ion-list>
+    <ion-item *ngFor="let device of devices" lines="full">
+      <ion-buttons>
+        <ion-button
+          (click)="switchNotifications(device)"
+          [disabled]="!device.token"
+        >
+          <ion-icon
+            [name]="
+              device.active && device.token
+                ? 'notifications'
+                : 'notifications-off'
+            "
+            slot="icon-only"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-label>{{ device.device_name }}</ion-label>
+      <ion-buttons>
+        <ion-button (click)="removeDevice(device)">
+          <ion-icon
+            [color]="device.current ? 'primary' : 'light'"
+            [name]="device.current ? 'phone-portrait' : 'trash'"
+            slot="icon-only"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
 </ion-content>

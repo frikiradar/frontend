@@ -48,6 +48,7 @@ export interface User {
   block_messages?: boolean;
   two_step?: boolean;
   hide_connection?: boolean;
+  mailing?: boolean;
 
   num_logins: number;
   last_login?: Date;

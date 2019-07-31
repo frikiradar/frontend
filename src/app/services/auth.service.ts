@@ -39,13 +39,14 @@ export class AuthService {
     email: string,
     password: string,
     birthday: string,
-    gender: string
+    gender: string,
+    mailing: boolean
   ) {
     try {
       return await this.http
         .post(
           `${environment.root}api/register`,
-          { username, email, password, birthday, gender },
+          { username, email, password, birthday, gender, mailing },
           httpOptions
         )
         .toPromise();

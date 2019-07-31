@@ -47,7 +47,8 @@ export class RegisterPage {
         Validators.minLength(8)
       ]),
       birthday: new FormControl("", Validators.required),
-      gender: new FormControl("", Validators.required)
+      gender: new FormControl("", Validators.required),
+      mailing: new FormControl("")
     });
   }
 
@@ -73,7 +74,8 @@ export class RegisterPage {
                   this.registerForm.get("email").value.trim(),
                   this.registerForm.get("password").value.trim(),
                   this.registerForm.get("birthday").value.split("T")[0],
-                  this.registerForm.get("gender").value.trim()
+                  this.registerForm.get("gender").value.trim(),
+                  this.registerForm.get("mailing").value,
                 );
 
                 const user = await this.auth.login(
