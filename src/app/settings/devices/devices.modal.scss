@@ -1,7 +1,16 @@
-ion-label {
+ion-item {
+  ion-label {
     --color: white !important;
-}
+  }
 
-ion-icon {
+  ion-icon {
     color: white;
+  }
+
+  ion-label {
+    p {
+      white-space: normal;
+      color: #bbb;
+    }
+  }
 }
