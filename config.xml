@@ -5,11 +5,11 @@
     <author email="hola@frikiradar.com" href="https://frikiradar.com/">FrikiRadar</author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
+    <allow-intent href="http://*/*" launch-external="yes" />
+    <allow-intent href="https://*/*" launch-external="yes" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
+    <allow-intent href="mailto:*" launch-external="yes" />
     <allow-intent href="geo:*" />
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />

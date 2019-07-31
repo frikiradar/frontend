@@ -105,7 +105,7 @@ export class AppComponent {
             navigator["app"].exitApp();
         }
       } else {
-        this.nav.back();
+        // this.nav.back();
         this.backButtonCount = 0;
       }
     });
