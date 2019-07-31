@@ -1,9 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!showOptions">
-      <ion-button (click)="back()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </ion-button>
+      <ion-back-button (click)="source.close()"></ion-back-button>
       <ion-button (click)="showProfile(userId)">
         <ion-avatar>
           <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
@@ -32,15 +30,21 @@
     <ion-infinite-scroll-content loadingSpinner="dots">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  <span class="bubble {{ message.fromuser?.id == userId ? 'to' : 'from' }}"
-    *ngFor="let message of messages; let i = index">
-    <ion-chip color="primary" class="center" *ngIf="
-          (message?.time_creation | date: 'shortDate') !==
-          (messages[i - 1]?.time_creation | date: 'shortDate')
-        ">
+  <span
+    class="bubble {{ message.fromuser?.id == userId ? 'to' : 'from' }}"
+    *ngFor="let message of messages; let i = index"
+  >
+    <ion-chip
+      color="primary"
+      class="center"
+      *ngIf="
+        (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')
+      "
+    >
       <ion-label color="secondary">{{
-          message.time_creation | date: "fullDate"
-        }}</ion-label>
+        message.time_creation | date: "fullDate"
+      }}</ion-label>
     </ion-chip>
     <ion-card button (press)="selectMessage(message)">
       <ion-card-content>
@@ -49,8 +53,15 @@
           {{ message.time_creation | date: "shortTime" }}
           <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
             <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-            <ion-icon *ngIf="!message.sending && !message.time_read" name="checkmark"></ion-icon>
-            <ion-icon *ngIf="message.time_read" color="secondary" name="done-all"></ion-icon>
+            <ion-icon
+              *ngIf="!message.sending && !message.time_read"
+              name="checkmark"
+            ></ion-icon>
+            <ion-icon
+              *ngIf="message.time_read"
+              color="secondary"
+              name="done-all"
+            ></ion-icon>
           </span>
         </ion-note>
       </ion-card-content>
@@ -61,12 +72,24 @@
 <ion-footer>
   <ion-toolbar>
     <ion-item lines="none">
-      <ion-textarea [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'" autocapitalize="on"
-        (keyup.enter)="sendMessage()" #textarea autofocus autoGrow rows="1" [disabled]="!user">
+      <ion-textarea
+        [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'"
+        autocapitalize="on"
+        (keyup.enter)="sendMessage()"
+        #textarea
+        autofocus
+        autoGrow
+        rows="1"
+        [disabled]="!user"
+      >
       </ion-textarea>
     </ion-item>
     <ion-buttons ion-activatable slot="end">
-      <ion-button color="primary" (click)="sendMessage()" [disabled]="!textarea?.value?.trim()">
+      <ion-button
+        color="primary"
+        (click)="sendMessage()"
+        [disabled]="!textarea?.value?.trim()"
+      >
         <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>
