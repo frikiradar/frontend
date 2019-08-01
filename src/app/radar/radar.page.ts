@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
+import { Event, Router } from "@angular/router";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { IonContent, IonRange, MenuController } from "@ionic/angular";
 

@@ -9,7 +9,7 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-// import { AdMob } from "@ionic-native/admob-plus/ngx";
+import { AdMobFree } from "@ionic-native/admob-free/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -36,6 +36,7 @@ import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { MenuComponent } from "./menu/menu.component";
+import { AdmobService } from "./services/admob.service";
 import { SharedModule } from "./shared/shared.module";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
@@ -77,8 +78,9 @@ registerLocaleData(localeEs, "es");
     LocalNotifications,
     AndroidPermissions,
     SocialSharing,
-    AppVersion
-    // AdMob
+    AppVersion,
+    AdMobFree,
+    AdmobService
   ],
   bootstrap: [AppComponent]
 })

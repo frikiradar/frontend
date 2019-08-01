@@ -2,7 +2,6 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-// import { AdMob } from "@ionic-native/admob-plus/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
@@ -17,6 +16,7 @@ import { pulse } from "ng-animate";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
+import { AdmobService } from "./../services/admob.service";
 
 @Component({
   selector: "profile-popover",
@@ -112,10 +112,12 @@ export class ProfilePage implements OnInit {
     public utils: UtilsService,
     private nav: NavController,
     private toast: Toast,
-    private vibration: Vibration // private admob: AdMob
+    private vibration: Vibration,
+    private admobSvc: AdmobService
   ) {}
 
   async ngOnInit() {
+    this.admobSvc.BannerAd();
     const id = this.route.snapshot.paramMap.get("id");
     try {
       this.loading = true;
@@ -146,10 +148,9 @@ export class ProfilePage implements OnInit {
       : await this.userSvc.like(this.user.id);
 
     if (this.user.like) {
+      this.admobSvc.RewardVideoAd();
+
       if (this.user.block_messages) {
-        /*this.admob.banner.show({
-          id: "ca-app-pub-8367506635932865/5790990999"
-        });*/
         this.toast
           .show(
             `¡Le has entregado tu kokoro a ${

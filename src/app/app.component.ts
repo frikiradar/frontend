@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { Event, Router } from "@angular/router";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
@@ -9,6 +9,7 @@ import { Toast } from "@ionic-native/toast/ngx";
 import { AlertController, NavController, Platform } from "@ionic/angular";
 
 import { User } from "./models/user";
+import { AdmobService } from "./services/admob.service";
 import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
 import { PushService } from "./services/push.service";
@@ -34,7 +35,8 @@ export class AppComponent {
     private push: PushService,
     private config: ConfigService,
     private launchReview: LaunchReview,
-    private appVersion: AppVersion
+    private appVersion: AppVersion,
+    private admob: AdmobService
   ) {
     this.initializeApp();
   }
@@ -57,6 +59,14 @@ export class AppComponent {
       if (this.platform.is("cordova")) {
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
+
+        this.router.events.subscribe(async (event: Event) => {
+          if (this.router.url.includes("/settings")) {
+            this.admob.BannerAd();
+          } else {
+            this.admob.BannerAdRemove();
+          }
+        });
       }
 
       // Veces abierto
