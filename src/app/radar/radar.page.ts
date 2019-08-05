@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Event, Router } from "@angular/router";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { IonContent, IonRange, MenuController } from "@ionic/angular";
+import { ScrollDetail } from "@ionic/core";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -19,6 +20,8 @@ export class RadarPage implements OnInit {
   radarlist: IonContent;
 
   public showSkeleton = true;
+  public hideRange = false;
+  scroll: number;
   ratio = 25;
   page = 0;
   user: User;
@@ -106,5 +109,18 @@ export class RadarPage implements OnInit {
 
   search() {
     this.router.navigate(["/search"]);
+  }
+
+  onScroll($event: CustomEvent<ScrollDetail>) {
+    if ($event && $event.detail && $event.detail.scrollTop) {
+      const scrollTop = $event.detail.scrollTop;
+
+      this.hideRange =
+        scrollTop >= 50 &&
+        scrollTop > this.scroll &&
+        scrollTop - this.scroll < 50;
+
+      this.scroll = scrollTop;
+    }
   }
 }

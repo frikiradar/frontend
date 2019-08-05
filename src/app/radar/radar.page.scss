@@ -76,3 +76,9 @@ ion-spinner {
     fill: blue !important;
   }
 }
+
+ion-footer {
+  &.hide-background {
+    display: none;
+  }
+}

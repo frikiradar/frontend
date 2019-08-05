@@ -51,7 +51,9 @@ export class AuthService {
         )
         .toPromise();
     } catch (e) {
-      throw new Error("Ya hay un usuario registrado con estos datos");
+      throw new Error(
+        "Ya hay un usuario registrado con este nombre de usuario o email."
+      );
     }
   }
 

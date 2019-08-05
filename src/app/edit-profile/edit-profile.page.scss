@@ -19,6 +19,12 @@ ion-list {
   }
 }
 
+ion-segment {
+  position: sticky;
+  top: 50px;
+  z-index: 2;
+}
+
 ion-slide {
   display: block;
 }

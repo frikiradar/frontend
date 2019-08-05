@@ -92,6 +92,18 @@
             {
               "xml": "<provider android:authorities=\"${applicationId}.provider\" android:exported=\"false\" android:grantUriPermissions=\"true\" android:name=\"org.apache.cordova.camera.FileProvider\"><meta-data android:name=\"android.support.FILE_PROVIDER_PATHS\" android:resource=\"@xml/camera_provider_paths\" /></provider>",
               "count": 1
+            },
+            {
+              "xml": "<meta-data android:name=\"com.facebook.sdk.ApplicationId\" android:value=\"@string/fb_app_id\" />",
+              "count": 1
+            },
+            {
+              "xml": "<meta-data android:name=\"com.facebook.sdk.ApplicationName\" android:value=\"@string/fb_app_name\" />",
+              "count": 1
+            },
+            {
+              "xml": "<activity android:configChanges=\"keyboard|keyboardHidden|screenLayout|screenSize|orientation\" android:label=\"@string/fb_app_name\" android:name=\"com.facebook.FacebookActivity\" />",
+              "count": 1
             }
           ],
           "/manifest": [
@@ -198,6 +210,34 @@
             {
               "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"FacebookConnectPlugin\"><param name=\"android-package\" value=\"org.apache.cordova.facebook.ConnectPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<access origin=\"https://m.facebook.com\" />",
+              "count": 1
+            },
+            {
+              "xml": "<access origin=\"https://graph.facebook.com\" />",
+              "count": 1
+            },
+            {
+              "xml": "<access origin=\"https://api.facebook.com\" />",
+              "count": 1
+            },
+            {
+              "xml": "<access origin=\"https://*.fbcdn.net\" />",
+              "count": 1
+            },
+            {
+              "xml": "<access origin=\"https://*.akamaihd.net\" />",
+              "count": 1
+            },
+            {
+              "xml": "<preference name=\"android-minSdkVersion\" value=\"15\" />",
+              "count": 1
             }
           ]
         }
@@ -231,6 +271,42 @@
             },
             {
               "xml": "<feature name=\"IonicWebView\"><param name=\"android-package\" value=\"com.ionicframework.cordova.webview.IonicWebView\" /></feature>",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "res/values/facebookconnect.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<string name=\"fb_app_id\">2308182012762454</string>",
+              "count": 1
+            },
+            {
+              "xml": "<string name=\"fb_app_name\">FrikiRadar</string>",
+              "count": 1
+            },
+            {
+              "xml": "<bool name=\"fb_hybrid_app_events\">false</bool>",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "app/src/main/res/values/facebookconnect.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<string name=\"fb_app_id\">2308182012762454</string>",
+              "count": 1
+            },
+            {
+              "xml": "<string name=\"fb_app_name\">FrikiRadar</string>",
+              "count": 1
+            },
+            {
+              "xml": "<bool name=\"fb_hybrid_app_events\">false</bool>",
               "count": 1
             }
           ]
@@ -322,6 +398,13 @@
       "PACKAGE_NAME": "com.frikiradar.app"
     },
     "cordova-plugin-x-toast": {
+      "PACKAGE_NAME": "com.frikiradar.app"
+    },
+    "cordova-plugin-facebook4": {
+      "APP_ID": "2308182012762454",
+      "APP_NAME": "FrikiRadar",
+      "FACEBOOK_HYBRID_APP_EVENTS": "false",
+      "FACEBOOK_ANDROID_SDK_VERSION": "5.0.2",
       "PACKAGE_NAME": "com.frikiradar.app"
     }
   },
@@ -578,6 +661,14 @@
       "clobbers": [
         "window.plugins.toast"
       ]
+    },
+    {
+      "id": "cordova-plugin-facebook4.FacebookConnectPlugin",
+      "file": "plugins/cordova-plugin-facebook4/www/facebook-native.js",
+      "pluginId": "cordova-plugin-facebook4",
+      "clobbers": [
+        "facebookConnectPlugin"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -607,6 +698,7 @@
     "cordova-plugin-whitelist": "1.3.4",
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-x-socialsharing": "5.4.7",
-    "cordova-plugin-x-toast": "2.7.2"
+    "cordova-plugin-x-toast": "2.7.2",
+    "cordova-plugin-facebook4": "5.0.0"
   }
 }

@@ -47,6 +47,8 @@ export class EditProfilePage implements OnInit {
   slider: IonSlides;
   @ViewChild("imageSlider", { static: true })
   imageSlider: IonSlides;
+  @ViewChild("segment", { static: true })
+  segment: IonSegment;
   @ViewChild("games", { static: true })
   games: IonInput;
   @ViewChild("films", { static: true })
@@ -167,10 +169,10 @@ export class EditProfilePage implements OnInit {
     i.then(index => {
       switch (index) {
         case 0:
-          this.activeTab = "info";
+          this.segment.value = "info";
           break;
         case 1:
-          this.activeTab = "tags";
+          this.segment.value = "tags";
           break;
       }
     });

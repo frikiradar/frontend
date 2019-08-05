@@ -61,10 +61,14 @@ export class AppComponent {
         this.splashScreen.hide();
 
         this.router.events.subscribe(async (event: Event) => {
-          if (this.router.url.includes("/settings")) {
-            this.admob.BannerAd();
-          } else {
-            this.admob.BannerAdRemove();
+          switch (this.router.url) {
+            case "/settings":
+            case "/search":
+              this.admob.BannerAd();
+              break;
+
+            default:
+              this.admob.BannerAdRemove();
           }
         });
       }

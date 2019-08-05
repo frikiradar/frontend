@@ -148,8 +148,6 @@ export class ProfilePage implements OnInit {
       : await this.userSvc.like(this.user.id);
 
     if (this.user.like) {
-      this.admobSvc.RewardVideoAd();
-
       if (this.user.block_messages) {
         this.toast
           .show(
@@ -178,6 +176,7 @@ export class ProfilePage implements OnInit {
         )
         .subscribe();
     }
+    this.admobSvc.InterstitialAd();
   }
 
   async showPopover(event: Event) {
