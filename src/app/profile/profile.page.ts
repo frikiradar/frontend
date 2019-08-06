@@ -117,7 +117,6 @@ export class ProfilePage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.admobSvc.BannerAd();
     const id = this.route.snapshot.paramMap.get("id");
     try {
       this.loading = true;
@@ -176,7 +175,7 @@ export class ProfilePage implements OnInit {
         )
         .subscribe();
     }
-    this.admobSvc.InterstitialAd();
+    this.admobSvc.RewardVideoAd();
   }
 
   async showPopover(event: Event) {

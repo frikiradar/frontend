@@ -27,44 +27,46 @@ export class AdmobService {
 
   constructor(private admobFree: AdMobFree, public platform: Platform) {
     platform.ready().then(() => {
-      // Load ad configuration
-      this.admobFree.interstitial.config(this.interstitialConfig);
-      // Prepare Ad to Show
-      this.admobFree.interstitial
-        .prepare()
-        .then(() => {
-          // alert(1);
-        })
-        .catch(e => console.error(e));
+      if (this.platform.is("cordova")) {
+        // Load ad configuration
+        this.admobFree.interstitial.config(this.interstitialConfig);
+        // Prepare Ad to Show
+        this.admobFree.interstitial
+          .prepare()
+          .then(() => {
+            // alert(1);
+          })
+          .catch(e => console.error(e));
 
-      // Load ad configuration
-      this.admobFree.rewardVideo.config(this.RewardVideoConfig);
-      // Prepare Ad to Show
-      this.admobFree.rewardVideo
-        .prepare()
-        .then(() => {
-          // alert(2);
-        })
-        .catch(e => console.error(e));
-    });
+        // Load ad configuration
+        this.admobFree.rewardVideo.config(this.RewardVideoConfig);
+        // Prepare Ad to Show
+        this.admobFree.rewardVideo
+          .prepare()
+          .then(() => {
+            // alert(2);
+          })
+          .catch(e => console.error(e));
+      }
 
-    // Handle interstitial's close event to Prepare Ad again
-    this.admobFree.on("admob.interstitial.events.CLOSE").subscribe(() => {
-      this.admobFree.interstitial
-        .prepare()
-        .then(() => {
-          console.error("Interstitial CLOSE");
-        })
-        .catch(e => console.error(e));
-    });
-    // Handle Reward's close event to Prepare Ad again
-    this.admobFree.on("admob.rewardvideo.events.CLOSE").subscribe(() => {
-      this.admobFree.rewardVideo
-        .prepare()
-        .then(() => {
-          console.error("Reward Video CLOSE");
-        })
-        .catch(e => console.error(e));
+      // Handle interstitial's close event to Prepare Ad again
+      this.admobFree.on("admob.interstitial.events.CLOSE").subscribe(() => {
+        this.admobFree.interstitial
+          .prepare()
+          .then(() => {
+            console.error("Interstitial CLOSE");
+          })
+          .catch(e => console.error(e));
+      });
+      // Handle Reward's close event to Prepare Ad again
+      this.admobFree.on("admob.rewardvideo.events.CLOSE").subscribe(() => {
+        this.admobFree.rewardVideo
+          .prepare()
+          .then(() => {
+            console.error("Reward Video CLOSE");
+          })
+          .catch(e => console.error(e));
+      });
     });
   }
 
