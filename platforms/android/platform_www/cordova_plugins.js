@@ -102,6 +102,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-chooser.Chooser",
+      "file": "plugins/cordova-plugin-chooser/www/chooser.js",
+      "pluginId": "cordova-plugin-chooser",
+      "clobbers": [
+        "chooser"
+      ]
+    },
+    {
       "id": "cordova-plugin-crop.CropPlugin",
       "file": "plugins/cordova-plugin-crop/www/crop.js",
       "pluginId": "cordova-plugin-crop",
@@ -231,14 +239,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
-      "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
-      "pluginId": "cordova-plugin-telerik-imagepicker",
-      "clobbers": [
-        "plugins.imagePicker"
-      ]
-    },
-    {
       "id": "es6-promise-plugin.Promise",
       "file": "plugins/es6-promise-plugin/www/promise.js",
       "pluginId": "es6-promise-plugin",
@@ -259,14 +259,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "window.plugins.toast"
       ]
-    },
-    {
-      "id": "cordova-plugin-chooser.Chooser",
-      "file": "plugins/cordova-plugin-chooser/www/chooser.js",
-      "pluginId": "cordova-plugin-chooser",
-      "clobbers": [
-        "chooser"
-      ]
     }
   ];
   module.exports.metadata = {
@@ -280,6 +272,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-camera": "4.0.3",
+    "cordova-plugin-chooser": "1.2.5",
     "cordova-plugin-crop": "0.3.1",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-facebook4": "5.0.0",
@@ -292,12 +285,10 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-network-information": "2.0.1",
     "cordova-plugin-splashscreen": "5.0.3",
     "cordova-plugin-statusbar": "2.4.3",
-    "cordova-plugin-telerik-imagepicker": "2.3.2",
     "cordova-plugin-vibration": "3.1.0",
     "cordova-plugin-whitelist": "1.3.4",
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-x-socialsharing": "5.4.7",
-    "cordova-plugin-x-toast": "2.7.2",
-    "cordova-plugin-chooser": "1.2.5"
+    "cordova-plugin-x-toast": "2.7.2"
   };
 });
