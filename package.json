@@ -26,6 +26,7 @@
     "@ionic-native/app-version": "^5.11.0",
     "@ionic-native/base64": "^5.11.0",
     "@ionic-native/camera": "^5.11.0",
+    "@ionic-native/chooser": "^5.11.0",
     "@ionic-native/clipboard": "^5.11.0",
     "@ionic-native/core": "^5.11.0",
     "@ionic-native/crop": "^5.11.0",
@@ -33,7 +34,6 @@
     "@ionic-native/facebook": "^5.11.0",
     "@ionic-native/fcm": "^5.11.0",
     "@ionic-native/geolocation": "^5.11.0",
-    "@ionic-native/image-picker": "^5.11.0",
     "@ionic-native/keyboard": "^5.11.0",
     "@ionic-native/launch-review": "^5.11.0",
     "@ionic-native/local-notifications": "^5.11.0",
@@ -54,6 +54,7 @@
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-camera": "4.0.3",
+    "cordova-plugin-chooser": "^1.2.5",
     "cordova-plugin-crop": "0.4.0",
     "cordova-plugin-facebook4": "^5.0.0",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
@@ -61,7 +62,6 @@
     "cordova-plugin-local-notification": "0.9.0-beta.2",
     "cordova-plugin-navigationbar-color": "0.0.9",
     "cordova-plugin-network-information": "2.0.1",
-    "cordova-plugin-telerik-imagepicker": "2.3.2",
     "cordova-plugin-vibration": "3.1.0",
     "cordova-plugin-x-socialsharing": "5.4.7",
     "cordova-plugin-x-toast": "2.7.2",
@@ -124,7 +124,6 @@
       "cordova-plugin-x-toast": {},
       "cordova-clipboard": {},
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-telerik-imagepicker": {},
       "com-badrit-base64": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-crop": {},
@@ -148,7 +147,8 @@
         "APP_ID": "2308182012762454",
         "APP_NAME": "FrikiRadar",
         "FACEBOOK_HYBRID_APP_EVENTS": "true"
-      }
+      },
+      "cordova-plugin-chooser": {}
     },
     "platforms": [
       "android"

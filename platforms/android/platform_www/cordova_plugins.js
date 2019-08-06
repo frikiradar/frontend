@@ -134,14 +134,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-filechooser.FileChooser",
-      "file": "plugins/cordova-plugin-filechooser/www/fileChooser.js",
-      "pluginId": "cordova-plugin-filechooser",
-      "clobbers": [
-        "fileChooser"
-      ]
-    },
-    {
       "id": "cordova-plugin-geolocation.geolocation",
       "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
       "pluginId": "cordova-plugin-geolocation",
@@ -267,12 +259,20 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "window.plugins.toast"
       ]
+    },
+    {
+      "id": "cordova-plugin-chooser.Chooser",
+      "file": "plugins/cordova-plugin-chooser/www/chooser.js",
+      "pluginId": "cordova-plugin-chooser",
+      "clobbers": [
+        "chooser"
+      ]
     }
   ];
   module.exports.metadata = {
     "com-badrit-base64": "0.2.0",
     "cordova-admob-sdk": "0.24.1",
-    "cordova-clipboard": "1.2.1",
+    "cordova-clipboard": "1.3.0",
     "cordova-launch-review": "3.1.1",
     "cordova-promise-polyfill": "0.0.2",
     "cordova-plugin-admob-free": "0.27.0",
@@ -281,23 +281,23 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-crop": "0.3.1",
-    "cordova-plugin-device": "2.0.2",
-    "cordova-plugin-facebook4": "4.2.1",
+    "cordova-plugin-device": "2.0.3",
+    "cordova-plugin-facebook4": "5.0.0",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
-    "cordova-plugin-filechooser": "1.2.0",
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-ionic-keyboard": "2.1.3",
-    "cordova-plugin-ionic-webview": "4.0.1",
+    "cordova-plugin-ionic-webview": "4.1.1",
     "cordova-plugin-local-notification": "0.9.0-beta.2",
     "cordova-plugin-navigationbar-color": "0.0.8",
     "cordova-plugin-network-information": "2.0.1",
-    "cordova-plugin-splashscreen": "5.0.2",
-    "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-splashscreen": "5.0.3",
+    "cordova-plugin-statusbar": "2.4.3",
     "cordova-plugin-telerik-imagepicker": "2.3.2",
     "cordova-plugin-vibration": "3.1.0",
-    "cordova-plugin-whitelist": "1.3.3",
+    "cordova-plugin-whitelist": "1.3.4",
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-x-socialsharing": "5.4.7",
-    "cordova-plugin-x-toast": "2.7.2"
+    "cordova-plugin-x-toast": "2.7.2",
+    "cordova-plugin-chooser": "1.2.5"
   };
 });

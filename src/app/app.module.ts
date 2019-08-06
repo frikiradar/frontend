@@ -12,12 +12,12 @@ import { RouteReuseStrategy } from "@angular/router";
 import { AdMobFree } from "@ionic-native/admob-free/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
+import { Chooser } from "@ionic-native/chooser/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { ImagePicker } from "@ionic-native/image-picker/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
@@ -73,14 +73,14 @@ registerLocaleData(localeEs, "es");
     FCM,
     Clipboard,
     LaunchReview,
-    ImagePicker,
     Keyboard,
     LocalNotifications,
     AndroidPermissions,
     SocialSharing,
     AppVersion,
     AdMobFree,
-    AdmobService
+    AdmobService,
+    Chooser
   ],
   bootstrap: [AppComponent]
 })

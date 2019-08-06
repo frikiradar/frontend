@@ -62,9 +62,6 @@
         <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="ImagePicker">
-        <param name="android-package" value="com.synconset.ImagePicker" />
-    </feature>
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
@@ -74,9 +71,6 @@
     </feature>
     <feature name="Toast">
         <param name="android-package" value="nl.xservices.plugins.Toast" />
-    </feature>
-    <feature name="FileChooser">
-        <param name="android-package" value="com.megster.cordova.FileChooser" />
     </feature>
     <feature name="Badge">
         <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge" />
@@ -89,6 +83,9 @@
     <allow-navigation href="ionic://*" />
     <feature name="IonicWebView">
         <param name="android-package" value="com.ionicframework.cordova.webview.IonicWebView" />
+    </feature>
+    <feature name="Chooser">
+        <param name="android-package" value="com.cyph.cordova.Chooser" />
     </feature>
     <name>FrikiRadar</name>
     <description>FrikiRadar, la app de citas y chat para frikis.</description>
@@ -107,6 +104,7 @@
     <allow-intent href="market:*" />
     <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
         <application android:usesCleartextTraffic="true" />
+        <application android:largeHeap="true" />
     </edit-config>
     <config-file parent="/manifest/application" target="AndroidManifest.xml">
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/notification_icon" />

@@ -9,8 +9,8 @@ import { Router } from "@angular/router";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
+import { Chooser } from "@ionic-native/chooser/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
-import { ImagePicker } from "@ionic-native/image-picker/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import {
   ActionSheetController,
@@ -81,11 +81,11 @@ export class EditProfilePage implements OnInit {
     private base64: Base64,
     private utils: UtilsService,
     private camera: Camera,
-    private imagePicker: ImagePicker,
     private router: Router,
     private toast: Toast,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions
+    private androidPermissions: AndroidPermissions,
+    private chooser: Chooser
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -349,21 +349,10 @@ export class EditProfilePage implements OnInit {
 
         break;
       case "gallery":
-        if (await this.imagePicker.hasReadPermission()) {
-          image = (await this.imagePicker.getPictures({
-            maximumImagesCount: 1,
-            outputType: 0,
-            width: 1024,
-            quality: 70
-          }))[0];
-        } else {
-          this.toast
-            .show(
-              `No has dado permisos para leer tu galería.`,
-              "short",
-              "bottom"
-            )
-            .subscribe();
+        try {
+          image = (await this.chooser.getFile("image/*")).uri;
+        } catch (e) {
+          console.error("Error con chooser", e);
         }
         break;
     }
