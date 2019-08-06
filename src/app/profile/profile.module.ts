@@ -4,7 +4,6 @@ import { FormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
-import { NiceDatePipe } from "../nice-date.pipe";
 import { SharedModule } from "../shared/shared.module";
 import { ProfilePage, ProfilePopover } from "./profile.page";
 
@@ -23,7 +22,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [ProfilePage, ProfilePopover, NiceDatePipe],
+  declarations: [ProfilePage, ProfilePopover],
   entryComponents: [ProfilePopover]
 })
 export class ProfilePageModule {}
