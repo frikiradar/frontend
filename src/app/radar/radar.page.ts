@@ -115,10 +115,11 @@ export class RadarPage implements OnInit {
     if ($event && $event.detail && $event.detail.scrollTop) {
       const scrollTop = $event.detail.scrollTop;
 
-      this.hideRange =
-        scrollTop >= 50 &&
-        scrollTop > this.scroll &&
-        scrollTop - this.scroll < 50;
+      if (scrollTop >= 50 && scrollTop > this.scroll) {
+        this.hideRange = true;
+      } else if (this.scroll - scrollTop > 5) {
+        this.hideRange = false;
+      }
 
       this.scroll = scrollTop;
     }

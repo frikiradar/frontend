@@ -27,7 +27,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.4.2'
     }
 }
 
@@ -277,12 +277,12 @@ dependencies {
     implementation "com.google.android.gms:play-services-ads:10.+"
     implementation "com.android.support:support-v4:24.1.1+"
     implementation "com.soundcloud.android:android-crop:1.0.0@aar"
+    implementation "com.facebook.android:facebook-android-sdk:4.40.0"
     implementation "com.google.firebase:firebase-core:10.+"
     implementation "com.google.firebase:firebase-messaging:10.+"
     implementation "com.android.support:support-annotations:27.+"
     implementation "com.android.support:support-v4:26.+"
     implementation "com.android.support:appcompat-v7:23+"
-    implementation "com.facebook.android:facebook-android-sdk:5.0.2"
     // SUB-PROJECT DEPENDENCIES END
 }
 

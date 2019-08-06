@@ -23,9 +23,17 @@
     </ion-list>
     <ng-template #chatItems>
       <ion-list *ngIf="chats?.length; else noChats">
-        <ion-item button (click)="showChat(chat.user.id)" *ngFor="let chat of chats" lines="full">
+        <ion-item
+          button
+          (click)="showChat(chat.user.id)"
+          *ngFor="let chat of chats"
+          lines="full"
+        >
           <ion-avatar slot="start">
-            <img [src]="chat.user.avatar" default="/assets/img/users/default.jpg" />
+            <img
+              [src]="chat.user.avatar"
+              default="/assets/img/users/default.jpg"
+            />
             <ion-badge color="primary" *ngIf="chat?.count > 0">{{
               chat?.count
             }}</ion-badge>
@@ -35,9 +43,7 @@
             <h2>{{ chat.user.username }}</h2>
             <p>{{ chat.text }}</p>
           </ion-label>
-          <ion-note slot="end">{{
-            chat.time_creation | date: "short"
-          }}</ion-note>
+          <ion-note slot="end">{{ chat.time_creation | niceDate }}</ion-note>
         </ion-item>
       </ion-list>
     </ng-template>
