@@ -9,7 +9,6 @@ import { Router } from "@angular/router";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
-import { Chooser } from "@ionic-native/chooser/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import {
@@ -84,8 +83,7 @@ export class EditProfilePage implements OnInit {
     private router: Router,
     private toast: Toast,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions,
-    private chooser: Chooser
+    private androidPermissions: AndroidPermissions
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -328,34 +326,19 @@ export class EditProfilePage implements OnInit {
   }
 
   async takePicture(mode: string) {
-    let image: any;
-
-    switch (mode) {
-      case "camera":
-        image = await this.camera.getPicture({
-          quality: 70,
-          destinationType: this.camera.DestinationType.FILE_URI,
-          encodingType: this.camera.EncodingType.JPEG,
-          sourceType:
-            mode === "camera"
-              ? this.camera.PictureSourceType.CAMERA
-              : this.camera.PictureSourceType.SAVEDPHOTOALBUM,
-          mediaType: this.camera.MediaType.PICTURE,
-          saveToPhotoAlbum: mode === "camera" ? true : false,
-          cameraDirection: 1,
-          correctOrientation: true,
-          targetWidth: 1024
-        });
-
-        break;
-      case "gallery":
-        try {
-          image = (await this.chooser.getFile("image/*")).uri;
-        } catch (e) {
-          console.error("Error con chooser", e);
-        }
-        break;
-    }
+    const image = await this.camera.getPicture({
+      quality: 70,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      sourceType:
+        mode === "camera"
+          ? this.camera.PictureSourceType.CAMERA
+          : this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      mediaType: this.camera.MediaType.PICTURE,
+      cameraDirection: 1,
+      correctOrientation: true
+      // targetWidth: 1024
+    });
 
     try {
       const newImage = await this.crop.crop(image, {

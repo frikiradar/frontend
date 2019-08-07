@@ -119,7 +119,7 @@
           "/manifest": [
             {
               "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-              "count": 1
+              "count": 2
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
@@ -234,6 +234,10 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
             },
@@ -245,6 +249,12 @@
               "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
               "count": 1
             }
+          ],
+          "/widget": [
+            {
+              "xml": "<feature name=\"FileChooser\"><param name=\"android-package\" value=\"com.megster.cordova.FileChooser\" /></feature>",
+              "count": 1
+            }
           ]
         }
       },
@@ -253,10 +263,6 @@
           "/*": [
             {
               "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"Chooser\"><param name=\"android-package\" value=\"com.cyph.cordova.Chooser\" /></feature>",
               "count": 1
             },
             {
@@ -298,7 +304,7 @@
               "count": 1
             },
             {
-              "xml": "<bool name=\"fb_hybrid_app_events\">true</bool>",
+              "xml": "<bool name=\"fb_hybrid_app_events\">false</bool>",
               "count": 1
             }
           ]
@@ -316,7 +322,7 @@
               "count": 1
             },
             {
-              "xml": "<bool name=\"fb_hybrid_app_events\">true</bool>",
+              "xml": "<bool name=\"fb_hybrid_app_events\">false</bool>",
               "count": 1
             }
           ]
@@ -357,9 +363,6 @@
     "cordova-plugin-camera": {
       "PACKAGE_NAME": "com.frikiradar.app"
     },
-    "cordova-plugin-chooser": {
-      "PACKAGE_NAME": "com.frikiradar.app"
-    },
     "cordova-plugin-crop": {
       "PACKAGE_NAME": "com.frikiradar.app"
     },
@@ -369,11 +372,14 @@
     "cordova-plugin-facebook4": {
       "APP_ID": "2308182012762454",
       "APP_NAME": "FrikiRadar",
-      "FACEBOOK_HYBRID_APP_EVENTS": "true",
-      "FACEBOOK_ANDROID_SDK_VERSION": "5.0.2",
+      "FACEBOOK_HYBRID_APP_EVENTS": "false",
+      "FACEBOOK_ANDROID_SDK_VERSION": "4.40.0",
       "PACKAGE_NAME": "com.frikiradar.app"
     },
     "cordova-plugin-fcm-with-dependecy-updated": {
+      "PACKAGE_NAME": "com.frikiradar.app"
+    },
+    "cordova-plugin-filechooser": {
       "PACKAGE_NAME": "com.frikiradar.app"
     },
     "cordova-plugin-geolocation": {
@@ -399,6 +405,9 @@
       "PACKAGE_NAME": "com.frikiradar.app"
     },
     "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.frikiradar.app"
+    },
+    "cordova-plugin-telerik-imagepicker": {
       "PACKAGE_NAME": "com.frikiradar.app"
     },
     "cordova-plugin-vibration": {
@@ -522,14 +531,6 @@
       ]
     },
     {
-      "id": "cordova-plugin-chooser.Chooser",
-      "file": "plugins/cordova-plugin-chooser/www/chooser.js",
-      "pluginId": "cordova-plugin-chooser",
-      "clobbers": [
-        "chooser"
-      ]
-    },
-    {
       "id": "cordova-plugin-crop.CropPlugin",
       "file": "plugins/cordova-plugin-crop/www/crop.js",
       "pluginId": "cordova-plugin-crop",
@@ -559,6 +560,14 @@
       "pluginId": "cordova-plugin-fcm-with-dependecy-updated",
       "clobbers": [
         "FCMPlugin"
+      ]
+    },
+    {
+      "id": "cordova-plugin-filechooser.FileChooser",
+      "file": "plugins/cordova-plugin-filechooser/www/fileChooser.js",
+      "pluginId": "cordova-plugin-filechooser",
+      "clobbers": [
+        "fileChooser"
       ]
     },
     {
@@ -659,6 +668,14 @@
       ]
     },
     {
+      "id": "cordova-plugin-telerik-imagepicker.ImagePicker",
+      "file": "plugins/cordova-plugin-telerik-imagepicker/www/imagepicker.js",
+      "pluginId": "cordova-plugin-telerik-imagepicker",
+      "clobbers": [
+        "plugins.imagePicker"
+      ]
+    },
+    {
       "id": "es6-promise-plugin.Promise",
       "file": "plugins/es6-promise-plugin/www/promise.js",
       "pluginId": "es6-promise-plugin",
@@ -684,7 +701,7 @@
   "plugin_metadata": {
     "com-badrit-base64": "0.2.0",
     "cordova-admob-sdk": "0.24.1",
-    "cordova-clipboard": "1.3.0",
+    "cordova-clipboard": "1.2.1",
     "cordova-launch-review": "3.1.1",
     "cordova-promise-polyfill": "0.0.2",
     "cordova-plugin-admob-free": "0.27.0",
@@ -692,21 +709,22 @@
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-camera": "4.0.3",
-    "cordova-plugin-chooser": "1.2.5",
     "cordova-plugin-crop": "0.3.1",
-    "cordova-plugin-device": "2.0.3",
-    "cordova-plugin-facebook4": "5.0.0",
+    "cordova-plugin-device": "2.0.2",
+    "cordova-plugin-facebook4": "4.2.1",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
+    "cordova-plugin-filechooser": "1.2.0",
     "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-ionic-keyboard": "2.1.3",
-    "cordova-plugin-ionic-webview": "4.1.1",
+    "cordova-plugin-ionic-webview": "4.0.1",
     "cordova-plugin-local-notification": "0.9.0-beta.2",
     "cordova-plugin-navigationbar-color": "0.0.8",
     "cordova-plugin-network-information": "2.0.1",
-    "cordova-plugin-splashscreen": "5.0.3",
-    "cordova-plugin-statusbar": "2.4.3",
+    "cordova-plugin-splashscreen": "5.0.2",
+    "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-telerik-imagepicker": "2.3.2",
     "cordova-plugin-vibration": "3.1.0",
-    "cordova-plugin-whitelist": "1.3.4",
+    "cordova-plugin-whitelist": "1.3.3",
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-x-socialsharing": "5.4.7",
     "cordova-plugin-x-toast": "2.7.2"

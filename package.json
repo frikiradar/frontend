@@ -26,7 +26,6 @@
     "@ionic-native/app-version": "^5.11.0",
     "@ionic-native/base64": "^5.11.0",
     "@ionic-native/camera": "^5.11.0",
-    "@ionic-native/chooser": "^5.11.0",
     "@ionic-native/clipboard": "^5.11.0",
     "@ionic-native/core": "^5.11.0",
     "@ionic-native/crop": "^5.11.0",
@@ -54,7 +53,6 @@
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-camera": "4.0.3",
-    "cordova-plugin-chooser": "^1.2.5",
     "cordova-plugin-crop": "0.4.0",
     "cordova-plugin-facebook4": "^5.0.0",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
@@ -147,8 +145,7 @@
         "APP_ID": "2308182012762454",
         "APP_NAME": "FrikiRadar",
         "FACEBOOK_HYBRID_APP_EVENTS": "true"
-      },
-      "cordova-plugin-chooser": {}
+      }
     },
     "platforms": [
       "android"
