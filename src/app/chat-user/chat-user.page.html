@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!showOptions">
-      <ion-back-button (click)="source.close()"></ion-back-button>
+      <ion-back-button
+        (click)="source.close()"
+        defaultHref="/tabs/chat"
+      ></ion-back-button>
       <ion-button (click)="showProfile(userId)">
         <ion-avatar>
           <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
@@ -75,7 +78,8 @@
       <ion-textarea
         [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'"
         autocapitalize="on"
-        (keyup.enter)="sendMessage()"
+        (keydown.enter)="sendMessage($event)"
+        [(ngModel)]="message"
         #textarea
         autofocus
         autoGrow
@@ -88,7 +92,7 @@
       <ion-button
         color="primary"
         (click)="sendMessage()"
-        [disabled]="!textarea?.value?.trim()"
+        [disabled]="!message.trim()"
       >
         <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>

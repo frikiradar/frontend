@@ -43,6 +43,7 @@ export class ChatUserPage implements OnInit {
   showOptions = false;
   selectedMessage: Chat;
   conErrors = 0;
+  public message = "";
 
   constructor(
     public auth: AuthService,
@@ -149,10 +150,11 @@ export class ChatUserPage implements OnInit {
     this.textarea.setFocus();
   }
 
-  async sendMessage() {
-    if (this.textarea.value.trim()) {
-      const text = this.textarea.value.trim();
-      this.textarea.value = "";
+  async sendMessage(event: Event) {
+    event.preventDefault();
+    if (this.message.trim()) {
+      const text = this.message.trim();
+      this.message = "";
       this.textarea.setFocus();
 
       this.messages = [
