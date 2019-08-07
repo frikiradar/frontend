@@ -150,8 +150,10 @@ export class ChatUserPage implements OnInit {
     this.textarea.setFocus();
   }
 
-  async sendMessage(event: Event) {
-    event.preventDefault();
+  async sendMessage(event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
     if (this.message.trim()) {
       const text = this.message.trim();
       this.message = "";
