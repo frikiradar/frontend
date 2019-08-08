@@ -208,6 +208,7 @@ export class AppComponent {
       const config: {
         maintenance: boolean;
         min_version: string;
+        chat: boolean;
       } = (await this.config.getConfig()) as any;
       if (
         this.platform.is("cordova") &&

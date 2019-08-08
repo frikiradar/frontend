@@ -68,7 +68,6 @@ export class RadarPage implements OnInit {
 
         if (this.users.length < 15) {
           event.target.disabled = true;
-          this.hideRange = false;
         }
       }
     } catch (e) {
@@ -114,15 +113,10 @@ export class RadarPage implements OnInit {
 
   onScroll($event: CustomEvent<ScrollDetail>) {
     if ($event && $event.detail && $event.detail.scrollTop) {
-      const scrollTop = $event.detail.scrollTop;
-
-      if (scrollTop >= 50 && scrollTop > this.scroll) {
-        this.hideRange = true;
-      } else if (this.scroll - scrollTop < 40) {
-        this.hideRange = false;
-      }
-
-      this.scroll = scrollTop;
+      this.hideRange = !(
+        $event.detail.scrollTop < this.scroll || this.users.length < 15
+      );
+      this.scroll = $event.detail.scrollTop;
     }
   }
 }

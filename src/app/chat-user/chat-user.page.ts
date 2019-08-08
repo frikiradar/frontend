@@ -16,6 +16,7 @@ import {
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
 import { ChatService } from "../services/chat.service";
+import { ConfigService } from "../services/config.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
 
@@ -56,10 +57,36 @@ export class ChatUserPage implements OnInit {
     private alert: AlertController,
     private clipboard: Clipboard,
     public keyboard: Keyboard,
-    private platform: Platform
+    private platform: Platform,
+    private config: ConfigService
   ) {}
 
   async ngOnInit() {
+    const config: {
+      maintenance: boolean;
+      min_version: string;
+      chat: boolean;
+    } = (await this.config.getConfig()) as any;
+
+    const alert = await this.alert.create({
+      header: `Ups, error al conectar`,
+      message:
+        "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: "Ok, seré paciente",
+          handler: () => {
+            this.back();
+          }
+        }
+      ]
+    });
+
+    if (!config.chat && !this.auth.isAdmin()) {
+      alert.present();
+    }
+
     this.userId = +this.route.snapshot.paramMap.get("id");
 
     try {
@@ -91,10 +118,11 @@ export class ChatUserPage implements OnInit {
         // Si ya existe el mensaje lo actualizamos
         this.messages.map(m => {
           if (m.id === message.id) {
-            m = message;
+            m.time_read = message.time_read;
           }
         });
       } else {
+        this.messages = [...this.messages, message];
         if (message.fromuser.id === this.user.id) {
           // marcamos como leido
           message = await this.chatSvc.readChat(message.id);
@@ -103,7 +131,7 @@ export class ChatUserPage implements OnInit {
           this.messages = this.messages.filter(m => !m.sending);
         }
       }
-      this.messages = [...this.messages, message];
+
       this.scrollDown();
     });
 
@@ -112,20 +140,6 @@ export class ChatUserPage implements OnInit {
       if (error.type === "error" && this.conErrors >= 2) {
         console.error(error);
         this.source.close();
-        const alert = await this.alert.create({
-          header: `Ups, error al conectar`,
-          message:
-            "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
-          backdropDismiss: false,
-          buttons: [
-            {
-              text: "Ok, seré paciente",
-              handler: () => {
-                this.back();
-              }
-            }
-          ]
-        });
 
         await alert.present();
       }
