@@ -36,7 +36,7 @@ export class RadarPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.range.value = 0;
+    this.range.value = 1;
     this.user = await this.auth.currentUserValue;
     if (this.user && this.user.id) {
       if (!this.user.roles.includes("ROLE_ADMIN")) {
