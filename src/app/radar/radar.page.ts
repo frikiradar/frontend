@@ -117,7 +117,7 @@ export class RadarPage implements OnInit {
 
       if (scrollTop >= 50 && scrollTop > this.scroll) {
         this.hideRange = true;
-      } else if (this.scroll - scrollTop > 5) {
+      } else if (this.scroll - scrollTop > 5 && this.scroll - scrollTop < 40) {
         this.hideRange = false;
       }
 
