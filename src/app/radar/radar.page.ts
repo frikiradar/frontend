@@ -22,7 +22,7 @@ export class RadarPage implements OnInit {
   public showSkeleton = true;
   public hideRange = false;
   scroll: number;
-  ratio = 25;
+  ratio = 10;
   page = 0;
   user: User;
   users: User[] = [];
@@ -36,7 +36,7 @@ export class RadarPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.range.value = 1;
+    this.range.value = 0;
     this.user = await this.auth.currentUserValue;
     if (this.user && this.user.id) {
       if (!this.user.roles.includes("ROLE_ADMIN")) {
@@ -68,6 +68,7 @@ export class RadarPage implements OnInit {
 
         if (this.users.length < 15) {
           event.target.disabled = true;
+          this.hideRange = false;
         }
       }
     } catch (e) {
@@ -83,10 +84,10 @@ export class RadarPage implements OnInit {
     this.showSkeleton = true;
     switch (value) {
       case 0:
-        this.ratio = 5;
+        this.ratio = 10;
         break;
       case 1:
-        this.ratio = 25;
+        this.ratio = 50;
         break;
       case 2:
         this.ratio = 100;
@@ -117,7 +118,7 @@ export class RadarPage implements OnInit {
 
       if (scrollTop >= 50 && scrollTop > this.scroll) {
         this.hideRange = true;
-      } else if (this.scroll - scrollTop > 5 && this.scroll - scrollTop < 40) {
+      } else if (this.scroll - scrollTop < 40) {
         this.hideRange = false;
       }
 
