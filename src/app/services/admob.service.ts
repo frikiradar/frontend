@@ -15,14 +15,18 @@ export class AdmobService {
     // for the sake of this example we will just use the test config
     // isTesting: true,
     autoShow: false,
-    id: "ca-app-pub-8367506635932865/9149948783"
+    id: this.platform.is("android")
+      ? "ca-app-pub-8367506635932865/9149948783"
+      : "ca-app-pub-8367506635932865/9057092208"
   };
 
   // Reward Video Ad's Configurations
   RewardVideoConfig: AdMobFreeRewardVideoConfig = {
     // isTesting: true, // Remove in production
     autoShow: false,
-    id: "ca-app-pub-8367506635932865/5790990999"
+    id: this.platform.is("android")
+      ? "ca-app-pub-8367506635932865/5790990999"
+      : "ca-app-pub-8367506635932865/7217504726"
   };
 
   constructor(private admobFree: AdMobFree, public platform: Platform) {
@@ -74,7 +78,9 @@ export class AdmobService {
     const bannerConfig: AdMobFreeBannerConfig = {
       // isTesting: true, // Remove in production
       autoShow: true,
-      id: "ca-app-pub-8367506635932865/5482166517"
+      id: this.platform.is("android")
+        ? "ca-app-pub-8367506635932865/5482166517"
+        : "ca-app-pub-8367506635932865/1749555622"
     };
     this.admobFree.banner.config(bannerConfig);
 
