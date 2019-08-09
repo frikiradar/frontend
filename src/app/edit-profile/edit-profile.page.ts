@@ -350,9 +350,9 @@ export class EditProfilePage implements OnInit {
       });
 
       console.log("se recortó", newImage);
-      // const src = this.webview.convertFileSrc(newImage);
-
-      const base64File = await this.base64.encodeFile(newImage);
+      const src = this.webview.convertFileSrc(newImage);
+      console.log("webview convierte!");
+      const base64File = await this.base64.encodeFile(src);
       console.log("falla en base64 encode");
       const blob: Blob = this.utils.base64toBlob(base64File);
       console.log("falla en base64toblob");
