@@ -7,6 +7,7 @@
     <access origin="*" />
     <allow-intent href="http://*/*" launch-external="yes" />
     <allow-intent href="https://*/*" launch-external="yes" />
+    <allow-intent href="ionic://frikiradar/*">
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" launch-external="yes" />
@@ -14,6 +15,7 @@
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
+    <allow-navigation href="ionic://frikiradar/*">
     <preference name="Hostname" value="frikiradar" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="23" />
