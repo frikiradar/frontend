@@ -1,29 +1,51 @@
-<ion-content padding>
-  <div id="login-header">
-    <img src="./assets/img/logo/logo_transparente.png"
-      style="width: 150px; display: block; margin-left: auto; margin-right: auto;" />
+<ion-header no-border>
+  <ion-toolbar padding>
+    <img
+      src="./assets/img/logo/logo_transparente.png"
+      style="width: 150px; display: block; margin-left: auto; margin-right: auto;"
+    />
     <h1>Hola,</h1>
     <h3>Te doy la bienvenida a FrikiRadar</h3>
-  </div>
+  </ion-toolbar>
+</ion-header>
 
+<ion-content padding>
   <div id="login-content">
     <form (submit)="submitLogin()" [formGroup]="loginForm" autocomplete="off">
       <ion-item>
-        <ion-label position="floating">Nombre de usuario o correo electrónico</ion-label>
-        <ion-input required type="text" formControlName="username" name="username" autocomplete="username"></ion-input>
+        <ion-label position="floating"
+          >Nombre de usuario o correo electrónico</ion-label
+        >
+        <ion-input
+          required
+          type="text"
+          formControlName="username"
+          name="username"
+          autocomplete="username"
+        ></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Contraseña</ion-label>
-        <ion-input required [type]="clearPassword ? 'text' : 'password'" formControlName="password" name="password"
-          autocomplete="current-password">
+        <ion-input
+          required
+          [type]="clearPassword ? 'text' : 'password'"
+          formControlName="password"
+          name="password"
+          autocomplete="current-password"
+        >
         </ion-input>
         <ion-buttons slot="end" *ngIf="!password.pristine">
           <ion-button (click)="clearPassword = !clearPassword">
-            <ion-icon slot="icon-only" [name]="clearPassword ? 'eye' : 'eye-off'"></ion-icon>
+            <ion-icon
+              slot="icon-only"
+              [name]="clearPassword ? 'eye' : 'eye-off'"
+            ></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-item>
-      <ion-button color="primary" type="submit" expand="block" class="dismiss">Iniciar sesión</ion-button>
+      <ion-button color="primary" type="submit" expand="block" class="dismiss"
+        >Iniciar sesión</ion-button
+      >
     </form>
     <p text-center>
       No tengo una cuenta, <a routerLink="/register">quiero registrarme</a>
@@ -32,24 +54,25 @@
       <a (click)="forgotPassword()">He olvidado mi contraseña</a>
     </p>
   </div>
-  <!--<div id="login-footer">
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-item button lines="none">
-            <img src="./assets/img/layout/google.png" />
-          </ion-item>
-        </ion-col>
-        <ion-col button lines="none" (click)="loginFacebook()">
-          <img src="./assets/img/layout/facebook.png" />
-        </ion-col>
-        <ion-col>
-          <a href="#"> <img src="./assets/img/layout/twitch.png" /> </a>
-        </ion-col>
-        <ion-col>
-          <a href="#"> <img src="./assets/img/layout/steam.png" /> </a>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>-->
 </ion-content>
+
+<ion-footer padding>
+  <!--<ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item button lines="none">
+          <img src="./assets/img/layout/google.png" />
+        </ion-item>
+      </ion-col>
+      <ion-col button lines="none" (click)="loginFacebook()">
+        <img src="./assets/img/layout/facebook.png" />
+      </ion-col>
+      <ion-col>
+        <a href="#"> <img src="./assets/img/layout/twitch.png" /> </a>
+      </ion-col>
+      <ion-col>
+        <a href="#"> <img src="./assets/img/layout/steam.png" /> </a>
+      </ion-col>
+    </ion-row>
+  </ion-grid>-->
+</ion-footer>

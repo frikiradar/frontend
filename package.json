@@ -33,6 +33,7 @@
     "@ionic-native/facebook": "^5.11.0",
     "@ionic-native/fcm": "^5.11.0",
     "@ionic-native/geolocation": "^5.11.0",
+    "@ionic-native/ionic-webview": "^5.12.0",
     "@ionic-native/keyboard": "^5.11.0",
     "@ionic-native/launch-review": "^5.11.0",
     "@ionic-native/local-notifications": "^5.11.0",
@@ -114,9 +115,7 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {
-        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      },
+      "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-launch-review": {},
       "cordova-plugin-network-information": {},
