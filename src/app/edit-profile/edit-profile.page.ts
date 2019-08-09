@@ -343,15 +343,16 @@ export class EditProfilePage implements OnInit {
     });
 
     try {
-      const newImage = this.webview.convertFileSrc(
-        await this.crop.crop(image, {
-          quality: 100,
-          targetWidth: -1,
-          targetHeight: -1
-        })
-      );
+      const newImage = await this.crop.crop(image, {
+        quality: 100,
+        targetWidth: -1,
+        targetHeight: -1
+      });
+      console.log(newImage);
+      const src = this.webview.convertFileSrc(newImage);
+      console.log(src);
 
-      const base64File = await this.base64.encodeFile(newImage);
+      const base64File = await this.base64.encodeFile(src);
       const blob: Blob = this.utils.base64toBlob(base64File);
       const avatar: File = new File([blob], "avatar.png");
       try {
