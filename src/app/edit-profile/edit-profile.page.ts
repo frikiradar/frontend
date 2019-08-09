@@ -10,6 +10,7 @@ import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
+import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Toast } from "@ionic-native/toast/ngx";
 import {
   ActionSheetController,
@@ -83,7 +84,8 @@ export class EditProfilePage implements OnInit {
     private router: Router,
     private toast: Toast,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions
+    private androidPermissions: AndroidPermissions,
+    private webview: WebView
   ) {
     this.profileForm = this.fb.group({
       description: [""],
@@ -341,11 +343,13 @@ export class EditProfilePage implements OnInit {
     });
 
     try {
-      const newImage = await this.crop.crop(image, {
-        quality: 100,
-        targetWidth: -1,
-        targetHeight: -1
-      });
+      const newImage = this.webview.convertFileSrc(
+        await this.crop.crop(image, {
+          quality: 100,
+          targetWidth: -1,
+          targetHeight: -1
+        })
+      );
 
       const base64File = await this.base64.encodeFile(newImage);
       const blob: Blob = this.utils.base64toBlob(base64File);

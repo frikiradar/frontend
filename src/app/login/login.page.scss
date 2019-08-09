@@ -1,13 +1,20 @@
+ion-header ion-toolbar {
+  padding: 10px;
+}
 ion-content {
   display: flex;
   flex-direction: column;
 }
 
-#login-footer {
+ion-footer {
   text-align: center;
 
   img {
     width: 50px;
+  }
+
+  &.footer-md::before {
+    background-image: none;
   }
 }
 
