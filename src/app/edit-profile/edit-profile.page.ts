@@ -327,8 +327,8 @@ export class EditProfilePage implements OnInit {
 
   async takePicture(mode: string) {
     const image = await this.camera.getPicture({
-      // quality: 70,
-      destinationType: this.camera.DestinationType.NATIVE_URI,
+      quality: 70,
+      destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       sourceType:
         mode === "camera"
