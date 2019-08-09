@@ -33,6 +33,7 @@
     "@ionic-native/facebook": "^5.11.0",
     "@ionic-native/fcm": "^5.11.0",
     "@ionic-native/geolocation": "^5.11.0",
+    "@ionic-native/ionic-webview": "^5.12.0",
     "@ionic-native/keyboard": "^5.11.0",
     "@ionic-native/launch-review": "^5.11.0",
     "@ionic-native/local-notifications": "^5.11.0",
@@ -58,6 +59,7 @@
     "cordova-plugin-facebook4": "^5.0.0",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
     "cordova-plugin-geolocation": "4.0.1",
+    "cordova-plugin-ionic-webview": "^4.1.1",
     "cordova-plugin-local-notification": "0.9.0-beta.2",
     "cordova-plugin-navigationbar-color": "0.0.9",
     "cordova-plugin-network-information": "2.0.1",
@@ -145,6 +147,9 @@
         "APP_NAME": "FrikiRadar",
         "FACEBOOK_HYBRID_APP_EVENTS": "true",
         "FACEBOOK_ANDROID_SDK_VERSION": "5.0.2"
+      },
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       }
     },
     "platforms": [

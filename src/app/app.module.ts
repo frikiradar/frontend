@@ -17,6 +17,7 @@ import { Device } from "@ionic-native/device/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
@@ -78,7 +79,8 @@ registerLocaleData(localeEs, "es");
     SocialSharing,
     AppVersion,
     AdMobFree,
-    AdmobService
+    AdmobService,
+    WebView
   ],
   bootstrap: [AppComponent]
 })
