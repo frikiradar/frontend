@@ -4,7 +4,7 @@
     <description>FrikiRadar, la app de citas y chat para frikis.</description>
     <author email="hola@frikiradar.com" href="https://frikiradar.com/">FrikiRadar</author>
     <content src="index.html" />
-    <access allows-arbitrary-loads-for-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" origin="*"/>
+    <access allows-arbitrary-loads-for-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" origin="*" />
     <allow-intent href="http://*/*" launch-external="yes" />
     <allow-intent href="https://*/*" launch-external="yes" />
     <allow-intent href="tel:*" />
@@ -14,7 +14,7 @@
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
-    <allow-navigation href="*"/>
+    <allow-navigation href="*" />
     <preference name="Hostname" value="frikiradar" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="23" />
