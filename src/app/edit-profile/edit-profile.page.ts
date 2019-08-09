@@ -335,7 +335,7 @@ export class EditProfilePage implements OnInit {
       sourceType:
         mode === "camera"
           ? this.camera.PictureSourceType.CAMERA
-          : this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+          : this.camera.PictureSourceType.PHOTOLIBRARY,
       mediaType: this.camera.MediaType.PICTURE,
       cameraDirection: 1,
       correctOrientation: true
