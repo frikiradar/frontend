@@ -339,21 +339,21 @@ export class EditProfilePage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE,
       cameraDirection: 1,
       correctOrientation: true
-      // targetWidth: 1024
     });
 
     try {
       const newImage = await this.crop.crop(image, {
-        quality: 100,
-        targetWidth: -1,
-        targetHeight: -1
+        quality: 70,
+        targetWidth: 1024,
+        targetHeight: 1024
       });
 
       const src = this.webview.convertFileSrc(newImage);
-      const base64File = await this.base64.encodeFile(src);
-      const blob: Blob = this.utils.base64toBlob(base64File);
+      const blob = (await this.utils.urltoBlob(src)) as Blob
+
+      // const base64File = await this.base64.encodeFile(src);
+      // const blob: Blob = this.utils.base64toBlob(base64File);
       const avatar: File = new File([blob], "avatar.png");
-      console.log(avatar);
       try {
         this.user = await this.userSvc.uploadAvatar(avatar);
         this.toast
