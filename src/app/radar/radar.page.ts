@@ -22,7 +22,7 @@ export class RadarPage implements OnInit {
   public showSkeleton = true;
   public hideRange = false;
   scroll: number;
-  ratio = 10;
+  ratio = 50;
   page = 0;
   user: User;
   users: User[] = [];
