@@ -9,7 +9,8 @@ export class UtilsService {
   constructor(public http: HttpClient, private alert: AlertController) {}
 
   base64toBlob(b64Data: string) {
-    const bytes: string = atob(b64Data);
+    const bytes: string = atob(b64Data.replace(/^[^,]+,/, ""));
+    // .replace(/\r\n/g, '');
     const byteNumbers = new Array(bytes.length);
     for (let i = 0; i < bytes.length; i++) {
       byteNumbers[i] = bytes.charCodeAt(i);
@@ -17,6 +18,21 @@ export class UtilsService {
     const byteArray = new Uint8Array(byteNumbers);
 
     return new Blob([byteArray], { type: "image/png" });
+  }
+
+  urltoBlob(url: string) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onerror = reject;
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          resolve(xhr.response);
+        }
+      };
+      xhr.open("GET", url);
+      xhr.responseType = "blob"; // convert type
+      xhr.send();
+    });
   }
 
   blobToBase64(blob: Blob): Promise<string> {
