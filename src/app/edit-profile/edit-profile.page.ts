@@ -327,7 +327,7 @@ export class EditProfilePage implements OnInit {
 
   async takePicture(mode: string) {
     const image = await this.camera.getPicture({
-      quality: 70,
+      // quality: 70,
       destinationType: this.camera.DestinationType.NATIVE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       sourceType:
@@ -339,6 +339,8 @@ export class EditProfilePage implements OnInit {
       correctOrientation: true
       // targetWidth: 1024
     });
+
+    console.log(image);
 
     try {
       const newImage = await this.crop.crop(image, {
