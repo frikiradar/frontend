@@ -61,7 +61,7 @@
     >
       <ion-slide>
         <form (submit)="submitProfile()" [formGroup]="profileForm">
-          <ion-item lines="none">
+          <ion-item lines="none" class="subheader">
             <ion-icon name="person" slot="start"></ion-icon>
             <ion-label>Mi información personal</ion-label>
           </ion-item>
@@ -171,30 +171,9 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <ion-item lines="none">
+          <ion-item lines="none" class="subheader">
             <ion-icon name="heart" slot="start"></ion-icon>
             <ion-label>Mi persona ideal</ion-label>
-          </ion-item>
-          <ion-item class="ages">
-            <ion-label>Desde </ion-label>
-            <ion-input
-              type="text"
-              formControlName="minage"
-              readonly
-              placeholder="Años"
-              (click)="openPicker('minage')"
-            >
-            </ion-input>
-
-            <ion-label>- Hasta</ion-label>
-            <ion-input
-              type="text"
-              formControlName="maxage"
-              readonly
-              placeholder="Años"
-              (click)="openPicker('maxage')"
-            >
-            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label>Identidad de género</ion-label>
@@ -210,6 +189,27 @@
                 >{{ likegender }}
               </ion-select-option>
             </ion-select>
+          </ion-item>
+          <ion-item class="ages">
+            <ion-label>Edad desde </ion-label>
+            <ion-input
+              type="text"
+              formControlName="minage"
+              readonly
+              placeholder="Años"
+              (click)="openPicker('minage')"
+            >
+            </ion-input>
+
+            <ion-label>- hasta</ion-label>
+            <ion-input
+              type="text"
+              formControlName="maxage"
+              readonly
+              placeholder="Años"
+              (click)="openPicker('maxage')"
+            >
+            </ion-input>
           </ion-item>
           <ion-item>
             <ion-label>Tipo de conexión</ion-label>
