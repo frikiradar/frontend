@@ -349,15 +349,18 @@ export class EditProfilePage implements OnInit {
         targetHeight: -1
       });
 
-      console.log("se recortó", newImage);
+      console.log(newImage);
+      console.log("falla en webview");
       const src = this.webview.convertFileSrc(newImage);
-      console.log("webview convierte!");
-      const base64File = await this.base64.encodeFile(src);
+      console.log(src);
       console.log("falla en base64 encode");
-      const blob: Blob = this.utils.base64toBlob(base64File);
+      const base64File = await this.base64.encodeFile(src);
+      console.log(base64File);
       console.log("falla en base64toblob");
+      const blob: Blob = this.utils.base64toBlob(base64File);
+      console.log(blob);
+      console.log("falla en new File");
       const avatar: File = new File([blob], "avatar.png");
-      console.log("falla en newfile");
       try {
         this.user = await this.userSvc.uploadAvatar(avatar);
         this.toast
