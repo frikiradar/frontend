@@ -346,8 +346,8 @@ export class EditProfilePage implements OnInit {
         targetHeight: -1
       });
 
-      // const src = this.webview.convertFileSrc(newImage);
-      const blob = (await this.utils.urltoBlob(newImage)) as Blob;
+      const src = this.webview.convertFileSrc(newImage);
+      const blob = (await this.utils.urltoBlob(src)) as Blob;
 
       // const base64File = await this.base64.encodeFile(src);
       // const blob: Blob = this.utils.base64toBlob(base64File);
