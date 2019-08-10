@@ -8,9 +8,9 @@ import { AlertController } from "@ionic/angular";
 export class UtilsService {
   constructor(public http: HttpClient, private alert: AlertController) {}
 
-  base64toBlob(b64Data: string) {
-    const bytes: string = atob(b64Data.replace(/^[^,]+,/, ""));
-    // .replace(/\r\n/g, '');
+  base64toBlob(dataURI: string) {
+    const bytes: string = atob(dataURI.split(",")[1]);
+    // .replace(/^data:image\/(png|jpg|jpeg|\*);charset=utf-8;base64,/, "")
     const byteNumbers = new Array(bytes.length);
     for (let i = 0; i < bytes.length; i++) {
       byteNumbers[i] = bytes.charCodeAt(i);
