@@ -3,6 +3,7 @@
     <ion-buttons slot="start" *ngIf="!showOptions">
       <ion-back-button
         (click)="source.close()"
+        text=""
         defaultHref="/tabs/chat"
       ></ion-back-button>
       <ion-button (click)="showProfile(userId)">

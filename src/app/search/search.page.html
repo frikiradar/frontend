@@ -2,13 +2,21 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button>
-        <ion-back-button defaultHref="/"></ion-back-button>
+        <ion-back-button text="Atrás" defaultHref="/"></ion-back-button>
       </ion-button>
     </ion-buttons>
     <ion-title>Búsqueda</ion-title>
   </ion-toolbar>
-  <ion-searchbar animated debounce="500" placeholder="Busco frikis a los que les guste..." [debounce]="500"
-    (keyup.enter)="search($event.target.value)" spellcheck="false" #searchBar></ion-searchbar>
+  <ion-searchbar
+    animated
+    debounce="500"
+    placeholder="Busco frikis a los que les guste..."
+    [debounce]="500"
+    (keyup.enter)="search($event.target.value)"
+    spellcheck="false"
+    color="light"
+    #searchBar
+  ></ion-searchbar>
   <ion-segment (ionChange)="changeOrder($event.detail.value)">
     <ion-segment-button layout="icon-start" value="distance" checked>
       <ion-label>Distancia</ion-label>
@@ -44,16 +52,26 @@
     </ion-list>
     <ng-template #radarItems>
       <ion-list>
-        <ion-item button *ngFor="let user of users" (click)="showProfile(user.id)" lines="full">
+        <ion-item
+          button
+          *ngFor="let user of users"
+          (click)="showProfile(user.id)"
+          lines="full"
+        >
           <ion-avatar slot="start">
-            <img [src]="user?.avatar" default="/assets/img/users/default.jpg">
+            <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
           </ion-avatar>
           <ion-label>
             <h2>{{ user.username }}, {{ user.age }}</h2>
             <h3>
-              <span *ngIf="user.location">{{ user?.location
-                }}<span *ngIf="user.location && user.distance !== undefined">, a
-                </span></span><span *ngIf="user.distance !== undefined">{{ user.distance }}km</span>
+              <span *ngIf="user.location"
+                >{{ user?.location
+                }}<span *ngIf="user.location && user.distance !== undefined"
+                  >, a
+                </span></span
+              ><span *ngIf="user.distance !== undefined"
+                >{{ user.distance }}km</span
+              >
             </h3>
             <p>{{ user.description }}</p>
           </ion-label>

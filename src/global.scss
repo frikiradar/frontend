@@ -92,10 +92,20 @@ form {
     --color: white !important;
   }
 
-  ion-buttons {
+  .sc-ion-buttons-md-h {
     margin-bottom: -14px;
     margin-right: -12px;
     color: #e91e63;
+  }
+
+  .sc-ion-buttons-ios-h {
+    position: relative;
+    top: 20px;
+    left: 20px;
+
+    ion-icon {
+      color: #e91e63 !important;
+    }
   }
 
   ion-button[type="submit"] {
@@ -132,4 +142,8 @@ ion-segment-button {
   background: #1a1a1a;
   --color: white;
   text-transform: none;
+}
+
+.sc-ion-back-button-md {
+  display: none;
 }
