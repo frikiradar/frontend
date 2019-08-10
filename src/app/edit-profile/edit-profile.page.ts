@@ -7,7 +7,6 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
-import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
@@ -78,7 +77,6 @@ export class EditProfilePage implements OnInit {
     private picker: PickerController,
     public sheet: ActionSheetController,
     private crop: Crop,
-    private base64: Base64,
     private utils: UtilsService,
     private camera: Camera,
     private router: Router,
@@ -348,8 +346,8 @@ export class EditProfilePage implements OnInit {
         targetHeight: -1
       });
 
-      const src = this.webview.convertFileSrc(newImage);
-      const blob = (await this.utils.urltoBlob(src)) as Blob;
+      // const src = this.webview.convertFileSrc(newImage);
+      const blob = (await this.utils.urltoBlob(newImage)) as Blob;
 
       // const base64File = await this.base64.encodeFile(src);
       // const blob: Blob = this.utils.base64toBlob(base64File);

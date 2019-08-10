@@ -2,7 +2,6 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
-import { Base64 } from "@ionic-native/base64/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
 import { IonicModule } from "@ionic/angular";
@@ -27,6 +26,6 @@ const routes: Routes = [
     SharedModule
   ],
   declarations: [EditProfilePage],
-  providers: [Crop, Base64, Camera]
+  providers: [Crop, Camera]
 })
 export class EditProfilePageModule {}
