@@ -165,5 +165,6 @@ export class AuthService {
 
     // Regresamos a la página de login
     this.nav.navigateRoot(["/login"]);
+    location.reload();
   }
 }
