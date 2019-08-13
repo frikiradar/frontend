@@ -28,6 +28,7 @@
     <preference name="NavigationBarBackgroundColor" value="#1a1a1a" />
     <preference name="SplashScreenDelay" value="30000" />
     <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="KeyboardStyle" value="dark" />
     <platform name="android">
         <preference name="Scheme" value="https" />
         <preference name="MixedContentMode" value="0" />
