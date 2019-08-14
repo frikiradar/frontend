@@ -348,9 +348,7 @@ export class EditProfilePage implements OnInit {
 
       const src = this.webview.convertFileSrc(newImage);
       const blob = (await this.utils.urltoBlob(src)) as Blob;
-
-      // const base64File = await this.base64.encodeFile(src);
-      // const blob: Blob = this.utils.base64toBlob(base64File);
+      
       const avatar: File = new File([blob], "avatar.png");
       try {
         this.user = await this.userSvc.uploadAvatar(avatar);
