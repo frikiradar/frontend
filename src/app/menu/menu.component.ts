@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { MenuController, NavController } from "@ionic/angular";
 
 import { AuthService } from "../services/auth.service";
@@ -20,8 +19,7 @@ export class MenuComponent {
     public auth: AuthService,
     public utils: UtilsService,
     private router: Router,
-    private nav: NavController,
-    private socialSharing: SocialSharing
+    private nav: NavController
   ) {}
 
   editProfile() {
@@ -35,15 +33,7 @@ export class MenuComponent {
   }
 
   share() {
-    const options = {
-      message:
-        "Conoce a personas con tus mismos gustos con FikiRadar, la app de chat y citas para frikis.", // not supported on some apps (Facebook, Instagram)
-      subject: "FrikiRadar, la app de chat y citas para frikis", // fi. for email
-      url: "https://play.google.com/store/apps/details?id=com.frikiradar.app",
-      chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
-    };
-
-    this.socialSharing.shareWithOptions(options);
+    this.utils.share();
   }
 
   logout() {

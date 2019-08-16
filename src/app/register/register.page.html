@@ -97,7 +97,19 @@
       de 8 caracteres.
     </div>
     <ion-item>
-      <ion-label>Identidad de género</ion-label>
+      <ion-label>Fecha de nacimiento</ion-label>
+      <ion-datetime
+        min="1900-01"
+        max="{{ (today | date: 'y') - 18 }}"
+        cancel-text="Cancelar"
+        done-text="Hecho"
+        displayFormat="DD MMM de YYYY"
+        monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+        formControlName="birthday"
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Mi identidad de género</ion-label>
       <ion-select
         interface="action-sheet"
         cancel-text="Cancelar"
@@ -122,16 +134,19 @@
       una opción
     </div>
     <ion-item>
-      <ion-label>Fecha de nacimiento</ion-label>
-      <ion-datetime
-        min="1900-01"
-        max="{{ (today | date: 'y') - 18 }}"
+      <ion-label>Estoy buscando (opcional)</ion-label>
+      <ion-select
         cancel-text="Cancelar"
-        done-text="Hecho"
-        displayFormat="DD MMM de YYYY"
-        monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-        formControlName="birthday"
-      ></ion-datetime>
+        placeholder="Selecciona"
+        formControlName="lovegender"
+        multiple
+      >
+        <ion-select-option
+          *ngFor="let likegender of userSvc.getGenders()"
+          [value]="likegender"
+          >{{ likegender }}
+        </ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item lines="none">
       <ion-label

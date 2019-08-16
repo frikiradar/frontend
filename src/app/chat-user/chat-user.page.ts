@@ -44,6 +44,7 @@ export class ChatUserPage implements OnInit {
   showOptions = false;
   selectedMessage: Chat;
   conErrors = 0;
+  alertError: any;
   public message = "";
 
   constructor(
@@ -68,7 +69,7 @@ export class ChatUserPage implements OnInit {
       chat: boolean;
     } = (await this.config.getConfig()) as any;
 
-    const alert = await this.alert.create({
+    this.alertError = await this.alert.create({
       header: `Ups, error al conectar`,
       message:
         "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
@@ -84,7 +85,7 @@ export class ChatUserPage implements OnInit {
     });
 
     if (!config.chat && !this.auth.isAdmin()) {
-      alert.present();
+      this.alertError.present();
     }
 
     this.userId = +this.route.snapshot.paramMap.get("id");
@@ -135,7 +136,7 @@ export class ChatUserPage implements OnInit {
       this.scrollDown();
     });
 
-    this.source.addEventListener("error", async error => {
+    /*this.source.addEventListener("error", async error => {
       this.conErrors++;
       if (error.type === "error" && this.conErrors >= 2) {
         console.error(error);
@@ -143,7 +144,7 @@ export class ChatUserPage implements OnInit {
 
         await alert.present();
       }
-    });
+    });*/
 
     this.source.addEventListener("open", async error => {
       this.conErrors = 0;
@@ -187,7 +188,11 @@ export class ChatUserPage implements OnInit {
       ];
 
       this.scrollDown();
-      this.chatSvc.sendMessage(this.user.id, text);
+      try {
+        await this.chatSvc.sendMessage(this.user.id, text).then();
+      } catch (e) {
+        this.alertError.present();
+      }
     }
   }
 

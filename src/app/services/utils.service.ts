@@ -1,12 +1,20 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController } from "@ionic/angular";
+
+import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class UtilsService {
-  constructor(public http: HttpClient, private alert: AlertController) {}
+  constructor(
+    public http: HttpClient,
+    private alert: AlertController,
+    private auth: AuthService,
+    private socialSharing: SocialSharing
+  ) {}
 
   base64toBlob(dataURI: string) {
     const bytes: string = atob(dataURI.split(",")[1]);
@@ -70,5 +78,18 @@ export class UtilsService {
     });
 
     await alert.present();
+  }
+
+  share() {
+    const referrer = this.auth.currentUserValue.username;
+    const options = {
+      message:
+        "Conoce a personas con tus mismos gustos con FikiRadar, la app de chat y citas para frikis.", // not supported on some apps (Facebook, Instagram)
+      subject: "FrikiRadar, la app de chat y citas para frikis", // fi. for email
+      url: `https://play.google.com/store/apps/details?id=com.frikiradar.app&referrer=${referrer}`,
+      chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
+    };
+
+    this.socialSharing.shareWithOptions(options);
   }
 }

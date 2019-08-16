@@ -48,7 +48,8 @@ export class RegisterPage {
       ]),
       birthday: new FormControl("", Validators.required),
       gender: new FormControl("", Validators.required),
-      mailing: new FormControl("")
+      lovegender: [""],
+      mailing: [""]
     });
   }
 
@@ -75,7 +76,8 @@ export class RegisterPage {
                   this.registerForm.get("password").value.trim(),
                   this.registerForm.get("birthday").value.split("T")[0],
                   this.registerForm.get("gender").value.trim(),
-                  this.registerForm.get("mailing").value,
+                  this.registerForm.get("lovegender").value,
+                  this.registerForm.get("mailing").value
                 );
 
                 const user = await this.auth.login(

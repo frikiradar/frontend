@@ -1,11 +1,17 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Event, Router } from "@angular/router";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { IonContent, IonRange, MenuController } from "@ionic/angular";
+import {
+  AlertController,
+  IonContent,
+  IonRange,
+  MenuController
+} from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
+import { UtilsService } from "../services/utils.service";
 import { AuthService } from "./../services/auth.service";
 
 @Component({
@@ -32,7 +38,9 @@ export class RadarPage implements OnInit {
     public menu: MenuController,
     private auth: AuthService,
     public router: Router,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private alert: AlertController,
+    private utils: UtilsService
   ) {}
 
   async ngOnInit() {
@@ -70,7 +78,7 @@ export class RadarPage implements OnInit {
       if (event) {
         event.target.complete();
 
-        if (this.users.length < 15) {
+        if (users.length < 15) {
           event.target.disabled = true;
         }
       }
@@ -84,6 +92,31 @@ export class RadarPage implements OnInit {
   }
 
   async changeRatio(value: number) {
+    if (this.users.length < 15) {
+      const config = JSON.parse(localStorage.getItem("config"));
+      const openTimes = config.openTimes;
+      const radarAdv = config.radarAdv;
+
+      if (!radarAdv) {
+        const alert = await this.alert.create({
+          header: "¿Falta gente en tu zona?",
+          message:
+            "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
+          buttons: [
+            {
+              text: "¡Compartir!",
+              handler: () => {
+                this.utils.share();
+              }
+            }
+          ]
+        });
+        config.radarAdv = true;
+        localStorage.setItem("config", JSON.stringify(config));
+        await alert.present();
+      }
+    }
+
     this.showSkeleton = true;
     switch (value) {
       case 0:
@@ -115,7 +148,7 @@ export class RadarPage implements OnInit {
     this.router.navigate(["/search"]);
   }
 
-  onScroll($event: CustomEvent<ScrollDetail>) {
+  async onScroll($event: CustomEvent<ScrollDetail>) {
     if ($event && $event.detail && $event.detail.scrollTop) {
       this.hideRange = !(
         $event.detail.scrollTop < this.scroll || this.users.length < 15

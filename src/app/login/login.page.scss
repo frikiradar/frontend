@@ -1,9 +1,14 @@
-ion-header ion-toolbar {
-  padding: 10px;
-}
 ion-content {
   display: flex;
   flex-direction: column;
+
+  img {
+    margin-top: 3vh;
+    width: 20vh;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 ion-footer {
