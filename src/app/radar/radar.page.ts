@@ -93,9 +93,8 @@ export class RadarPage implements OnInit {
 
   async changeRatio(value: number) {
     if (this.users.length < 15) {
-      const config = JSON.parse(localStorage.getItem("config"));
-      const openTimes = config.openTimes;
-      const radarAdv = config.radarAdv;
+      let config = JSON.parse(localStorage.getItem("config"));
+      const radarAdv = config && config.radarAdv ? config.radarAdv : false;
 
       if (!radarAdv) {
         const alert = await this.alert.create({
@@ -111,7 +110,11 @@ export class RadarPage implements OnInit {
             }
           ]
         });
-        config.radarAdv = true;
+        if (!config) {
+          config = { radarAdv: true };
+        } else {
+          config.radarAdv = true;
+        }
         localStorage.setItem("config", JSON.stringify(config));
         await alert.present();
       }
