@@ -1,8 +1,5 @@
-ion-header {
-  position: absolute;
-}
-
 ion-toolbar {
+  position: absolute;
   --background: #1a1a1aaa;
 
   &.show-background {
@@ -21,7 +18,7 @@ ion-list {
 
 ion-segment {
   position: sticky;
-  top: 44px;
+  top: 0;
   z-index: 2;
 }
 
