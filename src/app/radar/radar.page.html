@@ -51,7 +51,11 @@
           lines="full"
         >
           <ion-avatar slot="start">
-            <img [src]="user.avatar" default="/assets/img/users/default.jpg" />
+            <img
+              [src]="user.avatar"
+              alt="user.username"
+              default="/assets/img/users/default.jpg"
+            />
             <ion-badge color="primary" *ngIf="user?.radar">&nbsp;</ion-badge>
           </ion-avatar>
           <ion-label>

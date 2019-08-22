@@ -1,13 +1,17 @@
-ion-header {
-  position: absolute;
+@media (max-width: 720px) {
+  ion-toolbar {
+    position: absolute;
+    --background: #1a1a1aaa;
+
+    &.show-background {
+      --background: #1a1a1a;
+    }
+  }
 }
 
-ion-toolbar {
-  --background: #1a1a1aaa;
-
-  &.show-background {
-    --background: #1a1a1a;
-  }
+ion-grid {
+  --ion-grid-padding: 0px;
+  --ion-grid-column-padding: 0px;
 }
 
 ion-list {
@@ -21,7 +25,7 @@ ion-list {
 
 ion-segment {
   position: sticky;
-  top: 44px;
+  top: 0;
   z-index: 2;
 }
 

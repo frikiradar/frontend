@@ -1,4 +1,8 @@
-import { registerLocaleData } from "@angular/common";
+import {
+  HashLocationStrategy,
+  LocationStrategy,
+  registerLocaleData
+} from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import localeEs from "@angular/common/locales/es";
 import { LOCALE_ID, NgModule } from "@angular/core";
@@ -31,7 +35,9 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 
+import { ServiceWorkerModule } from "@angular/service-worker";
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
+import { environment } from "../environments/environment";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
@@ -55,11 +61,15 @@ registerLocaleData(localeEs, "es");
     ReactiveFormsModule,
     NgxLinkifyjsModule.forRoot(),
     SharedModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
   providers: [
     StatusBar,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: "es" },
