@@ -1,10 +1,17 @@
-ion-toolbar {
-  position: absolute;
-  --background: #1a1a1aaa;
+@media (max-width: 720px) {
+  ion-toolbar {
+    position: absolute;
+    --background: #1a1a1aaa;
 
-  &.show-background {
-    --background: #1a1a1a;
+    &.show-background {
+      --background: #1a1a1a;
+    }
   }
+}
+
+ion-grid {
+  --ion-grid-padding: 0px;
+  --ion-grid-column-padding: 0px;
 }
 
 ion-list {
