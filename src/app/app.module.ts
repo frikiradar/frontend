@@ -29,6 +29,7 @@ import { Toast } from "@ionic-native/toast/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
+import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
@@ -80,7 +81,8 @@ registerLocaleData(localeEs, "es");
     AppVersion,
     AdMobFree,
     AdmobService,
-    WebView
+    WebView,
+    AnalyticsFirebase
   ],
   bootstrap: [AppComponent]
 })

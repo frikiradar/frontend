@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Event, Router } from "@angular/router";
+import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
@@ -36,7 +37,8 @@ export class AppComponent {
     private config: ConfigService,
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
-    private admob: AdmobService
+    private admob: AdmobService,
+    private analyticsFirebase: AnalyticsFirebase
   ) {
     this.initializeApp();
   }
@@ -59,6 +61,21 @@ export class AppComponent {
       if (this.platform.is("cordova")) {
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
+
+        const eventParams = {};
+        eventParams[this.analyticsFirebase.DEFAULT_PARAMS.COUPON] = "folagor";
+        this.analyticsFirebase
+          .logEvent(
+            this.analyticsFirebase.DEFAULT_EVENTS.CAMPAIGN_DETAILS,
+            eventParams
+          )
+          .then(log => console.log("Event successfully tracked", log))
+          .catch(err => console.log("Error tracking event:", err));
+
+        this.analyticsFirebase
+          .logEvent(this.analyticsFirebase.DEFAULT_EVENTS.CAMPAIGN_DETAILS)
+          .then(log => console.log("Event successfully tracked", log))
+          .catch(err => console.log("Error tracking event:", err));
 
         this.router.events.subscribe(async (event: Event) => {
           switch (this.router.url) {
