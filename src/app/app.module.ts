@@ -34,7 +34,9 @@ import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
+import { ServiceWorkerModule } from "@angular/service-worker";
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
+import { environment } from "../environments/environment";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
@@ -58,7 +60,10 @@ registerLocaleData(localeEs, "es");
     ReactiveFormsModule,
     NgxLinkifyjsModule.forRoot(),
     SharedModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
   providers: [
     StatusBar,
