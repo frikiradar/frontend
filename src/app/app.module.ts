@@ -1,4 +1,8 @@
-import { registerLocaleData } from "@angular/common";
+import {
+  HashLocationStrategy,
+  LocationStrategy,
+  registerLocaleData
+} from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import localeEs from "@angular/common/locales/es";
 import { LOCALE_ID, NgModule } from "@angular/core";
@@ -59,6 +63,7 @@ registerLocaleData(localeEs, "es");
   providers: [
     StatusBar,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: "es" },
