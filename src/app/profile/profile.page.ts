@@ -2,13 +2,13 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Toast } from "@ionic-native/toast/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
   AlertController,
   NavController,
   NavParams,
-  PopoverController
+  PopoverController,
+  ToastController
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { pulse } from "ng-animate";
@@ -42,7 +42,7 @@ export class ProfilePopover {
     private data: NavParams,
     private router: Router,
     private userSvc: UserService,
-    private toast: Toast
+    private toast: ToastController
   ) {
     this.user = this.data.get("user");
   }
@@ -71,14 +71,18 @@ export class ProfilePopover {
           handler: async data => {
             try {
               await this.userSvc.block(this.user.id, data.note);
-              this.toast
-                .show(`Usuario bloqueado correctamente`, "short", "bottom")
-                .subscribe();
+              (await this.toast.create({
+                message: "Usuario bloqueado correctamente",
+                duration: 2000,
+                position: "bottom"
+              })).present();
               this.router.navigate(["/"]);
             } catch (e) {
-              this.toast
-                .show(`Error al bloquear al usuario ${e}`, "short", "bottom")
-                .subscribe();
+              (await this.toast.create({
+                message: `Error al bloquear al usuario ${e}`,
+                duration: 2000,
+                position: "bottom"
+              })).present();
               alert.present();
             }
           }
@@ -111,7 +115,7 @@ export class ProfilePage implements OnInit {
     public router: Router,
     public utils: UtilsService,
     private nav: NavController,
-    private toast: Toast,
+    private toast: ToastController,
     private vibration: Vibration,
     private admobSvc: AdmobService
   ) {}
@@ -148,32 +152,26 @@ export class ProfilePage implements OnInit {
 
     if (this.user.like) {
       if (this.user.block_messages) {
-        this.toast
-          .show(
-            `¡Le has entregado tu kokoro a ${
-              this.user.username
-            }! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
-            "long",
-            "center"
-          )
-          .subscribe();
+        (await this.toast.create({
+          message: `¡Le has entregado tu kokoro a ${
+            this.user.username
+          }! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
+          duration: 5000,
+          position: "middle"
+        })).present();
       } else {
-        this.toast
-          .show(
-            `¡Le has entregado tu kokoro a ${this.user.username}!`,
-            "long",
-            "center"
-          )
-          .subscribe();
+        (await this.toast.create({
+          message: `¡Le has entregado tu kokoro a ${this.user.username}!`,
+          duration: 5000,
+          position: "middle"
+        })).present();
       }
     } else {
-      this.toast
-        .show(
-          `Le has retirado tu kokoro a ${this.user.username}`,
-          "long",
-          "center"
-        )
-        .subscribe();
+      (await this.toast.create({
+        message: `Le has retirado tu kokoro a ${this.user.username}`,
+        duration: 5000,
+        position: "middle"
+      })).present();
     }
     this.admobSvc.RewardVideoAd();
   }

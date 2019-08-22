@@ -5,8 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Toast } from "@ionic-native/toast/ngx";
-import { AlertController, ModalController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  ToastController
+} from "@ionic/angular";
 
 import { User } from "src/app/models/user";
 import { AuthService } from "./../../services/auth.service";
@@ -29,7 +32,7 @@ export class ChangeUsernameModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private toast: Toast
+    private toast: ToastController
   ) {
     this.user = this.auth.currentUserValue;
 
@@ -51,13 +54,12 @@ export class ChangeUsernameModal {
 
       this.auth.setAuthUser(user);
 
-      this.toast
-        .show(
+      (await this.toast.create({
+        message:
           "¡Nombre de usuario cambiado correctamente! Vuelve a iniciar sesión.",
-          "short",
-          "bottom"
-        )
-        .subscribe();
+        duration: 2000,
+        position: "bottom"
+      })).present();
 
       this.modal.dismiss();
       this.auth.logout();

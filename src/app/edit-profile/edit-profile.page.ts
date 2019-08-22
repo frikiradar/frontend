@@ -10,14 +10,14 @@ import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
 import { Crop } from "@ionic-native/crop/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
-import { Toast } from "@ionic-native/toast/ngx";
 import {
   ActionSheetController,
   IonInput,
   IonSegment,
   IonSlides,
   PickerController,
-  Platform
+  Platform,
+  ToastController
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 
@@ -80,7 +80,7 @@ export class EditProfilePage implements OnInit {
     private utils: UtilsService,
     private camera: Camera,
     private router: Router,
-    private toast: Toast,
+    private toast: ToastController,
     private platform: Platform,
     private androidPermissions: AndroidPermissions,
     private webview: WebView
@@ -141,13 +141,17 @@ export class EditProfilePage implements OnInit {
       this.user = await this.userSvc.updateUser(this.user);
       this.tags = this.user.tags;
 
-      this.toast
-        .show("Cambios guardados correctamente.", "long", "bottom")
-        .subscribe();
+      (await this.toast.create({
+        message: "Cambios guardados correctamente.",
+        duration: 5000,
+        position: "bottom"
+      })).present();
     } catch (e) {
-      this.toast
-        .show(`Error al guardar los cambios ${e}.`, "long", "bottom")
-        .subscribe();
+      (await this.toast.create({
+        message: `Error al guardar los cambios ${e}.`,
+        duration: 5000,
+        position: "bottom"
+      })).present();
     }
     this.back();
   }
@@ -288,9 +292,11 @@ export class EditProfilePage implements OnInit {
     try {
       this.user = await this.userSvc.updateUser(this.user);
     } catch (e) {
-      this.toast
-        .show(`Error al guardar la etiqueta ${e}.`, "long", "bottom")
-        .subscribe();
+      (await this.toast.create({
+        message: `Error al guardar la etiqueta ${e}.`,
+        duration: 5000,
+        position: "bottom"
+      })).present();
     }
   }
 
@@ -348,17 +354,21 @@ export class EditProfilePage implements OnInit {
 
       const src = this.webview.convertFileSrc(newImage);
       const blob = (await this.utils.urltoBlob(src)) as Blob;
-      
+
       const avatar: File = new File([blob], "avatar.png");
       try {
         this.user = await this.userSvc.uploadAvatar(avatar);
-        this.toast
-          .show(`Imagen actualizada correctamente.`, "long", "center")
-          .subscribe();
+        (await this.toast.create({
+          message: `Imagen actualizada correctamente.`,
+          duration: 5000,
+          position: "middle"
+        })).present();
       } catch (e) {
-        this.toast
-          .show(`Error al actualizar la imagen.`, "long", "center")
-          .subscribe();
+        (await this.toast.create({
+          message: `Error al actualizar la imagen.`,
+          duration: 5000,
+          position: "middle"
+        })).present();
         console.error(e);
       }
     } catch (e) {

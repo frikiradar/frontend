@@ -14,6 +14,7 @@ import {
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { AdMobFree } from "@ionic-native/admob-free/ngx";
+import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -29,11 +30,9 @@ import { Network } from "@ionic-native/network/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { Toast } from "@ionic-native/toast/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { NgxLinkifyjsModule } from "ngx-linkifyjs";
-import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
@@ -76,7 +75,6 @@ registerLocaleData(localeEs, "es");
     { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
     Facebook,
     Device,
-    Toast,
     Network,
     Vibration,
     Geolocation,

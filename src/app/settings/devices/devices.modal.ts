@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { Toast } from "@ionic-native/toast/ngx";
-import { AlertController, ModalController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  ToastController
+} from "@ionic/angular";
 
 import { User } from "src/app/models/user";
 import { UserService } from "src/app/services/user.service";
@@ -22,7 +25,7 @@ export class DevicesSettingsModal implements OnInit {
     private alert: AlertController,
     private devicesSvc: DeviceService,
     private auth: AuthService,
-    private toast: Toast,
+    private toast: ToastController,
     private userSvc: UserService
   ) {}
 
@@ -45,7 +48,11 @@ export class DevicesSettingsModal implements OnInit {
       const user = await this.devicesSvc.removeDevice(device);
       this.auth.setAuthUser(user);
 
-      this.toast.show("¡Dispositivo eliminado!", "short", "bottom").subscribe();
+      (await this.toast.create({
+        message: "¡Dispositivo eliminado!",
+        duration: 2000,
+        position: "bottom"
+      })).present();
     } else {
       (await this.alert.create({
         message: "¡No puedes eliminar tu dispositivo actual!",
@@ -65,13 +72,17 @@ export class DevicesSettingsModal implements OnInit {
     this.auth.setAuthUser(user);
 
     if (!device.active) {
-      this.toast
-        .show("¡Notificaciones silenciadas!", "short", "bottom")
-        .subscribe();
+      (await this.toast.create({
+        message: "¡Notificaciones silenciadas!",
+        duration: 2000,
+        position: "bottom"
+      })).present();
     } else {
-      this.toast
-        .show("¡Notificaciones activadas!", "short", "bottom")
-        .subscribe();
+      (await this.toast.create({
+        message: "¡Notificaciones activadas!",
+        duration: 2000,
+        position: "bottom"
+      })).present();
     }
   }
 

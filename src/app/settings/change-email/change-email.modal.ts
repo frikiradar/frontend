@@ -5,8 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Toast } from "@ionic-native/toast/ngx";
-import { AlertController, ModalController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  ToastController
+} from "@ionic/angular";
 
 import { User } from "src/app/models/user";
 import { AuthService } from "./../../services/auth.service";
@@ -29,7 +32,7 @@ export class ChangeEmailModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private toast: Toast
+    private toast: ToastController
   ) {
     this.user = this.auth.currentUserValue;
 
@@ -50,9 +53,11 @@ export class ChangeEmailModal {
 
       this.auth.setAuthUser(user);
 
-      this.toast
-        .show("¡Cuenta de correo cambiada correctamente!", "short", "bottom")
-        .subscribe();
+      (await this.toast.create({
+        message: "¡Cuenta de correo cambiada correctamente!",
+        duration: 2000,
+        position: "bottom"
+      })).present();
 
       this.modal.dismiss();
     } catch (e) {

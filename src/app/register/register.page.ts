@@ -5,8 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Toast } from "@ionic-native/toast/ngx";
-import { AlertController, NavController } from "@ionic/angular";
+import {
+  AlertController,
+  NavController,
+  ToastController
+} from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
@@ -27,7 +30,7 @@ export class RegisterPage {
     private auth: AuthService,
     public fb: FormBuilder,
     private nav: NavController,
-    private toast: Toast,
+    private toast: ToastController,
     public userSvc: UserService,
     private ngZone: NgZone
   ) {
@@ -107,9 +110,11 @@ export class RegisterPage {
 
   async registerSuccess(user: User) {
     this.auth.setAuthUser(user);
-    this.toast
-      .show("Registro realizado correctamente", "short", "bottom")
-      .subscribe();
+    (await this.toast.create({
+      message: "Registro realizado correctamente",
+      duration: 2000,
+      position: "bottom"
+    })).present();
 
     this.ngZone.run(() => this.nav.navigateRoot(["/tabs/radar"])).then();
   }

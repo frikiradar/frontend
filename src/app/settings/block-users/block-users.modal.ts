@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Toast } from "@ionic-native/toast/ngx";
-import { ModalController } from "@ionic/angular";
+import { ModalController, ToastController } from "@ionic/angular";
 import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
 
@@ -15,7 +14,7 @@ export class BlockUsersModal implements OnInit {
   constructor(
     private modal: ModalController,
     private userSvc: UserService,
-    private toast: Toast
+    private toast: ToastController
   ) {}
 
   async ngOnInit() {
@@ -24,9 +23,11 @@ export class BlockUsersModal implements OnInit {
 
   async unblock(user: User) {
     this.users = await this.userSvc.unblock(user.id);
-    this.toast
-      .show(`Usuario desbloqueado correctamente`, "short", "bottom")
-      .subscribe();
+    (await this.toast.create({
+      message: "Usuario desbloqueado correctamente",
+      duration: 2000,
+      position: "bottom"
+    })).present();
   }
 
   close() {

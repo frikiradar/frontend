@@ -3,14 +3,14 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
-import { Toast } from "@ionic-native/toast/ngx";
 import {
   AlertController,
   IonContent,
   IonInfiniteScroll,
   IonTextarea,
   NavController,
-  Platform
+  Platform,
+  ToastController
 } from "@ionic/angular";
 
 import { Chat } from "../models/chat";
@@ -54,7 +54,7 @@ export class ChatUserPage implements OnInit {
     private route: ActivatedRoute,
     private nav: NavController,
     private chatSvc: ChatService,
-    private toast: Toast,
+    private toast: ToastController,
     private alert: AlertController,
     private clipboard: Clipboard,
     public keyboard: Keyboard,
@@ -232,7 +232,11 @@ export class ChatUserPage implements OnInit {
   async copy() {
     this.clipboard.copy(this.selectedMessage.text);
 
-    this.toast.show("Copiado al portapapeles", "short", "center").subscribe();
+    (await this.toast.create({
+      message: "Copiado al portapapeles",
+      duration: 2000,
+      position: "middle"
+    })).present();
     this.showOptions = false;
   }
 

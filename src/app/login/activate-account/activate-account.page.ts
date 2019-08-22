@@ -5,8 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Toast } from "@ionic-native/toast/ngx";
-import { AlertController, NavController } from "@ionic/angular";
+import {
+  AlertController,
+  NavController,
+  ToastController
+} from "@ionic/angular";
 
 import { User } from "src/app/models/user";
 import { AuthService } from "../../services/auth.service";
@@ -29,7 +32,7 @@ export class ActivateAccountPage {
     private auth: AuthService,
     private alert: AlertController,
     private nav: NavController,
-    private toast: Toast
+    private toast: ToastController
   ) {
     this.user = this.auth.currentUserValue;
 
@@ -71,13 +74,11 @@ export class ActivateAccountPage {
 
   async resendCode() {
     await this.userSvc.resendActivationEmail().toPromise();
-    this.toast
-      .show(
-        "Te hemos enviado un nuevo código de verificación al email",
-        "short",
-        "bottom"
-      )
-      .subscribe();
+    (await this.toast.create({
+      message: "Te hemos enviado un nuevo código de verificación al email",
+      duration: 2000,
+      position: "bottom"
+    })).present();
   }
 
   async changeEmail() {

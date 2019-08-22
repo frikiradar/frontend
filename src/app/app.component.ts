@@ -6,8 +6,7 @@ import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { Toast } from "@ionic-native/toast/ngx";
-import { AlertController, NavController, Platform } from "@ionic/angular";
+import { AlertController, Platform, ToastController } from "@ionic/angular";
 
 import { User } from "./models/user";
 import { AdmobService } from "./services/admob.service";
@@ -27,9 +26,7 @@ export class AppComponent {
     private auth: AuthService,
     private alert: AlertController,
     private router: Router,
-    private nav: NavController,
     private statusBar: StatusBar,
-    private toast: Toast,
     private network: Network,
     private splashScreen: SplashScreen,
     private platform: Platform,
@@ -38,7 +35,8 @@ export class AppComponent {
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
     private admob: AdmobService,
-    private analyticsFirebase: AnalyticsFirebase
+    private analyticsFirebase: AnalyticsFirebase,
+    private toastController: ToastController
   ) {
     this.initializeApp();
   }
@@ -117,19 +115,17 @@ export class AppComponent {
   }
 
   async backButtonStatus() {
-    this.platform.backButton.subscribe(() => {
+    this.platform.backButton.subscribe(async () => {
       if (this.router.url.includes("/tabs/")) {
         this.backButtonCount++;
 
         switch (this.backButtonCount) {
           case 1:
-            this.toast
-              .show(
-                "Pulsa de nuevo para salir de la aplicación",
-                "short",
-                "bottom"
-              )
-              .subscribe();
+            (await this.toastController.create({
+              message: "Pulsa de nuevo para salir de la aplicación",
+              duration: 2000,
+              position: "bottom"
+            })).present();
             break;
 
           default:

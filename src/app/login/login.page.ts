@@ -7,11 +7,11 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 // import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
-import { Toast } from "@ionic-native/toast/ngx";
 import {
   AlertController,
   ModalController,
-  NavController
+  NavController,
+  ToastController
 } from "@ionic/angular";
 
 import { User } from "../models/user";
@@ -38,11 +38,10 @@ export class LoginPage {
     private auth: AuthService,
     private alert: AlertController,
     private modal: ModalController,
-    private toast: Toast,
+    private toast: ToastController,
     public formBuilder: FormBuilder,
-    private nav: NavController
-  ) // private fb: Facebook
-  {
+    private nav: NavController // private fb: Facebook
+  ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
     }
@@ -88,7 +87,11 @@ export class LoginPage {
       this.nav.navigateRoot(["/login/two-step"]);
     } else {
       this.auth.setAuthUser(user);
-      this.toast.show("¡Acceso concedido!", "short", "bottom").subscribe();
+      (await this.toast.create({
+        message: "¡Acceso concedido!",
+        duration: 2000,
+        position: "bottom"
+      })).present();
       this.nav.navigateRoot(["/tabs/radar"]);
     }
   }

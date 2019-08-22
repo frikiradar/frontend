@@ -147,3 +147,10 @@ ion-segment-button {
 .sc-ion-back-button-md {
   display: none;
 }
+
+ion-toast.md {
+  --border-radius: 25px;
+  --background: #ffffffee;
+  --width: fit-content;
+  --color: #353535;
+}

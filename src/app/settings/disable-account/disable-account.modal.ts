@@ -5,8 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Toast } from "@ionic-native/toast/ngx";
-import { AlertController, ModalController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  ToastController
+} from "@ionic/angular";
 
 import { AuthService } from "./../../services/auth.service";
 import { UserService } from "./../../services/user.service";
@@ -26,7 +29,7 @@ export class DisableAccountModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private toast: Toast
+    private toast: ToastController
   ) {
     this.disableForm = fb.group({
       password: new FormControl("", [
@@ -46,9 +49,11 @@ export class DisableAccountModal {
 
       this.auth.setAuthUser(user);
 
-      this.toast
-        .show("¡Cuenta desactivada correctamente!", "long", "bottom")
-        .subscribe();
+      (await this.toast.create({
+        message: "¡Cuenta desactivada correctamente!",
+        duration: 5000,
+        position: "bottom"
+      })).present();
 
       this.modal.dismiss();
       this.auth.logout();
