@@ -93,7 +93,7 @@ export class UtilsService {
       };
 
       this.socialSharing.shareWithOptions(options);
-    } else if (window.navigator && window.navigator.share) {
+    } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
         title: "FrikiRadar, la app de citas y chat para frikis",
         text:
