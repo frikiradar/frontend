@@ -303,7 +303,7 @@ export class EditProfilePage implements OnInit {
   }
 
   async openPictureSheet() {
-    if (this.platform.is("android")) {
+    if (this.platform.is("android") && this.platform.is("cordova")) {
       await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
