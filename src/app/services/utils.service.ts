@@ -84,8 +84,8 @@ export class UtilsService {
     const referrer = this.auth.currentUserValue.username;
     const options = {
       message:
-        "Conoce a personas con tus mismos gustos con FikiRadar, la app de chat y citas para frikis.", // not supported on some apps (Facebook, Instagram)
-      subject: "FrikiRadar, la app de chat y citas para frikis", // fi. for email
+        "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.", // not supported on some apps (Facebook, Instagram)
+      subject: "FrikiRadar, la app de citas y chat para frikis", // fi. for email
       url: `https://play.google.com/store/apps/details?id=com.frikiradar.app&referrer=${referrer}`,
       chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
     };
