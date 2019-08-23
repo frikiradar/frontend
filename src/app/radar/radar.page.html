@@ -3,7 +3,11 @@
     <ion-buttons slot="start">
       <ion-button (click)="menu.open()">
         <ion-avatar>
-          <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
+          <img
+            [src]="user?.avatar"
+            [alt]="user?.username"
+            default="/assets/img/users/default.jpg"
+          />
         </ion-avatar>
       </ion-button>
     </ion-buttons>
@@ -53,7 +57,7 @@
           <ion-avatar slot="start">
             <img
               [src]="user.avatar"
-              alt="user.username"
+              [alt]="user.username"
               default="/assets/img/users/default.jpg"
             />
             <ion-badge color="primary" *ngIf="user?.radar">&nbsp;</ion-badge>

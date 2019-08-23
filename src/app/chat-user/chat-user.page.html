@@ -8,7 +8,11 @@
       ></ion-back-button>
       <ion-button (click)="showProfile(userId)">
         <ion-avatar>
-          <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
+          <img
+            [src]="user?.avatar"
+            [alt]="user?.username"
+            default="/assets/img/users/default.jpg"
+          />
         </ion-avatar>
         <ion-label>
           <h2>{{ user ? user.username : "Usuario desconocido" }}</h2>
@@ -95,7 +99,11 @@
         (click)="sendMessage()"
         [disabled]="!message.trim()"
       >
-        <ion-icon slot="icon-only" md="md-send" ios="ios-arrow-dropup-circle"></ion-icon>
+        <ion-icon
+          slot="icon-only"
+          md="md-send"
+          ios="ios-arrow-dropup-circle"
+        ></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

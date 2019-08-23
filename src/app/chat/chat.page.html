@@ -32,6 +32,7 @@
           <ion-avatar slot="start">
             <img
               [src]="chat.user.avatar"
+              [alt]="chat.user.username"
               default="/assets/img/users/default.jpg"
             />
             <ion-badge color="primary" *ngIf="chat?.count > 0">{{
