@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
-import { AlertController } from "@ionic/angular";
+import { AlertController, Platform } from "@ionic/angular";
 
 import { AuthService } from "./auth.service";
 
@@ -13,7 +13,8 @@ export class UtilsService {
     public http: HttpClient,
     private alert: AlertController,
     private auth: AuthService,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private platform: Platform
   ) {}
 
   base64toBlob(dataURI: string) {
@@ -81,15 +82,29 @@ export class UtilsService {
   }
 
   share() {
-    const referrer = this.auth.currentUserValue.username;
-    const options = {
-      message:
-        "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.", // not supported on some apps (Facebook, Instagram)
-      subject: "FrikiRadar, la app de citas y chat para frikis", // fi. for email
-      url: `https://play.google.com/store/apps/details?id=com.frikiradar.app&referrer=${referrer}`,
-      chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
-    };
+    if (this.platform.is("hybrid")) {
+      const referrer = this.auth.currentUserValue.username;
+      const options = {
+        message:
+          "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.", // not supported on some apps (Facebook, Instagram)
+        subject: "FrikiRadar, la app de citas y chat para frikis", // fi. for email
+        url: `https://play.google.com/store/apps/details?id=com.frikiradar.app&referrer=${referrer}`,
+        chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
+      };
 
-    this.socialSharing.shareWithOptions(options);
+      this.socialSharing.shareWithOptions(options);
+    } else if (navigator.share) {
+      navigator
+        .share({
+          title: "FrikiRadar, la app de citas y chat para frikis",
+          url: "https://frikiradar.app"
+        })
+        .then(() => {
+          console.log("Thanks for sharing!");
+        })
+        .catch(console.error);
+    } else {
+      // fallback
+    }
   }
 }
