@@ -93,14 +93,13 @@ export class UtilsService {
       };
 
       this.socialSharing.shareWithOptions(options);
-    } else if (navigator && navigator.share) {
-      navigator
-        .share({
-          title: "FrikiRadar, la app de citas y chat para frikis",
-          text:
-            "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.",
-          url: "https://frikiradar.app"
-        })
+    } else if (window.navigator && window.navigator.share) {
+      window.navigator["share"]({
+        title: "FrikiRadar, la app de citas y chat para frikis",
+        text:
+          "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.",
+        url: "https://frikiradar.app"
+      })
         .then(() => {
           console.log("Thanks for sharing!");
         })
