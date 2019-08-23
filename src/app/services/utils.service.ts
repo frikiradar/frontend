@@ -82,7 +82,7 @@ export class UtilsService {
   }
 
   share() {
-    if (this.platform.is("hybrid")) {
+    if (this.platform.is("cordova")) {
       const referrer = this.auth.currentUserValue.username;
       const options = {
         message:
