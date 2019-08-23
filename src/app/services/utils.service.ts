@@ -82,7 +82,7 @@ export class UtilsService {
   }
 
   share() {
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("hybrid")) {
       const referrer = this.auth.currentUserValue.username;
       const options = {
         message:
@@ -93,10 +93,12 @@ export class UtilsService {
       };
 
       this.socialSharing.shareWithOptions(options);
-    } else if (navigator.share) {
+    } else if (navigator && navigator.share) {
       navigator
         .share({
           title: "FrikiRadar, la app de citas y chat para frikis",
+          text:
+            "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.",
           url: "https://frikiradar.app"
         })
         .then(() => {
