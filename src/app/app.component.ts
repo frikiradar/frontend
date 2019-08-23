@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Event, Router } from "@angular/router";
-import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
+// import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
@@ -35,7 +35,7 @@ export class AppComponent {
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
     private admob: AdmobService,
-    private analyticsFirebase: AnalyticsFirebase,
+    // private analyticsFirebase: AnalyticsFirebase,
     private toastController: ToastController
   ) {
     this.initializeApp();
@@ -60,7 +60,7 @@ export class AppComponent {
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
 
-        const eventParams = {};
+        /*const eventParams = {};
         eventParams[this.analyticsFirebase.DEFAULT_PARAMS.COUPON] = "folagor";
         this.analyticsFirebase
           .logEvent(
@@ -73,7 +73,7 @@ export class AppComponent {
         this.analyticsFirebase
           .logEvent(this.analyticsFirebase.DEFAULT_EVENTS.CAMPAIGN_DETAILS)
           .then(log => console.log("Event successfully tracked", log))
-          .catch(err => console.log("Error tracking event:", err));
+          .catch(err => console.log("Error tracking event:", err));*/
 
         this.router.events.subscribe(async (event: Event) => {
           switch (this.router.url) {

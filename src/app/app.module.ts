@@ -14,7 +14,7 @@ import {
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { AdMobFree } from "@ionic-native/admob-free/ngx";
-import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
+// import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -89,8 +89,8 @@ registerLocaleData(localeEs, "es");
     AppVersion,
     AdMobFree,
     AdmobService,
-    WebView,
-    AnalyticsFirebase
+    WebView
+    // AnalyticsFirebase
   ],
   bootstrap: [AppComponent]
 })
