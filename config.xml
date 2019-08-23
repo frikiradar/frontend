@@ -16,7 +16,7 @@
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
     <allow-navigation href="ionic://frikiradar/*" />
-    <preference name="Hostname" value="frikiradar" />
+    <preference name="Hostname" value="frikiradar.app" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="23" />
     <preference name="BackupWebStorage" value="none" />

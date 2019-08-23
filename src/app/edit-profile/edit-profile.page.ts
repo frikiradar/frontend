@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -58,6 +58,8 @@ export class EditProfilePage implements OnInit {
   music: IonInput;
   @ViewChild("role", { static: true })
   role: IonInput;
+  @ViewChild("imageInput", { static: true })
+  imageInput: ElementRef;
 
   public showToolbar = false;
   public profileForm: FormGroup;
@@ -308,30 +310,34 @@ export class EditProfilePage implements OnInit {
       ]);
     }
 
-    const actionSheet = await this.sheet.create({
-      header:
-        "Consejo: Si pones una foto tuya transmitirás mucha más confianza.",
-      buttons: [
-        {
-          text: "Desde la cámara",
-          icon: "camera",
-          handler: () => {
-            this.takePicture("camera");
+    if (this.platform.is("cordova")) {
+      const actionSheet = await this.sheet.create({
+        header:
+          "Consejo: Si pones una foto tuya transmitirás mucha más confianza.",
+        buttons: [
+          {
+            text: "Desde la cámara",
+            icon: "camera",
+            handler: () => {
+              this.takePicture("camera");
+            }
+          },
+          {
+            text: "Desde tus fotos",
+            icon: "images",
+            handler: () => {
+              this.takePicture("gallery");
+            }
           }
-        },
-        {
-          text: "Desde tus fotos",
-          icon: "images",
-          handler: () => {
-            this.takePicture("gallery");
-          }
-        }
-      ]
-    });
-    await actionSheet.present();
+        ]
+      });
+      await actionSheet.present();
+    } else {
+      this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
+    }
   }
 
-  async takePicture(mode: string) {
+  async takePicture(mode?: string) {
     const image = await this.camera.getPicture({
       quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -356,23 +362,27 @@ export class EditProfilePage implements OnInit {
       const blob = (await this.utils.urltoBlob(src)) as Blob;
 
       const avatar: File = new File([blob], "avatar.png");
-      try {
-        this.user = await this.userSvc.uploadAvatar(avatar);
-        (await this.toast.create({
-          message: `Imagen actualizada correctamente.`,
-          duration: 5000,
-          position: "middle"
-        })).present();
-      } catch (e) {
-        (await this.toast.create({
-          message: `Error al actualizar la imagen.`,
-          duration: 5000,
-          position: "middle"
-        })).present();
-        console.error(e);
-      }
+      this.uploadPicture(avatar);
     } catch (e) {
       console.error("Error al recortar la imagen.", e);
+    }
+  }
+
+  async uploadPicture(avatar: File) {
+    try {
+      this.user = await this.userSvc.uploadAvatar(avatar);
+      (await this.toast.create({
+        message: `Imagen actualizada correctamente.`,
+        duration: 5000,
+        position: "middle"
+      })).present();
+    } catch (e) {
+      (await this.toast.create({
+        message: `Error al actualizar la imagen.`,
+        duration: 5000,
+        position: "middle"
+      })).present();
+      console.error(e);
     }
   }
 
