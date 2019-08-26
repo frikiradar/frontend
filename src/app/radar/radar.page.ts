@@ -154,7 +154,7 @@ export class RadarPage implements OnInit {
   async onScroll($event: CustomEvent<ScrollDetail>) {
     if ($event && $event.detail && $event.detail.scrollTop) {
       this.hideRange = !(
-        $event.detail.scrollTop < this.scroll || this.users.length < 15
+        $event.detail.scrollTop < this.scroll || this.users.length <= 15
       );
       this.scroll = $event.detail.scrollTop;
     }

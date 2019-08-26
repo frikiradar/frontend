@@ -40,7 +40,7 @@ export class ChatUserPage implements OnInit {
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
   loading = true;
-  page = 1;
+  page = 0;
   showOptions = false;
   selectedMessage: Chat;
   conErrors = 0;
@@ -94,6 +94,8 @@ export class ChatUserPage implements OnInit {
       this.user = await this.userSvc.getUser(this.userId);
       this.loading = false;
     } catch (e) {}
+
+    this.page = 1;
 
     this.messages = (await this.chatSvc.getMessages(
       this.userId,
@@ -191,7 +193,7 @@ export class ChatUserPage implements OnInit {
       try {
         await this.chatSvc.sendMessage(this.user.id, text).then();
       } catch (e) {
-        this.alertError.present();
+        // this.alertError.present();
       }
     }
   }
@@ -206,6 +208,9 @@ export class ChatUserPage implements OnInit {
   }
 
   async loadChats(event: any) {
+    if (!this.messages.length) {
+      return;
+    }
     this.page++;
     const messages = (await this.chatSvc.getMessages(
       this.userId,

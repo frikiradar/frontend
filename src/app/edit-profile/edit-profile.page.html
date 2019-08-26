@@ -3,22 +3,24 @@
   [scrollEvents]="true"
   (ionScroll)="onScroll($event)"
 >
-  <ion-toolbar [class.show-background]="showToolbar">
-    <ion-buttons slot="start">
-      <ion-back-button text="Atrás" defaultHref="/tabs/radar"></ion-back-button>
-    </ion-buttons>
-    <ion-title>{{
-      user?.tags.length ? "Mi Perfil" : "Completa tu perfil"
-    }}</ion-title>
-    <ion-buttons slot="end" *ngIf="activeImage > 0">
-      <ion-button (click)="deleteImage()">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-      <ion-button (click)="setAvatar()">
-        <ion-icon slot="icon-only" name="star-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+  <ion-header>
+    <ion-toolbar [class.show-background]="showToolbar">
+      <ion-buttons slot="start">
+        <ion-back-button text="Atrás" defaultHref="/tabs/radar"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{
+        user?.tags.length ? "Mi Perfil" : "Completa tu perfil"
+      }}</ion-title>
+      <ion-buttons slot="end" *ngIf="activeImage > 0">
+        <ion-button (click)="deleteImage()">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+        <ion-button (click)="setAvatar()">
+          <ion-icon slot="icon-only" name="star-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
   <ion-grid>
     <ion-row>
       <ion-col size-sm="6">
