@@ -20,7 +20,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
+<ion-content
+  #radarlist
+  [scrollEvents]="true"
+  (ionScroll)="onScroll($event)"
+  no-bounce
+  has-bouncing="false"
+  forceOverscroll="false"
+>
   <div *ngIf="users?.length || showSkeleton; else noUsers">
     <!--<p padding>
       Estos son los resultados obtenidos
