@@ -77,8 +77,18 @@ ion-spinner {
   }
 }
 
-ion-footer {
+ion-header ion-toolbar {
+  transition: max-height 0.5s;
+  max-height: 100px;
   &.hide-background {
-    display: none;
+    max-height: 0;
+  }
+}
+
+ion-footer {
+  transition: max-height 0.5s;
+  max-height: 100px;
+  &.hide-background {
+    max-height: 0;
   }
 }

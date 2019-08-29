@@ -26,8 +26,8 @@ export class RadarPage implements OnInit {
   radarlist: IonContent;
 
   public showSkeleton = true;
-  public hideRange = false;
-  scroll: number;
+  public hide = false;
+  scroll = 0;
   ratio = 50;
   page = 0;
   user: User;
@@ -153,10 +153,7 @@ export class RadarPage implements OnInit {
 
   async onScroll($event: CustomEvent<ScrollDetail>) {
     if ($event && $event.detail && $event.detail.scrollTop) {
-      this.hideRange = !(
-        $event.detail.scrollTop < this.scroll || this.users.length <= 15
-      );
-      this.scroll = $event.detail.scrollTop;
+      this.hide = !($event.detail.deltaY < 0);
     }
   }
 }
