@@ -72,8 +72,8 @@
         </ion-slide>
       </ion-slides>
 
-      <div padding>
-        <ion-list padding class="resume">
+      <div class="ion-padding">
+        <ion-list class="resume ion-padding">
           <h1>{{ user?.username }}, {{ user?.age }}</h1>
           <h3 class="location">
             <span *ngIf="user?.location">{{ user.location }}</span
@@ -116,7 +116,7 @@
         <ion-list class="tags">
           <ion-item *ngIf="getTagsCategory('games')?.length">
             <ion-icon name="logo-game-controller-b"></ion-icon>
-            <ion-label text-wrap>
+            <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('games')"
                 color="secondary"
@@ -129,7 +129,7 @@
           </ion-item>
           <ion-item *ngIf="getTagsCategory('films')?.length">
             <ion-icon name="film"></ion-icon>
-            <ion-label text-wrap>
+            <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('films')"
                 color="secondary"
@@ -142,7 +142,7 @@
           </ion-item>
           <ion-item *ngIf="getTagsCategory('books')?.length">
             <ion-icon name="book"></ion-icon>
-            <ion-label text-wrap>
+            <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('books')"
                 color="secondary"
@@ -155,7 +155,7 @@
           </ion-item>
           <ion-item *ngIf="getTagsCategory('role')?.length">
             <ion-icon src="/assets/icons/outline-casino-24px.svg"></ion-icon>
-            <ion-label text-wrap>
+            <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('role')"
                 color="secondary"
@@ -168,7 +168,7 @@
           </ion-item>
           <ion-item *ngIf="getTagsCategory('music')?.length" lines="none">
             <ion-icon name="headset"></ion-icon>
-            <ion-label text-wrap>
+            <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('music')"
                 color="secondary"
@@ -184,7 +184,7 @@
     </ng-template>
   </div>
   <ng-template #noUser>
-    <div class="full-center" padding>
+    <div class="full-center ion-padding">
       <ion-icon name="body"></ion-icon>
       <h2>No encontrado</h2>
       <p>

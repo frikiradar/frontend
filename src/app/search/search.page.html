@@ -31,7 +31,7 @@
 
 <ion-content>
   <div *ngIf="users?.length || showSkeleton; else noUsers">
-    <p text-center>{{ users?.length }} usuarios encontrados</p>
+    <p class="ion-text-center">{{ users?.length }} usuarios encontrados</p>
     <ion-list *ngIf="showSkeleton; else radarItems">
       <ion-item *ngFor="let i of [].constructor(8)" lines="full">
         <ion-avatar slot="start">
@@ -81,7 +81,7 @@
     </ng-template>
   </div>
   <ng-template #noUsers>
-    <div class="full-center" padding>
+    <div class="full-center ion-padding">
       <ion-icon name="search"></ion-icon>
       <h2>Sin resultados</h2>
       <p>

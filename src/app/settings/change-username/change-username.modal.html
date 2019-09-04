@@ -1,40 +1,61 @@
 <ion-header no-border>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-button (click)="close()">
-                <ion-icon name="close"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-title>Cambiar nombre de usuario</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Cambiar nombre de usuario</ion-title>
+  </ion-toolbar>
 </ion-header>
-<ion-content padding>
-    <h4>¿Quieres cambiar tu correo nombre de usuario?</h4>
-    <p>Indica a continuación el nuevo nombre que deseas y te confirmaremos el cambio si está disponible.</p>
+<ion-content class="ion-padding">
+  <h4>¿Quieres cambiar tu correo nombre de usuario?</h4>
+  <p>
+    Indica a continuación el nuevo nombre que deseas y te confirmaremos el
+    cambio si está disponible.
+  </p>
 
-    <form (submit)="submitForm()" [formGroup]="usernameForm" autocomplete="off">
-        <ion-item>
-            <ion-label position="floating">Nombre de usuario</ion-label>
-            <ion-input required type="text" autocapitalize="words" formControlName="username" debounce="500"
-                [value]="user.username" name="username">
-            </ion-input>
-        </ion-item>
-        <div class="error-message" *ngIf="
+  <form (submit)="submitForm()" [formGroup]="usernameForm" autocomplete="off">
+    <ion-item>
+      <ion-label position="floating">Nombre de usuario</ion-label>
+      <ion-input
+        required
+        type="text"
+        autocapitalize="words"
+        formControlName="username"
+        debounce="500"
+        [value]="user.username"
+        name="username"
+      >
+      </ion-input>
+    </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
         usernameForm.get('username').invalid &&
         usernameForm.get('username').value
-            ">
-            <ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3
-            caracteres y máximo de 15.
-        </div>
-        <div class="error-message" *ngIf="
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3
+      caracteres y máximo de 15.
+    </div>
+    <div
+      class="error-message"
+      *ngIf="
         usernameForm.get('username').invalid &&
         usernameForm.get('username').value
-            ">
-            <ion-icon name="information-circle-outline"></ion-icon>Letras, números,
-            guiones (-_) y puntos(.).
-        </div>
-        <ion-button class="dismiss" color="primary" expand="block" type="submit"
-            [disabled]="usernameForm.invalid || usernameForm.pristine">Confirmar
-            cambio</ion-button>
-    </form>
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Letras, números,
+      guiones (-_) y puntos(.).
+    </div>
+    <ion-button
+      class="dismiss"
+      color="primary"
+      expand="block"
+      type="submit"
+      [disabled]="usernameForm.invalid || usernameForm.pristine"
+      >Confirmar cambio</ion-button
+    >
+  </form>
 </ion-content>

@@ -1,39 +1,61 @@
 <ion-header no-border>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-button (click)="close()">
-                <ion-icon name="close"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-        <ion-title>Desactivar cuenta</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Desactivar cuenta</ion-title>
+  </ion-toolbar>
 </ion-header>
-<ion-content padding>
-    <h4>¿Quieres desactivar tu cuenta?</h4>
-    <p>Introduce de nuevo tu contraseña como medida de seguridad adicional para desactivar la cuenta.</p>
+<ion-content class="ion-padding">
+  <h4>¿Quieres desactivar tu cuenta?</h4>
+  <p>
+    Introduce de nuevo tu contraseña como medida de seguridad adicional para
+    desactivar la cuenta.
+  </p>
 
-    <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
-        <ion-item>
-            <ion-label position="floating">Contraseña</ion-label>
-            <ion-input required autocomplete="off" [type]="clearPassword ? 'text' : 'password'"
-                formControlName="password" debounce="500" name="password"></ion-input>
-            <ion-buttons slot="end" *ngIf="!disableForm.get('password').pristine">
-                <ion-button (click)="clearPassword = !clearPassword">
-                    <ion-icon slot="icon-only" [name]="clearPassword ? 'eye' : 'eye-off'"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-        </ion-item>
-        <div class="error-message" *ngIf="
+  <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input
+        required
+        autocomplete="off"
+        [type]="clearPassword ? 'text' : 'password'"
+        formControlName="password"
+        debounce="500"
+        name="password"
+      ></ion-input>
+      <ion-buttons slot="end" *ngIf="!disableForm.get('password').pristine">
+        <ion-button (click)="clearPassword = !clearPassword">
+          <ion-icon
+            slot="icon-only"
+            [name]="clearPassword ? 'eye' : 'eye-off'"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
         disableForm.get('password').invalid && disableForm.get('password').value
-      ">
-            <ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo
-            de 8 caracteres.
-        </div>
-        <ion-item>
-            <ion-label position="floating">Motivo de la desactivación</ion-label>
-            <ion-textarea formControlName="note" autocapitalize="on"></ion-textarea>
-        </ion-item>
-        <ion-button color="primary" type="submit" expand="block" class="dismiss" [disabled]="disableForm.invalid">
-            Desactivar cuenta</ion-button>
-    </form>
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo
+      de 8 caracteres.
+    </div>
+    <ion-item>
+      <ion-label position="floating">Motivo de la desactivación</ion-label>
+      <ion-textarea formControlName="note" autocapitalize="on"></ion-textarea>
+    </ion-item>
+    <ion-button
+      color="primary"
+      type="submit"
+      expand="block"
+      class="dismiss"
+      [disabled]="disableForm.invalid"
+    >
+      Desactivar cuenta</ion-button
+    >
+  </form>
 </ion-content>

@@ -21,7 +21,7 @@
 </ion-header>
 <ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div *ngIf="users?.length || showSkeleton; else noUsers">
-    <!--<p padding>
+    <!--<p class="ion-padding">
       Estos son los resultados obtenidos
       <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un
       porcentaje de
@@ -94,7 +94,7 @@
     </ng-template>
   </div>
   <ng-template #noUsers>
-    <div class="full-center" padding>
+    <div class="full-center ion-padding">
       <ion-icon name="pin"></ion-icon>
       <h2>Sin resultados</h2>
       <p>
@@ -105,7 +105,7 @@
   </ng-template>
 </ion-content>
 <ion-footer [class.hide-background]="hide">
-  <div id="radar-range" padding>
+  <div id="radar-range" class="ion-padding">
     <ion-range
       #range
       min="0"

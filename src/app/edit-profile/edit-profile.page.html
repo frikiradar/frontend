@@ -6,7 +6,10 @@
   <ion-header>
     <ion-toolbar [class.show-background]="showToolbar">
       <ion-buttons slot="start">
-        <ion-back-button text="Atrás" defaultHref="/tabs/radar"></ion-back-button>
+        <ion-back-button
+          text="Atrás"
+          defaultHref="/tabs/radar"
+        ></ion-back-button>
       </ion-buttons>
       <ion-title>{{
         user?.tags.length ? "Mi Perfil" : "Completa tu perfil"
@@ -65,7 +68,7 @@
           </ion-segment-button>
         </ion-segment>
 
-        <div padding>
+        <div class="ion-padding">
           <ion-slides
             #slider
             initialSlide="0"
@@ -269,7 +272,7 @@
                     ></ion-input>
                   </ion-item>
                   <ion-item lines="none">
-                    <ion-label text-wrap>
+                    <ion-label class="ion-text-wrap">
                       <ion-chip
                         *ngFor="let tag of getTagsCategory('games')"
                         color="secondary"
@@ -300,7 +303,7 @@
                     ></ion-input>
                   </ion-item>
                   <ion-item lines="none">
-                    <ion-label text-wrap>
+                    <ion-label class="ion-text-wrap">
                       <ion-chip
                         *ngFor="let tag of getTagsCategory('films')"
                         color="secondary"
@@ -331,7 +334,7 @@
                     ></ion-input>
                   </ion-item>
                   <ion-item lines="none">
-                    <ion-label text-wrap>
+                    <ion-label class="ion-text-wrap">
                       <ion-chip
                         *ngFor="let tag of getTagsCategory('books')"
                         color="secondary"
@@ -364,7 +367,7 @@
                     ></ion-input>
                   </ion-item>
                   <ion-item lines="none">
-                    <ion-label text-wrap>
+                    <ion-label class="ion-text-wrap">
                       <ion-chip
                         *ngFor="let tag of getTagsCategory('role')"
                         color="secondary"
@@ -395,7 +398,7 @@
                     ></ion-input>
                   </ion-item>
                   <ion-item lines="none">
-                    <ion-label text-wrap>
+                    <ion-label class="ion-text-wrap">
                       <ion-chip
                         *ngFor="let tag of getTagsCategory('music')"
                         color="secondary"
