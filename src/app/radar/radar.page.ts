@@ -47,7 +47,10 @@ export class RadarPage implements OnInit {
     this.range.value = 1;
     this.user = await this.auth.currentUserValue;
     if (this.user && this.user.id) {
-      if (!this.user.roles.includes("ROLE_ADMIN")) {
+      if (
+        !this.user.roles.includes("ROLE_ADMIN") &&
+        !this.user.roles.includes("ROLE_DEMO")
+      ) {
         try {
           const coordinates = await this.geolocation.getCurrentPosition({
             enableHighAccuracy: true,
@@ -153,7 +156,7 @@ export class RadarPage implements OnInit {
 
   async onScroll($event: CustomEvent<ScrollDetail>) {
     if ($event && $event.detail && $event.detail.deltaY) {
-      this.hide = !($event.detail.deltaY < 0);
+      this.hide = !($event.detail.deltaY < 0) && this.users.length > 8;
     }
   }
 }
