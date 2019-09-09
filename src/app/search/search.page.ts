@@ -11,7 +11,7 @@ import { RestService } from "./../services/rest.service";
   styleUrls: ["./search.page.scss"]
 })
 export class SearchPage implements OnInit {
-  @ViewChild("searchBar", {static: true})
+  @ViewChild("searchBar", { static: true })
   searchBar: IonSearchbar;
 
   order = "distance";
@@ -29,6 +29,7 @@ export class SearchPage implements OnInit {
     if (this.route.snapshot.paramMap.get("query")) {
       this.query = this.route.snapshot.paramMap.get("query");
       this.searchBar.value = this.query;
+      this.search(this.query);
     }
   }
 

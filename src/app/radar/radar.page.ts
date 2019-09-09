@@ -156,7 +156,10 @@ export class RadarPage implements OnInit {
 
   async onScroll($event: CustomEvent<ScrollDetail>) {
     if ($event && $event.detail && $event.detail.deltaY) {
-      this.hide = !($event.detail.deltaY < 0) && this.users.length > 8;
+      this.hide =
+        !($event.detail.deltaY < 0) &&
+        this.users.length > 8 &&
+        $event.detail.scrollTop > 200;
     }
   }
 }
