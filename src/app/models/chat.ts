@@ -4,6 +4,7 @@ export interface Chat {
   touser: Partial<User>;
   text: string;
   fromuser?: Partial<User>;
+  user?: Partial<User>;
   time_creation?: Date;
   time_read?: Date;
   id?: number;
