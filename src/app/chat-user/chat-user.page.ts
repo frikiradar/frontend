@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -59,7 +59,8 @@ export class ChatUserPage implements OnInit {
     private clipboard: Clipboard,
     public keyboard: Keyboard,
     private platform: Platform,
-    private config: ConfigService
+    private config: ConfigService,
+    public detectorRef: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -165,6 +166,7 @@ export class ChatUserPage implements OnInit {
     });
 
     this.textarea.setFocus();
+    this.detectorRef.detectChanges();
   }
 
   async sendMessage(event?: Event) {

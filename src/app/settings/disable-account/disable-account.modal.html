@@ -10,9 +10,29 @@
 </ion-header>
 <ion-content class="ion-padding">
   <h4>¿Quieres desactivar tu cuenta?</h4>
+  <p>Antes de desactivar la cuenta lee estos puntos:</p>
+  <ul>
+    <li>
+      Recuerda que aplicación está en desarrollo y aún no hemos llegado a todos
+      los lugares. Gracias a tu ayuda podremos llegar a más personas. ¡Háblale a
+      todo el mundo de FrikiRadar!
+    </li>
+    <li>
+      Si un usuario es molesto puedes bloquearlo entrando en las opciones de su
+      perfil.
+    </li>
+    <li>
+      Puedes realizar ajustes en tu privacidad para evitar sentirte
+      espiado/acosado.
+    </li>
+    <li>
+      Si quieres cambiar tu nombre de usuario puedes hacerlo con la opción
+      correspondiente.
+    </li>
+  </ul>
   <p>
-    Introduce de nuevo tu contraseña como medida de seguridad adicional para
-    desactivar la cuenta.
+    Si aún así sigues queriendo desactivar tu cuenta, introduce de nuevo tu
+    contraseña como medida de seguridad adicional para desactivar la cuenta.
   </p>
 
   <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">

@@ -37,7 +37,7 @@ export class SettingsPage implements OnInit {
     return await modal.present();
   }
 
-  async DevicesSettingsModal() {
+  async devicesSettingsModal() {
     const modal = await this.modal.create({
       component: DevicesSettingsModal
     });

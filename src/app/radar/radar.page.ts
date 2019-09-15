@@ -158,7 +158,7 @@ export class RadarPage implements OnInit {
     if ($event && $event.detail && $event.detail.deltaY) {
       this.hide =
         !($event.detail.deltaY < 0) &&
-        this.users.length > 8 &&
+        this.users.length > 10 &&
         $event.detail.scrollTop > 200;
     }
   }

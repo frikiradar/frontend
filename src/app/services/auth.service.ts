@@ -106,9 +106,7 @@ export class AuthService {
       return false;
     }
 
-    if (!user.token) {
-      user.token = this.currentUserValue.token;
-    }
+    user = { ...this.currentUserValue, ...user };
 
     localStorage.setItem("currentUser", JSON.stringify(user));
     this.currentUserSubject.next(user);
@@ -153,6 +151,13 @@ export class AuthService {
       user = this.currentUserValue;
     }
     return user.roles.includes("ROLE_ADMIN");
+  }
+
+  isPremium(user?: User) {
+    if (!user) {
+      user = this.currentUserValue;
+    }
+    return user.is_premium;
   }
 
   async logout() {
