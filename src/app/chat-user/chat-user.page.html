@@ -80,26 +80,25 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-item lines="none">
-      <ion-textarea
-        [placeholder]="user ? 'Escribe tu mensaje aquí' : 'No puedes responder'"
-        autocapitalize="on"
-        (keydown.enter)="sendMessage($event)"
-        [(ngModel)]="message"
-        #textarea
-        autofocus
-        autoGrow
-        rows="1"
-        [disabled]="!user"
-      >
-      </ion-textarea>
-    </ion-item>
+    <form [formGroup]="chatForm" autocomplete="off">
+      <ion-item lines="none">
+        <ion-textarea
+          [placeholder]="
+            user ? 'Escribe tu mensaje aquí' : 'No puedes responder'
+          "
+          autocapitalize="on"
+          (keydown.enter)="sendMessage($event)"
+          formControlName="message"
+          #textarea
+          autofocus
+          autoGrow
+          rows="1"
+        >
+        </ion-textarea>
+      </ion-item>
+    </form>
     <ion-buttons ion-activatable slot="end">
-      <ion-button
-        color="primary"
-        (click)="sendMessage()"
-        [disabled]="!message.trim()"
-      >
+      <ion-button color="primary" (click)="sendMessage()">
         <ion-icon
           slot="icon-only"
           md="md-send"

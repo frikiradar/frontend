@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from "@angular/forms";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -26,6 +32,11 @@ import { UserService } from "./../services/user.service";
   styleUrls: ["./chat-user.page.scss"]
 })
 export class ChatUserPage implements OnInit {
+  public chatForm: FormGroup;
+  get message() {
+    return this.chatForm.get("message");
+  }
+
   @ViewChild("textarea", { static: true })
   textarea: IonTextarea;
   @ViewChild("chatlist", { static: true })
@@ -45,7 +56,6 @@ export class ChatUserPage implements OnInit {
   selectedMessage: Chat;
   conErrors = 0;
   alertError: any;
-  public message = "";
 
   constructor(
     public auth: AuthService,
@@ -60,8 +70,12 @@ export class ChatUserPage implements OnInit {
     public keyboard: Keyboard,
     private platform: Platform,
     private config: ConfigService,
-    public detectorRef: ChangeDetectorRef
-  ) {}
+    public formBuilder: FormBuilder
+  ) {
+    this.chatForm = formBuilder.group({
+      message: new FormControl("", [Validators.required])
+    });
+  }
 
   async ngOnInit() {
     const config: {
@@ -94,7 +108,9 @@ export class ChatUserPage implements OnInit {
     try {
       this.user = await this.userSvc.getUser(this.userId);
       this.loading = false;
-    } catch (e) {}
+    } catch (e) {
+      this.chatForm.get("message").disable();
+    }
 
     this.page = 1;
 
@@ -166,16 +182,15 @@ export class ChatUserPage implements OnInit {
     });
 
     this.textarea.setFocus();
-    this.detectorRef.detectChanges();
   }
 
   async sendMessage(event?: Event) {
     if (event) {
       event.preventDefault();
     }
-    if (this.message.trim()) {
-      const text = this.message.trim();
-      this.message = "";
+    if (this.message.value.trim()) {
+      const text = this.message.value.trim();
+      this.message.setValue("");
       this.textarea.setFocus();
 
       this.messages = [
