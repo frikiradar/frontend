@@ -22,6 +22,7 @@ import { Device } from "@ionic-native/device/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { InAppPurchase2 } from "@ionic-native/in-app-purchase-2/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
@@ -41,7 +42,6 @@ import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { InsertCoinModal } from "./insert-coin/insert-coin.modal";
 import { MenuComponent } from "./menu/menu.component";
 import { AdmobService } from "./services/admob.service";
 import { SharedModule } from "./shared/shared.module";
@@ -50,8 +50,8 @@ import { SharedModule } from "./shared/shared.module";
 registerLocaleData(localeEs, "es");
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent, InsertCoinModal],
-  entryComponents: [MenuComponent, InsertCoinModal],
+  declarations: [AppComponent, MenuComponent],
+  entryComponents: [MenuComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -90,7 +90,8 @@ registerLocaleData(localeEs, "es");
     AppVersion,
     AdMobFree,
     AdmobService,
-    WebView
+    WebView,
+    InAppPurchase2
     // AnalyticsFirebase
   ],
   bootstrap: [AppComponent]

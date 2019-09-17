@@ -1,0 +1,70 @@
+<link
+  href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap"
+  rel="stylesheet"
+/>
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Añade créditos</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <p class="ion-text-center">
+    Los créditos permiten realizar acciones dentro de FrikiRadar, tales como
+    iniciar un nuevo chat o entregar un kokoro.
+  </p>
+  <p class="ion-text-center" style="margin-top: 30px;">
+    ¿Cuántos créditos deseas?
+  </p>
+  <ion-button
+    color="primary"
+    expand="block"
+    fill="outline"
+    shape="round"
+    [disabled]="!one_credit?.canPurchase"
+    (click)="buyCredits(1)"
+    >1 Crédito -
+    {{ auth.currentUserValue.country == "MX" ? "$10.00" : "0,50€" }}</ion-button
+  >
+  <ion-button
+    color="primary"
+    expand="block"
+    size="large"
+    fill="outline"
+    shape="round"
+    [disabled]="!five_credits?.canPurchase"
+    (click)="buyCredits(5)"
+    >5 Créditos -
+    {{ auth.currentUserValue.country == "MX" ? "$20.00" : "1€" }}</ion-button
+  >
+  <ion-button
+    color="primary"
+    expand="block"
+    fill="outline"
+    shape="round"
+    [disabled]="!ten_credits?.canPurchase"
+    (click)="buyCredits(10)"
+    >10 Créditos -
+    {{ auth.currentUserValue.country == "MX" ? "$30.00" : "1,50€" }}</ion-button
+  >
+
+  <p class="ion-text-center" style="margin-top: 30px;">
+    ¡O consigue FrikiRadar ILIMITADO!
+  </p>
+  <ion-button
+    color="primary"
+    expand="block"
+    size="large"
+    fill="outline"
+    shape="round"
+    (click)="showPremium()"
+    >Por tan solo
+    {{
+      auth.currentUserValue.country == "MX" ? "$100.00" : "5€"
+    }}/mes</ion-button
+  >
+</ion-content>

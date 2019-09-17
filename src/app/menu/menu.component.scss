@@ -15,4 +15,11 @@
   ion-icon {
     color: white;
   }
+
+  ion-item.activated {
+    ion-icon,
+    ion-label {
+      color: #e91e63;
+    }
+  }
 }

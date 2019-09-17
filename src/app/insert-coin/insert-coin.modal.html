@@ -7,7 +7,7 @@
     <ion-title>¿CONTINUAR?</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="full-center" *ngIf="page == 'choose'">
+<ion-content class="full-center">
   <p>Elige tu opción:</p>
   <p>
     > Insert Coin (1 crédito)
@@ -15,10 +15,10 @@
   <ion-grid>
     <ion-row class="ic-top">
       <ion-col class="full-center">
-        <ion-item button lines="none">
+        <ion-item button lines="none" (click)="showCredits()">
           <img src="./assets/img/layout/insert-coin.png" />
         </ion-item>
-        <p>CRÉDITOS {{ user.credits }}</p>
+        <p>CRÉDITOS {{ auth.currentUserValue.credits || "0" }}</p>
       </ion-col>
     </ion-row>
 
@@ -30,7 +30,7 @@
         <p>> Press start to play!</p>
       </ion-col>
       <ion-col class="full-center">
-        <ion-item button lines="none" (click)="showPromo()">
+        <ion-item button lines="none" (click)="showPremium()">
           <img src="./assets/img/layout/icon_unlimited.png" />
         </ion-item>
         <p>> FrikiRadar ILIMITADO</p>

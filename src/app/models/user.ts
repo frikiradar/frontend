@@ -24,6 +24,7 @@ export interface User {
   latitude: number;
   longitude: number;
   location: string;
+  country: string;
   distance: number;
 
   password?: string;

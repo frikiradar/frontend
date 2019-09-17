@@ -34,7 +34,7 @@
     "@ionic-native/facebook": "^5.14.0",
     "@ionic-native/fcm": "^5.14.0",
     "@ionic-native/geolocation": "^5.14.0",
-    "@ionic-native/in-app-purchase": "^5.14.0",
+    "@ionic-native/in-app-purchase-2": "^5.14.0",
     "@ionic-native/ionic-webview": "^5.14.0",
     "@ionic-native/keyboard": "^5.14.0",
     "@ionic-native/launch-review": "^5.14.0",
@@ -46,6 +46,7 @@
     "@ionic-native/vibration": "^5.14.0",
     "@ionic/angular": "^4.10.0-dev.201909171522.1e46902",
     "@ionic/lab": "^2.0.10",
+    "cc.fovea.cordova.purchase": "^8.1.1",
     "cordova-admob-sdk": "^0.24.1",
     "cordova-android": "8.0.0",
     "cordova-clipboard": "1.3.0",
@@ -60,7 +61,6 @@
     "cordova-plugin-facebook4": "^5.0.0",
     "cordova-plugin-fcm-with-dependecy-updated": "2.4.0",
     "cordova-plugin-geolocation": "4.0.2",
-    "cordova-plugin-inapppurchase": "^1.2.0",
     "cordova-plugin-ionic-webview": "^4.1.1",
     "cordova-plugin-local-notification": "0.9.0-beta.2",
     "cordova-plugin-navigationbar-color": "0.0.9",
@@ -152,7 +152,9 @@
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova-plugin-inapppurchase": {}
+      "cc.fovea.cordova.purchase": {
+        "BILLING_KEY": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgDn4f/Q+mPYYEpoMMVyGLzs6K5qYbVOqkha5w/ilA42bt1A1nWK8NBEwiGLp36VdJkhLSSj7HU4HqgCkRDBhE8D4OpR5JpO7aEx1JseVp/ku/NsNnridY+VBlvMzSNm90M6dg0AcIigbcZOkgeAoULp7rPzhkrWDf4gDWKFjI7eSxXG/ojnuEq6DB3bmKa3usf81UKZqmWfSrEAl+nu1bQNV4JRgPa7ri4q5W9ILO9hSYX/BY/ikmXfF5KabboSz/3LUDwlysAVMM4jq1D1CSIuVWYWHfUsljBAsXG/rIQ/0kG/4rcRAsWRogJ03J4Q3G+LNP71DgfZbeGx4sNq/qwIDAQAB"
+      }
     },
     "platforms": [
       "android",
