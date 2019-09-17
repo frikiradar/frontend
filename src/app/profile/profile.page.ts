@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
   AlertController,
+  ModalController,
   NavController,
   NavParams,
   PopoverController,
@@ -16,7 +17,8 @@ import { pulse } from "ng-animate";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
-import { AdmobService } from "./../services/admob.service";
+import { InsertCoinModal } from "./../insert-coin/insert-coin.modal";
+import { AuthService } from "./../services/auth.service";
 
 @Component({
   selector: "profile-popover",
@@ -117,8 +119,9 @@ export class ProfilePage implements OnInit {
     private nav: NavController,
     private toast: ToastController,
     private vibration: Vibration,
-    private admobSvc: AdmobService,
-    private alert: AlertController
+    private alert: AlertController,
+    private auth: AuthService,
+    private modal: ModalController
   ) {}
 
   async ngOnInit() {
@@ -143,7 +146,9 @@ export class ProfilePage implements OnInit {
 
   async showChat() {
     if (this.user.match > 0) {
-      this.router.navigate(["/chat", this.user.id]);
+      if (await this.insertCoinModal()) {
+        this.router.navigate(["/chat", this.user.id]);
+      }
     } else {
       const alert = await this.alert.create({
         header: "No puedes iniciar un chat con esta persona",
@@ -157,34 +162,33 @@ export class ProfilePage implements OnInit {
 
   async switchLike() {
     if (this.user.match > 0) {
-      this.router.navigate(["/chat", this.user.id]);
       this.vibration.vibrate(50);
-      this.user = this.user.like
-        ? await this.userSvc.unlike(this.user.id)
-        : await this.userSvc.like(this.user.id);
 
-      if (this.user.like) {
-        if (this.user.block_messages) {
-          (await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.username}! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
-            duration: 5000,
-            position: "middle"
-          })).present();
-        } else {
-          (await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.username}!`,
-            duration: 5000,
-            position: "middle"
-          })).present();
+      if (!this.user.like) {
+        if (await this.insertCoinModal()) {
+          this.user = await this.userSvc.like(this.user.id);
+          if (this.user.block_messages) {
+            (await this.toast.create({
+              message: `¡Le has entregado tu kokoro a ${this.user.username}! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
+              duration: 5000,
+              position: "middle"
+            })).present();
+          } else {
+            (await this.toast.create({
+              message: `¡Le has entregado tu kokoro a ${this.user.username}!`,
+              duration: 5000,
+              position: "middle"
+            })).present();
+          }
         }
       } else {
+        this.user = await this.userSvc.unlike(this.user.id);
         (await this.toast.create({
           message: `Le has retirado tu kokoro a ${this.user.username}`,
           duration: 5000,
           position: "middle"
         })).present();
       }
-      this.admobSvc.RewardVideoAd();
     } else {
       const alert = await this.alert.create({
         header: "No le puedes entregar tu kokoro a esta persona",
@@ -211,6 +215,17 @@ export class ProfilePage implements OnInit {
       const scrollTop = $event.detail.scrollTop;
       this.showToolbar = scrollTop >= 150;
     }
+  }
+
+  async insertCoinModal() {
+    if (!this.auth.isPremium()) {
+      const modal = await this.modal.create({
+        component: InsertCoinModal,
+        cssClass: "insert-coin-modal"
+      });
+      return await modal.present();
+    }
+    return true;
   }
 
   back() {

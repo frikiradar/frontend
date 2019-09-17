@@ -1,0 +1,33 @@
+ion-title,
+p {
+  font-family: "Press Start 2P", cursive !important;
+}
+
+ion-title {
+  font-size: 12pt;
+  padding: 0;
+  text-align: center;
+}
+
+p {
+  margin-top: 10px;
+  font-size: 8pt;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.ic-top img {
+  height: 120px;
+  text-align: center;
+  margin-right: 30px;
+}
+
+.ic-bottom {
+  margin-top: 30px;
+  p {
+    font-size: 7pt;
+  }
+  img {
+    height: 64px;
+  }
+}

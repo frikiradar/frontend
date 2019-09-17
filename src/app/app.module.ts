@@ -41,6 +41,7 @@ import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { InsertCoinModal } from "./insert-coin/insert-coin.modal";
 import { MenuComponent } from "./menu/menu.component";
 import { AdmobService } from "./services/admob.service";
 import { SharedModule } from "./shared/shared.module";
@@ -49,8 +50,8 @@ import { SharedModule } from "./shared/shared.module";
 registerLocaleData(localeEs, "es");
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent],
-  entryComponents: [MenuComponent],
+  declarations: [AppComponent, MenuComponent, InsertCoinModal],
+  entryComponents: [MenuComponent, InsertCoinModal],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

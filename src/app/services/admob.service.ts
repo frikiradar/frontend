@@ -7,6 +7,8 @@ import {
 } from "@ionic-native/admob-free/ngx";
 import { Platform } from "@ionic/angular";
 
+import { AuthService } from "./auth.service";
+
 @Injectable()
 export class AdmobService {
   // Interstitial Ad's Configurations
@@ -29,9 +31,16 @@ export class AdmobService {
       : "ca-app-pub-8367506635932865/7217504726"
   };
 
-  constructor(private admobFree: AdMobFree, public platform: Platform) {
+  constructor(
+    private admobFree: AdMobFree,
+    public platform: Platform,
+    private auth: AuthService
+  ) {
     platform.ready().then(() => {
-      if (this.platform.is("cordova")) {
+      if (
+        this.platform.is("cordova") &&
+        !this.auth.currentUserValue.is_premium
+      ) {
         // Load ad configuration
         this.admobFree.interstitial.config(this.interstitialConfig);
         // Prepare Ad to Show

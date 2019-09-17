@@ -1,0 +1,47 @@
+<link
+  href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap"
+  rel="stylesheet"
+/>
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>¿CONTINUAR?</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="full-center" *ngIf="page == 'choose'">
+  <p>Elige tu opción:</p>
+  <p>
+    > Insert Coin (1 crédito)
+  </p>
+  <ion-grid>
+    <ion-row class="ic-top">
+      <ion-col class="full-center">
+        <ion-item button lines="none">
+          <img src="./assets/img/layout/insert-coin.png" />
+        </ion-item>
+        <p>CRÉDITOS {{ user.credits }}</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ic-bottom">
+      <ion-col class="full-center">
+        <ion-item button lines="none" (click)="showPromo()">
+          <img src="./assets/img/layout/promo-video.png" />
+        </ion-item>
+        <p>> Press start to play!</p>
+      </ion-col>
+      <ion-col class="full-center">
+        <ion-item button lines="none" (click)="showPromo()">
+          <img src="./assets/img/layout/icon_unlimited.png" />
+        </ion-item>
+        <p>> FrikiRadar ILIMITADO</p>
+        <!--<p>
+          O consigue PODER ILIMITADO uniéndote a FrikiRadar Premium por solo 5€.
+        </p>
+        <img src="./assets/img/layout/unlimited2.gif" />
+        <ion-button color="primary" type="submit" expand="block" shape="round"
+          >¡Ver todas las ventajas!</ion-button
+        >-->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
