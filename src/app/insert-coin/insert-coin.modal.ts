@@ -41,9 +41,10 @@ export class InsertCoinModal implements OnInit {
 
   async showPromo() {
     this.admobSvc.RewardVideoAd();
+    this.close(true);
   }
 
-  close() {
-    this.modal.dismiss();
+  close(data: any) {
+    this.modal.dismiss(data);
   }
 }

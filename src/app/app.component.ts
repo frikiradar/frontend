@@ -60,21 +60,6 @@ export class AppComponent {
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
 
-        /*const eventParams = {};
-        eventParams[this.analyticsFirebase.DEFAULT_PARAMS.COUPON] = "folagor";
-        this.analyticsFirebase
-          .logEvent(
-            this.analyticsFirebase.DEFAULT_EVENTS.CAMPAIGN_DETAILS,
-            eventParams
-          )
-          .then(log => console.log("Event successfully tracked", log))
-          .catch(err => console.log("Error tracking event:", err));
-
-        this.analyticsFirebase
-          .logEvent(this.analyticsFirebase.DEFAULT_EVENTS.CAMPAIGN_DETAILS)
-          .then(log => console.log("Event successfully tracked", log))
-          .catch(err => console.log("Error tracking event:", err));*/
-
         this.router.events.subscribe(async (event: Event) => {
           switch (this.router.url) {
             case "/settings":
@@ -98,7 +83,7 @@ export class AppComponent {
   }
 
   async networkStatus() {
-    const alertNetwork = await this.alert.create({
+    /*const alertNetwork = await this.alert.create({
       header: "Sin conexión a internet",
       message:
         "No tienes conexión a internet en estos momentos. Podrás seguir utilizando la aplicación en cuanto vuelvas a tener red.",
@@ -111,7 +96,7 @@ export class AppComponent {
 
     this.network.onDisconnect().subscribe(async () => {
       await alertNetwork.present();
-    });
+    });*/
   }
 
   async backButtonStatus() {

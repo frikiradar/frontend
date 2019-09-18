@@ -223,7 +223,8 @@ export class ProfilePage implements OnInit {
         component: InsertCoinModal,
         cssClass: "insert-coin-modal"
       });
-      return await modal.present();
+      await modal.present();
+      return await modal.onDidDismiss();
     }
     return true;
   }
