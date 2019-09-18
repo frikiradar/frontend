@@ -26,34 +26,31 @@ export class CreditsModal implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.store.verbosity = this.store.DEBUG;
-    /*his.one_credit = this.store.get("1_credit");
-    this.five_credits = this.store.get("5_credits");
-    this.ten_credits = this.store.get("10_credits");*/
+    // this.store.verbosity = this.store.DEBUG;
 
     this.store.register({ type: this.store.CONSUMABLE, id: "1_credit" });
     this.store.register({ type: this.store.CONSUMABLE, id: "5_credits" });
     this.store.register({ type: this.store.CONSUMABLE, id: "10_credits" });
 
     this.store.when("1_credit").registered((product: IAPProduct) => {
-      console.log("Registered: " + JSON.stringify(product));
+      console.log("Registered: ", product);
     });
     this.store.when("5_credits").registered((product: IAPProduct) => {
-      console.log("Registered: " + JSON.stringify(product));
+      console.log("Registered: ", product);
     });
     this.store.when("10_credits").registered((product: IAPProduct) => {
-      console.log("Registered: " + JSON.stringify(product));
+      console.log("Registered: ", product);
     });
 
     // Updated
     this.store.when("1_credit").updated((product: IAPProduct) => {
-      console.log("Updated" + JSON.stringify(product));
+      console.log("Updated: ", product);
     });
     this.store.when("5_credits").updated((product: IAPProduct) => {
-      console.log("Updated" + JSON.stringify(product));
+      console.log("Updated: ", product);
     });
     this.store.when("10_credits").updated((product: IAPProduct) => {
-      console.log("Updated" + JSON.stringify(product));
+      console.log("Updated: ", product);
     });
 
     // User closed the native purchase dialog
@@ -69,16 +66,15 @@ export class CreditsModal implements OnInit {
 
     // Track all store errors
     this.store.error(err => {
-      console.error("Store Error " + JSON.stringify(err));
+      console.error("Store Error: ", err);
     });
 
     // Run some code only when the store is ready to be used
     this.store.ready(() => {
-      console.log("Store is ready");
-      console.log("Products: " + JSON.stringify(this.store.products));
-      console.log(JSON.stringify(this.store.get("1_credit")));
-      console.log(JSON.stringify(this.store.get("5_credits")));
-      console.log(JSON.stringify(this.store.get("10_credits")));
+      console.log("Store is ready. Products: ", this.store.products);
+      this.one_credit = this.store.get("1_credit");
+      this.five_credits = this.store.get("5_credits");
+      this.ten_credits = this.store.get("10_credits");
     });
 
     // Refresh the status of in-app products
@@ -86,15 +82,15 @@ export class CreditsModal implements OnInit {
 
     // Approved
     this.store.when("1_credit").approved((product: IAPProduct) => {
-      console.log("Approved: " + JSON.stringify(product));
+      console.log("Approved: ", product);
       this.finishPurchase(product);
     });
     this.store.when("5_credits").approved((product: IAPProduct) => {
-      console.log("Approved: " + JSON.stringify(product));
+      console.log("Approved: ", product);
       this.finishPurchase(product);
     });
     this.store.when("10_credits").approved((product: IAPProduct) => {
-      console.log("Approved: " + JSON.stringify(product));
+      console.log("Approved: ", product);
       this.finishPurchase(product);
     });
   }

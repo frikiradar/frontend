@@ -28,8 +28,7 @@
     shape="round"
     [disabled]="!one_credit?.canPurchase"
     (click)="buyCredits(1)"
-    >1 Crédito -
-    {{ auth.currentUserValue.country == "MX" ? "$10.00" : "0,50€" }}</ion-button
+    >{{ one_credit?.description }} - {{ one_credit?.price }}</ion-button
   >
   <ion-button
     color="primary"
@@ -39,8 +38,7 @@
     shape="round"
     [disabled]="!five_credits?.canPurchase"
     (click)="buyCredits(5)"
-    >5 Créditos -
-    {{ auth.currentUserValue.country == "MX" ? "$20.00" : "1€" }}</ion-button
+    >{{ five_credits?.description }} - {{ five_credits?.price }}</ion-button
   >
   <ion-button
     color="primary"
@@ -49,8 +47,7 @@
     shape="round"
     [disabled]="!ten_credits?.canPurchase"
     (click)="buyCredits(10)"
-    >10 Créditos -
-    {{ auth.currentUserValue.country == "MX" ? "$30.00" : "1,50€" }}</ion-button
+    >{{ ten_credits?.description }} - {{ ten_credits?.price }}</ion-button
   >
 
   <p class="ion-text-center" style="margin-top: 30px;">
