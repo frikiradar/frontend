@@ -146,7 +146,8 @@ export class ProfilePage implements OnInit {
 
   async showChat() {
     if (this.user.match > 0) {
-      if (await this.insertCoinModal()) {
+      const data = await this.insertCoinModal();
+      if (data) {
         this.router.navigate(["/chat", this.user.id]);
       }
     } else {
@@ -165,7 +166,8 @@ export class ProfilePage implements OnInit {
       this.vibration.vibrate(50);
 
       if (!this.user.like) {
-        if (await this.insertCoinModal()) {
+        const data = await this.insertCoinModal();
+        if (data) {
           this.user = await this.userSvc.like(this.user.id);
           if (this.user.block_messages) {
             (await this.toast.create({
@@ -224,7 +226,8 @@ export class ProfilePage implements OnInit {
         cssClass: "insert-coin-modal"
       });
       await modal.present();
-      return await modal.onDidDismiss();
+      const res = await modal.onDidDismiss();
+      return res.data;
     }
     return true;
   }

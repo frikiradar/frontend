@@ -37,104 +37,117 @@ export class AdmobService {
     private auth: AuthService
   ) {
     platform.ready().then(() => {
-      if (
-        this.platform.is("cordova") &&
-        !this.auth.currentUserValue.is_premium
-      ) {
-        // Load ad configuration
-        this.admobFree.interstitial.config(this.interstitialConfig);
-        // Prepare Ad to Show
-        this.admobFree.interstitial
-          .prepare()
-          .then(() => {
-            // alert(1);
-          })
-          .catch(e => console.error(e));
-
-        // Load ad configuration
-        this.admobFree.rewardVideo.config(this.RewardVideoConfig);
-        // Prepare Ad to Show
-        this.admobFree.rewardVideo
-          .prepare()
-          .then(() => {
-            // alert(2);
-          })
-          .catch(e => console.error(e));
+      if (this.platform.is("cordova")) {
+        // Handle interstitial's close event to Prepare Ad again
+        this.admobFree.on("admob.interstitial.events.CLOSE").subscribe(() => {
+          this.admobFree.interstitial
+            .prepare()
+            .then(() => {
+              console.error("Interstitial CLOSE");
+            })
+            .catch(e => console.error(e));
+        });
+        // Handle Reward's close event to Prepare Ad again
+        this.admobFree.on("admob.rewardvideo.events.CLOSE").subscribe(() => {
+          this.admobFree.rewardVideo
+            .prepare()
+            .then(() => {
+              console.error("Reward Video CLOSE");
+            })
+            .catch(e => console.error(e));
+        });
       }
-
-      // Handle interstitial's close event to Prepare Ad again
-      this.admobFree.on("admob.interstitial.events.CLOSE").subscribe(() => {
-        this.admobFree.interstitial
-          .prepare()
-          .then(() => {
-            console.error("Interstitial CLOSE");
-          })
-          .catch(e => console.error(e));
-      });
-      // Handle Reward's close event to Prepare Ad again
-      this.admobFree.on("admob.rewardvideo.events.CLOSE").subscribe(() => {
-        this.admobFree.rewardVideo
-          .prepare()
-          .then(() => {
-            console.error("Reward Video CLOSE");
-          })
-          .catch(e => console.error(e));
-      });
     });
   }
 
-  BannerAd() {
-    const bannerConfig: AdMobFreeBannerConfig = {
-      // isTesting: true, // Remove in production
-      autoShow: true,
-      id: this.platform.is("android")
-        ? "ca-app-pub-8367506635932865/5482166517"
-        : "ca-app-pub-8367506635932865/1749555622"
-    };
-    this.admobFree.banner.config(bannerConfig);
+  init() {
+    if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
+      // Load ad configuration
+      this.admobFree.interstitial.config(this.interstitialConfig);
+      // Prepare Ad to Show
+      this.admobFree.interstitial
+        .prepare()
+        .then(() => {
+          // alert(1);
+        })
+        .catch(e => console.error(e));
 
-    this.admobFree.banner
-      .prepare()
-      .then(() => {
-        // success
-      })
-      .catch(e => console.error(e));
+      // Load ad configuration
+      this.admobFree.rewardVideo.config(this.RewardVideoConfig);
+      // Prepare Ad to Show
+      this.admobFree.rewardVideo
+        .prepare()
+        .then(() => {
+          // alert(2);
+        })
+        .catch(e => console.error(e));
+    }
+  }
+
+  BannerAd() {
+    if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
+      const bannerConfig: AdMobFreeBannerConfig = {
+        // isTesting: true, // Remove in production
+        autoShow: true,
+        id: this.platform.is("android")
+          ? "ca-app-pub-8367506635932865/5482166517"
+          : "ca-app-pub-8367506635932865/1749555622"
+      };
+      this.admobFree.banner.config(bannerConfig);
+
+      this.admobFree.banner
+        .prepare()
+        .then(() => {
+          // success
+        })
+        .catch(e => console.error(e));
+    }
   }
 
   BannerAdRemove() {
-    this.admobFree.banner
-      .remove()
-      .then(() => {
-        // success
-      })
-      .catch(e => console.error(e));
+    if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
+      this.admobFree.banner
+        .remove()
+        .then(() => {
+          // success
+        })
+        .catch(e => console.error(e));
+    }
   }
 
   InterstitialAd() {
-    // Check if Ad is loaded
-    this.admobFree.interstitial
-      .isReady()
-      .then(() => {
-        // Will show prepared Ad
-        this.admobFree.interstitial
-          .show()
-          .then(() => {})
-          .catch(e => console.error(`show ${e}`));
-      })
-      .catch(e => console.error(`isReady ${e}`));
+    if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
+      // Check if Ad is loaded
+      this.admobFree.interstitial
+        .isReady()
+        .then(() => {
+          // Will show prepared Ad
+          this.admobFree.interstitial
+            .show()
+            .then(e => {
+              console.log(`InterstitialAd cargado ${e}`);
+            })
+            .catch(e => console.error(`show ${e}`));
+        })
+        .catch(e => console.error(e));
+    }
   }
 
   RewardVideoAd() {
-    // Check if Ad is loaded
-    this.admobFree.rewardVideo
-      .isReady()
-      .then(() => {
-        // Will show prepared Ad
-        this.admobFree.rewardVideo
-          .show()
-          .then(() => {})
-          .catch(e => console.error(`show ${e}`));
-      })
-      .catch(e => console.error(`isReady ${e}`));
+    if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
+      // Check if Ad is loaded
+      this.admobFree.rewardVideo
+        .isReady()
+        .then(() => {
+          // Will show prepared Ad
+          this.admobFree.rewardVideo
+            .show()
+            .then(e => {
+              console.log(`RewardVideoAd cargado ${e}`);
+            })
+            .catch(e => console.error(`show ${e}`));
+        })
+        .catch(e => console.error(e));
+    }
   }
 }

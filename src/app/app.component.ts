@@ -50,9 +50,9 @@ export class AppComponent {
       this.auth.setAuthUser(await this.auth.getAuthUser());
       this.auth.currentUser.subscribe(async authUser => {
         this.currentUser = authUser;
-
         if (this.platform.is("cordova")) {
           this.push.init();
+          this.admob.init();
         }
       });
 

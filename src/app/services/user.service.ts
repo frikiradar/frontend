@@ -146,6 +146,20 @@ export class UserService {
     return this.rest.delete(`block/${id}`).toPromise() as Promise<User[]>;
   }
 
+  addCredits(credits: number) {
+    return this.rest.post("credits", { credits }).toPromise() as Promise<User>;
+  }
+
+  insertCoin(credits: number) {
+    return this.rest.put("insertcoin", { credits }).toPromise() as Promise<
+      User
+    >;
+  }
+
+  subscribePremim(months: number) {
+    return this.rest.post("premium", { months }).toPromise() as Promise<User>;
+  }
+
   getOrientations() {
     return [
       "Heterosexual",
