@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 
@@ -16,7 +17,7 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
     CreditsModal
   ],
   entryComponents: [InsertCoinModal, PremiumModal, CreditsModal],
-  imports: [IonicModule.forRoot()],
+  imports: [IonicModule.forRoot(), CommonModule],
   exports: [ImagePreloadDirective, NiceDatePipe]
 })
 export class SharedModule {}

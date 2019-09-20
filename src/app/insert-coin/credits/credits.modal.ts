@@ -1,7 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { IAPProduct } from "@ionic-native/in-app-purchase-2/ngx";
-import { ModalController } from "@ionic/angular";
+import { ChangeDetectorRef, Component } from "@angular/core";
+import {
+  LoadingController,
+  ModalController,
+  ToastController
+} from "@ionic/angular";
 
+import { User } from "src/app/models/user";
+import { Product } from "src/app/services/product.service";
 import { StoreService } from "src/app/services/store.service";
 import { AuthService } from "./../../services/auth.service";
 
@@ -10,30 +15,59 @@ import { AuthService } from "./../../services/auth.service";
   templateUrl: "./credits.modal.html",
   styleUrls: ["./credits.modal.scss"]
 })
-export class CreditsModal implements OnInit {
-  public one_credit: IAPProduct;
-  public five_credits: IAPProduct;
-  public ten_credits: IAPProduct;
+export class CreditsModal {
+  public products: Product[];
+  public user: User;
 
   constructor(
     private modal: ModalController,
     public auth: AuthService,
     public storeSvc: StoreService,
-    public detectorRef: ChangeDetectorRef
-  ) {}
-
-  async ngOnInit() {
-    this.one_credit = this.storeSvc.get("1_credit");
-    this.five_credits = this.storeSvc.get("5_credits");
-    this.ten_credits = this.storeSvc.get("10_credits");
-    this.detectorRef.detectChanges();
+    public loading: LoadingController,
+    public detectorRef: ChangeDetectorRef,
+    private toast: ToastController
+  ) {
+    this.user = this.auth.currentUserValue;
   }
 
-  async buyCredits(product: IAPProduct) {
+  async ionViewDidEnter() {
+    const loading = await this.loading.create({
+      translucent: true,
+      message: "Cargando"
+    });
+    await loading.present();
+
+    if (!this.storeSvc.products) {
+      return;
+    }
+
+    this.storeSvc.products.subscribe(async products => {
+      this.products = products;
+      this.detectorRef.detectChanges();
+
+      const product = this.products.filter(p => p.data.state === "finished")[0];
+      if (product) {
+        // Acabamos de comprar uno de los productos
+        (await this.toast.create({
+          message: `¡Has añadido correctamente ${product.value} créditos a tu cuenta!`,
+          duration: 2000,
+          position: "middle"
+        })).present();
+
+        this.close(true);
+      }
+
+      this.loading.getTop().then(v => (v ? this.loading.dismiss() : undefined));
+    });
+
+    this.auth.currentUser.subscribe(authUser => this.user);
+  }
+
+  async buyCredits(product: Product) {
     this.storeSvc.order(product);
   }
 
-  close() {
-    this.modal.dismiss();
+  close(data?: any) {
+    this.modal.dismiss(data);
   }
 }

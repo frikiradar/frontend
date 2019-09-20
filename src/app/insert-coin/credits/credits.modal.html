@@ -17,51 +17,55 @@
     Los créditos permiten realizar acciones dentro de FrikiRadar, tales como
     iniciar un nuevo chat o entregar un kokoro.
   </p>
-  <p class="ion-text-center">
-    Tienes {{ auth.currentUserValue.credits || 0 }} Créditos.
-  </p>
+  <p class="ion-text-center">Tienes {{ user?.credits || 0 }} Créditos.</p>
   <p class="ion-text-center" style="margin-top: 30px;">
     ¿Cuántos créditos deseas?
   </p>
-  <ion-button
-    color="primary"
-    expand="block"
-    fill="outline"
-    shape="round"
-    (click)="buyCredits(one_credit)"
-    >{{ one_credit?.description }} - {{ one_credit?.price }}</ion-button
-  >
-  <ion-button
-    color="primary"
-    expand="block"
-    size="large"
-    fill="outline"
-    shape="round"
-    (click)="buyCredits(five_credits)"
-    >{{ five_credits?.description }} - {{ five_credits?.price }}</ion-button
-  >
-  <ion-button
-    color="primary"
-    expand="block"
-    fill="outline"
-    shape="round"
-    (click)="buyCredits(ten_credits)"
-    >{{ ten_credits?.description }} - {{ ten_credits?.price }}</ion-button
-  >
+  <div *ngIf="products?.length">
+    <ion-button
+      color="primary"
+      expand="block"
+      fill="outline"
+      shape="round"
+      [disabled]="!products[0]?.data?.canPurchase"
+      (click)="buyCredits(products[0])"
+      >{{ products[0]?.data?.description }} -
+      {{ products[0]?.data?.price }}</ion-button
+    >
+    <ion-button
+      color="primary"
+      expand="block"
+      size="large"
+      fill="outline"
+      shape="round"
+      [disabled]="!products[1]?.data?.canPurchase"
+      (click)="buyCredits(products[1])"
+      >{{ products[1]?.data?.description }} -
+      {{ products[1]?.data?.price }}</ion-button
+    >
+    <ion-button
+      color="primary"
+      expand="block"
+      fill="outline"
+      shape="round"
+      [disabled]="!products[2]?.data?.canPurchase"
+      (click)="buyCredits(products[2])"
+      >{{ products[2]?.data?.description }} -
+      {{ products[2]?.data?.price }}</ion-button
+    >
 
-  <p class="ion-text-center" style="margin-top: 30px;">
-    ¡O consigue FrikiRadar ILIMITADO!
-  </p>
-  <ion-button
-    color="primary"
-    expand="block"
-    size="large"
-    fill="outline"
-    shape="round"
-    (click)="storeSvc.showPremium()"
-    >Por tan solo
-    {{
-      auth.currentUserValue.country == "MX" ? "$100.00" : "5€"
-    }}/mes</ion-button
-  >
+    <p class="ion-text-center" style="margin-top: 30px;">
+      ¡O consigue FrikiRadar ILIMITADO!
+    </p>
+    <ion-button
+      color="primary"
+      expand="block"
+      size="large"
+      fill="outline"
+      shape="round"
+      (click)="storeSvc.showPremium()"
+      >Por tan solo
+      {{ user?.country == "MX" ? "$100.00" : "5€" }}/mes</ion-button
+    >
+  </div>
 </ion-content>

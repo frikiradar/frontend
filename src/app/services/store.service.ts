@@ -1,65 +1,73 @@
 import { Injectable } from "@angular/core";
 import {
   IAPProduct,
+  IAPProducts,
   InAppPurchase2
 } from "@ionic-native/in-app-purchase-2/ngx";
 import { ModalController, Platform } from "@ionic/angular";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { PremiumModal } from "./../insert-coin/premium/premium.modal";
-import { AuthService } from "./../services/auth.service";
+import { AuthService } from "./auth.service";
+import { Product, ProductService } from "./product.service";
+import { UserService } from "./user.service";
+import { JsonPipe } from "@angular/common";
+import { stringify } from "querystring";
 
 @Injectable({
   providedIn: "root"
 })
 export class StoreService {
-  public one_credit: IAPProduct;
-  public five_credits: IAPProduct;
-  public ten_credits: IAPProduct;
+  private productsSubject: BehaviorSubject<Product[]>;
+  public products: Observable<Product[]>;
 
   constructor(
     private modal: ModalController,
-    public auth: AuthService,
+    private auth: AuthService,
     private store: InAppPurchase2,
-    private platform: Platform
+    private platform: Platform,
+    private userSvc: UserService,
+    private productsSvc: ProductService
   ) {
     this.platform.ready().then(() => {
       if (this.platform.is("cordova")) {
+        const products = this.productsSvc.getCreditsProducts();
+        this.productsSubject = new BehaviorSubject<Product[]>(products);
+        this.products = this.productsSubject.asObservable();
+
         // this.store.verbosity = this.store.DEBUG;
+        products.forEach(p => {
+          this.store.register({ type: this.store.CONSUMABLE, id: p.id });
 
-        this.store.register({ type: this.store.CONSUMABLE, id: "1_credit" });
-        this.store.register({ type: this.store.CONSUMABLE, id: "5_credits" });
-        this.store.register({ type: this.store.CONSUMABLE, id: "10_credits" });
+          this.store.when(p.id).registered((product: IAPProduct) => {
+            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            console.log("Registered: ", JSON.parse(JSON.stringify(product)));
+          });
 
-        this.store.when("1_credit").registered((product: IAPProduct) => {
-          console.log("Registered: ", product);
-        });
-        this.store.when("5_credits").registered((product: IAPProduct) => {
-          console.log("Registered: ", product);
-        });
-        this.store.when("10_credits").registered((product: IAPProduct) => {
-          console.log("Registered: ", product);
-        });
+          // Updated
+          this.store.when(p.id).updated((product: IAPProduct) => {
+            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            console.log("Updated: ", JSON.parse(JSON.stringify(product)));
+          });
 
-        // Updated
-        this.store.when("1_credit").updated((product: IAPProduct) => {
-          console.log("Updated: ", product);
-        });
-        this.store.when("5_credits").updated((product: IAPProduct) => {
-          console.log("Updated: ", product);
-        });
-        this.store.when("10_credits").updated((product: IAPProduct) => {
-          console.log("Updated: ", product);
-        });
+          // User closed the native purchase dialog
+          this.store.when(p.id).cancelled((product: IAPProduct) => {
+            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            console.error("Cancelled: ", JSON.parse(JSON.stringify(product)));
+          });
 
-        // User closed the native purchase dialog
-        this.store.when("1_credit").cancelled((product: IAPProduct) => {
-          console.error("Purchase was Cancelled: ", product);
-        });
-        this.store.when("5_credits").cancelled((product: IAPProduct) => {
-          console.error("Purchase was Cancelled: ", product);
-        });
-        this.store.when("10_credits").cancelled((product: IAPProduct) => {
-          console.error("Purchase was Cancelled: ", product);
+          // Approved
+          this.store.when(p.id).approved((product: IAPProduct) => {
+            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            console.log("Approved: ", JSON.parse(JSON.stringify(product)));
+            this.finishPurchase(JSON.parse(JSON.stringify(product)));
+          });
+
+          // Finished
+          this.store.when(p.id).finished((product: IAPProduct) => {
+            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            console.log("Finished: ", JSON.parse(JSON.stringify(product)));
+          });
         });
 
         // Track all store errors
@@ -68,42 +76,63 @@ export class StoreService {
         });
 
         // Run some code only when the store is ready to be used
-        this.store.ready(() => {
+        /*this.store.ready(() => {
+          this.updateProducts(this.store.products);
           console.log("Store is ready. Products: ", this.store.products);
-        });
+        });*/
 
         // Refresh the status of in-app products
         this.store.refresh();
-
-        // Approved
-        this.store.when("1_credit").approved((product: IAPProduct) => {
-          console.log("Approved: ", product);
-          this.finishPurchase(product);
-        });
-        this.store.when("5_credits").approved((product: IAPProduct) => {
-          console.log("Approved: ", product);
-          this.finishPurchase(product);
-        });
-        this.store.when("10_credits").approved((product: IAPProduct) => {
-          console.log("Approved: ", product);
-          this.finishPurchase(product);
-        });
       }
     });
+  }
+
+  public get productsValue(): Product[] {
+    return this.productsSubject.value;
+  }
+
+  updateProduct(product: IAPProduct) {
+    this.productsValue.map(pv => {
+      if (pv.id === product.id) {
+        pv.data = product;
+      }
+    });
+
+    this.productsSubject.next(this.productsValue);
+  }
+
+  updateProducts(products: IAPProducts) {
+    this.productsValue.map(p => {
+      this.store.products.forEach(sp => {
+        if (sp.id === p.id) {
+          p.data = sp;
+        }
+      });
+    });
+
+    this.productsSubject.next(this.productsValue);
   }
 
   get(id: string) {
     return this.store.get(id);
   }
 
-  async order(p: IAPProduct) {
-    this.store.order(p);
+  async order(product: Product) {
+    return this.store.order(product.data);
   }
 
-  finishPurchase(p: IAPProduct) {
-    p.finish();
-    console.log("comprado", p);
-    // Añadimos créditos!!
+  async finishPurchase(product: IAPProduct) {
+    product.finish();
+
+    const credits = this.productsValue.find(p => p.id === product.id).value;
+    try {
+      const user = await this.userSvc.addCredits(credits);
+      this.auth.setAuthUser(user);
+      // Añadimos créditos!!
+      console.log("Comprado, añadimos créditos", product);
+    } catch (e) {
+      console.error("Error al añadir los créditos", product);
+    }
   }
 
   async showPremium() {

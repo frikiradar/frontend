@@ -5,6 +5,7 @@ import {
   ToastController
 } from "@ionic/angular";
 
+import { User } from "../models/user";
 import { AdmobService } from "./../services/admob.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
@@ -17,6 +18,8 @@ import { PremiumModal } from "./premium/premium.modal";
   styleUrls: ["./insert-coin.modal.scss"]
 })
 export class InsertCoinModal {
+  public user: User;
+
   constructor(
     private modal: ModalController,
     private newModal: ModalController,
@@ -25,7 +28,9 @@ export class InsertCoinModal {
     private userSvc: UserService,
     private alert: AlertController,
     private toast: ToastController
-  ) {}
+  ) {
+    this.user = this.auth.currentUserValue;
+  }
 
   async showCredits() {
     if (this.auth.currentUserValue.credits) {
@@ -34,7 +39,7 @@ export class InsertCoinModal {
         this.auth.setAuthUser(user);
         // gastamos creditos y accedemos
         (await this.toast.create({
-          message: `Clic!`,
+          message: `Clic! Has introducido la moneda`,
           duration: 1500,
           position: "bottom"
         })).present();
@@ -59,7 +64,11 @@ export class InsertCoinModal {
       const modal = await this.newModal.create({
         component: CreditsModal
       });
-      return await modal.present();
+      await modal.present();
+      const res = await modal.onDidDismiss();
+      if (res.data) {
+        this.user = this.auth.currentUserValue;
+      }
     }
   }
   async showPremium() {
@@ -74,7 +83,7 @@ export class InsertCoinModal {
     this.close(true);
   }
 
-  close(data: any) {
+  close(data?: any) {
     this.modal.dismiss(data);
   }
 }
