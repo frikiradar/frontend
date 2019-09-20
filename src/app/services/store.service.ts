@@ -11,8 +11,6 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
 import { AuthService } from "./auth.service";
 import { Product, ProductService } from "./product.service";
 import { UserService } from "./user.service";
-import { JsonPipe } from "@angular/common";
-import { stringify } from "querystring";
 
 @Injectable({
   providedIn: "root"
@@ -40,27 +38,27 @@ export class StoreService {
           this.store.register({ type: this.store.CONSUMABLE, id: p.id });
 
           this.store.when(p.id).registered((product: IAPProduct) => {
-            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            this.updateProduct(product);
             console.log("Registered: ", JSON.parse(JSON.stringify(product)));
           });
 
           // Updated
           this.store.when(p.id).updated((product: IAPProduct) => {
-            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            this.updateProduct(product);
             console.log("Updated: ", JSON.parse(JSON.stringify(product)));
           });
 
           // User closed the native purchase dialog
           this.store.when(p.id).cancelled((product: IAPProduct) => {
-            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            this.updateProduct(product);
             console.error("Cancelled: ", JSON.parse(JSON.stringify(product)));
           });
 
           // Approved
           this.store.when(p.id).approved((product: IAPProduct) => {
-            this.updateProduct(JSON.parse(JSON.stringify(product)));
+            this.updateProduct(product);
             console.log("Approved: ", JSON.parse(JSON.stringify(product)));
-            this.finishPurchase(JSON.parse(JSON.stringify(product)));
+            this.finishPurchase(product);
           });
 
           // Finished
