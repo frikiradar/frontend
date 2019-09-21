@@ -24,12 +24,22 @@
         <ion-icon name="settings" slot="start"></ion-icon>
         <ion-label>Configuración y privacidad</ion-label>
       </ion-item>
-      <ion-item button lines="none" (click)="showCredits()">
-        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+      <ion-item
+        button
+        lines="none"
+        (click)="showCredits()"
+        *ngIf="!auth.currentUserValue.is_premium"
+      >
+        <ion-icon name="gift" slot="start"></ion-icon>
         <ion-label>Insert Coin (Créditos)</ion-label>
       </ion-item>
-      <ion-item button lines="none" (click)="showPremium()">
-        <ion-icon name="gift" slot="start"></ion-icon>
+      <ion-item
+        button
+        lines="none"
+        (click)="showPremium()"
+        *ngIf="!auth.currentUserValue.is_premium"
+      >
+        <ion-icon name="infinite" slot="start"></ion-icon>
         <ion-label>FrikiRadar ILIMITADO</ion-label>
       </ion-item>
       <ion-item button lines="none" (click)="share()">

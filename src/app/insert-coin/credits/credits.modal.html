@@ -64,8 +64,7 @@
       fill="outline"
       shape="round"
       (click)="storeSvc.showPremium()"
-      >Por tan solo
-      {{ user?.country == "MX" ? "$100.00" : "5€" }}/mes</ion-button
+      >Por tan solo {{ products[3]?.data?.price }}/mes</ion-button
     >
   </div>
 </ion-content>

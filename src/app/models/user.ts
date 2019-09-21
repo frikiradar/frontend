@@ -46,6 +46,8 @@ export interface User {
   credits?: number;
   is_premium: boolean;
   premium_expiration?: Date;
+  meet?: string;
+  referral?: string;
 
   /*configuration*/
   hide_location?: boolean;

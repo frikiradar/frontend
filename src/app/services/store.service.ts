@@ -28,14 +28,27 @@ export class StoreService {
     private productsSvc: ProductService
   ) {
     this.platform.ready().then(() => {
-      if (this.platform.is("cordova")) {
-        const products = this.productsSvc.getCreditsProducts();
-        this.productsSubject = new BehaviorSubject<Product[]>(products);
-        this.products = this.productsSubject.asObservable();
+      const products = this.productsSvc.getProducts();
+      this.productsSubject = new BehaviorSubject<Product[]>(products);
+      this.products = this.productsSubject.asObservable();
 
+      if (this.platform.is("cordova")) {
         // this.store.verbosity = this.store.DEBUG;
         products.forEach(p => {
-          this.store.register({ type: this.store.CONSUMABLE, id: p.id });
+          let type = "";
+          switch (p.type) {
+            case "consumable":
+              type = this.store.CONSUMABLE;
+              break;
+            case "non_consumable":
+              type = this.store.NON_CONSUMABLE;
+              break;
+            case "subscription":
+              type = this.store.PAID_SUBSCRIPTION;
+              break;
+          }
+
+          this.store.register({ type, id: p.id });
 
           this.store.when(p.id).registered((product: IAPProduct) => {
             this.updateProduct(product);

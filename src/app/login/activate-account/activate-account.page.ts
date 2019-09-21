@@ -58,7 +58,28 @@ export class ActivateAccountPage {
         this.codeForm.get("code").value.toUpperCase()
       );
       this.auth.setAuthUser(this.user);
-      this.nav.navigateRoot(["/edit-profile"]);
+      const alert = await this.alert.create({
+        header: `¡Cuenta activada correctamente!`,
+        message:
+          "¿Qué te gustaría hacer ahora? ¿Configurar tu perfil (fotos, descripción, gustos y pasatiempos...) o comenzar a buscar personas?",
+        backdropDismiss: false,
+        buttons: [
+          {
+            text: "Buscar personas",
+            handler: () => {
+              this.nav.navigateRoot(["/tabs/radar"]);
+            }
+          },
+          {
+            text: "Configurar mi perfil",
+            handler: () => {
+              this.nav.navigateRoot(["/edit-profile"]);
+            }
+          }
+        ]
+      });
+
+      alert.present();
     } catch (e) {
       this.codeForm.get("code").setValue("");
 

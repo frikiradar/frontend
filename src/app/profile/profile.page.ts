@@ -145,7 +145,7 @@ export class ProfilePage implements OnInit {
   }
 
   async showChat() {
-    if (this.user.match > 0) {
+    if (this.user.match > 0 || this.auth.isPremium()) {
       const data = await this.insertCoinModal();
       if (data) {
         this.router.navigate(["/chat", this.user.id]);
@@ -162,7 +162,7 @@ export class ProfilePage implements OnInit {
   }
 
   async switchLike() {
-    if (this.user.match > 0) {
+    if (this.user.match > 0 || this.auth.isPremium()) {
       this.vibration.vibrate(50);
 
       if (!this.user.like) {

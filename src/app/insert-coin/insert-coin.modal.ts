@@ -40,7 +40,7 @@ export class InsertCoinModal {
         // gastamos creditos y accedemos
         (await this.toast.create({
           message: `Clic! Has introducido la moneda`,
-          duration: 1500,
+          duration: 500,
           position: "bottom"
         })).present();
         setTimeout(async () => {

@@ -10,7 +10,7 @@
 </ion-header>
 <ion-content class="ion-padding">
   <form (submit)="submitRegister()" [formGroup]="registerForm">
-    <h2>¿Cómo? ¿Que aún no tienes una cuenta?</h2>
+    <h2>¿Cómo? ¿Aún no tienes una cuenta?</h2>
     <p>
       Pasa, ¡ya te queda muy muy poco para comenzar a conocer frikis en tu zona!
     </p>
@@ -148,6 +148,78 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label>¿Cómo nos has conocido?</ion-label>
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="meet"
+      >
+        <ion-select-option value="friend"
+          >A través de un amigo</ion-select-option
+        >
+        <ion-select-option value="youtube">Por un youtuber</ion-select-option>
+        <ion-select-option value="blog"
+          >En un blog o web de noticias</ion-select-option
+        >
+        <ion-select-option value="social">En una red social</ion-select-option>
+        <ion-select-option value="store"
+          >En la tienda de aplicaciones</ion-select-option
+        >
+        <ion-select-option [value]="false"
+          >Otro, no se o no quiero decirlo</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item
+      *ngIf="
+        registerForm.get('meet').value &&
+        registerForm.get('meet').value !== 'store'
+      "
+    >
+      <ion-label position="floating">
+        {{
+          registerForm.get("meet").value === "friend"
+            ? "Nombre de usuario tu amigo"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "youtube"
+            ? "¿Cuál es el nombre del youtuber?"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "blog"
+            ? "¿Cómo se llama el blog o la web?"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "social"
+            ? "¿En cuál red social?"
+            : ""
+        }}
+      </ion-label>
+      <ion-input
+        required
+        type="text"
+        autocapitalize="words"
+        formControlName="referral"
+        debounce="500"
+        name="referral"
+      >
+      </ion-input>
+    </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('password').invalid &&
+        registerForm.get('password').value
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
+      una opción
+    </div>
     <ion-item lines="none">
       <ion-label
         >Me interesa recibir correos electrónicos promocionales e informativos
@@ -160,7 +232,7 @@
       ></ion-checkbox>
       <ion-icon color="light" name="mail" slot="end"></ion-icon>
     </ion-item>
-    <ion-button color="primary" type="submit" expand="block" class="dismiss"
+    <ion-button color="primary" type="submit" expand="block"
       >Registrarme</ion-button
     >
   </form>

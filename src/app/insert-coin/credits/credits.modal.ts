@@ -45,7 +45,9 @@ export class CreditsModal {
       this.products = products;
       this.detectorRef.detectChanges();
 
-      const product = this.products.filter(p => p.data.state === "finished")[0];
+      const product = this.products.filter(
+        p => p.data && p.data.state === "finished"
+      )[0];
       if (product) {
         // Acabamos de comprar uno de los productos
         (await this.toast.create({

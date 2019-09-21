@@ -52,6 +52,8 @@ export class RegisterPage {
       birthday: new FormControl("", Validators.required),
       gender: new FormControl("", Validators.required),
       lovegender: [""],
+      meet: [""],
+      referral: [""],
       mailing: [""]
     });
   }
@@ -80,6 +82,8 @@ export class RegisterPage {
                   this.registerForm.get("birthday").value.split("T")[0],
                   this.registerForm.get("gender").value.trim(),
                   this.registerForm.get("lovegender").value,
+                  this.registerForm.get("meet").value,
+                  this.registerForm.get("referral").value,
                   this.registerForm.get("mailing").value
                 );
 
