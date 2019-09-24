@@ -116,11 +116,17 @@
         <ion-icon name="contact" slot="start"></ion-icon>
         <ion-label>Cuenta</ion-label>
       </ion-item-divider>
-      <ion-item lines="full" button>
+      <ion-item lines="full" (click)="premiumSettingsModal()" button>
         <ion-icon name="infinite" slot="start"></ion-icon>
         <ion-label>
           <h2>Configurar mi suscripción</h2>
           <p>FrikiRadar ILIMITADO</p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="full" (click)="paymentsModal()" button>
+        <ion-icon name="card" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Historial de pagos</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="usernameModal()" button>

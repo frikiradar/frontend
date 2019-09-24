@@ -4,12 +4,15 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
+import { SharedModule } from "../shared/shared.module";
 import { BlockUsersModal } from "./block-users/block-users.modal";
 import { ChangeEmailModal } from "./change-email/change-email.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
 import { DisableAccountModal } from "./disable-account/disable-account.modal";
+import { PaymentsModal } from "./payments/payments.modal";
+import { PremiumSettingsModal } from "./premium-settings/premium-settings.modal";
 import { SettingsPage } from "./settings.page";
 
 const routes: Routes = [
@@ -25,7 +28,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule
   ],
   declarations: [
     SettingsPage,
@@ -34,7 +38,9 @@ const routes: Routes = [
     ChangeUsernameModal,
     DisableAccountModal,
     DevicesSettingsModal,
-    BlockUsersModal
+    BlockUsersModal,
+    PaymentsModal,
+    PremiumSettingsModal
   ],
   entryComponents: [
     ChangePasswordModal,
@@ -42,7 +48,9 @@ const routes: Routes = [
     ChangeUsernameModal,
     DisableAccountModal,
     DevicesSettingsModal,
-    BlockUsersModal
+    BlockUsersModal,
+    PaymentsModal,
+    PremiumSettingsModal
   ]
 })
 export class SettingsPageModule {}

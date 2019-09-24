@@ -4,10 +4,9 @@ import {
   IAPProducts,
   InAppPurchase2
 } from "@ionic-native/in-app-purchase-2/ngx";
-import { ModalController, Platform } from "@ionic/angular";
+import { Platform } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { PremiumModal } from "./../insert-coin/premium/premium.modal";
 import { AuthService } from "./auth.service";
 import { Product, ProductService } from "./product.service";
 import { UserService } from "./user.service";
@@ -20,7 +19,6 @@ export class StoreService {
   public products: Observable<Product[]>;
 
   constructor(
-    private modal: ModalController,
     private auth: AuthService,
     private store: InAppPurchase2,
     private platform: Platform,
@@ -133,23 +131,22 @@ export class StoreService {
   }
 
   async finishPurchase(product: IAPProduct) {
-    product.finish();
+    switch (product.type) {
+      case "consumable":
+        product.finish();
 
-    const credits = this.productsValue.find(p => p.id === product.id).value;
-    try {
-      const user = await this.userSvc.addCredits(credits);
-      this.auth.setAuthUser(user);
-      // Añadimos créditos!!
-      console.log("Comprado, añadimos créditos", product);
-    } catch (e) {
-      console.error("Error al añadir los créditos", product);
+        const credits = this.productsValue.find(p => p.id === product.id).value;
+        try {
+          const user = await this.userSvc.addCredits(credits);
+          this.auth.setAuthUser(user);
+          // Añadimos créditos!!
+          console.log("Comprado, añadimos créditos", product);
+        } catch (e) {
+          console.error("Error al añadir los créditos", product);
+        }
+        break;
+      case "paid subscription":
+        break;
     }
-  }
-
-  async showPremium() {
-    const modal = await this.modal.create({
-      component: PremiumModal
-    });
-    return await modal.present();
   }
 }

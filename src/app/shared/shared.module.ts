@@ -17,7 +17,7 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
     CreditsModal
   ],
   entryComponents: [InsertCoinModal, PremiumModal, CreditsModal],
-  imports: [IonicModule.forRoot(), CommonModule],
+  imports: [IonicModule, CommonModule],
   exports: [ImagePreloadDirective, NiceDatePipe]
 })
 export class SharedModule {}

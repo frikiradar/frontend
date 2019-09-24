@@ -10,6 +10,8 @@ import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
 import { DisableAccountModal } from "./disable-account/disable-account.modal";
+import { PaymentsModal } from "./payments/payments.modal";
+import { PremiumSettingsModal } from "./premium-settings/premium-settings.modal";
 
 @Component({
   selector: "app-settings",
@@ -68,6 +70,20 @@ export class SettingsPage implements OnInit {
   async disableAccountModal() {
     const modal = await this.modal.create({
       component: DisableAccountModal
+    });
+    return await modal.present();
+  }
+
+  async premiumSettingsModal() {
+    const modal = await this.modal.create({
+      component: PremiumSettingsModal
+    });
+    return await modal.present();
+  }
+
+  async paymentsModal() {
+    const modal = await this.modal.create({
+      component: PaymentsModal
     });
     return await modal.present();
   }

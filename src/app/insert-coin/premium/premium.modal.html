@@ -1,7 +1,3 @@
-<link
-  href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap"
-  rel="stylesheet"
-/>
 <ion-header no-border>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -13,9 +9,70 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <p>Antes de desactivar la cuenta lee estos puntos:</p>
-  <p>
-    Si aún así sigues queriendo desactivar tu cuenta, introduce de nuevo tu
-    contraseña como medida de seguridad adicional para desactivar la cuenta.
+  <p class="ion-text-center">
+    Suscríbete a FrikiRadar ILIMITADO y disfruta de todas las ventajas que te
+    ofrece la membresía.
   </p>
+  <ion-button
+    color="primary"
+    expand="block"
+    size="large"
+    fill="outline"
+    shape="round"
+    [disabled]="!products[3]?.data?.canPurchase"
+    (click)="subscribe(products[3])"
+    *ngIf="products?.length"
+    >Por tan solo {{ products[3]?.data?.price }}/mes</ion-button
+  >
+  <ion-list>
+    <ion-item>
+      <ion-icon name="hand" slot="start"></ion-icon>
+      <ion-label
+        ><p>
+          <strong>CERO PUBLICIDAD.</strong> Utiliza la aplicación libremente. No
+          te aparecerán anuncios publicitarios de ningún tipo.
+        </p></ion-label
+      >
+    </ion-item>
+    <ion-item>
+      <ion-icon name="infinite" slot="start"></ion-icon>
+      <ion-label
+        ><p>
+          <strong>PODER ILIMITADO.</strong> Disfruta sin límites de todas las
+          opciones de FrikiRadar como chatear libremente y entregar kokoros sin
+          límite, sin gastar un solo crédito ni ver un comercial.
+        </p></ion-label
+      >
+    </ion-item>
+    <ion-item>
+      <ion-icon name="hammer" slot="start"></ion-icon>
+      <ion-label>
+        <p>
+          <strong>SÁLTATE LAS REGLAS.</strong> Comienza nuevos chats y entrega
+          kokoros aunque no tengas afinidad con el usuario.
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="globe" slot="start"></ion-icon>
+      <ion-label
+        ><p>
+          <strong>RADAR MUNDIAL.</strong> Encuentra a cualquier usuario, sin
+          límite de kilómetros en el radar, añadiendo la opción mundial. ¡Para
+          el amor no hay distancias!
+        </p></ion-label
+      >
+    </ion-item>
+    <ion-item>
+      <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+      <ion-label
+        ><p>
+          <strong>SOPORTE PREMIUM.</strong> Accede al grupo privado, donde
+          podrás hablar directamente con los creadores de FrikiRadar para
+          responder tus dudas y sugerencias con atención prioritaria. Además de
+          ser de los primeros en enterarte de todas las novedades.
+        </p></ion-label
+      >
+    </ion-item>
+  </ion-list>
 </ion-content>

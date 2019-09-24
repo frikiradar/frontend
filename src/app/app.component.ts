@@ -21,6 +21,7 @@ import { PushService } from "./services/push.service";
 export class AppComponent {
   currentUser: User;
   backButtonCount = 0;
+  alertNetwork: HTMLIonAlertElement;
 
   constructor(
     private auth: AuthService,
@@ -83,20 +84,27 @@ export class AppComponent {
   }
 
   async networkStatus() {
-    /*const alertNetwork = await this.alert.create({
+    this.initNetworkAlert();
+
+    this.network.onConnect().subscribe(() => {
+      console.log("Online");
+      this.alertNetwork.dismiss();
+      this.initNetworkAlert();
+    });
+
+    this.network.onDisconnect().subscribe(() => {
+      console.log("Offline");
+      this.alertNetwork.present();
+    });
+  }
+
+  async initNetworkAlert() {
+    this.alertNetwork = await this.alert.create({
       header: "Sin conexión a internet",
       message:
         "No tienes conexión a internet en estos momentos. Podrás seguir utilizando la aplicación en cuanto vuelvas a tener red.",
       backdropDismiss: false
     });
-
-    this.network.onConnect().subscribe(async () => {
-      await alertNetwork.dismiss();
-    });
-
-    this.network.onDisconnect().subscribe(async () => {
-      await alertNetwork.present();
-    });*/
   }
 
   async backButtonStatus() {

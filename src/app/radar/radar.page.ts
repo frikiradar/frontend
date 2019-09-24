@@ -30,7 +30,7 @@ export class RadarPage implements OnInit {
   scroll = 0;
   ratio = 50;
   page = 0;
-  user: User;
+  authUser: User;
   users: User[] = [];
 
   constructor(
@@ -45,11 +45,11 @@ export class RadarPage implements OnInit {
 
   async ngOnInit() {
     this.range.value = 1;
-    this.user = this.auth.currentUserValue;
-    if (this.user && this.user.id) {
+    this.authUser = this.auth.currentUserValue;
+    if (this.authUser && this.authUser.id) {
       if (
-        !this.user.roles.includes("ROLE_ADMIN") &&
-        !this.user.roles.includes("ROLE_DEMO")
+        !this.authUser.roles.includes("ROLE_ADMIN") &&
+        !this.authUser.roles.includes("ROLE_DEMO")
       ) {
         try {
           const coordinates = await this.geolocation.getCurrentPosition({
@@ -59,11 +59,17 @@ export class RadarPage implements OnInit {
           });
           const longitude = coordinates.coords.longitude;
           const latitude = coordinates.coords.latitude;
-          this.user = await this.userSvc.setCoordinates(longitude, latitude);
+          const authUser = await this.userSvc.setCoordinates(
+            longitude,
+            latitude
+          );
+          this.auth.setAuthUser(authUser);
         } catch (e) {
-          this.user = await this.userSvc.setCoordinates(0, 0);
+          const authUser = await this.userSvc.setCoordinates(0, 0);
+          this.auth.setAuthUser(authUser);
         }
-        this.auth.setAuthUser(this.user);
+
+        this.authUser = this.auth.currentUserValue;
       }
 
       this.getRadarUsers();
