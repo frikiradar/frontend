@@ -155,7 +155,7 @@ export class UserService {
     >;
   }
 
-  subscribePremim(months: number) {
+  subscribePremim(months?: number) {
     return this.rest.post("premium", { months }).toPromise() as Promise<User>;
   }
 

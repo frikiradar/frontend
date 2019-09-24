@@ -9,4 +9,6 @@ export interface Payment {
   type: string;
   user: Partial<User>;
   payment_date?: Date;
+  amount: number;
+  currency: string;
 }

@@ -10,20 +10,24 @@ export class PaymentService {
   async setPayment(
     title: string,
     description: string,
-    orderId: string,
+    order_id: string,
     token: string,
     signature: string,
-    type: string
+    type: string,
+    amount: number,
+    currency: string
   ) {
     try {
       return await this.rest
         .post("payment", {
           title,
           description,
-          orderId,
+          order_id,
           token,
           signature,
-          type
+          type,
+          amount,
+          currency
         })
         .toPromise();
     } catch (e) {

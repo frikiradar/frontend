@@ -8,6 +8,7 @@ import { Platform } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 
 import { AuthService } from "./auth.service";
+import { PaymentService } from "./payment.service";
 import { Product, ProductService } from "./product.service";
 import { UserService } from "./user.service";
 
@@ -23,7 +24,8 @@ export class StoreService {
     private store: InAppPurchase2,
     private platform: Platform,
     private userSvc: UserService,
-    private productsSvc: ProductService
+    private productsSvc: ProductService,
+    private payment: PaymentService
   ) {
     this.platform.ready().then(() => {
       const products = this.productsSvc.getProducts();
@@ -133,20 +135,49 @@ export class StoreService {
   async finishPurchase(product: IAPProduct) {
     switch (product.type) {
       case "consumable":
-        product.finish();
-
         const credits = this.productsValue.find(p => p.id === product.id).value;
         try {
           const user = await this.userSvc.addCredits(credits);
           this.auth.setAuthUser(user);
           // Añadimos créditos!!
           console.log("Comprado, añadimos créditos", product);
+
+          this.payment.setPayment(
+            product.description,
+            `Has añadido ${product.description} a tu cuenta.`,
+            product.transaction.id,
+            product.transaction.purchaseToken,
+            product.transaction.signature,
+            product.transaction.type,
+            +product.priceMicros / 1000000,
+            product.currency
+          );
         } catch (e) {
           console.error("Error al añadir los créditos", product);
         }
         break;
       case "paid subscription":
+        try {
+          const user = await this.userSvc.subscribePremim();
+          this.auth.setAuthUser(user);
+          // Añadimos créditos!!
+          console.log("Comprado, añadimos créditos", product);
+          this.payment.setPayment(
+            product.description,
+            `Te has suscrito a ${product.description}.`,
+            product.transaction.id,
+            product.transaction.purchaseToken,
+            product.transaction.signature,
+            product.transaction.type,
+            +product.priceMicros / 1000000,
+            product.currency
+          );
+        } catch (e) {
+          console.error("Error al añadir los créditos", product);
+        }
         break;
     }
+
+    product.finish();
   }
 }
