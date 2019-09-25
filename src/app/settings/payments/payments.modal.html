@@ -19,10 +19,21 @@
           }}"
         ></ion-icon>
         <ion-label>
-          <h2>{{ payment.title }} ({{ payment.order_id }})</h2>
           <p>{{ payment.description }}</p>
         </ion-label>
-        <ion-note slot="end">{{ payment.payment_date | niceDate }}</ion-note>
+        <ion-note slot="end" class="ion-text-right">
+          {{ payment.payment_date | niceDate }}
+          <h4>
+            {{ payment.amount }}
+            {{
+              payment.currency === "EUR"
+                ? "€"
+                : payment.currency === "MXN"
+                ? "$"
+                : payment.currency
+            }}
+          </h4>
+        </ion-note>
       </ion-item>
     </ion-list>
   </div>

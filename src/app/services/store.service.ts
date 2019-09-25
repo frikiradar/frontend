@@ -133,6 +133,7 @@ export class StoreService {
   }
 
   async finishPurchase(product: IAPProduct) {
+    console.log("finishPurrchase", product);
     switch (product.type) {
       case "consumable":
         const credits = this.productsValue.find(p => p.id === product.id).value;
@@ -143,7 +144,7 @@ export class StoreService {
           console.log("Comprado, añadimos créditos", product);
 
           this.payment.setPayment(
-            product.description,
+            product.id,
             `Has añadido ${product.description} a tu cuenta.`,
             product.transaction.id,
             product.transaction.purchaseToken,
@@ -163,7 +164,7 @@ export class StoreService {
           // Añadimos créditos!!
           console.log("Comprado, añadimos créditos", product);
           this.payment.setPayment(
-            product.description,
+            product.id,
             `Te has suscrito a ${product.description}.`,
             product.transaction.id,
             product.transaction.purchaseToken,
@@ -173,7 +174,7 @@ export class StoreService {
             product.currency
           );
         } catch (e) {
-          console.error("Error al añadir los créditos", product);
+          console.error("Error al suscribirse", product);
         }
         break;
     }

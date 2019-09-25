@@ -18,7 +18,7 @@ export class PaymentsModal implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.payments = await this.payment.getPayments();
+    this.payments = (await this.payment.getPayments()).reverse();
   }
 
   close() {

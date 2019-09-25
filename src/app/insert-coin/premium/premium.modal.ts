@@ -49,9 +49,11 @@ export class PremiumModal {
         p => p.data && p.data.state === "finished"
       )[0];
       if (product) {
-        // Acabamos de comprar uno de los productos
+        console.log("ha pasado el filtro suscripcion", product);
+
+        // Acabamos de suscribirnos
         (await this.toast.create({
-          message: `¡Has añadido correctamente ${product.value} créditos a tu cuenta!`,
+          message: `¡Te has suscrito correctamente a ${product.data.description}!`,
           duration: 2000,
           position: "middle"
         })).present();
@@ -65,7 +67,7 @@ export class PremiumModal {
     this.auth.currentUser.subscribe(authUser => this.user);
   }
 
-  subscribe(product: Product) {
+  subscribePremium(product: Product) {
     this.storeSvc.order(product);
   }
 

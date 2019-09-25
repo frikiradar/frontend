@@ -20,7 +20,7 @@
     fill="outline"
     shape="round"
     [disabled]="!products[3]?.data?.canPurchase"
-    (click)="subscribe(products[3])"
+    (click)="subscribePremium(products[3])"
     *ngIf="products?.length"
     >Por tan solo {{ products[3]?.data?.price }}/mes</ion-button
   >

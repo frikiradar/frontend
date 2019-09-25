@@ -8,6 +8,7 @@ import {
 import { User } from "src/app/models/user";
 import { Product } from "src/app/services/product.service";
 import { StoreService } from "src/app/services/store.service";
+import { PremiumModal } from "../premium/premium.modal";
 import { AuthService } from "./../../services/auth.service";
 
 @Component({
@@ -21,6 +22,7 @@ export class CreditsModal {
 
   constructor(
     private modal: ModalController,
+    private newModal: ModalController,
     public auth: AuthService,
     public storeSvc: StoreService,
     public loading: LoadingController,
@@ -67,6 +69,14 @@ export class CreditsModal {
 
   async buyCredits(product: Product) {
     this.storeSvc.order(product);
+  }
+
+  async showPremium() {
+    this.modal.dismiss();
+    const modal = await this.newModal.create({
+      component: PremiumModal
+    });
+    return await modal.present();
   }
 
   close(data?: any) {
