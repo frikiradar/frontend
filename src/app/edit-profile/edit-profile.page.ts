@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -33,7 +33,7 @@ import { UtilsService } from "./../services/utils.service";
   templateUrl: "./edit-profile.page.html",
   styleUrls: ["./edit-profile.page.scss"]
 })
-export class EditProfilePage implements OnInit {
+export class EditProfilePage {
   get minage() {
     return this.profileForm.get("minage");
   }
@@ -106,7 +106,7 @@ export class EditProfilePage implements OnInit {
     });
   }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     this.user = await this.auth.getAuthUser();
 
     this.profileForm.patchValue({

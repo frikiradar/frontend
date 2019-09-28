@@ -24,6 +24,7 @@ export class RegisterPage {
   public registerForm: FormGroup;
   public today: number = Date.now();
   public clearPassword = false;
+  public usernameSuggestion = "";
 
   constructor(
     private alert: AlertController,
@@ -55,6 +56,18 @@ export class RegisterPage {
       meet: [""],
       referral: [""],
       mailing: [""]
+    });
+
+    this.registerForm.get("username").valueChanges.subscribe(async username => {
+      if (username.trim() !== "") {
+        const u = await this.auth.checkUsername(username);
+        if (u !== true) {
+          this.registerForm.get("username").setErrors({ incorrect: true });
+          this.usernameSuggestion = u as string;
+        } else {
+          this.usernameSuggestion = "";
+        }
+      }
     });
   }
 

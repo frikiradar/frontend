@@ -11,6 +11,7 @@ import {
   AlertController,
   ModalController,
   NavController,
+  Platform,
   ToastController
 } from "@ionic/angular";
 
@@ -40,7 +41,8 @@ export class LoginPage {
     private modal: ModalController,
     private toast: ToastController,
     public formBuilder: FormBuilder,
-    private nav: NavController // private fb: Facebook
+    private nav: NavController, // private fb: Facebook
+    public platform: Platform
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);

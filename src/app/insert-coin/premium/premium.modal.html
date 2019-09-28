@@ -9,20 +9,48 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <p class="ion-text-center">
-    Suscríbete a FrikiRadar ILIMITADO y disfruta de todas las ventajas que te
-    ofrece la membresía.
+  <p class="ion-text-center" *ngIf="!user?.is_premium">
+    Únete a FrikiRadar ILIMITADO y disfruta de todas las ventajas que te ofrece.
   </p>
+  <div *ngIf="user?.is_premium">
+    <p class="ion-text-center">
+      ESTADO: Activo hasta el {{ user?.premium_expiration | date: "medium" }}
+    </p>
+    <p class="ion-text-center">
+      Actualmente estás disfrutando de FrikiRadar ILIMITADO, pero puedes ampliar
+      tu periodo de validez por el tiempo que desees.
+    </p>
+  </div>
+  <ion-button
+    color="primary"
+    expand="block"
+    fill="outline"
+    shape="round"
+    [disabled]="!products[3]?.data?.canPurchase"
+    (click)="subscribePremium(products[3])"
+    *ngIf="products?.length"
+    >{{ products[3]?.name }} por {{ products[3]?.data?.price }}</ion-button
+  >
   <ion-button
     color="primary"
     expand="block"
     size="large"
     fill="outline"
     shape="round"
-    [disabled]="!products[3]?.data?.canPurchase"
-    (click)="subscribePremium(products[3])"
+    [disabled]="!products[4]?.data?.canPurchase"
+    (click)="subscribePremium(products[4])"
     *ngIf="products?.length"
-    >Por tan solo {{ products[3]?.data?.price }}/mes</ion-button
+    >{{ products[4]?.name }} por {{ products[4]?.data?.price }}</ion-button
+  >
+  <ion-button
+    color="primary"
+    expand="block"
+    fill="outline"
+    shape="round"
+    [disabled]="!products[5]?.data?.canPurchase"
+    (click)="subscribePremium(products[5])"
+    *ngIf="products?.length"
+    >{{ products[5]?.name }} por {{ products[5]?.data?.price }}</ion-button
   >
   <ion-list>
     <ion-item>

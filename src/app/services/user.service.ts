@@ -155,8 +155,8 @@ export class UserService {
     >;
   }
 
-  subscribePremim(months?: number) {
-    return this.rest.post("premium", { months }).toPromise() as Promise<User>;
+  subscribePremim(days: number) {
+    return this.rest.post("premium", { days }).toPromise() as Promise<User>;
   }
 
   getOrientations() {

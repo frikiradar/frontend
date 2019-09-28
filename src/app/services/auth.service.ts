@@ -92,6 +92,23 @@ export class AuthService {
     }
   }
 
+  async checkUsername(
+    username: User["username"]
+  ): Promise<User["username"] | boolean> {
+    try {
+      const u = (await this.http
+        .get(`${environment.root}api/username/${username}`)
+        .toPromise()) as User["username"];
+      if (u === username) {
+        return true;
+      } else {
+        return u;
+      }
+    } catch (e) {
+      throw new Error("Error al comprobar el nombre de usuario");
+    }
+  }
+
   getAuthUser() {
     if (!this.currentUserValue) {
       return;

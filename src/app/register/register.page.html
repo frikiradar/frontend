@@ -27,11 +27,16 @@
       >
       </ion-input>
     </ion-item>
+    <div class="error-message" *ngIf="usernameSuggestion">
+      <ion-icon name="information-circle-outline"></ion-icon>Ups! Nombre de
+      usuario no disponible. Sugerencia {{ usernameSuggestion }}
+    </div>
     <div
       class="error-message"
       *ngIf="
         registerForm.get('username').invalid &&
-        registerForm.get('username').value
+        registerForm.get('username').value &&
+        !usernameSuggestion
       "
     >
       <ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3
@@ -41,7 +46,8 @@
       class="error-message"
       *ngIf="
         registerForm.get('username').invalid &&
-        registerForm.get('username').value
+        registerForm.get('username').value &&
+        !usernameSuggestion
       "
     >
       <ion-icon name="information-circle-outline"></ion-icon>Letras, números,

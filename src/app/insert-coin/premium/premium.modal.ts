@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component } from "@angular/core";
 import {
+  AlertController,
   LoadingController,
-  ModalController,
-  ToastController
+  ModalController
 } from "@ionic/angular";
 
 import { User } from "src/app/models/user";
@@ -24,7 +24,7 @@ export class PremiumModal {
     public auth: AuthService,
     public loading: LoadingController,
     public storeSvc: StoreService,
-    private toast: ToastController,
+    private alert: AlertController,
     public detectorRef: ChangeDetectorRef
   ) {
     this.user = this.auth.currentUserValue;
@@ -49,25 +49,30 @@ export class PremiumModal {
         p => p.data && p.data.state === "finished"
       )[0];
       if (product) {
-        console.log("ha pasado el filtro suscripcion", product);
-
         // Acabamos de suscribirnos
-        (await this.toast.create({
-          message: `¡Te has suscrito correctamente a ${product.data.description}!`,
-          duration: 2000,
-          position: "middle"
-        })).present();
 
-        this.close(true);
+        const alert = await this.alert.create({
+          header: "¡Enhorabuena!",
+          message: `Has activado FrikiRadar ILIMITADO por ${product.name}. Muchas gracias por confiar en FrikiRadar, esperamos que disfrutes de todas los beneficios obtenidos.`,
+          buttons: [
+            {
+              text: "¡Muchas gracias!",
+              handler: () => {
+                this.close(true);
+                location.reload();
+              }
+            }
+          ]
+        });
+
+        alert.present();
       }
 
       this.loading.getTop().then(v => (v ? this.loading.dismiss() : undefined));
     });
-
-    this.auth.currentUser.subscribe(authUser => this.user);
   }
 
-  subscribePremium(product: Product) {
+  async subscribePremium(product: Product) {
     this.storeSvc.order(product);
   }
 

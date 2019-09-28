@@ -38,13 +38,11 @@ export class StoreService {
           let type = "";
           switch (p.type) {
             case "consumable":
+            case "subscription":
               type = this.store.CONSUMABLE;
               break;
             case "non_consumable":
               type = this.store.NON_CONSUMABLE;
-              break;
-            case "subscription":
-              type = this.store.PAID_SUBSCRIPTION;
               break;
           }
 
@@ -132,53 +130,54 @@ export class StoreService {
     return this.store.order(product.data);
   }
 
-  async finishPurchase(product: IAPProduct) {
-    console.log("finishPurrchase", product);
+  async finishPurchase(p: IAPProduct) {
+    console.log("finishPurrchase", p);
+    const product = this.productsValue.find(pr => pr.id === p.id);
     switch (product.type) {
       case "consumable":
-        const credits = this.productsValue.find(p => p.id === product.id).value;
         try {
-          const user = await this.userSvc.addCredits(credits);
+          const user = await this.userSvc.addCredits(product.value);
           this.auth.setAuthUser(user);
           // Añadimos créditos!!
           console.log("Comprado, añadimos créditos", product);
 
           this.payment.setPayment(
-            product.id,
-            `Has añadido ${product.description} a tu cuenta.`,
-            product.transaction.id,
-            product.transaction.purchaseToken,
-            product.transaction.signature,
-            product.transaction.type,
-            +product.priceMicros / 1000000,
-            product.currency
+            p.id,
+            `Has añadido ${p.description} a tu cuenta.`,
+            p.transaction.id,
+            p.transaction.purchaseToken,
+            p.transaction.signature,
+            p.transaction.type,
+            +p.priceMicros / 1000000,
+            p.currency
           );
+
+          p.finish();
         } catch (e) {
           console.error("Error al añadir los créditos", product);
         }
         break;
-      case "paid subscription":
+      case "subscription":
         try {
-          const user = await this.userSvc.subscribePremim();
+          const user = await this.userSvc.subscribePremim(product.value);
           this.auth.setAuthUser(user);
           // Añadimos créditos!!
-          console.log("Comprado, añadimos créditos", product);
+          console.log("Comprado, añadimos días de suscripción", product);
           this.payment.setPayment(
-            product.id,
-            `Te has suscrito a ${product.description}.`,
-            product.transaction.id,
-            product.transaction.purchaseToken,
-            product.transaction.signature,
-            product.transaction.type,
-            +product.priceMicros / 1000000,
-            product.currency
+            p.id,
+            `Has añadido ${product.name} FrikiRadar ILIMITADO a tu cuenta.`,
+            p.transaction.id,
+            p.transaction.purchaseToken,
+            p.transaction.signature,
+            p.transaction.type,
+            +p.priceMicros / 1000000,
+            p.currency
           );
+          p.finish();
         } catch (e) {
           console.error("Error al suscribirse", product);
         }
         break;
     }
-
-    product.finish();
   }
 }

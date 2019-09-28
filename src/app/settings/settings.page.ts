@@ -3,6 +3,7 @@ import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
+import { PremiumModal } from "./../insert-coin/premium/premium.modal";
 import { AuthService } from "./../services/auth.service";
 import { BlockUsersModal } from "./block-users/block-users.modal";
 import { ChangeEmailModal } from "./change-email/change-email.modal";
@@ -11,7 +12,6 @@ import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
 import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { PaymentsModal } from "./payments/payments.modal";
-import { PremiumSettingsModal } from "./premium-settings/premium-settings.modal";
 
 @Component({
   selector: "app-settings",
@@ -74,9 +74,9 @@ export class SettingsPage implements OnInit {
     return await modal.present();
   }
 
-  async premiumSettingsModal() {
+  async premiumModal() {
     const modal = await this.modal.create({
-      component: PremiumSettingsModal
+      component: PremiumModal
     });
     return await modal.present();
   }
