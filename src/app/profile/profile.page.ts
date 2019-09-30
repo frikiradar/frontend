@@ -145,7 +145,7 @@ export class ProfilePage implements OnInit {
   }
 
   async showChat() {
-    if (this.user.match > 0 || this.auth.isPremium()) {
+    if (this.user.match > 0 || this.user.from_like || this.auth.isVerified()) {
       const data = await this.insertCoinModal();
       if (data) {
         this.router.navigate(["/chat", this.user.id]);
@@ -153,7 +153,7 @@ export class ProfilePage implements OnInit {
     } else {
       const alert = await this.alert.create({
         header: "No puedes iniciar un chat con esta persona",
-        message: `Para poder iniciar una conversación es necesario tener temas de conversación en común. Tu afinidad con ${this.user.username} es del ${this.user.match}%.`,
+        message: `Para poder iniciar una conversación es necesario tener temas de conversación en común o haber recibido su kokoro ❤️.`,
         buttons: ["Entendido, gracias!"]
       });
 
@@ -162,43 +162,36 @@ export class ProfilePage implements OnInit {
   }
 
   async switchLike() {
-    if (this.user.match > 0 || this.auth.isPremium()) {
-      this.vibration.vibrate(50);
-
-      if (!this.user.like) {
-        const data = await this.insertCoinModal();
-        if (data) {
-          this.user = await this.userSvc.like(this.user.id);
-          if (this.user.block_messages) {
-            (await this.toast.create({
-              message: `¡Le has entregado tu kokoro a ${this.user.username}! No podrás iniciar un chat con hasta que te entregue el suyo también.`,
-              duration: 5000,
-              position: "middle"
-            })).present();
-          } else {
-            (await this.toast.create({
-              message: `¡Le has entregado tu kokoro a ${this.user.username}!`,
-              duration: 5000,
-              position: "middle"
-            })).present();
-          }
+    if (!this.user.like) {
+      const data = await this.insertCoinModal();
+      if (data) {
+        this.vibration.vibrate(50);
+        this.user = await this.userSvc.like(this.user.id);
+        if (
+          this.user.block_messages ||
+          !this.user.match ||
+          !this.auth.isVerified()
+        ) {
+          (await this.toast.create({
+            message: `¡Le has entregado tu kokoro a ${this.user.username}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
+            duration: 5000,
+            position: "middle"
+          })).present();
+        } else {
+          (await this.toast.create({
+            message: `¡Le has entregado tu kokoro a ${this.user.username}!`,
+            duration: 5000,
+            position: "middle"
+          })).present();
         }
-      } else {
-        this.user = await this.userSvc.unlike(this.user.id);
-        (await this.toast.create({
-          message: `Le has retirado tu kokoro a ${this.user.username}`,
-          duration: 5000,
-          position: "middle"
-        })).present();
       }
     } else {
-      const alert = await this.alert.create({
-        header: "No le puedes entregar tu kokoro a esta persona",
-        message: `Para poder entregarle tu kokoro es necesario tener temas de conversación en común. Tu afinidad con ${this.user.username} es del ${this.user.match}%.`,
-        buttons: ["Entendido, gracias!"]
-      });
-
-      await alert.present();
+      this.user = await this.userSvc.unlike(this.user.id);
+      (await this.toast.create({
+        message: `Le has retirado tu kokoro a ${this.user.username}`,
+        duration: 5000,
+        position: "middle"
+      })).present();
     }
   }
 

@@ -189,6 +189,13 @@ export class AuthService {
     return user.is_premium;
   }
 
+  isVerified(user?: User) {
+    if (!user) {
+      user = this.currentUserValue;
+    }
+    return user.verified;
+  }
+
   async logout() {
     // Desactivamos las notificaciones
     this.rest.get(`turnoff-device/${this.device.uuid}`).toPromise();

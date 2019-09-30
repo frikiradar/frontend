@@ -42,7 +42,7 @@
         >Iniciar sesión</ion-button
       >
     </form>
-    <p class="ion-text-center" *ngIf="platform.is('cordova')">
+    <p class="ion-text-center" *ngIf="!platform.is('pwa')">
       No tengo una cuenta, <a routerLink="/register">quiero registrarme</a>
     </p>
     <p class="ion-text-center" id="forgot-password">
