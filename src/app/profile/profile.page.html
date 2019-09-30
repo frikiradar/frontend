@@ -74,7 +74,21 @@
 
       <div class="ion-padding">
         <ion-list class="resume ion-padding">
-          <h1>{{ user?.username }}, {{ user?.age }}</h1>
+          <ion-item lines="none">
+            <ion-icon
+              name="checkmark-circle"
+              slot="start"
+              size="small"
+              color="secondary"
+              *ngIf="user.verified"
+            ></ion-icon>
+            <ion-label>
+              <h1>
+                {{ user?.username }},
+                {{ user?.age }}
+              </h1>
+            </ion-label>
+          </ion-item>
           <h3 class="location">
             <span *ngIf="user?.location">{{ user.location }}</span
             ><span *ngIf="user?.location && user?.distance !== undefined"

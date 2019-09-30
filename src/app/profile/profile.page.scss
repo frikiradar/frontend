@@ -35,6 +35,14 @@ ion-grid {
   padding-top: 0;
   padding-bottom: 0;
 
+  ion-item {
+    margin-left: -15px;
+
+    ion-icon {
+      margin-right: 5px;
+    }
+  }
+
   h1,
   h3 {
     margin: 0;
