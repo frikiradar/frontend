@@ -147,7 +147,7 @@ export class RadarPage implements OnInit {
         this.ratio = 1000;
         break;
       case 5:
-        this.ratio = 100000;
+        this.ratio = 25000;
         break;
     }
     this.page = 0;
