@@ -78,7 +78,6 @@ export class RadarPage implements OnInit {
         this.ratio = 50;
         this.page = 0;
         this.scroll = 0;
-        this.users = [];
         this.showSkeleton = true;
         this.getRadarUsers();
       });
@@ -91,7 +90,8 @@ export class RadarPage implements OnInit {
       const users = await this.userSvc.getRadarUsers(this.ratio, this.page);
 
       this.showSkeleton = false;
-      this.users = [...this.users, ...users];
+      this.users =
+        this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
       if (event) {
         event.target.complete();
