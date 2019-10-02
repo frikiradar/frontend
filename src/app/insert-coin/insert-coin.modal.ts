@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
+import { AdMobFree } from "@ionic-native/admob-free/ngx";
 import {
   AlertController,
   ModalController,
+  Platform,
   ToastController
 } from "@ionic/angular";
 
@@ -27,7 +29,9 @@ export class InsertCoinModal {
     public auth: AuthService,
     private userSvc: UserService,
     private alert: AlertController,
-    private toast: ToastController
+    private toast: ToastController,
+    private admobFree: AdMobFree,
+    public platform: Platform
   ) {
     this.user = this.auth.currentUserValue;
   }
@@ -80,7 +84,11 @@ export class InsertCoinModal {
 
   async showPromo() {
     this.admobSvc.RewardVideoAd();
-    this.close(true);
+    this.admobSvc.adViewed.subscribe(adViewed => {
+      if (adViewed) {
+        this.close(true);
+      }
+    });
   }
 
   close(data?: any) {

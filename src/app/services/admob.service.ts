@@ -6,11 +6,15 @@ import {
   AdMobFreeRewardVideoConfig
 } from "@ionic-native/admob-free/ngx";
 import { Platform } from "@ionic/angular";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { AuthService } from "./auth.service";
 
 @Injectable()
 export class AdmobService {
+  private adViewedSubject: BehaviorSubject<boolean>;
+  public adViewed: Observable<boolean>;
+
   // Interstitial Ad's Configurations
   interstitialConfig: AdMobFreeInterstitialConfig = {
     // add your config here
@@ -37,6 +41,9 @@ export class AdmobService {
     private auth: AuthService
   ) {
     platform.ready().then(() => {
+      this.adViewedSubject = new BehaviorSubject<boolean>(false);
+      this.adViewed = this.adViewedSubject.asObservable();
+
       if (this.platform.is("cordova")) {
         // Handle interstitial's close event to Prepare Ad again
         this.admobFree.on("admob.interstitial.events.CLOSE").subscribe(() => {
@@ -53,11 +60,22 @@ export class AdmobService {
             .prepare()
             .then(() => {
               console.error("Reward Video CLOSE");
+              this.adViewedSubject.next(false);
             })
             .catch(e => console.error(e));
         });
+
+        // Recompensa adquirida
+        this.admobFree.on("admob.rewardvideo.events.REWARD").subscribe(() => {
+          console.log("Recompensa adquirida");
+          this.adViewedSubject.next(true);
+        });
       }
     });
+  }
+
+  public get adsViewedValue(): boolean {
+    return this.adViewedSubject.value;
   }
 
   init() {

@@ -88,7 +88,9 @@ export class AppComponent {
 
     this.network.onConnect().subscribe(() => {
       console.log("Online");
-      this.alertNetwork.dismiss();
+      this.alert
+        .getTop()
+        .then(v => (v ? this.alertNetwork.dismiss() : undefined));
       this.initNetworkAlert();
     });
 
@@ -183,7 +185,7 @@ export class AppComponent {
     const alert = await this.alert.create({
       header: "En desarrollo",
       message:
-        "Ayúdanos en nuestro reto para ser la aplicación de citas para frikis nº1. Cuéntale a tus amigos y envíanos errores o sugerencias a hola@frikiradar.com ¡Te obsequiaremos con una suscripción a FrikiRadar ILIMITADO gratuita! 😁",
+        "Ayúdanos en nuestro reto para ser la aplicación de citas para frikis nº1. Cuéntale a tus amigos y envíanos errores o sugerencias a hola@frikiradar.com 😁",
       buttons: [
         {
           text: "¡Comenzar la aventura!"
