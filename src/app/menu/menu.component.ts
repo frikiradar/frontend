@@ -26,7 +26,7 @@ export class MenuComponent {
   ) {}
 
   editProfile() {
-    this.nav.navigateRoot(["/edit-profile"]);
+    this.router.navigate(["/edit-profile"]);
     this.menu.close();
   }
 
