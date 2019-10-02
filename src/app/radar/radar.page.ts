@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Event, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import {
   AlertController,
@@ -72,7 +72,16 @@ export class RadarPage implements OnInit {
         this.authUser = this.auth.currentUserValue;
       }
 
-      this.getRadarUsers();
+      this.auth.currentUser.subscribe(async authUser => {
+        this.authUser = authUser;
+        this.range.value = 1;
+        this.ratio = 50;
+        this.page = 0;
+        this.scroll = 0;
+        this.users = [];
+        this.showSkeleton = true;
+        this.getRadarUsers();
+      });
     }
   }
 

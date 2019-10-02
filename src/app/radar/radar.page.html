@@ -109,7 +109,7 @@
     <ion-range
       #range
       min="0"
-      [max]="authUser.is_premium ? 5 : 4"
+      [max]="authUser?.is_premium ? 5 : 4"
       step="1"
       snaps="true"
       [debounce]="250"
@@ -123,7 +123,7 @@
         <ion-col>100km</ion-col>
         <ion-col>500km</ion-col>
         <ion-col>1000km</ion-col>
-        <ion-col *ngIf="authUser.is_premium">
+        <ion-col *ngIf="authUser?.is_premium">
           <ion-icon name="globe"></ion-icon>
         </ion-col>
       </ion-row>
