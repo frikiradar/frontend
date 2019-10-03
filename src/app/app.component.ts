@@ -31,7 +31,7 @@ export class AppComponent {
     private network: Network,
     private splashScreen: SplashScreen,
     private platform: Platform,
-    private push: PushService,
+
     private config: ConfigService,
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
@@ -47,15 +47,6 @@ export class AppComponent {
       this.loadConfig();
       this.networkStatus();
       this.backButtonStatus();
-
-      this.auth.setAuthUser(await this.auth.getAuthUser());
-      this.auth.currentUser.subscribe(async authUser => {
-        this.currentUser = authUser;
-        if (this.platform.is("cordova")) {
-          this.push.init();
-          this.admob.init();
-        }
-      });
 
       if (this.platform.is("cordova")) {
         this.statusBar.backgroundColorByHexString("#1a1a1a");

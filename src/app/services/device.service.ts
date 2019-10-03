@@ -30,6 +30,16 @@ export class DeviceService {
 
   async setDevice(token?: string) {
     if (this.device.uuid !== null) {
+      const devices = await this.getDevices();
+      const device = await this.getCurrentDevice();
+      if (
+        devices.length &&
+        !devices.some(d => d.device_id === device.device_id)
+      ) {
+        // dispositivo desconocido, enviar email avisando
+        await this.unknownDevice(device).toPromise();
+      }
+
       const name = `${this.device.manufacturer} ${
         this.device.model
       } (${this.device.platform.charAt(0).toUpperCase() +
@@ -43,9 +53,7 @@ export class DeviceService {
         })
         .toPromise()) as User;
 
-      if (!token) {
-        this.auth.setAuthUser(user);
-      }
+      this.auth.setAuthUser(user);
     }
   }
 

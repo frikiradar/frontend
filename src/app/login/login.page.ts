@@ -85,7 +85,7 @@ export class LoginPage {
   }
 
   async loginSuccess(user: User) {
-    if (user.two_step) {
+    if (user && user.two_step) {
       this.nav.navigateRoot(["/login/two-step"]);
     } else {
       this.auth.setAuthUser(user);

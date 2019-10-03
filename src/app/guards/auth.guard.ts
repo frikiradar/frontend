@@ -30,22 +30,6 @@ export class AuthGuard implements CanActivate {
 
         return false;
       } else {
-        // El dispositivo utilizado es desconocido
-        const device = await this.device.getCurrentDevice();
-        const devices = await this.device.getDevices();
-        if (device === undefined) {
-          return true;
-        }
-
-        if (
-          devices.length &&
-          !devices.some(d => d.device_name === device.device_name)
-        ) {
-          // dispositivo desconocido, enviar email avisando
-          await this.device.unknownDevice(device).toPromise();
-        }
-        this.device.setDevice();
-
         return true;
       }
     }
