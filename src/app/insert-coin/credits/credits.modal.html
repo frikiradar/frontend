@@ -23,6 +23,7 @@
   </p>
   <div *ngIf="products?.length">
     <ion-button
+      *ngIf="products[0]?.data"
       color="primary"
       expand="block"
       fill="outline"
