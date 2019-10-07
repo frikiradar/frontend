@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.frikiradar.app" version="0.9.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.frikiradar.app" version="0.9.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>FrikiRadar</name>
     <description>FrikiRadar, la app de citas y chat para frikis.</description>
     <author email="hola@frikiradar.com" href="https://frikiradar.com/">FrikiRadar</author>
@@ -90,11 +90,14 @@
             <true />
         </config-file>
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
-            <string>You can take photos</string>
+            <string>Necesario para hacer una nueva foto de perfil.</string>
         </config-file>
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-            <string>We use your location for full functionality of certain app features.</string>
+            <string>Necesitamos saber tu ubicación para usar el radar con mayor precisión.</string>
         </edit-config>
+        <config-file target="*-Info.plist" parent="ITSAppUsesNonExemptEncryption" mode="add">
+            <false/>
+        </config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="20" src="resources/ios/icon/icon-20.png" width="20" />
