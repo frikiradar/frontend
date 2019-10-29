@@ -145,19 +145,27 @@ export class ProfilePage implements OnInit {
   }
 
   async showChat() {
-    if (this.user.match > 0 || this.user.from_like || this.auth.isVerified()) {
-      const data = await this.insertCoinModal();
-      if (data) {
-        this.router.navigate(["/chat", this.user.id]);
-      }
+    if (this.user.chat && !this.user.block) {
+      this.router.navigate(["/chat", this.user.id]);
     } else {
-      const alert = await this.alert.create({
-        header: "No puedes iniciar un chat con esta persona",
-        message: `Para poder iniciar una conversación es necesario tener temas de conversación en común o haber recibido su kokoro ❤️.`,
-        buttons: ["Entendido, gracias!"]
-      });
+      if (
+        this.user.match > 0 ||
+        this.user.from_like ||
+        this.auth.isVerified()
+      ) {
+        const data = await this.insertCoinModal();
+        if (data) {
+          this.router.navigate(["/chat", this.user.id]);
+        }
+      } else {
+        const alert = await this.alert.create({
+          header: "No puedes iniciar un chat con esta persona",
+          message: `Para poder iniciar una conversación es necesario tener temas de conversación en común o haber recibido su kokoro ❤️.`,
+          buttons: ["Entendido, gracias!"]
+        });
 
-      await alert.present();
+        await alert.present();
+      }
     }
   }
 

@@ -38,6 +38,7 @@ export interface User {
   like: boolean;
   from_like: boolean;
   block: boolean;
+  chat: boolean;
 
   avatar: SafeResourceUrl;
   images: SafeResourceUrl[];
