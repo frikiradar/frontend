@@ -19,7 +19,7 @@
     <preference name="Hostname" value="frikiradar" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="23" />
-    <preference name="android-targetSdkVersion" value="28"/>
+    <preference name="android-targetSdkVersion" value="28" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
@@ -96,8 +96,8 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>Necesitamos saber tu ubicación para usar el radar con mayor precisión.</string>
         </edit-config>
-        <config-file target="*-Info.plist" parent="ITSAppUsesNonExemptEncryption" mode="add">
-            <false/>
+        <config-file mode="add" parent="ITSAppUsesNonExemptEncryption" target="*-Info.plist">
+            <false />
         </config-file>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />

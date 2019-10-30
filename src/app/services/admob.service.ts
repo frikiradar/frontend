@@ -70,6 +70,16 @@ export class AdmobService {
           console.log("Recompensa adquirida");
           this.adViewedSubject.next(true);
         });
+
+        this.admobFree
+          .on("admob.rewardvideo.events.LOAD_FAIL")
+          .subscribe(() => {
+            console.log("Carga fallida");
+          });
+
+        this.admobFree.on("admob.rewardvideo.events.LOAD").subscribe(() => {
+          console.log("Cargado");
+        });
       }
     });
   }

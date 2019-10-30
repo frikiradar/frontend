@@ -84,6 +84,7 @@ export class InsertCoinModal {
 
   async showPromo() {
     this.admobSvc.RewardVideoAd();
+
     this.admobSvc.adViewed.subscribe(adViewed => {
       if (adViewed) {
         this.close(true);
