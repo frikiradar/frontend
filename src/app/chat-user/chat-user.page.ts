@@ -118,7 +118,9 @@ export class ChatUserPage implements OnInit {
       this.userId,
       true,
       this.page
-    )).reverse();
+    ))
+      .filter(m => m.text)
+      .reverse();
 
     if (this.messages.length < 50) {
       this.infiniteScroll.disabled = true;
@@ -182,13 +184,19 @@ export class ChatUserPage implements OnInit {
     });
 
     this.textarea.setFocus();
+
+    if (!this.user.chat) {
+      this.message.setValue(undefined);
+      this.sendMessage();
+    }
   }
 
   async sendMessage(event?: Event) {
     if (event) {
       event.preventDefault();
     }
-    if (this.message.value.trim()) {
+
+    if (this.message.value && this.message.value.trim()) {
       const text = this.message.value.trim();
       this.message.setValue("");
       this.textarea.setFocus();
@@ -204,7 +212,7 @@ export class ChatUserPage implements OnInit {
             sending: true
           }
         ]
-      ];
+      ].filter(m => m.text);
 
       this.scrollDown();
       try {
@@ -212,6 +220,8 @@ export class ChatUserPage implements OnInit {
       } catch (e) {
         // this.alertError.present();
       }
+    } else {
+      await this.chatSvc.sendMessage(this.user.id, undefined).then();
     }
   }
 
@@ -233,7 +243,9 @@ export class ChatUserPage implements OnInit {
       this.userId,
       false,
       this.page
-    )).reverse();
+    ))
+      .filter(m => m.text)
+      .reverse();
     this.messages = [...messages, ...this.messages];
     event.target.complete();
 
