@@ -21,19 +21,20 @@
   <p class="ion-text-center" style="margin-top: 30px;">
     ¿Cuántos créditos deseas?
   </p>
-  <div *ngIf="products?.length">
+  <div *ngIf="products.length">
     <ion-button
-      *ngIf="products[0]?.data"
+      *ngIf="products[0]?.data?.valid"
       color="primary"
       expand="block"
       fill="outline"
       shape="round"
       [disabled]="!products[0]?.data?.canPurchase"
       (click)="buyCredits(products[0])"
-      >{{ products[0]?.data?.description }} -
+      >{{ products[0]?.data?.description || products[0].name }} -
       {{ products[0]?.data?.price }}</ion-button
     >
     <ion-button
+      *ngIf="products[1]?.data?.valid"
       color="primary"
       expand="block"
       size="large"
@@ -41,18 +42,30 @@
       shape="round"
       [disabled]="!products[1]?.data?.canPurchase"
       (click)="buyCredits(products[1])"
-      >{{ products[1]?.data?.description }} -
+      >{{ products[1]?.data?.description || products[1].name }} -
       {{ products[1]?.data?.price }}</ion-button
     >
     <ion-button
+      *ngIf="products[2]?.data?.valid"
       color="primary"
       expand="block"
       fill="outline"
       shape="round"
       [disabled]="!products[2]?.data?.canPurchase"
       (click)="buyCredits(products[2])"
-      >{{ products[2]?.data?.description }} -
+      >{{ products[2]?.data?.description || products[2].name }} -
       {{ products[2]?.data?.price }}</ion-button
+    >
+    <ion-button
+      *ngIf="products[6]?.data?.valid"
+      color="primary"
+      expand="block"
+      fill="outline"
+      shape="round"
+      [disabled]="!products[6]?.data?.canPurchase"
+      (click)="buyCredits(products[6])"
+      >{{ products[6]?.data?.description || products[6].name }} -
+      {{ products[6]?.data?.price }}</ion-button
     >
 
     <p class="ion-text-center" style="margin-top: 30px;">

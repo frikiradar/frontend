@@ -17,7 +17,7 @@ import { AuthService } from "./../../services/auth.service";
   styleUrls: ["./credits.modal.scss"]
 })
 export class CreditsModal {
-  public products: Product[];
+  public products: Product[] = [];
   public user: User;
 
   constructor(
@@ -47,6 +47,12 @@ export class CreditsModal {
       this.products = products;
       this.detectorRef.detectChanges();
 
+      if (this.products.some(p => p.data.valid)) {
+        this.loading
+          .getTop()
+          .then(v => (v ? this.loading.dismiss() : undefined));
+      }
+
       const product = this.products.filter(
         p => p.data && p.data.state === "finished"
       )[0];
@@ -60,8 +66,6 @@ export class CreditsModal {
 
         this.close(true);
       }
-
-      this.loading.getTop().then(v => (v ? this.loading.dismiss() : undefined));
     });
 
     this.auth.currentUser.subscribe(authUser => this.user);

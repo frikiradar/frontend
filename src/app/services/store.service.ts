@@ -81,7 +81,7 @@ export class StoreService {
 
         // Track all store errors
         this.store.error(err => {
-          console.error("Store Error: ", err);
+          console.error("Store Error: ", err.code, err.message);
         });
 
         // Run some code only when the store is ready to be used
@@ -145,8 +145,8 @@ export class StoreService {
             p.id,
             `Has añadido ${p.description} a tu cuenta.`,
             p.transaction.id,
-            p.transaction.purchaseToken,
-            p.transaction.signature,
+            p.transaction.purchaseToken || p.transaction.id,
+            p.transaction.signature || "",
             p.transaction.type,
             +p.priceMicros / 1000000,
             p.currency
@@ -167,8 +167,8 @@ export class StoreService {
             p.id,
             `Has añadido ${product.name} FrikiRadar ILIMITADO a tu cuenta.`,
             p.transaction.id,
-            p.transaction.purchaseToken,
-            p.transaction.signature,
+            p.transaction.purchaseToken || p.transaction.id,
+            p.transaction.signature || "",
             p.transaction.type,
             +p.priceMicros / 1000000,
             p.currency
