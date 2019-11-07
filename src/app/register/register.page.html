@@ -173,6 +173,9 @@
         <ion-select-option value="store"
           >En la tienda de aplicaciones</ion-select-option
         >
+        <ion-select-option value="event"
+          >En un evento/exposición/convención</ion-select-option
+        >
         <ion-select-option [value]="false"
           >Otro, no se o no quiero decirlo</ion-select-option
         >
@@ -203,6 +206,11 @@
         {{
           registerForm.get("meet").value === "social"
             ? "¿En cuál red social?"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "event"
+            ? "Nombre del evento/convención/exposición"
             : ""
         }}
       </ion-label>

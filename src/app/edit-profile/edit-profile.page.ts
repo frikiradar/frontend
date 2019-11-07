@@ -370,7 +370,10 @@ export class EditProfilePage {
 
   async uploadPicture(avatar: File) {
     try {
-      this.user = await this.userSvc.uploadAvatar(avatar);
+      const user = await this.userSvc.uploadAvatar(avatar);
+      this.auth.setAuthUser(user);
+      this.user = this.auth.currentUserValue;
+
       (await this.toast.create({
         message: `Imagen actualizada correctamente.`,
         duration: 5000,
@@ -388,7 +391,9 @@ export class EditProfilePage {
 
   async setAvatar() {
     const image = this.user.images[this.activeImage - 1];
-    this.user = await this.userSvc.setAvatar(image);
+    const user = await this.userSvc.setAvatar(image);
+    this.auth.setAuthUser(user);
+    this.user = this.auth.currentUserValue;
     this.imageSlider.slideTo(0);
   }
 

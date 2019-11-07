@@ -47,7 +47,7 @@ export class CreditsModal {
       this.products = products;
       this.detectorRef.detectChanges();
 
-      if (this.products.some(p => p.data.valid)) {
+      if (this.products.some(p => p.data && p.data.valid)) {
         this.loading
           .getTop()
           .then(v => (v ? this.loading.dismiss() : undefined));

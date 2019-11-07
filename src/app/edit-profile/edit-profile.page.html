@@ -12,7 +12,7 @@
         ></ion-back-button>
       </ion-buttons>
       <ion-title>{{
-        user?.tags.length ? "Mi Perfil" : "Completa tu perfil"
+        user?.tags?.length ? "Mi Perfil" : "Completa tu perfil"
       }}</ion-title>
       <ion-buttons slot="end" *ngIf="activeImage > 0">
         <ion-button (click)="deleteImage()">
