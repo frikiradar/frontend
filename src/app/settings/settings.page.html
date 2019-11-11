@@ -35,9 +35,9 @@
       <ion-item lines="full">
         <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Verificación en dos pasos</h2>
+          <h2>Autenticación en dos pasos</h2>
           <p>
-            Te enviaremos un email con un código de verificación cada vez que
+            Te enviaremos un email con un código de autenticación cada vez que
             inicies una nueva sesión.
           </p>
         </ion-label>
@@ -48,15 +48,23 @@
         >
         </ion-checkbox>
       </ion-item>
-      <!--<ion-item button lines="full" *ngIf="user.verified">
+      <ion-item
+        button
+        (click)="verificationModal()"
+        lines="full"
+        *ngIf="user.verified"
+      >
         <ion-icon name="ribbon" slot="start"></ion-icon>
         <ion-label>
           <h2>Verificación de la cuenta</h2>
-          <p>
+          <p *ngIf="user?.verified">
             Comprueba el estado de verificación de tu cuenta.
           </p>
+          <p *ngIf="!user?.verified">
+            Verifica tu cuenta para mejorar la seguridad.
+          </p>
         </ion-label>
-      </ion-item>-->
+      </ion-item>
     </ion-item-group>
 
     <ion-item-group>

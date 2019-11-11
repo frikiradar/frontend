@@ -13,6 +13,7 @@ import { DevicesSettingsModal } from "./devices/devices.modal";
 import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { PaymentsModal } from "./payments/payments.modal";
 import { SettingsPage } from "./settings.page";
+import { VerificationModal } from "./verification/verification.modal";
 
 const routes: Routes = [
   {
@@ -38,7 +39,8 @@ const routes: Routes = [
     DisableAccountModal,
     DevicesSettingsModal,
     BlockUsersModal,
-    PaymentsModal
+    PaymentsModal,
+    VerificationModal
   ],
   entryComponents: [
     ChangePasswordModal,
@@ -47,7 +49,8 @@ const routes: Routes = [
     DisableAccountModal,
     DevicesSettingsModal,
     BlockUsersModal,
-    PaymentsModal
+    PaymentsModal,
+    VerificationModal
   ]
 })
 export class SettingsPageModule {}

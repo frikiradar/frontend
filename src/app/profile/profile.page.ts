@@ -181,13 +181,13 @@ export class ProfilePage implements OnInit {
           !this.auth.isVerified()
         ) {
           (await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.username}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
+            message: `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
             duration: 5000,
             position: "middle"
           })).present();
         } else {
           (await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.username}!`,
+            message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
             duration: 5000,
             position: "middle"
           })).present();
@@ -196,7 +196,7 @@ export class ProfilePage implements OnInit {
     } else {
       this.user = await this.userSvc.unlike(this.user.id);
       (await this.toast.create({
-        message: `Le has retirado tu kokoro a ${this.user.username}`,
+        message: `Le has retirado tu kokoro a ${this.user.name}`,
         duration: 5000,
         position: "middle"
       })).present();

@@ -1,0 +1,51 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Verificación de la cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-item lines="full" *ngIf="user.verified">
+    <ion-icon name="ribbon" slot="start"></ion-icon>
+    <ion-label>
+      <h2>Estado:</h2>
+      <h1>
+        Cuenta
+        {{ user?.verified ? "verificada" : "no verificada" }}
+      </h1>
+    </ion-label>
+  </ion-item>
+  <p class="ion-padding">
+    Tu seguridad es muy importante, es por eso que te proponemos validar tu
+    cuenta para aumentar la confianza con los demás usuarios completando una de
+    las siguientes opciones:
+  </p>
+  <ion-list>
+    <ion-item>
+      <ion-icon name="contact" slot="start"></ion-icon>
+      <ion-label>
+        <p>
+          <strong>IDENTIFICACIÓN OFICIAL.</strong> La manera más fiable de
+          verificar tu identidad. Envíanos una foto selfie, que coincida con tu
+          imagen de perfil, con identificación oficial en mano (NIE, DNI,
+          cédula, pasaporte...) claramente visible a
+          <a href="mailto:hola@frikiradar.com">hola@frikiradar.com</a>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="card" slot="start"></ion-icon>
+      <ion-label>
+        <p>
+          <strong>PAGO.</strong> Realizar un pago en FrikiRadar también permite
+          confirmar tu identidad. Puedes completar este paso comprando créditos
+          o tiempo de FrikiRadar ILIMITADO.
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

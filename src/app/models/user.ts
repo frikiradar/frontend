@@ -6,6 +6,7 @@ import { Tag } from "./tags";
 export interface User {
   id: number;
   username: string;
+  name: string;
   email: string;
   description: string;
   birthday: string;

@@ -88,6 +88,7 @@ export class EditProfilePage {
     private webview: WebView
   ) {
     this.profileForm = this.fb.group({
+      name: [""],
       description: [""],
       birthday: [""],
       gender: [""],
@@ -110,6 +111,7 @@ export class EditProfilePage {
     this.user = await this.auth.getAuthUser();
 
     this.profileForm.patchValue({
+      name: this.user.name,
       description: this.user.description,
       birthday: this.user.birthday,
       gender: this.user.gender,
