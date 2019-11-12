@@ -6,13 +6,18 @@ import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { AlertController, Platform, ToastController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  Platform,
+  ToastController
+} from "@ionic/angular";
 
+import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
 import { AdmobService } from "./services/admob.service";
 import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
-import { PushService } from "./services/push.service";
 import { UtilsService } from "./services/utils.service";
 
 @Component({
@@ -38,7 +43,8 @@ export class AppComponent {
     private appVersion: AppVersion,
     private admob: AdmobService,
     // private analyticsFirebase: AnalyticsFirebase,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private modal: ModalController
   ) {
     this.initializeApp();
   }
@@ -143,12 +149,15 @@ export class AppComponent {
       const alert = await this.alert.create({
         header: "¡Conviértete en embajador 🐲!",
         message:
-          "Únete al programa de embajadores de FrikiRadar reclutando a tus amigos y conseguirás meses gratuitos de FrikiRadar ILIMITADO. ¡Infórmate!",
+          "Únete al programa de embajadores de FrikiRadar reclutando a tus amigos y conseguirás créditos y meses de FrikiRadar ILIMITADO. ¡Infórmate!",
         buttons: [
           {
             text: "¡Quiero informarme!",
-            handler: () => {
-              this.utils.share();
+            handler: async () => {
+              const modal = await this.modal.create({
+                component: AmbassadorModal
+              });
+              return await modal.present();
             }
           }
         ]

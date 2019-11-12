@@ -44,7 +44,7 @@
           icon-only
           button
           id="camera-icon"
-          *ngIf="user?.images.length < 3"
+          *ngIf="user?.images?.length < 3"
           (click)="openPictureSheet()"
         >
           <ion-icon

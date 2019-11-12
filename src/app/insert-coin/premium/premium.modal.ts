@@ -48,7 +48,7 @@ export class PremiumModal {
       const product = this.products.filter(
         p => p.data && p.data.state === "finished"
       )[0];
-      if (product) {
+      if (product && product.type === "subscription") {
         // Acabamos de suscribirnos
 
         const alert = await this.alert.create({

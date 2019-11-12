@@ -56,13 +56,15 @@ export class CreditsModal {
       const product = this.products.filter(
         p => p.data && p.data.state === "finished"
       )[0];
-      if (product) {
+      if (product && product.type === "consumable") {
         // Acabamos de comprar uno de los productos
-        (await this.toast.create({
-          message: `¡Has añadido correctamente ${product.value} créditos a tu cuenta!`,
-          duration: 2000,
-          position: "middle"
-        })).present();
+        (
+          await this.toast.create({
+            message: `¡Has añadido correctamente ${product.value} créditos a tu cuenta!`,
+            duration: 2000,
+            position: "middle"
+          })
+        ).present();
 
         this.close(true);
       }

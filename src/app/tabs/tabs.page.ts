@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Platform } from "@ionic/angular";
 
 import { AdmobService } from "../services/admob.service";
@@ -13,7 +13,7 @@ import { PushService } from "../services/push.service";
   templateUrl: "tabs.page.html",
   styleUrls: ["tabs.page.scss"]
 })
-export class TabsPage {
+export class TabsPage implements OnInit {
   public counters: Notification;
 
   constructor(
@@ -22,7 +22,9 @@ export class TabsPage {
     private platform: Platform,
     private push: PushService,
     private admob: AdmobService
-  ) {
+  ) {}
+
+  async ngOnInit() {
     if (this.platform.is("cordova")) {
       this.push.init();
       this.admob.init();
@@ -30,12 +32,12 @@ export class TabsPage {
 
     this.notificationSvc.notification.subscribe(notification => {
       this.counters = notification;
+      this.detectorRef.detectChanges();
     });
   }
 
   async ionViewWillEnter() {
     this.counters = (await this.notificationSvc.getUnread()) as Notification;
     this.notificationSvc.setNotification(this.counters);
-    this.detectorRef.detectChanges();
   }
 }
