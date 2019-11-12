@@ -1,0 +1,59 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Programa de embajador</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <p>
+    Recluta a tus amigos y consigue recompensas especiales. Cuando tu amigo se
+    registre y adquiera créditos o tiempo de FrikiRadar ILIMITADO por primera
+    vez obtendrás tu recompensa.
+  </p>
+  <ion-list>
+    <ion-item>
+      <ion-icon name="infinite" slot="start"></ion-icon>
+      <ion-label>
+        <p>
+          <strong>FrikiRadar ILIMITADO.</strong> Si tu amigo compra tiempo de
+          FrikiRadar ILIMITADO obtendrás 1 mes completamente Gratis que se
+          añadirá a tu cuenta o se sumará al que ya tengas.
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-icon name="gift" slot="start"></ion-icon>
+      <ion-label>
+        <p>
+          <strong>Créditos.</strong> Si tu amigo compra créditos para añadir a
+          su cuenta obtendrás 3 Créditos que se añadirán a tu cuenta o se
+          sumarán a los que ya tengas.
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <p>
+    Para poder utilizar el programa de embajador y adquirir tus recompensas
+    sigue estos pasos:
+  </p>
+  <ul>
+    <li>
+      Tu amigo debe ser un nuevo usuario, no puede estar ya registrado en
+      FrikiRadar.
+    </li>
+    <li>
+      Al registrarse debe indicar que nos ha conocido
+      <b>a través de un amigo</b> e indicar tu nombre de usuario:
+      <b>{{user?.username}}</b>
+    </li>
+    <li>
+      En el momento en que tu amigo añada Créditos o tiempo de FrikiRadar
+      ILIMITADO a su cuenta obtendrás tus recompensas.
+    </li>
+    <li>No hay límite de amigos para reclutar.</li>
+  </ul>
+</ion-content>

@@ -18,11 +18,15 @@
     <ion-list>
       <ion-item button lines="none" (click)="editProfile()">
         <ion-icon name="contact" slot="start"></ion-icon>
-        <ion-label>Editar perfil</ion-label>
+        <ion-label>
+          Editar perfil
+        </ion-label>
       </ion-item>
       <ion-item button lines="full" (click)="settings()">
         <ion-icon name="settings" slot="start"></ion-icon>
-        <ion-label>Configuración y privacidad</ion-label>
+        <ion-label>
+          Configuración y privacidad
+        </ion-label>
       </ion-item>
       <ion-item
         button
@@ -35,12 +39,19 @@
       </ion-item>
       <ion-item
         button
-        lines="none"
+        lines="full"
         (click)="showPremium()"
         *ngIf="!auth.currentUserValue.is_premium"
       >
         <ion-icon name="infinite" slot="start"></ion-icon>
         <ion-label>FrikiRadar ILIMITADO</ion-label>
+      </ion-item>
+      <ion-item button lines="none" (click)="showAmbassador()">
+        <ion-icon name="contacts" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Programa de embajador</h2>
+          <p>Recluta y gana recompensas</p>
+        </ion-label>
       </ion-item>
       <ion-item button lines="none" (click)="share()">
         <ion-icon name="share" slot="start"></ion-icon>

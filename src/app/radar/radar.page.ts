@@ -139,6 +139,8 @@ export class RadarPage implements OnInit {
     }
 
     this.showSkeleton = true;
+
+    // tslint:disable-next-line: cyclomatic-complexity
     switch (value) {
       case 0:
         this.ratio = 10;
@@ -156,7 +158,7 @@ export class RadarPage implements OnInit {
         this.ratio = 1000;
         break;
       case 5:
-        this.ratio = 25000;
+        this.ratio = this.authUser.is_premium ? 25000 : 5000;
         break;
     }
     this.page = 0;

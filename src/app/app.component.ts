@@ -13,6 +13,7 @@ import { AdmobService } from "./services/admob.service";
 import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
 import { PushService } from "./services/push.service";
+import { UtilsService } from "./services/utils.service";
 
 @Component({
   selector: "app-root",
@@ -31,7 +32,7 @@ export class AppComponent {
     private network: Network,
     private splashScreen: SplashScreen,
     private platform: Platform,
-
+    private utils: UtilsService,
     private config: ConfigService,
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
@@ -107,11 +108,13 @@ export class AppComponent {
 
         switch (this.backButtonCount) {
           case 1:
-            (await this.toastController.create({
-              message: "Pulsa de nuevo para salir de la aplicación",
-              duration: 2000,
-              position: "bottom"
-            })).present();
+            (
+              await this.toastController.create({
+                message: "Pulsa de nuevo para salir de la aplicación",
+                duration: 2000,
+                position: "bottom"
+              })
+            ).present();
             break;
 
           default:
@@ -136,7 +139,23 @@ export class AppComponent {
     }
     localStorage.setItem("config", JSON.stringify(config));
 
-    if (openTimes >= 2 && !config.review) {
+    if (openTimes === 2) {
+      const alert = await this.alert.create({
+        header: "¡Conviértete en embajador 🐲!",
+        message:
+          "Únete al programa de embajadores de FrikiRadar reclutando a tus amigos y conseguirás meses gratuitos de FrikiRadar ILIMITADO. ¡Infórmate!",
+        buttons: [
+          {
+            text: "¡Quiero informarme!",
+            handler: () => {
+              this.utils.share();
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    } else if (openTimes >= 3 && !config.review) {
       const alert = await this.alert.create({
         header: "¡Únete a la batalla!",
         message:
@@ -174,12 +193,15 @@ export class AppComponent {
 
   async betaAdvertisement() {
     const alert = await this.alert.create({
-      header: "En desarrollo",
+      header: "¡Con tu ayuda seguiremos creciendo!",
       message:
-        "Ayúdanos en nuestro reto para ser la aplicación de citas para frikis nº1. Cuéntale a tus amigos y envíanos errores o sugerencias a hola@frikiradar.com 😁",
+        "FrikiRadar acaba de comenzar su andadura y aún le queda un largo camino por delante. Por eso agradecemos tu ayuda dando a conocer FrikiRadar y compartiendo con tus amigos.",
       buttons: [
         {
-          text: "¡Comenzar la aventura!"
+          text: "¡Compartir!",
+          handler: () => {
+            this.utils.share();
+          }
         }
       ]
     });

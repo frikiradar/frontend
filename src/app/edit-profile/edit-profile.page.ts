@@ -145,17 +145,21 @@ export class EditProfilePage {
       this.user = await this.userSvc.updateUser(this.user);
       this.tags = this.user.tags;
 
-      (await this.toast.create({
-        message: "Cambios guardados correctamente.",
-        duration: 5000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: "Cambios guardados correctamente.",
+          duration: 5000,
+          position: "bottom"
+        })
+      ).present();
     } catch (e) {
-      (await this.toast.create({
-        message: `Error al guardar los cambios ${e}.`,
-        duration: 5000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: `Error al guardar los cambios ${e}.`,
+          duration: 5000,
+          position: "bottom"
+        })
+      ).present();
     }
     this.back();
   }
@@ -296,11 +300,13 @@ export class EditProfilePage {
     try {
       this.user = await this.userSvc.updateUser(this.user);
     } catch (e) {
-      (await this.toast.create({
-        message: `Error al guardar la etiqueta ${e}.`,
-        duration: 5000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: `Error al guardar la etiqueta ${e}.`,
+          duration: 5000,
+          position: "bottom"
+        })
+      ).present();
     }
   }
 
@@ -376,17 +382,21 @@ export class EditProfilePage {
       this.auth.setAuthUser(user);
       this.user = this.auth.currentUserValue;
 
-      (await this.toast.create({
-        message: `Imagen actualizada correctamente.`,
-        duration: 5000,
-        position: "middle"
-      })).present();
+      (
+        await this.toast.create({
+          message: `Imagen actualizada correctamente.`,
+          duration: 5000,
+          position: "middle"
+        })
+      ).present();
     } catch (e) {
-      (await this.toast.create({
-        message: `Error al actualizar la imagen.`,
-        duration: 5000,
-        position: "middle"
-      })).present();
+      (
+        await this.toast.create({
+          message: `Error al actualizar la imagen.`,
+          duration: 5000,
+          position: "middle"
+        })
+      ).present();
       console.error(e);
     }
   }
@@ -401,7 +411,9 @@ export class EditProfilePage {
 
   async deleteImage() {
     const image = this.user.images[this.activeImage - 1];
-    this.user = await this.userSvc.deleteAvatar(image);
+    const user = await this.userSvc.deleteAvatar(image);
+    this.auth.setAuthUser(user);
+    this.user = this.auth.currentUserValue;
     await this.imageSlider.update();
     this.imageSlider.slideTo(0);
   }

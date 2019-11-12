@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 
+import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { NiceDatePipe } from "../nice-date.pipe";
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
 import { CreditsModal } from "./../insert-coin/credits/credits.modal";
@@ -14,9 +15,15 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
     NiceDatePipe,
     InsertCoinModal,
     PremiumModal,
-    CreditsModal
+    CreditsModal,
+    AmbassadorModal
   ],
-  entryComponents: [InsertCoinModal, PremiumModal, CreditsModal],
+  entryComponents: [
+    InsertCoinModal,
+    PremiumModal,
+    CreditsModal,
+    AmbassadorModal
+  ],
   imports: [IonicModule, CommonModule],
   exports: [ImagePreloadDirective, NiceDatePipe]
 })

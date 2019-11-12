@@ -3,6 +3,7 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { MenuController, ModalController, NavController } from "@ionic/angular";
 
+import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { AuthService } from "../services/auth.service";
 import { UtilsService } from "../services/utils.service";
 import { CreditsModal } from "./../insert-coin/credits/credits.modal";
@@ -45,6 +46,13 @@ export class MenuComponent {
   async showPremium() {
     const modal = await this.modal.create({
       component: PremiumModal
+    });
+    return await modal.present();
+  }
+
+  async showAmbassador() {
+    const modal = await this.modal.create({
+      component: AmbassadorModal
     });
     return await modal.present();
   }

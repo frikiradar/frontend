@@ -11,9 +11,10 @@
           defaultHref="/tabs/radar"
         ></ion-back-button>
       </ion-buttons>
-      <ion-title>{{
-        user?.tags?.length ? "Mi Perfil" : "Completa tu perfil"
-      }}</ion-title>
+      <ion-title
+        >{{ user?.tags?.length ? "Mi Perfil" : "Completa tu perfil"
+        }}</ion-title
+      >
       <ion-buttons slot="end" *ngIf="activeImage > 0">
         <ion-button (click)="deleteImage()">
           <ion-icon slot="icon-only" name="trash"></ion-icon>
@@ -43,9 +44,13 @@
           icon-only
           button
           id="camera-icon"
+          *ngIf="user?.images.length < 3"
           (click)="openPictureSheet()"
         >
-          <ion-icon name="camera" size="large"></ion-icon>
+          <ion-icon
+            [name]="user?.avatar ? 'add-circle-outline' : 'camera'"
+            size="large"
+          ></ion-icon>
         </ion-label>
         <input
           type="file"
