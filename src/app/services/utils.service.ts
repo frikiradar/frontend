@@ -82,8 +82,11 @@ export class UtilsService {
   }
 
   share() {
+    const referrer = this.auth.currentUserValue
+      ? this.auth.currentUserValue.username
+      : "app";
+
     if (this.platform.is("hybrid")) {
-      const referrer = this.auth.currentUserValue.username;
       const options = {
         message:
           "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.", // not supported on some apps (Facebook, Instagram)
@@ -98,7 +101,7 @@ export class UtilsService {
         title: "FrikiRadar, la app de citas y chat para frikis",
         text:
           "Conoce a personas con tus mismos gustos con FikiRadar, la app de citas y chat para frikis.",
-        url: "https://frikiradar.com?referrer=${referrer}"
+        url: `https://frikiradar.com?referrer=${referrer}`
       })
         .then(() => {
           console.log("Thanks for sharing!");
