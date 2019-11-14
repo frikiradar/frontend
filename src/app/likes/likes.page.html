@@ -56,7 +56,9 @@
               [alt]="like.user.username"
               default="/assets/img/users/default.jpg"
             />
-            <ion-badge color="primary" *ngIf="!like?.time_read"
+            <ion-badge
+              color="primary"
+              *ngIf="!like?.time_read && param == 'received'"
               >&nbsp;</ion-badge
             >
           </ion-avatar>

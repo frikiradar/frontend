@@ -14,7 +14,7 @@ import { AuthService } from "./../services/auth.service";
 export class LikesPage {
   likes: Like[];
   showSkeleton = true;
-  param: "delivered" | "received" = "received";
+  public param: "delivered" | "received" = "received";
 
   constructor(
     private router: Router,
