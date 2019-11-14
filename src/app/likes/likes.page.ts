@@ -33,7 +33,9 @@ export class LikesPage {
   }
 
   async viewProfile(id: number) {
-    await this.likeSvc.readLike(id);
+    if (this.param === "received") {
+      await this.likeSvc.readLike(id);
+    }
     this.router.navigate(["/profile/", id]);
   }
 
