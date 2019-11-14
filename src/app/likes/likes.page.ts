@@ -14,6 +14,7 @@ import { AuthService } from "./../services/auth.service";
 export class LikesPage {
   likes: Like[];
   showSkeleton = true;
+  param: "delivered" | "received" = "received";
 
   constructor(
     private router: Router,
@@ -27,12 +28,18 @@ export class LikesPage {
   }
 
   async getLikes() {
-    this.likes = await this.likeSvc.getLikes();
+    this.likes = await this.likeSvc.getLikes(this.param);
     this.showSkeleton = false;
   }
 
   async viewProfile(id: number) {
     await this.likeSvc.readLike(id);
     this.router.navigate(["/profile/", id]);
+  }
+
+  changeOrder(param: "delivered" | "received") {
+    this.param = param;
+    this.showSkeleton = true;
+    this.getLikes();
   }
 }

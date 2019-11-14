@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IonSearchbar } from "@ionic/angular";
+import { IonInput } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { RestService } from "./../services/rest.service";
@@ -12,7 +12,7 @@ import { RestService } from "./../services/rest.service";
 })
 export class SearchPage implements OnInit {
   @ViewChild("searchBar", { static: true })
-  searchBar: IonSearchbar;
+  searchBar: IonInput;
 
   order = "distance";
   query: string;
@@ -31,6 +31,9 @@ export class SearchPage implements OnInit {
       this.searchBar.value = this.query;
       this.search(this.query);
     }
+    setTimeout(() => {
+      this.searchBar.setFocus();
+    }, 250);
   }
 
   async search(query?: string) {

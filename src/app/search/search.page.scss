@@ -10,3 +10,8 @@ ion-note,
 p {
   color: #bbbbbb;
 }
+
+ion-input {
+  --placeholder-color: rgb(124, 124, 124) !important;
+  padding-right: 20px !important;
+}

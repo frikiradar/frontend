@@ -5,18 +5,18 @@
         <ion-back-button text="Atrás" defaultHref="/"></ion-back-button>
       </ion-button>
     </ion-buttons>
-    <ion-title>Búsqueda</ion-title>
+
+    <ion-input
+      type="search"
+      debounce="500"
+      placeholder="Busco frikis a los que les guste..."
+      (keyup.enter)="search($event.target.value)"
+      spellcheck="false"
+      color="light"
+      clearInput
+      #searchBar
+    ></ion-input>
   </ion-toolbar>
-  <ion-searchbar
-    animated
-    debounce="500"
-    placeholder="Busco frikis a los que les guste..."
-    [debounce]="500"
-    (keyup.enter)="search($event.target.value)"
-    spellcheck="false"
-    color="light"
-    #searchBar
-  ></ion-searchbar>
   <ion-segment (ionChange)="changeOrder($event.detail.value)">
     <ion-segment-button layout="icon-start" value="distance" checked>
       <ion-label>Distancia</ion-label>
@@ -65,8 +65,8 @@
             <h2>{{ user.name }}, {{ user.age }}</h2>
             <h3>
               <span *ngIf="user.location"
-                >{{ user?.location
-                }}<span *ngIf="user.location && user.distance !== undefined"
+                >{{ user?.location }}<span
+                  *ngIf="user.location && user.distance !== undefined"
                   >, a
                 </span></span
               ><span *ngIf="user.distance !== undefined"
