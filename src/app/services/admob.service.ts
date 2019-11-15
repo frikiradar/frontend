@@ -91,12 +91,6 @@ export class AdmobService {
     return this.adViewedSubject.value;
   }
 
-  init() {
-    if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
-      // Load ad configuration
-    }
-  }
-
   BannerAd() {
     if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
       const bannerConfig: AdMobFreeBannerConfig = {
