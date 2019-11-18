@@ -91,6 +91,30 @@ export class AdmobService {
     return this.adViewedSubject.value;
   }
 
+  init() {
+    if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
+      // Load ad configuration
+      this.admobFree.interstitial.config(this.interstitialConfig);
+      // Prepare Ad to Show
+      this.admobFree.interstitial
+        .prepare()
+        .then(() => {
+          // alert(1);
+        })
+        .catch(e => console.error(e));
+
+      // Load ad configuration
+      this.admobFree.rewardVideo.config(this.RewardVideoConfig);
+      // Prepare Ad to Show
+      this.admobFree.rewardVideo
+        .prepare()
+        .then(() => {
+          // alert(2);
+        })
+        .catch(e => console.error(e));
+    }
+  }
+
   BannerAd() {
     if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
       const bannerConfig: AdMobFreeBannerConfig = {
@@ -124,24 +148,17 @@ export class AdmobService {
 
   InterstitialAd() {
     if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
-      this.admobFree.interstitial.config(this.interstitialConfig);
-      // Prepare Ad to Show
+      // Check if Ad is loaded
       this.admobFree.interstitial
-        .prepare()
+        .isReady()
         .then(() => {
-          // Check if Ad is loaded
+          // Will show prepared Ad
           this.admobFree.interstitial
-            .isReady()
-            .then(() => {
-              // Will show prepared Ad
-              this.admobFree.interstitial
-                .show()
-                .then(e => {
-                  console.log(`InterstitialAd cargado ${e}`);
-                })
-                .catch(e => console.error(`show ${e}`));
+            .show()
+            .then(e => {
+              console.log(`InterstitialAd cargado ${e}`);
             })
-            .catch(e => console.error(e));
+            .catch(e => console.error(`show ${e}`));
         })
         .catch(e => console.error(e));
     }
@@ -149,25 +166,17 @@ export class AdmobService {
 
   RewardVideoAd() {
     if (this.auth.currentUserValue && !this.auth.currentUserValue.is_premium) {
-      // Load ad configuration
-      this.admobFree.rewardVideo.config(this.RewardVideoConfig);
-      // Prepare Ad to Show
+      // Check if Ad is loaded
       this.admobFree.rewardVideo
-        .prepare()
+        .isReady()
         .then(() => {
-          // Check if Ad is loaded
+          // Will show prepared Ad
           this.admobFree.rewardVideo
-            .isReady()
-            .then(() => {
-              // Will show prepared Ad
-              this.admobFree.rewardVideo
-                .show()
-                .then(e => {
-                  console.log(`RewardVideoAd cargado ${e}`);
-                })
-                .catch(e => console.error(`show ${e}`));
+            .show()
+            .then(e => {
+              console.log(`RewardVideoAd cargado ${e}`);
             })
-            .catch(e => console.error(e));
+            .catch(e => console.error(`show ${e}`));
         })
         .catch(e => console.error(e));
     }
