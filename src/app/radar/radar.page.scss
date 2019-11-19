@@ -33,6 +33,10 @@ ion-content {
   }
 }
 
+#radar-range {
+  padding: 15px 5px;
+}
+
 ion-range {
   --bar-background: white;
   --bar-height: 4px;
@@ -85,7 +89,7 @@ ion-header.md ion-toolbar {
   }
 }
 
-ion-footer {
+ion-footer.md {
   transition: max-height 0.5s;
   max-height: 100px;
   &.hide-background {

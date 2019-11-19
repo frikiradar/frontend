@@ -11,9 +11,21 @@
     }
   }
 
-  ion-item,
-  ion-icon {
-    color: white;
+  ion-item {
+    ion-label {
+      --color: white !important;
+    }
+
+    ion-icon {
+      color: white;
+    }
+
+    ion-label {
+      p {
+        white-space: normal;
+        color: #bbb;
+      }
+    }
   }
 
   ion-item.activated {
