@@ -35,16 +35,10 @@ export class StoreService {
       if (this.platform.is("cordova")) {
         // this.store.verbosity = this.store.DEBUG;
         products.forEach(p => {
-          let type = "";
-          switch (p.type) {
-            case "consumable":
-            case "subscription":
-              type = this.store.CONSUMABLE;
-              break;
-            case "non_consumable":
-              type = this.store.NON_CONSUMABLE;
-              break;
-          }
+          const type =
+            this.platform.is("ios") && p.type === "subscription"
+              ? this.store.NON_RENEWING_SUBSCRIPTION
+              : this.store.CONSUMABLE;
 
           this.store.register({ type, id: p.id });
 
@@ -110,7 +104,7 @@ export class StoreService {
     this.productsSubject.next(this.productsValue);
   }
 
-  updateProducts(products: IAPProducts) {
+  /*updateProducts(products: IAPProducts) {
     this.productsValue.map(p => {
       this.store.products.forEach(sp => {
         if (sp.id === p.id) {
@@ -120,7 +114,7 @@ export class StoreService {
     });
 
     this.productsSubject.next(this.productsValue);
-  }
+  }*/
 
   get(id: string) {
     return this.store.get(id);

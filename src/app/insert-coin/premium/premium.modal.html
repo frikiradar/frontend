@@ -26,10 +26,10 @@
     expand="block"
     fill="outline"
     shape="round"
-    [disabled]="!products[3]?.data?.canPurchase"
-    (click)="subscribePremium(products[3])"
-    *ngIf="products?.length"
-    >{{ products[3]?.name }} por {{ products[3]?.data?.price }}</ion-button
+    [disabled]="!products[0]?.data?.canPurchase"
+    (click)="subscribePremium(products[0])"
+    *ngIf="products[0]?.data?.valid"
+    >{{ products[0]?.name }} por {{ products[0]?.data?.price }}</ion-button
   >
   <ion-button
     color="primary"
@@ -37,20 +37,20 @@
     size="large"
     fill="outline"
     shape="round"
-    [disabled]="!products[4]?.data?.canPurchase"
-    (click)="subscribePremium(products[4])"
-    *ngIf="products?.length"
-    >{{ products[4]?.name }} por {{ products[4]?.data?.price }}</ion-button
+    [disabled]="!products[1]?.data?.canPurchase"
+    (click)="subscribePremium(products[1])"
+    *ngIf="products[1]?.data?.valid"
+    >{{ products[1]?.name }} por {{ products[1]?.data?.price }}</ion-button
   >
   <ion-button
     color="primary"
     expand="block"
     fill="outline"
     shape="round"
-    [disabled]="!products[5]?.data?.canPurchase"
-    (click)="subscribePremium(products[5])"
-    *ngIf="products?.length"
-    >{{ products[5]?.name }} por {{ products[5]?.data?.price }}</ion-button
+    [disabled]="!products[2]?.data?.canPurchase"
+    (click)="subscribePremium(products[2])"
+    *ngIf="products[2]?.data?.valid"
+    >{{ products[2]?.name }} por {{ products[2]?.data?.price }}</ion-button
   >
   <ion-list>
     <ion-item>

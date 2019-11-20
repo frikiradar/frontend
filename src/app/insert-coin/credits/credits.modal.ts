@@ -18,6 +18,7 @@ import { AuthService } from "./../../services/auth.service";
 })
 export class CreditsModal {
   public products: Product[] = [];
+  public premium: Product;
   public user: User;
 
   constructor(
@@ -44,7 +45,14 @@ export class CreditsModal {
     }
 
     this.storeSvc.products.subscribe(async products => {
-      this.products = products;
+      this.products = products.filter(
+        p => p.type === "consumable" && p.data.valid
+      );
+
+      this.premium = products.find(
+        p => p.type === "subscription" && p.data.valid
+      );
+
       this.detectorRef.detectChanges();
 
       if (this.products.some(p => p.data && p.data.valid)) {

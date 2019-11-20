@@ -42,7 +42,9 @@ export class PremiumModal {
     }
 
     this.storeSvc.products.subscribe(async products => {
-      this.products = products;
+      this.products = products.filter(
+        p => p.type === "subscription" && p.data.valid
+      );
       this.detectorRef.detectChanges();
 
       const product = this.products.filter(
