@@ -115,7 +115,10 @@
       ></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label>Mi identidad de género (opcional)</ion-label>
+      <ion-label
+        >Mi identidad de género {{platform.is("ios") ? "(opcional)" :
+        ""}}</ion-label
+      >
       <ion-select
         interface="action-sheet"
         cancel-text="Cancelar"

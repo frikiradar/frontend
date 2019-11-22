@@ -35,7 +35,7 @@ export class RegisterPage {
     private toast: ToastController,
     public userSvc: UserService,
     private ngZone: NgZone,
-    private platform: Platform
+    public platform: Platform
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [
