@@ -129,6 +129,16 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('password').invalid &&
+        registerForm.get('password').value
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
+      una opción
+    </div>
     <ion-item>
       <ion-label>Estoy buscando (opcional)</ion-label>
       <ion-select

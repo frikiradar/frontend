@@ -8,7 +8,8 @@ import {
 import {
   AlertController,
   NavController,
-  ToastController
+  ToastController,
+  Platform
 } from "@ionic/angular";
 
 import { User } from "../models/user";
@@ -33,7 +34,8 @@ export class RegisterPage {
     private nav: NavController,
     private toast: ToastController,
     public userSvc: UserService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private platform: Platform
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [
@@ -51,7 +53,9 @@ export class RegisterPage {
         Validators.minLength(8)
       ]),
       birthday: new FormControl("", Validators.required),
-      gender: [""],
+      gender: this.platform.is("ios")
+        ? [""]
+        : new FormControl("", Validators.required),
       lovegender: [""],
       meet: [""],
       referral: [""],
@@ -127,11 +131,13 @@ export class RegisterPage {
 
   async registerSuccess(user: User) {
     this.auth.setAuthUser(user);
-    (await this.toast.create({
-      message: "Registro realizado correctamente",
-      duration: 2000,
-      position: "bottom"
-    })).present();
+    (
+      await this.toast.create({
+        message: "Registro realizado correctamente",
+        duration: 2000,
+        position: "bottom"
+      })
+    ).present();
 
     this.ngZone.run(() => this.nav.navigateRoot(["/tabs/radar"])).then();
   }
