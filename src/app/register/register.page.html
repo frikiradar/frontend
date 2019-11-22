@@ -115,7 +115,7 @@
       ></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label>Mi identidad de género</ion-label>
+      <ion-label>Mi identidad de género (opcional)</ion-label>
       <ion-select
         interface="action-sheet"
         cancel-text="Cancelar"
@@ -129,16 +129,6 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
-    <div
-      class="error-message"
-      *ngIf="
-        registerForm.get('password').invalid &&
-        registerForm.get('password').value
-      "
-    >
-      <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
-      una opción
-    </div>
     <ion-item>
       <ion-label>Estoy buscando (opcional)</ion-label>
       <ion-select
@@ -188,31 +178,13 @@
       "
     >
       <ion-label position="floating">
-        {{
-          registerForm.get("meet").value === "friend"
-            ? "Nombre de usuario tu amigo"
-            : ""
-        }}
-        {{
-          registerForm.get("meet").value === "youtube"
-            ? "¿Cuál es el nombre del youtuber?"
-            : ""
-        }}
-        {{
-          registerForm.get("meet").value === "blog"
-            ? "¿Cómo se llama el blog o la web?"
-            : ""
-        }}
-        {{
-          registerForm.get("meet").value === "social"
-            ? "¿En cuál red social?"
-            : ""
-        }}
-        {{
-          registerForm.get("meet").value === "event"
-            ? "Nombre del evento/convención/exposición"
-            : ""
-        }}
+        {{ registerForm.get("meet").value === "friend" ? "Nombre de usuario tu
+        amigo" : "" }} {{ registerForm.get("meet").value === "youtube" ? "¿Cuál
+        es el nombre del youtuber?" : "" }} {{ registerForm.get("meet").value
+        === "blog" ? "¿Cómo se llama el blog o la web?" : "" }} {{
+        registerForm.get("meet").value === "social" ? "¿En cuál red social?" :
+        "" }} {{ registerForm.get("meet").value === "event" ? "Nombre del
+        evento/convención/exposición" : "" }}
       </ion-label>
       <ion-input
         required

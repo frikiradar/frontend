@@ -51,7 +51,7 @@ export class RegisterPage {
         Validators.minLength(8)
       ]),
       birthday: new FormControl("", Validators.required),
-      gender: new FormControl("", Validators.required),
+      gender: [""],
       lovegender: [""],
       meet: [""],
       referral: [""],
