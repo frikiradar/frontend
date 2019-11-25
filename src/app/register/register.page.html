@@ -177,7 +177,10 @@
           >En la tienda de aplicaciones</ion-select-option
         >
         <ion-select-option value="event"
-          >En un evento/exposición/convención</ion-select-option
+          >En un evento/convención</ion-select-option
+        >
+        <ion-select-option value="contest"
+          >Participando en un sorteo o concurso</ion-select-option
         >
         <ion-select-option [value]="false"
           >Otro, no se o no quiero decirlo</ion-select-option
@@ -195,9 +198,11 @@
         amigo" : "" }} {{ registerForm.get("meet").value === "youtube" ? "¿Cuál
         es el nombre del youtuber?" : "" }} {{ registerForm.get("meet").value
         === "blog" ? "¿Cómo se llama el blog o la web?" : "" }} {{
-        registerForm.get("meet").value === "social" ? "¿En cuál red social?" :
-        "" }} {{ registerForm.get("meet").value === "event" ? "Nombre del
-        evento/convención/exposición" : "" }}
+        registerForm.get("meet").value === "social" ? "¿En cuál red social,
+        página o perfil?" : "" }} {{ registerForm.get("meet").value === "event"
+        ? "Nombre del evento o convención" : "" }} {{
+        registerForm.get("meet").value === "contest" ? "Nombre del organizador"
+        : ""}}
       </ion-label>
       <ion-input
         required
