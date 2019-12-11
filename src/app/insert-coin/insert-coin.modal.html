@@ -23,11 +23,11 @@
     </ion-row>
 
     <ion-row class="ic-bottom">
-      <ion-col class="full-center">
+      <ion-col class="full-center" *ngIf="platform.is('cordova')">
         <ion-item button lines="none" (click)="showPromo()">
           <img src="./assets/img/layout/promo-video.png" />
         </ion-item>
-        <p>> Press start to play!</p>
+        <p>> Ver Vídeo!</p>
       </ion-col>
       <ion-col class="full-center">
         <ion-item button lines="none" (click)="showPremium()">

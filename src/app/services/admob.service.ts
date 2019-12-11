@@ -13,7 +13,7 @@ import { AuthService } from "./auth.service";
 @Injectable()
 export class AdmobService {
   private adViewedSubject: BehaviorSubject<boolean>;
-  public adViewed: Observable<boolean>;
+  public adViewed: Observable<boolean | undefined>;
 
   // Interstitial Ad's Configurations
   interstitialConfig: AdMobFreeInterstitialConfig = {
@@ -41,7 +41,7 @@ export class AdmobService {
     private auth: AuthService
   ) {
     platform.ready().then(() => {
-      this.adViewedSubject = new BehaviorSubject<boolean>(false);
+      this.adViewedSubject = new BehaviorSubject<boolean>(undefined);
       this.adViewed = this.adViewedSubject.asObservable();
 
       if (this.platform.is("cordova")) {
@@ -81,6 +81,7 @@ export class AdmobService {
           });
 
         this.admobFree.on("admob.rewardvideo.events.LOAD").subscribe(() => {
+          this.adViewedSubject.next(undefined);
           console.log("Cargado");
         });
       }
@@ -111,7 +112,7 @@ export class AdmobService {
         .then(() => {
           // alert(2);
         })
-        .catch(e => console.error(e));
+        .catch(e => console.error(`Error al cargar: ${e}`));
     }
   }
 
@@ -176,9 +177,16 @@ export class AdmobService {
             .then(e => {
               console.log(`RewardVideoAd cargado ${e}`);
             })
-            .catch(e => console.error(`show ${e}`));
+            .catch(e => {
+              console.error(`show ${e}`);
+              this.init();
+              this.adViewedSubject.next(false);
+            });
         })
-        .catch(e => console.error(e));
+        .catch(e => {
+          console.error(e);
+          this.adViewedSubject.next(false);
+        });
     }
   }
 }

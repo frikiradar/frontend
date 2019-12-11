@@ -15,6 +15,7 @@ import { ScrollDetail } from "@ionic/core";
 import { pulse } from "ng-animate";
 
 import { User } from "../models/user";
+import { AdmobService } from "../services/admob.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { InsertCoinModal } from "./../insert-coin/insert-coin.modal";
@@ -73,18 +74,22 @@ export class ProfilePopover {
           handler: async data => {
             try {
               await this.userSvc.block(this.user.id, data.note);
-              (await this.toast.create({
-                message: "Usuario bloqueado correctamente",
-                duration: 2000,
-                position: "bottom"
-              })).present();
+              (
+                await this.toast.create({
+                  message: "Usuario bloqueado correctamente",
+                  duration: 2000,
+                  position: "bottom"
+                })
+              ).present();
               this.router.navigate(["/"]);
             } catch (e) {
-              (await this.toast.create({
-                message: `Error al bloquear al usuario ${e}`,
-                duration: 2000,
-                position: "bottom"
-              })).present();
+              (
+                await this.toast.create({
+                  message: `Error al bloquear al usuario ${e}`,
+                  duration: 2000,
+                  position: "bottom"
+                })
+              ).present();
               alert.present();
             }
           }
@@ -121,7 +126,8 @@ export class ProfilePage implements OnInit {
     private vibration: Vibration,
     private alert: AlertController,
     private auth: AuthService,
-    private modal: ModalController
+    private modal: ModalController,
+    private admobSvc: AdmobService
   ) {}
 
   async ngOnInit() {
@@ -153,7 +159,7 @@ export class ProfilePage implements OnInit {
         this.user.from_like ||
         this.auth.isVerified()
       ) {
-        const data = await this.insertCoinModal();
+        const data = await this.doAction();
         if (data) {
           this.router.navigate(["/chat", this.user.id]);
         }
@@ -171,7 +177,7 @@ export class ProfilePage implements OnInit {
 
   async switchLike() {
     if (!this.user.like) {
-      const data = await this.insertCoinModal();
+      const data = await this.doAction();
       if (data) {
         this.vibration.vibrate(50);
         this.user = await this.userSvc.like(this.user.id);
@@ -180,26 +186,32 @@ export class ProfilePage implements OnInit {
           !this.user.match ||
           !this.auth.isVerified()
         ) {
-          (await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
-            duration: 5000,
-            position: "middle"
-          })).present();
+          (
+            await this.toast.create({
+              message: `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
+              duration: 5000,
+              position: "middle"
+            })
+          ).present();
         } else {
-          (await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
-            duration: 5000,
-            position: "middle"
-          })).present();
+          (
+            await this.toast.create({
+              message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
+              duration: 5000,
+              position: "middle"
+            })
+          ).present();
         }
       }
     } else {
       this.user = await this.userSvc.unlike(this.user.id);
-      (await this.toast.create({
-        message: `Le has retirado tu kokoro a ${this.user.name}`,
-        duration: 5000,
-        position: "middle"
-      })).present();
+      (
+        await this.toast.create({
+          message: `Le has retirado tu kokoro a ${this.user.name}`,
+          duration: 5000,
+          position: "middle"
+        })
+      ).present();
     }
   }
 
@@ -220,6 +232,21 @@ export class ProfilePage implements OnInit {
     }
   }
 
+  async doAction() {
+    if (!this.auth.isPremium()) {
+      if (this.auth.currentUserValue.credits) {
+        return await this.insertCoinModal();
+      } else {
+        const showPromo = await this.showPromo();
+        if (!showPromo) {
+          return await this.insertCoinModal();
+        }
+      }
+    }
+
+    return true;
+  }
+
   async insertCoinModal() {
     if (!this.auth.isPremium()) {
       const modal = await this.modal.create({
@@ -231,6 +258,18 @@ export class ProfilePage implements OnInit {
       return res.data;
     }
     return true;
+  }
+
+  async showPromo() {
+    this.admobSvc.RewardVideoAd();
+
+    return new Promise(resolve => {
+      this.admobSvc.adViewed.subscribe(adViewed => {
+        if (adViewed !== undefined) {
+          resolve(adViewed);
+        }
+      });
+    }).then(es => es);
   }
 
   back() {

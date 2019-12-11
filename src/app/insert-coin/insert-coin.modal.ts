@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { AdMobFree } from "@ionic-native/admob-free/ngx";
 import {
   AlertController,
   ModalController,
@@ -30,7 +29,6 @@ export class InsertCoinModal {
     private userSvc: UserService,
     private alert: AlertController,
     private toast: ToastController,
-    private admobFree: AdMobFree,
     public platform: Platform
   ) {
     this.user = this.auth.currentUserValue;
@@ -42,18 +40,22 @@ export class InsertCoinModal {
         const user = await this.userSvc.insertCoin(1);
         this.auth.setAuthUser(user);
         // gastamos creditos y accedemos
-        (await this.toast.create({
-          message: `Clic! Has introducido la moneda`,
-          duration: 500,
-          position: "bottom"
-        })).present();
+        (
+          await this.toast.create({
+            message: `Clic! Has introducido la moneda`,
+            duration: 500,
+            position: "bottom"
+          })
+        ).present();
         setTimeout(async () => {
           this.close(true);
-          (await this.toast.create({
-            message: `Accediendo...`,
-            duration: 2000,
-            position: "bottom"
-          })).present();
+          (
+            await this.toast.create({
+              message: `Accediendo...`,
+              duration: 2000,
+              position: "bottom"
+            })
+          ).present();
         }, 1500);
       } catch (e) {
         const alert = await this.alert.create({
