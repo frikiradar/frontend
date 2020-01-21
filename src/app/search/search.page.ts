@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { IonInput } from "@ionic/angular";
 
 import { User } from "../models/user";
-import { RestService } from "./../services/rest.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-search",
@@ -14,13 +14,14 @@ export class SearchPage implements OnInit {
   @ViewChild("searchBar", { static: true })
   searchBar: IonInput;
 
-  order = "distance";
+  order: "distance" | "match" = "distance";
   query: string;
+  page = 0;
   users: User[];
   showSkeleton = false;
 
   constructor(
-    private rest: RestService,
+    public userSvc: UserService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -29,26 +30,36 @@ export class SearchPage implements OnInit {
     if (this.route.snapshot.paramMap.get("query")) {
       this.query = this.route.snapshot.paramMap.get("query");
       this.searchBar.value = this.query;
-      this.search(this.query);
+      this.search();
     }
     setTimeout(() => {
       this.searchBar.setFocus();
     }, 250);
   }
 
-  async search(query?: string) {
-    if (!query) {
-      query = this.query;
-    }
-
-    if (query && query.trim()) {
-      this.query = query;
-      this.showSkeleton = true;
-      this.users = (await this.rest
-        .post("search", { query: query.trim(), order: this.order })
-        .toPromise()) as User[];
+  async search(event?: any) {
+    if (this.query && this.query.trim()) {
+      this.page++;
+      if (this.page === 1) {
+        this.showSkeleton = true;
+      }
+      const users = await this.userSvc.searchUsers(
+        this.query.trim(),
+        this.order,
+        this.page
+      );
 
       this.showSkeleton = false;
+      this.users =
+        this.page === 1 ? (this.users = users) : [...this.users, ...users];
+
+      if (event) {
+        event.target.complete();
+
+        if (users.length < 15) {
+          event.target.disabled = true;
+        }
+      }
     }
   }
 
@@ -88,8 +99,9 @@ export class SearchPage implements OnInit {
     this.router.navigate(["/profile", id]);
   }
 
-  changeOrder(order: string) {
+  changeOrder(order: "distance" | "match") {
     this.order = order;
+    this.page = 0;
     this.search();
   }
 }

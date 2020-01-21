@@ -76,6 +76,12 @@ export class UserService {
     >;
   }
 
+  searchUsers(query: string, order: "distance" | "match", page: number) {
+    return this.rest
+      .post(`search?page=${page}`, { query, order })
+      .toPromise() as Promise<User[]>;
+  }
+
   activateUser(verification_code: string) {
     return this.rest
       .put("activation", { verification_code })

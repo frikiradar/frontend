@@ -1,9 +1,26 @@
 @import "../../theme/variables.scss";
 
-ion-label h2 {
-  text-transform: none;
-  margin-left: 10px;
-  letter-spacing: normal;
+ion-label {
+  p,
+  h2 {
+    text-transform: none;
+    letter-spacing: normal;
+    margin: 0 0 0 10px;
+    text-align: left;
+  }
+
+  p {
+    font-size: 12px;
+
+    ion-badge {
+      margin-right: 5px;
+      border-radius: 15px;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
+      box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+    }
+  }
 }
 
 .bubble {

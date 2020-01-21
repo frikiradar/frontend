@@ -7,11 +7,9 @@ import {
   AlertController,
   ModalController,
   NavController,
-  NavParams,
   PopoverController,
   ToastController
 } from "@ionic/angular";
-import { ScrollDetail } from "@ionic/core";
 import { pulse } from "ng-animate";
 
 import { User } from "../models/user";
@@ -22,87 +20,6 @@ import { InsertCoinModal } from "./../insert-coin/insert-coin.modal";
 import { AuthService } from "./../services/auth.service";
 
 @Component({
-  selector: "profile-popover",
-  template: `
-    <style>
-      ion-list {
-        background: white !important;
-      }
-    </style>
-    <ion-list>
-      <ion-item button lines="none" (click)="blockUser()"
-        >Bloquear usuario</ion-item
-      >
-    </ion-list>
-  `
-})
-export class ProfilePopover {
-  private user: User;
-
-  constructor(
-    private popover: PopoverController,
-    private alert: AlertController,
-    private data: NavParams,
-    private router: Router,
-    private userSvc: UserService,
-    private toast: ToastController
-  ) {
-    this.user = this.data.get("user");
-  }
-
-  async blockUser() {
-    const alert = await this.alert.create({
-      header: `¿Quieres bloquear a ${this.user.username}?`,
-      message:
-        "Ya no podrá volver a verte, escribirte o interactuar contigo en FrikiRadar a menos que lo desbloquees. Si lo deseas puedes indicarnos el motivo del bloqueo.",
-      inputs: [
-        {
-          name: "note",
-          type: "text",
-          placeholder: "Motivo del bloqueo"
-        }
-      ],
-      buttons: [
-        {
-          text: "Cancelar",
-          role: "cancel",
-          cssClass: "secondary"
-        },
-        {
-          text: "Bloquear",
-          role: "block",
-          handler: async data => {
-            try {
-              await this.userSvc.block(this.user.id, data.note);
-              (
-                await this.toast.create({
-                  message: "Usuario bloqueado correctamente",
-                  duration: 2000,
-                  position: "bottom"
-                })
-              ).present();
-              this.router.navigate(["/"]);
-            } catch (e) {
-              (
-                await this.toast.create({
-                  message: `Error al bloquear al usuario ${e}`,
-                  duration: 2000,
-                  position: "bottom"
-                })
-              ).present();
-              alert.present();
-            }
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-    this.popover.dismiss();
-  }
-}
-
-@Component({
   selector: "app-profile",
   templateUrl: "./profile.page.html",
   styleUrls: ["./profile.page.scss"],
@@ -111,7 +28,6 @@ export class ProfilePopover {
 export class ProfilePage implements OnInit {
   public user: User;
   public avatar: SafeResourceUrl;
-  public showToolbar = false;
   public loading = true;
   public pulse: any;
 
@@ -215,23 +131,6 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  async showPopover(event: Event) {
-    const popover = await this.popover.create({
-      component: ProfilePopover,
-      event,
-      translucent: true,
-      componentProps: { user: this.user }
-    });
-    return await popover.present();
-  }
-
-  onScroll($event: CustomEvent<ScrollDetail>) {
-    if ($event && $event.detail && $event.detail.scrollTop) {
-      const scrollTop = $event.detail.scrollTop;
-      this.showToolbar = scrollTop >= 150;
-    }
-  }
-
   async doAction() {
     if (!this.auth.isPremium()) {
       if (this.auth.currentUserValue.credits) {
@@ -270,6 +169,57 @@ export class ProfilePage implements OnInit {
         }
       });
     }).then(es => es);
+  }
+
+  async blockUser() {
+    const alert = await this.alert.create({
+      header: `¿Quieres bloquear a ${this.user.username}?`,
+      message:
+        "Ya no podrá volver a verte, escribirte o interactuar contigo en FrikiRadar a menos que lo desbloquees. Si lo deseas puedes indicarnos el motivo del bloqueo.",
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: "Motivo del bloqueo (opcional)"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel",
+          cssClass: "secondary"
+        },
+        {
+          text: "Bloquear",
+          role: "block",
+          handler: async data => {
+            try {
+              await this.userSvc.block(this.user.id, data.note);
+              (
+                await this.toast.create({
+                  message: "Usuario bloqueado correctamente",
+                  duration: 2000,
+                  position: "bottom"
+                })
+              ).present();
+              this.router.navigate(["/"]);
+            } catch (e) {
+              (
+                await this.toast.create({
+                  message: `Error al bloquear al usuario ${e}`,
+                  duration: 2000,
+                  position: "bottom"
+                })
+              ).present();
+              alert.present();
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    this.popover.dismiss();
   }
 
   back() {

@@ -1,6 +1,9 @@
 ion-content {
-  ion-list {
+  ion-list ion-item-sliding {
+    background: #e91e63;
+
     ion-item {
+      --background: #1a1a1a;
       --border-color: #e91e63;
 
       ion-avatar {
@@ -25,10 +28,14 @@ ion-content {
       p {
         color: #bbbbbb;
       }
+    }
 
-      &:first-child {
-        --background: #e91e63;
-      }
+    &:first-child ion-item {
+      --background: #e91e63;
+    }
+
+    .item-options-end {
+      background-color: #f04041;
     }
   }
 }

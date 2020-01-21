@@ -114,11 +114,9 @@ export class ChatUserPage implements OnInit {
 
     this.page = 1;
 
-    this.messages = (await this.chatSvc.getMessages(
-      this.userId,
-      true,
-      this.page
-    ))
+    this.messages = (
+      await this.chatSvc.getMessages(this.userId, true, this.page)
+    )
       .filter(m => m.text)
       .reverse();
 
@@ -153,6 +151,8 @@ export class ChatUserPage implements OnInit {
           this.messages = this.messages.filter(m => !m.sending);
         }
       }
+
+      this.user = { ...this.user, ...message.fromuser };
 
       this.scrollDown();
     });
@@ -239,11 +239,9 @@ export class ChatUserPage implements OnInit {
       return;
     }
     this.page++;
-    const messages = (await this.chatSvc.getMessages(
-      this.userId,
-      false,
-      this.page
-    ))
+    const messages = (
+      await this.chatSvc.getMessages(this.userId, false, this.page)
+    )
       .filter(m => m.text)
       .reverse();
     this.messages = [...messages, ...this.messages];
@@ -266,11 +264,13 @@ export class ChatUserPage implements OnInit {
   async copy() {
     this.clipboard.copy(this.selectedMessage.text);
 
-    (await this.toast.create({
-      message: "Copiado al portapapeles",
-      duration: 2000,
-      position: "middle"
-    })).present();
+    (
+      await this.toast.create({
+        message: "Copiado al portapapeles",
+        duration: 2000,
+        position: "middle"
+      })
+    ).present();
     this.showOptions = false;
   }
 

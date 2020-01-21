@@ -1,8 +1,15 @@
-ion-toolbar {
-  --background: #1a1a1a85;
+ion-header {
+  position: absolute;
 
-  &.show-background {
-    --background: #1a1a1a;
+  ion-toolbar {
+    --background: transparent;
+
+    ion-back-button {
+      background: #2f2f2f87;
+      height: 50px;
+      width: 50px;
+      border-radius: 50px;
+    }
   }
 }
 
@@ -17,12 +24,6 @@ ion-list {
   &.info ion-label {
     --color: white;
     white-space: normal;
-  }
-}
-
-@media (max-width: 720px) {
-  ion-content {
-    position: absolute;
   }
 }
 

@@ -5,7 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
 import { SharedModule } from "../shared/shared.module";
-import { ProfilePage, ProfilePopover } from "./profile.page";
+import { ProfilePage } from "./profile.page";
 
 const routes: Routes = [
   {
@@ -22,7 +22,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [ProfilePage, ProfilePopover],
-  entryComponents: [ProfilePopover]
+  declarations: [ProfilePage]
 })
 export class ProfilePageModule {}

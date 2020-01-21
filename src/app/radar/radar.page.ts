@@ -5,7 +5,8 @@ import {
   AlertController,
   IonContent,
   IonRange,
-  MenuController
+  MenuController,
+  ToastController
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 
@@ -40,17 +41,15 @@ export class RadarPage implements OnInit {
     public router: Router,
     private geolocation: Geolocation,
     private alert: AlertController,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private toast: ToastController
   ) {}
 
   async ngOnInit() {
     this.range.value = 1;
     this.authUser = this.auth.currentUserValue;
     if (this.authUser && this.authUser.id) {
-      if (
-        !this.authUser.roles.includes("ROLE_ADMIN") &&
-        !this.authUser.roles.includes("ROLE_DEMO")
-      ) {
+      if (!this.authUser.roles.includes("ROLE_DEMO")) {
         try {
           const coordinates = await this.geolocation.getCurrentPosition({
             enableHighAccuracy: true,
@@ -107,6 +106,28 @@ export class RadarPage implements OnInit {
 
   async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
+  }
+
+  async hideProfile(id: User["id"]) {
+    const users = this.users;
+    this.users = this.users.filter(u => u.id !== id);
+    (
+      await this.toast.create({
+        message: "Has ocultado el usuario",
+        duration: 3000,
+        position: "bottom",
+        buttons: [
+          {
+            text: "Deshacer",
+            handler: () => {
+              this.users = users;
+            }
+          }
+        ]
+      })
+    ).present();
+
+    // llamada al endpoint
   }
 
   async changeRatio(value: number) {
@@ -177,6 +198,15 @@ export class RadarPage implements OnInit {
         !($event.detail.deltaY < 0) &&
         this.users.length > 10 &&
         $event.detail.scrollTop > 200;
+    }
+  }
+
+  async dragItem(event: any, id: number) {
+    if (event.detail.amount > 250) {
+      this.hideProfile(id);
+    } else if (event.detail.amount < -200) {
+      await event.target.close();
+      this.showProfile(id);
     }
   }
 }

@@ -17,7 +17,13 @@
         </ion-avatar>
         <ion-label>
           <h2>{{ user?.name }}</h2>
-          <!--<p>En línea</p>-->
+          <p>
+            <ion-badge
+              color="secondary"
+              *ngIf="(user?.last_login | niceDate) === 'En línea'"
+              >&nbsp;</ion-badge
+            >{{ user?.last_login | niceDate }}
+          </p>
         </ion-label>
       </ion-button>
     </ion-buttons>
@@ -54,9 +60,9 @@
         (messages[i - 1]?.time_creation | date: 'shortDate')
       "
     >
-      <ion-label color="secondary">{{
-        message.time_creation | date: "fullDate"
-      }}</ion-label>
+      <ion-label color="secondary"
+        >{{ message.time_creation | date: "fullDate" }}</ion-label
+      >
     </ion-chip>
     <ion-card button (press)="selectMessage(message)">
       <ion-card-content>

@@ -12,7 +12,9 @@ export class NiceDatePipe implements PipeTransform {
       return convertToNiceDate(value);
     } else {
       const datePipe = new DatePipe("es-ES");
-      return dif <= 365 ? datePipe.transform(value, "d 'de' MMMM") :  datePipe.transform(value, "d MMM 'de' yyyy");
+      return dif <= 365
+        ? datePipe.transform(value, "d 'de' MMMM")
+        : datePipe.transform(value, "d MMM 'de' yyyy");
     }
   }
 }
@@ -29,7 +31,7 @@ function convertToNiceDate(time: string) {
 
   return (
     (daydiff === 0 &&
-      ((diff < 300 && "Justo ahora") ||
+      ((diff < 300 && "En línea") ||
         (diff < 3600 && "Hace " + Math.floor(diff / 60) + " minutos") ||
         (diff < 7200 && "Hace 1 hora") ||
         (diff < 86400 && "Hace " + Math.floor(diff / 3600) + " horas"))) ||

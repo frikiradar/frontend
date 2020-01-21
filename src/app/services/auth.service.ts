@@ -182,6 +182,13 @@ export class AuthService {
     return user.roles.includes("ROLE_ADMIN");
   }
 
+  isDemo(user?: User) {
+    if (!user) {
+      user = this.currentUserValue;
+    }
+    return user.roles.includes("ROLE_DEMO");
+  }
+
   isPremium(user?: User) {
     if (!user) {
       user = this.currentUserValue;

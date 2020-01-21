@@ -1,31 +1,12 @@
 <ion-header no-border>
-  <ion-toolbar [class.show-background]="showToolbar">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button text="Atrás" defaultHref="/tabs/radar"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end" *ngIf="user">
-      <ion-button
-        *ngIf="!user?.block_messages || user.from_like"
-        (click)="showChat()"
-      >
-        <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
-      </ion-button>
-      <ion-button (click)="switchLike()">
-        <ion-icon
-          [@pulse]="user.like"
-          slot="icon-only"
-          [color]="user?.like ? 'primary' : 'light'"
-          [name]="user?.like ? 'heart' : 'heart-empty'"
-        ></ion-icon>
-      </ion-button>
-      <ion-button (click)="showPopover($event)">
-        <ion-icon slot="icon-only" name="more"></ion-icon>
-      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
+<ion-content>
   <div *ngIf="user || loading; else noUser">
     <ion-list *ngIf="loading; else profile">
       <ion-item lines="none">
@@ -84,8 +65,7 @@
             ></ion-icon>
             <ion-label>
               <h1>
-                {{ user?.name }},
-                {{ user?.age }}
+                {{ user?.name }}, {{ user?.age }}
               </h1>
             </ion-label>
           </ion-item>
@@ -135,9 +115,9 @@
                 *ngFor="let tag of getTagsCategory('games')"
                 color="secondary"
               >
-                <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                  tag.name
-                }}</ion-label>
+                <ion-label (click)="router.navigate(['/search', tag.name])"
+                  >{{ tag.name }}</ion-label
+                >
               </ion-chip>
             </ion-label>
           </ion-item>
@@ -148,9 +128,9 @@
                 *ngFor="let tag of getTagsCategory('films')"
                 color="secondary"
               >
-                <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                  tag.name
-                }}</ion-label>
+                <ion-label (click)="router.navigate(['/search', tag.name])"
+                  >{{ tag.name }}</ion-label
+                >
               </ion-chip>
             </ion-label>
           </ion-item>
@@ -161,9 +141,9 @@
                 *ngFor="let tag of getTagsCategory('books')"
                 color="secondary"
               >
-                <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                  tag.name
-                }}</ion-label>
+                <ion-label (click)="router.navigate(['/search', tag.name])"
+                  >{{ tag.name }}</ion-label
+                >
               </ion-chip>
             </ion-label>
           </ion-item>
@@ -174,26 +154,34 @@
                 *ngFor="let tag of getTagsCategory('role')"
                 color="secondary"
               >
-                <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                  tag.name
-                }}</ion-label>
+                <ion-label (click)="router.navigate(['/search', tag.name])"
+                  >{{ tag.name }}</ion-label
+                >
               </ion-chip>
             </ion-label>
           </ion-item>
-          <ion-item *ngIf="getTagsCategory('music')?.length" lines="none">
+          <ion-item *ngIf="getTagsCategory('music')?.length">
             <ion-icon name="headset"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('music')"
                 color="secondary"
               >
-                <ion-label (click)="router.navigate(['/search', tag.name])">{{
-                  tag.name
-                }}</ion-label>
+                <ion-label (click)="router.navigate(['/search', tag.name])"
+                  >{{ tag.name }}</ion-label
+                >
               </ion-chip>
             </ion-label>
           </ion-item>
         </ion-list>
+        <ion-button
+          color="danger"
+          shape="round"
+          fill="outline"
+          expand="block"
+          (click)="blockUser()"
+          >Bloquear/Denunciar</ion-button
+        >
       </div>
     </ng-template>
   </div>
@@ -207,3 +195,40 @@
     </div>
   </ng-template>
 </ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar>
+    <ion-buttons *ngIf="user">
+      <ion-grid>
+        <ion-row class="ion-align-items-center">
+          <ion-col class="ion-text-center">
+            <ion-button
+              *ngIf="!user?.block_messages || user.from_like"
+              (click)="showChat()"
+            >
+              <ion-icon color="danger" slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col class="ion-text-center">
+            <ion-button (click)="switchLike()">
+              <ion-icon
+                [@pulse]="user.like"
+                slot="icon-only"
+                [color]="user?.like ? 'primary' : 'light'"
+                [name]="user?.like ? 'heart' : 'heart-empty'"
+              ></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col class="ion-text-center">
+            <ion-button
+              *ngIf="!user?.block_messages || user.from_like"
+              (click)="showChat()"
+            >
+              <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

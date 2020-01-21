@@ -47,40 +47,54 @@
     </ion-list>
     <ng-template #radarItems>
       <ion-list>
-        <ion-item
-          button
-          *ngFor="let user of users"
-          (click)="showProfile(user.id)"
-          lines="full"
+        <ion-item-sliding
+          *ngFor="let user of users; "
+          (ionDrag)="dragItem($event, user.id)"
         >
-          <ion-avatar slot="start">
-            <img
-              [src]="user.avatar"
-              [alt]="user.username"
-              default="/assets/img/users/default.jpg"
-            />
-            <ion-badge color="primary" *ngIf="user?.radar">&nbsp;</ion-badge>
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ user.name }}, {{ user.age }}</h2>
-            <h3>
-              <span *ngIf="user.location && !user.hide_location"
-                >{{ user?.location }}<span
-                  *ngIf="
+          <ion-item-options side="start">
+            <ion-item-option (click)="showProfile(user.id)">
+              <ion-icon slot="icon-only" name="heart"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+          <ion-item button (click)="showProfile(user.id)" lines="full">
+            <ion-avatar slot="start">
+              <img
+                [src]="user.avatar"
+                [alt]="user.username"
+                default="/assets/img/users/default.jpg"
+              />
+              <ion-badge color="primary" *ngIf="user?.radar">&nbsp;</ion-badge>
+            </ion-avatar>
+            <ion-label>
+              <h2>{{ user.name }}, {{ user.age }}</h2>
+              <h3>
+                <span *ngIf="user.location && !user.hide_location"
+                  >{{ user?.location }}<span
+                    *ngIf="
                     user.location &&
                     user.distance !== undefined &&
                     !user.hide_location
                   "
-                  >, a
-                </span></span
-              ><span *ngIf="user.distance !== undefined"
-                >{{ user.distance }}km</span
-              >
-            </h3>
-            <p>{{ user.description }}</p>
-          </ion-label>
-          <ion-note slot="end">{{ user.match }}%</ion-note>
-        </ion-item>
+                    >, a
+                  </span></span
+                ><span *ngIf="user.distance !== undefined"
+                  >{{ user.distance }}km</span
+                >
+              </h3>
+              <p>{{ user.description }}</p>
+            </ion-label>
+            <ion-note slot="end">{{ user.match }}%</ion-note>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option
+              color="danger"
+              (click)="hideProfile(user.id)"
+              expandable
+            >
+              <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
         <ion-infinite-scroll
           threshold="50%"
           (ionInfinite)="getRadarUsers($event)"
