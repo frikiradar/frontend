@@ -2,16 +2,18 @@ import { Injectable } from "@angular/core";
 
 import { environment } from "../../environments/environment";
 import { Chat } from "../models/chat";
+import { ConfigService } from "./config.service";
 import { RestService } from "./rest.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class ChatService {
-  constructor(private rest: RestService) {}
+  constructor(private rest: RestService, private config: ConfigService) {}
 
-  register(channel: string) {
-    return new EventSource(`${environment.pushUrl}?topic=${channel}`);
+  async register(channel: string) {
+    const config = await this.config.getConfig();
+    return new EventSource(`${config.push_url}?topic=${channel}`);
   }
 
   async getChats() {

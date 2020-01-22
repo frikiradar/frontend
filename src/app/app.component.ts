@@ -134,16 +134,16 @@ export class AppComponent {
   }
 
   async countOpenTimes() {
-    let config = JSON.parse(localStorage.getItem("config"));
+    const config = await this.config.getConfig();
     let openTimes: number;
     if (config) {
       openTimes = config.openTimes ? ++config.openTimes : 1;
       config.openTimes = openTimes;
     } else {
       openTimes = this.auth.currentUserValue.num_logins++;
-      config = { openTimes };
+      config.openTimes = openTimes;
     }
-    localStorage.setItem("config", JSON.stringify(config));
+    this.config.setConfig(config);
 
     if (openTimes === 2) {
       const alert = await this.alert.create({
@@ -175,7 +175,7 @@ export class AppComponent {
             text: "Sí, ¡cuenta conmigo! 🏹",
             handler: () => {
               config.review = true;
-              localStorage.setItem("config", JSON.stringify(config));
+              this.config.setConfig(config);
               if (this.launchReview.isRatingSupported()) {
                 this.launchReview.rating().then();
               } else {
@@ -190,7 +190,7 @@ export class AppComponent {
             text: "Mmm, mejor no 🙈",
             handler: () => {
               config.review = true;
-              localStorage.setItem("config", JSON.stringify(config));
+              this.config.setConfig(config);
             }
           }
         ]
@@ -235,11 +235,7 @@ export class AppComponent {
     });
 
     try {
-      const config: {
-        maintenance: boolean;
-        min_version: string;
-        chat: boolean;
-      } = (await this.config.getConfig()) as any;
+      const config = await this.config.getConfig(true);
       if (
         this.platform.is("cordova") &&
         (await this.appVersion.getVersionCode()) < +config.min_version

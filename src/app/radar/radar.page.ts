@@ -111,23 +111,26 @@ export class RadarPage implements OnInit {
   async hideProfile(id: User["id"]) {
     const users = this.users;
     this.users = this.users.filter(u => u.id !== id);
-    (
-      await this.toast.create({
-        message: "Has ocultado el usuario",
-        duration: 3000,
-        position: "bottom",
-        buttons: [
-          {
-            text: "Deshacer",
-            handler: () => {
-              this.users = users;
-            }
-          }
-        ]
-      })
-    ).present();
 
-    // llamada al endpoint
+    const toast = await this.toast.create({
+      message: "Has ocultado el usuario",
+      duration: 3000,
+      position: "bottom",
+      buttons: [
+        {
+          text: "Deshacer",
+          handler: () => {
+            this.users = users;
+          }
+        }
+      ]
+    });
+    toast.present();
+
+    const log = await toast.onDidDismiss();
+    if (log.role === "timeout") {
+      this.userSvc.hide(id);
+    }
   }
 
   async changeRatio(value: number) {
@@ -202,9 +205,9 @@ export class RadarPage implements OnInit {
   }
 
   async dragItem(event: any, id: number) {
-    if (event.detail.amount > 250) {
+    if (event.detail.ratio > 1.8) {
       this.hideProfile(id);
-    } else if (event.detail.amount < -200) {
+    } else if (event.detail.ratio < -1.8) {
       await event.target.close();
       this.showProfile(id);
     }

@@ -171,6 +171,27 @@ export class ProfilePage implements OnInit {
     }).then(es => es);
   }
 
+  async hideProfile() {
+    this.back();
+
+    const toast = await this.toast.create({
+      message: "Has ocultado el usuario",
+      duration: 3000,
+      position: "bottom",
+      buttons: [
+        {
+          text: "Deshacer"
+        }
+      ]
+    });
+    toast.present();
+
+    const log = await toast.onDidDismiss();
+    if (log.role === "timeout") {
+      this.userSvc.hide(this.user.id);
+    }
+  }
+
   async blockUser() {
     const alert = await this.alert.create({
       header: `¿Quieres bloquear a ${this.user.username}?`,
