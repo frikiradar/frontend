@@ -130,7 +130,7 @@ export class ChatUserPage implements OnInit {
     const max = Math.max(this.auth.currentUserValue.id, this.userId);
     const channel = `${min}_${max}`;
 
-    this.source = this.chatSvc.register(channel);
+    this.source = await this.chatSvc.register(channel);
     this.source.addEventListener("message", async (res: any) => {
       this.conErrors = 0;
       let message = JSON.parse(res.data) as Chat;
