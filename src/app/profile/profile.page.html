@@ -175,10 +175,11 @@
           </ion-item>
         </ion-list>
         <ion-button
-          color="danger"
+          color="medium"
           shape="round"
           fill="outline"
-          expand="block"
+          expand="full"
+          size="small"
           (click)="blockUser()"
           >Bloquear/Denunciar</ion-button
         >
@@ -201,11 +202,6 @@
     <ion-buttons *ngIf="user">
       <ion-grid>
         <ion-row class="ion-align-items-center">
-          <ion-col class="ion-text-center">
-            <ion-button (click)="hideProfile()">
-              <ion-icon color="danger" slot="icon-only" name="close"></ion-icon>
-            </ion-button>
-          </ion-col>
           <ion-col class="ion-text-center">
             <ion-button (click)="switchLike()">
               <ion-icon

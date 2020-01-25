@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
+import { Event, NavigationStart, Router } from "@angular/router";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import {
   AlertController,
@@ -43,7 +43,14 @@ export class RadarPage implements OnInit {
     private alert: AlertController,
     private utils: UtilsService,
     private toast: ToastController
-  ) {}
+  ) {
+    this.router.events.subscribe(async (event: Event) => {
+      if (event instanceof NavigationStart) {
+        if (event.url === "/tabs/radar") {
+        }
+      }
+    });
+  }
 
   async ngOnInit() {
     this.range.value = 1;

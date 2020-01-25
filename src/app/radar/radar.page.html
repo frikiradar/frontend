@@ -66,24 +66,13 @@
               <ion-badge color="primary" *ngIf="user?.radar">&nbsp;</ion-badge>
             </ion-avatar>
             <ion-label>
-              <h2>{{ user.name }}, {{ user.age }}</h2>
-              <h3>
-                <span *ngIf="user.location && !user.hide_location"
-                  >{{ user?.location }}<span
-                    *ngIf="
-                    user.location &&
-                    user.distance !== undefined &&
-                    !user.hide_location
-                  "
-                    >, a
-                  </span></span
-                ><span *ngIf="user.distance !== undefined"
-                  >{{ user.distance }}km</span
-                >
-              </h3>
-              <p>{{ user.description }}</p>
+              <h2>
+                <span class="name">{{ user.name }}</span>
+                <span class="age">, {{ user.age }}</span>
+              </h2>
+              <p class="description">{{ user.description }}</p>
             </ion-label>
-            <ion-note slot="end">{{ user.match }}%</ion-note>
+            <div class="match full-center" slot="end">{{ user.match }}%</div>
           </ion-item>
           <ion-item-options side="end">
             <ion-item-option
