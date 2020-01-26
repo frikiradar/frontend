@@ -1,17 +1,22 @@
-@media (max-width: 720px) {
-  ion-toolbar {
-    position: absolute;
-    --background: #1a1a1aaa;
+ion-toolbar {
+  position: absolute;
+  --background: transparent;
 
-    &.show-background {
-      --background: #1a1a1a;
-    }
+  ion-back-button {
+    background: #2f2f2f87;
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
   }
 }
 
 ion-grid {
   --ion-grid-padding: 0px;
   --ion-grid-column-padding: 0px;
+}
+
+ion-item {
+  --border-color: white;
 }
 
 ion-list {

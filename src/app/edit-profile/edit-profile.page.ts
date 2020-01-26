@@ -90,6 +90,7 @@ export class EditProfilePage {
     this.profileForm = this.fb.group({
       name: [""],
       description: [""],
+      location: [""],
       birthday: [""],
       gender: [""],
       orientation: [""],
@@ -113,6 +114,7 @@ export class EditProfilePage {
     this.profileForm.patchValue({
       name: this.user.name,
       description: this.user.description,
+      location: this.user.location,
       birthday: this.user.birthday,
       gender: this.user.gender,
       orientation: this.user.orientation,

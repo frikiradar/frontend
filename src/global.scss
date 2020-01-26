@@ -165,6 +165,12 @@ ion-toast.md {
   --border-style: solid;
 }
 
+.preview-modal .modal-wrapper {
+  --height: 80%;
+  --width: 80%;
+  --border-radius: 8px;
+}
+
 ul {
   li {
     color: white;

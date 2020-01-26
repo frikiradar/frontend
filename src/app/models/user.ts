@@ -33,12 +33,14 @@ export interface User {
   devices: Device[];
 
   tags: Tag[];
+  common_tags: string[];
 
   match: number;
   radar: boolean;
   like: boolean;
   from_like: boolean;
   block: boolean;
+  hide: boolean;
   chat: boolean;
 
   avatar: SafeResourceUrl;

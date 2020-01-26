@@ -70,10 +70,8 @@ export class UserService {
       .toPromise()) as Promise<User>;
   }
 
-  getRadarUsers(ratio: number, page = 1) {
-    return this.rest.get(`radar/${ratio}?page=${page}`).toPromise() as Promise<
-      User[]
-    >;
+  getRadarUsers(page = 1) {
+    return this.rest.put("radar", { page }).toPromise() as Promise<User[]>;
   }
 
   searchUsers(query: string, order: "distance" | "match", page: number) {

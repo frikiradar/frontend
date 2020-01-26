@@ -3,18 +3,11 @@
   [scrollEvents]="true"
   (ionScroll)="onScroll($event)"
 >
-  <ion-header>
-    <ion-toolbar [class.show-background]="showToolbar">
+  <ion-header no-border>
+    <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button
-          text="Atrás"
-          defaultHref="/tabs/radar"
-        ></ion-back-button>
+        <ion-back-button text="" defaultHref="/tabs/radar"></ion-back-button>
       </ion-buttons>
-      <ion-title
-        >{{ user?.tags?.length ? "Mi Perfil" : "Completa tu perfil"
-        }}</ion-title
-      >
       <ion-buttons slot="end" *ngIf="activeImage > 0">
         <ion-button (click)="deleteImage()">
           <ion-icon slot="icon-only" name="trash"></ion-icon>
@@ -82,10 +75,10 @@
             <ion-slide>
               <form (submit)="submitProfile()" [formGroup]="profileForm">
                 <ion-item lines="none" class="subheader">
-                  <ion-icon name="person" slot="start"></ion-icon>
+                  <ion-icon name="contact" slot="start"></ion-icon>
                   <ion-label>Mi información personal</ion-label>
                 </ion-item>
-                <ion-item id="description">
+                <ion-item>
                   <ion-label position="floating">Nombre</ion-label>
                   <ion-input
                     formControlName="name"
@@ -102,6 +95,14 @@
                     autocapitalize="on"
                     autoGrow
                   ></ion-textarea>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Vivo en</ion-label>
+                  <ion-input
+                    formControlName="location"
+                    autocapitalize="on"
+                    autoGrow
+                  ></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label>Fecha de nacimiento</ion-label>
@@ -202,8 +203,8 @@
                   </ion-select>
                 </ion-item>
                 <ion-item lines="none" class="subheader">
-                  <ion-icon name="heart" slot="start"></ion-icon>
-                  <ion-label>Mi persona ideal</ion-label>
+                  <ion-icon name="search" slot="start"></ion-icon>
+                  <ion-label>Estoy buscando...</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label>Identidad de género</ion-label>
@@ -268,6 +269,13 @@
             </ion-slide>
             <ion-slide>
               <ion-list>
+                <ion-item lines="none">
+                  <p>
+                    Indica un videojuego, anime, serie, película, manga... por
+                    cada etiqueta. Tu porcentaje(%) de afinidad con los usuarios
+                    depende de esta información.
+                  </p>
+                </ion-item>
                 <ion-item-group>
                   <ion-item class="category-header">
                     <ion-icon name="logo-game-controller-b"></ion-icon>

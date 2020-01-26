@@ -4,11 +4,10 @@ import { Geolocation } from "@ionic-native/geolocation/ngx";
 import {
   AlertController,
   IonContent,
-  IonRange,
+  IonSlides,
   MenuController,
   ToastController
 } from "@ionic/angular";
-import { ScrollDetail } from "@ionic/core";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -21,10 +20,134 @@ import { AuthService } from "./../services/auth.service";
   styleUrls: ["./radar.page.scss"]
 })
 export class RadarPage implements OnInit {
-  @ViewChild("range", { static: true })
-  range: IonRange;
-  @ViewChild("radarlist", { static: true })
+  @ViewChild("slides", { static: true })
+  slides: IonSlides;
+
   radarlist: IonContent;
+  // tslint:disable
+  public slideOpts = {
+    autoHeight: true,
+    slidesPerView: 1,
+    coverflowEffect: {
+      rotate: 90,
+      stretch: 100,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true
+    },
+    on: {
+      beforeInit() {
+        const swiper = this;
+
+        swiper.classNames.push(
+          `${swiper.params.containerModifierClass}coverflow`
+        );
+        swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
+
+        swiper.params.watchSlidesProgress = true;
+        swiper.originalParams.watchSlidesProgress = true;
+      },
+      setTranslate() {
+        const swiper = this;
+        const {
+          width: swiperWidth,
+          height: swiperHeight,
+          slides,
+          $wrapperEl,
+          slidesSizesGrid,
+          $
+        } = swiper;
+        const params = swiper.params.coverflowEffect;
+        const isHorizontal = swiper.isHorizontal();
+        const transform$$1 = swiper.translate;
+        const center = isHorizontal
+          ? -transform$$1 + swiperWidth / 2
+          : -transform$$1 + swiperHeight / 2;
+        const rotate = isHorizontal ? params.rotate : -params.rotate;
+        const translate = params.depth;
+        // Each slide offset from center
+        for (let i = 0, length = slides.length; i < length; i += 1) {
+          const $slideEl = slides.eq(i);
+          const slideSize = slidesSizesGrid[i];
+          const slideOffset = $slideEl[0].swiperSlideOffset;
+          const offsetMultiplier =
+            ((center - slideOffset - slideSize / 2) / slideSize) *
+            params.modifier;
+
+          let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+          let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
+          // var rotateZ = 0
+          let translateZ = -translate * Math.abs(offsetMultiplier);
+
+          let translateY = isHorizontal ? 0 : params.stretch * offsetMultiplier;
+          let translateX = isHorizontal ? params.stretch * offsetMultiplier : 0;
+
+          // Fix for ultra small values
+          if (Math.abs(translateX) < 0.001) translateX = 0;
+          if (Math.abs(translateY) < 0.001) translateY = 0;
+          if (Math.abs(translateZ) < 0.001) translateZ = 0;
+          if (Math.abs(rotateY) < 0.001) rotateY = 0;
+          if (Math.abs(rotateX) < 0.001) rotateX = 0;
+
+          const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+          $slideEl.transform(slideTransform);
+          $slideEl[0].style.zIndex =
+            -Math.abs(Math.round(offsetMultiplier)) + 1;
+          if (params.slideShadows) {
+            // Set shadows
+            let $shadowBeforeEl = isHorizontal
+              ? $slideEl.find(".swiper-slide-shadow-left")
+              : $slideEl.find(".swiper-slide-shadow-top");
+            let $shadowAfterEl = isHorizontal
+              ? $slideEl.find(".swiper-slide-shadow-right")
+              : $slideEl.find(".swiper-slide-shadow-bottom");
+            if ($shadowBeforeEl.length === 0) {
+              $shadowBeforeEl = swiper.$(
+                `<div class="swiper-slide-shadow-${
+                  isHorizontal ? "left" : "top"
+                }"></div>`
+              );
+              $slideEl.append($shadowBeforeEl);
+            }
+            if ($shadowAfterEl.length === 0) {
+              $shadowAfterEl = swiper.$(
+                `<div class="swiper-slide-shadow-${
+                  isHorizontal ? "right" : "bottom"
+                }"></div>`
+              );
+              $slideEl.append($shadowAfterEl);
+            }
+            if ($shadowBeforeEl.length)
+              $shadowBeforeEl[0].style.opacity =
+                offsetMultiplier > 0 ? offsetMultiplier : 0;
+            if ($shadowAfterEl.length)
+              $shadowAfterEl[0].style.opacity =
+                -offsetMultiplier > 0 ? -offsetMultiplier : 0;
+          }
+        }
+
+        // Set correct perspective for IE10
+        if (
+          swiper.support.pointerEvents ||
+          swiper.support.prefixedPointerEvents
+        ) {
+          const ws = $wrapperEl[0].style;
+          ws.perspectiveOrigin = `${center}px 50%`;
+        }
+      },
+      setTransition(duration) {
+        const swiper = this;
+        swiper.slides
+          .transition(duration)
+          .find(
+            ".swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left"
+          )
+          .transition(duration);
+      }
+    }
+  };
+  // tslint:enable
 
   public showSkeleton = true;
   public hide = false;
@@ -33,6 +156,7 @@ export class RadarPage implements OnInit {
   page = 0;
   authUser: User;
   users: User[] = [];
+  public user: User;
 
   constructor(
     public userSvc: UserService,
@@ -43,17 +167,9 @@ export class RadarPage implements OnInit {
     private alert: AlertController,
     private utils: UtilsService,
     private toast: ToastController
-  ) {
-    this.router.events.subscribe(async (event: Event) => {
-      if (event instanceof NavigationStart) {
-        if (event.url === "/tabs/radar") {
-        }
-      }
-    });
-  }
+  ) {}
 
   async ngOnInit() {
-    this.range.value = 1;
     this.authUser = this.auth.currentUserValue;
     if (this.authUser && this.authUser.id) {
       if (!this.authUser.roles.includes("ROLE_DEMO")) {
@@ -80,7 +196,6 @@ export class RadarPage implements OnInit {
 
       this.auth.currentUser.subscribe(async authUser => {
         this.authUser = authUser;
-        this.range.value = 1;
         this.ratio = 50;
         this.page = 0;
         this.scroll = 0;
@@ -90,21 +205,18 @@ export class RadarPage implements OnInit {
     }
   }
 
-  async getRadarUsers(event?: any) {
+  async getRadarUsers() {
     try {
       this.page++;
-      const users = await this.userSvc.getRadarUsers(this.ratio, this.page);
+      let users = await this.userSvc.getRadarUsers(this.page);
+      users = users.filter(u => !u.hide && u.match && u.match > 0);
 
       this.showSkeleton = false;
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
-      if (event) {
-        event.target.complete();
-
-        if (users.length < 15) {
-          event.target.disabled = true;
-        }
+      if (this.page === 1) {
+        this.user = this.users[0];
       }
     } catch (e) {
       console.error(e);
@@ -140,83 +252,16 @@ export class RadarPage implements OnInit {
     }
   }
 
-  async changeRatio(value: number) {
-    if (this.users.length < 15) {
-      let config = JSON.parse(localStorage.getItem("config"));
-      const radarAdv = config && config.radarAdv ? config.radarAdv : false;
-
-      if (!radarAdv) {
-        const alert = await this.alert.create({
-          header: "¿Falta gente en tu zona?",
-          message:
-            "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
-          buttons: [
-            {
-              text: "¡Compartir!",
-              handler: () => {
-                this.utils.share();
-              }
-            }
-          ]
-        });
-        if (!config) {
-          config = { radarAdv: true };
-        } else {
-          config.radarAdv = true;
-        }
-        localStorage.setItem("config", JSON.stringify(config));
-        await alert.present();
-      }
-    }
-
-    this.showSkeleton = true;
-
-    // tslint:disable-next-line: cyclomatic-complexity
-    switch (value) {
-      case 0:
-        this.ratio = 10;
-        break;
-      case 1:
-        this.ratio = 50;
-        break;
-      case 2:
-        this.ratio = 100;
-        break;
-      case 3:
-        this.ratio = 500;
-        break;
-      case 4:
-        this.ratio = 1000;
-        break;
-      case 5:
-        this.ratio = this.authUser.is_premium ? 25000 : 5000;
-        break;
-    }
-    this.page = 0;
-    this.users = [];
-    this.radarlist.scrollToTop(0);
-    this.getRadarUsers();
-  }
-
   search() {
     this.router.navigate(["/search"]);
   }
 
-  async onScroll($event: CustomEvent<ScrollDetail>) {
-    if ($event && $event.detail && $event.detail.deltaY) {
-      this.hide =
-        !($event.detail.deltaY < 0) &&
-        this.users.length > 10 &&
-        $event.detail.scrollTop > 200;
-    }
-  }
-
-  async dragItem(event: any, id: number) {
-    if (event.detail.ratio > 1.8) {
-      this.hideProfile(id);
-    } else if (event.detail.ratio < -1.8) {
-      await event.target.close();
-      this.showProfile(id);
-    }
+  slide() {
+    this.slides.getActiveIndex().then(index => {
+      this.user = this.users[index];
+      if (index >= this.users.length - 5) {
+        this.getRadarUsers();
+      }
+    });
   }
 }
