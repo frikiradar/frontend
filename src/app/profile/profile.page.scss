@@ -30,7 +30,7 @@ ion-list {
 .match {
   position: relative;
   bottom: 70px;
-  color: #bbbbbb;
+  color: white;
   font-size: 14px;
   border: 2px solid white;
   height: 60px;
@@ -50,6 +50,8 @@ ion-grid {
 }
 
 .resume {
+  display: inline-block;
+  margin-top: -50px;
   padding-top: 0;
   padding-bottom: 0;
 

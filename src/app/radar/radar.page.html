@@ -31,10 +31,13 @@
         <div class="match full-center">{{ user.match }}%</div>
         <ion-card-header>
           <ion-card-title>
-            <h2>
-              <span class="name">{{ user.name }}</span>
-              <span class="age">, {{ user.age }}</span>
-            </h2>
+            <ion-badge
+              *ngIf="(user?.last_login | niceDate) === 'En línea'"
+              color="secondary"
+              >&nbsp;</ion-badge
+            >
+            <span class="name">{{ user.name }}</span>
+            <span class="age">, {{ user.age }}</span>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content

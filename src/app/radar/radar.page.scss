@@ -11,14 +11,24 @@ ion-card {
 ion-card-header {
   position: relative;
   width: 100%;
-  bottom: 38px;
+  bottom: 34px;
   margin: 0;
   text-align: left;
   background: rgba(26, 26, 26, 0.8);
   padding: 5px 10px;
+  margin: 0;
 
-  h2 {
-    margin: 0;
+  ion-card-title {
+    color: white;
+
+    ion-badge {
+      margin-right: 5px;
+      border-radius: 15px;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
+    }
+
     .name {
       font-size: 20px;
     }
@@ -59,7 +69,7 @@ ion-card-content {
 .match {
   position: relative;
   bottom: 58px;
-  color: #bbbbbb;
+  color: white;
   font-size: 12px;
   border: 2px solid white;
   height: 50px;
