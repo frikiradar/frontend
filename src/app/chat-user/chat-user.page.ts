@@ -152,7 +152,9 @@ export class ChatUserPage implements OnInit {
         }
       }
 
-      this.user = { ...this.user, ...message.fromuser };
+      if (message.fromuser.id === this.user.id) {
+        this.user = { ...this.user, ...message.fromuser };
+      }
 
       this.scrollDown();
     });
