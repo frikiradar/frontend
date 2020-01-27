@@ -1,5 +1,5 @@
 <ion-header no-border>
-  <ion-toolbar [class.hide-background]="hide">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="menu.open()">
         <ion-avatar>
@@ -20,37 +20,68 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-slides #slides (ionSlideDidChange)="slide()" [options]="slideOpts">
-    <ion-slide *ngFor="let user of users; ">
-      <ion-card (click)="showProfile(user.id)">
-        <img
-          [src]="user.avatar"
-          [alt]="user.username"
-          default="/assets/img/users/default.jpg"
-        />
-        <div class="match full-center">{{ user.match }}%</div>
+  <ion-slides #slides (ionSlideDidChange)="slide()">
+    <ion-slide *ngIf="!users?.length || showSkeleton; else radarItems">
+      <ion-card>
         <ion-card-header>
+          <ion-skeleton-text
+            animated
+            style="height: 400px; width: 100%"
+          ></ion-skeleton-text>
           <ion-card-title>
-            <ion-badge
-              *ngIf="(user?.last_login | niceDate) === 'En línea'"
-              color="secondary"
-              >&nbsp;</ion-badge
-            >
-            <span class="name">{{ user.name }}</span>
-            <span class="age">, {{ user.age }}</span>
+            <ion-skeleton-text
+              animated
+              style="height: 20px; width: 50%"
+            ></ion-skeleton-text>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content
-          ><p class="description">{{user.description}}</p>
-          <div class="tags">
-            <p>Gustos en común:</p>
-            <ion-chip *ngFor="let tag of user.common_tags" color="secondary">
-              <ion-label>{{ tag }}</ion-label>
-            </ion-chip>
-          </div></ion-card-content
-        >
+          ><p>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+          </p>
+        </ion-card-content>
       </ion-card>
     </ion-slide>
+    <ng-template #radarItems>
+      <ion-slide *ngFor="let user of users;" #users>
+        <ion-card (click)="showProfile(user.id)">
+          <img
+            [src]="user.avatar"
+            [alt]="user.username"
+            default="/assets/img/users/default.jpg"
+          />
+          <div class="match full-center">{{ user.match }}%</div>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-badge
+                *ngIf="(user?.last_login | niceDate) === 'En línea'"
+                color="secondary"
+                >&nbsp;</ion-badge
+              >
+              <span class="name">{{ user.name }}</span>
+              <span class="age">, {{ user.age }}</span>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content
+            ><p class="description">{{user.description}}</p>
+            <div class="tags">
+              <p>Gustos en común:</p>
+              <ion-chip *ngFor="let tag of user.common_tags" color="secondary">
+                <ion-label>{{ tag }}</ion-label>
+              </ion-chip>
+            </div></ion-card-content
+          >
+        </ion-card>
+      </ion-slide>
+    </ng-template>
   </ion-slides>
 </ion-content>
 <ion-footer no-border>

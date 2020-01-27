@@ -96,7 +96,10 @@ export class RegisterPage {
               try {
                 await this.auth.register(
                   this.registerForm.get("username").value.trim(),
-                  this.registerForm.get("email").value.trim(),
+                  this.registerForm
+                    .get("email")
+                    .value.trim()
+                    .toLowerCase(),
                   this.registerForm.get("password").value.trim(),
                   this.registerForm.get("birthday").value.split("T")[0],
                   this.registerForm.get("gender").value.trim(),

@@ -4,8 +4,9 @@ ion-slide {
 }
 
 ion-card {
-  height: -webkit-fill-available;
   background-color: #1a1a1a;
+  height: 75vh;
+  overflow: auto;
 }
 
 ion-card-header {
@@ -16,7 +17,10 @@ ion-card-header {
   text-align: left;
   background: rgba(26, 26, 26, 0.8);
   padding: 5px 10px;
-  margin: 0;
+
+  &.ios {
+    bottom: 43px;
+  }
 
   ion-card-title {
     color: white;
