@@ -3,7 +3,7 @@
   [scrollEvents]="true"
   (ionScroll)="onScroll($event)"
 >
-  <ion-header no-border>
+  <ion-header class="ion-no-border">
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-back-button text="" defaultHref="/tabs/radar"></ion-back-button>
@@ -55,8 +55,12 @@
         />
       </ion-col>
       <ion-col size-sm="6">
-        <ion-segment (ionChange)="showSegment($event.detail.value)" #segment>
-          <ion-segment-button layout="icon-start" value="info" checked>
+        <ion-segment
+          (ionChange)="showSegment($event.detail.value)"
+          #segment
+          value="info"
+        >
+          <ion-segment-button layout="icon-start" value="info">
             <ion-label>Información</ion-label>
             <ion-icon name="information-circle"></ion-icon>
           </ion-segment-button>
@@ -75,7 +79,10 @@
             <ion-slide>
               <form (submit)="submitProfile()" [formGroup]="profileForm">
                 <ion-item lines="none" class="subheader">
-                  <ion-icon name="contact" slot="start"></ion-icon>
+                  <ion-icon
+                    name="person-circle-outline"
+                    slot="start"
+                  ></ion-icon>
                   <ion-label>Mi información personal</ion-label>
                 </ion-item>
                 <ion-item>
@@ -155,10 +162,9 @@
                     cancel-text="Cancelar"
                     placeholder="Selecciona uno"
                     formControlName="pronoun"
+                    value=""
                   >
-                    <ion-select-option value="" selected
-                      >Sin indicar</ion-select-option
-                    >
+                    <ion-select-option value="">Sin indicar</ion-select-option>
                     <ion-select-option
                       *ngFor="let pronoun of userSvc.getPronouns()"
                       [value]="pronoun"
@@ -173,10 +179,9 @@
                     cancel-text="Cancelar"
                     placeholder="Selecciona uno"
                     formControlName="relationship"
+                    value=""
                   >
-                    <ion-select-option value="" selected
-                      >Sin indicar</ion-select-option
-                    >
+                    <ion-select-option value="">Sin indicar</ion-select-option>
                     <ion-select-option
                       *ngFor="let type of userSvc.getRelationships()"
                       [value]="type"
@@ -191,10 +196,9 @@
                     cancel-text="Cancelar"
                     placeholder="Selecciona uno"
                     formControlName="status"
+                    value=""
                   >
-                    <ion-select-option value="" selected
-                      >Sin indicar</ion-select-option
-                    >
+                    <ion-select-option value="">Sin indicar</ion-select-option>
                     <ion-select-option
                       *ngFor="let status of userSvc.getStatus()"
                       [value]="status"
@@ -203,7 +207,7 @@
                   </ion-select>
                 </ion-item>
                 <ion-item lines="none" class="subheader">
-                  <ion-icon name="search" slot="start"></ion-icon>
+                  <ion-icon name="search-outline" slot="start"></ion-icon>
                   <ion-label>Estoy buscando...</ion-label>
                 </ion-item>
                 <ion-item>
@@ -278,7 +282,7 @@
                 </ion-item>
                 <ion-item-group>
                   <ion-item class="category-header">
-                    <ion-icon name="logo-game-controller-b"></ion-icon>
+                    <ion-icon name="game-controller-outline"></ion-icon>
                     <ion-input
                       #games
                       placeholder="Videojuegos favoritos"
@@ -310,7 +314,7 @@
 
                 <ion-item-group>
                   <ion-item class="category-header">
-                    <ion-icon name="film"></ion-icon>
+                    <ion-icon name="film-outline"></ion-icon>
                     <ion-input
                       #films
                       placeholder="Películas, series o animes favoritos"
@@ -341,7 +345,7 @@
 
                 <ion-item-group>
                   <ion-item class="category-header">
-                    <ion-icon name="book"></ion-icon>
+                    <ion-icon name="book-outline"></ion-icon>
                     <ion-input
                       #books
                       placeholder="Cómics, mangas o libros"
@@ -405,7 +409,7 @@
 
                 <ion-item-group>
                   <ion-item class="category-header">
-                    <ion-icon name="headset"></ion-icon>
+                    <ion-icon name="headset-outline"></ion-icon>
                     <ion-input
                       #music
                       placeholder="Música, artistas o canciones favoritas"

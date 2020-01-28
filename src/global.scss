@@ -139,8 +139,9 @@ form {
 
 ion-segment-button {
   --background: #1a1a1a;
-  background: #1a1a1a;
+  --background-checked: #1a1a1a;
   --color: white;
+  --indicator-color: #e91e63;
   text-transform: none;
 }
 

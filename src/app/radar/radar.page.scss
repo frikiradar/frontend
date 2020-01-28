@@ -1,12 +1,23 @@
+ion-slides {
+  display: flex;
+  height: 100%;
+}
+
 ion-slide {
   display: block;
-  height: 100% !important;
 }
 
 ion-card {
   background-color: #1a1a1a;
-  height: 75vh;
   overflow: auto;
+
+  &.md {
+    height: 97%;
+  }
+
+  &.ios {
+    height: 95%;
+  }
 }
 
 ion-card-header {
@@ -57,9 +68,7 @@ ion-card-content {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 13px;
-
     white-space: initial;
-    text-align: justify;
   }
 
   .tags {

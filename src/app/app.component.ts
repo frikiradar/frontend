@@ -236,26 +236,30 @@ export class AppComponent {
 
     try {
       const config = await this.config.getConfig(true);
-      if (
-        this.platform.is("cordova") &&
-        (await this.appVersion.getVersionCode()) < +config.min_version
-      ) {
-        const versionAlert = await this.alert.create({
-          header: "Versión obsoleta",
-          message:
-            "La versión de FrikiRadar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
-          backdropDismiss: false,
-          buttons: [
-            {
-              text: "ACTUALIZAR",
-              handler: () => {
-                this.launchReview.launch().then();
+      if (this.platform.is("cordova")) {
+        const version = +(await this.appVersion.getVersionNumber()).replace(
+          ".",
+          ""
+        );
+        console.log(version);
+        if (version < +config.min_version || version > 1000) {
+          const versionAlert = await this.alert.create({
+            header: "Versión obsoleta",
+            message:
+              "La versión de FrikiRadar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
+            backdropDismiss: false,
+            buttons: [
+              {
+                text: "ACTUALIZAR",
+                handler: () => {
+                  this.launchReview.launch().then();
+                }
               }
-            }
-          ]
-        });
+            ]
+          });
 
-        versionAlert.present();
+          versionAlert.present();
+        }
       } else if (config.maintenance) {
         maintenanceAlert.present();
       }

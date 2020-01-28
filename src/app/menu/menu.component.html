@@ -4,7 +4,7 @@
   contentId="content"
   *ngIf="auth.currentUserValue && auth.currentUserValue.id"
 >
-  <ion-header no-border>
+  <ion-header class="ion-no-border">
     <img
       [src]="auth.currentUserValue.avatar"
       [alt]="auth.currentUserValue.username"
@@ -17,13 +17,13 @@
   <ion-content>
     <ion-list>
       <ion-item button lines="none" (click)="editProfile()">
-        <ion-icon name="contact" slot="start"></ion-icon>
+        <ion-icon name="person-circle-outline" slot="start"></ion-icon>
         <ion-label>
           Editar perfil
         </ion-label>
       </ion-item>
       <ion-item button lines="full" (click)="settings()">
-        <ion-icon name="settings" slot="start"></ion-icon>
+        <ion-icon name="settings-outline" slot="start"></ion-icon>
         <ion-label>
           Configuración y privacidad
         </ion-label>
@@ -34,7 +34,7 @@
         (click)="showCredits()"
         *ngIf="!auth.currentUserValue.is_premium"
       >
-        <ion-icon name="gift" slot="start"></ion-icon>
+        <ion-icon name="gift-outline" slot="start"></ion-icon>
         <ion-label>Insert Coin (Créditos)</ion-label>
       </ion-item>
       <ion-item
@@ -47,21 +47,21 @@
         <ion-label>FrikiRadar ILIMITADO</ion-label>
       </ion-item>
       <ion-item button lines="none" (click)="showAmbassador()">
-        <ion-icon name="contacts" slot="start"></ion-icon>
+        <ion-icon name="people-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Programa de embajador</h2>
           <p>Recluta y gana recompensas</p>
         </ion-label>
       </ion-item>
       <ion-item button lines="none" (click)="share()">
-        <ion-icon name="share" slot="start"></ion-icon>
+        <ion-icon name="share-outline" slot="start"></ion-icon>
         <ion-label>Comparte con tus amigos</ion-label>
       </ion-item>
     </ion-list>
   </ion-content>
   <ion-footer>
     <ion-item button lines="none" (click)="logout()">
-      <ion-icon name="log-out" slot="start"></ion-icon>
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
       <ion-label>Cerrar sesión</ion-label>
     </ion-item>
   </ion-footer>

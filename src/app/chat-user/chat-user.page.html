@@ -78,7 +78,7 @@
             <ion-icon
               *ngIf="message.time_read"
               color="secondary"
-              name="done-all"
+              name="checkmark-done"
             ></ion-icon>
           </span>
         </ion-note>
@@ -108,11 +108,7 @@
     </form>
     <ion-buttons ion-activatable slot="end">
       <ion-button color="primary" (click)="sendMessage()">
-        <ion-icon
-          slot="icon-only"
-          md="md-send"
-          ios="ios-arrow-dropup-circle"
-        ></ion-icon>
+        <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

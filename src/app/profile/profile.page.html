@@ -1,4 +1,4 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button text="" defaultHref="/tabs/radar"></ion-back-button>
@@ -75,16 +75,14 @@
               ></ion-icon>
             </ion-label>
           </ion-item>
-          <h3 class="location">
+          <h3 class="location" *ngIf="user?.distance !== undefined">
             <ion-icon
-              name="pin"
+              name="location-sharp"
               slot="start"
               size="xs"
               color="primary"
             ></ion-icon>
-            <span *ngIf="user?.distance !== undefined"
-              >A {{ user?.distance }}km de distancia</span
-            >
+            <span>A {{ user?.distance }}km de distancia</span>
           </h3>
           <p>{{ user?.description }}</p>
         </ion-list>
@@ -118,7 +116,7 @@
         </ion-list>
         <ion-list class="tags">
           <ion-item *ngIf="getTagsCategory('games')?.length">
-            <ion-icon name="logo-game-controller-b"></ion-icon>
+            <ion-icon name="game-controller-outline"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('games')"
@@ -131,7 +129,7 @@
             </ion-label>
           </ion-item>
           <ion-item *ngIf="getTagsCategory('films')?.length">
-            <ion-icon name="film"></ion-icon>
+            <ion-icon name="film-outline"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('films')"
@@ -144,7 +142,7 @@
             </ion-label>
           </ion-item>
           <ion-item *ngIf="getTagsCategory('books')?.length">
-            <ion-icon name="book"></ion-icon>
+            <ion-icon name="book-outline"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('books')"
@@ -170,7 +168,7 @@
             </ion-label>
           </ion-item>
           <ion-item *ngIf="getTagsCategory('music')?.length">
-            <ion-icon name="headset"></ion-icon>
+            <ion-icon name="headset-outline"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('music')"
@@ -206,7 +204,7 @@
   </ng-template>
 </ion-content>
 
-<ion-footer no-border>
+<ion-footer class="ion-no-border">
   <ion-toolbar>
     <ion-buttons *ngIf="user">
       <ion-grid>
@@ -216,7 +214,7 @@
               *ngIf="!user?.block_messages || user.from_like"
               (click)="showChat()"
             >
-              <ion-icon slot="icon-only" name="chatboxes"></ion-icon>
+              <ion-icon slot="icon-only" name="chatbubbles-outline"></ion-icon>
             </ion-button>
           </ion-col>
           <ion-col class="ion-text-center">
@@ -225,7 +223,7 @@
                 [@pulse]="user.like"
                 slot="icon-only"
                 [color]="user?.like ? 'primary' : 'light'"
-                [name]="user?.like ? 'heart' : 'heart-empty'"
+                [name]="user?.like ? 'heart' : 'heart-outline'"
               ></ion-icon>
             </ion-button>
           </ion-col>

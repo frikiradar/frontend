@@ -1,4 +1,4 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="menu.open()">
@@ -84,7 +84,7 @@
     </ng-template>
   </ion-slides>
 </ion-content>
-<ion-footer no-border>
+<ion-footer class="ion-no-border">
   <ion-toolbar>
     <ion-buttons>
       <ion-grid>
@@ -103,7 +103,7 @@
               <ion-icon
                 slot="icon-only"
                 [color]="user?.like ? 'primary' : 'light'"
-                [name]="user?.like ? 'heart' : 'heart-empty'"
+                [name]="user?.like ? 'heart' : 'heart-outline'"
               ></ion-icon>
             </ion-button>
           </ion-col>

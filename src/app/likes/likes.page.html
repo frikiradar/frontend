@@ -1,4 +1,4 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="menu.open()">
@@ -16,11 +16,11 @@
   <ion-segment (ionChange)="changeOrder($event.detail.value)">
     <ion-segment-button layout="icon-start" value="received" checked>
       <ion-label>Recibidos</ion-label>
-      <ion-icon name="arrow-round-down"></ion-icon>
+      <ion-icon name="arrow-down"></ion-icon>
     </ion-segment-button>
     <ion-segment-button layout="icon-start" value="delivered">
       <ion-label>Entregados</ion-label>
-      <ion-icon name="arrow-round-up"></ion-icon>
+      <ion-icon name="arrow-up"></ion-icon>
     </ion-segment-button>
   </ion-segment>
 </ion-header>

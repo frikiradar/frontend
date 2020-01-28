@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IonInput } from "@ionic/angular";
+import { IonInput, ToastController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -23,7 +23,8 @@ export class SearchPage implements OnInit {
   constructor(
     public userSvc: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toast: ToastController
   ) {}
 
   async ngOnInit() {
@@ -43,11 +44,13 @@ export class SearchPage implements OnInit {
       if (this.page === 1) {
         this.showSkeleton = true;
       }
-      const users = await this.userSvc.searchUsers(
+      let users = await this.userSvc.searchUsers(
         this.query.trim(),
         this.order,
         this.page
       );
+
+      users = users.filter(u => !u.hide);
 
       this.showSkeleton = false;
       this.users =
@@ -63,45 +66,47 @@ export class SearchPage implements OnInit {
     }
   }
 
-  /*async searchTag(query: string, category: string) {
-    this.sheet.dismiss();
-
-    if (query) {
-      this.list = (await this.tagSvc.searchTag(query, category)) as {
-        name: string;
-        total: number;
-      }[];
-
-      if (this.list.length) {
-        let buttons = [];
-        this.list.forEach(op => {
-          buttons = [
-            ...buttons,
-            {
-              text: `${op.name} (${op.total})`,
-              handler: () => {
-                this.inputTag(op.name, category);
-              }
-            }
-          ];
-        });
-
-        const actionSheet = await this.sheet.create({
-          keyboardClose: false,
-          buttons
-        });
-        await actionSheet.present();
-      }
-    }
-  }*/
-
   async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
+  }
+
+  async hideProfile(id: User["id"]) {
+    const users = this.users;
+    this.users = this.users.filter(u => u.id !== id);
+
+    const toast = await this.toast.create({
+      message: "Has ocultado el usuario",
+      duration: 3000,
+      position: "bottom",
+      buttons: [
+        {
+          text: "Deshacer",
+          handler: () => {
+            this.users = users;
+          }
+        }
+      ]
+    });
+    toast.present();
+
+    const log = await toast.onDidDismiss();
+    if (log.role === "timeout") {
+      this.userSvc.hide(id);
+    }
   }
 
   changeOrder(order: "distance" | "match") {
     this.order = order;
     this.page = 0;
     this.search();
+  }
+
+  async dragItem(event: any, id: number) {
+    if (event.detail.ratio > 1.8) {
+      this.hideProfile(id);
+    } else if (event.detail.ratio < -1.8) {
+      await event.target.close();
+      this.showProfile(id);
+    }
   }
 }

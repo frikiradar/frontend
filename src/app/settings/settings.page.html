@@ -1,8 +1,8 @@
-<ion-header no-border>
+<ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button>
-        <ion-back-button text="Atrás" defaultHref="/"></ion-back-button>
+        <ion-back-button text="" defaultHref="/"></ion-back-button>
       </ion-button>
     </ion-buttons>
     <ion-title>Configuración</ion-title>
@@ -13,7 +13,7 @@
   <ion-list>
     <ion-item-group>
       <ion-item-divider color="primary">
-        <ion-icon name="lock" slot="start"></ion-icon>
+        <ion-icon name="lock-closed" slot="start"></ion-icon>
         <ion-label>Seguridad</ion-label>
       </ion-item-divider>
       <!--<ion-item (click)="router.navigate(['settings/account'])" button lines="full">
@@ -21,13 +21,13 @@
                 <ion-label>Mi cuenta</ion-label>
             </ion-item>-->
       <ion-item (click)="passwordModal()" button lines="full">
-        <ion-icon name="key" slot="start"></ion-icon>
+        <ion-icon name="key-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Cambiar contraseña</h2>
         </ion-label>
       </ion-item>
       <ion-item (click)="devicesSettingsModal()" button lines="full">
-        <ion-icon name="notifications" slot="start"></ion-icon>
+        <ion-icon name="notifications-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Dispositivos y notificaciones</h2>
         </ion-label>
@@ -54,7 +54,7 @@
         lines="full"
         *ngIf="user.verified"
       >
-        <ion-icon name="ribbon" slot="start"></ion-icon>
+        <ion-icon name="ribbon-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Verificación de la cuenta</h2>
           <p *ngIf="user?.verified">
@@ -73,7 +73,7 @@
         <ion-label>Privacidad</ion-label>
       </ion-item-divider>
       <ion-item lines="full">
-        <ion-icon name="pin" slot="start"></ion-icon>
+        <ion-icon name="location-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Localización exacta</h2>
           <p>Mostrar mi distancia en kilómetros.</p>
@@ -85,7 +85,7 @@
         ></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
-        <ion-icon name="chatbubbles" slot="start"></ion-icon>
+        <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Mensajes directos</h2>
           <p>
@@ -100,7 +100,7 @@
         ></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
-        <ion-icon name="time" slot="start"></ion-icon>
+        <ion-icon name="time-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Última conexión</h2>
           <p>
@@ -115,14 +115,14 @@
         ></ion-checkbox>
       </ion-item>
       <ion-item (click)="blockUsersModal()" button lines="full">
-        <ion-icon name="hand" slot="start"></ion-icon>
+        <ion-icon name="hand-left-outline" slot="start"></ion-icon>
         <ion-label>Usuarios bloqueados</ion-label>
       </ion-item>
     </ion-item-group>
 
     <ion-item-group>
       <ion-item-divider color="primary">
-        <ion-icon name="contact" slot="start"></ion-icon>
+        <ion-icon name="people-circle" slot="start"></ion-icon>
         <ion-label>Cuenta</ion-label>
       </ion-item-divider>
       <ion-item lines="full" (click)="premiumModal()" button>
@@ -133,27 +133,27 @@
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="paymentsModal()" button>
-        <ion-icon name="card" slot="start"></ion-icon>
+        <ion-icon name="card-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Historial de pagos</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="usernameModal()" button>
-        <ion-icon name="person" slot="start"></ion-icon>
+        <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Cambiar nombre de usuario</h2>
           <p>{{ user.username }}</p>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="emailModal()" button>
-        <ion-icon name="mail" slot="start"></ion-icon>
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Cambiar correo electrónico</h2>
           <p>{{ user.email }}</p>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="disableAccountModal()" button>
-        <ion-icon name="close-circle" slot="start"></ion-icon>
+        <ion-icon name="close-circle-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Desactivar la cuenta</h2>
         </ion-label>
