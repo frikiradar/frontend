@@ -95,6 +95,8 @@ export class RadarPage implements OnInit {
   }
 
   async hideProfile(id: User["id"]) {
+    const nextIndex = this.users.findIndex(u => u.id === id) + 1;
+    this.user = this.users[nextIndex];
     const users = this.users;
     this.users = this.users.filter(u => u.id !== id);
 
