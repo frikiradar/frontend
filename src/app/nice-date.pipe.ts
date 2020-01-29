@@ -31,7 +31,7 @@ function convertToNiceDate(time: string) {
 
   return (
     (daydiff === 0 &&
-      ((diff < 300 && "En línea") ||
+      ((diff < 300 && "Ahora mismo") ||
         (diff < 3600 && "Hace " + Math.floor(diff / 60) + " minutos") ||
         (diff < 7200 && "Hace 1 hora") ||
         (diff < 86400 && "Hace " + Math.floor(diff / 3600) + " horas"))) ||

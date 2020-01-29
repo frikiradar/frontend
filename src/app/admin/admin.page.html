@@ -1,0 +1,54 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-back-button text="" defaultHref="/"></ion-back-button>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Modo Dios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p class="ion-padding">
+    Ten cuidado de lo que tocas aquí, podría afectar a todos los usuarios.
+  </p>
+  <ion-list>
+    <ion-item-group>
+      <ion-item-divider color="primary">
+        <ion-icon name="megaphone" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Notificaciones globales</h2>
+          <p>
+            Escribe aquí un mensaje para enviar una notificación push a todos
+            los usuarios. Ideal para campañas de marketing.
+          </p>
+        </ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <form [formGroup]="messageForm" autocomplete="off">
+          <ion-textarea
+            placeholder="Escribe aquí el mensaje"
+            autoGrow
+            rows="1"
+            formControlName="message"
+            class="ion-padding"
+          ></ion-textarea>
+        </form>
+        <ion-buttons slot="end">
+          <ion-button color="primary" (click)="sendMessage()">
+            <ion-icon slot="icon-only" name="send"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item-divider color="primary">
+        <ion-icon name="code-working" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Continuará</h2>
+        </ion-label>
+      </ion-item-divider>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

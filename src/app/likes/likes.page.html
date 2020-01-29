@@ -13,8 +13,8 @@
     </ion-buttons>
     <ion-title>Kokoros</ion-title>
   </ion-toolbar>
-  <ion-segment (ionChange)="changeOrder($event.detail.value)">
-    <ion-segment-button layout="icon-start" value="received" checked>
+  <ion-segment (ionChange)="changeOrder($event.detail.value)" value="received">
+    <ion-segment-button layout="icon-start" value="received">
       <ion-label>Recibidos</ion-label>
       <ion-icon name="arrow-down"></ion-icon>
     </ion-segment-button>

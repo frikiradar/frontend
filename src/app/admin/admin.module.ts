@@ -3,15 +3,14 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
-import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
-import { SharedModule } from "../shared/shared.module";
-import { ChatUserPage } from "./chat-user.page";
+import { SharedModule } from "./../shared/shared.module";
+import { AdminPage } from "./admin.page";
 
 const routes: Routes = [
   {
     path: "",
-    component: ChatUserPage
+    component: AdminPage
   }
 ];
 
@@ -22,9 +21,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    NgxLinkifyjsModule,
     SharedModule
   ],
-  declarations: [ChatUserPage]
+  declarations: [AdminPage]
 })
-export class ChatUserPageModule {}
+export class AdminPageModule {}

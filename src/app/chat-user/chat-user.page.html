@@ -20,9 +20,10 @@
           <p>
             <ion-badge
               color="secondary"
-              *ngIf="(user?.last_login | niceDate) === 'En línea'"
+              *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
               >&nbsp;</ion-badge
-            >{{ user?.last_login | niceDate }}
+            >{{ (user?.last_login | niceDate) === 'Ahora mismo' ? 'En línea' :
+            (user?.last_login | niceDate)}}
           </p>
         </ion-label>
       </ion-button>

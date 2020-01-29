@@ -40,12 +40,18 @@ export class PushService {
   }
 
   async init() {
-    // this.fcm.subscribeToTopic('marketing');
-    // this.fcm.unsubscribeFromTopic('marketing');
-
-    this.fcm.getToken().then(token => {
-      this.device.setDevice(token);
+    this.fcm.getToken().then(async token => {
+      await this.device.setDevice(token);
     });
+
+    this.fcm
+      .subscribeToTopic("frikiradar")
+      .then(response =>
+        console.log("Successfully subscribed to topic:", response)
+      )
+      .catch(error => {
+        console.log("Error subscribing to topic:", error);
+      });
 
     this.fcm.onNotification().subscribe(
       (data: NotificationData) => {

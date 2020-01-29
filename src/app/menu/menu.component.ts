@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { MenuController, ModalController, NavController } from "@ionic/angular";
+import { MenuController, ModalController } from "@ionic/angular";
 
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { AuthService } from "../services/auth.service";
@@ -22,7 +22,6 @@ export class MenuComponent {
     public auth: AuthService,
     public utils: UtilsService,
     private router: Router,
-    private nav: NavController,
     private modal: ModalController
   ) {}
 
@@ -33,6 +32,11 @@ export class MenuComponent {
 
   settings() {
     this.router.navigate(["/settings"]);
+    this.menu.close();
+  }
+
+  admin() {
+    this.router.navigate(["/admin"]);
     this.menu.close();
   }
 

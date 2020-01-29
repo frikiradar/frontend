@@ -60,7 +60,7 @@
           <ion-item lines="none">
             <ion-badge
               color="secondary"
-              *ngIf="(user?.last_login | niceDate) === 'En línea'"
+              *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
               >&nbsp;</ion-badge
             >
             <ion-label>
@@ -89,7 +89,8 @@
         <ion-list class="info">
           <ion-item lines="none" *ngIf="user?.last_login">
             <ion-label
-              >Última conexión: {{ user.last_login | niceDate }}</ion-label
+              >Última conexión: {{ (user?.last_login | niceDate) === 'Ahora
+              mismo' ? 'En línea' : (user?.last_login | niceDate) }}</ion-label
             >
           </ion-item>
           <ion-item lines="none" *ngIf="user?.location">
