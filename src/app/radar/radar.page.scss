@@ -42,6 +42,7 @@ ion-card-header {
       z-index: 1;
       width: 10px;
       height: 10px;
+      padding: 0;
     }
 
     .name {
@@ -59,6 +60,17 @@ ion-card-content {
   position: relative;
   bottom: 30px;
   clear: both;
+
+  .location {
+    font-size: 14px;
+    color: #e91e63 !important;
+    margin-bottom: 10px;
+
+    ion-icon {
+      margin-right: 5px;
+      vertical-align: text-bottom;
+    }
+  }
 
   .description {
     max-height: 37px;

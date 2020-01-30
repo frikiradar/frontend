@@ -6,6 +6,7 @@ import { Platform } from "@ionic/angular";
 
 import { DeviceService } from "./device.service";
 import { Notification, NotificationService } from "./notification.service";
+import { RestService } from "./rest.service";
 
 @Injectable({
   providedIn: "root"
@@ -19,7 +20,8 @@ export class PushService {
     private router: Router,
     private notificationSvc: NotificationService,
     private localNotifications: LocalNotifications,
-    private platform: Platform
+    private platform: Platform,
+    private rest: RestService
   ) {
     this.platform.ready().then(() => {
       if (this.platform.is("cordova")) {
@@ -82,5 +84,9 @@ export class PushService {
         console.error("Error in notification", error);
       }
     );
+  }
+
+  async sendTopicMessage(message: string, topic: string) {
+    return await this.rest.put("topic-message", { message, topic }).toPromise();
   }
 }

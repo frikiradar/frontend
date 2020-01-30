@@ -60,6 +60,7 @@ ion-grid {
     width: 10px;
     height: 10px;
     box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+    padding: 0;
   }
 
   ion-label {
@@ -104,6 +105,10 @@ ion-grid {
 
 ion-chip {
   display: inline-grid;
+
+  ion-label {
+    min-height: 15px;
+  }
 }
 
 ion-item {

@@ -70,9 +70,18 @@
               <span class="age">, {{ user.age }}</span>
             </ion-card-title>
           </ion-card-header>
-          <ion-card-content
-            ><p class="description">{{user.description}}</p>
-            <div class="tags">
+          <ion-card-content>
+            <h3 class="location" *ngIf="user?.distance !== undefined">
+              <ion-icon
+                name="location-sharp"
+                slot="start"
+                size="xs"
+                color="primary"
+              ></ion-icon>
+              <span>A {{ user?.distance }}km de distancia</span>
+            </h3>
+            <p class="description">{{user.description}}</p>
+            <div class="tags" *ngIf="user.common_tags.length">
               <p>Gustos en común:</p>
               <ion-chip *ngFor="let tag of user.common_tags" color="secondary">
                 <ion-label>{{ tag }}</ion-label>

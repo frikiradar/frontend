@@ -34,6 +34,12 @@ ion-segment.md {
   z-index: 2;
 }
 
+ion-chip {
+  ion-label {
+    min-height: 15px;
+  }
+}
+
 ion-slide {
   display: block;
 }

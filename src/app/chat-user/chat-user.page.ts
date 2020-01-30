@@ -222,7 +222,8 @@ export class ChatUserPage implements OnInit {
       } catch (e) {
         // this.alertError.present();
       }
-    } else {
+    } else if (!this.auth.isPremium()) {
+      // Si no es premium como ha pagado un chat se lo dejamos abierto para que no pierda los créditos
       await this.chatSvc.sendMessage(this.user.id, undefined).then();
     }
   }

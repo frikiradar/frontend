@@ -11,8 +11,15 @@ ion-content {
       --border-color: #e91e63;
 
       ion-avatar {
-        width: 64px;
-        height: 64px;
+        &.md {
+          width: 64px;
+          height: 64px;
+        }
+
+        &.ios {
+          width: 48px;
+          height: 48px;
+        }
 
         ion-badge {
           position: absolute;
@@ -31,8 +38,15 @@ ion-content {
           font-size: 24px;
         }
 
+        &.ios .description {
+          max-height: 30px;
+        }
+
+        &.md .description {
+          max-height: 36px;
+        }
+
         .description {
-          max-height: 37px;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
