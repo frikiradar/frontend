@@ -237,11 +237,13 @@ export class AppComponent {
     try {
       const config = await this.config.getConfig(true);
       if (this.platform.is("cordova")) {
-        const version = +(await this.appVersion.getVersionNumber()).replace(
+        let version = +(await this.appVersion.getVersionNumber()).replace(
           ".",
           ""
         );
-        console.log(version);
+        // Debe tener 3 digitos, por eso mayor o igual a 100
+        version = version >= 100 ? version : version * 10;
+
         if (version < +config.min_version || version > 1000) {
           const versionAlert = await this.alert.create({
             header: "Versión obsoleta",
