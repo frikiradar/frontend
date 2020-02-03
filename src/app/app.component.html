@@ -1,4 +1,15 @@
 <ion-app>
   <app-menu></app-menu>
   <ion-router-outlet id="content"></ion-router-outlet>
+  <div
+    id="no-internet"
+    *ngIf="!internet"
+    style="background-color: #f04141;
+    position: absolute;
+    bottom: 57px;
+    text-align: center;
+    width: 100%;"
+  >
+    <p style="font-size: 12px;">¡Te has quedado sin internet!</p>
+  </div>
 </ion-app>

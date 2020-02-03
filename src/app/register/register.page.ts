@@ -8,8 +8,8 @@ import {
 import {
   AlertController,
   NavController,
-  ToastController,
-  Platform
+  Platform,
+  ToastController
 } from "@ionic/angular";
 
 import { User } from "../models/user";

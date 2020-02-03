@@ -35,7 +35,6 @@ export class RadarPage implements OnInit {
     public router: Router,
     private geolocation: Geolocation,
     private alert: AlertController,
-    private utils: UtilsService,
     private toast: ToastController
   ) {}
 
@@ -57,8 +56,13 @@ export class RadarPage implements OnInit {
           );
           this.auth.setAuthUser(authUser);
         } catch (e) {
-          const authUser = await this.userSvc.setCoordinates(0, 0);
-          this.auth.setAuthUser(authUser);
+          const alert = await this.alert.create({
+            header: "Revisa la información",
+            message: "Es necesario rellenar todos los campos.",
+            buttons: ["Ok, Tendré más cuidado"]
+          });
+
+          await alert.present();
         }
 
         this.authUser = this.auth.currentUserValue;
@@ -76,12 +80,13 @@ export class RadarPage implements OnInit {
     try {
       this.page++;
       let users = await this.userSvc.getRadarUsers(this.page);
-      users = users.filter(u => !u.hide && u.match && u.match > 0);
-
+      users =
+        this.auth.currentUserValue.tags.length > 0
+          ? users.filter(u => !u.hide && u.match && u.match > 0)
+          : users.filter(u => !u.hide);
       this.showSkeleton = false;
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
-
       if (this.page === 1) {
         this.user = this.users[0];
       }

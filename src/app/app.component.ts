@@ -28,6 +28,7 @@ export class AppComponent {
   currentUser: User;
   backButtonCount = 0;
   alertNetwork: HTMLIonAlertElement;
+  public internet = true;
 
   constructor(
     private auth: AuthService,
@@ -82,28 +83,12 @@ export class AppComponent {
   }
 
   async networkStatus() {
-    this.initNetworkAlert();
-
     this.network.onConnect().subscribe(() => {
-      console.log("Online");
-      this.alert
-        .getTop()
-        .then(v => (v ? this.alertNetwork.dismiss() : undefined));
-      this.initNetworkAlert();
+      this.internet = true;
     });
 
     this.network.onDisconnect().subscribe(() => {
-      console.log("Offline");
-      this.alertNetwork.present();
-    });
-  }
-
-  async initNetworkAlert() {
-    this.alertNetwork = await this.alert.create({
-      header: "Sin conexión a internet",
-      message:
-        "No tienes conexión a internet en estos momentos. Podrás seguir utilizando la aplicación en cuanto vuelvas a tener red.",
-      backdropDismiss: false
+      this.internet = false;
     });
   }
 
@@ -244,7 +229,7 @@ export class AppComponent {
         // Debe tener 3 digitos, por eso mayor o igual a 100
         version = version >= 100 ? version : version * 10;
 
-        if (version < +config.min_version || version > 1000) {
+        if (version < +config.min_version) {
           const versionAlert = await this.alert.create({
             header: "Versión obsoleta",
             message:

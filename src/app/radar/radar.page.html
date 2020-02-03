@@ -21,7 +21,7 @@
 </ion-header>
 <ion-content>
   <ion-slides #slides (ionSlideDidChange)="slide()">
-    <ion-slide *ngIf="!users?.length || showSkeleton; else radarItems">
+    <ion-slide *ngIf="showSkeleton; else radarItems">
       <ion-card>
         <ion-card-header>
           <ion-skeleton-text
@@ -51,7 +51,20 @@
       </ion-card>
     </ion-slide>
     <ng-template #radarItems>
-      <ion-slide *ngFor="let user of users;" #users>
+      <ion-slide *ngIf="!users.length">
+        <div class="full-center ion-padding">
+          <ion-icon name="location"></ion-icon>
+          <h2>Sin resultados</h2>
+          <p>
+            Modifica tus ajustes de "Estoy buscando..." en tu configuración de
+            perfil para mejorar los resultados.
+          </p>
+          <ion-button (click)="router.navigate(['/edit-profile'])"
+            >Editar perfil</ion-button
+          >
+        </div>
+      </ion-slide>
+      <ion-slide *ngFor="let user of users;">
         <ion-card (click)="showProfile(user.id)">
           <img
             [src]="user.avatar"
@@ -93,7 +106,7 @@
     </ng-template>
   </ion-slides>
 </ion-content>
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border" *ngIf="users.length">
   <ion-toolbar>
     <ion-buttons>
       <ion-grid>
