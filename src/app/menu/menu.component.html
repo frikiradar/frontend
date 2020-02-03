@@ -1,72 +1,82 @@
-<ion-menu
-  side="start"
-  swipeGesture="false"
-  contentId="content"
-  *ngIf="auth.currentUserValue && auth.currentUserValue.id"
->
-  <ion-header class="ion-no-border">
-    <img
-      [src]="auth.currentUserValue.avatar"
-      [alt]="auth.currentUserValue.username"
-      default="/assets/img/users/default.jpg"
-    />
-    <div id="info">
-      <span>{{ auth.currentUserValue.name }}</span>
-    </div>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item button lines="none" (click)="editProfile()">
-        <ion-icon name="person-circle-outline" slot="start"></ion-icon>
-        <ion-label>
-          Editar perfil
-        </ion-label>
-      </ion-item>
-      <ion-item button lines="full" (click)="settings()">
-        <ion-icon name="settings-outline" slot="start"></ion-icon>
-        <ion-label>
-          Configuración y privacidad
-        </ion-label>
-      </ion-item>
-      <ion-item
-        button
-        lines="none"
-        (click)="showCredits()"
-        *ngIf="!auth.currentUserValue.is_premium"
-      >
-        <ion-icon name="gift-outline" slot="start"></ion-icon>
-        <ion-label>Insert Coin (Créditos)</ion-label>
-      </ion-item>
-      <ion-item
-        button
-        lines="full"
-        (click)="showPremium()"
-        *ngIf="!auth.currentUserValue.is_premium"
-      >
-        <ion-icon name="infinite" slot="start"></ion-icon>
-        <ion-label>FrikiRadar ILIMITADO</ion-label>
-      </ion-item>
-      <ion-item button lines="none" (click)="showAmbassador()">
-        <ion-icon name="people-outline" slot="start"></ion-icon>
-        <ion-label>
-          <h2>Programa de embajador</h2>
-          <p>Recluta y gana recompensas</p>
-        </ion-label>
-      </ion-item>
-      <ion-item button lines="none" (click)="share()">
-        <ion-icon name="share-outline" slot="start"></ion-icon>
-        <ion-label>Comparte con tus amigos</ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-  <ion-footer>
-    <ion-item button lines="none" (click)="admin()" *ngIf="auth.isAdmin()">
-      <ion-icon name="bonfire-outline" color="danger" slot="start"></ion-icon>
-      <ion-label color="danger">Modo Dios</ion-label>
-    </ion-item>
-    <ion-item button lines="none" (click)="logout()">
-      <ion-icon name="log-out-outline" color="danger" slot="start"></ion-icon>
-      <ion-label color="danger">Cerrar sesión</ion-label>
-    </ion-item>
-  </ion-footer>
-</ion-menu>
+<ion-split-pane contentId="content">
+  <ion-menu
+    side="start"
+    swipeGesture="false"
+    contentId="content"
+    *ngIf="auth.currentUserValue && auth.currentUserValue.id"
+  >
+    <ion-header class="ion-no-border">
+      <img
+        [src]="auth.currentUserValue.avatar"
+        [alt]="auth.currentUserValue.username"
+        default="/assets/img/users/default.jpg"
+      />
+      <div id="info">
+        <span>{{ auth.currentUserValue.name }}</span>
+      </div>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item button lines="none" (click)="editProfile()">
+          <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+          <ion-label>
+            Editar perfil
+          </ion-label>
+        </ion-item>
+        <ion-item button lines="full" (click)="settings()">
+          <ion-icon name="settings-outline" slot="start"></ion-icon>
+          <ion-label>
+            Configuración y privacidad
+          </ion-label>
+        </ion-item>
+        <ion-item
+          button
+          lines="none"
+          (click)="showCredits()"
+          *ngIf="!auth.currentUserValue.is_premium"
+        >
+          <ion-icon name="gift-outline" slot="start"></ion-icon>
+          <ion-label>Insert Coin (Créditos)</ion-label>
+        </ion-item>
+        <ion-item
+          button
+          lines="full"
+          (click)="showPremium()"
+          *ngIf="!auth.currentUserValue.is_premium"
+        >
+          <ion-icon name="infinite" slot="start"></ion-icon>
+          <ion-label>FrikiRadar ILIMITADO</ion-label>
+        </ion-item>
+        <ion-item button lines="none" (click)="showAmbassador()">
+          <ion-icon name="people-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h2>Programa de embajador</h2>
+            <p>Recluta y gana recompensas</p>
+          </ion-label>
+        </ion-item>
+        <ion-item button lines="full" (click)="share()">
+          <ion-icon name="share-outline" slot="start"></ion-icon>
+          <ion-label>Comparte con tus amigos</ion-label>
+        </ion-item>
+        <ion-item button lines="none" (click)="admin()" *ngIf="auth.isAdmin()">
+          <ion-icon
+            name="bonfire-outline"
+            color="danger"
+            slot="start"
+          ></ion-icon>
+          <ion-label color="danger">Modo Dios</ion-label>
+        </ion-item>
+        <ion-item button lines="none" (click)="logout()">
+          <ion-icon
+            name="log-out-outline"
+            color="danger"
+            slot="start"
+          ></ion-icon>
+          <ion-label color="danger">Cerrar sesión</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="content"></ion-router-outlet>
+</ion-split-pane>
