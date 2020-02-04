@@ -89,12 +89,15 @@ export class LoginPage {
       this.nav.navigateRoot(["/login/two-step"]);
     } else {
       this.auth.setAuthUser(user);
-      (await this.toast.create({
-        message: "¡Acceso concedido!",
-        duration: 2000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: "¡Acceso concedido!",
+          duration: 2000,
+          position: "bottom"
+        })
+      ).present();
       this.nav.navigateRoot(["/tabs/radar"]);
+      location.reload();
     }
   }
 

@@ -7,6 +7,7 @@ import {
   AlertController,
   ModalController,
   NavController,
+  Platform,
   PopoverController,
   ToastController
 } from "@ionic/angular";
@@ -43,7 +44,8 @@ export class ProfilePage implements OnInit {
     private alert: AlertController,
     private auth: AuthService,
     private modal: ModalController,
-    private admobSvc: AdmobService
+    private admobSvc: AdmobService,
+    private platform: Platform
   ) {}
 
   async ngOnInit() {
@@ -147,7 +149,7 @@ export class ProfilePage implements OnInit {
   }
 
   async insertCoinModal() {
-    if (!this.auth.isPremium()) {
+    if (!this.auth.isPremium() && this.platform.is("cordova")) {
       const modal = await this.modal.create({
         component: InsertCoinModal,
         cssClass: "insert-coin-modal"
@@ -155,8 +157,18 @@ export class ProfilePage implements OnInit {
       await modal.present();
       const res = await modal.onDidDismiss();
       return res.data;
+    } else if (this.auth.isPremium()) {
+      return true;
+    } else {
+      const alert = await this.alert.create({
+        header: "Funcionalidad no disponible",
+        message:
+          "Para poder disfrutar de esta funcionalidad es necesario entrar a FrikiRadar desde una app nativa o tener FrikiRadar ILIMITADO.",
+        buttons: ["Entendido, gracias!"]
+      });
+
+      await alert.present();
     }
-    return true;
   }
 
   async showPromo() {

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { MenuController, ModalController } from "@ionic/angular";
+import { MenuController, ModalController, Platform } from "@ionic/angular";
 
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { AuthService } from "../services/auth.service";
@@ -22,7 +22,8 @@ export class MenuComponent {
     public auth: AuthService,
     public utils: UtilsService,
     private router: Router,
-    private modal: ModalController
+    private modal: ModalController,
+    public platform: Platform
   ) {}
 
   editProfile() {

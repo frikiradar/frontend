@@ -47,7 +47,7 @@
           button
           lines="none"
           (click)="showCredits()"
-          *ngIf="!auth.currentUserValue.is_premium"
+          *ngIf="!auth.currentUserValue.is_premium && platform.is('cordova')"
         >
           <ion-icon name="gift-outline" slot="start"></ion-icon>
           <ion-label>Insert Coin (Créditos)</ion-label>
@@ -56,7 +56,7 @@
           button
           lines="full"
           (click)="showPremium()"
-          *ngIf="!auth.currentUserValue.is_premium"
+          *ngIf="!auth.currentUserValue.is_premium && platform.is('cordova')"
         >
           <ion-icon name="infinite" slot="start"></ion-icon>
           <ion-label>FrikiRadar ILIMITADO</ion-label>

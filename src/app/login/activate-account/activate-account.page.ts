@@ -68,12 +68,14 @@ export class ActivateAccountPage {
             text: "Buscar personas",
             handler: () => {
               this.nav.navigateRoot(["/tabs/radar"]);
+              location.reload();
             }
           },
           {
             text: "Configurar mi perfil",
             handler: () => {
               this.nav.navigateRoot(["/edit-profile"]);
+              location.reload();
             }
           }
         ]
@@ -95,11 +97,13 @@ export class ActivateAccountPage {
 
   async resendCode() {
     await this.userSvc.resendActivationEmail().toPromise();
-    (await this.toast.create({
-      message: "Te hemos enviado un nuevo código de verificación al email",
-      duration: 2000,
-      position: "bottom"
-    })).present();
+    (
+      await this.toast.create({
+        message: "Te hemos enviado un nuevo código de verificación al email",
+        duration: 2000,
+        position: "bottom"
+      })
+    ).present();
   }
 
   async changeEmail() {
