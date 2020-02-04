@@ -1,13 +1,28 @@
 :host {
   ion-header {
-    background: #1a1a1a !important;
+    padding: 20px;
+    height: 100px;
+    background: #1a1a1a;
+    background-position: center center;
+    background-size: cover;
+
+    #banner {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      background: #e91e634f;
+    }
 
     #info {
-      padding: 10px 20px;
-      background: rgba(26, 26, 26, 0.8);
-      position: relative;
-      top: -40px;
-      margin-bottom: -43px;
+      margin-top: 10px;
+    }
+
+    ion-avatar {
+      width: 48px;
+      height: 48px;
     }
   }
 

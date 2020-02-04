@@ -6,14 +6,27 @@
     contentId="content"
     *ngIf="auth.currentUserValue && auth.currentUserValue.id"
   >
-    <ion-header class="ion-no-border">
-      <img
-        [src]="auth.currentUserValue.avatar"
-        [alt]="auth.currentUserValue.username"
-        default="/assets/img/users/default.jpg"
-      />
+    <ion-header
+      class="ion-no-border"
+      [ngStyle]="{
+        'background-image': 'url(' + auth.currentUserValue.avatar + ')'
+      }"
+    >
+      <div id="banner"></div>
+      <ion-avatar>
+        <img
+          [src]="auth.currentUserValue.avatar"
+          [alt]="auth.currentUserValue.username"
+          default="/assets/img/users/default.jpg"
+        />
+      </ion-avatar>
       <div id="info">
         <span>{{ auth.currentUserValue.name }}</span>
+        <span
+          *ngIf="auth.currentUserValue.username !== auth.currentUserValue.name"
+        >
+          ({{ auth.currentUserValue.username }})</span
+        >
       </div>
     </ion-header>
     <ion-content>
@@ -67,16 +80,14 @@
           ></ion-icon>
           <ion-label color="danger">Modo Dios</ion-label>
         </ion-item>
-        <ion-item button lines="none" (click)="logout()">
-          <ion-icon
-            name="log-out-outline"
-            color="danger"
-            slot="start"
-          ></ion-icon>
-          <ion-label color="danger">Cerrar sesión</ion-label>
-        </ion-item>
       </ion-list>
     </ion-content>
+    <ion-footer>
+      <ion-item button lines="none" (click)="logout()">
+        <ion-icon name="log-out-outline" color="danger" slot="start"></ion-icon>
+        <ion-label color="danger">Cerrar sesión</ion-label>
+      </ion-item>
+    </ion-footer>
   </ion-menu>
 
   <ion-router-outlet id="content"></ion-router-outlet>
