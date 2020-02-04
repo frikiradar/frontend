@@ -61,6 +61,10 @@ ion-header {
     width: 32px;
     height: 32px;
   }
+
+  ion-menu-toggle {
+    margin-left: 10px;
+  }
 }
 
 [padding] {
@@ -176,5 +180,22 @@ ion-toast.md {
 ul {
   li {
     color: white;
+  }
+}
+
+.alert-center {
+  h2,
+  .alert-message {
+    text-align: center;
+  }
+
+  button {
+    border: 2px solid #e91e63 !important;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 20px !important;
+    padding: 10px 30px !important;
+    border-radius: 50px !important;
   }
 }

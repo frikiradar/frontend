@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, Platform } from "@ionic/angular";
 

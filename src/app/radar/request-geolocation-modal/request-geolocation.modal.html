@@ -1,0 +1,38 @@
+<ion-content>
+  <div class="full-center ion-padding" *ngIf="view === 'request'">
+    <ion-icon name="location-sharp"></ion-icon>
+    <h2>Permisos de ubicación</h2>
+    <p>
+      Para que el FrikiRadar pueda sugerirte a personas que están cerca de ti es
+      necesario que aceptes el permiso para ver tu ubicación.
+    </p>
+    <ion-button shape="round" fill="outline" (click)="getCoordinates()"
+      >PERMITIR</ion-button
+    >
+  </div>
+
+  <div class="full-center ion-padding" *ngIf="view === 'force'">
+    <ion-icon name="location-sharp"></ion-icon>
+    <h2>Ups!</h2>
+    <p>
+      Para que el FrikiRadar pueda encontrar personas que están cerca de ti es
+      necesario que aceptes el permiso para ver tu ubicación.
+    </p>
+    <div *ngIf="platform?.is('cordova'); else noCordova">
+      <p>Verifica los permisos de ubicación en los ajustes de la aplicación.</p>
+      <ion-button shape="round" fill="outline" (click)="openSettings()"
+        >ABRIR AJUSTES</ion-button
+      >
+    </div>
+    <ng-template #noCordova>
+      <p>Verifica los permisos de ubicación en los ajustes del navegador.</p>
+      <ion-button
+        shape="round"
+        fill="outline"
+        href="https://support.google.com/chrome/answer/142065?co=GENIE.Platform%3DDesktop&hl=es&oco=1"
+        target="_blank"
+        >MÁS INFORMACIÓN</ion-button
+      >
+    </ng-template>
+  </div>
+</ion-content>

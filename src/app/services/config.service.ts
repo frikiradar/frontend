@@ -4,13 +4,14 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 
 export interface Config {
-  openTimes: number;
-  review: boolean;
-  radarAdv: boolean;
-  maintenance: boolean;
-  min_version: string;
-  chat: boolean;
-  push_url: string;
+  openTimes?: number;
+  review?: boolean;
+  radarAdv?: boolean;
+  maintenance?: boolean;
+  min_version?: string;
+  chat?: boolean;
+  push_url?: string;
+  geolocation?: boolean;
 }
 @Injectable({
   providedIn: "root"
@@ -29,12 +30,33 @@ export class ConfigService {
       this.setConfig(config);
     }
 
+    if (!config) {
+      config = {};
+    }
+
     return config;
   }
 
+  async get(parameter: keyof Config) {
+    const config = await this.getConfig();
+    return config[parameter];
+  }
+
   async setConfig(config: Config) {
-    const currentConfig = await this.getConfig();
+    let currentConfig = await this.getConfig();
+    if (!currentConfig) {
+      currentConfig = {};
+    }
     config = { ...currentConfig, ...config };
     localStorage.setItem("config", JSON.stringify(config));
+  }
+
+  async set(parameter: keyof Config, value: any) {
+    let config = await this.getConfig();
+    if (!config) {
+      config = {};
+    }
+    config[parameter] = value;
+    this.setConfig(config);
   }
 }

@@ -120,15 +120,15 @@ export class AppComponent {
 
   async countOpenTimes() {
     const config = await this.config.getConfig();
+    this.config.setConfig(config);
     let openTimes: number;
+    // tslint:disable-next-line: prefer-conditional-expression
     if (config) {
       openTimes = config.openTimes ? ++config.openTimes : 1;
-      config.openTimes = openTimes;
     } else {
       openTimes = this.auth.currentUserValue.num_logins++;
-      config.openTimes = openTimes;
     }
-    this.config.setConfig(config);
+    this.config.set("openTimes", openTimes);
 
     if (openTimes === 2) {
       const alert = await this.alert.create({

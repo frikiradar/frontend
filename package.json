@@ -31,6 +31,7 @@
     "@ionic-native/core": "^5.20.0",
     "@ionic-native/crop": "^5.20.0",
     "@ionic-native/device": "^5.20.0",
+    "@ionic-native/diagnostic": "^5.20.0",
     "@ionic-native/facebook": "^5.20.0",
     "@ionic-native/fcm": "^5.20.0",
     "@ionic-native/geolocation": "^5.20.0",
@@ -68,6 +69,7 @@
     "cordova-plugin-vibration": "3.1.1",
     "cordova-plugin-x-socialsharing": "5.4.7",
     "cordova-promise-polyfill": "0.0.2",
+    "cordova.plugins.diagnostic": "^5.0.1",
     "core-js": "^2.6.11",
     "es6-promise-plugin": "4.2.2",
     "hammerjs": "^2.0.8",
@@ -154,6 +156,9 @@
       },
       "cc.fovea.cordova.purchase": {
         "BILLING_KEY": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgDn4f/Q+mPYYEpoMMVyGLzs6K5qYbVOqkha5w/ilA42bt1A1nWK8NBEwiGLp36VdJkhLSSj7HU4HqgCkRDBhE8D4OpR5JpO7aEx1JseVp/ku/NsNnridY+VBlvMzSNm90M6dg0AcIigbcZOkgeAoULp7rPzhkrWDf4gDWKFjI7eSxXG/ojnuEq6DB3bmKa3usf81UKZqmWfSrEAl+nu1bQNV4JRgPa7ri4q5W9ILO9hSYX/BY/ikmXfF5KabboSz/3LUDwlysAVMM4jq1D1CSIuVWYWHfUsljBAsXG/rIQ/0kG/4rcRAsWRogJ03J4Q3G+LNP71DgfZbeGx4sNq/qwIDAQAB"
+      },
+      "cordova.plugins.diagnostic": {
+        "ANDROID_SUPPORT_VERSION": "28.+"
       }
     },
     "platforms": [

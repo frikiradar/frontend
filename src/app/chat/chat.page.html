@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="menu.open()">
+      <ion-menu-toggle>
         <ion-avatar>
           <img
             [src]="auth.currentUserValue?.avatar"
@@ -9,7 +9,7 @@
             default="/assets/img/users/default.jpg"
           />
         </ion-avatar>
-      </ion-button>
+      </ion-menu-toggle>
     </ion-buttons>
     <ion-title>Chat</ion-title>
   </ion-toolbar>
@@ -46,9 +46,9 @@
               [alt]="chat.user.username"
               default="/assets/img/users/default.jpg"
             />
-            <ion-badge color="primary" *ngIf="chat?.count > 0">{{
-              chat?.count
-            }}</ion-badge>
+            <ion-badge color="primary" *ngIf="chat?.count > 0"
+              >{{ chat?.count }}</ion-badge
+            >
           </ion-avatar>
 
           <ion-label>

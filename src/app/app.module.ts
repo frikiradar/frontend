@@ -19,6 +19,7 @@ import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
+import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
@@ -91,7 +92,8 @@ registerLocaleData(localeEs, "es");
     AdMobFree,
     AdmobService,
     WebView,
-    InAppPurchase2
+    InAppPurchase2,
+    Diagnostic
     // AnalyticsFirebase
   ],
   bootstrap: [AppComponent]

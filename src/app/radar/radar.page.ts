@@ -1,16 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { Geolocation } from "@ionic-native/geolocation/ngx";
-import {
-  AlertController,
-  IonSlides,
-  MenuController,
-  ToastController
-} from "@ionic/angular";
+import { IonSlides, MenuController, ToastController } from "@ionic/angular";
 
 import { User } from "../models/user";
+import { GeolocationService } from "../services/geolocation.service";
 import { UserService } from "../services/user.service";
-import { UtilsService } from "../services/utils.service";
 import { AuthService } from "./../services/auth.service";
 
 @Component({
@@ -33,9 +27,8 @@ export class RadarPage implements OnInit {
     public menu: MenuController,
     private auth: AuthService,
     public router: Router,
-    private geolocation: Geolocation,
-    private alert: AlertController,
-    private toast: ToastController
+    private toast: ToastController,
+    private geolocationSvc: GeolocationService
   ) {}
 
   async ngOnInit() {
@@ -43,26 +36,15 @@ export class RadarPage implements OnInit {
     if (this.authUser && this.authUser.id) {
       if (!this.authUser.roles.includes("ROLE_DEMO")) {
         try {
-          const coordinates = await this.geolocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 10000
-          });
-          const longitude = coordinates.coords.longitude;
-          const latitude = coordinates.coords.latitude;
+          const coordinates = await this.geolocationSvc.getGeolocation();
           const authUser = await this.userSvc.setCoordinates(
-            longitude,
-            latitude
+            coordinates.longitude,
+            coordinates.latitude
           );
           this.auth.setAuthUser(authUser);
         } catch (e) {
-          const alert = await this.alert.create({
-            header: "Revisa la información",
-            message: "Es necesario rellenar todos los campos.",
-            buttons: ["Ok, Tendré más cuidado"]
-          });
-
-          await alert.present();
+          console.error(e);
+          // tienes que aprobar permisos
         }
 
         this.authUser = this.auth.currentUserValue;
