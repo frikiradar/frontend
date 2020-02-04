@@ -61,8 +61,8 @@ export class RegisterPage {
       lovegender: [""],
       meet: [""],
       referral: [""],
-      acceptos: new FormControl("", Validators.required),
-      adult: new FormControl("", Validators.required)
+      acceptos: new FormControl("", Validators.requiredTrue),
+      adult: new FormControl("", Validators.requiredTrue)
     });
 
     this.registerForm.get("username").valueChanges.subscribe(async username => {
