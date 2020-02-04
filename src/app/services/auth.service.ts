@@ -42,8 +42,7 @@ export class AuthService {
     gender: string,
     lovegender: string[],
     meet: string,
-    referral: string,
-    mailing: boolean
+    referral: string
   ) {
     try {
       return await this.http
@@ -57,8 +56,7 @@ export class AuthService {
             gender,
             lovegender,
             meet,
-            referral,
-            mailing
+            referral
           },
           httpOptions
         )

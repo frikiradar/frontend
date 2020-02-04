@@ -12,5 +12,9 @@ form {
   ion-label {
     --color: #9c2c51 !important;
     white-space: inherit;
+
+    p {
+      color: white !important;
+    }
   }
 }

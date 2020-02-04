@@ -61,7 +61,8 @@ export class RegisterPage {
       lovegender: [""],
       meet: [""],
       referral: [""],
-      mailing: [""]
+      acceptos: new FormControl("", Validators.required),
+      adult: new FormControl("", Validators.required)
     });
 
     this.registerForm.get("username").valueChanges.subscribe(async username => {
@@ -105,8 +106,7 @@ export class RegisterPage {
                   this.registerForm.get("gender").value.trim(),
                   this.registerForm.get("lovegender").value,
                   this.registerForm.get("meet").value,
-                  this.registerForm.get("referral").value,
-                  this.registerForm.get("mailing").value
+                  this.registerForm.get("referral").value
                 );
 
                 const user = await this.auth.login(

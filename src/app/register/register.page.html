@@ -225,29 +225,36 @@
     </div>
     <ion-item lines="none">
       <ion-label
-        >Me gustaría recibir información por correo electrónico sobre
-        promociones y descuentos exclusivos de FrikiRadar.</ion-label
+        ><p>
+          Acepto las
+          <a target="_blank" href="https://frikiradar.com/tos/"
+            >Condiciones del servicio</a
+          >
+          y la
+          <a
+            target="_blank"
+            href="https://frikiradar.com/politica-de-privacidad/"
+            >Política de privacidad</a
+          >
+          de FrikiRadar.
+        </p></ion-label
       >
       <ion-checkbox
         checked="false"
         slot="start"
-        formControlName="mailing"
+        formControlName="acceptos"
       ></ion-checkbox>
-      <ion-icon color="light" name="mail" slot="end"></ion-icon>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label><p>Confirmo ser mayor de edad.</p></ion-label>
+      <ion-checkbox
+        checked="false"
+        slot="start"
+        formControlName="adult"
+      ></ion-checkbox>
     </ion-item>
     <ion-button color="primary" type="submit" expand="block"
       >Registrarme</ion-button
     >
   </form>
-  <p>
-    Al crear una cuenta, aceptas las
-    <a target="_blank" href="https://frikiradar.com/tos/"
-      >Condiciones del servicio</a
-    >
-    y la
-    <a target="_blank" href="https://frikiradar.com/politica-de-privacidad/"
-      >Política de privacidad</a
-    >
-    de FrikiRadar.
-  </p>
 </ion-content>
