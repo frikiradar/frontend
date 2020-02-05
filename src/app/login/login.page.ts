@@ -6,7 +6,7 @@ import {
   Validators
 } from "@angular/forms";
 import { Router } from "@angular/router";
-// import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
+import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
 import {
   AlertController,
   ModalController,
@@ -40,15 +40,16 @@ export class LoginPage {
     private alert: AlertController,
     private modal: ModalController,
     private toast: ToastController,
-    public formBuilder: FormBuilder,
+    public fb: FormBuilder,
     private nav: NavController, // private fb: Facebook
-    public platform: Platform
+    public platform: Platform,
+    private facebook: Facebook
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
     }
 
-    this.loginForm = formBuilder.group({
+    this.loginForm = fb.group({
       username: new FormControl("", [
         Validators.required,
         Validators.minLength(3)
@@ -121,11 +122,30 @@ export class LoginPage {
   }
 
   async loginFacebook() {
-    /*  this.fb
-      .login(["public_profile", "email"])
-      .then((res: FacebookLoginResponse) =>
-        console.log("Logged into Facebook!", res)
-      )
-      .catch(e => console.error("Error logging into Facebook", e));*/
+    this.facebook
+      .login(["public_profile", "email", "user_birthday"])
+      .then(async (response: FacebookLoginResponse) => {
+        console.log("Logged into Facebook!", response);
+        const result = await this.facebook.api(
+          `${response.authResponse.userID}/?fields=id,email,name,birthday,picture.width(512)`,
+          ["public_profile", "email", "user_birthday"]
+        );
+
+        /*{
+          api tester: https://developers.facebook.com/tools/explorer/2308182012762454/?method=GET&path=2690421467747425%2F%3Ffields%3Did%2Cemail%2Cname%2Cbirthday%2Cpicture.width(512)&version=v6.0&classic=0
+          "id": "2690421467747425",
+          "email": "alberto.eps@gmail.com",
+          "name": "Alberto Rodríguez Merino",
+          "picture": {
+            "data": {
+              "height": 692,
+              "is_silhouette": false,
+              "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2690421467747425&width=512&ext=1583495399&hash=AeQGzxUiRc-AGgUA",
+              "width": 692
+            }
+          }
+        }*/
+      })
+      .catch(e => console.error("Error logging into Facebook", e));
   }
 }
