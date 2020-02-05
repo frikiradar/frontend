@@ -31,6 +31,7 @@
     <preference name="SplashScreenDelay" value="30000" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="KeyboardStyle" value="dark" />
+    <preference name="WKWebViewOnly" value="true" />
     <platform name="android">
         <preference name="Scheme" value="https" />
         <preference name="MixedContentMode" value="0" />
