@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Facebook } from "@ionic-native/facebook/ngx";
 import {
   IAPProduct,
   IAPProducts,
@@ -25,7 +26,8 @@ export class StoreService {
     private platform: Platform,
     private userSvc: UserService,
     private productsSvc: ProductService,
-    private payment: PaymentService
+    private payment: PaymentService,
+    private facebook: Facebook
   ) {
     this.platform.ready().then(() => {
       const products = this.productsSvc.getProducts();
@@ -173,5 +175,7 @@ export class StoreService {
         }
         break;
     }
+
+    this.facebook.logPurchase(+p.priceMicros / 1000000, p.currency);
   }
 }

@@ -98,7 +98,6 @@ export class LoginPage {
         })
       ).present();
       this.nav.navigateRoot(["/tabs/radar"]);
-      location.reload();
     }
   }
 

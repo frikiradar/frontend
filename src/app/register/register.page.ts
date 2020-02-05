@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
+import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
 import {
   AlertController,
   NavController,
@@ -35,7 +36,8 @@ export class RegisterPage {
     private toast: ToastController,
     public userSvc: UserService,
     private ngZone: NgZone,
-    public platform: Platform
+    public platform: Platform,
+    private facebook: Facebook
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [
@@ -143,6 +145,10 @@ export class RegisterPage {
         position: "bottom"
       })
     ).present();
+
+    this.facebook.logEvent(
+      this.facebook.EVENTS.EVENT_NAME_COMPLETED_REGISTRATION
+    );
 
     this.ngZone.run(() => this.nav.navigateRoot(["/tabs/radar"])).then();
   }

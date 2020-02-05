@@ -68,14 +68,12 @@ export class ActivateAccountPage {
             text: "Buscar personas",
             handler: () => {
               this.nav.navigateRoot(["/tabs/radar"]);
-              location.reload();
             }
           },
           {
             text: "Configurar mi perfil",
             handler: () => {
               this.nav.navigateRoot(["/edit-profile"]);
-              location.reload();
             }
           }
         ]
