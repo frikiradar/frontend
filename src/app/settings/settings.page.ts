@@ -97,7 +97,7 @@ export class SettingsPage implements OnInit {
   }
 
   async onChangeCheck(property: keyof User, value: boolean) {
-    this.user[property] = !value;
+    (this.user as any)[property] = !value;
 
     try {
       this.user = await this.userSvc.updateUser(this.user);
