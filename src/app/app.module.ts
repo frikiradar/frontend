@@ -34,7 +34,6 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
-import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
@@ -60,7 +59,6 @@ registerLocaleData(localeEs, "es");
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxLinkifyjsModule.forRoot(),
     SharedModule,
     BrowserAnimationsModule,
     ServiceWorkerModule.register("ngsw-worker.js", {

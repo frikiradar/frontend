@@ -67,7 +67,7 @@
     </ion-chip>
     <ion-card button (press)="selectMessage(message)">
       <ion-card-content>
-        <span class="text" [innerHTML]="message.text | linkify"> </span>
+        <span class="text">{{message.text}}</span>
         <ion-note>
           {{ message.time_creation | date: "shortTime" }}
           <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
