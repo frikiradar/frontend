@@ -13,7 +13,7 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-import { AdMobFree } from "@ionic-native/admob-free/ngx";
+import { AdMobFree } from "@ionic-native/admob-free";
 // import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
