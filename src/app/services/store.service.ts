@@ -145,7 +145,8 @@ export class StoreService {
             p.transaction.signature || "",
             p.transaction.type,
             +p.priceMicros / 1000000,
-            p.currency
+            p.currency,
+            JSON.stringify(p)
           );
 
           p.finish();
@@ -167,7 +168,8 @@ export class StoreService {
             p.transaction.signature || "",
             p.transaction.type,
             +p.priceMicros / 1000000,
-            p.currency
+            p.currency,
+            JSON.stringify(p)
           );
           p.finish();
         } catch (e) {

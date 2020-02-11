@@ -15,7 +15,8 @@ export class PaymentService {
     signature: string,
     type: string,
     amount: number,
-    currency: string
+    currency: string,
+    json: string
   ) {
     try {
       return await this.rest
@@ -27,7 +28,8 @@ export class PaymentService {
           signature,
           type,
           amount,
-          currency
+          currency,
+          json
         })
         .toPromise();
     } catch (e) {
