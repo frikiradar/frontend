@@ -4,7 +4,7 @@ import {
   AdMobFreeBannerConfig,
   AdMobFreeInterstitialConfig,
   AdMobFreeRewardVideoConfig
-} from "@ionic-native/admob-free";
+} from "@ionic-native/admob-free/ngx";
 import { Platform } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 

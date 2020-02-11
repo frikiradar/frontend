@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
+import { Facebook } from "@ionic-native/facebook/ngx";
 import {
   AlertController,
   NavController,
@@ -147,7 +147,9 @@ export class RegisterPage {
     ).present();
 
     this.facebook.logEvent(
-      this.facebook.EVENTS.EVENT_NAME_COMPLETED_REGISTRATION
+      this.facebook.EVENTS.EVENT_NAME_COMPLETED_REGISTRATION,
+      {},
+      1
     );
 
     this.ngZone.run(() => this.nav.navigateRoot(["/tabs/radar"])).then();

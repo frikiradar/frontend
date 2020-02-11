@@ -54,13 +54,14 @@ export class GeolocationService {
 
   async getCoordinates() {
     const coordinates = await this.geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
+      enableHighAccuracy: false,
       timeout: 5000,
       maximumAge: 10000
     });
     const longitude = coordinates.coords.longitude;
     const latitude = coordinates.coords.latitude;
     this.config.set("geolocation", true);
+
     return { longitude, latitude };
   }
 }

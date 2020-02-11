@@ -21,7 +21,7 @@ export class RequestGeolocationModal {
   async getCoordinates() {
     try {
       const coordinates = await this.geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
         timeout: 5000,
         maximumAge: 10000
       });
