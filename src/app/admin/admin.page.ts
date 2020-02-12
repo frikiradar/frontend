@@ -42,7 +42,7 @@ export class AdminPage implements OnInit {
     const message = this.message.value.trim();
     this.message.setValue("");
     try {
-      await this.push.sendTopicMessage(message, "frikiradar");
+      await this.push.sendTopicMessage(message, "test");
       (
         await this.toast.create({
           message: "Mensaje enviado correctamente.",

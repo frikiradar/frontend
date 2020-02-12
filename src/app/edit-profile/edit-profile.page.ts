@@ -19,7 +19,6 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
-import { ScrollDetail } from "@ionic/core";
 
 import { Tag } from "../models/tags";
 import { User } from "../models/user";

@@ -4,6 +4,7 @@ import { FCM, NotificationData } from "@ionic-native/fcm/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
 
+import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
 import { Notification, NotificationService } from "./notification.service";
 import { RestService } from "./rest.service";
@@ -21,7 +22,8 @@ export class PushService {
     private notificationSvc: NotificationService,
     private localNotifications: LocalNotifications,
     private platform: Platform,
-    private rest: RestService
+    private rest: RestService,
+    private auth: AuthService
   ) {
     this.platform.ready().then(() => {
       if (this.platform.is("cordova")) {
@@ -54,6 +56,17 @@ export class PushService {
       .catch(error => {
         console.log("Error subscribing to topic:", error);
       });
+
+    if (this.auth.isAdmin()) {
+      this.fcm
+        .subscribeToTopic("test")
+        .then(response =>
+          console.log("Successfully subscribed to topic:", response)
+        )
+        .catch(error => {
+          console.log("Error subscribing to topic:", error);
+        });
+    }
 
     this.fcm.onNotification().subscribe(
       (data: NotificationData) => {
