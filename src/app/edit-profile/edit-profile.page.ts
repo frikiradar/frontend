@@ -426,13 +426,6 @@ export class EditProfilePage {
     });
   }
 
-  onScroll($event: CustomEvent<ScrollDetail>) {
-    if ($event && $event.detail && $event.detail.scrollTop) {
-      const scrollTop = $event.detail.scrollTop;
-      this.showToolbar = scrollTop >= 50;
-    }
-  }
-
   back() {
     this.router.navigate(["/tabs/radar"]);
   }

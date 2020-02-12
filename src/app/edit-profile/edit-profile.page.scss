@@ -90,18 +90,3 @@ form ion-icon {
 #description {
   --border-color: white;
 }
-
-ion-footer {
-  display: none;
-
-  &.show-background {
-    display: block;
-  }
-}
-
-ion-footer ion-tab-button:not(.tab-selected) {
-  ion-icon,
-  ion-label {
-    color: white;
-  }
-}
