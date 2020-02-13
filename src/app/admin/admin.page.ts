@@ -1,4 +1,3 @@
-import { ToastController } from "@ionic/angular";
 import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
@@ -6,6 +5,7 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
+import { ToastController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
@@ -22,6 +22,10 @@ export class AdminPage implements OnInit {
   get message() {
     return this.messageForm.get("message");
   }
+  get title() {
+    return this.messageForm.get("title");
+  }
+  public test = true;
 
   constructor(
     private auth: AuthService,
@@ -30,7 +34,9 @@ export class AdminPage implements OnInit {
     private toast: ToastController
   ) {
     this.messageForm = formBuilder.group({
-      message: new FormControl("", [Validators.required])
+      title: new FormControl(),
+      message: new FormControl("", [Validators.required]),
+      test: new FormControl()
     });
   }
 
@@ -40,9 +46,13 @@ export class AdminPage implements OnInit {
 
   async sendMessage() {
     const message = this.message.value.trim();
+    const title = this.title.value ? this.title.value.trim() : "";
+
     this.message.setValue("");
+    this.title.setValue("");
     try {
-      await this.push.sendTopicMessage(message, "test");
+      const topic = this.test ? "test" : "frikiradar";
+      await this.push.sendTopicMessage(topic, message, title);
       (
         await this.toast.create({
           message: "Mensaje enviado correctamente.",

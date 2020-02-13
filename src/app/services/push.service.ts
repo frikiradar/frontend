@@ -99,7 +99,9 @@ export class PushService {
     );
   }
 
-  async sendTopicMessage(message: string, topic: string) {
-    return await this.rest.put("topic-message", { message, topic }).toPromise();
+  async sendTopicMessage(topic: string, message: string, title: string) {
+    return await this.rest
+      .put("topic-message", { topic, message, title })
+      .toPromise();
   }
 }
