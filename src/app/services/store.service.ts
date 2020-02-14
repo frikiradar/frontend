@@ -5,7 +5,7 @@ import {
   IAPProducts,
   InAppPurchase2
 } from "@ionic-native/in-app-purchase-2/ngx";
-import { Platform } from "@ionic/angular";
+import { AlertController, Platform } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 
 import { AuthService } from "./auth.service";
@@ -27,7 +27,8 @@ export class StoreService {
     private userSvc: UserService,
     private productsSvc: ProductService,
     private payment: PaymentService,
-    private facebook: Facebook
+    private facebook: Facebook,
+    private alert: AlertController
   ) {
     this.platform.ready().then(() => {
       const products = this.productsSvc.getProducts();
@@ -128,56 +129,73 @@ export class StoreService {
 
   async finishPurchase(p: IAPProduct) {
     console.log("finishPurrchase", p);
-    const product = this.productsValue.find(pr => pr.id === p.id);
-    switch (product.type) {
-      case "consumable":
-        try {
-          const user = await this.userSvc.addCredits(product.value);
-          this.auth.setAuthUser(user);
-          // Añadimos créditos!!
-          console.log("Comprado, añadimos créditos", product);
+    if (p.transaction.developerPayload === undefined) {
+      const product = this.productsValue.find(pr => pr.id === p.id);
+      switch (product.type) {
+        case "consumable":
+          try {
+            const user = await this.userSvc.addCredits(product.value);
+            this.auth.setAuthUser(user);
+            // Añadimos créditos!!
+            console.log("Comprado, añadimos créditos", product);
 
-          this.payment.setPayment(
-            p.id,
-            `Has añadido ${p.description} a tu cuenta.`,
-            p.transaction.id,
-            p.transaction.purchaseToken || p.transaction.id,
-            p.transaction.signature || "",
-            p.transaction.type,
-            +p.priceMicros / 1000000,
-            p.currency,
-            JSON.stringify(p)
-          );
+            this.payment.setPayment(
+              p.id,
+              `Has añadido ${p.description} a tu cuenta.`,
+              p.transaction.id,
+              p.transaction.purchaseToken || p.transaction.id,
+              p.transaction.signature || "",
+              p.transaction.type,
+              +p.priceMicros / 1000000,
+              p.currency,
+              JSON.stringify(p)
+            );
 
-          p.finish();
-        } catch (e) {
-          console.error("Error al añadir los créditos", product);
-        }
-        break;
-      case "subscription":
-        try {
-          const user = await this.userSvc.subscribePremim(product.value);
-          this.auth.setAuthUser(user);
-          // Añadimos créditos!!
-          console.log("Comprado, añadimos días de suscripción", product);
-          this.payment.setPayment(
-            p.id,
-            `Has añadido ${product.name} FrikiRadar ILIMITADO a tu cuenta.`,
-            p.transaction.id,
-            p.transaction.purchaseToken || p.transaction.id,
-            p.transaction.signature || "",
-            p.transaction.type,
-            +p.priceMicros / 1000000,
-            p.currency,
-            JSON.stringify(p)
-          );
-          p.finish();
-        } catch (e) {
-          console.error("Error al suscribirse", product);
-        }
-        break;
+            p.finish();
+          } catch (e) {
+            console.error("Error al añadir los créditos", product);
+          }
+          break;
+        case "subscription":
+          try {
+            const user = await this.userSvc.subscribePremim(product.value);
+            this.auth.setAuthUser(user);
+            // Añadimos créditos!!
+            console.log("Comprado, añadimos días de suscripción", product);
+            this.payment.setPayment(
+              p.id,
+              `Has añadido ${product.name} FrikiRadar ILIMITADO a tu cuenta.`,
+              p.transaction.id,
+              p.transaction.purchaseToken || p.transaction.id,
+              p.transaction.signature || "",
+              p.transaction.type,
+              +p.priceMicros / 1000000,
+              p.currency,
+              JSON.stringify(p)
+            );
+            p.finish();
+          } catch (e) {
+            console.error("Error al suscribirse", product);
+          }
+          break;
+      }
+
+      this.facebook.logPurchase(+p.priceMicros / 1000000, p.currency);
+    } else {
+      const alert = await this.alert.create({
+        header: "¡Buzzz! Error",
+        message: `Hemos detectado una anomalía en la transacción. Escríbenos a hola@frikiradar.com si crees que ha habido un problema.`,
+        buttons: [
+          {
+            text: "¡Muchas gracias!",
+            handler: () => {
+              location.reload();
+            }
+          }
+        ]
+      });
+
+      alert.present();
     }
-
-    this.facebook.logPurchase(+p.priceMicros / 1000000, p.currency);
   }
 }
