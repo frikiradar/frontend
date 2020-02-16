@@ -20,11 +20,7 @@ export class RequestGeolocationModal {
 
   async getCoordinates() {
     try {
-      const coordinates = await this.geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 10000
-      });
+      const coordinates = await this.geolocation.getCurrentPosition();
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
 

@@ -55,15 +55,11 @@ export class GeolocationService {
     try {
       const loading = await this.loading.create({
         translucent: true,
-        message: "Cargando"
+        message: "Obteniendo tu ubicación"
       });
       await loading.present();
 
-      const coordinates = await this.geolocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 10000
-      });
+      const coordinates = await this.geolocation.getCurrentPosition();
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
       this.config.set("geolocation", true);
