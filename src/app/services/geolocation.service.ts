@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { LoadingController, ModalController } from "@ionic/angular";
+import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
+import { LoadingController, ModalController, Platform } from "@ionic/angular";
 
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ConfigService } from "./config.service";
@@ -15,7 +16,9 @@ export class GeolocationService {
     private modal: ModalController,
     private geolocation: Geolocation,
     private config: ConfigService,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private locationAccuracy: LocationAccuracy,
+    private platform: Platform
   ) {}
 
   async requestPermission() {
@@ -24,22 +27,17 @@ export class GeolocationService {
       backdropDismiss: false
     });
     await modal.present();
-    const data = await modal.onDidDismiss();
-
-    this.config.set("geolocation", true);
-    return data.data;
+    return await modal.onDidDismiss();
   }
 
   async forcePermission() {
-    this.config.set("geolocation", false);
     const modal = await this.modal.create({
       component: RequestGeolocationModal,
       componentProps: { view: "force" },
       backdropDismiss: false
     });
     await modal.present();
-    const data = await modal.onDidDismiss();
-    return data.data;
+    return await modal.onDidDismiss();
   }
 
   async getGeolocation(): Promise<{ longitude: number; latitude: number }> {
@@ -47,7 +45,8 @@ export class GeolocationService {
     if (geoconfig === true) {
       return await this.getCoordinates();
     } else {
-      return await this.requestPermission();
+      await this.requestPermission();
+      return await this.getCoordinates();
     }
   }
 
@@ -59,16 +58,27 @@ export class GeolocationService {
       });
       await loading.present();
 
-      const coordinates = await this.geolocation.getCurrentPosition();
+      if (this.platform.is("cordova")) {
+        await this.locationAccuracy.request(
+          this.locationAccuracy.REQUEST_PRIORITY_BALANCED_POWER_ACCURACY
+        );
+      }
+
+      const coordinates = await this.geolocation.getCurrentPosition({
+        timeout: 10000,
+        maximumAge: 5000
+      });
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
+
       this.config.set("geolocation", true);
       this.loading.dismiss();
-
       return { longitude, latitude };
     } catch (e) {
+      this.config.set("geolocation", false);
       this.loading.dismiss();
-      return await this.requestPermission();
+      await this.forcePermission();
+      return await this.getCoordinates();
     }
   }
 }

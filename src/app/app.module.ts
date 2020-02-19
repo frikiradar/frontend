@@ -28,6 +28,7 @@ import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
+import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -91,7 +92,8 @@ registerLocaleData(localeEs, "es");
     AdmobService,
     WebView,
     InAppPurchase2,
-    Diagnostic
+    Diagnostic,
+    LocationAccuracy
     // AnalyticsFirebase
   ],
   bootstrap: [AppComponent]
