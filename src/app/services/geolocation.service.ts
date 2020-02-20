@@ -60,7 +60,7 @@ export class GeolocationService {
 
       if (this.platform.is("cordova")) {
         await this.locationAccuracy.request(
-          this.locationAccuracy.REQUEST_PRIORITY_BALANCED_POWER_ACCURACY
+          this.locationAccuracy.REQUEST_PRIORITY_LOW_POWER
         );
       }
 

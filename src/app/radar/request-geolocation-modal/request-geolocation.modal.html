@@ -20,8 +20,8 @@
     </p>
     <div *ngIf="platform?.is('cordova'); else noCordova">
       <p>Verifica los permisos de ubicación en los ajustes de la aplicación.</p>
-      <ion-button shape="round" fill="outline" (click)="openSettings()"
-        >ABRIR AJUSTES</ion-button
+      <ion-button shape="round" fill="outline" (click)="changeSettings()"
+        >CAMBIAR AJUSTES</ion-button
       >
     </div>
     <ng-template #noCordova>
