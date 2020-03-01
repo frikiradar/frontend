@@ -44,9 +44,12 @@ ion-chip {
   text-align: left;
 }
 
-form ion-icon {
-  color: white;
-  margin-right: 10px;
+form {
+  width: 100%;
+  ion-icon {
+    color: white;
+    margin-right: 10px;
+  }
 }
 
 #file-input {
