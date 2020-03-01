@@ -1,15 +1,12 @@
-ion-header {
+ion-toolbar {
   position: absolute;
+  --background: transparent;
 
-  ion-toolbar {
-    --background: transparent;
-
-    ion-back-button {
-      background: #2f2f2f87;
-      height: 50px;
-      width: 50px;
-      border-radius: 50px;
-    }
+  ion-back-button {
+    background: #2f2f2f87;
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
   }
 }
 
@@ -113,8 +110,4 @@ ion-chip {
 
 ion-item {
   --border-color: #e91e63;
-}
-
-.swiper-slide img {
-  width: 100%;
 }

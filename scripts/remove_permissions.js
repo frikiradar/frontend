@@ -21,10 +21,10 @@ fs.readFile(manifestFile, "utf8", function(err, data) {
     );
   }
 
-  result = result.replace(
+  /*result = result.replace(
     '<uses-feature android:name="android.hardware.location.gps" />',
     ""
-  );
+  );*/
 
   fs.writeFile(manifestFile, result, "utf8", function(err) {
     if (err) return console.log(err);

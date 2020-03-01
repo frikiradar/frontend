@@ -40,12 +40,11 @@
     </ion-list>
     <ng-template #profile>
       <ion-slides [pager]="user?.images?.length">
-        <ion-slide style="width: 100%">
+        <ion-slide>
           <img
             [src]="user?.avatar"
             [alt]="user?.username"
             default="/assets/img/users/default.jpg"
-            style="min-width: 100%"
           />
         </ion-slide>
         <ion-slide *ngFor="let image of user?.images">
