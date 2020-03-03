@@ -47,7 +47,6 @@ export interface User {
   images: SafeResourceUrl[];
   roles: string[];
   active: boolean;
-  credits?: number;
   is_premium: boolean;
   premium_expiration?: Date;
   verified: boolean;

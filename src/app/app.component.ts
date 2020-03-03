@@ -28,6 +28,7 @@ export class AppComponent {
   currentUser: User;
   backButtonCount = 0;
   alertNetwork: HTMLIonAlertElement;
+  public internet = true;
 
   constructor(
     private auth: AuthService,
@@ -83,14 +84,17 @@ export class AppComponent {
 
   async networkStatus() {
     this.network.onConnect().subscribe(async () => {
-      (
-        await this.toastController.create({
-          message: "¡Conexión a internet restablecida!",
-          duration: 2000,
-          position: "bottom",
-          color: "success"
-        })
-      ).present();
+      if (!this.internet) {
+        (
+          await this.toastController.create({
+            message: "¡Conexión a internet restablecida!",
+            duration: 2000,
+            position: "bottom",
+            color: "success"
+          })
+        ).present();
+        this.internet = true;
+      }
     });
 
     this.network.onDisconnect().subscribe(async () => {
@@ -102,6 +106,7 @@ export class AppComponent {
           color: "danger"
         })
       ).present();
+      this.internet = false;
     });
   }
 
@@ -147,7 +152,7 @@ export class AppComponent {
       const alert = await this.alert.create({
         header: "¡Conviértete en embajador 🐲!",
         message:
-          "Únete al programa de embajadores de FrikiRadar reclutando a tus amigos y conseguirás créditos y meses de FrikiRadar ILIMITADO. ¡Infórmate!",
+          "Únete al programa de embajadores de FrikiRadar reclutando a tus amigos y conseguirás meses de FrikiRadar ILIMITADO. ¡Infórmate!",
         buttons: [
           {
             text: "¡Quiero informarme!",

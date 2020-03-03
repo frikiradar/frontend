@@ -132,35 +132,11 @@ export class StoreService {
     if (p.transaction.developerPayload === undefined) {
       const product = this.productsValue.find(pr => pr.id === p.id);
       switch (product.type) {
-        case "consumable":
-          try {
-            const user = await this.userSvc.addCredits(product.value);
-            this.auth.setAuthUser(user);
-            // Añadimos créditos!!
-            console.log("Comprado, añadimos créditos", product);
-
-            this.payment.setPayment(
-              p.id,
-              `Has añadido ${p.description} a tu cuenta.`,
-              p.transaction.id,
-              p.transaction.purchaseToken || p.transaction.id,
-              p.transaction.signature || "",
-              p.transaction.type,
-              +p.priceMicros / 1000000,
-              p.currency,
-              JSON.stringify(p)
-            );
-
-            p.finish();
-          } catch (e) {
-            console.error("Error al añadir los créditos", product);
-          }
-          break;
         case "subscription":
           try {
             const user = await this.userSvc.subscribePremim(product.value);
             this.auth.setAuthUser(user);
-            // Añadimos créditos!!
+            // Añadimos días de suscripción!!
             console.log("Comprado, añadimos días de suscripción", product);
             this.payment.setPayment(
               p.id,

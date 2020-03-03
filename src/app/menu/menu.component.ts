@@ -6,7 +6,6 @@ import { MenuController, ModalController, Platform } from "@ionic/angular";
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { AuthService } from "../services/auth.service";
 import { UtilsService } from "../services/utils.service";
-import { CreditsModal } from "./../insert-coin/credits/credits.modal";
 import { PremiumModal } from "./../insert-coin/premium/premium.modal";
 
 @Component({
@@ -39,13 +38,6 @@ export class MenuComponent {
   admin() {
     this.router.navigate(["/admin"]);
     this.menu.close();
-  }
-
-  async showCredits() {
-    const modal = await this.modal.create({
-      component: CreditsModal
-    });
-    return await modal.present();
   }
 
   async showPremium() {

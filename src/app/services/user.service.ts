@@ -153,16 +153,6 @@ export class UserService {
     return this.rest.put("hide", { user: id }).toPromise();
   }
 
-  addCredits(credits: number) {
-    return this.rest.post("credits", { credits }).toPromise() as Promise<User>;
-  }
-
-  insertCoin(credits: number) {
-    return this.rest.put("insertcoin", { credits }).toPromise() as Promise<
-      User
-    >;
-  }
-
   subscribePremim(days: number) {
     return this.rest.post("premium", { days }).toPromise() as Promise<User>;
   }

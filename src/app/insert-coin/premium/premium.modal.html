@@ -10,7 +10,8 @@
 </ion-header>
 <ion-content class="ion-padding">
   <p class="ion-text-center" *ngIf="!user?.is_premium">
-    Únete a FrikiRadar ILIMITADO y disfruta de todas las ventajas que te ofrece.
+    ¿No quieres publicidad? Únete a FrikiRadar ILIMITADO y disfruta de todas las
+    ventajas que te ofrece.
   </p>
   <div *ngIf="user?.is_premium">
     <p class="ion-text-center">
@@ -21,37 +22,39 @@
       tu periodo de validez por el tiempo que desees.
     </p>
   </div>
-  <ion-button
-    color="primary"
-    expand="block"
-    fill="outline"
-    shape="round"
-    [disabled]="!products[0]?.data?.canPurchase"
-    (click)="subscribePremium(products[0])"
-    *ngIf="products[0]?.data?.valid"
-    >{{ products[0]?.name }} por {{ products[0]?.data?.price }}</ion-button
-  >
-  <ion-button
-    color="primary"
-    expand="block"
-    size="large"
-    fill="outline"
-    shape="round"
-    [disabled]="!products[1]?.data?.canPurchase"
-    (click)="subscribePremium(products[1])"
-    *ngIf="products[1]?.data?.valid"
-    >{{ products[1]?.name }} por {{ products[1]?.data?.price }}</ion-button
-  >
-  <ion-button
-    color="primary"
-    expand="block"
-    fill="outline"
-    shape="round"
-    [disabled]="!products[2]?.data?.canPurchase"
-    (click)="subscribePremium(products[2])"
-    *ngIf="products[2]?.data?.valid"
-    >{{ products[2]?.name }} por {{ products[2]?.data?.price }}</ion-button
-  >
+  <div *ngIf="platform.is('cordova')">
+    <ion-button
+      color="primary"
+      expand="block"
+      fill="outline"
+      shape="round"
+      [disabled]="!products[0]?.data?.canPurchase"
+      (click)="subscribePremium(products[0])"
+      *ngIf="products[0]?.data?.valid"
+      >{{ products[0]?.name }} por {{ products[0]?.data?.price }}</ion-button
+    >
+    <ion-button
+      color="primary"
+      expand="block"
+      size="large"
+      fill="outline"
+      shape="round"
+      [disabled]="!products[1]?.data?.canPurchase"
+      (click)="subscribePremium(products[1])"
+      *ngIf="products[1]?.data?.valid"
+      >{{ products[1]?.name }} por {{ products[1]?.data?.price }}</ion-button
+    >
+    <ion-button
+      color="primary"
+      expand="block"
+      fill="outline"
+      shape="round"
+      [disabled]="!products[2]?.data?.canPurchase"
+      (click)="subscribePremium(products[2])"
+      *ngIf="products[2]?.data?.valid"
+      >{{ products[2]?.name }} por {{ products[2]?.data?.price }}</ion-button
+    >
+  </div>
   <ion-list>
     <ion-item>
       <ion-icon name="hand-left-outline" slot="start"></ion-icon>
@@ -68,7 +71,7 @@
         ><p>
           <strong>PODER ILIMITADO.</strong> Disfruta sin límites de todas las
           opciones de FrikiRadar como chatear libremente y entregar kokoros sin
-          límite, sin gastar un solo crédito ni ver un comercial.
+          límite ni ver un solo comercial.
         </p></ion-label
       >
     </ion-item>

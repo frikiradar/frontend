@@ -17,7 +17,7 @@ import { User } from "../models/user";
 import { AdmobService } from "../services/admob.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
-import { InsertCoinModal } from "./../insert-coin/insert-coin.modal";
+import { PremiumModal } from "./../insert-coin/premium/premium.modal";
 import { AuthService } from "./../services/auth.service";
 
 @Component({
@@ -135,24 +135,20 @@ export class ProfilePage implements OnInit {
 
   async doAction() {
     if (!this.auth.isPremium()) {
-      if (this.auth.currentUserValue.credits) {
-        return await this.insertCoinModal();
-      } else {
-        const showPromo = await this.showPromo();
-        if (!showPromo) {
-          return await this.insertCoinModal();
-        }
+      const showPromo = await this.showPromo();
+      if (!showPromo) {
+        // Modal hazte premium
+        return await this.showPremium();
       }
     }
 
     return true;
   }
 
-  async insertCoinModal() {
+  async showPremium() {
     if (!this.auth.isPremium() && this.platform.is("cordova")) {
       const modal = await this.modal.create({
-        component: InsertCoinModal,
-        cssClass: "insert-coin-modal"
+        component: PremiumModal
       });
       await modal.present();
       const res = await modal.onDidDismiss();
