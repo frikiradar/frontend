@@ -28,7 +28,6 @@ export class AppComponent {
   currentUser: User;
   backButtonCount = 0;
   alertNetwork: HTMLIonAlertElement;
-  public internet = true;
 
   constructor(
     private auth: AuthService,
@@ -83,12 +82,26 @@ export class AppComponent {
   }
 
   async networkStatus() {
-    this.network.onConnect().subscribe(() => {
-      this.internet = true;
+    this.network.onConnect().subscribe(async () => {
+      (
+        await this.toastController.create({
+          message: "¡Conexión a internet restablecida!",
+          duration: 2000,
+          position: "bottom",
+          color: "success"
+        })
+      ).present();
     });
 
-    this.network.onDisconnect().subscribe(() => {
-      this.internet = false;
+    this.network.onDisconnect().subscribe(async () => {
+      (
+        await this.toastController.create({
+          message: "¡Te has quedado sin internet!",
+          duration: 5000,
+          position: "bottom",
+          color: "danger"
+        })
+      ).present();
     });
   }
 
