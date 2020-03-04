@@ -177,14 +177,14 @@ export class AuthService {
     if (!user) {
       user = this.currentUserValue;
     }
-    return user.roles.includes("ROLE_ADMIN");
+    return user?.roles?.includes("ROLE_ADMIN");
   }
 
   isDemo(user?: User) {
     if (!user) {
       user = this.currentUserValue;
     }
-    return user.roles.includes("ROLE_DEMO");
+    return user?.roles?.includes("ROLE_DEMO");
   }
 
   isPremium(user?: User) {

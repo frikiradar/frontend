@@ -1,31 +1,34 @@
 <ion-split-pane contentId="content">
   <ion-menu
+    [disabled]="!auth.currentUserValue?.id"
     side="start"
     swipeGesture="false"
     id="menu"
     contentId="content"
-    *ngIf="auth.currentUserValue && auth.currentUserValue.id"
   >
     <ion-header
       class="ion-no-border"
+      *ngIf="auth.currentUserValue?.id"
       [ngStyle]="{
-        'background-image': 'url(' + auth.currentUserValue.avatar + ')'
+        'background-image': 'url(' + auth.currentUserValue?.avatar + ')'
       }"
     >
       <div id="banner"></div>
       <ion-avatar>
         <img
-          [src]="auth.currentUserValue.avatar"
-          [alt]="auth.currentUserValue.username"
+          [src]="auth.currentUserValue?.avatar"
+          [alt]="auth.currentUserValue?.username"
           default="/assets/img/users/default.jpg"
         />
       </ion-avatar>
       <div id="info">
-        <span>{{ auth.currentUserValue.name }}</span>
+        <span>{{ auth.currentUserValue?.name }}</span>
         <span
-          *ngIf="auth.currentUserValue.username !== auth.currentUserValue.name"
+          *ngIf="
+            auth.currentUserValue?.username !== auth.currentUserValue?.name
+          "
         >
-          ({{ auth.currentUserValue.username }})</span
+          ({{ auth.currentUserValue?.username }})</span
         >
       </div>
     </ion-header>
@@ -47,7 +50,7 @@
           button
           lines="full"
           (click)="showPremium()"
-          *ngIf="!auth.currentUserValue.is_premium"
+          *ngIf="!auth.currentUserValue?.is_premium"
         >
           <ion-icon name="infinite" slot="start"></ion-icon>
           <ion-label>FrikiRadar ILIMITADO</ion-label>

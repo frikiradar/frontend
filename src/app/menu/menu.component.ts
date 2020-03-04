@@ -7,6 +7,7 @@ import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { AuthService } from "../services/auth.service";
 import { UtilsService } from "../services/utils.service";
 import { PremiumModal } from "./../insert-coin/premium/premium.modal";
+import { User } from "./../models/user";
 
 @Component({
   selector: "app-menu",
@@ -15,6 +16,7 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
 })
 export class MenuComponent {
   avatar: SafeResourceUrl;
+  public user: User;
 
   constructor(
     public menu: MenuController,
