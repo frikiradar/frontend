@@ -51,19 +51,6 @@
       </ion-card>
     </ion-slide>
     <ng-template #radarItems>
-      <ion-slide *ngIf="!users.length">
-        <div class="full-center ion-padding">
-          <ion-icon name="location"></ion-icon>
-          <h2>Sin resultados</h2>
-          <p>
-            Modifica tus ajustes de "Estoy buscando..." en tu configuración de
-            perfil y añade tus "Gustos frikis" para mejorar los resultados.
-          </p>
-          <ion-button (click)="router.navigate(['/edit-profile'])"
-            >Editar perfil</ion-button
-          >
-        </div>
-      </ion-slide>
       <ion-slide *ngFor="let user of users;">
         <ion-card (click)="showProfile(user.id)">
           <img
@@ -102,6 +89,19 @@
             </div></ion-card-content
           >
         </ion-card>
+      </ion-slide>
+      <ion-slide>
+        <div class="full-center ion-padding">
+          <ion-icon name="location"></ion-icon>
+          <h2>Sin resultados</h2>
+          <p>
+            Modifica tus ajustes de "Estoy buscando..." en tu configuración de
+            perfil y añade tus "Gustos frikis" para mejorar los resultados.
+          </p>
+          <ion-button (click)="router.navigate(['/edit-profile'])"
+            >Editar perfil</ion-button
+          >
+        </div>
       </ion-slide>
     </ng-template>
   </ion-slides>

@@ -75,6 +75,9 @@ export class RadarPage implements OnInit {
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
       if (this.page === 1) {
         this.user = this.users[0];
+        if (this.users.length === 1) {
+          this.getRadarUsers();
+        }
       }
     } catch (e) {
       console.error(e);
