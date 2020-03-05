@@ -62,10 +62,14 @@ export class RadarPage implements OnInit {
     try {
       this.page++;
       let users = await this.userSvc.getRadarUsers(this.page);
-      users =
-        this.auth.currentUserValue.tags.length > 0
-          ? users.filter(u => !u.hide && u.match && u.match > 0)
-          : users.filter(u => !u.hide);
+      if (
+        this.auth.currentUserValue.tags.length > 0 &&
+        users.some(u => u.match > 0)
+      ) {
+        users = users.filter(u => !u.hide && u.match && u.match > 0);
+      } else {
+        users.filter(u => !u.hide);
+      }
       this.showSkeleton = false;
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
