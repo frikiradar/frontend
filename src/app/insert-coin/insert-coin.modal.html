@@ -1,0 +1,26 @@
+<link
+  href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap"
+  rel="stylesheet"
+/>
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>¿CONTINUAR?</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <h3>Elige tu opción:</h3>
+
+  <div class="options">
+    <ion-item button lines="none" (click)="showPromo()">
+      <p>
+        > Insert Coin (Ver vídeo)
+      </p>
+      <img slot="end" src="./assets/img/layout/insert-coin.png" />
+    </ion-item>
+
+    <ion-item button lines="none" (click)="showPremium()">
+      <p>> FrikiRadar ILIMITADO</p>
+      <img slot="end" src="./assets/img/layout/icon_unlimited.png" />
+    </ion-item>
+  </div>
+</ion-content>

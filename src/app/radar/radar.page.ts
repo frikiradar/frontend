@@ -61,24 +61,27 @@ export class RadarPage implements OnInit {
   async getRadarUsers() {
     try {
       this.page++;
-      let users = await this.userSvc.getRadarUsers(this.page);
+      const resUsers = await this.userSvc.getRadarUsers(this.page);
+      let users = [];
       if (
         this.auth.currentUserValue.tags.length > 0 &&
-        users.some(u => u.match > 0)
+        resUsers.some(u => u.match > 0)
       ) {
-        users = users.filter(u => !u.hide && u.match && u.match > 0);
+        users = resUsers.filter(u => !u.hide && u.match && u.match > 0);
       } else {
-        users.filter(u => !u.hide);
+        users = resUsers.filter(u => !u.hide);
       }
-      this.showSkeleton = false;
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
-      if (this.page === 1) {
+      if (
+        (resUsers.length > 0 && !this.users.length) ||
+        (!this.user?.id && users[0]?.id)
+      ) {
+        this.getRadarUsers();
         this.user = this.users[0];
-        if (this.users.length === 1) {
-          this.getRadarUsers();
-        }
       }
+
+      this.showSkeleton = false;
     } catch (e) {
       console.error(e);
     }
@@ -119,7 +122,7 @@ export class RadarPage implements OnInit {
     this.router.navigate(["/search"]);
   }
 
-  slide() {
+  async slide() {
     this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
       if (index >= this.users.length - 5) {

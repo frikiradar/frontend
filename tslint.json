@@ -78,7 +78,7 @@
     "ordered-imports": true,
     "prefer-const": true,
     "prefer-object-spread": true,
-    "prefer-conditional-expression": true,
+    "prefer-conditional-expression": false,
     "prefer-template": [true, "allow-single-concat"],
     "quotemark": [true, "double"],
     "radix": true,
