@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { IonSlides, MenuController, ToastController } from "@ionic/angular";
 
@@ -12,7 +12,7 @@ import { AuthService } from "./../services/auth.service";
   templateUrl: "./radar.page.html",
   styleUrls: ["./radar.page.scss"]
 })
-export class RadarPage implements OnInit {
+export class RadarPage {
   @ViewChild("slides", { static: true })
   slides: IonSlides;
 
@@ -31,7 +31,7 @@ export class RadarPage implements OnInit {
     private geolocationSvc: GeolocationService
   ) {}
 
-  async ngOnInit() {
+  async ionViewDidEnter() {
     this.authUser = this.auth.currentUserValue;
     if (this.authUser && this.authUser.id) {
       if (!this.authUser.roles.includes("ROLE_DEMO")) {
@@ -51,8 +51,10 @@ export class RadarPage implements OnInit {
       }
 
       this.auth.currentUser.subscribe(async authUser => {
+        this.showSkeleton = true;
         this.authUser = authUser;
         this.page = 0;
+        await this.slides.slideTo(0);
         this.getRadarUsers();
       });
     }
@@ -73,11 +75,12 @@ export class RadarPage implements OnInit {
       }
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
-      if (
-        (resUsers.length > 0 && !this.users.length) ||
-        (!this.user?.id && users[0]?.id)
-      ) {
+
+      if (resUsers.length > 0 && !this.users.length) {
         this.getRadarUsers();
+      }
+
+      if (!this.user?.id && this.users[0]?.id) {
         this.user = this.users[0];
       }
 
