@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { IonSlides, MenuController, ToastController } from "@ionic/angular";
 
@@ -12,7 +12,7 @@ import { AuthService } from "./../services/auth.service";
   templateUrl: "./radar.page.html",
   styleUrls: ["./radar.page.scss"]
 })
-export class RadarPage {
+export class RadarPage implements OnInit {
   @ViewChild("slides", { static: true })
   slides: IonSlides;
 
@@ -31,7 +31,7 @@ export class RadarPage {
     private geolocationSvc: GeolocationService
   ) {}
 
-  async ionViewDidEnter() {
+  async ngOnInit() {
     this.authUser = this.auth.currentUserValue;
     if (this.authUser && this.authUser.id) {
       if (!this.authUser.roles.includes("ROLE_DEMO")) {
