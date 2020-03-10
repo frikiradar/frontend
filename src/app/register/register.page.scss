@@ -1,20 +1,36 @@
-form {
-  ion-slide {
-    display: block;
-    text-align: inherit;
-    height: 85vh;
-  }
+ion-grid {
+  padding: 0;
+}
 
-  ion-item {
-    --border-color: white;
-  }
+.info {
+  background: #222222;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
 
-  ion-label {
-    --color: #9c2c51 !important;
-    white-space: inherit;
+.register {
+  width: 50%;
+  max-width: 500px;
 
-    p {
-      color: white !important;
+  form {
+    ion-slide {
+      display: block;
+      text-align: inherit;
+      height: 85vh;
+    }
+
+    ion-item {
+      --border-color: white;
+    }
+
+    ion-label {
+      --color: #9c2c51 !important;
+      white-space: inherit;
+
+      p {
+        color: white !important;
+      }
     }
   }
 }

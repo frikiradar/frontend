@@ -2,9 +2,9 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
-
 import { IonicModule } from "@ionic/angular";
 
+import { SharedModule } from "../shared/shared.module";
 import { RegisterPage } from "./register.page";
 
 const routes: Routes = [
@@ -20,7 +20,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule
   ],
   declarations: [RegisterPage]
 })

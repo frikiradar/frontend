@@ -77,7 +77,7 @@ export class AppComponent {
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
         this.countOpenTimes();
       } else {
-        this.betaAdvertisement();
+        // this.betaAdvertisement();
       }
     });
   }

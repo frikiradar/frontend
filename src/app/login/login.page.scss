@@ -2,6 +2,10 @@ ion-content {
   display: flex;
   flex-direction: column;
 
+  ion-grid {
+    padding: 0;
+  }
+
   ion-img {
     margin-top: 3vh;
     width: 20vh;
@@ -25,15 +29,39 @@ ion-footer {
 
 ion-button {
   --color: red;
+  text-transform: unset;
 }
 
-form {
-  ion-item {
-    --border-color: white;
+.login {
+  width: 50%;
+  max-width: 500px;
+  form {
+    ion-item {
+      --border-color: white;
+    }
+
+    ion-label {
+      --color: #9c2c51 !important;
+    }
+  }
+}
+
+.info {
+  background: #222222;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.register {
+  p {
+    font-size: 14px;
+    margin-top: 20px;
+    margin-bottom: 5px;
   }
 
-  ion-label {
-    --color: #9c2c51 !important;
+  ion-button {
+    text-transform: unset;
   }
 }
 

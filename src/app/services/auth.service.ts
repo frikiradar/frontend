@@ -203,7 +203,7 @@ export class AuthService {
 
   async logout() {
     // Desactivamos las notificaciones
-    this.rest.get(`turnoff-device/${this.device.uuid}`).toPromise();
+    await this.rest.get(`turnoff-device/${this.device.uuid}`).toPromise();
 
     // Eliminamos la sesión y configuraciones
     localStorage.removeItem("currentUser");
@@ -212,6 +212,5 @@ export class AuthService {
 
     // Regresamos a la página de login
     this.nav.navigateRoot(["/login"]);
-    location.reload();
   }
 }
