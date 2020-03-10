@@ -51,8 +51,10 @@ export class RadarPage implements OnInit {
       }
 
       this.auth.currentUser.subscribe(async authUser => {
+        this.showSkeleton = true;
         this.authUser = authUser;
         this.page = 0;
+        await this.slides.slideTo(0);
         this.getRadarUsers();
       });
     }
@@ -73,11 +75,12 @@ export class RadarPage implements OnInit {
       }
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
-      if (
-        (resUsers.length > 0 && !this.users.length) ||
-        (!this.user?.id && users[0]?.id)
-      ) {
+
+      if (resUsers.length > 0 && !this.users.length) {
         this.getRadarUsers();
+      }
+
+      if (!this.user?.id && this.users[0]?.id) {
         this.user = this.users[0];
       }
 
