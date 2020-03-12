@@ -1,11 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
 
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
-import { LoginInfoComponent } from "../login/login-info/login-info.component";
-import { RegisterComponent } from "../login/register/register.component";
 import { NiceDatePipe } from "../nice-date.pipe";
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
@@ -19,9 +16,7 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
     PremiumModal,
     InsertCoinModal,
     AmbassadorModal,
-    RequestGeolocationModal,
-    LoginInfoComponent,
-    RegisterComponent
+    RequestGeolocationModal
   ],
   entryComponents: [
     PremiumModal,
@@ -29,12 +24,7 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
     AmbassadorModal,
     RequestGeolocationModal
   ],
-  imports: [IonicModule, CommonModule, FormsModule, ReactiveFormsModule],
-  exports: [
-    ImagePreloadDirective,
-    NiceDatePipe,
-    LoginInfoComponent,
-    RegisterComponent
-  ]
+  imports: [IonicModule, CommonModule],
+  exports: [ImagePreloadDirective, NiceDatePipe]
 })
 export class SharedModule {}

@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
+import { LoginInfoComponent } from "../login/login-info/login-info.component";
+import { RegisterComponent } from "../login/register/register.component";
 import { SharedModule } from "../shared/shared.module";
 import { ActivateAccountPage } from "./activate-account/activate-account.page";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
@@ -38,8 +40,11 @@ const routes: Routes = [
     LoginPage,
     ForgotPasswordModal,
     ActivateAccountPage,
-    TwoStepPage
+    TwoStepPage,
+    RegisterComponent,
+    LoginInfoComponent
   ],
-  entryComponents: [ForgotPasswordModal]
+  entryComponents: [ForgotPasswordModal],
+  exports: [RegisterComponent, LoginInfoComponent]
 })
 export class LoginPageModule {}
