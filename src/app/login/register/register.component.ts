@@ -13,16 +13,16 @@ import {
   ToastController
 } from "@ionic/angular";
 
-import { User } from "../models/user";
-import { AuthService } from "../services/auth.service";
-import { UserService } from "../services/user.service";
+import { User } from "../../models/user";
+import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: "app-register",
-  templateUrl: "./register.page.html",
-  styleUrls: ["./register.page.scss"]
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.scss"]
 })
-export class RegisterPage {
+export class RegisterComponent {
   public registerForm: FormGroup;
   public today: number = Date.now();
   public clearPassword = false;

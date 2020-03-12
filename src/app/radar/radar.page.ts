@@ -80,7 +80,7 @@ export class RadarPage implements OnInit {
         this.getRadarUsers();
       }
 
-      if (!this.user?.id && this.users[0]?.id) {
+      if (this.user !== undefined && this.users[0]?.id) {
         this.user = this.users[0];
       }
 

@@ -1,0 +1,272 @@
+<div class="ion-padding">
+  <form (submit)="submitRegister()" [formGroup]="registerForm">
+    <h2>¿Cómo? ¿Aún no tienes una cuenta?</h2>
+    <p>
+      Pasa, ¡ya te queda muy muy poco para comenzar a conocer frikis en tu zona!
+    </p>
+
+    <ion-item>
+      <ion-label position="floating">Nombre de usuario</ion-label>
+      <ion-input
+        required
+        type="text"
+        autocapitalize="words"
+        formControlName="username"
+        debounce="500"
+        name="username"
+      >
+      </ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="usernameSuggestion">
+      <ion-icon name="information-circle-outline"></ion-icon>Ups! Nombre de
+      usuario no disponible. Sugerencia {{ usernameSuggestion }}
+    </div>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('username').invalid &&
+        registerForm.get('username').value &&
+        !usernameSuggestion
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3
+      caracteres y máximo de 15.
+    </div>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('username').invalid &&
+        registerForm.get('username').value &&
+        !usernameSuggestion
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Letras, números,
+      guiones (-_) y puntos(.).
+    </div>
+    <ion-item>
+      <ion-label position="floating">Correo electrónico</ion-label>
+      <ion-input
+        required
+        type="email"
+        autocomplete="email"
+        formControlName="email"
+        debounce="500"
+        name="email"
+      >
+      </ion-input>
+    </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('email').invalid && registerForm.get('email').value
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Introduce una
+      dirección de correo electrónico válida.
+    </div>
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input
+        required
+        [type]="clearPassword ? 'text' : 'password'"
+        formControlName="password"
+        debounce="500"
+        name="password"
+      ></ion-input>
+      <ion-buttons slot="end" *ngIf="!registerForm.get('password').pristine">
+        <ion-button (click)="clearPassword = !clearPassword">
+          <ion-icon
+            slot="icon-only"
+            [name]="clearPassword ? 'eye' : 'eye-off'"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('password').invalid &&
+        registerForm.get('password').value
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo
+      de 8 caracteres.
+    </div>
+    <ion-item>
+      <ion-label>Fecha de nacimiento</ion-label>
+      <ion-datetime
+        min="1900-01"
+        max="{{ (today | date: 'y') - 18 }}"
+        cancel-text="Cancelar"
+        done-text="Hecho"
+        displayFormat="DD MMM de YYYY"
+        monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+        formControlName="birthday"
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label
+        >Mi identidad de género
+        {{ platform.is("ios") ? "(opcional)" : "" }}</ion-label
+      >
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="gender"
+      >
+        <ion-select-option
+          *ngFor="let gender of userSvc.getGenders()"
+          [value]="gender"
+          >{{ gender }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('password').invalid &&
+        registerForm.get('password').value
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
+      una opción
+    </div>
+    <ion-item>
+      <ion-label>Estoy buscando (opcional)</ion-label>
+      <ion-select
+        cancel-text="Cancelar"
+        placeholder="Selecciona"
+        formControlName="lovegender"
+        multiple
+      >
+        <ion-select-option
+          *ngFor="let likegender of userSvc.getGenders()"
+          [value]="likegender"
+          >{{ likegender }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>¿Cómo nos has conocido?</ion-label>
+      <ion-select
+        interface="action-sheet"
+        cancel-text="Cancelar"
+        placeholder="Selecciona uno"
+        formControlName="meet"
+      >
+        <ion-select-option value="friend"
+          >A través de un amigo</ion-select-option
+        >
+        <ion-select-option value="youtube">Por un youtuber</ion-select-option>
+        <ion-select-option value="blog"
+          >En un blog o web de noticias</ion-select-option
+        >
+        <ion-select-option value="social">En una red social</ion-select-option>
+        <ion-select-option value="store"
+          >En la tienda de aplicaciones</ion-select-option
+        >
+        <ion-select-option value="event"
+          >En un evento/convención</ion-select-option
+        >
+        <ion-select-option value="contest"
+          >Participando en un sorteo o concurso</ion-select-option
+        >
+        <ion-select-option [value]="false"
+          >Otro, no se o no quiero decirlo</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item
+      *ngIf="
+        registerForm.get('meet').value &&
+        registerForm.get('meet').value !== 'store'
+      "
+    >
+      <ion-label position="floating">
+        {{
+          registerForm.get("meet").value === "friend"
+            ? "Nombre de
+              usuario tu amigo"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "youtube"
+            ? "¿Cuál es el nombre del youtuber?"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "blog"
+            ? "¿Cómo se llama el
+              blog o la web?"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "social"
+            ? "¿En cuál red social, página o perfil?"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "event"
+            ? "Nombre del evento o
+              convención"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "contest"
+            ? "Nombre del organizador"
+            : ""
+        }}
+      </ion-label>
+      <ion-input
+        type="text"
+        autocapitalize="words"
+        formControlName="referral"
+        debounce="500"
+        name="referral"
+      >
+      </ion-input>
+    </ion-item>
+    <div
+      class="error-message"
+      *ngIf="
+        registerForm.get('password').invalid &&
+        registerForm.get('password').value
+      "
+    >
+      <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
+      una opción
+    </div>
+    <ion-item lines="none">
+      <ion-label
+        ><p>
+          Acepto el
+          <a target="_blank" href="https://frikiradar.com/tos">Aviso legal</a>
+          y la
+          <a
+            target="_blank"
+            href="https://frikiradar.com/politica-de-privacidad/"
+            >Política de privacidad</a
+          >
+          de FrikiRadar.
+        </p></ion-label
+      >
+      <ion-checkbox
+        checked="false"
+        slot="start"
+        formControlName="acceptos"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label><p>Confirmo ser mayor de edad.</p></ion-label>
+      <ion-checkbox
+        checked="false"
+        slot="start"
+        formControlName="adult"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-button color="primary" type="submit" expand="block"
+      >Registrarme</ion-button
+    >
+  </form>
+</div>
