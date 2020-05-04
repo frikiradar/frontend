@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
-import { LoginInfoComponent } from "../login/login-info/login-info.component";
 import { NiceDatePipe } from "../nice-date.pipe";
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
@@ -17,8 +16,7 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
     PremiumModal,
     InsertCoinModal,
     AmbassadorModal,
-    RequestGeolocationModal,
-    LoginInfoComponent
+    RequestGeolocationModal
   ],
   entryComponents: [
     PremiumModal,
@@ -27,6 +25,6 @@ import { PremiumModal } from "./../insert-coin/premium/premium.modal";
     RequestGeolocationModal
   ],
   imports: [IonicModule, CommonModule],
-  exports: [ImagePreloadDirective, NiceDatePipe, LoginInfoComponent]
+  exports: [ImagePreloadDirective, NiceDatePipe]
 })
 export class SharedModule {}

@@ -106,7 +106,7 @@
     </ng-template>
   </ion-slides>
 </ion-content>
-<ion-footer class="ion-no-border" *ngIf="users.length && user?.id">
+<ion-footer class="ion-no-border" *ngIf="users.length && user !== undefined">
   <ion-toolbar>
     <ion-buttons>
       <ion-grid>

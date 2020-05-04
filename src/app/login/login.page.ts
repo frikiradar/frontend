@@ -33,6 +33,7 @@ export class LoginPage {
     return this.loginForm.get("password");
   }
   public clearPassword = false;
+  public activeView: "login" | "register" = "login";
 
   constructor(
     private router: Router,

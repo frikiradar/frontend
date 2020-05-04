@@ -4,71 +4,89 @@
       <ion-col *ngIf="platform.is('desktop')" class="info">
         <app-login-info></app-login-info>
       </ion-col>
-      <ion-col class="ion-padding login">
-        <ion-img
-          alt="frikiradar"
-          src="./assets/img/logo/logo_transparente.png"
-        ></ion-img>
-        <h2>Hola,</h2>
-        <h3>Te doy la bienvenida a FrikiRadar</h3>
-        <div id="login-content">
-          <form
-            (submit)="submitLogin()"
-            [formGroup]="loginForm"
-            autocomplete="off"
-          >
-            <ion-item>
-              <ion-label position="floating"
-                >Nombre de usuario o correo electrónico</ion-label
+      <ion-col class="login">
+        <div *ngIf="activeView == 'login'" class="ion-padding">
+          <ion-img
+            alt="frikiradar"
+            src="./assets/img/logo/logo_transparente.png"
+          ></ion-img>
+          <h2>Hola,</h2>
+          <h3>Te doy la bienvenida a FrikiRadar</h3>
+          <div id="login-content">
+            <form
+              (submit)="submitLogin()"
+              [formGroup]="loginForm"
+              autocomplete="off"
+            >
+              <ion-item>
+                <ion-label position="floating"
+                  >Nombre de usuario o correo electrónico</ion-label
+                >
+                <ion-input
+                  required
+                  type="text"
+                  formControlName="username"
+                  name="username"
+                  autocomplete="username"
+                  (keyup.enter)="submitLogin()"
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Contraseña</ion-label>
+                <ion-input
+                  required
+                  [type]="clearPassword ? 'text' : 'password'"
+                  formControlName="password"
+                  name="password"
+                  autocomplete="current-password"
+                  (keyup.enter)="submitLogin()"
+                >
+                </ion-input>
+                <ion-buttons slot="end" *ngIf="!password.pristine">
+                  <ion-button (click)="clearPassword = !clearPassword">
+                    <ion-icon
+                      slot="icon-only"
+                      [name]="clearPassword ? 'eye' : 'eye-off'"
+                    ></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+              <ion-button
+                color="primary"
+                type="submit"
+                shape="round"
+                expand="block"
+                >Iniciar sesión</ion-button
               >
-              <ion-input
-                required
-                type="text"
-                formControlName="username"
-                name="username"
-                autocomplete="username"
-                (keyup.enter)="submitLogin()"
-              ></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Contraseña</ion-label>
-              <ion-input
-                required
-                [type]="clearPassword ? 'text' : 'password'"
-                formControlName="password"
-                name="password"
-                autocomplete="current-password"
-                (keyup.enter)="submitLogin()"
+            </form>
+            <p class="ion-text-center" id="forgot-password">
+              <a (click)="forgotPassword()">He olvidado mi contraseña</a>
+            </p>
+            <div class="ion-text-center register">
+              <p>
+                No tengo una cuenta,
+              </p>
+              <ion-button
+                color="primary"
+                (click)="activeView = 'register'"
+                shape="round"
+                >Quiero registrarme</ion-button
               >
-              </ion-input>
-              <ion-buttons slot="end" *ngIf="!password.pristine">
-                <ion-button (click)="clearPassword = !clearPassword">
-                  <ion-icon
-                    slot="icon-only"
-                    [name]="clearPassword ? 'eye' : 'eye-off'"
-                  ></ion-icon>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeView == 'register'">
+          <ion-header class="ion-no-border">
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button (click)="activeView = 'login'">
+                  <ion-icon name="arrow-back"></ion-icon>
                 </ion-button>
               </ion-buttons>
-            </ion-item>
-            <ion-button
-              color="primary"
-              type="submit"
-              shape="round"
-              expand="block"
-              >Iniciar sesión</ion-button
-            >
-          </form>
-          <p class="ion-text-center" id="forgot-password">
-            <a (click)="forgotPassword()">He olvidado mi contraseña</a>
-          </p>
-          <div class="ion-text-center register">
-            <p>
-              No tengo una cuenta,
-            </p>
-            <ion-button color="primary" routerLink="/register" shape="round"
-              >Quiero registrarme</ion-button
-            >
-          </div>
+              <ion-title>Registro</ion-title>
+            </ion-toolbar>
+          </ion-header>
+          <app-register></app-register>
         </div>
       </ion-col>
     </ion-row>
