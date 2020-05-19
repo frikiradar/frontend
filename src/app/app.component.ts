@@ -12,6 +12,7 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
+import * as LogRocket from "logrocket";
 
 import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
@@ -59,6 +60,10 @@ export class AppComponent {
       if (this.platform.is("cordova")) {
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
+
+        LogRocket.init("rvfke5/frikiradar", {
+          release: await this.appVersion.getVersionNumber()
+        });
 
         this.router.events.subscribe(async (event: Event) => {
           switch (this.router.url) {

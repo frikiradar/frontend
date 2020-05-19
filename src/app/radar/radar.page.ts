@@ -1,11 +1,18 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { IonSlides, MenuController, ToastController } from "@ionic/angular";
+import {
+  IonSlides,
+  MenuController,
+  ToastController,
+  Platform
+} from "@ionic/angular";
+import * as LogRocket from "logrocket";
 
 import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
+import { DeviceService } from "../services/device.service";
 
 @Component({
   selector: "app-radar",
@@ -28,12 +35,23 @@ export class RadarPage implements OnInit {
     private auth: AuthService,
     public router: Router,
     private toast: ToastController,
-    private geolocationSvc: GeolocationService
+    private geolocationSvc: GeolocationService,
+    private deviceSvc: DeviceService,
+    private platform: Platform
   ) {}
 
   async ngOnInit() {
     this.authUser = this.auth.currentUserValue;
     if (this.authUser && this.authUser.id) {
+      if (this.platform.is("cordova")) {
+        LogRocket.identify("" + this.authUser.id, {
+          name: this.authUser.username,
+          email: this.authUser.email,
+          premium: this.authUser.is_premium,
+          device: (await this.deviceSvc.getCurrentDevice()).device_name
+        });
+      }
+
       if (!this.authUser.roles.includes("ROLE_DEMO")) {
         try {
           const coordinates = await this.geolocationSvc.getGeolocation();
