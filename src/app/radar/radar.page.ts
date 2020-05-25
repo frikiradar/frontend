@@ -84,7 +84,7 @@ export class RadarPage implements OnInit {
       const resUsers = await this.userSvc.getRadarUsers(this.page);
       let users = [];
       if (
-        this.auth.currentUserValue.tags.length > 0 &&
+        this.auth.currentUserValue?.tags?.length > 0 &&
         resUsers.some(u => u.match > 0)
       ) {
         users = resUsers.filter(u => !u.hide && u.match && u.match > 0);
@@ -94,7 +94,7 @@ export class RadarPage implements OnInit {
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
-      if (resUsers.length > 0 && !this.users.length) {
+      if (resUsers?.length > 0 && !this.users?.length) {
         this.getRadarUsers();
       }
 
@@ -146,7 +146,7 @@ export class RadarPage implements OnInit {
   async slide() {
     this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
-      if (index >= this.users.length - 5) {
+      if (index >= this.users?.length - 5) {
         this.getRadarUsers();
       }
     });
