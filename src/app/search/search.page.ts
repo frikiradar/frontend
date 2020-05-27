@@ -16,7 +16,7 @@ export class SearchPage implements OnInit {
 
   order: "distance" | "match" = "distance";
   query: string;
-  page = 0;
+  public page = 1;
   users: User[];
   showSkeleton = false;
 
@@ -38,9 +38,11 @@ export class SearchPage implements OnInit {
     }, 250);
   }
 
-  async search(event?: any) {
+  async search(event?: any, addpage = false) {
     if (this.query && this.query.trim()) {
-      this.page++;
+      if (addpage) {
+        this.page++;
+      }
       if (this.page === 1) {
         this.showSkeleton = true;
       }

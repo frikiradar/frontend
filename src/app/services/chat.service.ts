@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 
-import { environment } from "../../environments/environment";
 import { Chat } from "../models/chat";
 import { ConfigService } from "./config.service";
 import { RestService } from "./rest.service";
@@ -36,5 +35,13 @@ export class ChatService {
 
   async readChat(id: number) {
     return (await this.rest.get(`read-chat/${id}`).toPromise()) as Chat;
+  }
+
+  async deleteMessage(id: number) {
+    return (await this.rest.delete(`chat-message/${id}`).toPromise()) as Chat;
+  }
+
+  async deleteChat(touserid: number) {
+    return (await this.rest.delete(`chat/${touserid}`).toPromise()) as Chat;
   }
 }

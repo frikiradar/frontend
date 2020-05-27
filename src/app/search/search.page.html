@@ -9,7 +9,7 @@
     <ion-input
       type="search"
       debounce="500"
-      placeholder="Busco frikis a los que les guste..."
+      placeholder="Busca por gustos/nombre de usuario..."
       (keyup.enter)="query = $event.target.value; search();"
       spellcheck="false"
       color="light"
@@ -38,13 +38,13 @@
         </ion-avatar>
         <ion-label>
           <h2>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
           </h2>
           <h3>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%;"></ion-skeleton-text>
           </h3>
           <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
           </p>
         </ion-label>
       </ion-item>
@@ -93,7 +93,7 @@
         </ion-item-sliding>
         <ion-infinite-scroll
           threshold="50%"
-          (ionInfinite)="search($event)"
+          (ionInfinite)="search($event, true)"
           position="bottom"
         >
           <ion-infinite-scroll-content loadingSpinner="dots">

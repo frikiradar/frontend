@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Event, NavigationStart, Router } from "@angular/router";
-import { MenuController } from "@ionic/angular";
+import { MenuController, ToastController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { Chat } from "./../models/chat";
@@ -20,7 +20,8 @@ export class ChatPage implements OnInit {
     private chatSvc: ChatService,
     private router: Router,
     public auth: AuthService,
-    public menu: MenuController
+    public menu: MenuController,
+    private toast: ToastController
   ) {
     this.showSkeleton = true;
 
@@ -40,5 +41,37 @@ export class ChatPage implements OnInit {
 
   async showChat(id: User["id"]) {
     this.router.navigate(["/chat", id]);
+  }
+
+  async deleteChat(chat: Chat) {
+    const chats = this.chats;
+    this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
+    const toast = await this.toast.create({
+      message: "Has eliminado el chat con " + chat.user.name,
+      duration: 3000,
+      position: "bottom",
+      buttons: [
+        {
+          text: "Deshacer",
+          handler: () => {
+            this.chats = chats;
+          }
+        }
+      ]
+    });
+    toast.present();
+
+    const log = await toast.onDidDismiss();
+    if (log.role === "timeout") {
+      console.log("borrada");
+      await this.chatSvc.deleteChat(chat.user.id);
+    }
+  }
+
+  async dragItem(event: any, id: number) {
+    if (event.detail.ratio < -1.8) {
+      await event.target.close();
+      this.showChat(id);
+    }
   }
 }

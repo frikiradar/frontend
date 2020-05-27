@@ -34,9 +34,12 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="showOptions">
-      <!--<ion-button (click)="delete()">
+      <ion-button
+        (click)="deleteMessage()"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+      >
         <ion-icon name="trash"></ion-icon>
-      </ion-button>-->
+      </ion-button>
       <ion-button (click)="copy()">
         <ion-icon name="clipboard"></ion-icon>
       </ion-button>
@@ -67,7 +70,7 @@
     </ion-chip>
     <ion-card button (press)="selectMessage(message)">
       <ion-card-content>
-        <span class="text">{{message.text}}</span>
+        <span class="text" [innerHTML]="message.text | linkify"></span>
         <ion-note>
           {{ message.time_creation | date: "shortTime" }}
           <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
@@ -94,7 +97,7 @@
       <ion-item lines="none">
         <ion-textarea
           [placeholder]="
-            user ? 'Escribe tu mensaje aquí' : 'No puedes responder'
+            !chatForm.get('message').disabled ? 'Escribe tu mensaje aquí' : 'No puedes responder'
           "
           autocapitalize="on"
           (keydown.enter)="sendMessage($event)"
@@ -108,7 +111,11 @@
       </ion-item>
     </form>
     <ion-buttons ion-activatable slot="end">
-      <ion-button color="primary" (click)="sendMessage()">
+      <ion-button
+        color="primary"
+        [disabled]="chatForm.get('message').disabled"
+        (click)="sendMessage()"
+      >
         <ion-icon slot="icon-only" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>

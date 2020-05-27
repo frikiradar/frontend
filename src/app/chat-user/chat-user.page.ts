@@ -108,6 +108,10 @@ export class ChatUserPage implements OnInit {
     try {
       this.user = await this.userSvc.getUser(this.userId);
       this.loading = false;
+
+      if (this.user.username === "frikiradar") {
+        this.chatForm.get("message").disable();
+      }
     } catch (e) {
       this.chatForm.get("message").disable();
     }
@@ -220,7 +224,8 @@ export class ChatUserPage implements OnInit {
       try {
         await this.chatSvc.sendMessage(this.user.id, text).then();
       } catch (e) {
-        // this.alertError.present();
+        this.messages = this.messages.filter(m => m.sending !== true);
+        console.error(e);
       }
     }
   }
@@ -258,6 +263,7 @@ export class ChatUserPage implements OnInit {
 
   selectMessage(message: Chat) {
     this.selectedMessage = message;
+    console.log(this.selectedMessage);
     this.showOptions = true;
   }
 
@@ -271,6 +277,27 @@ export class ChatUserPage implements OnInit {
         position: "middle"
       })
     ).present();
+    this.showOptions = false;
+  }
+
+  async deleteMessage() {
+    try {
+      await this.chatSvc.deleteMessage(this.selectedMessage.id);
+      this.messages = this.messages.filter(
+        m => m.id !== this.selectedMessage.id
+      );
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: "Error al eliminar el mensaje",
+          duration: 2000,
+          position: "middle"
+        })
+      ).present();
+
+      console.error(e);
+    }
+
     this.showOptions = false;
   }
 
