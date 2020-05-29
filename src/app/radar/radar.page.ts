@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   IonSlides,
@@ -19,7 +19,7 @@ import { DeviceService } from "../services/device.service";
   templateUrl: "./radar.page.html",
   styleUrls: ["./radar.page.scss"]
 })
-export class RadarPage implements OnInit {
+export class RadarPage {
   @ViewChild("slides", { static: true })
   slides: IonSlides;
 
@@ -40,41 +40,43 @@ export class RadarPage implements OnInit {
     private platform: Platform
   ) {}
 
-  async ngOnInit() {
-    this.authUser = this.auth.currentUserValue;
-    if (this.authUser && this.authUser.id) {
-      if (this.platform.is("cordova")) {
-        LogRocket.identify("" + this.authUser.id, {
-          name: this.authUser.username,
-          email: this.authUser.email,
-          premium: this.authUser.is_premium,
-          device: (await this.deviceSvc.getCurrentDevice()).device_name
-        });
-      }
-
-      if (!this.authUser.roles.includes("ROLE_DEMO")) {
-        try {
-          const coordinates = await this.geolocationSvc.getGeolocation();
-          const authUser = await this.userSvc.setCoordinates(
-            coordinates.longitude,
-            coordinates.latitude
-          );
-          this.auth.setAuthUser(authUser);
-        } catch (e) {
-          console.error(e);
-          // tienes que aprobar permisos
+  async ionViewWillEnter() {
+    if (!this.users?.length) {
+      this.authUser = this.auth.currentUserValue;
+      if (this.authUser && this.authUser.id) {
+        if (this.platform.is("cordova")) {
+          LogRocket.identify("" + this.authUser.id, {
+            name: this.authUser.username,
+            email: this.authUser.email,
+            premium: this.authUser.is_premium,
+            device: (await this.deviceSvc.getCurrentDevice()).device_name
+          });
         }
 
-        this.authUser = this.auth.currentUserValue;
-      }
+        if (!this.authUser.roles.includes("ROLE_DEMO")) {
+          try {
+            const coordinates = await this.geolocationSvc.getGeolocation();
+            const authUser = await this.userSvc.setCoordinates(
+              coordinates.longitude,
+              coordinates.latitude
+            );
+            this.auth.setAuthUser(authUser);
+          } catch (e) {
+            console.error(e);
+            // tienes que aprobar permisos
+          }
 
-      this.auth.currentUser.subscribe(async authUser => {
-        this.showSkeleton = true;
-        this.authUser = authUser;
-        this.page = 0;
-        await this.slides.slideTo(0);
-        this.getRadarUsers();
-      });
+          this.authUser = this.auth.currentUserValue;
+        }
+
+        this.auth.currentUser.subscribe(async authUser => {
+          this.showSkeleton = true;
+          this.authUser = authUser;
+          this.page = 0;
+          await this.slides.slideTo(0);
+          this.getRadarUsers();
+        });
+      }
     }
   }
 
