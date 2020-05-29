@@ -118,11 +118,36 @@ export class ChatUserPage implements OnInit {
 
     this.page = 1;
 
-    this.messages = (
-      await this.chatSvc.getMessages(this.userId, true, this.page)
+    const storagedMessages: Chat[] = JSON.parse(localStorage.getItem("chats"));
+    console.log(storagedMessages);
+    if (storagedMessages) {
+      this.messages = storagedMessages?.filter(
+        (c: Chat) =>
+          c?.fromuser?.id == this.userId || c?.touser?.id == this.userId
+      );
+      console.log(this.messages);
+    }
+
+    // Solamente los sin leer de este usuario
+    const lastId = this.messages?.reduce(
+      (max, message) => (message.id > max ? message.id : max),
+      this.messages[0]?.id
+    );
+    const messages = (
+      await this.chatSvc.getMessages(this.userId, true, this.page, lastId)
     )
       .filter(m => m.text)
       .reverse();
+
+    this.messages = [...messages, ...this.messages];
+
+    localStorage.setItem(
+      "chats",
+      JSON.stringify([
+        ...messages,
+        ...(storagedMessages ? storagedMessages : [])
+      ])
+    );
 
     if (this.messages.length < 50) {
       this.infiniteScroll.disabled = true;

@@ -21,9 +21,9 @@ export class ChatService {
     return chats;
   }
 
-  async getMessages(id: number, read?: boolean, page = 1) {
+  async getMessages(id: number, read?: boolean, page = 1, lastId = 0) {
     return (await this.rest
-      .get(`chat/${id}?read=${read}&page=${page}`)
+      .get(`chat/${id}?read=${read}&page=${page}&lastid=${lastId}`)
       .toPromise()) as Chat[];
   }
 
