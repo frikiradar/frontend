@@ -120,7 +120,6 @@ export class ChatUserPage implements OnInit {
 
     const storagedMessages: Chat[] = this.chatSvc.getStoragedMessages();
     if (storagedMessages) {
-      console.log(this.userId, this.auth.currentUserValue.id);
       this.messages = storagedMessages?.filter(
         (c: Chat) =>
           (c?.fromuser?.id == this.userId &&
@@ -130,7 +129,6 @@ export class ChatUserPage implements OnInit {
           (c?.fromuser?.id == this.userId && c?.touser?.id == null)
       );
     }
-    console.log(this.messages);
 
     // Solamente los mensajes a partir del ultimo guardado
     const lastId = this.messages?.reduce(
@@ -286,7 +284,6 @@ export class ChatUserPage implements OnInit {
 
   selectMessage(message: Chat) {
     this.selectedMessage = message;
-    console.log(this.selectedMessage);
     this.showOptions = true;
   }
 

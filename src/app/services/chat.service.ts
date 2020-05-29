@@ -38,11 +38,21 @@ export class ChatService {
   }
 
   async deleteMessage(id: number) {
-    return (await this.rest.delete(`chat-message/${id}`).toPromise()) as Chat;
+    await this.rest.delete(`chat-message/${id}`).toPromise();
+    let storagedMessages = this.getStoragedMessages();
+    storagedMessages = storagedMessages.filter(m => m.id !== id);
+
+    localStorage.setItem("chats", JSON.stringify(storagedMessages));
   }
 
   async deleteChat(touserid: number) {
-    return (await this.rest.delete(`chat/${touserid}`).toPromise()) as Chat;
+    await this.rest.delete(`chat/${touserid}`).toPromise();
+    let storagedMessages = this.getStoragedMessages();
+    storagedMessages = storagedMessages.filter(
+      m => m.touser.id !== touserid && m.fromuser.id !== touserid
+    );
+
+    localStorage.setItem("chats", JSON.stringify(storagedMessages));
   }
 
   getStoragedMessages(): Chat[] {
