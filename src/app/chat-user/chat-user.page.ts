@@ -118,17 +118,21 @@ export class ChatUserPage implements OnInit {
 
     this.page = 1;
 
-    const storagedMessages: Chat[] = JSON.parse(localStorage.getItem("chats"));
-    console.log(storagedMessages);
+    const storagedMessages: Chat[] = this.chatSvc.getStoragedMessages();
     if (storagedMessages) {
+      console.log(this.userId, this.auth.currentUserValue.id);
       this.messages = storagedMessages?.filter(
         (c: Chat) =>
-          c?.fromuser?.id == this.userId || c?.touser?.id == this.userId
+          (c?.fromuser?.id == this.userId &&
+            c?.touser?.id == this.auth.currentUserValue.id) ||
+          (c?.touser?.id == this.userId &&
+            c?.fromuser?.id == this.auth.currentUserValue.id) ||
+          (c?.fromuser?.id == this.userId && c?.touser?.id == null)
       );
-      console.log(this.messages);
     }
+    console.log(this.messages);
 
-    // Solamente los sin leer de este usuario
+    // Solamente los mensajes a partir del ultimo guardado
     const lastId = this.messages?.reduce(
       (max, message) => (message.id > max ? message.id : max),
       this.messages[0]?.id
@@ -139,15 +143,8 @@ export class ChatUserPage implements OnInit {
       .filter(m => m.text)
       .reverse();
 
-    this.messages = [...messages, ...this.messages];
-
-    localStorage.setItem(
-      "chats",
-      JSON.stringify([
-        ...messages,
-        ...(storagedMessages ? storagedMessages : [])
-      ])
-    );
+    this.messages = [...this.messages, ...messages];
+    this.chatSvc.setStoragedMessages(messages);
 
     if (this.messages.length < 50) {
       this.infiniteScroll.disabled = true;
@@ -247,7 +244,8 @@ export class ChatUserPage implements OnInit {
 
       this.scrollDown();
       try {
-        await this.chatSvc.sendMessage(this.user.id, text).then();
+        const chat = await this.chatSvc.sendMessage(this.user.id, text).then();
+        this.chatSvc.setStoragedMessages([chat]);
       } catch (e) {
         this.messages = this.messages.filter(m => m.sending !== true);
         console.error(e);

@@ -44,4 +44,29 @@ export class ChatService {
   async deleteChat(touserid: number) {
     return (await this.rest.delete(`chat/${touserid}`).toPromise()) as Chat;
   }
+
+  getStoragedMessages(): Chat[] {
+    const storagedMessages = JSON.parse(localStorage.getItem("chats"));
+    return storagedMessages ? storagedMessages : [];
+  }
+
+  setStoragedMessages(messages: Chat[]) {
+    let storagedMessages = this.getStoragedMessages();
+    messages.forEach(message => {
+      if (storagedMessages.some(m => m.id === message.id)) {
+        storagedMessages.map(m => {
+          if (m.id === message.id) {
+            m.time_read = message.time_read;
+            m.sending = message.sending;
+          }
+        });
+      } else {
+        storagedMessages = [...storagedMessages, message];
+      }
+    });
+
+    storagedMessages.sort((a, b) => a.id - b.id);
+
+    localStorage.setItem("chats", JSON.stringify(storagedMessages));
+  }
 }
