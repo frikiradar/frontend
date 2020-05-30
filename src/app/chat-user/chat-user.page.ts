@@ -183,15 +183,15 @@ export class ChatUserPage implements OnInit {
       this.scrollDown();
     });
 
-    /*this.source.addEventListener("error", async error => {
+    this.source.addEventListener("error", async error => {
       this.conErrors++;
-      if (error.type === "error" && this.conErrors >= 2) {
+      if (error.type === "error" && this.conErrors >= 3) {
         console.error(error);
         this.source.close();
 
-        await alert.present();
+        // await this.alertError.present();
       }
-    });*/
+    });
 
     this.source.addEventListener("open", async error => {
       this.conErrors = 0;
@@ -209,7 +209,7 @@ export class ChatUserPage implements OnInit {
       this.source.close();
     });
 
-    this.textarea.setFocus();
+    this.textarea?.setFocus();
 
     if (!this.user.chat) {
       this.message.setValue(undefined);
@@ -225,7 +225,7 @@ export class ChatUserPage implements OnInit {
     if (this.message.value && this.message.value.trim()) {
       const text = this.message.value.trim();
       this.message.setValue("");
-      this.textarea.setFocus();
+      this.textarea?.setFocus();
 
       this.messages = [
         ...this.messages,

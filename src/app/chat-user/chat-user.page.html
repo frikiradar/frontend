@@ -91,14 +91,12 @@
   </span>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="!chatForm.get('message').disabled">
   <ion-toolbar>
     <form [formGroup]="chatForm" autocomplete="off">
       <ion-item lines="none">
         <ion-textarea
-          [placeholder]="
-            !chatForm.get('message').disabled ? 'Escribe tu mensaje aquí' : 'No puedes responder'
-          "
+          placeholder="Escribe tu mensaje aquí"
           autocapitalize="on"
           (keydown.enter)="sendMessage($event)"
           formControlName="message"
