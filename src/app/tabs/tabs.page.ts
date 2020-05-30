@@ -6,7 +6,6 @@ import {
   Notification,
   NotificationService
 } from "../services/notification.service";
-import { PushService } from "../services/push.service";
 
 @Component({
   selector: "app-tabs",
@@ -20,13 +19,11 @@ export class TabsPage implements OnInit {
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
     private platform: Platform,
-    private push: PushService,
     private admob: AdmobService
   ) {}
 
   async ngOnInit() {
     if (this.platform.is("cordova")) {
-      this.push.init();
       this.admob.init();
     }
 

@@ -20,6 +20,7 @@ import { AdmobService } from "./services/admob.service";
 import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
 import { UtilsService } from "./services/utils.service";
+import { PushService } from "./services/push.service";
 
 @Component({
   selector: "app-root",
@@ -46,7 +47,8 @@ export class AppComponent {
     private admob: AdmobService,
     // private analyticsFirebase: AnalyticsFirebase,
     private toastController: ToastController,
-    private modal: ModalController
+    private modal: ModalController,
+    private push: PushService
   ) {
     this.initializeApp();
   }
@@ -59,6 +61,7 @@ export class AppComponent {
 
       if (this.platform.is("cordova")) {
         this.statusBar.backgroundColorByHexString("#1a1a1a");
+        this.push.init();
         this.splashScreen.hide();
 
         LogRocket.init("rvfke5/frikiradar", {
