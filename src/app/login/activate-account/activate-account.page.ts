@@ -52,6 +52,12 @@ export class ActivateAccountPage {
     });
   }
 
+  async ionViewWillEnter() {
+    if (this.user.num_logins > 1) {
+      await this.userSvc.resendActivationEmail().toPromise();
+    }
+  }
+
   async submitCode() {
     try {
       this.user = await this.userSvc.activateUser(

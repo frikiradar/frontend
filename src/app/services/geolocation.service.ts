@@ -65,8 +65,8 @@ export class GeolocationService {
       }
 
       const coordinates = await this.geolocation.getCurrentPosition({
-        timeout: 10000,
-        maximumAge: 5000
+        timeout: 15000,
+        maximumAge: 15000
       });
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
