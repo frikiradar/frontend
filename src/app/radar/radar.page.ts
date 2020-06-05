@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   IonSlides,
@@ -23,11 +23,38 @@ export class RadarPage {
   @ViewChild("slides", { static: true })
   slides: IonSlides;
 
+  public slideOpts = {
+    slidesPerView: 1,
+    breakpoints: {
+      1024: {
+        slidesPerView: 3,
+        centeredSlides: true
+      }
+    }
+  };
+
   public showSkeleton = true;
   page = 0;
   authUser: User;
   users: User[] = [];
   public user: User;
+
+  @HostListener("document:keydown", ["$event"])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (this.users?.length) {
+      switch (event.key) {
+        case "ArrowRight":
+          this.slides.slideNext();
+          break;
+        case "ArrowLeft":
+          this.slides.slidePrev();
+          break;
+        case "Enter":
+          this.showProfile(this.user.id);
+          break;
+      }
+    }
+  }
 
   constructor(
     public userSvc: UserService,
@@ -100,7 +127,7 @@ export class RadarPage {
         this.getRadarUsers();
       }
 
-      if (this.user !== undefined && this.users[0]?.id) {
+      if (this.users[0]?.id) {
         this.user = this.users[0];
       }
 

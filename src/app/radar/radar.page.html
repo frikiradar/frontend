@@ -20,32 +20,47 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-slides #slides (ionSlideDidChange)="slide()">
+  <ion-slides #slides (ionSlideDidChange)="slide()" [options]="slideOpts">
     <ion-slide *ngIf="showSkeleton; else radarItems">
       <ion-card>
         <ion-card-header>
           <ion-skeleton-text
             animated
-            style="height: 400px; width: 100%"
+            style="height: 400px; width: 100%;"
           ></ion-skeleton-text>
           <ion-card-title>
             <ion-skeleton-text
               animated
-              style="height: 20px; width: 50%"
+              style="height: 20px; width: 50%;"
             ></ion-skeleton-text>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content
           ><p>
-            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text
+              animated
+              style="width: 100%;"
+            ></ion-skeleton-text>
+            <ion-skeleton-text
+              animated
+              style="width: 100%;"
+            ></ion-skeleton-text>
+            <ion-skeleton-text
+              animated
+              style="width: 100%;"
+            ></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%;"></ion-skeleton-text>
+            <ion-skeleton-text
+              animated
+              style="width: 100%;"
+            ></ion-skeleton-text>
+            <ion-skeleton-text
+              animated
+              style="width: 100%;"
+            ></ion-skeleton-text>
           </p>
         </ion-card-content>
       </ion-card>

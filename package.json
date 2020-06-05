@@ -92,7 +92,7 @@
     "@ionic/angular-toolkit": "^2.2.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "^2.0.8",
-    "@types/node": "^12.12.43",
+    "@types/node": "^12.12.44",
     "codelyzer": "^5.2.2",
     "cordova": "^9.0.0",
     "cordova-plugin-device": "^2.0.3",

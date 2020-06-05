@@ -5,6 +5,11 @@ ion-slides {
 
 ion-slide {
   display: block;
+
+  &.swiper-slide-prev,
+  &.swiper-slide-next {
+    opacity: 0.4;
+  }
 }
 
 ion-card {
