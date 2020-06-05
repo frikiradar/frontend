@@ -52,6 +52,9 @@ export class RadarPage {
         case "Enter":
           this.showProfile(this.user.id);
           break;
+        case "h":
+          this.hideProfile(this.user.id);
+          break;
       }
     }
   }
