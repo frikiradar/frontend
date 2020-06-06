@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="!showOptions">
       <ion-menu-toggle>
         <ion-avatar>
           <img
@@ -11,7 +11,17 @@
         </ion-avatar>
       </ion-menu-toggle>
     </ion-buttons>
-    <ion-title>Chat</ion-title>
+    <ion-buttons slot="start" *ngIf="showOptions">
+      <ion-button (click)="showOptions = false">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title *ngIf="!showOptions">Chat</ion-title>
+    <ion-buttons slot="end" *ngIf="showOptions">
+      <ion-button (click)="deleteChat(selectedChat)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -36,6 +46,7 @@
       <ion-list *ngIf="chats?.length; else noChats">
         <ion-item-sliding
           *ngFor="let chat of chats"
+          (press)="selectChat(chat)"
           (ionDrag)="dragItem($event, chat.user.id)"
         >
           <ion-item-options side="start">

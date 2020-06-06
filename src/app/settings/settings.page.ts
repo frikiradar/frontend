@@ -13,6 +13,7 @@ import { DevicesSettingsModal } from "./devices/devices.modal";
 import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { PaymentsModal } from "./payments/payments.modal";
 import { VerificationModal } from "./verification/verification.modal";
+import { HideUsersModal } from "./hide-users/hide-users.modal";
 
 @Component({
   selector: "app-settings",
@@ -50,6 +51,13 @@ export class SettingsPage implements OnInit {
   async blockUsersModal() {
     const modal = await this.modal.create({
       component: BlockUsersModal
+    });
+    return await modal.present();
+  }
+
+  async hideUsersModal() {
+    const modal = await this.modal.create({
+      component: HideUsersModal
     });
     return await modal.present();
   }

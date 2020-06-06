@@ -149,8 +149,16 @@ export class UserService {
     return this.rest.delete(`block/${id}`).toPromise() as Promise<User[]>;
   }
 
+  getHides() {
+    return this.rest.get("hides").toPromise() as Promise<User[]>;
+  }
+
   hide(id: User["id"]) {
     return this.rest.put("hide", { user: id }).toPromise();
+  }
+
+  unhide(id: User["id"]) {
+    return this.rest.delete(`hide/${id}`).toPromise() as Promise<User[]>;
   }
 
   subscribePremim(days: number) {

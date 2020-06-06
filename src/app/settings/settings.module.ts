@@ -14,6 +14,7 @@ import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { PaymentsModal } from "./payments/payments.modal";
 import { SettingsPage } from "./settings.page";
 import { VerificationModal } from "./verification/verification.modal";
+import { HideUsersModal } from "./hide-users/hide-users.modal";
 
 const routes: Routes = [
   {
@@ -39,6 +40,7 @@ const routes: Routes = [
     DisableAccountModal,
     DevicesSettingsModal,
     BlockUsersModal,
+    HideUsersModal,
     PaymentsModal,
     VerificationModal
   ],
@@ -49,6 +51,7 @@ const routes: Routes = [
     DisableAccountModal,
     DevicesSettingsModal,
     BlockUsersModal,
+    HideUsersModal,
     PaymentsModal,
     VerificationModal
   ]

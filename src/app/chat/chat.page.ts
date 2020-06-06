@@ -15,6 +15,8 @@ import { ChatService } from "./../services/chat.service";
 export class ChatPage implements OnInit {
   chats: Chat[];
   showSkeleton: boolean;
+  showOptions = false;
+  selectedChat: Chat;
 
   constructor(
     private chatSvc: ChatService,
@@ -44,6 +46,7 @@ export class ChatPage implements OnInit {
   }
 
   async deleteChat(chat: Chat) {
+    this.showOptions = false;
     const chats = this.chats;
     this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
     const toast = await this.toast.create({
@@ -72,6 +75,19 @@ export class ChatPage implements OnInit {
     if (event.detail.ratio < -1.8) {
       await event.target.close();
       this.showChat(id);
+    }
+  }
+
+  async openItem(event: any, id: number) {
+    console.log(event);
+    const element = event.target.parentElement;
+    element.open("end");
+  }
+
+  selectChat(chat: Chat) {
+    if (chat.user.username !== "frikiradar") {
+      this.selectedChat = chat;
+      this.showOptions = true;
     }
   }
 }

@@ -301,6 +301,7 @@ export class ChatUserPage implements OnInit {
   }
 
   async deleteMessage() {
+    this.showOptions = false;
     try {
       await this.chatSvc.deleteMessage(this.selectedMessage.id);
       this.messages = this.messages.filter(
@@ -317,8 +318,6 @@ export class ChatUserPage implements OnInit {
 
       console.error(e);
     }
-
-    this.showOptions = false;
   }
 
   back() {
