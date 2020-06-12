@@ -161,7 +161,7 @@ export class UserService {
     return this.rest.delete(`hide/${id}`).toPromise() as Promise<User[]>;
   }
 
-  subscribePremim(days: number) {
+  subscribePremium(days: number) {
     return this.rest.post("premium", { days }).toPromise() as Promise<User>;
   }
 

@@ -100,11 +100,13 @@ export class RadarPage {
         }
 
         this.auth.currentUser.subscribe(async authUser => {
-          this.showSkeleton = true;
-          this.authUser = authUser;
-          this.page = 0;
-          await this.slides.slideTo(0);
-          this.getRadarUsers();
+          if (authUser?.id) {
+            this.showSkeleton = true;
+            this.authUser = authUser;
+            this.page = 0;
+            await this.slides.slideTo(0);
+            this.getRadarUsers();
+          }
         });
       }
     }

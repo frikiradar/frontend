@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import {
   IAPProduct,
-  IAPProducts,
   InAppPurchase2
 } from "@ionic-native/in-app-purchase-2/ngx";
 import { AlertController, Platform } from "@ionic/angular";
@@ -134,7 +133,7 @@ export class StoreService {
       switch (product.type) {
         case "subscription":
           try {
-            const user = await this.userSvc.subscribePremim(product.value);
+            const user = await this.userSvc.subscribePremium(product.value);
             this.auth.setAuthUser(user);
             // Añadimos días de suscripción!!
             console.log("Comprado, añadimos días de suscripción", product);
