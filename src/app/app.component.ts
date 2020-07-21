@@ -188,9 +188,9 @@ export class AppComponent {
               config.review = true;
               this.config.setConfig(config);
               if (this.launchReview.isRatingSupported()) {
-                this.launchReview.rating().then();
+                this.launchReview.rating().toPromise().then();
               } else {
-                this.launchReview.launch().then();
+                this.launchReview.launch();
               }
             }
           },

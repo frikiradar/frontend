@@ -41,7 +41,7 @@ export class RadarPage {
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (this.users?.length) {
+    if (this.users?.length && this.router.url === "/tabs/radar") {
       switch (event.key) {
         case "ArrowRight":
           this.slides.slideNext();
