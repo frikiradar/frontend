@@ -9,7 +9,8 @@ import { LOCALE_ID, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   BrowserModule,
-  HAMMER_GESTURE_CONFIG
+  HAMMER_GESTURE_CONFIG,
+  HammerModule
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
@@ -64,7 +65,8 @@ registerLocaleData(localeEs, "es");
     BrowserAnimationsModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
-    })
+    }),
+    HammerModule
   ],
   providers: [
     StatusBar,
