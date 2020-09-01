@@ -58,6 +58,8 @@ export class SearchPage implements OnInit {
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
+      console.log(this.users);
+
       if (event) {
         event.target.complete();
 
@@ -99,7 +101,7 @@ export class SearchPage implements OnInit {
 
   changeOrder(order: "distance" | "match") {
     this.order = order;
-    this.page = 0;
+    this.page = 1;
     this.search();
   }
 
