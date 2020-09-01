@@ -105,6 +105,12 @@ export class SearchPage implements OnInit {
     this.search();
   }
 
+  newSearch(query: string) {
+    this.query = query;
+    this.page = 1;
+    this.search();
+  }
+
   async dragItem(event: any, id: number) {
     if (event.detail.ratio > 1.8) {
       this.hideProfile(id);
