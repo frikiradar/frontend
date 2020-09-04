@@ -25,7 +25,7 @@ import { UtilsService } from "../services/utils.service";
   styleUrls: ["./radar.page.scss"]
 })
 export class RadarPage {
-  @ViewChild("slides", { static: true })
+  @ViewChild("slides", { static: false })
   slides: IonSlides;
   @ViewChild("range", { static: true })
   range: IonRange;
@@ -115,7 +115,7 @@ export class RadarPage {
             this.showSkeleton = true;
             this.authUser = authUser;
             this.page = 0;
-            await this.slides?.slideTo(0);
+            await this.slides.slideTo(0);
             this.getRadarUsers();
           }
         });
@@ -129,14 +129,7 @@ export class RadarPage {
 
       const resUsers = await this.userSvc.getRadarUsers(this.page, this.ratio);
       let users = [];
-      if (
-        this.auth.currentUserValue?.tags?.length > 0 &&
-        resUsers.some(u => u.match > 0)
-      ) {
-        users = resUsers.filter(u => !u.hide && u.match && u.match > 0);
-      } else {
-        users = resUsers.filter(u => !u.hide);
-      }
+      users = resUsers.filter(u => u.match && u.match > 0);
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
@@ -272,9 +265,9 @@ export class RadarPage {
 
   async slide() {
     this.userSvc.view(this.user.id);
-    this.slides?.getActiveIndex().then(index => {
+    this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
-      if (index >= this.users?.length - 5) {
+      if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }
     });
