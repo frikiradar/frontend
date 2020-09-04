@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
-import { NgxLinkifyjsModule } from "ngx-linkifyjs";
+// import { NgxLinkifyjsModule } from "ngx-linkifyjs";
 
 import { SharedModule } from "../shared/shared.module";
 import { ChatUserPage } from "./chat-user.page";
@@ -22,7 +22,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    NgxLinkifyjsModule.forRoot(),
+    // NgxLinkifyjsModule.forRoot(),
     SharedModule
   ],
   declarations: [ChatUserPage]
