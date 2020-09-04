@@ -123,7 +123,7 @@ export class RadarPage {
     }
   }
 
-  async getRadarUsers() {
+  async getRadarUsers(event?: any) {
     try {
       this.page++;
 
@@ -133,12 +133,23 @@ export class RadarPage {
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
-      if (resUsers?.length > 0 && !this.users?.length) {
-        this.getRadarUsers();
-      }
+      if (this.ratio === -1) {
+        if (resUsers?.length > 0 && !this.users?.length) {
+          this.getRadarUsers();
+        }
 
-      if (this.users[0]?.id) {
-        this.user = this.users[0];
+        if (this.users[0]?.id) {
+          this.user = this.users[0];
+          this.userSvc.view(this.user.id);
+        }
+      } else {
+        if (event) {
+          event.target.complete();
+
+          if (users.length < 15) {
+            event.target.disabled = true;
+          }
+        }
       }
 
       this.showSkeleton = false;
@@ -264,9 +275,9 @@ export class RadarPage {
   }
 
   async slide() {
-    this.userSvc.view(this.user.id);
     this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
+      this.userSvc.view(this.user.id);
       if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }

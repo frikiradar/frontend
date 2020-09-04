@@ -259,6 +259,7 @@
       [debounce]="250"
       value="1"
       (ionChange)="changeRatio($event.detail.value)"
+      [disabled]="showSkeleton"
     >
     </ion-range>
     <ion-grid id="range-distance">
