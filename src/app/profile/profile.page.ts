@@ -134,15 +134,7 @@ export class ProfilePage implements OnInit {
   }
 
   async doAction() {
-    if (!this.auth.isPremium()) {
-      const showPromo = await this.showPromo();
-      if (!showPromo) {
-        // Modal hazte premium
-        return await this.insertCoinModal();
-      }
-    }
-
-    return true;
+    return await this.insertCoinModal();
   }
 
   async insertCoinModal() {
@@ -178,6 +170,30 @@ export class ProfilePage implements OnInit {
         }
       });
     }).then(es => es);
+  }
+
+  async hideProfile() {
+    this.router.navigate(["/"]);
+    const toast = await this.toast.create({
+      message:
+        "Has ocultado al usuario. No volverá a aparecerte como sugerencia.",
+      duration: 3000,
+      position: "bottom",
+      buttons: [
+        {
+          text: "Deshacer",
+          handler: () => {
+            this.router.navigate(["/profile/" + this.user.id]);
+          }
+        }
+      ]
+    });
+    toast.present();
+
+    const log = await toast.onDidDismiss();
+    if (log.role === "timeout") {
+      this.userSvc.hide(this.user.id);
+    }
   }
 
   async blockUser() {

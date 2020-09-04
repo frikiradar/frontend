@@ -112,3 +112,99 @@ ion-card-content {
   float: right;
   right: 10px;
 }
+
+ion-content {
+  ion-list ion-item-sliding {
+    background: #e91e63;
+
+    ion-item {
+      --background: #1a1a1a;
+      --border-color: #e91e63;
+
+      ion-avatar {
+        &.md {
+          width: 64px;
+          height: 64px;
+        }
+
+        &.ios {
+          width: 48px;
+          height: 48px;
+        }
+
+        ion-badge {
+          position: absolute;
+          left: 70px;
+          border-radius: 15px;
+          z-index: 1;
+          width: 15px;
+          height: 15px;
+          box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+        }
+      }
+
+      ion-label {
+        width: 150px;
+        .name {
+          font-size: 24px;
+        }
+
+        &.ios .description {
+          max-height: 30px;
+        }
+
+        &.md .description {
+          max-height: 36px;
+        }
+
+        .description {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          font-size: 13px;
+          color: #bbbbbb;
+          white-space: initial;
+        }
+      }
+
+      .match-list {
+        color: white;
+        font-size: 12px;
+        border: 2px solid white;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-left: 10px;
+        background-color: #e91e63;
+      }
+    }
+
+    &:first-child ion-item {
+      --background: #e91e63;
+
+      .match-list {
+        background-color: white;
+        color: #e91e63;
+        height: 60px;
+        width: 60px;
+        font-size: 13px;
+      }
+    }
+
+    .item-options-end {
+      background-color: #f04041;
+    }
+  }
+}
+
+ion-footer.md {
+  transition: max-height 0.5s;
+  max-height: 100px;
+  &.hide-background {
+    max-height: 0;
+  }
+}

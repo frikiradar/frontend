@@ -3,16 +3,21 @@ import { Router } from "@angular/router";
 import {
   IonSlides,
   MenuController,
-  ToastController,
-  Platform
+  Platform,
+  AlertController,
+  IonRange,
+  IonContent,
+  ToastController
 } from "@ionic/angular";
 import * as LogRocket from "logrocket";
+import { ScrollDetail } from "@ionic/core";
 
 import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { DeviceService } from "../services/device.service";
+import { UtilsService } from "../services/utils.service";
 
 @Component({
   selector: "app-radar",
@@ -22,6 +27,10 @@ import { DeviceService } from "../services/device.service";
 export class RadarPage {
   @ViewChild("slides", { static: true })
   slides: IonSlides;
+  @ViewChild("range", { static: true })
+  range: IonRange;
+  @ViewChild("radarlist", { static: true })
+  radarlist: IonContent;
 
   public slideOpts = {
     slidesPerView: 1,
@@ -34,10 +43,13 @@ export class RadarPage {
   };
 
   public showSkeleton = true;
+  public hide = false;
   page = 0;
+  ratio = -1;
   authUser: User;
   users: User[] = [];
   public user: User;
+  public view: "cards" | "list" = "cards";
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -52,9 +64,6 @@ export class RadarPage {
         case "Enter":
           this.showProfile(this.user.id);
           break;
-        case "h":
-          this.hideProfile(this.user.id);
-          break;
       }
     }
   }
@@ -64,10 +73,12 @@ export class RadarPage {
     public menu: MenuController,
     private auth: AuthService,
     public router: Router,
-    private toast: ToastController,
     private geolocationSvc: GeolocationService,
     private deviceSvc: DeviceService,
-    private platform: Platform
+    private platform: Platform,
+    private alert: AlertController,
+    private utils: UtilsService,
+    private toast: ToastController
   ) {}
 
   async ionViewWillEnter() {
@@ -104,7 +115,7 @@ export class RadarPage {
             this.showSkeleton = true;
             this.authUser = authUser;
             this.page = 0;
-            await this.slides.slideTo(0);
+            await this.slides?.slideTo(0);
             this.getRadarUsers();
           }
         });
@@ -115,7 +126,8 @@ export class RadarPage {
   async getRadarUsers() {
     try {
       this.page++;
-      const resUsers = await this.userSvc.getRadarUsers(this.page);
+
+      const resUsers = await this.userSvc.getRadarUsers(this.page, this.ratio);
       let users = [];
       if (
         this.auth.currentUserValue?.tags?.length > 0 &&
@@ -146,6 +158,82 @@ export class RadarPage {
     this.router.navigate(["/profile", id]);
   }
 
+  search() {
+    this.router.navigate(["/search"]);
+  }
+
+  changeView() {
+    this.users = [];
+    this.showSkeleton = true;
+    this.page = 0;
+    if (this.view === "cards") {
+      this.view = "list";
+      this.ratio = 50;
+    } else {
+      this.view = "cards";
+      this.ratio = -1;
+    }
+    this.getRadarUsers();
+  }
+
+  async changeRatio(value: number) {
+    if (this.users.length < 15) {
+      let config = JSON.parse(localStorage.getItem("config"));
+      const radarAdv = config && config.radarAdv ? config.radarAdv : false;
+
+      if (!radarAdv) {
+        const alert = await this.alert.create({
+          header: "¿Falta gente en tu zona?",
+          message:
+            "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
+          buttons: [
+            {
+              text: "¡Compartir!",
+              handler: () => {
+                this.utils.share();
+              }
+            }
+          ]
+        });
+        if (!config) {
+          config = { radarAdv: true };
+        } else {
+          config.radarAdv = true;
+        }
+        localStorage.setItem("config", JSON.stringify(config));
+        await alert.present();
+      }
+    }
+
+    this.showSkeleton = true;
+
+    // tslint:disable-next-line: cyclomatic-complexity
+    switch (value) {
+      case 0:
+        this.ratio = 10;
+        break;
+      case 1:
+        this.ratio = 50;
+        break;
+      case 2:
+        this.ratio = 100;
+        break;
+      case 3:
+        this.ratio = 500;
+        break;
+      case 4:
+        this.ratio = 1000;
+        break;
+      case 5:
+        this.ratio = this.authUser.is_premium ? 25000 : 5000;
+        break;
+    }
+    this.page = 0;
+    this.users = [];
+    this.radarlist?.scrollToTop(0);
+    this.getRadarUsers();
+  }
+
   async hideProfile(id: User["id"]) {
     const nextIndex = this.users.findIndex(u => u.id === id) + 1;
     this.user = this.users[nextIndex];
@@ -173,16 +261,31 @@ export class RadarPage {
     }
   }
 
-  search() {
-    this.router.navigate(["/search"]);
+  async onScroll($event: CustomEvent<ScrollDetail>) {
+    if ($event && $event.detail && $event.detail.deltaY) {
+      this.hide =
+        !($event.detail.deltaY < 0) &&
+        this.users.length > 10 &&
+        $event.detail.scrollTop > 200;
+    }
   }
 
   async slide() {
-    this.slides.getActiveIndex().then(index => {
+    this.userSvc.view(this.user.id);
+    this.slides?.getActiveIndex().then(index => {
       this.user = this.users[index];
       if (index >= this.users?.length - 5) {
         this.getRadarUsers();
       }
     });
+  }
+
+  async dragItem(event: any, id: number) {
+    if (event.detail.ratio > 1.8) {
+      this.hideProfile(id);
+    } else if (event.detail.ratio < -1.8) {
+      await event.target.close();
+      this.showProfile(id);
+    }
   }
 }

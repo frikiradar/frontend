@@ -210,6 +210,15 @@
       <ion-grid>
         <ion-row class="ion-align-items-center">
           <ion-col class="ion-text-center">
+            <ion-button (click)="hideProfile()">
+              <ion-icon
+                slot="icon-only"
+                name="eye-off"
+                color="danger"
+              ></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col class="ion-text-center">
             <ion-button
               *ngIf="!user?.block_messages || user.from_like"
               (click)="showChat()"

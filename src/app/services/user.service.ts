@@ -70,8 +70,10 @@ export class UserService {
       .toPromise()) as Promise<User>;
   }
 
-  getRadarUsers(page = 1) {
-    return this.rest.put("radar", { page }).toPromise() as Promise<User[]>;
+  getRadarUsers(page = 1, ratio = -1) {
+    return this.rest.put("radar", { page, ratio }).toPromise() as Promise<
+      User[]
+    >;
   }
 
   searchUsers(query: string, order: "distance" | "match", page: number) {
@@ -155,6 +157,10 @@ export class UserService {
 
   hide(id: User["id"]) {
     return this.rest.put("hide", { user: id }).toPromise();
+  }
+
+  view(id: User["id"]) {
+    this.rest.put("view", { user: id }).toPromise();
   }
 
   unhide(id: User["id"]) {
