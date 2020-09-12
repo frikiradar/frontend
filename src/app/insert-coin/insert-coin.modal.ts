@@ -33,15 +33,15 @@ export class InsertCoinModal {
 
   async showPromo() {
     // Método para NO esperar a que vean el video completo
-    this.admobSvc.RewardVideoAd();
-    this.close(true);
+    /*this.admobSvc.RewardVideoAd();
+    this.close(true);*/
 
     // Método para esperar a que vean el video completo
-    /*this.admobSvc.adViewed.subscribe(adViewed => {
+    this.admobSvc.adViewed.subscribe(adViewed => {
       if (adViewed) {
         this.close(true);
       }
-    });*/
+    });
   }
 
   close(data?: any) {

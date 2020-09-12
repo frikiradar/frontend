@@ -134,11 +134,19 @@ export class ProfilePage implements OnInit {
   }
 
   async doAction() {
-    return await this.insertCoinModal();
+    if (!this.auth.isPremium()) {
+      const showPromo = await this.showPromo();
+      if (!showPromo) {
+        // Modal hazte premium
+        return await this.insertCoinModal();
+      }
+    }
+
+    return true;
   }
 
   async insertCoinModal() {
-    if (!this.auth.isPremium() /*&& this.platform.is("cordova")*/) {
+    if (!this.auth.isPremium() && this.platform.is("cordova")) {
       const modal = await this.modal.create({
         component: InsertCoinModal,
         cssClass: "insert-coin-modal"
