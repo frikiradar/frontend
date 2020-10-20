@@ -18,6 +18,7 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
+import { ConfigService } from '../services/config.service';
 
 @Component({
   selector: "app-radar",
@@ -78,7 +79,8 @@ export class RadarPage {
     private platform: Platform,
     private alert: AlertController,
     private utils: UtilsService,
-    private toast: ToastController
+    private toast: ToastController,
+    private config: ConfigService
   ) {}
 
   async ionViewWillEnter() {
@@ -115,7 +117,13 @@ export class RadarPage {
             this.showSkeleton = true;
             this.authUser = authUser;
             this.page = 0;
-            await this.slides.slideTo(0);
+            if (await this.config.get("radarView") === "list") {
+              this.view = "list";
+              this.ratio = 50;
+            } else {
+              await this.slides.slideTo(0);
+            }
+
             this.getRadarUsers();
           }
         });
@@ -134,9 +142,9 @@ export class RadarPage {
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
       if (this.ratio === -1) {
-        if (resUsers?.length > 0 && !this.users?.length) {
-          this.getRadarUsers();
-        }
+        /*if (resUsers?.length > 0 && !this.users?.length) {
+          this.getRadarUsers()
+        }*/
 
         if (this.users[0]?.id) {
           this.user = this.users[0];
@@ -151,7 +159,7 @@ export class RadarPage {
           }
         }
       }
-
+      
       this.showSkeleton = false;
     } catch (e) {
       console.error(e);
@@ -177,36 +185,14 @@ export class RadarPage {
       this.view = "cards";
       this.ratio = -1;
     }
+
+    this.config.set("radarView", this.view)
     this.getRadarUsers();
   }
 
   async changeRatio(value: number) {
     if (this.users.length < 15) {
-      let config = JSON.parse(localStorage.getItem("config"));
-      const radarAdv = config && config.radarAdv ? config.radarAdv : false;
-
-      if (!radarAdv) {
-        const alert = await this.alert.create({
-          header: "¿Falta gente en tu zona?",
-          message:
-            "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
-          buttons: [
-            {
-              text: "¡Compartir!",
-              handler: () => {
-                this.utils.share();
-              }
-            }
-          ]
-        });
-        if (!config) {
-          config = { radarAdv: true };
-        } else {
-          config.radarAdv = true;
-        }
-        localStorage.setItem("config", JSON.stringify(config));
-        await alert.present();
-      }
+      this.radarAdv();
     }
 
     this.showSkeleton = true;
@@ -281,6 +267,9 @@ export class RadarPage {
       if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }
+      if (this.view === 'cards' && this.page === 0 && this.user.distance >= 100) {
+        this.radarAdv();
+      }
     });
   }
 
@@ -291,5 +280,27 @@ export class RadarPage {
       await event.target.close();
       this.showProfile(id);
     }
+  }
+
+  async radarAdv() {
+    const radarAdv = this.config.get("radarAdv");
+
+      if (!radarAdv) {
+        const alert = await this.alert.create({
+          header: "¿Pocas personas cerca tuya?",
+          message:
+            "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
+          buttons: [
+            {
+              text: "¡Compartir!",
+              handler: () => {
+                this.utils.share();
+              }
+            }
+          ]
+        });
+        this.config.set("radarAdv", true)
+        await alert.present();
+      }
   }
 }

@@ -6,6 +6,7 @@ import { environment } from "../../environments/environment";
 export interface Config {
   openTimes?: number;
   review?: boolean;
+  radarView?: "view" | "list";
   radarAdv?: boolean;
   maintenance?: boolean;
   min_version?: string;
