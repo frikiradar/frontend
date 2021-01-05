@@ -164,7 +164,7 @@
         >
         <ion-select-option value="social">En una red social</ion-select-option>
         <ion-select-option value="store"
-          >En la tienda de aplicaciones</ion-select-option
+          >En un buscador o tienda de aplicaciones</ion-select-option
         >
         <ion-select-option value="event"
           >En un evento/convención</ion-select-option
@@ -179,9 +179,7 @@
     </ion-item>
     <ion-item
       *ngIf="
-        registerForm.get('meet').value &&
-        registerForm.get('meet').value !== 'store'
-      "
+        registerForm.get('meet').value"
     >
       <ion-label position="floating">
         {{
@@ -215,6 +213,11 @@
         {{
           registerForm.get("meet").value === "contest"
             ? "Nombre del organizador"
+            : ""
+        }}
+        {{
+          registerForm.get("meet").value === "store"
+            ? "Nombre del buscador o tienda"
             : ""
         }}
       </ion-label>
@@ -252,7 +255,6 @@
         </p></ion-label
       >
       <ion-checkbox
-        checked="false"
         slot="start"
         formControlName="acceptos"
       ></ion-checkbox>
@@ -260,7 +262,6 @@
     <ion-item lines="none">
       <ion-label><p>Confirmo ser mayor de edad.</p></ion-label>
       <ion-checkbox
-        checked="false"
         slot="start"
         formControlName="adult"
       ></ion-checkbox>

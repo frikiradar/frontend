@@ -63,8 +63,8 @@ export class RegisterComponent {
       lovegender: [""],
       meet: [""],
       referral: [""],
-      acceptos: new FormControl("", Validators.requiredTrue),
-      adult: new FormControl("", Validators.requiredTrue)
+      acceptos: new FormControl(false, Validators.requiredTrue),
+      adult: new FormControl(false, Validators.requiredTrue)
     });
 
     this.registerForm.get("username").valueChanges.subscribe(async username => {
