@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Platform } from "@ionic/angular";
 
-import { AdmobService } from "../services/admob.service";
 import {
   Notification,
   NotificationService
@@ -19,14 +18,9 @@ export class TabsPage implements OnInit {
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
     private platform: Platform,
-    private admob: AdmobService
   ) {}
 
   async ngOnInit() {
-    if (this.platform.is("cordova")) {
-      this.admob.init();
-    }
-
     this.notificationSvc.notification.subscribe(notification => {
       this.counters = notification;
       this.detectorRef.detectChanges();

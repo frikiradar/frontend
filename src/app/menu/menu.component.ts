@@ -6,7 +6,6 @@ import { MenuController, ModalController, Platform } from "@ionic/angular";
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { AuthService } from "../services/auth.service";
 import { UtilsService } from "../services/utils.service";
-import { PremiumModal } from "./../insert-coin/premium/premium.modal";
 import { User } from "./../models/user";
 
 @Component({
@@ -40,13 +39,6 @@ export class MenuComponent {
   admin() {
     this.router.navigate(["/admin"]);
     this.menu.close();
-  }
-
-  async showPremium() {
-    const modal = await this.modal.create({
-      component: PremiumModal
-    });
-    return await modal.present();
   }
 
   async showAmbassador() {

@@ -187,13 +187,6 @@ export class AuthService {
     return user?.roles?.includes("ROLE_DEMO");
   }
 
-  isPremium(user?: User) {
-    if (!user) {
-      user = this.currentUserValue;
-    }
-    return user.is_premium;
-  }
-
   isVerified(user?: User) {
     if (!user) {
       user = this.currentUserValue;

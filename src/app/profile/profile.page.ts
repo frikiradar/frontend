@@ -5,19 +5,15 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
   AlertController,
-  ModalController,
   NavController,
-  Platform,
   PopoverController,
   ToastController
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
 
 import { User } from "../models/user";
-import { AdmobService } from "../services/admob.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
-import { InsertCoinModal } from "./../insert-coin/insert-coin.modal";
 import { AuthService } from "./../services/auth.service";
 
 @Component({
@@ -43,9 +39,6 @@ export class ProfilePage implements OnInit {
     private vibration: Vibration,
     private alert: AlertController,
     private auth: AuthService,
-    private modal: ModalController,
-    private admobSvc: AdmobService,
-    private platform: Platform
   ) {}
 
   async ngOnInit() {
@@ -77,10 +70,7 @@ export class ProfilePage implements OnInit {
         this.user.from_like ||
         this.auth.isVerified()
       ) {
-        const data = await this.doAction();
-        if (data) {
           this.router.navigate(["/chat", this.user.id]);
-        }
       } else {
         const alert = await this.alert.create({
           header: "No puedes iniciar un chat con esta persona",
@@ -95,31 +85,28 @@ export class ProfilePage implements OnInit {
 
   async switchLike() {
     if (!this.user.like) {
-      const data = await this.doAction();
-      if (data) {
-        this.vibration.vibrate(50);
-        this.user = await this.userSvc.like(this.user.id);
-        if (
-          this.user.block_messages ||
-          !this.user.match ||
-          !this.auth.isVerified()
-        ) {
-          (
-            await this.toast.create({
-              message: `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
-              duration: 5000,
-              position: "middle"
-            })
-          ).present();
-        } else {
-          (
-            await this.toast.create({
-              message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
-              duration: 5000,
-              position: "middle"
-            })
-          ).present();
-        }
+      this.vibration.vibrate(50);
+      this.user = await this.userSvc.like(this.user.id);
+      if (
+        this.user.block_messages ||
+        !this.user.match ||
+        !this.auth.isVerified()
+      ) {
+        (
+          await this.toast.create({
+            message: `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
+            duration: 5000,
+            position: "middle"
+          })
+        ).present();
+      } else {
+        (
+          await this.toast.create({
+            message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
+            duration: 5000,
+            position: "middle"
+          })
+        ).present();
       }
     } else {
       this.user = await this.userSvc.unlike(this.user.id);
@@ -131,53 +118,6 @@ export class ProfilePage implements OnInit {
         })
       ).present();
     }
-  }
-
-  async doAction() {
-    if (!this.auth.isPremium()) {
-      const showPromo = await this.showPromo();
-      if (!showPromo) {
-        // Modal hazte premium
-        return await this.insertCoinModal();
-      }
-    }
-
-    return true;
-  }
-
-  async insertCoinModal() {
-    if (!this.auth.isPremium() && this.platform.is("cordova")) {
-      const modal = await this.modal.create({
-        component: InsertCoinModal,
-        cssClass: "insert-coin-modal"
-      });
-      await modal.present();
-      const res = await modal.onDidDismiss();
-      return res.data;
-    } else if (this.auth.isPremium()) {
-      return true;
-    } else {
-      const alert = await this.alert.create({
-        header: "Funcionalidad no disponible",
-        message:
-          "Para poder disfrutar de esta funcionalidad es necesario entrar a FrikiRadar desde una app nativa o tener FrikiRadar ILIMITADO.",
-        buttons: ["Entendido, gracias!"]
-      });
-
-      await alert.present();
-    }
-  }
-
-  async showPromo() {
-    this.admobSvc.RewardVideoAd();
-
-    return new Promise(resolve => {
-      this.admobSvc.adViewed.subscribe(adViewed => {
-        if (adViewed !== undefined) {
-          resolve(adViewed);
-        }
-      });
-    }).then(es => es);
   }
 
   async hideProfile() {

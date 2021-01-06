@@ -16,7 +16,6 @@ import * as LogRocket from "logrocket";
 
 import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
-import { AdmobService } from "./services/admob.service";
 import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
 import { UtilsService } from "./services/utils.service";
@@ -44,7 +43,6 @@ export class AppComponent {
     private config: ConfigService,
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
-    private admob: AdmobService,
     // private analyticsFirebase: AnalyticsFirebase,
     private toastController: ToastController,
     private modal: ModalController,
@@ -66,18 +64,6 @@ export class AppComponent {
 
         LogRocket.init("rvfke5/frikiradar", {
           release: await this.appVersion.getVersionNumber()
-        });
-
-        this.router.events.subscribe(async (event: Event) => {
-          switch (this.router.url) {
-            case "/settings":
-            case "/search":
-              this.admob.BannerAd();
-              break;
-
-            default:
-              this.admob.BannerAdRemove();
-          }
         });
       }
 
@@ -156,11 +142,11 @@ export class AppComponent {
     }
     this.config.set("openTimes", openTimes);
 
-    if (openTimes === 2) {
+    if (openTimes === 7) {
       const alert = await this.alert.create({
         header: "¡Conviértete en embajador 🐲!",
         message:
-          "Únete al programa de embajadores de FrikiRadar reclutando a tus amigos y conseguirás meses de FrikiRadar ILIMITADO. ¡Infórmate!",
+          "Únete al Patreon de embajadores de FrikiRadar y conseguirás ventajas exclusivas. ¡Infórmate!",
         buttons: [
           {
             text: "¡Quiero informarme!",

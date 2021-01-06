@@ -22,7 +22,6 @@
     "@angular/platform-browser-dynamic": "^11.0.5",
     "@angular/router": "^11.0.5",
     "@angular/service-worker": "^11.0.5",
-    "@ionic-native/admob-free": "^5.30.0",
     "@ionic-native/android-permissions": "^5.30.0",
     "@ionic-native/app-version": "^5.30.0",
     "@ionic-native/camera": "^5.30.0",
@@ -35,7 +34,6 @@
     "@ionic-native/fcm": "^5.30.0",
     "@ionic-native/geolocation": "^5.30.0",
     "@ionic-native/in-app-browser": "^5.30.0",
-    "@ionic-native/in-app-purchase-2": "^5.30.0",
     "@ionic-native/ionic-webview": "^5.30.0",
     "@ionic-native/keyboard": "^5.30.0",
     "@ionic-native/launch-review": "^5.30.0",
@@ -48,13 +46,10 @@
     "@ionic-native/vibration": "^5.30.0",
     "@ionic/angular": "^5.5.2",
     "@ionic/lab": "^3.2.10",
-    "cc.fovea.cordova.purchase": "^10.1.1",
-    "cordova-admob-sdk": "^0.24.1",
     "cordova-android": "^9.0.0",
     "cordova-clipboard": "1.3.0",
     "cordova-ios": "^6.1.1",
     "cordova-launch-review": "3.1.1",
-    "cordova-plugin-admob-free": "^0.27.0",
     "cordova-plugin-android-permissions": "1.0.2",
     "cordova-plugin-app-version": "^0.1.12",
     "cordova-plugin-badge": "0.8.8",
@@ -145,13 +140,6 @@
         "GOOGLE_SERVICES_VERSION": "4.2.0"
       },
       "cordova-plugin-app-version": {},
-      "cordova-plugin-admob-free": {
-        "ADMOB_APP_ID": "ca-app-pub-8367506635932865~6771177979",
-        "PLAY_SERVICES_VERSION": "16.+"
-      },
-      "cordova-admob-sdk": {
-        "PLAY_SERVICES_VERSION": "16.+"
-      },
       "cordova-plugin-facebook4": {
         "APP_ID": "2308182012762454",
         "APP_NAME": "FrikiRadar",
@@ -160,9 +148,6 @@
       },
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      },
-      "cc.fovea.cordova.purchase": {
-        "BILLING_KEY": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgDn4f/Q+mPYYEpoMMVyGLzs6K5qYbVOqkha5w/ilA42bt1A1nWK8NBEwiGLp36VdJkhLSSj7HU4HqgCkRDBhE8D4OpR5JpO7aEx1JseVp/ku/NsNnridY+VBlvMzSNm90M6dg0AcIigbcZOkgeAoULp7rPzhkrWDf4gDWKFjI7eSxXG/ojnuEq6DB3bmKa3usf81UKZqmWfSrEAl+nu1bQNV4JRgPa7ri4q5W9ILO9hSYX/BY/ikmXfF5KabboSz/3LUDwlysAVMM4jq1D1CSIuVWYWHfUsljBAsXG/rIQ/0kG/4rcRAsWRogJ03J4Q3G+LNP71DgfZbeGx4sNq/qwIDAQAB"
       },
       "cordova.plugins.diagnostic": {
         "ANDROID_SUPPORT_VERSION": "28.+"

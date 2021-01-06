@@ -167,10 +167,6 @@ export class UserService {
     return this.rest.delete(`hide/${id}`).toPromise() as Promise<User[]>;
   }
 
-  subscribePremium(days: number) {
-    return this.rest.post("premium", { days }).toPromise() as Promise<User>;
-  }
-
   getOrientations() {
     return [
       "Heterosexual",

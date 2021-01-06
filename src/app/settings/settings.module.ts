@@ -11,7 +11,6 @@ import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
 import { DisableAccountModal } from "./disable-account/disable-account.modal";
-import { PaymentsModal } from "./payments/payments.modal";
 import { SettingsPage } from "./settings.page";
 import { VerificationModal } from "./verification/verification.modal";
 import { HideUsersModal } from "./hide-users/hide-users.modal";
@@ -41,7 +40,6 @@ const routes: Routes = [
     DevicesSettingsModal,
     BlockUsersModal,
     HideUsersModal,
-    PaymentsModal,
     VerificationModal
   ],
   entryComponents: [
@@ -52,7 +50,6 @@ const routes: Routes = [
     DevicesSettingsModal,
     BlockUsersModal,
     HideUsersModal,
-    PaymentsModal,
     VerificationModal
   ]
 })

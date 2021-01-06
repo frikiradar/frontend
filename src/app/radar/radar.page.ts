@@ -91,7 +91,6 @@ export class RadarPage {
           LogRocket.identify("" + this.authUser.id, {
             name: this.authUser.username,
             email: this.authUser.email,
-            premium: this.authUser.is_premium,
             device: (await this.deviceSvc.getCurrentDevice()).device_name
           });
         }
@@ -215,7 +214,7 @@ export class RadarPage {
         this.ratio = 1000;
         break;
       case 5:
-        this.ratio = this.authUser.is_premium ? 25000 : 5000;
+        this.ratio = 25000;
         break;
     }
     this.page = 0;

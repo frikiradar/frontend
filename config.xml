@@ -158,7 +158,4 @@
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-admob-sdk" spec="~0.13.1">
-        <variable name="PLAY_SERVICES_VERSION" value="16.+" />
-    </plugin>
 </widget>

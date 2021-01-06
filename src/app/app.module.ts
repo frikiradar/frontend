@@ -14,7 +14,6 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-import { AdMobFree } from "@ionic-native/admob-free/ngx";
 // import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
@@ -24,7 +23,6 @@ import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
 import { FCM } from "@ionic-native/fcm/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { InAppPurchase2 } from "@ionic-native/in-app-purchase-2/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
@@ -45,7 +43,6 @@ import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { MenuComponent } from "./menu/menu.component";
-import { AdmobService } from "./services/admob.service";
 import { SharedModule } from "./shared/shared.module";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
@@ -90,10 +87,7 @@ registerLocaleData(localeEs, "es");
     AndroidPermissions,
     SocialSharing,
     AppVersion,
-    AdMobFree,
-    AdmobService,
     WebView,
-    InAppPurchase2,
     Diagnostic,
     LocationAccuracy
     // AnalyticsFirebase
