@@ -34,6 +34,8 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
+import { BrowserTab } from '@ionic-native/browser-tab/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
@@ -89,8 +91,10 @@ registerLocaleData(localeEs, "es");
     AppVersion,
     WebView,
     Diagnostic,
-    LocationAccuracy
-    // AnalyticsFirebase
+    LocationAccuracy,
+    // AnalyticsFirebase,
+    BrowserTab,
+    InAppBrowser
   ],
   bootstrap: [AppComponent]
 })

@@ -134,7 +134,6 @@ export class AppComponent {
     const config = await this.config.getConfig();
     this.config.setConfig(config);
     let openTimes: number;
-    // tslint:disable-next-line: prefer-conditional-expression
     if (config) {
       openTimes = config.openTimes ? ++config.openTimes : 1;
     } else {

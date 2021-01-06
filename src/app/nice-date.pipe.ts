@@ -19,7 +19,6 @@ export class NiceDatePipe implements PipeTransform {
   }
 }
 
-// tslint:disable-next-line: cyclomatic-complexity
 function convertToNiceDate(time: string) {
   const date = new Date(time);
   const diff = (new Date().getTime() - date.getTime()) / 1000;

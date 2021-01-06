@@ -196,7 +196,6 @@ export class RadarPage {
 
     this.showSkeleton = true;
 
-    // tslint:disable-next-line: cyclomatic-complexity
     switch (value) {
       case 0:
         this.ratio = 10;
