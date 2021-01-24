@@ -173,7 +173,10 @@ export class AppComponent {
               config.review = true;
               this.config.setConfig(config);
               if (this.launchReview.isRatingSupported()) {
-                this.launchReview.rating().toPromise().then();
+                this.launchReview
+                  .rating()
+                  .toPromise()
+                  .then();
               } else {
                 this.launchReview.launch();
               }

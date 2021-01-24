@@ -53,9 +53,19 @@
             <p>Consigue ventajas exclusivas</p>
           </ion-label>
         </ion-item>
-        <ion-item button lines="full" (click)="share()">
+        <ion-item button lines="none" (click)="share()">
           <ion-icon name="share-outline" slot="start"></ion-icon>
-          <ion-label>Comparte con tus amigos</ion-label>
+          <ion-label>
+            <h2>Comparte con tus amigos</h2>
+            <p>¡Y así cada vez seremos más!</p>
+          </ion-label>
+        </ion-item>
+        <ion-item button lines="full" (click)="credits()">
+          <ion-icon name="rocket-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h2>Créditos</h2>
+            <p>Las personas que hacemos posible FrikiRadar</p>
+          </ion-label>
         </ion-item>
         <ion-item button lines="none" (click)="admin()" *ngIf="auth.isAdmin()">
           <ion-icon

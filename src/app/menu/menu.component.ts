@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { MenuController, ModalController, Platform } from "@ionic/angular";
 
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
+import { CreditsModal } from "../credits/credits.modal";
 import { AuthService } from "../services/auth.service";
 import { UtilsService } from "../services/utils.service";
 import { User } from "./../models/user";
@@ -50,6 +51,13 @@ export class MenuComponent {
 
   share() {
     this.utils.share();
+  }
+
+  async credits() {
+    const modal = await this.modal.create({
+      component: CreditsModal
+    });
+    return await modal.present();
   }
 
   logout() {
