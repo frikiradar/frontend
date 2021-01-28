@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
-  root: "https://api.frikiradar.com/",
-  apiUrl: "https://api.frikiradar.com/api/v1/"
+  production: false,
+  root: "https://localhost:8000/",
+  apiUrl: "https://localhost:8000/api/v1/"
 };

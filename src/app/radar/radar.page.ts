@@ -18,7 +18,7 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
-import { ConfigService } from '../services/config.service';
+import { ConfigService } from "../services/config.service";
 
 @Component({
   selector: "app-radar",
@@ -116,7 +116,7 @@ export class RadarPage {
             this.showSkeleton = true;
             this.authUser = authUser;
             this.page = 0;
-            if (await this.config.get("radarView") === "list") {
+            if ((await this.config.get("radarView")) === "list") {
               this.view = "list";
               this.ratio = 50;
             } else {
@@ -136,7 +136,11 @@ export class RadarPage {
 
       const resUsers = await this.userSvc.getRadarUsers(this.page, this.ratio);
       let users = [];
-      users = resUsers.filter(u => u.match && u.match > 0);
+      users =
+        this.authUser?.tags?.length > 0
+          ? resUsers.filter(u => u.match && u.match > 0)
+          : resUsers;
+
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
@@ -158,7 +162,7 @@ export class RadarPage {
           }
         }
       }
-      
+
       this.showSkeleton = false;
     } catch (e) {
       console.error(e);
@@ -185,7 +189,7 @@ export class RadarPage {
       this.ratio = -1;
     }
 
-    this.config.set("radarView", this.view)
+    this.config.set("radarView", this.view);
     this.getRadarUsers();
   }
 
@@ -265,7 +269,11 @@ export class RadarPage {
       if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }
-      if (this.view === 'cards' && this.page === 0 && this.user.distance >= 100) {
+      if (
+        this.view === "cards" &&
+        this.page === 0 &&
+        this.user.distance >= 100
+      ) {
         this.radarAdv();
       }
     });
@@ -283,22 +291,22 @@ export class RadarPage {
   async radarAdv() {
     const radarAdv = this.config.get("radarAdv");
 
-      if (!radarAdv) {
-        const alert = await this.alert.create({
-          header: "¿Pocas personas cerca tuya?",
-          message:
-            "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
-          buttons: [
-            {
-              text: "¡Compartir!",
-              handler: () => {
-                this.utils.share();
-              }
+    if (!radarAdv) {
+      const alert = await this.alert.create({
+        header: "¿Pocas personas cerca tuya?",
+        message:
+          "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
+        buttons: [
+          {
+            text: "¡Compartir!",
+            handler: () => {
+              this.utils.share();
             }
-          ]
-        });
-        this.config.set("radarAdv", true)
-        await alert.present();
-      }
+          }
+        ]
+      });
+      this.config.set("radarAdv", true);
+      await alert.present();
+    }
   }
 }

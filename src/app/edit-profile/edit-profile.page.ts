@@ -64,7 +64,7 @@ export class EditProfilePage {
   public profileForm: FormGroup;
   public today: number = Date.now();
   public user: User;
-  public tags: Tag[];
+  public tags: Tag[] = [];
   public tagsInput: string;
   public list: { name: string; total: number }[];
   public activeImage = 0;
@@ -126,7 +126,7 @@ export class EditProfilePage {
       connection: this.user.connection
     });
 
-    this.tags = this.user.tags;
+    this.tags = this.user.tags ? this.user.tags : [];
 
     if (this.minage.value) {
       this.profileForm.get("maxage").enable();
