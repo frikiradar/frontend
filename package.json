@@ -45,6 +45,7 @@
     "@ionic-native/status-bar": "^5.31.1",
     "@ionic-native/vibration": "^5.31.1",
     "@ionic/angular": "^5.5.3",
+    "@ionic/cli": "^6.12.4",
     "@ionic/lab": "^3.2.10",
     "autolinker": "^3.14.2",
     "cordova-android": "^9.0.0",
