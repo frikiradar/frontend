@@ -118,7 +118,9 @@ export class ChatUserPage implements OnInit {
 
     this.page = 1;
 
-    const storagedMessages: Chat[] = this.chatSvc.getStoragedMessages();
+    this.chatSvc.deleteStoragedMessages();
+
+    /*const storagedMessages: Chat[] = this.chatSvc.getStoragedMessages();
     if (storagedMessages) {
       this.messages = storagedMessages?.filter(
         (c: Chat) =>
@@ -128,7 +130,7 @@ export class ChatUserPage implements OnInit {
             c?.fromuser?.id == this.auth.currentUserValue.id) ||
           (c?.fromuser?.id == this.userId && c?.touser?.id == null)
       );
-    }
+    }*/
 
     // Solamente los mensajes a partir del ultimo guardado
     const lastId = this.messages?.reduce(
@@ -142,7 +144,7 @@ export class ChatUserPage implements OnInit {
       .reverse();
 
     this.messages = [...this.messages, ...messages];
-    this.chatSvc.setStoragedMessages(messages);
+    // this.chatSvc.setStoragedMessages(messages);
 
     if (this.messages.length < 50) {
       this.infiniteScroll.disabled = true;
@@ -243,7 +245,7 @@ export class ChatUserPage implements OnInit {
       this.scrollDown();
       try {
         const chat = await this.chatSvc.sendMessage(this.user.id, text).then();
-        this.chatSvc.setStoragedMessages([chat]);
+        // this.chatSvc.setStoragedMessages([chat]);
       } catch (e) {
         this.messages = this.messages.filter(m => m.sending !== true);
         console.error(e);

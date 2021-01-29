@@ -60,6 +60,10 @@ export class ChatService {
     return storagedMessages ? storagedMessages : [];
   }
 
+  deleteStoragedMessages() {
+    localStorage.removeItem("chats");
+  }
+
   setStoragedMessages(messages: Chat[]) {
     let storagedMessages = this.getStoragedMessages();
     messages.forEach(message => {
