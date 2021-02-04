@@ -12,6 +12,7 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
+import { UrlService } from "src/app/services/url.service";
 
 import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
@@ -37,7 +38,8 @@ export class RegisterComponent {
     public userSvc: UserService,
     private ngZone: NgZone,
     public platform: Platform,
-    private facebook: Facebook
+    private facebook: Facebook,
+    public urlSvc: UrlService
   ) {
     this.registerForm = fb.group({
       username: new FormControl("", [

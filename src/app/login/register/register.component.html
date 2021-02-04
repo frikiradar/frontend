@@ -244,12 +244,9 @@
       <ion-label
         ><p>
           Acepto el
-          <a target="_blank" href="https://frikiradar.com/tos">Aviso legal</a>
+          <a (click)="urlSvc.openUrl('https://frikiradar.com/tos')">Aviso legal</a>
           y la
-          <a
-            target="_blank"
-            href="https://frikiradar.com/politica-de-privacidad/"
-            >Política de privacidad</a
+          <a (click)="urlSvc.openUrl('https://frikiradar.com/politica-de-privacidad/')">Política de privacidad</a
           >
           de FrikiRadar.
         </p></ion-label

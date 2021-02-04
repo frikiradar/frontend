@@ -47,18 +47,18 @@
         <ion-item-sliding
           *ngFor="let chat of chats"
           (press)="selectChat(chat)"
-          (ionDrag)="dragItem($event, chat.user.id)"
+          (ionDrag)="dragItem($event, chat.user?.id)"
         >
           <ion-item-options side="start">
-            <ion-item-option (click)="showChat(chat.user.id)" color="secondary">
+            <ion-item-option (click)="showChat(chat.user?.id)" color="secondary">
               <ion-icon slot="icon-only" name="mail-open"></ion-icon>
             </ion-item-option>
           </ion-item-options>
-          <ion-item button (click)="showChat(chat.user.id)" lines="full">
+          <ion-item button (click)="showChat(chat.user?.id)" lines="full">
             <ion-avatar slot="start">
               <img
-                [src]="chat.user.avatar"
-                [alt]="chat.user.username"
+                [src]="chat.user?.avatar"
+                [alt]="chat.user?.username"
                 default="/assets/img/users/default.jpg"
               />
               <ion-badge color="primary" *ngIf="chat?.count > 0"
@@ -67,7 +67,7 @@
             </ion-avatar>
 
             <ion-label>
-              <h2>{{ chat.user.name }}</h2>
+              <h2>{{ chat.user?.name }}</h2>
               <p>{{ chat.text }}</p>
             </ion-label>
             <ion-note slot="end">{{ chat.time_creation | niceDate }}</ion-note>

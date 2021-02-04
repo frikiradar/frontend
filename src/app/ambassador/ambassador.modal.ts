@@ -1,10 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { ModalController, Platform } from "@ionic/angular";
-import { BrowserTab } from "@ionic-native/browser-tab/ngx";
-import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
+import { ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
+import { UrlService } from "../services/url.service";
 
 @Component({
   selector: "ambassador-modal",
@@ -16,9 +15,7 @@ export class AmbassadorModal implements OnInit {
   constructor(
     private modal: ModalController,
     private auth: AuthService,
-    private browserTab: BrowserTab,
-    private iab: InAppBrowser,
-    private platform: Platform
+    private urlSvc: UrlService
   ) {}
 
   async ngOnInit() {
@@ -27,19 +24,7 @@ export class AmbassadorModal implements OnInit {
 
   public goToPatreon() {
     const url = "https://patreon.com/frikiradar";
-    if (this.platform.is("cordova")) {
-      this.browserTab.isAvailable().then(isAvailable => {
-        if (isAvailable) {
-          this.browserTab.openUrl(url);
-        } else {
-          const browser = this.iab.create(url);
-          browser.show();
-        }
-      });
-    } else {
-      const browser = this.iab.create(url);
-      browser.show();
-    }
+    this.urlSvc.openUrl(url);
   }
 
   close() {

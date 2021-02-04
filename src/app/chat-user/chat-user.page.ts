@@ -23,6 +23,7 @@ import { Chat } from "../models/chat";
 import { User } from "../models/user";
 import { ChatService } from "../services/chat.service";
 import { ConfigService } from "../services/config.service";
+import { UrlService } from "../services/url.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
 
@@ -70,7 +71,8 @@ export class ChatUserPage implements OnInit {
     public keyboard: Keyboard,
     private platform: Platform,
     private config: ConfigService,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private urlSvc: UrlService
   ) {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required])
@@ -219,6 +221,13 @@ export class ChatUserPage implements OnInit {
     }
   }
 
+  /*@HostListener("window:click", ["$event"]) onClick(event: any) {
+    event.stopPropagation();
+    if (event.srcElement.href && event.target.className.includes("linkified")) {
+      console.log("este vale", event);
+    }
+  }*/
+
   async sendMessage(event?: Event) {
     if (event) {
       event.preventDefault();
@@ -320,6 +329,13 @@ export class ChatUserPage implements OnInit {
 
       console.error(e);
     }
+  }
+
+  openUrl(event: any) {
+    if (event.srcElement.href && event.target.className.includes("linkified")) {
+      this.urlSvc.openUrl(event.srcElement.href);
+    }
+    return false;
   }
 
   back() {

@@ -58,8 +58,6 @@ export class SearchPage implements OnInit {
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
-      console.log(this.users);
-
       if (event) {
         event.target.complete();
 

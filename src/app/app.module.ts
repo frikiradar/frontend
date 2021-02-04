@@ -21,7 +21,7 @@ import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
-import { FCM } from "@ionic-native/fcm/ngx";
+import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
@@ -38,7 +38,10 @@ import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { LinkyModule } from "ngx-linky";
 
-import { ServiceWorkerModule } from "@angular/service-worker";
+import {
+  ServiceWorkerModule,
+  SwRegistrationOptions
+} from "@angular/service-worker";
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
@@ -64,9 +67,7 @@ registerLocaleData(localeEs, "es");
     SharedModule,
     BrowserAnimationsModule,
     LinkyModule,
-    ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: environment.production
-    }),
+    ServiceWorkerModule.register("ngsw-worker.js"),
     HammerModule
   ],
   providers: [
@@ -77,6 +78,10 @@ registerLocaleData(localeEs, "es");
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: "es" },
     { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
+    {
+      provide: SwRegistrationOptions,
+      useFactory: () => ({ enabled: environment.production })
+    },
     Facebook,
     Device,
     Network,

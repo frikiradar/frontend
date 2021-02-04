@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { FCM, NotificationData } from "@ionic-native/fcm/ngx";
+import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic/ngx";
+import { NotificationData } from "@ionic-native/fcm/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
 
