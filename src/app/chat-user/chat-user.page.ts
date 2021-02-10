@@ -333,7 +333,7 @@ export class ChatUserPage implements OnInit {
   }
 
   addEmoji(event: any) {
-    this.message.setValue(this.message.value + event.char);
+    this.message.setValue(this.message.value + event.emoji.native);
   }
 
   openUrl(event: any) {

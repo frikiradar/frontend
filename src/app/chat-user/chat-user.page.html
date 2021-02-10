@@ -94,14 +94,35 @@
     </ion-card>
   </span>
 </ion-content>
-
-<span
-  [emojiPickerIf]="toggled"
-  [emojiPickerDirection]="'bottom' || 'top' || 'left' || 'right'"
-  (emojiPickerSelect)="addEmoji($event)"
->
-</span>
-
+<emoji-mart
+  *ngIf="toggled"
+  set="google"
+  title="Pick your emoji…"
+  emoji="point_up"
+  darkMode="true"
+  [style]="{ position: 'absolute', bottom: '55px', right: '0px', left: '0px', width: '100vw', maxWidth: '500px' }"
+  (emojiSelect)="addEmoji($event)"
+  title="Selecciona el emoji"
+  [i18n]="{
+    search: 'Buscar',
+    emojilist: 'Listado de emojis',
+    notfound: 'Emoji no encontrado',
+    clear: 'Borrar',
+    categories: {
+      search: 'Resultados',
+      recent: 'Más usados',
+      people: 'Caras y personas',
+      nature: 'Animales y naturaleza',
+      foods: 'Comida y bebida',
+      activity: 'Actividad',
+      places: 'Viajes y lugares',
+      objects: 'Objetos',
+      symbols: 'Símbolos',
+      flags: 'Banderas',
+      custom: 'FrikiRadar'
+    }
+  }"
+></emoji-mart>
 <ion-footer *ngIf="!chatForm.get('message').disabled">
   <ion-toolbar>
     <ion-buttons ion-activatable slot="start">

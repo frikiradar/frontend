@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
-import { NgxEmojiPickerModule } from "ngx-emoji-picker";
+import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { LinkyModule } from "ngx-linky";
 
 import { SharedModule } from "../shared/shared.module";
@@ -25,7 +25,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     LinkyModule,
     SharedModule,
-    NgxEmojiPickerModule
+    PickerModule
   ],
   declarations: [ChatUserPage]
 })
