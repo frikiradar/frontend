@@ -230,6 +230,7 @@ export class ChatUserPage implements OnInit {
   }*/
 
   async sendMessage(event?: Event) {
+    this.toggled = false;
     if (event) {
       event.preventDefault();
     }
