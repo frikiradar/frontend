@@ -97,13 +97,15 @@
 <emoji-mart
   *ngIf="toggled"
   isNative="true"
-  emoji="spock-hand"
+  emoji="point_up"
   darkMode="true"
-  [style]="{ position: 'absolute', bottom: '55px', right: '0px', left: '0px', width: '100vw', maxWidth: '500px' }"
+  showPreview="false"
+  autoFocus="true"
+  [style]="{ width: '100vw', maxWidth: '500px' }"
   (emojiSelect)="addEmoji($event)"
-  title="FrikiEmojis!"
+  title="Elige un emoji"
   [i18n]="{
-    search: 'Buscar',
+    search: 'Busca el emoji perfecto',
     emojilist: 'Listado de emojis',
     notfound: 'Emoji no encontrado',
     clear: 'Borrar',
