@@ -12,6 +12,7 @@ export class ChatService {
 
   async register(channel: string) {
     const config = await this.config.getConfig();
+    config.push_url = "https://frikiradar.chat/.well-known/mercure";
     return new EventSource(`${config.push_url}?topic=${channel}`);
   }
 
