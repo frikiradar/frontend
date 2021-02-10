@@ -129,10 +129,12 @@ ion-footer {
 
 ::ng-deep {
   emoji-picker {
-    position: relative !important;
+    transform: none !important;
+    bottom: 55px;
 
     emoji-content {
-      width: 100% !important;
+      width: 100vw !important;
+      box-shadow: none !important;
     }
   }
 }

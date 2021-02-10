@@ -46,6 +46,7 @@ export class ChatUserPage implements OnInit {
   infiniteScroll: IonInfiniteScroll;
 
   source: EventSource;
+  public toggled: boolean = false;
 
   user: User;
   userId: User["id"];
@@ -329,6 +330,10 @@ export class ChatUserPage implements OnInit {
 
       console.error(e);
     }
+  }
+
+  addEmoji(event: any) {
+    this.message.setValue(this.message.value + event.char);
   }
 
   openUrl(event: any) {

@@ -70,7 +70,11 @@
     </ion-chip>
     <ion-card button (press)="selectMessage(message)">
       <ion-card-content>
-        <span class="text" [innerHTML]="message.text | linky:{className: 'linkified'}" (click)="$event.stopImmediatePropagation(); openUrl($event);"></span>
+        <span
+          class="text"
+          [innerHTML]="message.text | linky:{className: 'linkified'}"
+          (click)="$event.stopImmediatePropagation(); openUrl($event);"
+        ></span>
         <ion-note>
           {{ message.time_creation | date: "shortTime" }}
           <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
@@ -91,8 +95,23 @@
   </span>
 </ion-content>
 
+<span
+  [emojiPickerIf]="toggled"
+  [emojiPickerDirection]="'bottom' || 'top' || 'left' || 'right'"
+  (emojiPickerSelect)="addEmoji($event)"
+>
+</span>
+
 <ion-footer *ngIf="!chatForm.get('message').disabled">
   <ion-toolbar>
+    <ion-buttons ion-activatable slot="start">
+      <ion-button (click)="toggled = !toggled">
+        <ion-icon
+          slot="icon-only"
+          [name]="toggled ? 'close-outline' : 'happy'"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <form [formGroup]="chatForm" autocomplete="off">
       <ion-item lines="none">
         <ion-textarea
@@ -104,6 +123,7 @@
           autofocus
           autoGrow
           rows="1"
+          (ionFocus)="toggled = false"
         >
         </ion-textarea>
       </ion-item>

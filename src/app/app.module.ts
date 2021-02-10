@@ -37,6 +37,7 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { LinkyModule } from "ngx-linky";
+import { NgxEmojiPickerModule } from "ngx-emoji-picker";
 
 import {
   ServiceWorkerModule,
@@ -60,6 +61,7 @@ registerLocaleData(localeEs, "es");
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    NgxEmojiPickerModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
     FormsModule,

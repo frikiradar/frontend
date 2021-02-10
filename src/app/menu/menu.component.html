@@ -22,6 +22,15 @@
         />
       </ion-avatar>
       <div id="info">
+        <span>
+          <ion-icon
+            name="checkmark-circle"
+            slot="start"
+            size="small"
+            color="secondary"
+            *ngIf="auth.currentUserValue?.verified"
+          ></ion-icon>
+        </span>
         <span>{{ auth.currentUserValue?.name }}</span>
         <span
           *ngIf="
