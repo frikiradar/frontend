@@ -13,6 +13,7 @@ export interface Config {
   chat?: boolean;
   push_url?: string;
   geolocation?: boolean;
+  coordinates?: { latitude: number; longitude: number };
   patreon?: string;
 }
 @Injectable({

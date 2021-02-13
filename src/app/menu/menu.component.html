@@ -2,7 +2,7 @@
   <ion-menu
     [disabled]="!auth.currentUserValue?.id"
     side="start"
-    swipeGesture="false"
+    swipeGesture="true"
     id="menu"
     contentId="content"
   >
@@ -28,7 +28,21 @@
             slot="start"
             size="small"
             color="secondary"
-            *ngIf="auth.currentUserValue?.verified"
+            *ngIf="
+              auth.currentUserValue?.verified &&
+              !auth.currentUserValue?.roles.includes('ROLE_ADMIN') &&
+              !auth.currentUserValue?.roles.includes('ROLE_MASTER')
+            "
+          ></ion-icon>
+          <ion-icon
+            name="shield-checkmark"
+            slot="start"
+            size="small"
+            color="tertiary"
+            *ngIf="
+              auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
+              auth.currentUserValue?.roles.includes('ROLE_MASTER')
+            "
           ></ion-icon>
         </span>
         <span>{{ auth.currentUserValue?.name }}</span>

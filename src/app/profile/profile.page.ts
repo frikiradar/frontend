@@ -38,7 +38,7 @@ export class ProfilePage implements OnInit {
     private toast: ToastController,
     private vibration: Vibration,
     private alert: AlertController,
-    private auth: AuthService,
+    private auth: AuthService
   ) {}
 
   async ngOnInit() {
@@ -70,7 +70,7 @@ export class ProfilePage implements OnInit {
         this.user.from_like ||
         this.auth.isVerified()
       ) {
-          this.router.navigate(["/chat", this.user.id]);
+        this.router.navigate(["/chat", this.user.id]);
       } else {
         const alert = await this.alert.create({
           header: "No puedes iniciar un chat con esta persona",
@@ -92,9 +92,15 @@ export class ProfilePage implements OnInit {
         !this.user.match ||
         !this.auth.isVerified()
       ) {
+        let message = "";
+        if (this.user.from_like) {
+          message = `¡Felicidades por el match! Ya puedes chatear con ${this.user.name}.`;
+        } else {
+          message = `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`;
+        }
         (
           await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`,
+            message,
             duration: 5000,
             position: "middle"
           })

@@ -9,9 +9,9 @@ import { RestService } from "./rest.service";
 export class LikeService {
   constructor(private rest: RestService) {}
 
-  async getLikes(param: "received" | "delivered") {
+  async getLikes(param: "received" | "delivered", page = 1) {
     const likes = (await this.rest
-      .get(`likes?param=${param}`)
+      .get(`likes?param=${param}&page=${page}`)
       .toPromise()) as Like[];
 
     return likes;

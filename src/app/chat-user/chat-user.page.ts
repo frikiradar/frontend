@@ -149,7 +149,7 @@ export class ChatUserPage implements OnInit {
     this.messages = [...this.messages, ...messages];
     // this.chatSvc.setStoragedMessages(messages);
 
-    if (this.messages.length < 50) {
+    if (this.messages.length < 15) {
       this.infiniteScroll.disabled = true;
     }
 
@@ -286,7 +286,7 @@ export class ChatUserPage implements OnInit {
     this.messages = [...messages, ...this.messages];
     event.target.complete();
 
-    if (this.messages.length < 50) {
+    if (this.messages.length < 15) {
       event.target.disabled = true;
     }
   }

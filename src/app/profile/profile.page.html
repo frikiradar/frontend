@@ -70,7 +70,14 @@
                 slot="start"
                 size="small"
                 color="secondary"
-                *ngIf="user.verified"
+                *ngIf="user.verified && user.roles.includes('ROLE_USER')"
+              ></ion-icon>
+              <ion-icon
+                name="shield-checkmark"
+                slot="start"
+                size="small"
+                color="tertiary"
+                *ngIf="user.roles.includes('ROLE_MASTER') || user.roles.includes('ROLE_ADMIN')"
               ></ion-icon>
             </ion-label>
           </ion-item>

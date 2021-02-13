@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
-import { LoadingController, ModalController, Platform } from "@ionic/angular";
+import {
+  LoadingController,
+  ModalController,
+  Platform,
+  ToastController
+} from "@ionic/angular";
 
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ConfigService } from "./config.service";
@@ -18,7 +23,8 @@ export class GeolocationService {
     private config: ConfigService,
     private loading: LoadingController,
     private locationAccuracy: LocationAccuracy,
-    private platform: Platform
+    private platform: Platform,
+    private toastController: ToastController
   ) {}
 
   async requestPermission() {
@@ -52,11 +58,13 @@ export class GeolocationService {
 
   async getCoordinates() {
     try {
-      const loading = await this.loading.create({
-        translucent: true,
-        message: "Obteniendo tu ubicación"
-      });
-      await loading.present();
+      (
+        await this.toastController.create({
+          message: "Obteniendo tu ubicación",
+          position: "middle",
+          color: "secondary"
+        })
+      ).present();
 
       if (this.platform.is("cordova")) {
         await this.locationAccuracy.request(
@@ -72,11 +80,11 @@ export class GeolocationService {
       const latitude = coordinates.coords.latitude;
 
       this.config.set("geolocation", true);
-      this.loading.dismiss();
+      this.toastController.dismiss();
       return { longitude, latitude };
     } catch (e) {
       this.config.set("geolocation", false);
-      this.loading.dismiss();
+      this.toastController.dismiss();
       await this.forcePermission();
       return await this.getCoordinates();
     }

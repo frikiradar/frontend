@@ -2,6 +2,7 @@
 
 Changelog:
 --
+* Cambio de servidor de chat: ahora permite iniciarse desde webapp
 * Selector de emojis en el chat
 
 

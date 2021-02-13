@@ -18,7 +18,7 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
-import { ConfigService } from "../services/config.service";
+import { ConfigService, Config } from "../services/config.service";
 
 @Component({
   selector: "app-radar",
@@ -98,11 +98,25 @@ export class RadarPage {
         if (!this.authUser.roles.includes("ROLE_DEMO")) {
           try {
             const coordinates = await this.geolocationSvc.getGeolocation();
-            const authUser = await this.userSvc.setCoordinates(
-              coordinates.longitude,
-              coordinates.latitude
-            );
-            this.auth.setAuthUser(authUser);
+            const oldCoordinates = (await this.config.get(
+              "coordinates"
+            )) as Config["coordinates"];
+
+            coordinates.latitude.toFixed(2);
+
+            if (
+              coordinates.latitude.toFixed(3) !==
+                oldCoordinates.latitude.toFixed(3) ||
+              coordinates.longitude.toFixed(3) !==
+                oldCoordinates.longitude.toFixed(3)
+            ) {
+              this.config.set("coordinates", coordinates);
+              const authUser = await this.userSvc.setCoordinates(
+                coordinates.longitude,
+                coordinates.latitude
+              );
+              this.auth.setAuthUser(authUser);
+            }
           } catch (e) {
             console.error(e);
             // tienes que aprobar permisos
