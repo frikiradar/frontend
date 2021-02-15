@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import {
+  ActionSheetController,
   AlertController,
   IonContent,
   IonInfiniteScroll,
@@ -18,6 +19,7 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
+import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
@@ -26,6 +28,7 @@ import { ConfigService } from "../services/config.service";
 import { UrlService } from "../services/url.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
+import { UtilsService } from "../services/utils.service";
 
 @Component({
   selector: "app-chat-user",
@@ -44,6 +47,8 @@ export class ChatUserPage implements OnInit {
   chatlist: IonContent;
   @ViewChild(IonInfiniteScroll, { static: true })
   infiniteScroll: IonInfiniteScroll;
+  @ViewChild("imageInput", { static: false })
+  imageInput: ElementRef;
 
   source: EventSource;
   public toggled: boolean = false;
@@ -73,7 +78,10 @@ export class ChatUserPage implements OnInit {
     private platform: Platform,
     private config: ConfigService,
     public formBuilder: FormBuilder,
-    private urlSvc: UrlService
+    private urlSvc: UrlService,
+    private androidPermissions: AndroidPermissions,
+    public sheet: ActionSheetController,
+    private utils: UtilsService
   ) {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required])
@@ -172,7 +180,7 @@ export class ChatUserPage implements OnInit {
         });
       } else {
         this.messages = [...this.messages, message];
-        if (message.fromuser.id === this.user.id) {
+        if (message.fromuser.id === this.user.id && message.text) {
           // marcamos como leido
           message = await this.chatSvc.readChat(message.id);
         } else {
@@ -342,6 +350,58 @@ export class ChatUserPage implements OnInit {
       this.urlSvc.openUrl(event.srcElement.href);
     }
     return false;
+  }
+
+  async openPictureSheet() {
+    if (this.platform.is("android") && this.platform.is("cordova")) {
+      await this.androidPermissions.requestPermissions([
+        this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+        this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
+      ]);
+    }
+
+    if (this.platform.is("cordova")) {
+      const actionSheet = await this.sheet.create({
+        header:
+          "Consejo: Si pones una foto tuya transmitirás mucha más confianza.",
+        buttons: [
+          {
+            text: "Desde la cámara",
+            icon: "camera",
+            handler: async () => {
+              const image = await this.utils.takePicture(
+                "camera",
+                false,
+                "default"
+              );
+              this.sendPicture(image);
+            }
+          },
+          {
+            text: "Desde tus fotos",
+            icon: "images",
+            handler: async () => {
+              const image = await this.utils.takePicture(
+                "gallery",
+                false,
+                "default"
+              );
+              this.sendPicture(image);
+            }
+          }
+        ]
+      });
+      await actionSheet.present();
+    } else {
+      this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
+    }
+  }
+
+  async sendPicture(image: File) {
+    try {
+      const base64 = await this.utils.fileToBase64(image);
+      const chat = await this.chatSvc.sendImage(this.user.id, base64).then();
+    } catch (e) {}
   }
 
   back() {

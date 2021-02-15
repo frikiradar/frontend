@@ -70,7 +70,10 @@
                 slot="start"
                 size="small"
                 color="secondary"
-                *ngIf="user.verified && user.roles.includes('ROLE_USER')"
+                *ngIf="user.verified &&
+                !user.roles.includes('ROLE_ADMIN') &&
+                !user.roles.includes('ROLE_MASTER')
+                "
               ></ion-icon>
               <ion-icon
                 name="shield-checkmark"

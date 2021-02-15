@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-avatar>
+          <img
+            [src]="auth.currentUserValue?.avatar"
+            [alt]="auth.currentUserValue?.username"
+            default="/assets/img/users/default.jpg"
+          />
+        </ion-avatar>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>Comunidad</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides #stories [options]="storiesOpts">
+    <ion-slide>
+      <ion-item button lines="none">
+        <ion-avatar>
+          <img src="/assets/img/users/default.jpg" alt="games" />
+        </ion-avatar>
+      </ion-item>
+    </ion-slide>
+    <ion-slide>
+      <ion-item button lines="none">
+        <ion-avatar>
+          <img src="/assets/img/users/default.jpg" alt="games" />
+        </ion-avatar>
+      </ion-item>
+    </ion-slide>
+    <ion-slide>
+      <ion-item button lines="none">
+        <ion-avatar>
+          <img src="/assets/img/users/default.jpg" alt="games" />
+        </ion-avatar>
+      </ion-item>
+    </ion-slide>
+    <ion-slide>
+      <ion-item button lines="none">
+        <ion-avatar>
+          <img src="/assets/img/users/default.jpg" alt="games" />
+        </ion-avatar>
+      </ion-item>
+    </ion-slide>
+    <ion-slide>
+      <ion-item button lines="none">
+        <ion-avatar>
+          <img src="/assets/img/users/default.jpg" alt="games" />
+        </ion-avatar>
+      </ion-item>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-label>
+    <h2 class="section">Chats grupales</h2>
+    <p class="subtitle">
+      Entra y habla con la comunidad
+    </p>
+  </ion-label>
+  <div id="chats"></div>
+
+  <ion-label>
+    <h2 class="section">Eventos y quedadas</h2>
+    <p class="subtitle">
+      Próximamente
+    </p>
+  </ion-label>
+
+  <!--<div class="full-center ion-padding">
+    <ion-icon name="people-outline"></ion-icon>
+    <h2>Próximamente</h2>
+    <p>
+      Regresa aquí más adelante para disfrutar de todo lo que FrikiRadar te
+      puede ofrecer.
+    </p>
+  </div>-->
+</ion-content>

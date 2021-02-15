@@ -1,6 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
+import { Camera } from "@ionic-native/camera/ngx";
+import { Crop } from "@ionic-native/crop/ngx";
+import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, Platform } from "@ionic/angular";
 
@@ -15,8 +18,49 @@ export class UtilsService {
     private alert: AlertController,
     private auth: AuthService,
     private socialSharing: SocialSharing,
-    private platform: Platform
+    private platform: Platform,
+    private crop: Crop,
+    private webview: WebView,
+    private camera: Camera
   ) {}
+
+  async takePicture(mode?: string, crop?: boolean, name?: string) {
+    const image = await this.camera.getPicture({
+      quality: 70,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      sourceType:
+        mode === "camera"
+          ? this.camera.PictureSourceType.CAMERA
+          : this.camera.PictureSourceType.PHOTOLIBRARY,
+      mediaType: this.camera.MediaType.PICTURE,
+      cameraDirection: 1,
+      correctOrientation: true
+    });
+
+    try {
+      if (crop) {
+        const newImage = await this.crop.crop(image, {
+          quality: 100,
+          targetWidth: -1,
+          targetHeight: -1
+        });
+
+        const src = this.webview.convertFileSrc(newImage);
+        const blob = (await this.urltoBlob(src)) as Blob;
+
+        const croppedImage: File = new File(
+          [blob],
+          name ? name : "default" + ".png"
+        );
+        return croppedImage;
+      } else {
+        return image;
+      }
+    } catch (e) {
+      console.error("Error al recortar la imagen.", e);
+    }
+  }
 
   base64toBlob(dataURI: string) {
     const bytes: string = atob(dataURI.split(",")[1]);
@@ -45,10 +89,10 @@ export class UtilsService {
     });
   }
 
-  blobToBase64(blob: Blob): Promise<string> {
+  fileToBase64(file: Blob | File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(blob);
+      reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = error => reject(error);
     });

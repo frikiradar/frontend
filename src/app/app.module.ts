@@ -38,6 +38,7 @@ import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
+import { Pro } from "@ionic/pro";
 
 import {
   ServiceWorkerModule,
@@ -54,6 +55,10 @@ import { SharedModule } from "./shared/shared.module";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
 registerLocaleData(localeEs, "es");
+
+Pro.init("6e277455", {
+  appVersion: "1.0"
+});
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],

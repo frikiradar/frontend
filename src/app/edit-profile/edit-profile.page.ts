@@ -7,9 +7,6 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
-import { Camera } from "@ionic-native/camera/ngx";
-import { Crop } from "@ionic-native/crop/ngx";
-import { WebView } from "@ionic-native/ionic-webview/ngx";
 import {
   ActionSheetController,
   IonInput,
@@ -77,14 +74,11 @@ export class EditProfilePage {
     private auth: AuthService,
     private picker: PickerController,
     public sheet: ActionSheetController,
-    private crop: Crop,
     private utils: UtilsService,
-    private camera: Camera,
     private router: Router,
     private toast: ToastController,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions,
-    private webview: WebView
+    private androidPermissions: AndroidPermissions
   ) {
     this.profileForm = this.fb.group({
       name: [""],
@@ -327,15 +321,25 @@ export class EditProfilePage {
           {
             text: "Desde la cámara",
             icon: "camera",
-            handler: () => {
-              this.takePicture("camera");
+            handler: async () => {
+              const avatar = await this.utils.takePicture(
+                "camera",
+                true,
+                "avatar"
+              );
+              this.uploadPicture(avatar);
             }
           },
           {
             text: "Desde tus fotos",
             icon: "images",
-            handler: () => {
-              this.takePicture("gallery");
+            handler: async () => {
+              const avatar = await this.utils.takePicture(
+                "gallery",
+                true,
+                "avatar"
+              );
+              this.uploadPicture(avatar);
             }
           }
         ]
@@ -343,37 +347,6 @@ export class EditProfilePage {
       await actionSheet.present();
     } else {
       this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
-    }
-  }
-
-  async takePicture(mode?: string) {
-    const image = await this.camera.getPicture({
-      quality: 70,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      sourceType:
-        mode === "camera"
-          ? this.camera.PictureSourceType.CAMERA
-          : this.camera.PictureSourceType.PHOTOLIBRARY,
-      mediaType: this.camera.MediaType.PICTURE,
-      cameraDirection: 1,
-      correctOrientation: true
-    });
-
-    try {
-      const newImage = await this.crop.crop(image, {
-        quality: 100,
-        targetWidth: -1,
-        targetHeight: -1
-      });
-
-      const src = this.webview.convertFileSrc(newImage);
-      const blob = (await this.utils.urltoBlob(src)) as Blob;
-
-      const avatar: File = new File([blob], "avatar.png");
-      this.uploadPicture(avatar);
-    } catch (e) {
-      console.error("Error al recortar la imagen.", e);
     }
   }
 

@@ -75,6 +75,9 @@
           [innerHTML]="message.text | linky:{className: 'linkified'}"
           (click)="$event.stopImmediatePropagation(); openUrl($event);"
         ></span>
+        <span class="image" *ngIf="message.image">
+          <img [src]="message.image" />
+        </span>
         <ion-note>
           {{ message.time_creation | date: "shortTime" }}
           <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
@@ -130,9 +133,20 @@
       <ion-button (click)="toggled = !toggled">
         <ion-icon
           slot="icon-only"
-          [name]="toggled ? 'close-outline' : 'happy'"
+          [name]="toggled ? 'close-outline' : 'happy-outline'"
         ></ion-icon>
       </ion-button>
+      <!--<ion-button *ngIf="!message.value" (click)="openPictureSheet()">
+        <ion-icon slot="icon-only" name="attach-outline"></ion-icon>
+      </ion-button>
+      <input
+        type="file"
+        accept="image/*"
+        #imageInput
+        style="display: none;"
+        name="default"
+        (change)="sendPicture($event.target.files[0])"
+      />-->
     </ion-buttons>
     <form [formGroup]="chatForm" autocomplete="off">
       <ion-item lines="none">
@@ -153,7 +167,7 @@
     <ion-buttons ion-activatable slot="end">
       <ion-button
         color="primary"
-        [disabled]="chatForm.get('message').disabled"
+        [disabled]="!message.value"
         (click)="sendMessage()"
       >
         <ion-icon slot="icon-only" name="send"></ion-icon>

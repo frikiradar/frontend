@@ -1,6 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
+import { Crop } from "@ionic-native/crop/ngx";
+import { Camera } from "@ionic-native/camera/ngx";
 
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { CreditsModal } from "../credits/credits.modal";
@@ -18,6 +20,7 @@ import { ImagePreloadDirective } from "../shared/image-preload.directive";
   ],
   entryComponents: [AmbassadorModal, CreditsModal, RequestGeolocationModal],
   imports: [IonicModule, CommonModule],
-  exports: [ImagePreloadDirective, NiceDatePipe]
+  exports: [ImagePreloadDirective, NiceDatePipe],
+  providers: [Crop, Camera]
 })
 export class SharedModule {}

@@ -33,6 +33,12 @@ export class ChatService {
       .toPromise()) as Chat;
   }
 
+  async sendImage(id: number, base64: string) {
+    return (await this.rest
+      .put("chat", { touser: id, image: base64 })
+      .toPromise()) as Chat;
+  }
+
   async readChat(id: number) {
     return (await this.rest.get(`read-chat/${id}`).toPromise()) as Chat;
   }

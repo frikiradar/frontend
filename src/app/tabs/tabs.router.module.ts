@@ -39,6 +39,18 @@ const routes: Routes = [
         ]
       },
       {
+        path: "community",
+        children: [
+          {
+            path: "",
+            loadChildren: () =>
+              import("../community/community.module").then(
+                m => m.CommunityPageModule
+              )
+          }
+        ]
+      },
+      {
         path: "",
         redirectTo: "/tabs/radar",
         pathMatch: "full"
