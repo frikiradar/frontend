@@ -136,7 +136,7 @@
           [name]="toggled ? 'close-outline' : 'happy-outline'"
         ></ion-icon>
       </ion-button>
-      <ion-button *ngIf="!message.value" (click)="openPictureSheet()">
+      <!--<ion-button *ngIf="!message.value" (click)="openPictureSheet()">
         <ion-icon slot="icon-only" name="attach-outline"></ion-icon>
       </ion-button>
       <input
@@ -146,7 +146,7 @@
         style="display: none;"
         name="default"
         (change)="sendPicture($event.target.files[0])"
-      />
+      />-->
     </ion-buttons>
     <form [formGroup]="chatForm" autocomplete="off">
       <ion-item lines="none">
