@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { Platform } from "@ionic/angular";
+import { AuthService } from "../services/auth.service";
 
 import {
   Notification,
@@ -17,7 +17,7 @@ export class TabsPage implements OnInit {
   constructor(
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
-    private platform: Platform,
+    public auth: AuthService
   ) {}
 
   async ngOnInit() {

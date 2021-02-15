@@ -180,6 +180,13 @@ export class AuthService {
     return user?.roles?.includes("ROLE_ADMIN");
   }
 
+  isMaster(user?: User) {
+    if (!user) {
+      user = this.currentUserValue;
+    }
+    return user?.roles?.includes("ROLE_MASTER");
+  }
+
   isDemo(user?: User) {
     if (!user) {
       user = this.currentUserValue;
