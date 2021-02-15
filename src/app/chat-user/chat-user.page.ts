@@ -53,11 +53,10 @@ export class ChatUserPage implements OnInit {
   source: EventSource;
   public toggled: boolean = false;
 
-  user: User;
+  user: Partial<User>;
   userId: User["id"];
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
-  loading = true;
   page = 0;
   showOptions = false;
   selectedMessage: Chat;
@@ -116,16 +115,15 @@ export class ChatUserPage implements OnInit {
 
     this.userId = +this.route.snapshot.paramMap.get("id");
 
-    try {
+    /*try {
       this.user = await this.userSvc.getUser(this.userId);
-      this.loading = false;
 
       if (this.user.username === "frikiradar") {
         this.chatForm.get("message").disable();
       }
     } catch (e) {
       this.chatForm.get("message").disable();
-    }
+    }*/
 
     this.page = 1;
 
@@ -163,6 +161,16 @@ export class ChatUserPage implements OnInit {
 
     this.scrollDown(500);
 
+    if (this.userId == this.messages[0].fromuser.id) {
+      this.user = this.messages[0].fromuser;
+    } else {
+      this.user = this.messages[0].touser;
+    }
+
+    if (this.auth.isDemo(this.user as User) || !this.user.active) {
+      this.chatForm.get("message").disable();
+    }
+
     const min = Math.min(this.auth.currentUserValue.id, this.userId);
     const max = Math.max(this.auth.currentUserValue.id, this.userId);
     const channel = `${min}_${max}`;
@@ -190,7 +198,7 @@ export class ChatUserPage implements OnInit {
       }
 
       if (message.fromuser.id === this.user.id) {
-        this.user = { ...this.user, ...message.fromuser };
+        this.user = message.fromuser;
       }
 
       this.scrollDown();
@@ -300,7 +308,9 @@ export class ChatUserPage implements OnInit {
   }
 
   async showProfile(id: User["id"]) {
-    this.router.navigate(["/profile", id]);
+    if (id !== 1) {
+      this.router.navigate(["/profile", id]);
+    }
   }
 
   selectMessage(message: Chat) {
