@@ -184,7 +184,7 @@
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-ionic": {
         "APP_ID": "6e277455",
-        "CHANNEL_NAME": "Production",
+        "CHANNEL_NAME": "Master",
         "UPDATE_METHOD": "background",
         "MAX_STORE": "2",
         "MIN_BACKGROUND_DURATION": "30",
