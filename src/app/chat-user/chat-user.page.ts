@@ -161,10 +161,18 @@ export class ChatUserPage implements OnInit {
 
     this.scrollDown(500);
 
-    if (this.userId == this.messages[0].fromuser.id) {
-      this.user = this.messages[0].fromuser;
+    if (this.messages.length > 0) {
+      if (this.userId == this.messages[0].fromuser.id) {
+        this.user = this.messages[0].fromuser;
+      } else {
+        this.user = this.messages[0].touser;
+      }
     } else {
-      this.user = this.messages[0].touser;
+      try {
+        this.user = await this.userSvc.getUser(this.userId);
+      } catch (e) {
+        this.chatForm.get("message").disable();
+      }
     }
 
     if (this.auth.isDemo(this.user as User) || !this.user.active) {
@@ -409,9 +417,13 @@ export class ChatUserPage implements OnInit {
 
   async sendPicture(image: File) {
     try {
+      console.log("image", image);
       const base64 = await this.utils.fileToBase64(image);
+      console.log("base", base64);
       const chat = await this.chatSvc.sendImage(this.user.id, base64).then();
-    } catch (e) {}
+    } catch (e) {
+      console.error("error al enviar la imagen" + e);
+    }
   }
 
   back() {
