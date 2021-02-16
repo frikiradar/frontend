@@ -415,12 +415,9 @@ export class ChatUserPage implements OnInit {
     }
   }
 
-  async sendPicture(image: File) {
+  async sendPicture(file: File) {
     try {
-      console.log("image", image);
-      const base64 = await this.utils.fileToBase64(image);
-      console.log("base", base64);
-      const chat = await this.chatSvc.sendImage(this.user.id, base64).then();
+      const chat = await this.chatSvc.sendImage(this.user.id, file).then();
     } catch (e) {
       console.error("error al enviar la imagen" + e);
     }

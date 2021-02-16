@@ -24,8 +24,12 @@ export class UtilsService {
     private camera: Camera
   ) {}
 
-  async takePicture(mode?: string, crop?: boolean, name?: string) {
-    const image = await this.camera.getPicture({
+  async takePicture(
+    mode?: string,
+    crop?: boolean,
+    name?: string
+  ): Promise<File> {
+    let image = await this.camera.getPicture({
       quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
@@ -40,23 +44,17 @@ export class UtilsService {
 
     try {
       if (crop) {
-        const newImage = await this.crop.crop(image, {
+        image = await this.crop.crop(image, {
           quality: 100,
           targetWidth: -1,
           targetHeight: -1
         });
-
-        const src = this.webview.convertFileSrc(newImage);
-        const blob = (await this.urltoBlob(src)) as Blob;
-
-        const croppedImage: File = new File(
-          [blob],
-          name ? name : "default" + ".png"
-        );
-        return croppedImage;
-      } else {
-        return image;
       }
+      const src = this.webview.convertFileSrc(image);
+      const blob = (await this.urltoBlob(src)) as Blob;
+
+      const blobFile: File = new File([blob], name ? name : "default" + ".png");
+      return blobFile;
     } catch (e) {
       console.error("Error al recortar la imagen.", e);
     }

@@ -3,12 +3,17 @@ import { Injectable } from "@angular/core";
 import { Chat } from "../models/chat";
 import { ConfigService } from "./config.service";
 import { RestService } from "./rest.service";
+import { UploadService } from "./upload.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class ChatService {
-  constructor(private rest: RestService, private config: ConfigService) {}
+  constructor(
+    private rest: RestService,
+    private config: ConfigService,
+    private uploadSvc: UploadService
+  ) {}
 
   async register(channel: string) {
     const config = await this.config.getConfig();
@@ -33,10 +38,11 @@ export class ChatService {
       .toPromise()) as Chat;
   }
 
-  async sendImage(id: number, base64: string) {
-    return (await this.rest
-      .put("chat", { touser: id, image: base64 })
-      .toPromise()) as Chat;
+  async sendImage(id: number, file: File) {
+    const formData: FormData = new FormData();
+    formData.set("image", file);
+    formData.set("touser", "" + id);
+    this.uploadSvc.upload("chat-upload", formData);
   }
 
   async readChat(id: number) {
