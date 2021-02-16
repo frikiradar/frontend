@@ -149,7 +149,7 @@ export class ChatUserPage implements OnInit {
     const messages = (
       await this.chatSvc.getMessages(this.userId, true, this.page, lastId)
     )
-      .filter(m => m.text)
+      .filter(m => m.text || m.image || m.audio)
       .reverse();
 
     this.messages = [...this.messages, ...messages];
@@ -196,7 +196,10 @@ export class ChatUserPage implements OnInit {
         });
       } else {
         this.messages = [...this.messages, message];
-        if (message.fromuser.id === this.user.id && message.text) {
+        if (
+          message.fromuser.id === this.user.id &&
+          (message.text || message.image || message.audio)
+        ) {
           // marcamos como leido
           message = await this.chatSvc.readChat(message.id);
         } else {
@@ -275,7 +278,7 @@ export class ChatUserPage implements OnInit {
             sending: true
           }
         ]
-      ].filter(m => m.text);
+      ].filter((m: Chat) => m.text);
 
       this.scrollDown();
       try {
@@ -305,7 +308,7 @@ export class ChatUserPage implements OnInit {
     const messages = (
       await this.chatSvc.getMessages(this.userId, false, this.page)
     )
-      .filter(m => m.text)
+      .filter(m => m.text || m.image || m.audio)
       .reverse();
     this.messages = [...messages, ...this.messages];
     event.target.complete();

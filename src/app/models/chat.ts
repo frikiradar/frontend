@@ -2,7 +2,9 @@ import { User } from "./user";
 
 export interface Chat {
   touser: Partial<User>;
-  text: string;
+  text?: string;
+  image?: string;
+  audio?: string;
   fromuser?: Partial<User>;
   user?: Partial<User>;
   time_creation?: Date;
