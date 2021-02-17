@@ -69,15 +69,17 @@
       >
     </ion-chip>
     <ion-card button (press)="selectMessage(message)">
-      <ion-card-content>
+      <ion-img
+        *ngIf="message.image"
+        (click)="openViewer(message.image, 'title', 'text')"
+        [src]="message.image"
+      ></ion-img>
+      <ion-card-content *ngIf="message.text">
         <span
           class="text"
           [innerHTML]="message.text | linky:{className: 'linkified'}"
           (click)="$event.stopImmediatePropagation(); openUrl($event);"
         ></span>
-        <span class="image" *ngIf="message.image">
-          <img [src]="message.image" />
-        </span>
         <ion-note>
           {{ message.time_creation | date: "shortTime" }}
           <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
@@ -110,7 +112,7 @@
   [i18n]="{
     search: 'Busca el emoji perfecto',
     emojilist: 'Listado de emojis',
-    notfound: 'Emoji no encontrado',
+   found: 'Emoji no encontrado',
     clear: 'Borrar',
     categories: {
       search: 'Resultados',
@@ -128,6 +130,16 @@
   }"
 ></emoji-mart>
 <ion-footer *ngIf="!chatForm.get('message').disabled">
+  <div id="image-preview" *ngIf="image">
+    <ion-icon
+      name="close-circle"
+      slot="icon-only"
+      (click)="image = ''"
+    ></ion-icon>
+    <ion-thumbnail>
+      <img [src]="image" />
+    </ion-thumbnail>
+  </div>
   <ion-toolbar>
     <ion-buttons ion-activatable slot="start">
       <ion-button (click)="toggled = !toggled">
@@ -136,11 +148,8 @@
           [name]="toggled ? 'close-outline' : 'happy-outline'"
         ></ion-icon>
       </ion-button>
-      <ion-button
-        *ngIf="!message.value && auth.isMaster()"
-        (click)="openPictureSheet()"
-      >
-        <ion-icon slot="icon-only" name="attach-outline"></ion-icon>
+      <ion-button *ngIf="auth.isMaster()" (click)="openPictureSheet()">
+        <ion-icon slot="icon-only" name="camera"></ion-icon>
       </ion-button>
       <input
         type="file"
@@ -148,7 +157,7 @@
         #imageInput
         style="display: none;"
         name="default"
-        (change)="sendPicture($event.target.files[0])"
+        (change)="addPicture($event.target.files[0]);"
       />
     </ion-buttons>
     <form [formGroup]="chatForm" autocomplete="off">
@@ -170,7 +179,7 @@
     <ion-buttons ion-activatable slot="end">
       <ion-button
         color="primary"
-        [disabled]="!message.value"
+        [disabled]="!message.value && !image"
         (click)="sendMessage()"
       >
         <ion-icon slot="icon-only" name="send"></ion-icon>

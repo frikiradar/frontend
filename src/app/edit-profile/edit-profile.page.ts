@@ -322,11 +322,11 @@ export class EditProfilePage {
             text: "Desde la cámara",
             icon: "camera",
             handler: async () => {
-              const avatar = await this.utils.takePicture(
+              const avatar = (await this.utils.takePicture(
                 "camera",
                 true,
                 "avatar"
-              );
+              )) as File;
               this.uploadPicture(avatar);
             }
           },
@@ -334,11 +334,11 @@ export class EditProfilePage {
             text: "Desde tus fotos",
             icon: "images",
             handler: async () => {
-              const avatar = await this.utils.takePicture(
+              const avatar = (await this.utils.takePicture(
                 "gallery",
                 true,
                 "avatar"
-              );
+              )) as File;
               this.uploadPicture(avatar);
             }
           }

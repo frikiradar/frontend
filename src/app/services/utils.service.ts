@@ -27,8 +27,9 @@ export class UtilsService {
   async takePicture(
     mode?: string,
     crop?: boolean,
-    name?: string
-  ): Promise<File> {
+    name?: string,
+    returnsrc = false
+  ): Promise<File | string> {
     let image = await this.camera.getPicture({
       quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -51,6 +52,9 @@ export class UtilsService {
         });
       }
       const src = this.webview.convertFileSrc(image);
+      if (returnsrc) {
+        return src;
+      }
       const blob = (await this.urltoBlob(src)) as Blob;
 
       const blobFile: File = new File([blob], name ? name : "default" + ".png");
@@ -72,7 +76,7 @@ export class UtilsService {
     return new Blob([byteArray], { type: "image/png" });
   }
 
-  urltoBlob(url: string) {
+  urltoBlob(url: string): Promise<Blob> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onerror = reject;
@@ -85,6 +89,12 @@ export class UtilsService {
       xhr.responseType = "blob"; // convert type
       xhr.send();
     });
+  }
+
+  async urlToFile(url: string, name?: string) {
+    const blob = await this.urltoBlob(url);
+    const blobFile: File = new File([blob], name ? name : "default" + ".png");
+    return blobFile;
   }
 
   fileToBase64(file: Blob | File): Promise<string> {

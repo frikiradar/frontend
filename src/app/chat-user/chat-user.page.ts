@@ -15,6 +15,7 @@ import {
   IonContent,
   IonInfiniteScroll,
   IonTextarea,
+  ModalController,
   NavController,
   Platform,
   ToastController
@@ -29,6 +30,7 @@ import { UrlService } from "../services/url.service";
 import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
 import { UtilsService } from "../services/utils.service";
+import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 
 @Component({
   selector: "app-chat-user",
@@ -62,6 +64,7 @@ export class ChatUserPage implements OnInit {
   selectedMessage: Chat;
   conErrors = 0;
   alertError: any;
+  public image: string;
 
   constructor(
     public auth: AuthService,
@@ -80,7 +83,8 @@ export class ChatUserPage implements OnInit {
     private urlSvc: UrlService,
     private androidPermissions: AndroidPermissions,
     public sheet: ActionSheetController,
-    private utils: UtilsService
+    private utils: UtilsService,
+    public modalController: ModalController
   ) {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required])
@@ -183,6 +187,7 @@ export class ChatUserPage implements OnInit {
     const max = Math.max(this.auth.currentUserValue.id, this.userId);
     const channel = `${min}_${max}`;
 
+    // Nos suscribimos al canal
     this.source = await this.chatSvc.register(channel);
     this.source.addEventListener("message", async (res: any) => {
       this.conErrors = 0;
@@ -262,8 +267,9 @@ export class ChatUserPage implements OnInit {
       event.preventDefault();
     }
 
-    if (this.message.value && this.message.value.trim()) {
-      const text = this.message.value.trim();
+    if ((this.message.value && this.message.value.trim()) || this.image) {
+      const text = this.message.value ? this.message.value.trim() : "";
+      const image = this.image;
       this.message.setValue("");
       this.textarea?.setFocus();
 
@@ -274,6 +280,7 @@ export class ChatUserPage implements OnInit {
             touser: { id: this.user.id },
             fromuser: { id: this.auth.currentUserValue.id },
             text,
+            image,
             time_creation: new Date(),
             sending: true
           }
@@ -282,7 +289,17 @@ export class ChatUserPage implements OnInit {
 
       this.scrollDown();
       try {
-        const chat = await this.chatSvc.sendMessage(this.user.id, text).then();
+        if (!image) {
+          const chat = await this.chatSvc
+            .sendMessage(this.user.id, text)
+            .then();
+        } else if (image) {
+          const imageFile = await this.utils.urlToFile(image);
+          const chat = await this.chatSvc
+            .sendImage(this.user.id, imageFile, text)
+            .then();
+          this.image = "";
+        }
         // this.chatSvc.setStoragedMessages([chat]);
       } catch (e) {
         this.messages = this.messages.filter(m => m.sending !== true);
@@ -390,24 +407,26 @@ export class ChatUserPage implements OnInit {
             text: "Desde la cámara",
             icon: "camera",
             handler: async () => {
-              const image = await this.utils.takePicture(
+              const image = (await this.utils.takePicture(
                 "camera",
                 false,
-                "default"
-              );
-              this.sendPicture(image);
+                "default",
+                true
+              )) as string;
+              this.addPicture(image);
             }
           },
           {
             text: "Desde tus fotos",
             icon: "images",
             handler: async () => {
-              const image = await this.utils.takePicture(
+              const image = (await this.utils.takePicture(
                 "gallery",
                 false,
-                "default"
-              );
-              this.sendPicture(image);
+                "default",
+                true
+              )) as string;
+              this.addPicture(image);
             }
           }
         ]
@@ -418,12 +437,28 @@ export class ChatUserPage implements OnInit {
     }
   }
 
-  async sendPicture(file: File) {
-    try {
-      const chat = await this.chatSvc.sendImage(this.user.id, file).then();
-    } catch (e) {
-      console.error("error al enviar la imagen" + e);
+  async addPicture(image: string | File) {
+    if (typeof image !== "string") {
+      image = await this.utils.fileToBase64(image);
     }
+    this.image = image;
+  }
+
+  async openViewer(src: string, title: string, text: string, scheme = "dark") {
+    const modal = await this.modalController.create({
+      component: ViewerModalComponent,
+      componentProps: {
+        src,
+        title,
+        text,
+        scheme
+      },
+      cssClass: "ion-img-viewer",
+      keyboardClose: true,
+      showBackdrop: true
+    });
+
+    return await modal.present();
   }
 
   back() {

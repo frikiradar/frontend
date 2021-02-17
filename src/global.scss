@@ -191,3 +191,9 @@ ul {
     border-radius: 50px !important;
   }
 }
+
+.ion-img-viewer {
+  .swiper-slide img {
+    z-index: 1;
+  }
+}

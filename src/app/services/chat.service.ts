@@ -38,10 +38,11 @@ export class ChatService {
       .toPromise()) as Chat;
   }
 
-  async sendImage(id: number, file: File) {
+  async sendImage(id: number, image: File, text: string) {
     const formData: FormData = new FormData();
-    formData.set("image", file);
+    formData.set("image", image);
     formData.set("touser", "" + id);
+    formData.set("text", text);
     this.uploadSvc.upload("chat-upload", formData);
   }
 

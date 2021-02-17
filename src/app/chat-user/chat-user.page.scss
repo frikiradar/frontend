@@ -34,9 +34,13 @@ ion-label {
     ion-card {
       margin-left: 40px;
       --color: white;
-      --background: #6d0b28;
+      --background: none;
       float: right;
       clear: both;
+    }
+
+    ion-card-content {
+      background: #6d0b28;
     }
 
     & + .to ion-card {
@@ -48,9 +52,13 @@ ion-label {
     ion-card {
       margin-right: 40px;
       --color: white;
-      --background: #9a1c42;
+      --background: none;
       float: left;
       clear: both;
+    }
+
+    ion-card-content {
+      background: #9a1c42;
     }
 
     & + .from ion-card {
@@ -88,6 +96,22 @@ ion-chip {
 }
 
 ion-footer {
+  #image-preview {
+    ion-icon {
+      position: absolute;
+      top: -5px;
+      font-size: 20px;
+      color: #e91e63;
+      z-index: 1;
+      left: 45px;
+    }
+    ion-thumbnail {
+      --border-radius: 5px;
+      padding: 5px;
+      --size: 60px;
+    }
+  }
+
   ion-item {
     background: white;
     border-radius: 30px;

@@ -39,6 +39,7 @@ import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { Pro } from "@ionic/pro";
+import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 
 import {
   ServiceWorkerModule,
@@ -75,7 +76,8 @@ Pro.init("6e277455", {
     BrowserAnimationsModule,
     LinkyModule,
     ServiceWorkerModule.register("ngsw-worker.js"),
-    HammerModule
+    HammerModule,
+    NgxIonicImageViewerModule
   ],
   providers: [
     StatusBar,
