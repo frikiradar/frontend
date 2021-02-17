@@ -164,4 +164,34 @@ export class UtilsService {
       // fallback
     }
   }
+
+  niceDate(time: string) {
+    console.log(time);
+    const date = new Date(time);
+    const hours = this.format_two_digits(date.getHours());
+    const minutes = this.format_two_digits(date.getMinutes());
+
+    const diff = (new Date().getTime() - date.getTime()) / 1000;
+    const daydiff = Math.floor(diff / 86400);
+
+    if (isNaN(daydiff) || daydiff < 0 || daydiff >= 31) {
+      return "";
+    }
+
+    return (
+      (daydiff === 0 &&
+        ((diff < 300 && "ahora mismo") ||
+          (diff < 3600 && "hace " + Math.floor(diff / 60) + " minutos") ||
+          (diff < 7200 && "hace 1 hora") ||
+          (diff < 86400 && "hace " + Math.floor(diff / 3600) + " horas"))) ||
+      (daydiff === 1 && "ayer a las " + hours + ":" + minutes) ||
+      (daydiff < 14 && "hace " + daydiff + " días") ||
+      (daydiff < 30 && "hace " + Math.ceil(daydiff / 7) + " semanas") ||
+      (daydiff < 60 && "hace 1 mes")
+    );
+  }
+
+  format_two_digits(n: string | number) {
+    return n < 10 ? "0" + n : n;
+  }
 }

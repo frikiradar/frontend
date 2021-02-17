@@ -69,11 +69,12 @@
       >
     </ion-chip>
     <ion-card button (press)="selectMessage(message)">
-      <ion-img
-        *ngIf="message.image"
-        (click)="openViewer(message.image, 'title', 'text')"
-        [src]="message.image"
-      ></ion-img>
+      <div *ngIf="message.image">
+        <img
+          (click)="openViewer(message.image, message.fromuser.name + ', ' + utils.niceDate(message.time_creation), message.text)"
+          [src]="message.image"
+        />
+      </div>
       <ion-card-content *ngIf="message.text">
         <span
           class="text"

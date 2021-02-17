@@ -83,7 +83,7 @@ export class ChatUserPage implements OnInit {
     private urlSvc: UrlService,
     private androidPermissions: AndroidPermissions,
     public sheet: ActionSheetController,
-    private utils: UtilsService,
+    public utils: UtilsService,
     public modalController: ModalController
   ) {
     this.chatForm = formBuilder.group({
@@ -445,14 +445,25 @@ export class ChatUserPage implements OnInit {
   }
 
   async openViewer(src: string, title: string, text: string, scheme = "dark") {
-    const modal = await this.modalController.create({
-      component: ViewerModalComponent,
-      componentProps: {
+    console.log(title, text);
+    let componentProps = {};
+    if (text) {
+      componentProps = {
         src,
         title,
         text,
         scheme
-      },
+      };
+    } else {
+      componentProps = {
+        src,
+        title,
+        scheme
+      };
+    }
+    const modal = await this.modalController.create({
+      component: ViewerModalComponent,
+      componentProps,
       cssClass: "ion-img-viewer",
       keyboardClose: true,
       showBackdrop: true
