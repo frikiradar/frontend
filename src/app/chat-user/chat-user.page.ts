@@ -77,7 +77,7 @@ export class ChatUserPage implements OnInit {
     private alert: AlertController,
     private clipboard: Clipboard,
     public keyboard: Keyboard,
-    private platform: Platform,
+    public platform: Platform,
     private config: ConfigService,
     public formBuilder: FormBuilder,
     private urlSvc: UrlService,
@@ -285,7 +285,7 @@ export class ChatUserPage implements OnInit {
             sending: true
           }
         ]
-      ].filter((m: Chat) => m.text);
+      ].filter((m: Chat) => m.text || m.image);
 
       this.scrollDown();
       try {
@@ -445,7 +445,6 @@ export class ChatUserPage implements OnInit {
   }
 
   async openViewer(src: string, title: string, text: string, scheme = "dark") {
-    console.log(title, text);
     let componentProps = {};
     if (text) {
       componentProps = {
@@ -470,6 +469,21 @@ export class ChatUserPage implements OnInit {
     });
 
     return await modal.present();
+  }
+
+  async openMic() {
+    /*if (this.platform.is("android") && this.platform.is("cordova")) {
+      await this.androidPermissions.requestPermissions([
+        this.androidPermissions.PERMISSION.RECORD_AUDIO
+      ]);
+    }
+    let options: CaptureAudioOptions = { limit: 1, duration: 60 * 30 };
+    this.mediaCapture.captureAudio(options).then(
+      (data: MediaFile[]) => {
+        console.log(data);
+      },
+      (err: CaptureError) => console.error(err)
+    );*/
   }
 
   back() {

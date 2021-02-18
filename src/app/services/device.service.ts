@@ -43,7 +43,7 @@ export class DeviceService {
       const name = `${this.device.manufacturer} ${
         this.device.model
       } (${this.device.platform.charAt(0).toUpperCase() +
-        this.device.platform.slice(1)} ${this.device.version})`;
+        this.device.platform.slice(1)} ${this.device?.version})`;
 
       const user = (await this.rest
         .put("device", {
@@ -64,7 +64,7 @@ export class DeviceService {
         device_name: `${this.device.manufacturer} ${
           this.device.model
         } (${this.device.platform.charAt(0).toUpperCase() +
-          this.device.platform.slice(1)} ${this.device.version})`
+          this.device.platform.slice(1)} ${this.device?.version})`
       };
       const devices = await this.getDevices();
       if (devices.some(d => d.device_id === device.device_id)) {

@@ -166,7 +166,6 @@ export class UtilsService {
   }
 
   niceDate(time: string) {
-    console.log(time);
     const date = new Date(time);
     const hours = this.format_two_digits(date.getHours());
     const minutes = this.format_two_digits(date.getMinutes());
