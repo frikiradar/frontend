@@ -91,32 +91,30 @@ export class RadarPage {
           LogRocket.identify("" + this.authUser.id, {
             name: this.authUser.username,
             email: this.authUser.email,
-            device: (await this.deviceSvc.getCurrentDevice()).device_name
+            device: (await this.deviceSvc.getCurrentDevice())?.device_name
           });
         }
 
         if (!this.authUser.roles.includes("ROLE_DEMO")) {
           try {
             const coordinates = await this.geolocationSvc.getGeolocation();
-            const oldCoordinates = (await this.config.get(
+            /*const oldCoordinates = (await this.config.get(
               "coordinates"
             )) as Config["coordinates"];
 
-            coordinates.latitude.toFixed(2);
-
             if (
               coordinates.latitude.toFixed(3) !==
-                oldCoordinates.latitude.toFixed(3) ||
+                oldCoordinates?.latitude.toFixed(3) ||
               coordinates.longitude.toFixed(3) !==
-                oldCoordinates.longitude.toFixed(3)
-            ) {
-              this.config.set("coordinates", coordinates);
-              const authUser = await this.userSvc.setCoordinates(
-                coordinates.longitude,
-                coordinates.latitude
-              );
-              this.auth.setAuthUser(authUser);
-            }
+                oldCoordinates?.longitude.toFixed(3)
+            ) {*/
+            this.config.set("coordinates", coordinates);
+            const authUser = await this.userSvc.setCoordinates(
+              coordinates.longitude,
+              coordinates.latitude
+            );
+            this.auth.setAuthUser(authUser);
+            //}
           } catch (e) {
             console.error(e);
             // tienes que aprobar permisos
