@@ -157,9 +157,9 @@ export class RadarPage {
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
 
       if (this.ratio === -1) {
-        /*if (resUsers?.length > 0 && !this.users?.length) {
-          this.getRadarUsers()
-        }*/
+        if (resUsers?.length > 0 && !this.users?.length) {
+          this.users = [...this.users, ...resUsers];
+        }
 
         if (this.users[0]?.id) {
           this.user = this.users[0];
