@@ -35,7 +35,7 @@
     </ion-buttons>
     <ion-buttons
       slot="end"
-      *ngIf="!pressOptions && !user?.roles?.includes('ROLE_DEMO')"
+      *ngIf="!pressOptions && user?.active && !user?.roles?.includes('ROLE_DEMO')"
     >
       <ion-button (click)="showOptions($event)">
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
