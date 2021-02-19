@@ -111,7 +111,7 @@ export class LoginPage {
     } else if (message.includes("Banned account.")) {
       header = "Tu cuenta está baneada";
       const data = JSON.parse(message);
-      const date = data.end.date;
+      const date = data.end?.date;
 
       message =
         "Motivo: " +
