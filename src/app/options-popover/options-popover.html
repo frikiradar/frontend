@@ -1,0 +1,22 @@
+<ion-list>
+  <ion-item button (click)="showProfile(user?.id)" *ngIf="page === 'chat'">
+    <ion-icon name="person" slot="start"></ion-icon>
+    <ion-label>Ver Perfil</ion-label>
+  </ion-item>
+  <ion-item button (click)="close()" *ngIf="page === 'chat'">
+    <ion-icon name="volume-mute" slot="start"></ion-icon>
+    <ion-label>Silenciar notificaciones</ion-label>
+  </ion-item>
+  <ion-item button (click)="block(user)" lines="full">
+    <ion-icon name="ban" slot="start"></ion-icon>
+    <ion-label>Bloquear</ion-label>
+  </ion-item>
+  <ion-item button (click)="warn(user)" *ngIf="auth.isMaster()">
+    <ion-icon color="danger" name="warning" slot="start"></ion-icon>
+    <ion-label color="danger">Advertir al usuario</ion-label>
+  </ion-item>
+  <ion-item button (click)="ban(user)" lines="none" *ngIf="auth.isMaster()">
+    <ion-icon color="danger" name="close-circle" slot="start"></ion-icon>
+    <ion-label color="danger">Banear</ion-label>
+  </ion-item>
+</ion-list>

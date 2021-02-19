@@ -3,6 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button text="" defaultHref="/tabs/radar"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="showOptions($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -191,15 +196,6 @@
             </ion-label>
           </ion-item>
         </ion-list>
-        <ion-button
-          color="medium"
-          shape="round"
-          fill="outline"
-          expand="full"
-          size="small"
-          (click)="blockUser()"
-          >Bloquear/Denunciar</ion-button
-        >
       </div>
     </ng-template>
   </div>

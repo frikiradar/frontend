@@ -86,7 +86,7 @@ export class AuthService {
       this.currentUserSubject.next({ token } as User);
       return await this.getAuthUser();
     } catch (e) {
-      throw new Error("Credenciales incorrectas");
+      throw new Error(e);
     }
   }
 
@@ -203,10 +203,12 @@ export class AuthService {
 
   async logout() {
     // Desactivamos las notificaciones
-    try {
-      await this.rest.get(`turnoff-device/${this.device.uuid}`).toPromise();
-    } catch (e) {
-      console.error(e);
+    if (this.device.uuid) {
+      try {
+        await this.rest.get(`turnoff-device/${this.device.uuid}`).toPromise();
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     // Eliminamos la sesión y configuraciones

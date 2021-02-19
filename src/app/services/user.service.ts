@@ -151,6 +151,14 @@ export class UserService {
     return this.rest.delete(`block/${id}`).toPromise() as Promise<User[]>;
   }
 
+  async warn(id: User["id"], message: string) {
+    return this.rest.put("warn", { touser: id, message }).toPromise();
+  }
+
+  async ban(id: User["id"], message: string, date: string) {
+    return this.rest.put("ban", { touser: id, message, date }).toPromise();
+  }
+
   getHides() {
     return this.rest.get("hides").toPromise() as Promise<User[]>;
   }

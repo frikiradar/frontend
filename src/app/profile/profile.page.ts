@@ -12,6 +12,7 @@ import {
 import { pulse } from "ng-animate";
 
 import { User } from "../models/user";
+import { OptionsPopover } from "../options-popover/options-popover";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { AuthService } from "./../services/auth.service";
@@ -150,55 +151,18 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  async blockUser() {
-    const alert = await this.alert.create({
-      header: `¿Quieres bloquear a ${this.user.username}?`,
-      message:
-        "Ya no podrá volver a verte, escribirte o interactuar contigo en FrikiRadar a menos que lo desbloquees. Si lo deseas puedes indicarnos el motivo del bloqueo.",
-      inputs: [
-        {
-          name: "note",
-          type: "text",
-          placeholder: "Motivo del bloqueo (opcional)"
-        }
-      ],
-      buttons: [
-        {
-          text: "Cancelar",
-          role: "cancel",
-          cssClass: "secondary"
-        },
-        {
-          text: "Bloquear",
-          role: "block",
-          handler: async data => {
-            try {
-              await this.userSvc.block(this.user.id, data.note);
-              (
-                await this.toast.create({
-                  message: "Usuario bloqueado correctamente",
-                  duration: 2000,
-                  position: "bottom"
-                })
-              ).present();
-              this.router.navigate(["/"]);
-            } catch (e) {
-              (
-                await this.toast.create({
-                  message: `Error al bloquear al usuario ${e}`,
-                  duration: 2000,
-                  position: "bottom"
-                })
-              ).present();
-              alert.present();
-            }
-          }
-        }
-      ]
+  async showOptions(event: any) {
+    const popover = await this.popover.create({
+      component: OptionsPopover,
+      cssClass: "options-popover",
+      event: event,
+      translucent: true,
+      componentProps: {
+        user: this.user,
+        page: "profile"
+      }
     });
-
-    await alert.present();
-    this.popover.dismiss();
+    return await popover.present();
   }
 
   back() {

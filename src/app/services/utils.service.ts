@@ -30,7 +30,7 @@ export class UtilsService {
     name?: string,
     returnsrc = false
   ): Promise<File | string> {
-    let image = await this.camera.getPicture({
+    const image = await this.camera.getPicture({
       quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
@@ -44,20 +44,26 @@ export class UtilsService {
     });
 
     try {
+      let src = "";
       if (crop) {
-        image = await this.crop.crop(image, {
+        const newImage = await this.crop.crop(image, {
           quality: 100,
           targetWidth: -1,
           targetHeight: -1
         });
+        src = this.webview.convertFileSrc(newImage);
+      } else {
+        src = this.webview.convertFileSrc(image);
       }
-      const src = this.webview.convertFileSrc(image);
       if (returnsrc) {
         return src;
       }
-      const blob = (await this.urltoBlob(src)) as Blob;
+      const blob = await this.urltoBlob(src);
 
-      const blobFile: File = new File([blob], name ? name : "default" + ".png");
+      const blobFile: File = new File(
+        [blob],
+        (name ? name : "default") + ".png"
+      );
       return blobFile;
     } catch (e) {
       console.error("Error al recortar la imagen.", e);

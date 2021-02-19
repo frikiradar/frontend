@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start" *ngIf="!showOptions">
+    <ion-buttons slot="start" *ngIf="!pressOptions">
       <ion-back-button
         (click)="source.close()"
         text=""
@@ -28,12 +28,20 @@
         </ion-label>
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="start" *ngIf="showOptions">
-      <ion-button (click)="showOptions = false">
+    <ion-buttons slot="start" *ngIf="pressOptions">
+      <ion-button (click)="pressOptions = false">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end" *ngIf="showOptions">
+    <ion-buttons
+      slot="end"
+      *ngIf="!pressOptions && !user?.roles?.includes('ROLE_DEMO')"
+    >
+      <ion-button (click)="showOptions($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="pressOptions">
       <ion-button
         (click)="deleteMessage()"
         *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
@@ -47,7 +55,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #chatlist (tap)="showOptions = false">
+<ion-content #chatlist (tap)="pressOptions = false">
   <ion-infinite-scroll (ionInfinite)="loadChats($event)" position="top">
     <ion-infinite-scroll-content loadingSpinner="dots">
     </ion-infinite-scroll-content>
@@ -100,36 +108,6 @@
     </ion-card>
   </span>
 </ion-content>
-<emoji-mart
-  *ngIf="toggled"
-  isNative="true"
-  emoji="point_up"
-  darkMode="true"
-  showPreview="false"
-  autoFocus="true"
-  [style]="{ width: '100vw', maxWidth: '500px' }"
-  (emojiSelect)="addEmoji($event)"
-  title="Elige un emoji"
-  [i18n]="{
-    search: 'Busca el emoji perfecto',
-    emojilist: 'Listado de emojis',
-   found: 'Emoji no encontrado',
-    clear: 'Borrar',
-    categories: {
-      search: 'Resultados',
-      recent: 'Más usados',
-      people: 'Caras y personas',
-      nature: 'Animales y naturaleza',
-      foods: 'Comida y bebida',
-      activity: 'Actividad',
-      places: 'Viajes y lugares',
-      objects: 'Objetos',
-      symbols: 'Símbolos',
-      flags: 'Banderas',
-      custom: 'FrikiRadar'
-    }
-  }"
-></emoji-mart>
 <ion-footer *ngIf="!chatForm.get('message').disabled">
   <div id="image-preview" *ngIf="image">
     <ion-icon
@@ -187,4 +165,34 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <emoji-mart
+    *ngIf="toggled"
+    isNative="true"
+    emoji="point_up"
+    darkMode="true"
+    showPreview="false"
+    autoFocus="true"
+    [style]="{ width: '100%'}"
+    (emojiSelect)="addEmoji($event)"
+    title="Elige un emoji"
+    [i18n]="{
+    search: 'Busca el emoji perfecto',
+    emojilist: 'Listado de emojis',
+   found: 'Emoji no encontrado',
+    clear: 'Borrar',
+    categories: {
+      search: 'Resultados',
+      recent: 'Más usados',
+      people: 'Caras y personas',
+      nature: 'Animales y naturaleza',
+      foods: 'Comida y bebida',
+      activity: 'Actividad',
+      places: 'Viajes y lugares',
+      objects: 'Objetos',
+      symbols: 'Símbolos',
+      flags: 'Banderas',
+      custom: 'FrikiRadar'
+    }
+  }"
+  ></emoji-mart>
 </ion-footer>

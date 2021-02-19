@@ -18,6 +18,7 @@ import {
   ModalController,
   NavController,
   Platform,
+  PopoverController,
   ToastController
 } from "@ionic/angular";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
@@ -31,6 +32,7 @@ import { AuthService } from "./../services/auth.service";
 import { UserService } from "./../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
+import { OptionsPopover } from "../options-popover/options-popover";
 
 @Component({
   selector: "app-chat-user",
@@ -60,7 +62,7 @@ export class ChatUserPage implements OnInit {
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
   page = 0;
-  showOptions = false;
+  pressOptions = false;
   selectedMessage: Chat;
   conErrors = 0;
   alertError: any;
@@ -84,7 +86,8 @@ export class ChatUserPage implements OnInit {
     private androidPermissions: AndroidPermissions,
     public sheet: ActionSheetController,
     public utils: UtilsService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private popover: PopoverController
   ) {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required])
@@ -343,7 +346,7 @@ export class ChatUserPage implements OnInit {
 
   selectMessage(message: Chat) {
     this.selectedMessage = message;
-    this.showOptions = true;
+    this.pressOptions = true;
   }
 
   async copy() {
@@ -356,11 +359,11 @@ export class ChatUserPage implements OnInit {
         position: "middle"
       })
     ).present();
-    this.showOptions = false;
+    this.pressOptions = false;
   }
 
   async deleteMessage() {
-    this.showOptions = false;
+    this.pressOptions = false;
     try {
       await this.chatSvc.deleteMessage(this.selectedMessage.id);
       this.messages = this.messages.filter(
@@ -380,7 +383,9 @@ export class ChatUserPage implements OnInit {
   }
 
   addEmoji(event: any) {
-    this.message.setValue(this.message.value + event.emoji.native);
+    this.message.setValue(
+      (this.message.value ? this.message.value : "") + event.emoji.native
+    );
   }
 
   openUrl(event: any) {
@@ -471,19 +476,18 @@ export class ChatUserPage implements OnInit {
     return await modal.present();
   }
 
-  async openMic() {
-    /*if (this.platform.is("android") && this.platform.is("cordova")) {
-      await this.androidPermissions.requestPermissions([
-        this.androidPermissions.PERMISSION.RECORD_AUDIO
-      ]);
-    }
-    let options: CaptureAudioOptions = { limit: 1, duration: 60 * 30 };
-    this.mediaCapture.captureAudio(options).then(
-      (data: MediaFile[]) => {
-        console.log(data);
-      },
-      (err: CaptureError) => console.error(err)
-    );*/
+  async showOptions(event: any) {
+    const popover = await this.popover.create({
+      component: OptionsPopover,
+      cssClass: "options-popover",
+      event: event,
+      translucent: true,
+      componentProps: {
+        user: this.user,
+        page: "chat"
+      }
+    });
+    return await popover.present();
   }
 
   back() {

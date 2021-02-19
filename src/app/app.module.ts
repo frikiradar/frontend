@@ -53,17 +53,18 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { MenuComponent } from "./menu/menu.component";
 import { SharedModule } from "./shared/shared.module";
+import { OptionsPopover } from "./options-popover/options-popover";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
 registerLocaleData(localeEs, "es");
 
-Pro.init("6e277455", {
+/*Pro.init("6e277455", {
   appVersion: "1.0"
-});
+});*/
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent],
-  entryComponents: [MenuComponent],
+  declarations: [AppComponent, MenuComponent, OptionsPopover],
+  entryComponents: [MenuComponent, OptionsPopover],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

@@ -73,7 +73,7 @@ export class LoginPage {
         this.loginSuccess(user);
         this.loginForm.reset();
       } catch (e) {
-        this.loginError();
+        this.loginError(e.message);
       }
     } else {
       const alert = await this.alert.create({
@@ -102,11 +102,31 @@ export class LoginPage {
     }
   }
 
-  async loginError() {
+  async loginError(message: string) {
+    let header = "";
+    if (message.includes("Invalid credentials.")) {
+      header = "Error de autenticación";
+      message =
+        "El nombre/email o contraseña que has introducido no son correctos.";
+    } else if (message.includes("Banned account.")) {
+      header = "Tu cuenta está baneada";
+      const data = JSON.parse(message);
+      const date = data.end.date;
+
+      message =
+        "Motivo: " +
+        data.reason +
+        "." +
+        "<br />" +
+        "Fin del baneo: " +
+        (date ? date.split(" ")[0] : "Indefinido");
+    } else {
+      header = "Error desconocido";
+    }
+
     const alert = await this.alert.create({
-      header: "Error de autenticación",
-      message:
-        "El nombre/email o contraseña que has introducido no son correctos.",
+      header,
+      message,
       buttons: ["Oki doki"]
     });
 
