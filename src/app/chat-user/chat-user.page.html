@@ -27,6 +27,14 @@
           </p>
         </ion-label>
       </ion-button>
+      <ion-icon
+        *ngIf="user?.verified || user?.roles.includes('ROLE_MASTER')"
+        [name]="user?.roles.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
+        slot="icon-only"
+        size="small"
+        [color]="user?.roles.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+        (click)="userSvc.showRole(user)"
+      ></ion-icon>
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="pressOptions">
       <ion-button (click)="pressOptions = false">

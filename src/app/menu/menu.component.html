@@ -24,24 +24,24 @@
       <div id="info">
         <span>
           <ion-icon
-            name="checkmark-circle"
-            slot="start"
-            size="small"
-            color="secondary"
             *ngIf="
-              auth.currentUserValue?.verified &&
-              !auth.currentUserValue?.roles.includes('ROLE_ADMIN') &&
-              !auth.currentUserValue?.roles.includes('ROLE_MASTER')
-            "
-          ></ion-icon>
-          <ion-icon
-            name="shield-checkmark"
-            slot="start"
-            size="small"
-            color="tertiary"
-            *ngIf="
+              auth.currentUserValue?.verified ||
               auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
               auth.currentUserValue?.roles.includes('ROLE_MASTER')
+            "
+            [name]="
+              auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
+              auth.currentUserValue?.roles.includes('ROLE_MASTER')
+                ? 'shield-checkmark'
+                : 'checkmark-circle'
+            "
+            slot="icon-only"
+            size="small"
+            [color]="
+              auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
+              auth.currentUserValue?.roles.includes('ROLE_MASTER')
+                ? 'tertiary'
+                : 'secondary'
             "
           ></ion-icon>
         </span>

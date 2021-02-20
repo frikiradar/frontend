@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
+import { ToastController } from "@ionic/angular";
 
 import { User } from "./../models/user";
 import { AuthService } from "./auth.service";
@@ -11,7 +12,8 @@ export class UserService {
   constructor(
     private rest: RestService,
     private uploadSvc: UploadService,
-    private auth: AuthService
+    private auth: AuthService,
+    private toast: ToastController
   ) {}
 
   async getUser(id: User["id"]): Promise<User> {
@@ -173,6 +175,30 @@ export class UserService {
 
   unhide(id: User["id"]) {
     return this.rest.delete(`hide/${id}`).toPromise() as Promise<User[]>;
+  }
+
+  async showRole(user: User) {
+    let message = "";
+    if (user.roles.includes("ROLE_ADMIN")) {
+      message = "Administrador";
+    } else if (user.roles.includes("ROLE_MASTER")) {
+      message = "App Master";
+    } else if (user.verified) {
+      message = "Usuario verificado";
+    }
+
+    (
+      await this.toast.create({
+        message,
+        duration: 1500,
+        position: "middle",
+        color:
+          user.roles.includes("ROLE_MASTER") ||
+          user.roles.includes("ROLE_ADMIN")
+            ? "tertiary"
+            : "secondary"
+      })
+    ).present();
   }
 
   getOrientations() {

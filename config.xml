@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.frikiradar.app" version="2.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.frikiradar.app" version="2.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>FrikiRadar</name>
     <description>FrikiRadar, la app de citas y chat para frikis.</description>
     <author email="hola@frikiradar.com" href="https://frikiradar.com/">FrikiRadar</author>

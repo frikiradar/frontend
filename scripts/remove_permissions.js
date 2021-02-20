@@ -1,4 +1,4 @@
-var permissionsToRemove = ["BLUETOOTH"];
+var permissionsToRemove = ["BLUETOOTH", "WAKE_LOCK", "RECORD_VIDEO", "READ_PHONE_STATE"];
 
 var fs = require("fs");
 var path = require("path");

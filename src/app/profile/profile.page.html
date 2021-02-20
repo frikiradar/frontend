@@ -71,21 +71,14 @@
               <span class="name">{{ user.name }}</span>
               <span class="age">, {{ user.age }}</span>
               <ion-icon
-                name="checkmark-circle"
-                slot="start"
+                *ngIf="user?.verified || user?.roles.includes('ROLE_ADMIN') || user?.roles.includes('ROLE_MASTER')"
+                [name]="user?.roles.includes('ROLE_ADMIN') ||
+              user?.roles.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
+                slot="icon-only"
                 size="small"
-                color="secondary"
-                *ngIf="user.verified &&
-                !user.roles.includes('ROLE_ADMIN') &&
-                !user.roles.includes('ROLE_MASTER')
-                "
-              ></ion-icon>
-              <ion-icon
-                name="shield-checkmark"
-                slot="start"
-                size="small"
-                color="tertiary"
-                *ngIf="user.roles.includes('ROLE_MASTER') || user.roles.includes('ROLE_ADMIN')"
+                [color]="user?.roles.includes('ROLE_ADMIN') ||
+              user?.roles.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+                (click)="userSvc.showRole(user)"
               ></ion-icon>
             </ion-label>
           </ion-item>
