@@ -73,7 +73,13 @@ export class LoginPage {
         this.loginSuccess(user);
         this.loginForm.reset();
       } catch (e) {
-        this.loginError(e.message);
+        if (e.message) {
+          this.loginError(e.message);
+        } else if (e.detail) {
+          this.loginError(e.detail);
+        } else {
+          this.loginError(e);
+        }
       }
     } else {
       const alert = await this.alert.create({
@@ -120,8 +126,14 @@ export class LoginPage {
         "<br />" +
         "Fin del baneo: " +
         (date ? date.split(" ")[0] : "Indefinido");
+    } else if (message === "Internal Server Error" || message === "OK") {
+      header = "Error del sistema";
+      message =
+        "Escríbenos a hola@frikiradar si te aparece este error para que lo revisemos.";
     } else {
       header = "Error desconocido";
+      message =
+        "Escríbenos a hola@frikiradar si te aparece este error para que lo revisemos.";
     }
 
     const alert = await this.alert.create({
