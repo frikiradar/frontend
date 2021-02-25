@@ -118,7 +118,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "^7.0.0",
     "ts-node": "^8.10.2",
-    "typescript": "^4.2.2"
+    "typescript": "4.1.5"
   },
   "description": "FrikiRadar, la app de citas y chat para frikis.",
   "cordova": {
