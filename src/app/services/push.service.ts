@@ -100,41 +100,43 @@ export class PushService {
         }
       );
     } else {
-      navigator.serviceWorker.ready.then(
-        registration => {
-          if (!firebase.messaging.isSupported()) {
-            return;
+      return new Promise<void>((resolve, reject) => {
+        navigator.serviceWorker.ready.then(
+          registration => {
+            if (!firebase.messaging.isSupported()) {
+              return;
+            }
+
+            const messaging = firebase.messaging();
+            // Register the Service Worker
+            messaging.useServiceWorker(registration);
+
+            // Initialize your VAPI key
+            messaging.usePublicVapidKey(environment.firebase.vapidKey);
+
+            // Optional and not covered in the article
+            // Listen to messages when your app is in the foreground
+            messaging.onMessage(payload => {
+              console.log(payload);
+            });
+            // Optional and not covered in the article
+            // Handle token refresh
+            messaging.onTokenRefresh(() => {
+              messaging
+                .getToken()
+                .then((refreshedToken: string) => {
+                  console.log(refreshedToken);
+                })
+                .catch(err => {
+                  console.error(err);
+                });
+            });
+          },
+          err => {
+            console.error(err);
           }
-
-          const messaging = firebase.messaging();
-          // Register the Service Worker
-          messaging.useServiceWorker(registration);
-
-          // Initialize your VAPI key
-          messaging.usePublicVapidKey(environment.firebase.vapidKey);
-
-          // Optional and not covered in the article
-          // Listen to messages when your app is in the foreground
-          messaging.onMessage(payload => {
-            console.log(payload);
-          });
-          // Optional and not covered in the article
-          // Handle token refresh
-          messaging.onTokenRefresh(() => {
-            messaging
-              .getToken()
-              .then((refreshedToken: string) => {
-                console.log(refreshedToken);
-              })
-              .catch(err => {
-                console.error(err);
-              });
-          });
-        },
-        err => {
-          console.error(err);
-        }
-      );
+        );
+      });
     }
   }
 
