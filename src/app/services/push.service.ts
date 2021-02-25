@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
+import { Subscription } from "rxjs";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
@@ -29,23 +30,18 @@ export class PushService {
       if (this.platform.is("cordova")) {
         this.localNotifications.on("click").subscribe(notification => {
           console.log("click", notification);
-          const data = JSON.parse(notification.data);
-          console.log(data);
+          const data = notification.data;
           this.router.navigate([data.url]);
         });
 
         this.localNotifications.on("trigger").subscribe(notification => {
           console.log("trigger", notification);
-          const data = JSON.parse(notification.data);
-          console.log(data);
+          const data = notification.data;
         });
 
-        this.localNotifications.on("reply").subscribe(
-          notification => {
-            console.log("onreply", notification);
-          },
-          err => console.log(err)
-        );
+        this.localNotifications.on("reply").subscribe(notification => {
+          console.log("onreply", notification);
+        });
       }
     });
   }
@@ -81,31 +77,11 @@ export class PushService {
       data => {
         console.log("data", data);
         if (data.tap) {
-          console.log("tap", data.tap);
+          // console.log("tap", data.tap);
           this.router.navigate([data.url]);
         } else {
           if (this.router.url !== data.url) {
-            let actions = null;
-            if (data.url.includes("chat")) {
-              actions = [
-                {
-                  id: "reply",
-                  type: "input",
-                  title: "Responder",
-                  emptyText: "Escribe tu mensaje"
-                }
-              ] as any[];
-            }
-            this.localNotifications.schedule({
-              title: data.title,
-              text: data.body,
-              sound: "file://bipbip.mp3",
-              smallIcon: "res://notification_icon",
-              color: "#e91e63",
-              icon: data.icon,
-              foreground: true,
-              actions
-            });
+            this.localNotification(data);
           }
 
           this.notificationSvc
@@ -200,5 +176,32 @@ export class PushService {
     return await this.rest
       .put("topic-message", { topic, message, title })
       .toPromise();
+  }
+
+  async localNotification(data: any) {
+    let actions = null;
+    if (data.topic == "chat") {
+      actions = [
+        {
+          id: "reply",
+          type: "input",
+          title: "Responder",
+          emptyText: "Escribe tu mensaje"
+        }
+      ] as any[];
+    }
+    this.localNotifications.schedule({
+      title: data?.title,
+      text: data?.body,
+      sound: "file://assets/audio/bipbip.mp3",
+      smallIcon: "res://notification_icon",
+      color: "#e91e63",
+      icon: data?.icon,
+      attachments: data?.attachments,
+      // foreground: true,
+      data: data
+      // launch: true,
+      // actions
+    });
   }
 }
