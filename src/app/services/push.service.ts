@@ -3,12 +3,14 @@ import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
-import { Subscription } from "rxjs";
+import { firebase } from "@firebase/app";
+import "@firebase/messaging";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
 import { Notification, NotificationService } from "./notification.service";
 import { RestService } from "./rest.service";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root"
@@ -47,55 +49,93 @@ export class PushService {
   }
 
   async init() {
-    this.setChannels();
+    if (this.platform.is("cordova")) {
+      this.setChannels();
 
-    this.firebase.getToken().then(async token => {
-      await this.device.setDevice(token);
-    });
-
-    this.firebase
-      .subscribe("frikiradar")
-      .then(response =>
-        console.log("Successfully subscribed to topic:", response)
-      )
-      .catch(error => {
-        console.log("Error subscribing to topic:", error);
+      this.firebase.getToken().then(async token => {
+        await this.device.setDevice(token);
       });
 
-    if (this.auth.isAdmin() || this.auth.isMaster()) {
       this.firebase
-        .subscribe("test")
+        .subscribe("frikiradar")
         .then(response =>
           console.log("Successfully subscribed to topic:", response)
         )
         .catch(error => {
           console.log("Error subscribing to topic:", error);
         });
-    }
 
-    this.firebase.onMessageReceived().subscribe(
-      data => {
-        console.log("data", data);
-        if (data.tap) {
-          // console.log("tap", data.tap);
-          this.router.navigate([data.url]);
-        } else {
-          if (this.router.url !== data.url) {
-            this.localNotification(data);
+      if (this.auth.isAdmin() || this.auth.isMaster()) {
+        this.firebase
+          .subscribe("test")
+          .then(response =>
+            console.log("Successfully subscribed to topic:", response)
+          )
+          .catch(error => {
+            console.log("Error subscribing to topic:", error);
+          });
+      }
+
+      this.firebase.onMessageReceived().subscribe(
+        data => {
+          console.log("data", data);
+          if (data.tap) {
+            // console.log("tap", data.tap);
+            this.router.navigate([data.url]);
+          } else {
+            if (this.router.url !== data.url) {
+              this.localNotification(data);
+            }
+
+            this.notificationSvc
+              .getUnread()
+              .then((notification: Notification) => {
+                this.notificationSvc.setNotification(notification);
+              });
+            // console.log("Received in foreground");
+          }
+        },
+        error => {
+          console.error("Error in notification", error);
+        }
+      );
+    } else {
+      navigator.serviceWorker.ready.then(
+        registration => {
+          if (!firebase.messaging.isSupported()) {
+            return;
           }
 
-          this.notificationSvc
-            .getUnread()
-            .then((notification: Notification) => {
-              this.notificationSvc.setNotification(notification);
-            });
-          // console.log("Received in foreground");
+          const messaging = firebase.messaging();
+          // Register the Service Worker
+          messaging.useServiceWorker(registration);
+
+          // Initialize your VAPI key
+          messaging.usePublicVapidKey(environment.firebase.vapidKey);
+
+          // Optional and not covered in the article
+          // Listen to messages when your app is in the foreground
+          messaging.onMessage(payload => {
+            console.log(payload);
+          });
+          // Optional and not covered in the article
+          // Handle token refresh
+          messaging.onTokenRefresh(() => {
+            messaging
+              .getToken()
+              .then((refreshedToken: string) => {
+                console.log(refreshedToken);
+              })
+              .catch(err => {
+                console.error(err);
+              });
+          });
+        },
+        err => {
+          console.error(err);
         }
-      },
-      error => {
-        console.error("Error in notification", error);
-      }
-    );
+      );
+    }
   }
 
   setChannels() {
@@ -202,6 +242,31 @@ export class PushService {
       data: data
       // launch: true,
       // actions
+    });
+  }
+
+  requestPermission(): Promise<void> {
+    return new Promise<void>(async resolve => {
+      if (!Notification) {
+        resolve();
+        return;
+      }
+      if (!firebase.messaging.isSupported()) {
+        resolve();
+        return;
+      }
+      try {
+        const messaging = firebase.messaging();
+        await Notification.requestPermission();
+
+        const token: string = await messaging.getToken();
+
+        console.log("User notifications token:", token);
+      } catch (err) {
+        // No notifications granted
+      }
+
+      resolve();
     });
   }
 }

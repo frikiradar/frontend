@@ -76,10 +76,12 @@ registerLocaleData(localeEs, "es");
     SharedModule,
     BrowserAnimationsModule,
     LinkyModule,
-    ServiceWorkerModule.register("ngsw-worker.js"),
     HammerModule,
     NgxIonicImageViewerModule,
-    ImageCropperModule
+    ImageCropperModule,
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
   providers: [
     StatusBar,

@@ -11,6 +11,7 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
+import { firebase } from "@firebase/app";
 
 import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
@@ -18,6 +19,7 @@ import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
 import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-root",
@@ -54,6 +56,9 @@ export class AppComponent {
         this.push.init();
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
+      } else {
+        await this.push.requestPermission();
+        firebase.initializeApp(environment.firebase);
       }
 
       this.loadConfig();
