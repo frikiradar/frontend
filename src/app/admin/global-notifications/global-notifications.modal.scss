@@ -1,0 +1,27 @@
+ion-item,
+ion-item-divider {
+  ion-label {
+    --color: white !important;
+  }
+
+  ion-icon {
+    color: white;
+  }
+
+  ion-label {
+    p {
+      white-space: normal;
+      color: white;
+    }
+  }
+}
+
+ion-item {
+  form {
+    width: 100%;
+  }
+
+  ion-buttons {
+    margin: 0;
+  }
+}

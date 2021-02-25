@@ -1,15 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from "@angular/forms";
-import { ToastController } from "@ionic/angular";
+import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
-import { AuthService } from "../services/auth.service";
-import { PushService } from "./../services/push.service";
+import { UserService } from "../services/user.service";
+import { AuthService } from "./../services/auth.service";
+import { BannedUsersModal } from "./banned-users/banned-users.modal";
+import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
 
 @Component({
   selector: "app-admin",
@@ -18,56 +14,29 @@ import { PushService } from "./../services/push.service";
 })
 export class AdminPage implements OnInit {
   public user: User;
-  public messageForm: FormGroup;
-  get message() {
-    return this.messageForm.get("message");
-  }
-  get title() {
-    return this.messageForm.get("title");
-  }
-  public test = true;
 
   constructor(
+    private modal: ModalController,
     private auth: AuthService,
-    public formBuilder: FormBuilder,
-    private push: PushService,
-    private toast: ToastController
-  ) {
-    this.messageForm = formBuilder.group({
-      title: new FormControl(),
-      message: new FormControl("", [Validators.required]),
-      test: new FormControl()
-    });
-  }
+    private userSvc: UserService,
+    private alert: AlertController
+  ) {}
 
   async ngOnInit() {
     this.user = this.auth.currentUserValue;
   }
 
-  async sendMessage() {
-    const message = this.message.value.trim();
-    const title = this.title.value ? this.title.value.trim() : "";
+  async bannedUsersModal() {
+    const modal = await this.modal.create({
+      component: BannedUsersModal
+    });
+    return await modal.present();
+  }
 
-    this.message.setValue("");
-    this.title.setValue("");
-    try {
-      const topic = this.test ? "test" : "frikiradar";
-      await this.push.sendTopicMessage(topic, message, title);
-      (
-        await this.toast.create({
-          message: "Mensaje enviado correctamente.",
-          duration: 5000,
-          position: "middle"
-        })
-      ).present();
-    } catch (e) {
-      (
-        await this.toast.create({
-          message: "Error al enviar el mensaje.",
-          duration: 5000,
-          position: "middle"
-        })
-      ).present();
-    }
+  async globalNotificationsModal() {
+    const modal = await this.modal.create({
+      component: GlobalNotificationsModal
+    });
+    return await modal.present();
   }
 }

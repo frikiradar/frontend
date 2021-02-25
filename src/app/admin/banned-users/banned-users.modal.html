@@ -5,7 +5,7 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Usuarios ocultos</ion-title>
+    <ion-title>Usuarios baneados</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -17,9 +17,15 @@
         </ion-avatar>
         <ion-label>
           <h2>{{ user.name }}</h2>
+          <p>
+            <ion-text color="light">{{user.ban_reason}} - </ion-text>
+            <ion-text color="secondary">
+              {{user?.ban_end ? user.ban_end : 'Indefinido'}}
+            </ion-text>
+          </p>
         </ion-label>
         <ion-buttons>
-          <ion-button (click)="unhide(user)">
+          <ion-button (click)="unban(user)">
             <ion-icon slot="icon-only" color="primary" name="trash"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -31,7 +37,7 @@
       <ion-icon name="body"></ion-icon>
       <h2>Sin resultados</h2>
       <p>
-        No has ocultado a ningún usuario.
+        No hay ningún usuario baneado.
       </p>
     </div>
   </ng-template>

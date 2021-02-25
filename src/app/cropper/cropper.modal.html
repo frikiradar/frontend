@@ -1,0 +1,50 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Ajusta tu imagen</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <image-cropper
+    style="background-color: black !important;"
+    class="full-center"
+    [imageURL]="src"
+    [imageChangedEvent]="imageChangedEvent"
+    [maintainAspectRatio]="true"
+    [resizeToWidth]="512"
+    [cropperMinWidth]="256"
+    format="png"
+    (imageCropped)="imageCropped($event)"
+    (imageLoaded)="imageLoaded()"
+    (loadImageFailed)="loadImageFailed()"
+    backgroundColor="#1a1a1a"
+    [transform]="transform"
+  ></image-cropper>
+  <!--<img [src]="croppedImage" />-->
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">CANCELAR</ion-button>
+    </ion-buttons>
+    <ion-buttons id="transform">
+      <ion-button (click)="rotateRight()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+      <ion-button (click)="flipH()">
+        <ion-icon name="swap-horizontal"></ion-icon>
+      </ion-button>
+      <ion-button (click)="flipV()">
+        <ion-icon name="swap-vertical"></ion-icon>
+      </ion-button>
+      <ion-button (click)="zoomIn()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="zoomOut()">
+        <ion-icon name="remove-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="ok()">OK</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

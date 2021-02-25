@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+      <ion-avatar>
+        <ion-img
+          *ngIf="user"
+          src="/assets/img/users/banned.jpg"
+          [alt]="user?.username"
+        ></ion-img>
+        <ion-skeleton-text animated *ngIf="!user"></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h2>Cuenta baneada</h2>
+      </ion-label>
+    </ion-buttons>
+    <ion-label class="ion-padding" slot="end">{{countDownString}}</ion-label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #chatlist>
+  <span
+    class="bubble {{ message.fromuser?.id == 1 ? 'to' : 'from' }}"
+    *ngFor="let message of messages; let i = index"
+  >
+    <ion-chip
+      color="primary"
+      class="center"
+      *ngIf="
+        (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')
+      "
+    >
+      <ion-label color="secondary"
+        >{{ message.time_creation | date: "fullDate" }}</ion-label
+      >
+    </ion-chip>
+    <ion-card button>
+      <ion-card-content *ngIf="message.text">
+        <span
+          class="text"
+          [innerHTML]="message.text | linky:{className: 'linkified'}"
+          (click)="$event.stopImmediatePropagation(); openUrl($event);"
+        ></span>
+        <ion-note>
+          {{ message.time_creation | date: "shortTime" }}
+          <span *ngIf="message.fromuser?.id == user?.id">
+            <ion-icon *ngIf="message.sending" name="time"></ion-icon>
+            <ion-icon
+              *ngIf="!message.sending && !message.time_read"
+              name="checkmark"
+            ></ion-icon>
+            <ion-icon
+              *ngIf="message.time_read"
+              color="secondary"
+              name="checkmark-done"
+            ></ion-icon>
+          </span>
+        </ion-note>
+      </ion-card-content>
+    </ion-card>
+  </span>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <form [formGroup]="chatForm" autocomplete="off">
+      <ion-item lines="none">
+        <ion-textarea
+          placeholder="Escribe tu mensaje aquí"
+          autocapitalize="on"
+          (keydown.enter)="sendMessage($event)"
+          formControlName="message"
+          #textarea
+          autofocus
+          autoGrow
+          rows="1"
+        >
+        </ion-textarea>
+      </ion-item>
+    </form>
+    <ion-buttons ion-activatable slot="end">
+      <ion-button
+        color="primary"
+        [disabled]="!message.value"
+        (click)="sendMessage()"
+      >
+        <ion-icon slot="icon-only" name="send"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

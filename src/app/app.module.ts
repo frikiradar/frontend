@@ -14,14 +14,12 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-// import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { Facebook } from "@ionic-native/facebook/ngx";
-import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
@@ -40,6 +38,8 @@ import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { Pro } from "@ionic/pro";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { ImageCropperModule } from "ngx-image-cropper";
 
 import {
   ServiceWorkerModule,
@@ -78,7 +78,8 @@ registerLocaleData(localeEs, "es");
     LinkyModule,
     ServiceWorkerModule.register("ngsw-worker.js"),
     HammerModule,
-    NgxIonicImageViewerModule
+    NgxIonicImageViewerModule,
+    ImageCropperModule
   ],
   providers: [
     StatusBar,
@@ -98,7 +99,6 @@ registerLocaleData(localeEs, "es");
     Vibration,
     Geolocation,
     SplashScreen,
-    FCM,
     Clipboard,
     LaunchReview,
     Keyboard,
@@ -109,9 +109,9 @@ registerLocaleData(localeEs, "es");
     WebView,
     Diagnostic,
     LocationAccuracy,
-    // AnalyticsFirebase,
     BrowserTab,
-    InAppBrowser
+    InAppBrowser,
+    FirebaseX
   ],
   bootstrap: [AppComponent]
 })

@@ -1,11 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
-import { Crop } from "@ionic-native/crop/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
-import { AlertController, Platform } from "@ionic/angular";
+import { AlertController, ModalController, Platform } from "@ionic/angular";
+import { CropperModal } from "../cropper/cropper.modal";
 
 import { AuthService } from "./auth.service";
 
@@ -19,9 +18,9 @@ export class UtilsService {
     private auth: AuthService,
     private socialSharing: SocialSharing,
     private platform: Platform,
-    private crop: Crop,
     private webview: WebView,
-    private camera: Camera
+    private camera: Camera,
+    private modal: ModalController
   ) {}
 
   async takePicture(
@@ -30,7 +29,7 @@ export class UtilsService {
     name?: string,
     returnsrc = false
   ): Promise<File | string> {
-    const image = await this.camera.getPicture({
+    const fileUri = await this.camera.getPicture({
       quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
@@ -43,31 +42,50 @@ export class UtilsService {
       correctOrientation: true
     });
 
+    let src = this.webview.convertFileSrc(fileUri);
+
     try {
-      let src = "";
       if (crop) {
-        const newImage = await this.crop.crop(image, {
-          quality: 100,
-          targetWidth: -1,
-          targetHeight: -1
-        });
-        src = this.webview.convertFileSrc(newImage);
-      } else {
-        src = this.webview.convertFileSrc(image);
+        const res = await this.cropImage("", src);
+        if (typeof res == "string") {
+          src = res;
+        } else {
+          return;
+        }
       }
+      console.log(src);
       if (returnsrc) {
         return src;
       }
-      const blob = await this.urltoBlob(src);
-
-      const blobFile: File = new File(
-        [blob],
-        (name ? name : "default") + ".png"
-      );
-      return blobFile;
+      const file = await this.urlToFile(src, name);
+      return file;
     } catch (e) {
       console.error("Error al recortar la imagen.", e);
     }
+  }
+
+  async cropImage(
+    event: any = "",
+    src: string = ""
+  ): Promise<string | boolean> {
+    const modal = await this.modal.create({
+      component: CropperModal,
+      componentProps: {
+        event,
+        src
+      }
+    });
+    await modal.present();
+
+    try {
+      const data = await modal.onDidDismiss();
+      if (data.data) {
+        return data.data;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return false;
   }
 
   base64toBlob(dataURI: string) {

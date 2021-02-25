@@ -115,7 +115,7 @@ export class LoginPage {
       message =
         "El nombre/email o contraseña que has introducido no son correctos.";
     } else if (message.includes("Banned account.")) {
-      header = "Tu cuenta está baneada";
+      header = "¡Estás baneado!";
       const data = JSON.parse(message);
       const date = data.end?.date;
 

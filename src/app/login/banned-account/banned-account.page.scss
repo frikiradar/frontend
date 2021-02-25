@@ -1,0 +1,123 @@
+ion-label {
+  p,
+  h2 {
+    text-transform: none;
+    letter-spacing: normal;
+    margin: 0 0 0 10px;
+    text-align: left;
+  }
+
+  p {
+    font-size: 12px;
+
+    ion-badge {
+      margin-right: 5px;
+      border-radius: 15px;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
+      box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+    }
+  }
+}
+
+.bubble {
+  ion-card {
+    border-radius: 25px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+
+  &.from {
+    ion-card {
+      margin-left: 40px;
+      --color: white;
+      --background: none;
+      float: right;
+      clear: both;
+    }
+
+    ion-card-content {
+      background: #6d0b28;
+    }
+
+    & + .to ion-card {
+      margin-top: 8px;
+    }
+  }
+
+  &.to {
+    ion-card {
+      margin-right: 40px;
+      --color: white;
+      --background: none;
+      float: left;
+      clear: both;
+    }
+
+    ion-card-content {
+      background: #9a1c42;
+    }
+
+    & + .from ion-card {
+      margin-top: 8px;
+    }
+  }
+
+  .text {
+    margin-right: 10px;
+    word-break: break-word;
+    white-space: pre-line;
+  }
+
+  ion-note {
+    font-size: 10px;
+    position: relative;
+    bottom: -8px;
+    color: #bbbbbb;
+
+    ion-icon {
+      font-size: 14px;
+      vertical-align: text-bottom;
+    }
+  }
+}
+
+ion-chip {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: fit-content;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  clear: both;
+}
+
+ion-footer {
+  ion-item {
+    background: white;
+    border-radius: 30px;
+    margin-left: 8px;
+  }
+
+  ion-textarea {
+    --placeholder-color: #555555 !important;
+    color: #353535 !important;
+    padding: 5px 0 4px 15px;
+    margin: 0;
+    font-size: 12pt;
+  }
+
+  ion-label {
+    position: absolute;
+    z-index: 2;
+    right: 20px;
+    width: 30px !important;
+    min-width: 0px !important;
+    margin: 2px 0 !important;
+
+    ion-icon {
+      font-size: 30px;
+    }
+  }
+}

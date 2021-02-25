@@ -144,7 +144,7 @@ export class OptionsPopover {
     const alert = await this.alert.create({
       header: `¿Quieres banear al usuario ${user.username}?`,
       message:
-        "Indícale al usuario el motivo por el cual le baneas. Añade una fecha de fin si el baneo es temporal.",
+        "Indícale al usuario el motivo por el cual le baneas. Añade el tiempo (días/horas) si el baneo es temporal o déjalo en blanco si es indefinido.",
       inputs: [
         {
           name: "note",
@@ -152,9 +152,18 @@ export class OptionsPopover {
           placeholder: "Motivo del baneo"
         },
         {
-          name: "date",
-          type: "date",
-          placeholder: "Fecha de finalización"
+          name: "hours",
+          type: "number",
+          attributes: {
+            min: 0,
+            max: 24
+          },
+          placeholder: "Horas"
+        },
+        {
+          name: "days",
+          type: "number",
+          placeholder: "Dias"
         }
       ],
       buttons: [
@@ -168,7 +177,7 @@ export class OptionsPopover {
           role: "ban",
           handler: async data => {
             try {
-              await this.userSvc.ban(user.id, data.note, data.date);
+              await this.userSvc.ban(user.id, data.note, data.days, data.hours);
               (
                 await this.toast.create({
                   message: "Usuario baneado correctamente",

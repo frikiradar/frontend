@@ -43,6 +43,10 @@ export interface User {
   hide: boolean;
   chat: boolean;
 
+  banned: boolean;
+  ban_reason?: string;
+  ban_end?: string;
+
   avatar: SafeResourceUrl;
   images: SafeResourceUrl[];
   roles: string[];

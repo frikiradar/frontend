@@ -6,6 +6,8 @@ import { IonicModule } from "@ionic/angular";
 
 import { SharedModule } from "./../shared/shared.module";
 import { AdminPage } from "./admin.page";
+import { BannedUsersModal } from "./banned-users/banned-users.modal";
+import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
 
 const routes: Routes = [
   {
@@ -23,6 +25,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [AdminPage]
+  declarations: [AdminPage, BannedUsersModal, GlobalNotificationsModal],
+  entryComponents: [BannedUsersModal, GlobalNotificationsModal]
 })
 export class AdminPageModule {}

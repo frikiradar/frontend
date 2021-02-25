@@ -9,8 +9,8 @@ import {
   IonContent,
   ToastController
 } from "@ionic/angular";
-import * as LogRocket from "logrocket";
 import { ScrollDetail } from "@ionic/core";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 
 import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
@@ -18,7 +18,7 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
-import { ConfigService, Config } from "../services/config.service";
+import { ConfigService } from "../services/config.service";
 
 @Component({
   selector: "app-radar",
@@ -80,7 +80,8 @@ export class RadarPage {
     private alert: AlertController,
     private utils: UtilsService,
     private toast: ToastController,
-    private config: ConfigService
+    private config: ConfigService,
+    private firebase: FirebaseX
   ) {}
 
   async ionViewWillEnter() {
@@ -88,11 +89,15 @@ export class RadarPage {
       this.authUser = this.auth.currentUserValue;
       if (this.authUser && this.authUser.id) {
         if (this.platform.is("cordova")) {
-          LogRocket.identify("" + this.authUser.id, {
-            name: this.authUser.username,
-            email: this.authUser.email,
-            device: (await this.deviceSvc.getCurrentDevice())?.device_name
-          });
+          this.firebase
+            .setUserId("" + this.authUser.id)
+            .then(() => console.log("User id successfully set"))
+            .catch(err => console.log("Error setting user id:", err));
+
+          this.firebase
+            .setScreenName("radar")
+            .then(() => console.log("View successfully tracked"))
+            .catch(err => console.log("Error tracking view:", err));
         }
 
         if (!this.authUser.roles.includes("ROLE_DEMO")) {
@@ -277,7 +282,7 @@ export class RadarPage {
   async slide() {
     this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
-      this.userSvc.view(this.user.id);
+      this.userSvc.view(this.user?.id);
       if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }

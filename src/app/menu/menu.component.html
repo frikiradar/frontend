@@ -24,6 +24,7 @@
       <div id="info">
         <span>
           <ion-icon
+            (click)="userSvc.showRole(auth.currentUserValue)"
             *ngIf="
               auth.currentUserValue?.verified ||
               auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
@@ -90,13 +91,18 @@
             <p>Las personas que hacemos posible FrikiRadar</p>
           </ion-label>
         </ion-item>
-        <ion-item button lines="none" (click)="admin()" *ngIf="auth.isAdmin()">
+        <ion-item
+          button
+          lines="none"
+          (click)="admin()"
+          *ngIf="auth.isAdmin() || auth.isMaster()"
+        >
           <ion-icon
             name="bonfire-outline"
             color="danger"
             slot="start"
           ></ion-icon>
-          <ion-label color="danger">Modo Dios</ion-label>
+          <ion-label color="danger">Administración</ion-label>
         </ion-item>
       </ion-list>
     </ion-content>

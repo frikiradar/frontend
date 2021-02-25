@@ -325,7 +325,8 @@ export class EditProfilePage {
               const avatar = (await this.utils.takePicture(
                 "camera",
                 true,
-                "avatar"
+                "avatar",
+                false
               )) as File;
               this.uploadPicture(avatar);
             }
@@ -337,7 +338,8 @@ export class EditProfilePage {
               const avatar = (await this.utils.takePicture(
                 "gallery",
                 true,
-                "avatar"
+                "avatar",
+                false
               )) as File;
               this.uploadPicture(avatar);
             }
@@ -347,6 +349,18 @@ export class EditProfilePage {
       await actionSheet.present();
     } else {
       this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
+    }
+  }
+
+  async cropImagebyEvent(event: any) {
+    try {
+      const src = await this.utils.cropImage(event);
+      if (typeof src == "string") {
+        const imageFile = await this.utils.urlToFile(src);
+        this.uploadPicture(imageFile);
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 

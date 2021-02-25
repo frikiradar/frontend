@@ -1,12 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
-import {
-  LoadingController,
-  ModalController,
-  Platform,
-  ToastController
-} from "@ionic/angular";
+import { ModalController, Platform, ToastController } from "@ionic/angular";
 
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ConfigService } from "./config.service";
@@ -21,7 +16,6 @@ export class GeolocationService {
     private modal: ModalController,
     private geolocation: Geolocation,
     private config: ConfigService,
-    private loading: LoadingController,
     private locationAccuracy: LocationAccuracy,
     private platform: Platform,
     private toastController: ToastController

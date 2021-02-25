@@ -27,6 +27,13 @@ export class AuthGuard implements CanActivate {
           .then();
 
         return false;
+      } else if (currentUser.banned) {
+        // El usuario está baneado
+        this.ngZone
+          .run(() => this.nav.navigateRoot(["/login/banned-account"]))
+          .then();
+
+        return false;
       } else {
         return true;
       }

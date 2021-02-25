@@ -44,7 +44,7 @@
     #imageInput
     style="display: none;"
     name="avatar"
-    (change)="uploadPicture($event.target.files[0])"
+    (change)="cropImagebyEvent($event)"
   />
   <ion-segment
     (ionChange)="showSegment($event.detail.value)"
@@ -362,7 +362,7 @@
 
           <ion-item-group>
             <ion-item class="category-header">
-              <ion-icon src="/assets/icons/outline-casino-24px.svg"></ion-icon>
+              <ion-icon name="dice-outline"></ion-icon>
               <ion-input
                 #role
                 placeholder="Juegos de mesa, rol y cartas frikis"

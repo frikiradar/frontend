@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic/ngx";
-import { NotificationData } from "@ionic-native/fcm/ngx";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
 
@@ -18,7 +17,7 @@ export class PushService {
 
   constructor(
     private device: DeviceService,
-    private fcm: FCM,
+    private firebase: FirebaseX,
     private router: Router,
     private notificationSvc: NotificationService,
     private localNotifications: LocalNotifications,
@@ -40,17 +39,26 @@ export class PushService {
           const data = JSON.parse(notification.data);
           console.log(data);
         });
+
+        this.localNotifications.on("reply").subscribe(
+          notification => {
+            console.log("onreply", notification);
+          },
+          err => console.log(err)
+        );
       }
     });
   }
 
   async init() {
-    this.fcm.getToken().then(async token => {
+    this.setChannels();
+
+    this.firebase.getToken().then(async token => {
       await this.device.setDevice(token);
     });
 
-    this.fcm
-      .subscribeToTopic("frikiradar")
+    this.firebase
+      .subscribe("frikiradar")
       .then(response =>
         console.log("Successfully subscribed to topic:", response)
       )
@@ -58,9 +66,9 @@ export class PushService {
         console.log("Error subscribing to topic:", error);
       });
 
-    if (this.auth.isAdmin()) {
-      this.fcm
-        .subscribeToTopic("test")
+    if (this.auth.isAdmin() || this.auth.isMaster()) {
+      this.firebase
+        .subscribe("test")
         .then(response =>
           console.log("Successfully subscribed to topic:", response)
         )
@@ -69,20 +77,34 @@ export class PushService {
         });
     }
 
-    this.fcm.onNotification().subscribe(
-      (data: NotificationData) => {
-        // console.log(data);
-        if (data.wasTapped) {
+    this.firebase.onMessageReceived().subscribe(
+      data => {
+        console.log("data", data);
+        if (data.tap) {
+          console.log("tap", data.tap);
           this.router.navigate([data.url]);
         } else {
           if (this.router.url !== data.url) {
+            let actions = null;
+            if (data.url.includes("chat")) {
+              actions = [
+                {
+                  id: "reply",
+                  type: "input",
+                  title: "Responder",
+                  emptyText: "Escribe tu mensaje"
+                }
+              ] as any[];
+            }
             this.localNotifications.schedule({
               title: data.title,
               text: data.body,
-              sound: "file://assets/sounds/bipbip.mp3",
+              sound: "file://bipbip.mp3",
               smallIcon: "res://notification_icon",
+              color: "#e91e63",
               icon: data.icon,
-              foreground: true
+              foreground: true,
+              actions
             });
           }
 
@@ -98,6 +120,80 @@ export class PushService {
         console.error("Error in notification", error);
       }
     );
+  }
+
+  setChannels() {
+    const channels = [
+      {
+        id: "chat",
+        name: "Notificaciones de Chat",
+        description: "Recibe notificaciones de chat cuando alguien te escribe."
+      },
+      {
+        id: "radar",
+        name: "Notificaciones de Radar",
+        description:
+          "Recibe notificaciones cuando hay un usuario interesante cerca de ti."
+      },
+      {
+        id: "like",
+        name: "Notificaciones de Kokoros",
+        description:
+          "Recibe notificaciones cuando un usuario te entregue su kokoro."
+      },
+      {
+        id: "frikiradar",
+        name: "Notificaciones de FrikiRadar",
+        description:
+          "Canal de información sobre FrikiRadar, novedades y actualizaciones."
+      },
+      {
+        id: "test",
+        name: "Notificaciones de testeo",
+        description: "Canal de testeo, exclusivo para masters."
+      }
+    ];
+
+    for (let channel of channels) {
+      if (
+        channel.id == "test" &&
+        !(this.auth.isAdmin() || this.auth.isMaster())
+      ) {
+        continue;
+      }
+
+      this.firebase
+        .createChannel({
+          id: channel.id,
+          name: channel.name,
+          sound: "bipbip",
+          description: channel.description
+        })
+        .then(response => {
+          // console.log("Notification Channel created", channel, response);
+        })
+        .catch(error => {
+          console.log("Create notification channel error: " + error);
+        });
+    }
+
+    this.firebase
+      .deleteChannel("fcm_default_channel")
+      .then(response => {
+        // console.log(response);
+      })
+      .catch(error => {
+        console.error("Error deleting channel", error);
+      });
+
+    /*this.firebase
+      .listChannels()
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.error(error);
+      });*/
   }
 
   async sendTopicMessage(topic: string, message: string, title: string) {

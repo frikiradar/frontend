@@ -14,7 +14,7 @@ export class AdminGuard implements CanActivate {
 
   async canActivate() {
     // logged in so return true
-    if (!this.auth.isAdmin()) {
+    if (!this.auth.isAdmin() && !this.auth.isMaster()) {
       // El usuario no está activo
       await this.auth.logout();
 

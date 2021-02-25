@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
-import { Crop } from "@ionic-native/crop/ngx";
 import { Camera } from "@ionic-native/camera/ngx";
+import { CropperModal } from "../cropper/cropper.modal";
 
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { CreditsModal } from "../credits/credits.modal";
@@ -10,6 +10,7 @@ import { NiceDatePipe } from "../nice-date.pipe";
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
+import { ImageCropperModule } from "ngx-image-cropper";
 
 @NgModule({
   declarations: [
@@ -17,11 +18,22 @@ import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
     NiceDatePipe,
     AmbassadorModal,
     CreditsModal,
-    RequestGeolocationModal
+    RequestGeolocationModal,
+    CropperModal
   ],
-  entryComponents: [AmbassadorModal, CreditsModal, RequestGeolocationModal],
-  imports: [IonicModule, CommonModule, NgxIonicImageViewerModule],
+  entryComponents: [
+    AmbassadorModal,
+    CreditsModal,
+    RequestGeolocationModal,
+    CropperModal
+  ],
+  imports: [
+    IonicModule,
+    CommonModule,
+    NgxIonicImageViewerModule,
+    ImageCropperModule
+  ],
   exports: [ImagePreloadDirective, NiceDatePipe],
-  providers: [Crop, Camera]
+  providers: [Camera]
 })
 export class SharedModule {}

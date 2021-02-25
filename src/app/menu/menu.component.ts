@@ -6,6 +6,7 @@ import { MenuController, ModalController, Platform } from "@ionic/angular";
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { CreditsModal } from "../credits/credits.modal";
 import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { User } from "./../models/user";
 
@@ -24,7 +25,8 @@ export class MenuComponent {
     public utils: UtilsService,
     private router: Router,
     private modal: ModalController,
-    public platform: Platform
+    public platform: Platform,
+    public userSvc: UserService
   ) {}
 
   editProfile() {

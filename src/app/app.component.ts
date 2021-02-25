@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { Event, Router } from "@angular/router";
-// import { AnalyticsFirebase } from "@ionic-native/analytics-firebase/ngx";
+import { Router } from "@angular/router";
 import { AppVersion } from "@ionic-native/app-version/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
@@ -12,7 +11,6 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
-import * as LogRocket from "logrocket";
 
 import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
@@ -43,7 +41,6 @@ export class AppComponent {
     private config: ConfigService,
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
-    // private analyticsFirebase: AnalyticsFirebase,
     private toastController: ToastController,
     private modal: ModalController,
     private push: PushService
@@ -53,19 +50,15 @@ export class AppComponent {
 
   async initializeApp() {
     this.platform.ready().then(async () => {
+      if (this.platform.is("cordova")) {
+        this.push.init();
+        this.statusBar.backgroundColorByHexString("#1a1a1a");
+        this.splashScreen.hide();
+      }
+
       this.loadConfig();
       this.networkStatus();
       this.backButtonStatus();
-
-      if (this.platform.is("cordova")) {
-        this.statusBar.backgroundColorByHexString("#1a1a1a");
-        this.push.init();
-        this.splashScreen.hide();
-
-        LogRocket.init("rvfke5/frikiradar", {
-          release: await this.appVersion.getVersionNumber()
-        });
-      }
 
       // Veces abierto
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
