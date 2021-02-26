@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Device as deviceInfo } from "@ionic-native/device/ngx";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import * as platform from "platform";
+import { Platform } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { Device } from "./../models/device";
@@ -13,7 +16,8 @@ export class DeviceService {
   constructor(
     private rest: RestService,
     private auth: AuthService,
-    private device: deviceInfo
+    private device: deviceInfo,
+    private platform: Platform
   ) {}
 
   async getDevices(forceApi = false): Promise<Device[]> {
@@ -29,7 +33,15 @@ export class DeviceService {
   }
 
   async setDevice(token?: string) {
-    if (this.device.uuid !== null) {
+    let uuid = null;
+    if (this.platform.is("cordova")) {
+      uuid = this.device.uuid;
+    } else {
+      const fp = await FingerprintJS.load();
+      const fingerprint = await fp.get();
+      uuid = fingerprint.visitorId;
+    }
+    if (uuid !== null) {
       const devices = await this.getDevices();
       const device = await this.getCurrentDevice();
       if (
@@ -40,15 +52,10 @@ export class DeviceService {
         await this.unknownDevice(device).toPromise();
       }
 
-      const name = `${this.device.manufacturer} ${
-        this.device.model
-      } (${this.device.platform.charAt(0).toUpperCase() +
-        this.device.platform.slice(1)} ${this.device?.version})`;
-
       const user = (await this.rest
         .put("device", {
-          id: this.device.uuid,
-          name,
+          id: uuid,
+          name: device.device_name,
           token
         })
         .toPromise()) as User;
@@ -58,20 +65,31 @@ export class DeviceService {
   }
 
   async getCurrentDevice(): Promise<Device> {
-    if (this.device.uuid !== null) {
-      const device: Device = {
-        device_id: this.device.uuid,
+    let uuid = null;
+    let device: Device;
+    if (this.platform.is("cordova")) {
+      uuid = this.device.uuid;
+      device = {
+        device_id: uuid,
         device_name: `${this.device.manufacturer} ${
           this.device.model
         } (${this.device.platform.charAt(0).toUpperCase() +
           this.device.platform.slice(1)} ${this.device?.version})`
       };
-      const devices = await this.getDevices();
-      if (devices.some(d => d.device_id === device.device_id)) {
-        return devices.find(d => d.device_id === device.device_id);
-      } else {
-        return device;
-      }
+    } else {
+      const fp = await FingerprintJS.load();
+      const fingerprint = await fp.get();
+      device = {
+        device_id: fingerprint.visitorId,
+        device_name: platform.description
+      };
+    }
+
+    const devices = await this.getDevices();
+    if (devices.some(d => d.device_id === device.device_id)) {
+      return devices.find(d => d.device_id === device.device_id);
+    } else {
+      return device;
     }
   }
 

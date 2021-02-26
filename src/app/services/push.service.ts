@@ -124,8 +124,9 @@ export class PushService {
             messaging.onTokenRefresh(() => {
               messaging
                 .getToken()
-                .then((refreshedToken: string) => {
-                  console.log(refreshedToken);
+                .then(async (token: string) => {
+                  await this.device.setDevice(token);
+                  console.log("token refresh", token);
                 })
                 .catch(err => {
                   console.error(err);
@@ -262,8 +263,9 @@ export class PushService {
         await Notification.requestPermission();
 
         const token: string = await messaging.getToken();
+        await this.device.setDevice(token);
 
-        console.log("User notifications token:", token);
+        // console.log("User notifications token:", token);
       } catch (err) {
         // No notifications granted
       }

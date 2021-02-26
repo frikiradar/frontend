@@ -43,7 +43,7 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": []
+            "scripts": ["../node_modules/platform/platform.js"]
           },
           "configurations": {
             "production": {
@@ -114,7 +114,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [],
-            "scripts": [],
+            "scripts": ["../node_modules/platform/platform.js"],
             "assets": [
               {
                 "glob": "favicon.ico",
