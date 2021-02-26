@@ -104,12 +104,14 @@ export class PushService {
         navigator.serviceWorker.ready.then(
           registration => {
             if (!firebase.messaging.isSupported()) {
+              resolve();
               return;
             }
 
             const messaging = firebase.messaging();
             // Register the Service Worker
             messaging.useServiceWorker(registration);
+            console.log("useServiceWorker");
 
             // Initialize your VAPI key
             messaging.usePublicVapidKey(environment.firebase.vapidKey);
@@ -134,6 +136,7 @@ export class PushService {
             });
           },
           err => {
+            reject(err);
             console.error(err);
           }
         );

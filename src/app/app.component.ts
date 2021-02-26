@@ -57,10 +57,8 @@ export class AppComponent {
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
       } else {
-        if (!firebase.app[0]) {
-          firebase.initializeApp(environment.firebase);
-        }
         await this.push.requestPermission();
+        firebase.initializeApp(environment.firebase);
         this.push.init();
       }
 
