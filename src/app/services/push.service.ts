@@ -128,11 +128,11 @@ export class PushService {
             }
 
             // Register the Service Worker
-            // messaging.useServiceWorker(registration);
+            messaging.useServiceWorker(registration);
             // console.log("useServiceWorker");
 
             // Initialize your VAPI key
-            // messaging.usePublicVapidKey(environment.firebase.vapidKey);
+            messaging.usePublicVapidKey(environment.firebase.vapidKey);
 
             // Optional and not covered in the article
             // Listen to messages when your app is in the foreground
@@ -152,8 +152,10 @@ export class PushService {
                 icon: "/firebase-logo.png"
               };
 
-              /*self.registration.showNotification(notificationTitle,
-                notificationOptions);*/
+              registration.showNotification(
+                notificationTitle,
+                notificationOptions
+              );
             });
 
             // Optional and not covered in the article
