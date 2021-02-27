@@ -110,10 +110,14 @@ export class PushService {
             }
 
             const messaging = firebase.messaging();
+            // Register the Service Worker
+            messaging.useServiceWorker(registration);
+            // console.log("useServiceWorker");
+
+            // Initialize your VAPI key
+            messaging.usePublicVapidKey(environment.firebase.vapidKey);
             try {
-              const token: string = await messaging.getToken({
-                vapidKey: environment.firebase.vapidKey
-              });
+              const token: string = await messaging.getToken();
 
               if (token) {
                 await this.device.setDevice(token);
@@ -126,13 +130,6 @@ export class PushService {
             } catch (e) {
               console.error(e);
             }
-
-            // Register the Service Worker
-            messaging.useServiceWorker(registration);
-            // console.log("useServiceWorker");
-
-            // Initialize your VAPI key
-            messaging.usePublicVapidKey(environment.firebase.vapidKey);
 
             // Optional and not covered in the article
             // Listen to messages when your app is in the foreground
