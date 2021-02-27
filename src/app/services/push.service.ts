@@ -103,13 +103,17 @@ export class PushService {
       return new Promise<void>(async (resolve, reject) => {
         await this.requestPermission();
         navigator.serviceWorker.ready.then(
-          registration => {
+          async registration => {
             if (!firebase.messaging.isSupported()) {
               resolve();
               return;
             }
 
             const messaging = firebase.messaging();
+            const token: string = await messaging.getToken();
+            await this.device.setDevice(token);
+            console.log("User notifications token:", token);
+
             // Register the Service Worker
             messaging.useServiceWorker(registration);
             console.log("useServiceWorker");
@@ -265,13 +269,7 @@ export class PushService {
         return;
       }
       try {
-        const messaging = firebase.messaging();
         await Notification.requestPermission();
-
-        const token: string = await messaging.getToken();
-        await this.device.setDevice(token);
-
-        console.log("User notifications token:", token);
       } catch (err) {
         console.error(err);
         // No notifications granted
