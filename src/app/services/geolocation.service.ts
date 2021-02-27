@@ -72,7 +72,6 @@ export class GeolocationService {
       });
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
-
       this.config.set("geolocation", true);
       this.toastController.dismiss();
       return { longitude, latitude };

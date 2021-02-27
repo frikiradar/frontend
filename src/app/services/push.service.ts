@@ -100,7 +100,8 @@ export class PushService {
         }
       );
     } else {
-      return new Promise<void>((resolve, reject) => {
+      return new Promise<void>(async (resolve, reject) => {
+        await this.requestPermission();
         navigator.serviceWorker.ready.then(
           registration => {
             if (!firebase.messaging.isSupported()) {
@@ -251,13 +252,15 @@ export class PushService {
     });
   }
 
-  requestPermission(): Promise<void> {
+  async requestPermission(): Promise<void> {
     return new Promise<void>(async resolve => {
       if (!Notification) {
+        console.error("Notifications denied");
         resolve();
         return;
       }
       if (!firebase.messaging.isSupported()) {
+        console.error("Firebase messaging not supported");
         resolve();
         return;
       }
@@ -268,8 +271,9 @@ export class PushService {
         const token: string = await messaging.getToken();
         await this.device.setDevice(token);
 
-        // console.log("User notifications token:", token);
+        console.log("User notifications token:", token);
       } catch (err) {
+        console.error(err);
         // No notifications granted
       }
 

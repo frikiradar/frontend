@@ -14,7 +14,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["hammerjs", "linkifyjs"],
+            "allowedCommonJsDependencies": ["hammerjs", "linkifyjs", "platform"],
             "aot": false,
             "outputPath": "www",
             "index": "src/index.html",
@@ -43,7 +43,7 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": ["../node_modules/platform/platform.js"]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -114,7 +114,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [],
-            "scripts": ["../node_modules/platform/platform.js"],
+            "scripts": [],
             "assets": [
               {
                 "glob": "favicon.ico",

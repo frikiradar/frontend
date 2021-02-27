@@ -16,14 +16,13 @@ export interface User {
   relationship: string;
   status: string;
   age: number;
+  coordinates: { longitude: number; latitude: number };
 
   lovegender: string[];
   minage: number;
   maxage: number;
   connection: string[];
 
-  latitude: number;
-  longitude: number;
   location: string;
   country: string;
   distance: number;

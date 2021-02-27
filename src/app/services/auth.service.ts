@@ -4,6 +4,8 @@ import { Device as deviceInfo } from "@ionic-native/device/ngx";
 import { NavController } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import { Platform } from "@ionic/angular";
 
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
@@ -22,7 +24,8 @@ export class AuthService {
     private http: HttpClient,
     private rest: RestService,
     private nav: NavController,
-    private device: deviceInfo
+    private device: deviceInfo,
+    private platform: Platform
   ) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("currentUser"))
@@ -202,10 +205,19 @@ export class AuthService {
   }
 
   async logout() {
+    let uuid = null;
+    if (this.platform.is("cordova")) {
+      uuid = this.device.uuid;
+    } else {
+      const fp = await FingerprintJS.load();
+      const fingerprint = await fp.get();
+      uuid = fingerprint.visitorId;
+    }
+
     // Desactivamos las notificaciones
-    if (this.device.uuid) {
+    if (uuid) {
       try {
-        await this.rest.get(`turnoff-device/${this.device.uuid}`).toPromise();
+        await this.rest.get(`turnoff-device/${uuid}`).toPromise();
       } catch (e) {
         console.error(e);
       }

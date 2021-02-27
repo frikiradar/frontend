@@ -33,34 +33,38 @@ export class DeviceService {
   }
 
   async setDevice(token?: string) {
-    let uuid = null;
-    if (this.platform.is("cordova")) {
-      uuid = this.device.uuid;
-    } else {
-      const fp = await FingerprintJS.load();
-      const fingerprint = await fp.get();
-      uuid = fingerprint.visitorId;
-    }
-    if (uuid !== null) {
-      const devices = await this.getDevices();
+    if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
       const device = await this.getCurrentDevice();
-      if (
-        devices.length &&
-        !devices.some(d => d.device_id === device.device_id)
-      ) {
-        // dispositivo desconocido, enviar email avisando
-        await this.unknownDevice(device).toPromise();
+      if (device.token !== token) {
+        let uuid = null;
+        if (this.platform.is("cordova")) {
+          uuid = this.device.uuid;
+        } else {
+          const fp = await FingerprintJS.load();
+          const fingerprint = await fp.get();
+          uuid = fingerprint.visitorId;
+        }
+        if (uuid !== null) {
+          const devices = await this.getDevices();
+          if (
+            devices.length &&
+            !devices.some(d => d.device_id === device.device_id)
+          ) {
+            // dispositivo desconocido, enviar email avisando
+            await this.unknownDevice(device).toPromise();
+          }
+
+          const user = (await this.rest
+            .put("device", {
+              id: uuid,
+              name: device.device_name,
+              token
+            })
+            .toPromise()) as User;
+
+          this.auth.setAuthUser(user);
+        }
       }
-
-      const user = (await this.rest
-        .put("device", {
-          id: uuid,
-          name: device.device_name,
-          token
-        })
-        .toPromise()) as User;
-
-      this.auth.setAuthUser(user);
     }
   }
 

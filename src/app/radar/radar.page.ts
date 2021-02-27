@@ -19,6 +19,8 @@ import { AuthService } from "./../services/auth.service";
 import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
 import { ConfigService } from "../services/config.service";
+import { PushService } from "../services/push.service";
+import { takeWhile } from "rxjs/operators";
 
 @Component({
   selector: "app-radar",
@@ -48,9 +50,10 @@ export class RadarPage {
   page = 0;
   ratio = -1;
   authUser: User;
-  users: User[] = [];
+  users: User[];
   public user: User;
   public view: "cards" | "list" = "cards";
+  coordinates: User["coordinates"];
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -81,68 +84,79 @@ export class RadarPage {
     private utils: UtilsService,
     private toast: ToastController,
     private config: ConfigService,
-    private firebase: FirebaseX
+    private firebase: FirebaseX,
+    private push: PushService
   ) {}
+
+  async ngOnInit() {
+    this.authUser = this.auth.currentUserValue;
+
+    // Una vez logueado iniciamos notificaciones si no están
+    const device = await this.deviceSvc.getCurrentDevice();
+    if (!device.token) {
+      this.push.init();
+    }
+    // Y despues iniciamos la geolocalización
+    if (!this.authUser.roles.includes("ROLE_DEMO")) {
+      try {
+        this.coordinates = await this.geolocationSvc.getGeolocation();
+        const oldCoordinates = this.authUser.coordinates;
+        if (
+          oldCoordinates === undefined ||
+          this.coordinates.latitude.toFixed(3) !==
+            oldCoordinates?.latitude.toFixed(3) ||
+          this.coordinates.longitude.toFixed(3) !==
+            oldCoordinates?.longitude.toFixed(3)
+        ) {
+          const authUser = await this.userSvc.setCoordinates(
+            this.coordinates.longitude,
+            this.coordinates.latitude
+          );
+          authUser.coordinates = this.coordinates;
+          // this.auth.setAuthUser(authUser);
+        }
+      } catch (e) {
+        console.error(e);
+        // tienes que aprobar permisos
+      }
+
+      this.authUser = this.auth.currentUserValue;
+    }
+
+    if (this.platform.is("cordova")) {
+      this.firebase
+        .setUserId("" + this.authUser.id)
+        .then(() => console.log("User id successfully set"))
+        .catch(err => console.log("Error setting user id:", err));
+
+      this.firebase
+        .setScreenName("radar")
+        .then(() => console.log("View successfully tracked"))
+        .catch(err => console.log("Error tracking view:", err));
+    }
+
+    this.getRadarUsers();
+  }
 
   async ionViewWillEnter() {
     if (!this.users?.length) {
-      this.authUser = this.auth.currentUserValue;
       if (this.authUser && this.authUser.id) {
-        if (this.platform.is("cordova")) {
-          this.firebase
-            .setUserId("" + this.authUser.id)
-            .then(() => console.log("User id successfully set"))
-            .catch(err => console.log("Error setting user id:", err));
-
-          this.firebase
-            .setScreenName("radar")
-            .then(() => console.log("View successfully tracked"))
-            .catch(err => console.log("Error tracking view:", err));
-        }
-
-        if (!this.authUser.roles.includes("ROLE_DEMO")) {
-          try {
-            const coordinates = await this.geolocationSvc.getGeolocation();
-            /*const oldCoordinates = (await this.config.get(
-              "coordinates"
-            )) as Config["coordinates"];
-
-            if (
-              coordinates.latitude.toFixed(3) !==
-                oldCoordinates?.latitude.toFixed(3) ||
-              coordinates.longitude.toFixed(3) !==
-                oldCoordinates?.longitude.toFixed(3)
-            ) {*/
-            this.config.set("coordinates", coordinates);
-            const authUser = await this.userSvc.setCoordinates(
-              coordinates.longitude,
-              coordinates.latitude
-            );
-            this.auth.setAuthUser(authUser);
-            //}
-          } catch (e) {
-            console.error(e);
-            // tienes que aprobar permisos
-          }
-
-          this.authUser = this.auth.currentUserValue;
-        }
-
-        this.auth.currentUser.subscribe(async authUser => {
-          if (authUser?.id) {
-            this.showSkeleton = true;
-            this.authUser = authUser;
-            this.page = 0;
-            if ((await this.config.get("radarView")) === "list") {
-              this.view = "list";
-              this.ratio = 50;
-            } else {
-              await this.slides.slideTo(0);
+        this.auth.currentUser
+          .pipe(takeWhile(u => !!u?.id))
+          .subscribe(async authUser => {
+            if (this.users) {
+              this.showSkeleton = true;
+              this.authUser = authUser;
+              this.page = 0;
+              if ((await this.config.get("radarView")) === "list") {
+                this.view = "list";
+                this.ratio = 50;
+              } else {
+                await this.slides.slideTo(0);
+              }
+              this.getRadarUsers();
             }
-
-            this.getRadarUsers();
-          }
-        });
+          });
       }
     }
   }
