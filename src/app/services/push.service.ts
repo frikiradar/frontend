@@ -224,9 +224,10 @@ export class PushService {
         // Customize notification here
         const notificationTitle = notification?.title;
         const notificationOptions = {
-          body: notification?.text,
+          body: notification?.body,
           icon: data?.icon,
-          image: notification?.image
+          image: notification?.image,
+          badge: data?.icon
         };
         await registration.showNotification(
           notificationTitle,
