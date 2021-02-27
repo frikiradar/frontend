@@ -110,22 +110,52 @@ export class PushService {
             }
 
             const messaging = firebase.messaging();
-            const token: string = await messaging.getToken();
-            await this.device.setDevice(token);
-            console.log("User notifications token:", token);
+            try {
+              const token: string = await messaging.getToken({
+                vapidKey: environment.firebase.vapidKey
+              });
+
+              if (token) {
+                await this.device.setDevice(token);
+                console.log("User notifications token:", token);
+              } else {
+                console.log(
+                  "No registration token available. Request permission to generate one."
+                );
+              }
+            } catch (e) {
+              console.error(e);
+            }
 
             // Register the Service Worker
             // messaging.useServiceWorker(registration);
             // console.log("useServiceWorker");
 
             // Initialize your VAPI key
-            messaging.usePublicVapidKey(environment.firebase.vapidKey);
+            // messaging.usePublicVapidKey(environment.firebase.vapidKey);
 
             // Optional and not covered in the article
             // Listen to messages when your app is in the foreground
             messaging.onMessage(payload => {
               console.log(payload);
             });
+
+            messaging.onBackgroundMessage(payload => {
+              console.log(
+                "[firebase-messaging-sw.js] Received background message ",
+                payload
+              );
+              // Customize notification here
+              const notificationTitle = "Background Message Title";
+              const notificationOptions = {
+                body: "Background Message body.",
+                icon: "/firebase-logo.png"
+              };
+
+              /*self.registration.showNotification(notificationTitle,
+                notificationOptions);*/
+            });
+
             // Optional and not covered in the article
             // Handle token refresh
             messaging.onTokenRefresh(() => {
