@@ -134,7 +134,7 @@ export class PushService {
         console.log(payload);
       });
 
-      messaging.onBackgroundMessage(payload => {
+      /*messaging.onBackgroundMessage(payload => {
         console.log(
           "[firebase-messaging-sw.js] Received background message ",
           payload
@@ -147,7 +147,7 @@ export class PushService {
         };
 
         registration.showNotification(notificationTitle, notificationOptions);
-      });
+      });*/
 
       // Optional and not covered in the article
       // Handle token refresh
