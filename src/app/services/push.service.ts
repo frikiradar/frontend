@@ -115,8 +115,8 @@ export class PushService {
             console.log("User notifications token:", token);
 
             // Register the Service Worker
-            messaging.useServiceWorker(registration);
-            console.log("useServiceWorker");
+            // messaging.useServiceWorker(registration);
+            // console.log("useServiceWorker");
 
             // Initialize your VAPI key
             messaging.usePublicVapidKey(environment.firebase.vapidKey);
