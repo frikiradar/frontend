@@ -153,107 +153,117 @@ export class ChatUserPage implements OnInit {
       (max, message) => (message.id > max ? message.id : max),
       this.messages[0]?.id
     );
-    const messages = (
-      await this.chatSvc.getMessages(this.userId, true, this.page, lastId)
-    )
-      .filter(m => m.text || m.image || m.audio)
-      .reverse();
+    try {
+      const messages = (
+        await this.chatSvc.getMessages(this.userId, true, this.page, lastId)
+      )
+        .filter(m => m.text || m.image || m.audio)
+        .reverse();
 
-    this.messages = [...this.messages, ...messages];
-    // this.chatSvc.setStoragedMessages(messages);
+      this.messages = [...this.messages, ...messages];
+      // this.chatSvc.setStoragedMessages(messages);
 
-    if (this.messages.length < 15) {
-      this.infiniteScroll.disabled = true;
-    }
-
-    this.scrollDown(500);
-
-    if (this.messages.length > 0) {
-      if (this.userId == this.messages[0].fromuser.id) {
-        this.user = this.messages[0].fromuser;
-      } else {
-        this.user = this.messages[0].touser;
+      if (this.messages.length < 15) {
+        this.infiniteScroll.disabled = true;
       }
-    } else {
-      try {
-        this.user = await this.userSvc.getUser(this.userId);
-      } catch (e) {
-        this.chatForm.get("message").disable();
-      }
-    }
 
-    if (this.auth.isDemo(this.user as User) || !this.user.active) {
-      this.chatForm.get("message").disable();
-    }
+      this.scrollDown(500);
 
-    const min = Math.min(this.auth.currentUserValue.id, this.userId);
-    const max = Math.max(this.auth.currentUserValue.id, this.userId);
-    const channel = `${min}_${max}`;
-
-    // Nos suscribimos al canal
-    this.source = await this.chatSvc.register(channel);
-    this.source.addEventListener("message", async (res: any) => {
-      this.conErrors = 0;
-      let message = JSON.parse(res.data) as Chat;
-      if (this.messages.some(m => m.id === message.id)) {
-        // Si ya existe el mensaje lo actualizamos
-        this.messages.map(m => {
-          if (m.id === message.id) {
-            m.time_read = message.time_read;
-          }
-        });
-      } else {
-        this.messages = [...this.messages, message];
-        if (
-          message.fromuser.id === this.user.id &&
-          (message.text || message.image || message.audio)
-        ) {
-          // marcamos como leido
-          message = await this.chatSvc.readChat(message.id);
+      if (this.messages.length > 0) {
+        if (this.userId == this.messages[0].fromuser.id) {
+          this.user = this.messages[0].fromuser;
         } else {
-          // borramos los enviando...
-          this.messages = this.messages.filter(m => !m.sending);
+          this.user = this.messages[0].touser;
+        }
+      } else {
+        try {
+          this.user = await this.userSvc.getUser(this.userId);
+        } catch (e) {
+          this.chatForm.get("message").disable();
         }
       }
 
-      if (message.fromuser.id === this.user.id) {
-        this.user = message.fromuser;
+      if (this.auth.isDemo(this.user as User) || !this.user.active) {
+        this.chatForm.get("message").disable();
       }
 
-      this.scrollDown();
-    });
+      const min = Math.min(this.auth.currentUserValue.id, this.userId);
+      const max = Math.max(this.auth.currentUserValue.id, this.userId);
+      const channel = `${min}_${max}`;
 
-    this.source.addEventListener("error", async error => {
-      this.conErrors++;
-      if (error.type === "error" && this.conErrors >= 3) {
-        console.error(error);
+      // Nos suscribimos al canal
+      this.source = await this.chatSvc.register(channel);
+      this.source.addEventListener("message", async (res: any) => {
+        this.conErrors = 0;
+        let message = JSON.parse(res.data) as Chat;
+        if (this.messages.some(m => m.id === message.id)) {
+          // Si ya existe el mensaje lo actualizamos
+          this.messages.map(m => {
+            if (m.id === message.id) {
+              m.time_read = message.time_read;
+            }
+          });
+        } else {
+          this.messages = [...this.messages, message];
+          if (
+            message.fromuser.id === this.user.id &&
+            (message.text || message.image || message.audio)
+          ) {
+            // marcamos como leido
+            try {
+              message = await this.chatSvc.readChat(message.id);
+            } catch (e) {
+              console.error(e);
+              await this.alertError.present();
+            }
+          } else {
+            // borramos los enviando...
+            this.messages = this.messages.filter(m => !m.sending);
+          }
+        }
+
+        if (message.fromuser.id === this.user.id) {
+          this.user = message.fromuser;
+        }
+
+        this.scrollDown();
+      });
+
+      this.source.addEventListener("error", async error => {
+        this.conErrors++;
+        if (error.type === "error" && this.conErrors >= 3) {
+          console.error(error);
+          this.source.close();
+
+          await this.alertError.present();
+        }
+      });
+
+      this.source.addEventListener("open", async error => {
+        this.conErrors = 0;
+      });
+
+      window.addEventListener("keyboardDidShow", event => {
+        this.scrollDown();
+      });
+
+      window.addEventListener("keyboardDidHide", event => {
+        this.scrollDown();
+      });
+
+      this.platform.backButton.subscribe(() => {
         this.source.close();
+      });
 
-        // await this.alertError.present();
+      this.textarea?.setFocus();
+
+      if (!this.user.chat) {
+        this.message.setValue(undefined);
+        this.sendMessage();
       }
-    });
-
-    this.source.addEventListener("open", async error => {
-      this.conErrors = 0;
-    });
-
-    window.addEventListener("keyboardDidShow", event => {
-      this.scrollDown();
-    });
-
-    window.addEventListener("keyboardDidHide", event => {
-      this.scrollDown();
-    });
-
-    this.platform.backButton.subscribe(() => {
-      this.source.close();
-    });
-
-    this.textarea?.setFocus();
-
-    if (!this.user.chat) {
-      this.message.setValue(undefined);
-      this.sendMessage();
+    } catch (e) {
+      console.error(e);
+      await this.alertError.present();
     }
   }
 
@@ -280,7 +290,7 @@ export class ChatUserPage implements OnInit {
         ...this.messages,
         ...[
           {
-            touser: { id: this.user.id },
+            touser: { id: this.user?.id },
             fromuser: { id: this.auth.currentUserValue.id },
             text,
             image,
@@ -405,8 +415,6 @@ export class ChatUserPage implements OnInit {
 
     if (this.platform.is("cordova")) {
       const actionSheet = await this.sheet.create({
-        header:
-          "Consejo: Si pones una foto tuya transmitirás mucha más confianza.",
         buttons: [
           {
             text: "Desde la cámara",

@@ -78,14 +78,14 @@ export class PushService {
       }
 
       this.firebase.onMessageReceived().subscribe(
-        data => {
-          console.log("data", data);
-          if (data.tap) {
+        payload => {
+          console.log("payload", payload);
+          if (payload.tap) {
             // console.log("tap", data.tap);
-            this.router.navigate([data.url]);
+            this.router.navigate([payload.url]);
           } else {
-            if (this.router.url !== data.url) {
-              this.localNotification(data);
+            if (this.router.url !== payload.url) {
+              this.localNotification(payload.notification, payload.data);
             }
 
             this.notificationSvc
@@ -102,9 +102,12 @@ export class PushService {
       );
     } else {
       await this.requestPermission();
-      this.afMessaging.messages.subscribe(payload => {
-        console.log("new message received. ", payload);
-      });
+      this.afMessaging.messages.subscribe(
+        (payload: { data: {}; notification: {} }) => {
+          this.localNotification(payload.notification, payload.data);
+          console.log("new message received. ", payload);
+        }
+      );
     }
   }
 
@@ -188,31 +191,51 @@ export class PushService {
       .toPromise();
   }
 
-  async localNotification(data: any) {
-    let actions = null;
-    if (data.topic == "chat") {
-      actions = [
-        {
-          id: "reply",
-          type: "input",
-          title: "Responder",
-          emptyText: "Escribe tu mensaje"
-        }
-      ] as any[];
+  async localNotification(notification: any, data: any) {
+    if (this.platform.is("cordova")) {
+      let actions = null;
+      if (data.topic == "chat") {
+        actions = [
+          {
+            id: "reply",
+            type: "input",
+            title: "Responder",
+            emptyText: "Escribe tu mensaje"
+          }
+        ] as any[];
+      }
+      this.localNotifications.schedule({
+        title: notification?.title,
+        text: notification?.body,
+        sound: "file://assets/audio/bipbip.mp3",
+        smallIcon: "res://notification_icon",
+        color: "#e91e63",
+        icon: data?.icon,
+        attachments: data?.attachments,
+        channel: data?.topic,
+        // foreground: true,
+        data: data
+        // launch: true,
+        // actions
+      });
+    } else {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        // Customize notification here
+        const notificationTitle = notification?.title;
+        const notificationOptions = {
+          body: notification?.text,
+          icon: data?.icon,
+          image: notification?.image
+        };
+        await registration.showNotification(
+          notificationTitle,
+          notificationOptions
+        );
+      } catch (e) {
+        console.error(e);
+      }
     }
-    this.localNotifications.schedule({
-      title: data?.title,
-      text: data?.body,
-      sound: "file://assets/audio/bipbip.mp3",
-      smallIcon: "res://notification_icon",
-      color: "#e91e63",
-      icon: data?.icon,
-      attachments: data?.attachments,
-      // foreground: true,
-      data: data
-      // launch: true,
-      // actions
-    });
   }
 
   async requestPermission(): Promise<void> {

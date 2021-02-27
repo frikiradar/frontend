@@ -116,7 +116,7 @@
     </ion-card>
   </span>
 </ion-content>
-<ion-footer *ngIf="!chatForm.get('message').disabled">
+<ion-footer *ngIf="!chatForm.get('message').disabled && user?.id">
   <div id="image-preview" *ngIf="image">
     <ion-icon
       name="close-circle"
