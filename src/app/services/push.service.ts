@@ -100,80 +100,67 @@ export class PushService {
         }
       );
     } else {
-      return new Promise<void>(async (resolve, reject) => {
-        await this.requestPermission();
-        navigator.serviceWorker.ready.then(
-          async registration => {
-            if (!firebase.messaging.isSupported()) {
-              resolve();
-              return;
-            }
+      await this.requestPermission();
+      const registration = await navigator.serviceWorker.ready;
 
-            const messaging = firebase.messaging();
-            // Register the Service Worker
-            messaging.useServiceWorker(registration);
-            // console.log("useServiceWorker");
+      if (!firebase.messaging.isSupported()) {
+        console.error("Firebase messaging not supported");
+        return;
+      }
 
-            // Initialize your VAPI key
-            messaging.usePublicVapidKey(environment.firebase.vapidKey);
-            try {
-              const token: string = await messaging.getToken();
+      const messaging = firebase.messaging();
 
-              if (token) {
-                await this.device.setDevice(token);
-                console.log("User notifications token:", token);
-              } else {
-                console.log(
-                  "No registration token available. Request permission to generate one."
-                );
-              }
-            } catch (e) {
-              console.error(e);
-            }
+      try {
+        const token = await messaging.getToken({
+          serviceWorkerRegistration: registration,
+          vapidKey: environment.firebase.vapidKey
+        });
 
-            // Optional and not covered in the article
-            // Listen to messages when your app is in the foreground
-            messaging.onMessage(payload => {
-              console.log(payload);
-            });
+        if (token) {
+          await this.device.setDevice(token);
+          console.log("User notifications token:", token);
+        } else {
+          console.log(
+            "No registration token available. Request permission to generate one."
+          );
+        }
+      } catch (e) {
+        console.error(e);
+      }
 
-            messaging.onBackgroundMessage(payload => {
-              console.log(
-                "[firebase-messaging-sw.js] Received background message ",
-                payload
-              );
-              // Customize notification here
-              const notificationTitle = "Background Message Title";
-              const notificationOptions = {
-                body: "Background Message body.",
-                icon: "/firebase-logo.png"
-              };
+      // Optional and not covered in the article
+      // Listen to messages when your app is in the foreground
+      messaging.onMessage(payload => {
+        console.log(payload);
+      });
 
-              registration.showNotification(
-                notificationTitle,
-                notificationOptions
-              );
-            });
-
-            // Optional and not covered in the article
-            // Handle token refresh
-            messaging.onTokenRefresh(() => {
-              messaging
-                .getToken()
-                .then(async (token: string) => {
-                  await this.device.setDevice(token);
-                  console.log("token refresh", token);
-                })
-                .catch(err => {
-                  console.error(err);
-                });
-            });
-          },
-          err => {
-            reject(err);
-            console.error(err);
-          }
+      messaging.onBackgroundMessage(payload => {
+        console.log(
+          "[firebase-messaging-sw.js] Received background message ",
+          payload
         );
+        // Customize notification here
+        const notificationTitle = "Background Message Title";
+        const notificationOptions = {
+          body: "Background Message body.",
+          icon: "/firebase-logo.png"
+        };
+
+        registration.showNotification(notificationTitle, notificationOptions);
+      });
+
+      // Optional and not covered in the article
+      // Handle token refresh
+      messaging.onTokenRefresh(() => {
+        messaging
+          .getToken()
+          .then(async (token: string) => {
+            await this.device.setDevice(token);
+            console.log("token refresh", token);
+          })
+          .catch(err => {
+            console.error(err);
+          });
       });
     }
   }
