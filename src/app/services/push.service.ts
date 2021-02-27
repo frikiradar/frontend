@@ -3,14 +3,14 @@ import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
-import { firebase } from "@firebase/app";
-import "@firebase/messaging";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
 import { Notification, NotificationService } from "./notification.service";
 import { RestService } from "./rest.service";
 import { environment } from "src/environments/environment";
+import { mergeMapTo } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -26,7 +26,8 @@ export class PushService {
     private localNotifications: LocalNotifications,
     private platform: Platform,
     private rest: RestService,
-    private auth: AuthService
+    private auth: AuthService,
+    private afMessaging: AngularFireMessaging
   ) {
     this.platform.ready().then(() => {
       if (this.platform.is("cordova")) {
@@ -101,66 +102,8 @@ export class PushService {
       );
     } else {
       await this.requestPermission();
-      const registration = await navigator.serviceWorker.ready;
-
-      if (!firebase.messaging.isSupported()) {
-        console.error("Firebase messaging not supported");
-        return;
-      }
-
-      const messaging = firebase.messaging();
-
-      try {
-        const token = await messaging.getToken({
-          serviceWorkerRegistration: registration,
-          vapidKey: environment.firebase.vapidKey
-        });
-
-        if (token) {
-          await this.device.setDevice(token);
-          console.log("User notifications token:", token);
-        } else {
-          console.log(
-            "No registration token available. Request permission to generate one."
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      // Optional and not covered in the article
-      // Listen to messages when your app is in the foreground
-      messaging.onMessage(payload => {
-        console.log(payload);
-      });
-
-      /*messaging.onBackgroundMessage(payload => {
-        console.log(
-          "[firebase-messaging-sw.js] Received background message ",
-          payload
-        );
-        // Customize notification here
-        const notificationTitle = "Background Message Title";
-        const notificationOptions = {
-          body: "Background Message body.",
-          icon: "/firebase-logo.png"
-        };
-
-        registration.showNotification(notificationTitle, notificationOptions);
-      });*/
-
-      // Optional and not covered in the article
-      // Handle token refresh
-      messaging.onTokenRefresh(() => {
-        messaging
-          .getToken()
-          .then(async (token: string) => {
-            await this.device.setDevice(token);
-            console.log("token refresh", token);
-          })
-          .catch(err => {
-            console.error(err);
-          });
+      this.afMessaging.messages.subscribe(payload => {
+        console.log("new message received. ", payload);
       });
     }
   }
@@ -273,25 +216,31 @@ export class PushService {
   }
 
   async requestPermission(): Promise<void> {
-    return new Promise<void>(async resolve => {
-      if (!Notification) {
-        console.error("Notifications denied");
-        resolve();
-        return;
-      }
-      if (!firebase.messaging.isSupported()) {
-        console.error("Firebase messaging not supported");
-        resolve();
-        return;
-      }
-      try {
-        await Notification.requestPermission();
-      } catch (err) {
-        console.error(err);
-        // No notifications granted
-      }
+    this.afMessaging.requestPermission
+      .pipe(mergeMapTo(this.afMessaging.tokenChanges))
+      .subscribe(
+        async token => {
+          console.log("Permission granted! Save to the server!", token);
+          await this.device.setDevice(token);
+        },
+        error => {
+          console.error(error);
+        }
+      );
+  }
 
-      resolve();
-    });
+  async testNotification() {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      // Customize notification here
+      const notificationTitle = "Background Message Title";
+      const notificationOptions = {
+        body: "Background Message body."
+        // icon: "/firebase-logo.png"
+      };
+      registration.showNotification(notificationTitle, notificationOptions);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

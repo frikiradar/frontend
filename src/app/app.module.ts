@@ -40,6 +40,8 @@ import { Pro } from "@ionic/pro";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { ImageCropperModule } from "ngx-image-cropper";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFireMessagingModule } from "@angular/fire/messaging";
 
 import {
   ServiceWorkerModule,
@@ -81,7 +83,9 @@ registerLocaleData(localeEs, "es");
     ImageCropperModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
-    })
+    }),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireMessagingModule
   ],
   providers: [
     StatusBar,

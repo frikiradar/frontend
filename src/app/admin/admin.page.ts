@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
+import { PushService } from "../services/push.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { BannedUsersModal } from "./banned-users/banned-users.modal";
@@ -19,7 +20,8 @@ export class AdminPage implements OnInit {
     private modal: ModalController,
     private auth: AuthService,
     private userSvc: UserService,
-    private alert: AlertController
+    private alert: AlertController,
+    private push: PushService
   ) {}
 
   async ngOnInit() {
@@ -38,5 +40,9 @@ export class AdminPage implements OnInit {
       component: GlobalNotificationsModal
     });
     return await modal.present();
+  }
+
+  async testNotification() {
+    this.push.testNotification();
   }
 }
