@@ -192,18 +192,18 @@ export class PushService {
   }
 
   async localNotification(notification: any, data: any) {
+    let actions = null;
+    if (data.topic == "chat") {
+      actions = [
+        {
+          id: "reply",
+          type: "input",
+          title: "Responder",
+          emptyText: "Escribe tu mensaje"
+        }
+      ] as any[];
+    }
     if (this.platform.is("cordova")) {
-      let actions = null;
-      if (data.topic == "chat") {
-        actions = [
-          {
-            id: "reply",
-            type: "input",
-            title: "Responder",
-            emptyText: "Escribe tu mensaje"
-          }
-        ] as any[];
-      }
       this.localNotifications.schedule({
         title: notification?.title,
         text: notification?.body,
@@ -226,8 +226,9 @@ export class PushService {
         const notificationOptions = {
           body: notification?.body,
           icon: data?.icon,
-          image: notification?.image,
-          badge: data?.icon
+          image: data?.attachments[0],
+          badge: data?.badge,
+          actions
         };
         await registration.showNotification(
           notificationTitle,
