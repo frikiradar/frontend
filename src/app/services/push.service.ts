@@ -226,7 +226,7 @@ export class PushService {
         const notificationOptions = {
           body: notification?.body,
           icon: data?.icon,
-          image: data?.attachments[0],
+          image: data?.attachments ? data.attachments[0] : null,
           badge: data?.badge,
           actions
         };
