@@ -2,18 +2,18 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="close()">
-        <ion-icon name="close"></ion-icon>
+        <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
       <ion-avatar>
         <ion-img
           *ngIf="user"
-          src="/assets/img/users/banned.jpg"
+          [src]="user?.avatar"
           [alt]="user?.username"
         ></ion-img>
         <ion-skeleton-text animated *ngIf="!user"></ion-skeleton-text>
       </ion-avatar>
       <ion-label>
-        <h2>Cuenta baneada</h2>
+        <h2>{{user?.name}}</h2>
       </ion-label>
     </ion-buttons>
     <ion-label class="ion-padding" slot="end">{{countDownString}}</ion-label>
@@ -28,7 +28,7 @@
     <ion-chip
       color="primary"
       class="center"
-      *ngIf="message?.time_creation &&
+      *ngIf="
         (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate')
       "

@@ -47,15 +47,11 @@ export class BannedAccountPage {
     setInterval(() => {
       this.countDown();
     }, 1000);
+  }
 
-    this.messages = [
-      {
-        text:
-          "Tu cuenta está baneada por el siguiente motivo: " +
-          this.user.ban_reason,
-        touser: { id: this.user.id },
-        fromuser: { id: 1 }
-      },
+  async ngOnInit() {
+    const messages = (await this.chatSvc.getMessages(1, true)).reverse();
+    const topMessages = [
       {
         text:
           "Recapacita lo que has hecho, reflexiona y mejora tu actitud, esto es una advertencia. Estás castigado el tiempo mostrado, muestra respeto tal y como te gustaría recibirlo.",
@@ -68,6 +64,12 @@ export class BannedAccountPage {
         touser: { id: this.user.id },
         fromuser: { id: 1 }
       }
+    ];
+
+    this.messages = [
+      messages[0],
+      ...topMessages,
+      ...messages.filter(m => m.id !== messages[0].id)
     ];
   }
 

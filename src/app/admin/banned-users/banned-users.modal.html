@@ -14,6 +14,9 @@
       <ion-item lines="full" *ngFor="let user of users">
         <ion-avatar slot="start">
           <img [src]="user.avatar" default="/assets/img/users/default.jpg" />
+          <ion-badge color="primary" *ngIf="user?.count > 0"
+            >{{ user?.count }}</ion-badge
+          >
         </ion-avatar>
         <ion-label>
           <h2>{{ user.name }}</h2>
@@ -25,6 +28,13 @@
           </p>
         </ion-label>
         <ion-buttons>
+          <ion-button (click)="viewMessages(user?.id)">
+            <ion-icon
+              slot="icon-only"
+              color="primary"
+              name="chatbubbles"
+            ></ion-icon>
+          </ion-button>
           <ion-button (click)="unban(user)">
             <ion-icon slot="icon-only" color="primary" name="trash"></ion-icon>
           </ion-button>

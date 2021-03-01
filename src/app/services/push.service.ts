@@ -54,6 +54,12 @@ export class PushService {
       this.setChannels();
 
       this.firebase.getToken().then(async token => {
+        console.log("Notification token:", token);
+        await this.device.setDevice(token);
+      });
+
+      this.firebase.onTokenRefresh().subscribe(async token => {
+        console.log("Notification token refreshed:", token);
         await this.device.setDevice(token);
       });
 
@@ -185,12 +191,6 @@ export class PushService {
       });*/
   }
 
-  async sendTopicMessage(topic: string, message: string, title: string) {
-    return await this.rest
-      .put("topic-message", { topic, message, title })
-      .toPromise();
-  }
-
   async localNotification(notification: any, data: any) {
     let actions = null;
     if (data.topic == "chat") {
@@ -245,7 +245,7 @@ export class PushService {
       .pipe(mergeMapTo(this.afMessaging.tokenChanges))
       .subscribe(
         async token => {
-          console.log("Permission granted! Save to the server!", token);
+          console.log("Notification token:", token);
           await this.device.setDevice(token);
         },
         error => {

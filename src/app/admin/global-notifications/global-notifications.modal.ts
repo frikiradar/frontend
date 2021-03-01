@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 import { ModalController, ToastController } from "@ionic/angular";
 import { User } from "src/app/models/user";
+import { AdminService } from "src/app/services/admin.service";
 import { AuthService } from "src/app/services/auth.service";
 import { PushService } from "src/app/services/push.service";
 
@@ -29,7 +30,7 @@ export class GlobalNotificationsModal implements OnInit {
   constructor(
     private auth: AuthService,
     public formBuilder: FormBuilder,
-    private push: PushService,
+    private admin: AdminService,
     private toast: ToastController,
     private modal: ModalController
   ) {
@@ -56,7 +57,7 @@ export class GlobalNotificationsModal implements OnInit {
     }
     try {
       const topic = this.test ? "test" : "frikiradar";
-      await this.push.sendTopicMessage(topic, message, title);
+      await this.admin.sendTopicMessage(topic, message, title);
       (
         await this.toast.create({
           message: "Mensaje enviado correctamente.",

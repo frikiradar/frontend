@@ -1,3 +1,12 @@
 ion-label p {
     white-space: initial;
 }
+
+ion-badge {
+    position: absolute;
+    left: 45px;
+    border-radius: 15px;
+    z-index: 1;
+    width: 20px;
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+  }

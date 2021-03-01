@@ -52,7 +52,7 @@
         >
           <ion-avatar slot="start">
             <img
-              [src]="like.user.avatar"
+              [src]="like.user.avatar ? like.user.avatar : '/assets/img/users/default.jpg'"
               [alt]="like.user.username"
               default="/assets/img/users/default.jpg"
             />

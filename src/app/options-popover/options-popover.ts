@@ -6,6 +6,7 @@ import {
   ToastController
 } from "@ionic/angular";
 import { User } from "src/app/models/user";
+import { AdminService } from "../services/admin.service";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 
@@ -24,7 +25,8 @@ export class OptionsPopover {
     public auth: AuthService,
     private userSvc: UserService,
     private alert: AlertController,
-    private toast: ToastController
+    private toast: ToastController,
+    private admin: AdminService
   ) {}
 
   close() {
@@ -113,7 +115,7 @@ export class OptionsPopover {
           role: "warn",
           handler: async data => {
             try {
-              await this.userSvc.warn(user.id, data.note);
+              await this.admin.warn(user.id, data.note);
               (
                 await this.toast.create({
                   message: "Usuario avisado correctamente",
@@ -177,7 +179,7 @@ export class OptionsPopover {
           role: "ban",
           handler: async data => {
             try {
-              await this.userSvc.ban(user.id, data.note, data.days, data.hours);
+              await this.admin.ban(user.id, data.note, data.days, data.hours);
               (
                 await this.toast.create({
                   message: "Usuario baneado correctamente",
