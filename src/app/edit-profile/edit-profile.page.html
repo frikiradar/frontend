@@ -46,15 +46,6 @@
     name="avatar"
     (change)="cropImagebyEvent($event)"
   />
-  <input
-    type="file"
-    accept="image/*"
-    capture="camera"
-    #cameraInput
-    style="display: none;"
-    name="camera"
-    (change)="cropImageEvent($event)"
-  />
   <ion-segment
     (ionChange)="showSegment($event.detail.value)"
     #segment
