@@ -66,8 +66,10 @@ export class AppComponent {
       this.networkStatus();
       this.backButtonStatus();
 
-      // Veces abierto
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
+        const user = await this.auth.getAuthUser();
+        this.auth.setAuthUser(user);
+        // Contar veces abierto
         this.countOpenTimes();
       } else {
         // this.betaAdvertisement();

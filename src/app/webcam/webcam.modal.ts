@@ -12,9 +12,14 @@ export class WebcamModal {
   @Input() src: string;
   @Input() event: any;
   public webcamImage: string = "";
+  public switchCamera: Subject<void> = new Subject<void>();
   private trigger: Subject<void> = new Subject<void>();
-  triggerSnapshot(): void {
-    this.trigger.next();
+
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+  public get switchCameraObservable(): Observable<void> {
+    return this.switchCamera.asObservable();
   }
 
   constructor(public modal: ModalController, public webcam: WebcamImage) {}
@@ -23,8 +28,12 @@ export class WebcamModal {
     this.webcamImage = webcamImage.imageAsDataUrl;
   }
 
-  public get triggerObservable(): Observable<void> {
-    return this.trigger.asObservable();
+  triggerSnapshot(): void {
+    this.trigger.next();
+  }
+
+  triggerSwitchCamera(): void {
+    this.switchCamera.next();
   }
 
   ok() {

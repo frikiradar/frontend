@@ -331,7 +331,8 @@ export class EditProfilePage {
               this.uploadPicture(avatar);
             } else {
               const avatar = await this.utils.webcamImage("avatar");
-              if (typeof avatar == "boolean") {
+              if (!avatar || typeof avatar === "boolean") {
+                actionSheet.dismiss();
                 return false;
               }
               this.uploadPicture(avatar);
@@ -349,7 +350,8 @@ export class EditProfilePage {
                 "avatar",
                 false
               );
-              if (typeof avatar == "string") {
+              if (!avatar || typeof avatar == "string") {
+                actionSheet.dismiss();
                 return false;
               }
               this.uploadPicture(avatar);

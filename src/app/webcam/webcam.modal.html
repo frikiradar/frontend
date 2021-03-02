@@ -10,7 +10,9 @@
       [width]="640"
       [trigger]="triggerObservable"
       [allowCameraSwitch]="false"
+      [switchCamera]="switchCameraObservable"
       (imageCapture)="handleImage($event)"
+      [imageQuality]="1"
     >
     </webcam>
     <ion-buttons class="capture">
@@ -33,6 +35,11 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">CANCELAR</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="triggerSwitchCamera()">
+        <ion-icon slot="icon-only" name="camera-reverse-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
