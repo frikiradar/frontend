@@ -11,6 +11,8 @@ import { RequestGeolocationModal } from "../radar/request-geolocation-modal/requ
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { ImageCropperModule } from "ngx-image-cropper";
+import { WebcamModal } from "../webcam/webcam.modal";
+import { WebcamModule } from "ngx-webcam";
 
 @NgModule({
   declarations: [
@@ -19,19 +21,22 @@ import { ImageCropperModule } from "ngx-image-cropper";
     AmbassadorModal,
     CreditsModal,
     RequestGeolocationModal,
-    CropperModal
+    CropperModal,
+    WebcamModal
   ],
   entryComponents: [
     AmbassadorModal,
     CreditsModal,
     RequestGeolocationModal,
-    CropperModal
+    CropperModal,
+    WebcamModal
   ],
   imports: [
     IonicModule,
     CommonModule,
     NgxIonicImageViewerModule,
-    ImageCropperModule
+    ImageCropperModule,
+    WebcamModule
   ],
   exports: [ImagePreloadDirective, NiceDatePipe],
   providers: [Camera]

@@ -135,6 +135,13 @@ export class RadarPage {
         .catch(err => console.log("Error tracking view:", err));
     }
 
+    if ((await this.config.get("radarView")) === "list") {
+      this.view = "list";
+      this.ratio = 50;
+    } else {
+      await this.slides.slideTo(0);
+    }
+
     this.getRadarUsers();
   }
 

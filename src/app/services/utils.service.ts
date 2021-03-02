@@ -5,6 +5,7 @@ import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, ModalController, Platform } from "@ionic/angular";
 import { CropperModal } from "../cropper/cropper.modal";
+import { WebcamModal } from "../webcam/webcam.modal";
 
 import { AuthService } from "./auth.service";
 
@@ -81,6 +82,29 @@ export class UtilsService {
       const data = await modal.onDidDismiss();
       if (data.data) {
         return data.data;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return false;
+  }
+
+  async webcamImage(name: string = "default"): Promise<File | boolean> {
+    const modal = await this.modal.create({
+      component: WebcamModal
+    });
+    await modal.present();
+
+    try {
+      const data = await modal.onDidDismiss();
+      if (data.data) {
+        const src = await this.cropImage("", data.data);
+        if (typeof src == "string") {
+          const file = await this.urlToFile(src, name);
+          return file;
+        } else {
+          return;
+        }
       }
     } catch (e) {
       console.error(e);

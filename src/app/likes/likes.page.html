@@ -4,7 +4,7 @@
       <ion-menu-toggle>
         <ion-avatar>
           <img
-            [src]="auth.currentUserValue?.avatar"
+            [src]="auth.currentUserValue?.thumbnail"
             [alt]="auth.currentUserValue?.username"
             default="/assets/img/users/default.jpg"
           />
@@ -52,7 +52,7 @@
         >
           <ion-avatar slot="start">
             <img
-              [src]="like.user.avatar ? like.user.avatar : '/assets/img/users/default.jpg'"
+              [src]="like.user.thumbnail"
               [alt]="like.user.username"
               default="/assets/img/users/default.jpg"
             />

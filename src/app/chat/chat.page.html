@@ -4,7 +4,7 @@
       <ion-menu-toggle>
         <ion-avatar>
           <img
-            [src]="auth.currentUserValue?.avatar"
+            [src]="auth.currentUserValue?.thumbnail"
             [alt]="auth.currentUserValue?.username"
             default="/assets/img/users/default.jpg"
           />
@@ -50,14 +50,17 @@
           (ionDrag)="dragItem($event, chat.user?.id)"
         >
           <ion-item-options side="start">
-            <ion-item-option (click)="showChat(chat.user?.id)" color="secondary">
+            <ion-item-option
+              (click)="showChat(chat.user?.id)"
+              color="secondary"
+            >
               <ion-icon slot="icon-only" name="mail-open"></ion-icon>
             </ion-item-option>
           </ion-item-options>
           <ion-item button (click)="showChat(chat.user?.id)" lines="full">
             <ion-avatar slot="start">
               <img
-                [src]="chat.user?.avatar"
+                [src]="chat.user?.thumbnail"
                 [alt]="chat.user?.username"
                 default="/assets/img/users/default.jpg"
               />

@@ -47,6 +47,7 @@ export interface User {
   ban_end?: string;
 
   avatar: SafeResourceUrl;
+  thumbnail: SafeResourceUrl;
   images: SafeResourceUrl[];
   roles: string[];
   active: boolean;

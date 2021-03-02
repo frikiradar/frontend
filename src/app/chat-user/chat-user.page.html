@@ -10,7 +10,7 @@
         <ion-avatar>
           <ion-img
             *ngIf="user"
-            [src]="user?.avatar"
+            [src]="user?.thumbnail"
             [alt]="user?.username"
           ></ion-img>
           <ion-skeleton-text animated *ngIf="!user"></ion-skeleton-text>

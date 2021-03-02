@@ -78,6 +78,7 @@
     "ngx-image-cropper": "^3.3.5",
     "ngx-ionic-image-viewer": "^0.7.4",
     "ngx-linky": "^3.0.0",
+    "ngx-webcam": "^0.3.2",
     "platform": "^1.3.6",
     "rxjs": "^6.6.6",
     "tslib": "^1.14.1",

@@ -313,15 +313,15 @@ export class EditProfilePage {
       ]);
     }
 
-    if (this.platform.is("cordova")) {
-      const actionSheet = await this.sheet.create({
-        header:
-          "Consejo: Si pones una foto tuya transmitirás mucha más confianza.",
-        buttons: [
-          {
-            text: "Desde la cámara",
-            icon: "camera",
-            handler: async () => {
+    const actionSheet = await this.sheet.create({
+      header:
+        "Consejo: Si pones una foto tuya transmitirás mucha más confianza. Puedes subir hasta 9 fotos.",
+      buttons: [
+        {
+          text: "Desde la cámara",
+          icon: "camera",
+          handler: async () => {
+            if (this.platform.is("cordova")) {
               const avatar = (await this.utils.takePicture(
                 "camera",
                 true,
@@ -329,27 +329,40 @@ export class EditProfilePage {
                 false
               )) as File;
               this.uploadPicture(avatar);
+            } else {
+              const avatar = await this.utils.webcamImage("avatar");
+              if (typeof avatar == "boolean") {
+                return false;
+              }
+              this.uploadPicture(avatar);
             }
-          },
-          {
-            text: "Desde tus fotos",
-            icon: "images",
-            handler: async () => {
-              const avatar = (await this.utils.takePicture(
+          }
+        },
+        {
+          text: "Desde tus fotos",
+          icon: "images",
+          handler: async () => {
+            if (this.platform.is("cordova")) {
+              const avatar = await this.utils.takePicture(
                 "gallery",
                 true,
                 "avatar",
                 false
-              )) as File;
+              );
+              if (typeof avatar == "string") {
+                return false;
+              }
               this.uploadPicture(avatar);
+            } else {
+              this.imageInput.nativeElement.dispatchEvent(
+                new MouseEvent("click")
+              );
             }
           }
-        ]
-      });
-      await actionSheet.present();
-    } else {
-      this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
-    }
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   async cropImagebyEvent(event: any) {

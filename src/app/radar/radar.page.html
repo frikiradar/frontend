@@ -4,7 +4,7 @@
       <ion-menu-toggle (click)="menu.open()">
         <ion-avatar>
           <img
-            [src]="authUser?.avatar"
+            [src]="authUser?.thumbnail"
             [alt]="authUser?.username"
             default="/assets/img/users/default.jpg"
           />
@@ -88,8 +88,8 @@
         <ion-slide *ngFor="let user of users;">
           <ion-card (click)="showProfile(user.id)">
             <img
-              [src]="user.avatar"
-              [alt]="user.username"
+              [src]="user?.avatar"
+              [alt]="users?.username"
               default="/assets/img/users/default.jpg"
             />
             <div class="match full-center">{{ user.match }}%</div>
@@ -135,15 +135,18 @@
               Modifica tus ajustes de "Estoy buscando..." en tu configuración de
               perfil y añade más "Gustos frikis" para mejorar los resultados.
             </p>
-            <ion-button shape="round" (click)="router.navigate(['/edit-profile'])"
+            <ion-button
+              shape="round"
+              (click)="router.navigate(['/edit-profile'])"
               >Editar mi perfil</ion-button
             >
-            <br>
+            <br />
             <p>
               También puedes probar suerte cambiando a la vista por kilómetros
             </p>
             <ion-button shape="round" (click)="changeView()"
-              ><ion-icon name="list" slot="start" size="small"></ion-icon>Cambiar a vista por kilómetros</ion-button
+              ><ion-icon name="list" slot="start" size="small"></ion-icon
+              >Cambiar a vista por kilómetros</ion-button
             >
           </div>
         </ion-slide>
@@ -199,7 +202,7 @@
             <ion-item button (click)="showProfile(user.id)" lines="full">
               <ion-avatar slot="start">
                 <img
-                  [src]="user?.avatar"
+                  [src]="user?.thumbnail"
                   default="/assets/img/users/default.jpg"
                 />
               </ion-avatar>
@@ -255,7 +258,10 @@
     </ng-template>
   </ng-template>
 </ion-content>
-<ion-footer *ngIf="view === 'list'" [class.hide-background]="hide || showSkeleton">
+<ion-footer
+  *ngIf="view === 'list'"
+  [class.hide-background]="hide || showSkeleton"
+>
   <div id="radar-range">
     <ion-range
       #range

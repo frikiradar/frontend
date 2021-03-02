@@ -10,13 +10,13 @@
       class="ion-no-border"
       *ngIf="auth.currentUserValue?.id"
       [ngStyle]="{
-        'background-image': 'url(' + auth.currentUserValue?.avatar + ')'
+        'background-image': 'url(' + auth.currentUserValue?.thumbnail + ')'
       }"
     >
       <div id="banner"></div>
       <ion-avatar>
         <img
-          [src]="auth.currentUserValue?.avatar"
+          [src]="auth.currentUserValue?.thumbnail"
           [alt]="auth.currentUserValue?.username"
           default="/assets/img/users/default.jpg"
         />

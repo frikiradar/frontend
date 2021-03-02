@@ -42,11 +42,12 @@ import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { ImageCropperModule } from "ngx-image-cropper";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireMessagingModule } from "@angular/fire/messaging";
-
+import { WebcamImage, WebcamModule } from "ngx-webcam";
 import {
   ServiceWorkerModule,
   SwRegistrationOptions
 } from "@angular/service-worker";
+
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
@@ -85,7 +86,8 @@ registerLocaleData(localeEs, "es");
       enabled: environment.production
     }),
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireMessagingModule
+    AngularFireMessagingModule,
+    WebcamModule
   ],
   providers: [
     StatusBar,
@@ -117,7 +119,8 @@ registerLocaleData(localeEs, "es");
     LocationAccuracy,
     BrowserTab,
     InAppBrowser,
-    FirebaseX
+    FirebaseX,
+    { provide: WebcamImage }
   ],
   bootstrap: [AppComponent]
 })

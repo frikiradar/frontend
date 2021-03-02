@@ -13,7 +13,7 @@
     <ion-list>
       <ion-item lines="full" *ngFor="let user of users">
         <ion-avatar slot="start">
-          <img [src]="user.avatar" default="/assets/img/users/default.jpg" />
+          <img [src]="user.thumbnail" default="/assets/img/users/default.jpg" />
         </ion-avatar>
         <ion-label>
           <h2>{{ user.name }}</h2>

@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>¡Sonríe al pajarito!</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div *ngIf="!webcamImage">
+    <webcam
+      [height]="480"
+      [width]="640"
+      [trigger]="triggerObservable"
+      [allowCameraSwitch]="false"
+      (imageCapture)="handleImage($event)"
+    >
+    </webcam>
+    <ion-buttons class="capture">
+      <ion-button (click)="triggerSnapshot()">
+        <ion-icon slot="icon-only" name="ellipse-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+  <img [src]="webcamImage" *ngIf="webcamImage" />
+  <ion-buttons class="capture" *ngIf="webcamImage">
+    <ion-button (click)="ok()">
+      <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-button (click)="retry()">
+      <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">CANCELAR</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

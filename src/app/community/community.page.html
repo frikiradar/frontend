@@ -4,7 +4,7 @@
       <ion-menu-toggle>
         <ion-avatar>
           <img
-            [src]="auth.currentUserValue?.avatar"
+            [src]="auth.currentUserValue?.thumbnail"
             [alt]="auth.currentUserValue?.username"
             default="/assets/img/users/default.jpg"
           />
@@ -20,7 +20,7 @@
     <ion-slide>
       <ion-item button lines="none">
         <ion-avatar>
-          <img src="/assets/img/users/default.jpg" alt="games" />
+          <img [src]="auth.currentUserValue?.thumbnail" alt="games" />
         </ion-avatar>
       </ion-item>
     </ion-slide>
