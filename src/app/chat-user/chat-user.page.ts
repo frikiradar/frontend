@@ -67,6 +67,7 @@ export class ChatUserPage implements OnInit {
   conErrors = 0;
   alertError: any;
   public image: string;
+  public replyingTo = false;
 
   constructor(
     public auth: AuthService,
@@ -301,10 +302,16 @@ export class ChatUserPage implements OnInit {
       ].filter((m: Chat) => m.text || m.image);
 
       this.scrollDown();
+      let replyToId =
+        this.selectedMessage && this.replyingTo
+          ? this.selectedMessage.id
+          : null;
+      this.replyingTo = false;
+
       try {
         if (!image) {
           const chat = await this.chatSvc
-            .sendMessage(this.user.id, text)
+            .sendMessage(this.user.id, text, replyToId)
             .then();
         } else if (image) {
           const imageFile = await this.utils.urlToFile(image);
@@ -313,6 +320,8 @@ export class ChatUserPage implements OnInit {
             .then();
           this.image = "";
         }
+
+        replyToId = null;
         // this.chatSvc.setStoragedMessages([chat]);
       } catch (e) {
         this.messages = this.messages.filter(m => m.sending !== true);
@@ -354,7 +363,9 @@ export class ChatUserPage implements OnInit {
     }
   }
 
-  selectMessage(message: Chat) {
+  selectMessage(event: Event, message: Chat) {
+    event.preventDefault();
+
     this.selectedMessage = message;
     this.pressOptions = true;
   }
@@ -370,6 +381,12 @@ export class ChatUserPage implements OnInit {
       })
     ).present();
     this.pressOptions = false;
+  }
+
+  reply() {
+    this.replyingTo = true;
+    this.pressOptions = false;
+    this.textarea?.setFocus();
   }
 
   async deleteMessage() {

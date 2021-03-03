@@ -12,4 +12,6 @@ export interface Chat {
   id?: number;
   sending?: boolean;
   count?: number;
+  replyto?: Partial<Chat>;
+  edited?: boolean;
 }

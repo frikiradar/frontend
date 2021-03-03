@@ -32,9 +32,9 @@ export class ChatService {
       .toPromise()) as Chat[];
   }
 
-  async sendMessage(id: number, text: string) {
+  async sendMessage(id: number, text: string, replyto?: number) {
     return (await this.rest
-      .put("chat", { touser: id, text })
+      .put("chat", { touser: id, text, replyto })
       .toPromise()) as Chat;
   }
 
