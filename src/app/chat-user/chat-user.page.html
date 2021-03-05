@@ -110,10 +110,26 @@
           </div>
         </div>
         <div *ngIf="message.image">
-          <img
+          <ion-img
             (click)="openViewer(message.image, message.fromuser.name + ', ' + utils.niceDate(message.time_creation), message.text)"
             [src]="message.image"
-          />
+          ></ion-img>
+          <ion-note class="note-image" *ngIf="!message?.text">
+            <span *ngIf="message?.edited">Editado</span>
+            {{ message.time_creation | date: "shortTime" }}
+            <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
+              <ion-icon *ngIf="message.sending" name="time"></ion-icon>
+              <ion-icon
+                *ngIf="!message.sending && !message.time_read"
+                name="checkmark"
+              ></ion-icon>
+              <ion-icon
+                *ngIf="message.time_read"
+                color="secondary"
+                name="checkmark-done"
+              ></ion-icon>
+            </span>
+          </ion-note>
         </div>
         <ion-card-content *ngIf="message.text">
           <span
@@ -121,7 +137,8 @@
             [innerHTML]="message.text | linky:{className: 'linkified'}"
             (click)="$event.stopImmediatePropagation(); openUrl($event);"
           ></span>
-          <ion-note>
+          <ion-note class="note-text">
+            <span *ngIf="message?.edited">Editado</span>
             {{ message.time_creation | date: "shortTime" }}
             <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
               <ion-icon *ngIf="message.sending" name="time"></ion-icon>
@@ -168,15 +185,29 @@
       slot="end"
     ></ion-icon>
   </ion-item>
+  <ion-item id="edit" lines="none" *ngIf="editing">
+    <ion-icon name="pencil-sharp" slot="start"></ion-icon>
+    <ion-thumbnail *ngIf="selectedMessage.image">
+      <img [src]="selectedMessage?.image" />
+    </ion-thumbnail>
+    <ion-label>
+      <p class="reply-to-name">Editar mensaje</p>
+      <p class="reply-to-text">{{selectedMessage?.text}}</p>
+    </ion-label>
+    <ion-icon button (click)="closeEdit()" name="close" slot="end"></ion-icon>
+  </ion-item>
   <ion-toolbar id="text-input">
     <ion-buttons ion-activatable slot="start">
-      <ion-button (click)="toggled = !toggled">
+      <ion-button (click)="openEmojis()">
         <ion-icon
           slot="icon-only"
           [name]="toggled ? 'close-outline' : 'happy-outline'"
         ></ion-icon>
       </ion-button>
-      <ion-button *ngIf="auth.isMaster()" (click)="openPictureSheet()">
+      <ion-button
+        *ngIf="auth.isMaster() && !replyingTo"
+        (click)="openPictureSheet()"
+      >
         <ion-icon slot="icon-only" name="camera"></ion-icon>
       </ion-button>
       <input
@@ -196,7 +227,6 @@
           (keydown.enter)="sendMessage($event)"
           formControlName="message"
           #textarea
-          autofocus
           autoGrow
           rows="1"
           (ionFocus)="toggled = false"
@@ -220,7 +250,6 @@
     emoji="point_up"
     darkMode="true"
     showPreview="false"
-    autoFocus="true"
     [style]="{ width: '100%'}"
     (emojiSelect)="addEmoji($event)"
     title="Elige un emoji"

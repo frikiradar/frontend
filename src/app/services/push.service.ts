@@ -9,7 +9,6 @@ import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
 import { Notification, NotificationService } from "./notification.service";
 import { RestService } from "./rest.service";
-import { environment } from "src/environments/environment";
 import { mergeMapTo } from "rxjs/operators";
 
 @Injectable({
@@ -54,14 +53,14 @@ export class PushService {
       this.setChannels();
 
       this.firebase.getToken().then(async token => {
-        console.log("Notification token:", token);
+        // console.log("Notification token:", token);
         await this.device.setDevice(token);
       });
 
-      this.firebase.onTokenRefresh().subscribe(async token => {
-        console.log("Notification token refreshed:", token);
+      /*this.firebase.onTokenRefresh().subscribe(async token => {
+        // console.log("Notification token refreshed:", token);
         await this.device.setDevice(token);
-      });
+      });*/
 
       this.firebase
         .subscribe("frikiradar")
@@ -87,12 +86,9 @@ export class PushService {
         payload => {
           console.log("payload", payload);
           if (payload.tap) {
-            // console.log("tap", data.tap);
             this.router.navigate([payload.url]);
           } else {
-            if (this.router.url !== payload.url) {
-              this.localNotification(payload.notification, payload.data);
-            }
+            this.localNotification(payload);
 
             this.notificationSvc
               .getUnread()
@@ -108,12 +104,12 @@ export class PushService {
       );
     } else {
       await this.requestPermission();
-      this.afMessaging.messages.subscribe(
-        (payload: { data: {}; notification: {} }) => {
-          this.localNotification(payload.notification, payload.data);
-          console.log("new message received. ", payload);
-        }
-      );
+      this.afMessaging.messages.subscribe((payload: any) => {
+        console.log("new message received. ", payload);
+        this.notificationSvc.getUnread().then((notification: Notification) => {
+          this.notificationSvc.setNotification(notification);
+        });
+      });
     }
   }
 
@@ -191,9 +187,10 @@ export class PushService {
       });*/
   }
 
-  async localNotification(notification: any, data: any) {
-    let actions = null;
-    if (data.topic == "chat") {
+  async localNotification(notification: any) {
+    if (this.router.url !== notification.data.url) {
+      /*let actions = null;
+    if (notification.topic == "chat") {
       actions = [
         {
           id: "reply",
@@ -202,40 +199,40 @@ export class PushService {
           emptyText: "Escribe tu mensaje"
         }
       ] as any[];
-    }
-    if (this.platform.is("cordova")) {
-      this.localNotifications.schedule({
-        title: notification?.title,
-        text: notification?.body,
-        sound: "file://assets/audio/bipbip.mp3",
-        smallIcon: "res://notification_icon",
-        color: "#e91e63",
-        icon: data?.icon,
-        attachments: data?.attachments,
-        channel: data?.topic,
-        // foreground: true,
-        data: data
-        // launch: true,
-        // actions
-      });
-    } else {
-      try {
-        const registration = await navigator.serviceWorker.ready;
-        // Customize notification here
-        const notificationTitle = notification?.title;
-        const notificationOptions = {
-          body: notification?.body,
-          icon: data?.icon,
-          image: data?.attachments ? data.attachments[0] : null,
-          badge: data?.badge,
-          actions
-        };
-        await registration.showNotification(
-          notificationTitle,
-          notificationOptions
-        );
-      } catch (e) {
-        console.error(e);
+    }*/
+      if (this.platform.is("cordova")) {
+        this.localNotifications.schedule({
+          title: notification?.title,
+          text: notification?.body,
+          sound: "file://assets/audio/bipbip.mp3",
+          smallIcon: "res://notification_icon",
+          color: "#e91e63",
+          icon: notification?.icon,
+          attachments: notification?.attachments,
+          channel: notification?.topic,
+          data: notification
+          // actions
+        });
+      } else {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          // Customize notification here
+          const notificationTitle = notification?.title;
+          const notificationOptions = {
+            body: notification?.body,
+            icon: notification?.data?.icon,
+            image: notification?.data?.attachments
+              ? notification?.data.attachments[0]
+              : null,
+            badge: notification?.data?.badge
+          };
+          await registration.showNotification(
+            notificationTitle,
+            notificationOptions
+          );
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
   }
@@ -245,7 +242,7 @@ export class PushService {
       .pipe(mergeMapTo(this.afMessaging.tokenChanges))
       .subscribe(
         async token => {
-          console.log("Notification token:", token);
+          // console.log("Notification token:", token);
           await this.device.setDevice(token);
         },
         error => {

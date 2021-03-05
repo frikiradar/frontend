@@ -93,7 +93,7 @@ export class RadarPage {
 
     // Una vez logueado iniciamos notificaciones si no están
     const device = await this.deviceSvc.getCurrentDevice();
-    if (!device.token) {
+    if (!device?.token) {
       this.push.init();
     }
     // Y despues iniciamos la geolocalización
@@ -128,6 +128,11 @@ export class RadarPage {
         .setUserId("" + this.authUser.id)
         .then(() => console.log("User id successfully set"))
         .catch(err => console.log("Error setting user id:", err));
+
+      this.firebase
+        .setUserProperty("username", this.authUser.username)
+        .then(() => console.log("Username successfully set"))
+        .catch(err => console.log("Error setting username:", err));
 
       this.firebase
         .setScreenName("radar")

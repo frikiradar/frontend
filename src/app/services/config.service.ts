@@ -10,6 +10,7 @@ export interface Config {
   radarAdv?: boolean;
   maintenance?: boolean;
   min_version?: string;
+  version?: string;
   chat?: boolean;
   push_url?: string;
   geolocation?: boolean;

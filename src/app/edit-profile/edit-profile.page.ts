@@ -108,7 +108,7 @@ export class EditProfilePage {
       name: this.user.name,
       description: this.user.description,
       location: this.user.location,
-      birthday: this.user.birthday,
+      birthday: this.user.birthday.split("T")[0],
       gender: this.user.gender,
       orientation: this.user.orientation,
       pronoun: this.user.pronoun,

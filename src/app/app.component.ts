@@ -261,6 +261,11 @@ export class AppComponent {
           });
 
           versionAlert.present();
+        } else {
+          const oldVersion = await this.config.get("version");
+          if (+version > (!Number.isNaN(oldVersion) ? +oldVersion : 0)) {
+            this.config.set("version", version);
+          }
         }
       } else if (config.maintenance) {
         maintenanceAlert.present();

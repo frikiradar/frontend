@@ -52,7 +52,6 @@
     "@ionic/pro": "^2.0.4",
     "autolinker": "^3.14.2",
     "cordova-android": "^9.0.0",
-    "cordova-clipboard": "1.3.0",
     "cordova-ios": "^6.2.0",
     "cordova-launch-review": "4.0.1",
     "cordova-plugin-android-permissions": "^1.1.2",
@@ -85,20 +84,22 @@
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^0.1100.7",
-    "@angular-devkit/build-angular": "^0.1100.7",
+    "@angular-devkit/architect": "~0.1101.4",
+    "@angular-devkit/build-angular": "~0.1101.4",
     "@angular/cli": "^11.2.2",
     "@angular/compiler": "^11.2.3",
     "@angular/compiler-cli": "^11.2.3",
     "@angular/language-service": "^11.2.3",
     "@ionic/angular-toolkit": "^3.1.0",
-    "@types/jasmine": "^2.8.17",
-    "@types/jasminewd2": "^2.0.8",
-    "@types/node": "^12.20.4",
+    "@types/jasmine": "~3.6.0",
+    "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
     "@types/platform": "^1.3.3",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
+    "codelyzer": "^6.0.0",
     "cordova": "^10.0.0",
+    "cordova-clipboard": "^1.3.0",
     "cordova-plugin-androidx-adapter": "^1.1.3",
     "cordova-plugin-browsertab": "^0.2.0",
     "cordova-plugin-camera": "^5.0.1",
@@ -114,9 +115,9 @@
     "cordova-plugin-statusbar": "^2.4.3",
     "cordova-plugin-whitelist": "^1.3.4",
     "eslint": "^7.21.0",
-    "jasmine-core": "~2.99.1",
-    "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~5.1.0",
+    "jasmine-core": "~3.6.0",
+    "jasmine-spec-reporter": "~5.0.0",
+    "karma": "~5.2.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-coverage-istanbul-reporter": "~3.0.2",
@@ -124,7 +125,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "^7.0.0",
     "ts-node": "^8.10.2",
-    "typescript": "4.1.5"
+    "typescript": "~4.0.2"
   },
   "description": "FrikiRadar, la app de citas y chat para frikis.",
   "cordova": {
@@ -138,7 +139,6 @@
         "ANDROID_PLAY_SERVICES_CORE_VERSION": "1.8.0"
       },
       "cordova-plugin-network-information": {},
-      "cordova-clipboard": {},
       "cordova-plugin-geolocation": {
         "GPS_REQUIRED": "true"
       },
@@ -193,7 +193,8 @@
         "ANDROID_GSON_VERSION": "2.8.6",
         "ANDROID_FIREBASE_PERF_GRADLE_PLUGIN_VERSION": "1.3.1"
       },
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-ionic-webview": {},
+      "cordova-clipboard": {}
     },
     "platforms": [
       "android",

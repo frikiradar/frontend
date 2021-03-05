@@ -36,7 +36,9 @@ export class DevicesSettingsModal implements OnInit {
 
     if (currentDevice) {
       this.devices.map(device => {
-        device.current = device.device_id === currentDevice.device_id;
+        device.current =
+          device.device_id === currentDevice.device_id ||
+          device.token === currentDevice.token;
       });
     }
   }
@@ -48,16 +50,20 @@ export class DevicesSettingsModal implements OnInit {
       const user = await this.devicesSvc.removeDevice(device);
       this.auth.setAuthUser(user);
 
-      (await this.toast.create({
-        message: "¡Dispositivo eliminado!",
-        duration: 2000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: "¡Dispositivo eliminado!",
+          duration: 2000,
+          position: "bottom"
+        })
+      ).present();
     } else {
-      (await this.alert.create({
-        message: "¡No puedes eliminar tu dispositivo actual!",
-        buttons: ["Entendido"]
-      })).present();
+      (
+        await this.alert.create({
+          message: "¡No puedes eliminar tu dispositivo actual!",
+          buttons: ["Entendido"]
+        })
+      ).present();
     }
   }
 
@@ -72,17 +78,21 @@ export class DevicesSettingsModal implements OnInit {
     this.auth.setAuthUser(user);
 
     if (!device.active) {
-      (await this.toast.create({
-        message: "¡Notificaciones silenciadas!",
-        duration: 2000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: "¡Notificaciones silenciadas!",
+          duration: 2000,
+          position: "bottom"
+        })
+      ).present();
     } else {
-      (await this.toast.create({
-        message: "¡Notificaciones activadas!",
-        duration: 2000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: "¡Notificaciones activadas!",
+          duration: 2000,
+          position: "bottom"
+        })
+      ).present();
     }
   }
 

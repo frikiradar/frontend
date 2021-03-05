@@ -14,4 +14,5 @@ export interface Chat {
   count?: number;
   replyto?: Partial<Chat>;
   edited?: boolean;
+  deleted?: boolean;
 }

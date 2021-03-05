@@ -33,6 +33,7 @@ import { UserService } from "./../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { OptionsPopover } from "../options-popover/options-popover";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-chat-user",
@@ -45,11 +46,11 @@ export class ChatUserPage implements OnInit {
     return this.chatForm.get("message");
   }
 
-  @ViewChild("textarea", { static: true })
+  @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
-  @ViewChild("chatlist", { static: true })
+  @ViewChild("chatlist", { static: false })
   chatlist: IonContent;
-  @ViewChild(IonInfiniteScroll, { static: true })
+  @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
   @ViewChild("imageInput", { static: false })
   imageInput: ElementRef;
@@ -68,6 +69,7 @@ export class ChatUserPage implements OnInit {
   alertError: any;
   public image: string;
   public replyingTo = false;
+  public editing = false;
 
   constructor(
     public auth: AuthService,
@@ -197,11 +199,22 @@ export class ChatUserPage implements OnInit {
       this.source.addEventListener("message", async (res: any) => {
         this.conErrors = 0;
         let message = JSON.parse(res.data) as Chat;
+        // borramos los enviando
+        this.messages = this.messages.filter(m => !m.sending);
         if (this.messages.some(m => m.id === message.id)) {
           // Si ya existe el mensaje lo actualizamos
           this.messages.map(m => {
             if (m.id === message.id) {
+              m.text = message.text;
               m.time_read = message.time_read;
+              m.edited = message.edited;
+              m.deleted = message.deleted;
+            }
+          });
+          // Borramos los deleted
+          this.messages = this.messages.filter(m => {
+            if (!m.deleted) {
+              return m;
             }
           });
         } else {
@@ -212,14 +225,13 @@ export class ChatUserPage implements OnInit {
           ) {
             // marcamos como leido
             try {
-              message = await this.chatSvc.readChat(message.id);
+              if (this.user.id !== this.auth.currentUserValue.id) {
+                message = await this.chatSvc.readChat(message.id);
+              }
             } catch (e) {
               console.error(e);
               await this.alertError.present();
             }
-          } else {
-            // borramos los enviando...
-            this.messages = this.messages.filter(m => !m.sending);
           }
         }
 
@@ -231,9 +243,18 @@ export class ChatUserPage implements OnInit {
       });
 
       this.source.addEventListener("error", async error => {
+        console.error("Error al conectarse al servidor de chat", error);
         this.conErrors++;
-        if (error.type === "error" && this.conErrors >= 3) {
-          console.error(error);
+        (
+          await this.toast.create({
+            message: "Se ha perdido la conexión con el servidor de chat",
+            duration: 5000,
+            position: "bottom",
+            color: "danger"
+          })
+        ).present();
+
+        if (error.type === "error" && this.conErrors >= 10) {
           this.source.close();
 
           await this.alertError.present();
@@ -241,6 +262,16 @@ export class ChatUserPage implements OnInit {
       });
 
       this.source.addEventListener("open", async error => {
+        if (this.conErrors >= 1) {
+          (
+            await this.toast.create({
+              message: "¡Conexión al servidor de chat restablecida!",
+              duration: 2000,
+              position: "bottom",
+              color: "success"
+            })
+          ).present();
+        }
         this.conErrors = 0;
       });
 
@@ -256,7 +287,7 @@ export class ChatUserPage implements OnInit {
         this.source.close();
       });
 
-      this.textarea?.setFocus();
+      this.focusTextArea();
 
       if (!this.user.chat) {
         this.message.setValue(undefined);
@@ -266,6 +297,10 @@ export class ChatUserPage implements OnInit {
       console.error(e);
       await this.alertError.present();
     }
+
+    setTimeout(() => {
+      this.focusTextArea();
+    }, 1000);
   }
 
   /*@HostListener("window:click", ["$event"]) onClick(event: any) {
@@ -285,47 +320,58 @@ export class ChatUserPage implements OnInit {
       const text = this.message.value ? this.message.value.trim() : "";
       const image = this.image;
       this.message.setValue("");
-      this.textarea?.setFocus();
-
-      this.messages = [
-        ...this.messages,
-        ...[
-          {
-            touser: { id: this.user?.id },
-            fromuser: { id: this.auth.currentUserValue.id },
-            text,
-            image,
-            time_creation: new Date(),
-            sending: true
+      this.focusTextArea();
+      if (this.editing) {
+        const chat = await this.chatSvc
+          .updateMessage(this.selectedMessage.id, text)
+          .then();
+        this.messages.map(m => {
+          if (m.id === this.selectedMessage.id) {
+            m.text = text;
           }
-        ]
-      ].filter((m: Chat) => m.text || m.image);
+        });
+        this.editing = false;
+      } else {
+        this.messages = [
+          ...this.messages,
+          ...[
+            {
+              touser: { id: this.user?.id },
+              fromuser: { id: this.auth.currentUserValue.id },
+              text,
+              image,
+              time_creation: new Date(),
+              sending: true
+            }
+          ]
+        ].filter((m: Chat) => m.text || m.image);
 
-      this.scrollDown();
-      let replyToId =
-        this.selectedMessage && this.replyingTo
-          ? this.selectedMessage.id
-          : null;
-      this.replyingTo = false;
+        this.scrollDown();
+        let replyToId =
+          this.selectedMessage && this.replyingTo
+            ? this.selectedMessage.id
+            : null;
+        this.replyingTo = false;
 
-      try {
-        if (!image) {
-          const chat = await this.chatSvc
-            .sendMessage(this.user.id, text, replyToId)
-            .then();
-        } else if (image) {
-          const imageFile = await this.utils.urlToFile(image);
-          const chat = await this.chatSvc
-            .sendImage(this.user.id, imageFile, text)
-            .then();
-          this.image = "";
+        try {
+          if (!image) {
+            const chat = await this.chatSvc
+              .sendMessage(this.user.id, text, replyToId)
+              .then();
+          } else if (image) {
+            const imageFile = await this.utils.urlToFile(image);
+            const chat = await this.chatSvc
+              .sendImage(this.user.id, imageFile, text)
+              .then();
+            this.image = "";
+          }
+
+          replyToId = null;
+          // this.chatSvc.setStoragedMessages([chat]);
+        } catch (e) {
+          this.messages = this.messages.filter(m => m.sending !== true);
+          console.error(e);
         }
-
-        replyToId = null;
-        // this.chatSvc.setStoragedMessages([chat]);
-      } catch (e) {
-        this.messages = this.messages.filter(m => m.sending !== true);
-        console.error(e);
       }
     }
   }
@@ -371,22 +417,48 @@ export class ChatUserPage implements OnInit {
   }
 
   async copy() {
-    this.clipboard.copy(this.selectedMessage.text);
-
-    (
-      await this.toast.create({
-        message: "Copiado al portapapeles",
-        duration: 2000,
-        position: "middle"
-      })
-    ).present();
     this.pressOptions = false;
+    try {
+      if (this.platform.is("cordova")) {
+        await this.clipboard.copy(this.selectedMessage.text);
+      } else {
+        await navigator.clipboard.writeText(this.selectedMessage.text);
+      }
+
+      (
+        await this.toast.create({
+          message: "Mensaje copiado",
+          duration: 2000,
+          position: "middle"
+        })
+      ).present();
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: "Error al copiar el mensaje",
+          duration: 2000,
+          position: "middle"
+        })
+      ).present();
+    }
   }
 
   reply() {
     this.replyingTo = true;
     this.pressOptions = false;
-    this.textarea?.setFocus();
+    this.focusTextArea();
+  }
+
+  edit() {
+    this.editing = true;
+    this.pressOptions = false;
+    this.message.setValue(this.selectedMessage.text);
+    this.focusTextArea();
+  }
+
+  closeEdit() {
+    this.editing = false;
+    this.message.setValue("");
   }
 
   async deleteMessage() {
@@ -406,6 +478,18 @@ export class ChatUserPage implements OnInit {
       ).present();
 
       console.error(e);
+    }
+  }
+
+  openEmojis() {
+    this.toggled = !this.toggled;
+
+    if (this.toggled) {
+      if (this.platform.is("cordova")) {
+        this.keyboard.hide();
+      }
+    } else {
+      this.focusTextArea();
     }
   }
 
@@ -513,6 +597,13 @@ export class ChatUserPage implements OnInit {
       }
     });
     return await popover.present();
+  }
+
+  async focusTextArea() {
+    this.textarea?.setFocus();
+    if (this.platform.is("cordova")) {
+      this.keyboard.show();
+    }
   }
 
   back() {

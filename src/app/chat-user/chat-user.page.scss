@@ -28,7 +28,6 @@ ion-label {
     border-radius: 25px;
     margin-top: 2px;
     margin-bottom: 2px;
-    background-color: #23191c;
 
     .replyfrom {
       margin-top: 5px;
@@ -61,19 +60,13 @@ ion-label {
 
   &.from {
     ion-card {
-      margin-left: 40px;
       --color: white;
       --background: none;
-      float: right;
-      clear: both;
+      margin-left: auto;
     }
 
     ion-card-content {
       background: #6d0b28;
-    }
-
-    & + .to ion-card {
-      margin-top: 8px;
     }
   }
 
@@ -89,10 +82,6 @@ ion-label {
     ion-card-content {
       background: #9a1c42;
     }
-
-    & + .from ion-card {
-      margin-top: 8px;
-    }
   }
 
   .text {
@@ -101,7 +90,23 @@ ion-label {
     white-space: pre-line;
   }
 
-  ion-note {
+  .note-image {
+    font-size: 10px;
+    position: absolute;
+    color: white;
+    bottom: 15px;
+    right: 15px;
+    background: #1a1a1abb;
+    padding: 5px;
+    border-radius: 10px;
+
+    ion-icon {
+      font-size: 14px;
+      vertical-align: text-bottom;
+    }
+  }
+
+  .note-text {
     font-size: 10px;
     position: relative;
     bottom: -8px;
@@ -114,14 +119,14 @@ ion-label {
   }
 
   ion-item {
-    margin-left: -15px;
-    margin-right: -15px;
+    margin-top: 3px;
+    margin-bottom: 3px;
   }
 
   ion-item.pressed {
     background: #9a1c424d;
-    margin-left: 0;
-    margin-right: 0;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
@@ -153,7 +158,7 @@ ion-footer {
     }
   }
 
-  ion-item#reply-to {
+  ion-item#reply-to, ion-item#edit {
     ion-icon {
       margin-right: 15px;
       color: white;
