@@ -22,9 +22,9 @@
               color="secondary"
               *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
               >&nbsp;</ion-badge
-            >{{ toUserWriting ? 'Escribiendo...' : ((user?.last_login |
-            niceDate) === 'Ahora mismo' ? 'En línea' : (user?.last_login |
-            niceDate))}}
+            >{{ toUserWriting && auth.isMaster() ? 'Escribiendo...' :
+            ((user?.last_login | niceDate) === 'Ahora mismo' ? 'En línea' :
+            (user?.last_login | niceDate))}}
           </p>
         </ion-label>
       </ion-button>
