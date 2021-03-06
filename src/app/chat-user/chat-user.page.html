@@ -22,17 +22,18 @@
               color="secondary"
               *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
               >&nbsp;</ion-badge
-            >{{ (user?.last_login | niceDate) === 'Ahora mismo' ? 'En línea' :
-            (user?.last_login | niceDate)}}
+            >{{ toUserWriting ? 'Escribiendo...' : ((user?.last_login |
+            niceDate) === 'Ahora mismo' ? 'En línea' : (user?.last_login |
+            niceDate))}}
           </p>
         </ion-label>
       </ion-button>
       <ion-icon
-        *ngIf="user?.verified || user?.roles.includes('ROLE_MASTER')"
-        [name]="user?.roles.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
+        *ngIf="user?.verified || user?.roles?.includes('ROLE_MASTER')"
+        [name]="user?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
         slot="icon-only"
         size="small"
-        [color]="user?.roles.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+        [color]="user?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
         (click)="userSvc.showRole(user)"
       ></ion-icon>
     </ion-buttons>
@@ -230,6 +231,7 @@
           autoGrow
           rows="1"
           (ionFocus)="toggled = false"
+          (ionChange)="setWriting()"
         >
         </ion-textarea>
       </ion-item>

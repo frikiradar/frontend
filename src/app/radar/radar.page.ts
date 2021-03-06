@@ -97,7 +97,7 @@ export class RadarPage {
       this.push.init();
     }
     // Y despues iniciamos la geolocalización
-    if (!this.authUser.roles.includes("ROLE_DEMO")) {
+    if (!this.authUser.roles?.includes("ROLE_DEMO")) {
       try {
         this.coordinates = await this.geolocationSvc.getGeolocation();
         const oldCoordinates = this.authUser.coordinates;

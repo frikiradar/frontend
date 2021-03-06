@@ -171,9 +171,9 @@ export class UserService {
 
   async showRole(user: User) {
     let message = "";
-    if (user.roles.includes("ROLE_ADMIN")) {
+    if (user.roles?.includes("ROLE_ADMIN")) {
       message = "Administrador";
-    } else if (user.roles.includes("ROLE_MASTER")) {
+    } else if (user.roles?.includes("ROLE_MASTER")) {
       message = "Moderador";
     } else if (user.verified) {
       message = "Usuario verificado";
@@ -185,8 +185,8 @@ export class UserService {
         duration: 1500,
         position: "middle",
         color:
-          user.roles.includes("ROLE_MASTER") ||
-          user.roles.includes("ROLE_ADMIN")
+          user.roles?.includes("ROLE_MASTER") ||
+          user.roles?.includes("ROLE_ADMIN")
             ? "tertiary"
             : "secondary"
       })

@@ -46,6 +46,12 @@ export class ChatService {
     this.uploadSvc.upload("chat-upload", formData);
   }
 
+  async writing(fromuser: number, touser: number) {
+    return (await this.rest
+      .put("writing-chat", { fromuser, touser })
+      .toPromise()) as Chat;
+  }
+
   async updateMessage(id: Chat["id"], text: Chat["text"]) {
     return (await this.rest
       .put("update-message", { id, text })

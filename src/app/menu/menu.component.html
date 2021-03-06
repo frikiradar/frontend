@@ -27,20 +27,20 @@
             (click)="userSvc.showRole(auth.currentUserValue)"
             *ngIf="
               auth.currentUserValue?.verified ||
-              auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
-              auth.currentUserValue?.roles.includes('ROLE_MASTER')
+              auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
+              auth.currentUserValue?.roles?.includes('ROLE_MASTER')
             "
             [name]="
-              auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
-              auth.currentUserValue?.roles.includes('ROLE_MASTER')
+              auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
+              auth.currentUserValue?.roles?.includes('ROLE_MASTER')
                 ? 'shield-checkmark'
                 : 'checkmark-circle'
             "
             slot="icon-only"
             size="small"
             [color]="
-              auth.currentUserValue?.roles.includes('ROLE_ADMIN') ||
-              auth.currentUserValue?.roles.includes('ROLE_MASTER')
+              auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
+              auth.currentUserValue?.roles?.includes('ROLE_MASTER')
                 ? 'tertiary'
                 : 'secondary'
             "

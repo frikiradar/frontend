@@ -70,6 +70,8 @@ export class ChatUserPage implements OnInit {
   public image: string;
   public replyingTo = false;
   public editing = false;
+  public writing = false;
+  public toUserWriting = false;
 
   constructor(
     public auth: AuthService,
@@ -199,60 +201,70 @@ export class ChatUserPage implements OnInit {
       this.source.addEventListener("message", async (res: any) => {
         this.conErrors = 0;
         let message = JSON.parse(res.data) as Chat;
-        // borramos los enviando
-        this.messages = this.messages.filter(m => !m.sending);
-        if (this.messages.some(m => m.id === message.id)) {
-          // Si ya existe el mensaje lo actualizamos
-          this.messages.map(m => {
-            if (m.id === message.id) {
-              m.text = message.text;
-              m.time_read = message.time_read;
-              m.edited = message.edited;
-              m.deleted = message.deleted;
-            }
-          });
-          // Borramos los deleted
-          this.messages = this.messages.filter(m => {
-            if (!m.deleted) {
-              return m;
-            }
-          });
+        if (message.writing && message.fromuser.id === this.user.id) {
+          this.toUserWriting = true;
+          setTimeout(() => {
+            this.toUserWriting = false;
+          }, 10000);
         } else {
-          this.messages = [...this.messages, message];
-          if (
-            message.fromuser.id === this.user.id &&
-            (message.text || message.image || message.audio)
-          ) {
-            // marcamos como leido
-            try {
-              if (this.user.id !== this.auth.currentUserValue.id) {
-                message = await this.chatSvc.readChat(message.id);
+          this.toUserWriting = false;
+          // borramos los enviando
+          this.messages = this.messages.filter(m => !m.sending);
+          if (this.messages.some(m => m.id === message.id)) {
+            // Si ya existe el mensaje lo actualizamos
+            this.messages.map(m => {
+              if (m.id === message.id) {
+                m.text = message.text;
+                m.time_read = message.time_read;
+                m.edited = message.edited;
+                m.deleted = message.deleted;
               }
-            } catch (e) {
-              console.error(e);
-              await this.alertError.present();
+            });
+            // Borramos los deleted
+            this.messages = this.messages.filter(m => {
+              if (!m.deleted) {
+                return m;
+              }
+            });
+          } else {
+            this.messages = [...this.messages, message];
+            if (
+              message.fromuser.id === this.user.id &&
+              (message.text || message.image || message.audio)
+            ) {
+              // marcamos como leido
+              try {
+                if (this.user.id !== this.auth.currentUserValue.id) {
+                  message = await this.chatSvc.readChat(message.id);
+                }
+              } catch (e) {
+                console.error(e);
+                await this.alertError.present();
+              }
             }
           }
-        }
 
-        if (message.fromuser.id === this.user.id) {
-          this.user = message.fromuser;
-        }
+          if (message.fromuser.id === this.user.id) {
+            this.user = message.fromuser;
+          }
 
-        this.scrollDown();
+          this.scrollDown();
+        }
       });
 
       this.source.addEventListener("error", async error => {
         console.error("Error al conectarse al servidor de chat", error);
         this.conErrors++;
-        (
-          await this.toast.create({
-            message: "Se ha perdido la conexión con el servidor de chat",
-            duration: 5000,
-            position: "bottom",
-            color: "danger"
-          })
-        ).present();
+        if (error.type === "error" && this.conErrors === 5) {
+          (
+            await this.toast.create({
+              message: "Se ha perdido la conexión con el servidor de chat",
+              duration: 2000,
+              position: "bottom",
+              color: "danger"
+            })
+          ).present();
+        }
 
         if (error.type === "error" && this.conErrors >= 10) {
           this.source.close();
@@ -262,7 +274,7 @@ export class ChatUserPage implements OnInit {
       });
 
       this.source.addEventListener("open", async error => {
-        if (this.conErrors >= 1) {
+        if (this.conErrors === 5) {
           (
             await this.toast.create({
               message: "¡Conexión al servidor de chat restablecida!",
@@ -597,6 +609,17 @@ export class ChatUserPage implements OnInit {
       }
     });
     return await popover.present();
+  }
+
+  async setWriting() {
+    if (this.writing) {
+      return;
+    }
+    this.writing = true;
+    await this.chatSvc.writing(this.auth.currentUserValue.id, this.user.id);
+    setTimeout(async () => {
+      this.writing = false;
+    }, 2500);
   }
 
   async focusTextArea() {

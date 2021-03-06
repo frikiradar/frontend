@@ -15,4 +15,5 @@ export interface Chat {
   replyto?: Partial<Chat>;
   edited?: boolean;
   deleted?: boolean;
+  writing?: boolean;
 }
