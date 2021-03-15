@@ -16,11 +16,12 @@
 </ion-header>
 
 <ion-content>
-  <ion-slides #stories [options]="storiesOpts">
+  <ion-slides #stories id="stories" [options]="storiesOpts">
     <ion-slide>
       <ion-item button lines="none">
         <ion-avatar>
           <img [src]="auth.currentUserValue?.thumbnail" alt="games" />
+          <ion-badge color="tertiary">+</ion-badge>
         </ion-avatar>
       </ion-item>
     </ion-slide>
@@ -55,19 +56,39 @@
   </ion-slides>
 
   <ion-label>
-    <h2 class="section">Chats grupales</h2>
+    <h2 class="section">Salas de chat</h2>
     <p class="subtitle">
-      Entra y habla con la comunidad
+      ¡Entra y habla con la comunidad FrikiRadar!
     </p>
   </ion-label>
-  <div id="chats"></div>
+  <ion-list id="rooms">
+    <div *ngFor="let room of rooms">
+      <ion-item
+        button
+        lines="none"
+        *ngIf="auth.currentUserValue?.roles?.includes(room.permissions[0])"
+        (click)="showRoom(room.slug)"
+      >
+        <ion-thumbnail>
+          <img [src]="room.image" [alt]="room.name" />
+          <ion-badge color="primary" *ngIf="room?.unread">&nbsp;</ion-badge>
+        </ion-thumbnail>
+        <ion-label>
+          <h2 class="room-name" [ngClass]="room?.unread ? 'unread' : ''">
+            {{ room?.name }}
+          </h2>
+          <p class="room-description">{{room?.description}}</p>
+        </ion-label>
+      </ion-item>
+    </div>
+  </ion-list>
 
-  <ion-label>
-    <h2 class="section">Eventos y quedadas</h2>
+  <!--<ion-label>
+    <h2 class="section">Eventos</h2>
     <p class="subtitle">
       Próximamente
     </p>
-  </ion-label>
+  </ion-label>-->
 
   <!--<div class="full-center ion-padding">
     <ion-icon name="people-outline"></ion-icon>

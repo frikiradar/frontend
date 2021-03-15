@@ -31,7 +31,13 @@ const routes: Routes = [
   {
     path: "chat/:id",
     loadChildren: () =>
-      import("./chat-user/chat-user.module").then(m => m.ChatUserPageModule)
+      import("./chat/chat-user/chat-user.module").then(
+        m => m.ChatUserPageModule
+      )
+  },
+  {
+    path: "room/:slug",
+    loadChildren: () => import("./room/room.module").then(m => m.RoomPageModule)
   },
   {
     path: "search",

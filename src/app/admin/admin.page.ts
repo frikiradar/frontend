@@ -7,6 +7,7 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { BannedUsersModal } from "./banned-users/banned-users.modal";
 import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
+import { EditRoomsModal } from "./rooms/edit-rooms/edit-rooms.modal";
 
 @Component({
   selector: "app-admin",
@@ -42,7 +43,10 @@ export class AdminPage implements OnInit {
     return await modal.present();
   }
 
-  async testNotification() {
-    this.push.testNotification();
+  async editRoomsModal() {
+    const modal = await this.modal.create({
+      component: EditRoomsModal
+    });
+    return await modal.present();
   }
 }

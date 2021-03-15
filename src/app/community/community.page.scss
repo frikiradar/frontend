@@ -1,14 +1,55 @@
 .section {
     font-size: 14pt;
-    margin: 10px 0px 0px 18px;
+    margin: 30px 0px 0px 18px;
 }
 
 .subtitle {
     font-size: 10pt;
     margin: 2px 0px 0px 18px;
+    color: rgb(172, 172, 172);
 }
 
-#chats {
-    margin-top: 10px;
-    margin-left: 18px;
+#rooms {
+    ion-thumbnail {
+        --border-radius: 8px;
+        margin-right: 10px;
+    }
+
+    .room-name.unread {
+        font-weight: bolder;
+    }
+
+    .room-description {
+        white-space: initial;
+        color: rgb(172, 172, 172);
+    }
+
+    ion-badge {
+        position: absolute;
+        left: 45px;
+        border-radius: 15px;
+        z-index: 1;
+        width: 20px;
+        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+      }
+}
+
+#stories {
+    ion-avatar {
+        width: 58px;
+        height: 58px;
+    }
+
+    ion-badge {
+        position: absolute;
+        left: 45px;
+        border-radius: 15px;
+        z-index: 1;
+        width: 22px;
+        height: 22px;
+        bottom: 7px;
+        border: 2px solid #1a1a1a;
+        font-size: 14pt;
+        line-height: 0.7;
+    }
 }

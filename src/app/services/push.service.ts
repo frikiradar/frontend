@@ -188,8 +188,7 @@ export class PushService {
   }
 
   async localNotification(notification: any) {
-    if (this.router.url !== notification.data.url) {
-      /*let actions = null;
+    /*let actions = null;
     if (notification.topic == "chat") {
       actions = [
         {
@@ -200,7 +199,8 @@ export class PushService {
         }
       ] as any[];
     }*/
-      if (this.platform.is("cordova")) {
+    if (this.platform.is("cordova")) {
+      if (this.router.url !== notification?.url) {
         this.localNotifications.schedule({
           title: notification?.title,
           text: notification?.body,
@@ -208,12 +208,14 @@ export class PushService {
           smallIcon: "res://notification_icon",
           color: "#e91e63",
           icon: notification?.icon,
-          attachments: notification?.attachments,
+          // attachments: notification?.attachments,
           channel: notification?.topic,
           data: notification
           // actions
         });
-      } else {
+      }
+    } else {
+      if (this.router.url !== notification?.data.url) {
         try {
           const registration = await navigator.serviceWorker.ready;
           // Customize notification here
@@ -237,6 +239,37 @@ export class PushService {
     }
   }
 
+  setChannel(slug: string, name: string, description: string) {
+    if (this.platform.is("cordova")) {
+      this.firebase
+        .createChannel({
+          id: slug,
+          name: name,
+          sound: "bipbip",
+          description: description
+        })
+        .then(response => {
+          console.log("Notification Channel created", slug, response);
+        })
+        .catch(error => {
+          console.error("Create notification channel error: " + error);
+        });
+    }
+  }
+
+  removeChannel(slug: string) {
+    if (this.platform.is("cordova")) {
+      this.firebase
+        .deleteChannel(slug)
+        .then(response => {
+          console.log("Notification Chanel deleted", slug, response);
+        })
+        .catch(error => {
+          console.error("Error deleting channel", error);
+        });
+    }
+  }
+
   async requestPermission(): Promise<void> {
     this.afMessaging.requestPermission
       .pipe(mergeMapTo(this.afMessaging.tokenChanges))
@@ -249,20 +282,5 @@ export class PushService {
           console.error(error);
         }
       );
-  }
-
-  async testNotification() {
-    try {
-      const registration = await navigator.serviceWorker.ready;
-      // Customize notification here
-      const notificationTitle = "Background Message Title";
-      const notificationOptions = {
-        body: "Background Message body."
-        // icon: "/firebase-logo.png"
-      };
-      registration.showNotification(notificationTitle, notificationOptions);
-    } catch (e) {
-      console.error(e);
-    }
   }
 }

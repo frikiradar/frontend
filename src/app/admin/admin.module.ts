@@ -9,7 +9,9 @@ import { SharedModule } from "./../shared/shared.module";
 import { AdminPage } from "./admin.page";
 import { BannedMessagesModal } from "./banned-users/banned-messages/banned-messages.modal";
 import { BannedUsersModal } from "./banned-users/banned-users.modal";
+import { CreateRoomModal } from "./rooms/create-room/create-room.modal";
 import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
+import { EditRoomsModal } from "./rooms/edit-rooms/edit-rooms.modal";
 
 const routes: Routes = [
   {
@@ -32,12 +34,16 @@ const routes: Routes = [
     AdminPage,
     BannedUsersModal,
     GlobalNotificationsModal,
+    CreateRoomModal,
+    EditRoomsModal,
     BannedMessagesModal
   ],
   entryComponents: [
     BannedUsersModal,
     BannedMessagesModal,
-    GlobalNotificationsModal
+    GlobalNotificationsModal,
+    CreateRoomModal,
+    EditRoomsModal
   ]
 })
 export class AdminPageModule {}

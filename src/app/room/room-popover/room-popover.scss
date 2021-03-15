@@ -1,0 +1,23 @@
+ion-item {
+    ion-label {
+      --color: white !important;
+    }
+
+    ion-icon {
+      color: white;
+    }
+
+    ion-label {
+      p {
+        white-space: normal;
+        color: #bbb;
+      }
+    }
+  }
+
+  ion-item.activated {
+    ion-icon,
+    ion-label {
+      color: #e91e63;
+    }
+  }

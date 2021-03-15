@@ -1,7 +1,9 @@
+import { Room } from "./room";
 import { User } from "./user";
 
 export interface Chat {
-  touser: Partial<User>;
+  touser?: Partial<User>;
+  slug?: Room["slug"];
   text?: string;
   image?: string;
   audio?: string;

@@ -5,33 +5,42 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Usuarios bloqueados</ion-title>
+    <ion-title>Salas creadas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="create()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div *ngIf="users?.length; else noUsers">
+  <div *ngIf="rooms?.length; else noRooms">
     <ion-list>
-      <ion-item lines="full" *ngFor="let user of users">
+      <ion-item lines="full" *ngFor="let room of rooms">
         <ion-avatar slot="start">
-          <img [src]="user.thumbnail" default="/assets/img/users/default.jpg" />
+          <img [src]="room.image" default="/assets/img/users/default.jpg" />
         </ion-avatar>
         <ion-label>
-          <h2>{{ user.name }}</h2>
+          <h2>{{ room.name }}</h2>
+          <p>{{room.description}}</p>
         </ion-label>
         <ion-buttons>
-          <ion-button (click)="unblock(user)">
+          <ion-button (click)="edit(room)">
+            <ion-icon slot="icon-only" color="primary" name="create"></ion-icon>
+          </ion-button>
+          <ion-button (click)="remove(room)">
             <ion-icon slot="icon-only" color="primary" name="trash"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-item>
     </ion-list>
   </div>
-  <ng-template #noUsers>
+  <ng-template #noRooms>
     <div class="full-center ion-padding">
       <ion-icon name="body"></ion-icon>
       <h2>Sin resultados</h2>
       <p>
-        No has bloqueado a ningún usuario.
+        No hay salas creadas.
       </p>
     </div>
   </ng-template>

@@ -13,7 +13,7 @@
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="showOptions">
       <ion-button (click)="showOptions = false">
-        <ion-icon name="close"></ion-icon>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title *ngIf="!showOptions">Chat</ion-title>
@@ -73,7 +73,17 @@
               <h2>{{ chat.user?.name }}</h2>
               <p>{{ chat.text }}</p>
             </ion-label>
-            <ion-note slot="end">{{ chat.time_creation | niceDate }}</ion-note>
+            <ion-note slot="end">
+              <span *ngIf="chat.fromuser == auth.currentUserValue?.id">
+                <ion-icon *ngIf="!chat.time_read" name="checkmark"></ion-icon>
+                <ion-icon
+                  *ngIf="chat.time_read"
+                  color="secondary"
+                  name="checkmark-done"
+                ></ion-icon>
+              </span>
+              {{ chat.time_creation | niceDate }}
+            </ion-note>
           </ion-item>
           <ion-item-options
             side="end"

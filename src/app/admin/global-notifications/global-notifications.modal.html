@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="close()">
-        <ion-icon name="close"></ion-icon>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>Notificaciones globales</ion-title>
@@ -25,8 +25,7 @@
         <ion-item>
           <ion-textarea
             placeholder="Escribe aquí el mensaje"
-            autoGrow
-            rows="1"
+            rows="3"
             formControlName="message"
           ></ion-textarea>
           <ion-buttons slot="end">

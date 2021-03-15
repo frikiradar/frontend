@@ -1,6 +1,6 @@
 <ion-split-pane contentId="content">
   <ion-menu
-    [disabled]="!auth.currentUserValue?.id"
+    [disabled]="!auth.currentUserValue?.id || auth.currentUserValue?.banned"
     side="start"
     swipeGesture="true"
     id="menu"

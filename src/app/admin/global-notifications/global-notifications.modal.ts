@@ -9,10 +9,9 @@ import { ModalController, ToastController } from "@ionic/angular";
 import { User } from "src/app/models/user";
 import { AdminService } from "src/app/services/admin.service";
 import { AuthService } from "src/app/services/auth.service";
-import { PushService } from "src/app/services/push.service";
 
 @Component({
-  selector: "app-admin",
+  selector: "global-notifications",
   templateUrl: "./global-notifications.modal.html",
   styleUrls: ["./global-notifications.modal.scss"]
 })

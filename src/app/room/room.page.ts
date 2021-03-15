@@ -1,10 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from "@angular/forms";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -14,7 +8,6 @@ import {
   AlertController,
   IonContent,
   IonInfiniteScroll,
-  IonTextarea,
   ModalController,
   NavController,
   Platform,
@@ -28,26 +21,21 @@ import { User } from "../models/user";
 import { ChatService } from "../services/chat.service";
 import { ConfigService } from "../services/config.service";
 import { UrlService } from "../services/url.service";
-import { AuthService } from "./../services/auth.service";
-import { UserService } from "./../services/user.service";
+import { AuthService } from "../services/auth.service";
 import { UtilsService } from "../services/utils.service";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
-import { OptionsPopover } from "../options-popover/options-popover";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+import { Room } from "../models/room";
+import { RoomService } from "../services/room.service";
+import { RoomPopover } from "./room-popover/room-popover";
+import { PushService } from "../services/push.service";
+import { UserService } from "../services/user.service";
 
 @Component({
-  selector: "app-chat-user",
-  templateUrl: "./chat-user.page.html",
-  styleUrls: ["./chat-user.page.scss"]
+  selector: "app-room",
+  templateUrl: "./room.page.html",
+  styleUrls: ["./room.page.scss"]
 })
-export class ChatUserPage implements OnInit {
-  public chatForm: FormGroup;
-  get message() {
-    return this.chatForm.get("message");
-  }
-
-  @ViewChild("textarea", { static: false })
-  textarea: IonTextarea;
+export class RoomPage implements OnInit {
   @ViewChild("chatlist", { static: false })
   chatlist: IonContent;
   @ViewChild(IonInfiniteScroll, { static: false })
@@ -58,27 +46,28 @@ export class ChatUserPage implements OnInit {
   source: EventSource;
   public toggled: boolean = false;
 
-  user: Partial<User>;
-  userId: User["id"];
+  public room: Room;
+  slug: Room["slug"];
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
   page = 0;
   pressOptions = false;
   selectedMessage: Chat;
   conErrors = 0;
+  connected = false;
   alertError: any;
   public image: string;
-  public replyingTo = false;
+  public replying = false;
   public editing = false;
   public writing = false;
-  public toUserWriting = false;
+  public toUserWriting = "";
 
   constructor(
     public auth: AuthService,
-    private userSvc: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private nav: NavController,
+    private roomSvc: RoomService,
     private chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
@@ -86,18 +75,14 @@ export class ChatUserPage implements OnInit {
     public keyboard: Keyboard,
     public platform: Platform,
     private config: ConfigService,
-    public formBuilder: FormBuilder,
     private urlSvc: UrlService,
     private androidPermissions: AndroidPermissions,
     public sheet: ActionSheetController,
     public utils: UtilsService,
     public modalController: ModalController,
-    private popover: PopoverController
-  ) {
-    this.chatForm = formBuilder.group({
-      message: new FormControl("", [Validators.required])
-    });
-  }
+    public popover: PopoverController,
+    private userSvc: UserService
+  ) {}
 
   async ngOnInit() {
     const config: {
@@ -125,45 +110,23 @@ export class ChatUserPage implements OnInit {
       this.alertError.present();
     }
 
-    this.userId = +this.route.snapshot.paramMap.get("id");
+    this.slug = this.route.snapshot.paramMap.get("slug");
+    this.room = await this.roomSvc.getRoom(this.slug);
 
-    /*try {
-      this.user = await this.userSvc.getUser(this.userId);
-
-      if (this.user.username === "frikiradar") {
-        this.chatForm.get("message").disable();
-      }
-    } catch (e) {
-      this.chatForm.get("message").disable();
-    }*/
+    this.roomSvc.setNotifications(this.room);
 
     this.page = 1;
-
-    this.chatSvc.deleteStoragedMessages();
-
-    /*const storagedMessages: Chat[] = this.chatSvc.getStoragedMessages();
-    if (storagedMessages) {
-      this.messages = storagedMessages?.filter(
-        (c: Chat) =>
-          (c?.fromuser?.id == this.userId &&
-            c?.touser?.id == this.auth.currentUserValue.id) ||
-          (c?.touser?.id == this.userId &&
-            c?.fromuser?.id == this.auth.currentUserValue.id) ||
-          (c?.fromuser?.id == this.userId && c?.touser?.id == null)
-      );
-    }*/
-
-    // Solamente los mensajes a partir del ultimo guardado
-    const lastId = this.messages?.reduce(
-      (max, message) => (message.id > max ? message.id : max),
-      this.messages[0]?.id
-    );
     try {
-      const messages = (
-        await this.chatSvc.getMessages(this.userId, true, this.page, lastId)
-      )
+      const messages = (await this.roomSvc.getMessages(this.slug, this.page))
         .filter(m => m.text || m.image || m.audio)
         .reverse();
+
+      if (messages.length) {
+        this.roomSvc.setLastMessage(
+          this.slug,
+          messages[messages.length - 1].id
+        );
+      }
 
       this.messages = [...this.messages, ...messages];
       // this.chatSvc.setStoragedMessages(messages);
@@ -174,40 +137,25 @@ export class ChatUserPage implements OnInit {
 
       this.scrollDown(500);
 
-      if (this.messages.length > 0) {
-        if (this.userId == this.messages[0].fromuser.id) {
-          this.user = this.messages[0].fromuser;
-        } else {
-          this.user = this.messages[0].touser;
-        }
-      } else {
-        try {
-          this.user = await this.userSvc.getUser(this.userId);
-        } catch (e) {
-          this.chatForm.get("message").disable();
-        }
-      }
-
-      if (this.auth.isDemo(this.user as User) || !this.user.active) {
-        this.chatForm.get("message").disable();
-      }
-
-      const min = Math.min(this.auth.currentUserValue.id, this.userId);
-      const max = Math.max(this.auth.currentUserValue.id, this.userId);
-      const channel = `${min}_${max}`;
-
       // Nos suscribimos al canal
-      this.source = await this.chatSvc.register(channel);
+      this.source = await this.roomSvc.register(this.slug);
       this.source.addEventListener("message", async (res: any) => {
+        this.connected = true;
         this.conErrors = 0;
         let message = JSON.parse(res.data) as Chat;
-        if (message.writing && message.fromuser.id === this.user.id) {
-          this.toUserWriting = true;
+
+        if (
+          message.writing &&
+          message.fromuser.name !== this.auth.currentUserValue.name
+        ) {
+          this.toUserWriting = "Escribiendo " + message.fromuser.name + "...";
           setTimeout(() => {
-            this.toUserWriting = false;
+            this.toUserWriting = "";
           }, 10000);
-        } else {
-          this.toUserWriting = false;
+        } else if (!message.writing) {
+          this.roomSvc.setLastMessage(this.slug, message.id);
+
+          this.toUserWriting = "";
           // borramos los enviando
           this.messages = this.messages.filter(m => !m.sending);
           if (this.messages.some(m => m.id === message.id)) {
@@ -221,31 +169,9 @@ export class ChatUserPage implements OnInit {
               }
             });
             // Borramos los deleted
-            this.messages = this.messages.filter(m => {
-              if (!m.deleted) {
-                return m;
-              }
-            });
+            this.messages = this.messages.filter(m => !m.deleted);
           } else {
             this.messages = [...this.messages, message];
-            if (
-              message.fromuser.id === this.user.id &&
-              (message.text || message.image || message.audio)
-            ) {
-              // marcamos como leido
-              try {
-                if (this.user.id !== this.auth.currentUserValue.id) {
-                  message = await this.chatSvc.readChat(message.id);
-                }
-              } catch (e) {
-                console.error(e);
-                await this.alertError.present();
-              }
-            }
-          }
-
-          if (message.fromuser.id === this.user.id) {
-            this.user = message.fromuser;
           }
 
           this.scrollDown();
@@ -253,7 +179,12 @@ export class ChatUserPage implements OnInit {
       });
 
       this.source.addEventListener("error", async error => {
-        console.error("Error al conectarse al servidor de chat", error);
+        console.error(
+          "Error al conectarse al servidor de chat",
+          `connected: ${this.connected}`,
+          `conErrors: ${this.conErrors}`,
+          error
+        );
         this.conErrors++;
         if (error.type === "error" && this.conErrors === 5) {
           (
@@ -266,7 +197,10 @@ export class ChatUserPage implements OnInit {
           ).present();
         }
 
-        if (error.type === "error" && this.conErrors >= 10) {
+        if (
+          error.type === "error" &&
+          (!this.connected || this.conErrors >= 10)
+        ) {
           this.source.close();
 
           await this.alertError.present();
@@ -298,92 +232,63 @@ export class ChatUserPage implements OnInit {
       this.platform.backButton.subscribe(() => {
         this.source.close();
       });
-
-      this.focusTextArea();
-
-      if (!this.user.chat) {
-        this.message.setValue(undefined);
-        this.sendMessage();
-      }
     } catch (e) {
       console.error(e);
       await this.alertError.present();
     }
-
-    setTimeout(() => {
-      this.focusTextArea();
-    }, 1000);
   }
 
-  /*@HostListener("window:click", ["$event"]) onClick(event: any) {
-    event.stopPropagation();
-    if (event.srcElement.href && event.target.className.includes("linkified")) {
-      console.log("este vale", event);
-    }
-  }*/
+  async sendMessage(message?: Chat) {
+    const text = message.text;
+    const image = message.image;
 
-  async sendMessage(event?: Event) {
-    this.toggled = false;
-    if (event) {
-      event.preventDefault();
-    }
-
-    if ((this.message.value && this.message.value.trim()) || this.image) {
-      const text = this.message.value ? this.message.value.trim() : "";
-      const image = this.image;
-      this.message.setValue("");
-      this.focusTextArea();
-      if (this.editing) {
-        const chat = await this.chatSvc
-          .updateMessage(this.selectedMessage.id, text)
-          .then();
-        this.messages.map(m => {
-          if (m.id === this.selectedMessage.id) {
-            m.text = text;
-          }
-        });
-        this.editing = false;
-      } else {
-        this.messages = [
-          ...this.messages,
-          ...[
-            {
-              touser: { id: this.user?.id },
-              fromuser: { id: this.auth.currentUserValue.id },
-              text,
-              image,
-              time_creation: new Date(),
-              sending: true
-            }
-          ]
-        ].filter((m: Chat) => m.text || m.image);
-
-        this.scrollDown();
-        let replyToId =
-          this.selectedMessage && this.replyingTo
-            ? this.selectedMessage.id
-            : null;
-        this.replyingTo = false;
-
-        try {
-          if (!image) {
-            const chat = await this.chatSvc
-              .sendMessage(this.user.id, text, replyToId)
-              .then();
-          } else if (image) {
-            const imageFile = await this.utils.urlToFile(image);
-            const chat = await this.chatSvc
-              .sendImage(this.user.id, imageFile, text)
-              .then();
-            this.image = "";
-          }
-
-          replyToId = null;
-          // this.chatSvc.setStoragedMessages([chat]);
-        } catch (e) {
-          this.messages = this.messages.filter(m => m.sending !== true);
-          console.error(e);
+    if (this.editing) {
+      const chat = await this.chatSvc
+        .updateMessage(this.selectedMessage.id, text)
+        .then();
+      this.messages.map(m => {
+        if (m.id === this.selectedMessage.id) {
+          m.text = text;
         }
+      });
+      this.editing = false;
+    } else {
+      this.messages = [
+        ...this.messages,
+        ...[
+          {
+            slug: this.slug,
+            fromuser: { id: this.auth.currentUserValue.id },
+            text,
+            image,
+            time_creation: new Date(),
+            sending: true
+          }
+        ]
+      ].filter((m: Chat) => m.text || m.image);
+
+      this.scrollDown();
+      let replyToId =
+        this.selectedMessage && this.replying ? this.selectedMessage.id : null;
+      this.replying = false;
+
+      try {
+        if (!image) {
+          const chat = await this.roomSvc
+            .sendMessage(this.slug, this.room.name, text, replyToId)
+            .then();
+        } else if (image) {
+          const imageFile = await this.utils.urlToFile(image);
+          const chat = await this.roomSvc
+            .sendImage(this.slug, imageFile, text)
+            .then();
+        }
+
+        replyToId = null;
+        // this.chatSvc.setStoragedMessages([chat]);
+      } catch (e) {
+        this.messages = this.messages.filter(m => m.sending !== true);
+        console.error(e);
       }
     }
   }
@@ -402,9 +307,7 @@ export class ChatUserPage implements OnInit {
       return;
     }
     this.page++;
-    const messages = (
-      await this.chatSvc.getMessages(this.userId, false, this.page)
-    )
+    const messages = (await this.roomSvc.getMessages(this.slug, this.page))
       .filter(m => m.text || m.image || m.audio)
       .reverse();
     this.messages = [...messages, ...this.messages];
@@ -456,21 +359,13 @@ export class ChatUserPage implements OnInit {
   }
 
   reply() {
-    this.replyingTo = true;
+    this.replying = true;
     this.pressOptions = false;
-    this.focusTextArea();
   }
 
   edit() {
     this.editing = true;
     this.pressOptions = false;
-    this.message.setValue(this.selectedMessage.text);
-    this.focusTextArea();
-  }
-
-  closeEdit() {
-    this.editing = false;
-    this.message.setValue("");
   }
 
   async deleteMessage() {
@@ -493,27 +388,14 @@ export class ChatUserPage implements OnInit {
     }
   }
 
-  openEmojis() {
-    this.toggled = !this.toggled;
-
-    if (this.toggled) {
-      if (this.platform.is("cordova")) {
-        this.keyboard.hide();
-      }
-    } else {
-      this.focusTextArea();
-    }
-  }
-
-  addEmoji(event: any) {
-    this.message.setValue(
-      (this.message.value ? this.message.value : "") + event.emoji.native
-    );
-  }
-
-  openUrl(event: any) {
+  async openUrl(event: any) {
     if (event.srcElement.href && event.target.className.includes("linkified")) {
-      this.urlSvc.openUrl(event.srcElement.href);
+      if (event.target.innerHTML.includes("@")) {
+        event.preventDefault();
+        this.showProfile(event.target.innerHTML.replace("@", ""));
+      } else {
+        this.urlSvc.openUrl(event.srcElement.href);
+      }
     }
     return false;
   }
@@ -599,34 +481,26 @@ export class ChatUserPage implements OnInit {
 
   async showOptions(event: any) {
     const popover = await this.popover.create({
-      component: OptionsPopover,
+      component: RoomPopover,
       cssClass: "options-popover",
       event: event,
       translucent: true,
       componentProps: {
-        user: this.user,
-        page: "chat"
+        room: this.room
       }
     });
     return await popover.present();
   }
 
   async setWriting() {
-    if (this.writing) {
+    if (this.writing || this.editing) {
       return;
     }
     this.writing = true;
-    await this.chatSvc.writing(this.auth.currentUserValue.id, this.user.id);
+    await this.roomSvc.writing(this.auth.currentUserValue.name, this.slug);
     setTimeout(async () => {
       this.writing = false;
     }, 2500);
-  }
-
-  async focusTextArea() {
-    this.textarea?.setFocus();
-    if (this.platform.is("cordova")) {
-      this.keyboard.show();
-    }
   }
 
   back() {

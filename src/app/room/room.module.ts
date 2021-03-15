@@ -7,16 +7,18 @@ import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { LinkyModule } from "ngx-linky";
 
 import { SharedModule } from "../shared/shared.module";
-import { ChatUserPage } from "./chat-user.page";
+import { RoomPage } from "./room.page";
+import { RoomPopover } from "./room-popover/room-popover";
 
 const routes: Routes = [
   {
     path: "",
-    component: ChatUserPage
+    component: RoomPage
   }
 ];
 
 @NgModule({
+  entryComponents: [RoomPopover],
   imports: [
     CommonModule,
     FormsModule,
@@ -27,6 +29,6 @@ const routes: Routes = [
     SharedModule,
     PickerModule
   ],
-  declarations: [ChatUserPage]
+  declarations: [RoomPage, RoomPopover]
 })
-export class ChatUserPageModule {}
+export class RoomPageModule {}

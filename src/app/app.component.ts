@@ -228,7 +228,12 @@ export class AppComponent {
         {
           text: "Oki doki",
           handler: () => {
-            navigator["app"].exitApp();
+            if (this.platform.is("cordova")) {
+              navigator["app"].exitApp();
+            } else {
+              window.open("", "_parent", "");
+              window.close();
+            }
           }
         }
       ]

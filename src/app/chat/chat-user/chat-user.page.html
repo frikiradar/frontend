@@ -22,7 +22,7 @@
               color="secondary"
               *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
               >&nbsp;</ion-badge
-            >{{ toUserWriting && auth.isMaster() ? 'Escribiendo...' :
+            >{{ toUserWriting && auth.isMaster() ? toUserWriting :
             ((user?.last_login | niceDate) === 'Ahora mismo' ? 'En línea' :
             (user?.last_login | niceDate))}}
           </p>
@@ -39,7 +39,7 @@
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="pressOptions">
       <ion-button (click)="pressOptions = false">
-        <ion-icon name="close"></ion-icon>
+        <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons
@@ -55,19 +55,19 @@
         (click)="edit()"
         *ngIf="auth.isMaster() && selectedMessage?.fromuser?.id == auth.currentUserValue.id"
       >
-        <ion-icon name="pencil-sharp"></ion-icon>
+        <ion-icon slot="icon-only" name="pencil-sharp"></ion-icon>
       </ion-button>
       <ion-button (click)="copy()">
-        <ion-icon name="copy-outline"></ion-icon>
+        <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
       </ion-button>
       <ion-button *ngIf="auth.isMaster()" (click)="reply()">
-        <ion-icon name="arrow-undo-outline"></ion-icon>
+        <ion-icon slot="icon-only" name="arrow-undo-outline"></ion-icon>
       </ion-button>
       <ion-button
         (click)="deleteMessage()"
         *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
       >
-        <ion-icon name="trash-outline"></ion-icon>
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -159,120 +159,12 @@
     </ion-item>
   </span>
 </ion-content>
-<ion-footer *ngIf="!chatForm.get('message').disabled && user?.id">
-  <div id="image-preview" *ngIf="image">
-    <ion-icon
-      name="close-circle"
-      slot="icon-only"
-      (click)="image = ''"
-    ></ion-icon>
-    <ion-thumbnail>
-      <img [src]="image" />
-    </ion-thumbnail>
-  </div>
-  <ion-item id="reply-to" lines="none" *ngIf="replyingTo">
-    <ion-icon name="arrow-undo-outline" slot="start"></ion-icon>
-    <ion-thumbnail *ngIf="selectedMessage.image">
-      <img [src]="selectedMessage?.image" />
-    </ion-thumbnail>
-    <ion-label>
-      <p class="reply-to-name">{{selectedMessage?.fromuser.name}}</p>
-      <p class="reply-to-text">{{selectedMessage?.text}}</p>
-    </ion-label>
-    <ion-icon
-      button
-      (click)="replyingTo = false"
-      name="close"
-      slot="end"
-    ></ion-icon>
-  </ion-item>
-  <ion-item id="edit" lines="none" *ngIf="editing">
-    <ion-icon name="pencil-sharp" slot="start"></ion-icon>
-    <ion-thumbnail *ngIf="selectedMessage.image">
-      <img [src]="selectedMessage?.image" />
-    </ion-thumbnail>
-    <ion-label>
-      <p class="reply-to-name">Editar mensaje</p>
-      <p class="reply-to-text">{{selectedMessage?.text}}</p>
-    </ion-label>
-    <ion-icon button (click)="closeEdit()" name="close" slot="end"></ion-icon>
-  </ion-item>
-  <ion-toolbar id="text-input">
-    <ion-buttons ion-activatable slot="start">
-      <ion-button (click)="openEmojis()">
-        <ion-icon
-          slot="icon-only"
-          [name]="toggled ? 'close-outline' : 'happy-outline'"
-        ></ion-icon>
-      </ion-button>
-      <ion-button
-        *ngIf="auth.isMaster() && !replyingTo"
-        (click)="openPictureSheet()"
-      >
-        <ion-icon slot="icon-only" name="camera"></ion-icon>
-      </ion-button>
-      <input
-        type="file"
-        accept="image/*"
-        #imageInput
-        style="display: none;"
-        name="default"
-        (change)="addPicture($event.target.files[0]);"
-      />
-    </ion-buttons>
-    <form [formGroup]="chatForm" autocomplete="off">
-      <ion-item lines="none">
-        <ion-textarea
-          placeholder="Escribe tu mensaje aquí"
-          autocapitalize="on"
-          (keydown.enter)="sendMessage($event)"
-          formControlName="message"
-          #textarea
-          autoGrow
-          rows="1"
-          (ionFocus)="toggled = false"
-          (ionChange)="setWriting()"
-        >
-        </ion-textarea>
-      </ion-item>
-    </form>
-    <ion-buttons ion-activatable slot="end">
-      <ion-button
-        color="primary"
-        [disabled]="!message.value && !image"
-        (click)="sendMessage()"
-      >
-        <ion-icon slot="icon-only" name="send"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  <emoji-mart
-    *ngIf="toggled"
-    isNative="true"
-    emoji="point_up"
-    darkMode="true"
-    showPreview="false"
-    [style]="{ width: '100%'}"
-    (emojiSelect)="addEmoji($event)"
-    title="Elige un emoji"
-    [i18n]="{
-    search: 'Busca el emoji perfecto',
-    emojilist: 'Listado de emojis',
-   found: 'Emoji no encontrado',
-    clear: 'Borrar',
-    categories: {
-      search: 'Resultados',
-      recent: 'Más usados',
-      people: 'Caras y personas',
-      nature: 'Animales y naturaleza',
-      foods: 'Comida y bebida',
-      activity: 'Actividad',
-      places: 'Viajes y lugares',
-      objects: 'Objetos',
-      symbols: 'Símbolos',
-      flags: 'Banderas',
-      custom: 'FrikiRadar'
-    }
-  }"
-  ></emoji-mart>
+<ion-footer *ngIf="user?.active && !user?.roles?.includes('ROLE_DEMO')">
+  <app-chat-input
+    (onWriting)="setWriting()"
+    (onSubmit)="sendMessage($event)"
+    [(replying)]="replying"
+    [(editing)]="editing"
+    [selectedMessage]="selectedMessage"
+  ></app-chat-input>
 </ion-footer>

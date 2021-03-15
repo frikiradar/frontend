@@ -46,7 +46,7 @@ export class ProfilePage implements OnInit {
     const id = this.route.snapshot.paramMap.get("id");
     try {
       this.loading = true;
-      this.user = await this.userSvc.getUser(+id);
+      this.user = await this.userSvc.getUser(id);
       if (this.user.avatar) {
         this.avatar = this.user.avatar;
       }

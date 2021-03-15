@@ -1,0 +1,168 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="!pressOptions">
+      <ion-back-button
+        (click)="source.close()"
+        text=""
+        defaultHref="/tabs/community"
+      ></ion-back-button>
+      <ion-avatar>
+        <ion-img *ngIf="room" [src]="room?.image" [alt]="room?.name"></ion-img>
+        <ion-skeleton-text animated *ngIf="!room"></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ room?.name }}</h2>
+        <p>
+          {{ toUserWriting}}
+        </p>
+      </ion-label>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="pressOptions">
+      <ion-button (click)="pressOptions = false">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="!pressOptions">
+      <ion-button (click)="showOptions($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="pressOptions">
+      <ion-button
+        (click)="edit()"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+      >
+        <ion-icon slot="icon-only" name="pencil-sharp"></ion-icon>
+      </ion-button>
+      <ion-button (click)="copy()">
+        <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="reply()">
+        <ion-icon slot="icon-only" name="arrow-undo-outline"></ion-icon>
+      </ion-button>
+      <ion-button
+        (click)="deleteMessage()"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+      >
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #chatlist (tap)="pressOptions = false">
+  <ion-infinite-scroll (ionInfinite)="loadChats($event)" position="top">
+    <ion-infinite-scroll-content loadingSpinner="dots">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <span
+    class="bubble {{ message.fromuser?.id == auth.currentUserValue?.id ? 'from' : 'to' }}"
+    *ngFor="let message of messages; let i = index"
+  >
+    <ion-chip
+      color="primary"
+      class="center"
+      *ngIf="
+        (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')
+      "
+    >
+      <ion-label color="secondary"
+        >{{ message.time_creation | date: "fullDate" }}</ion-label
+      >
+    </ion-chip>
+    <ion-item
+      lines="none"
+      button
+      (press)="selectMessage($event, message)"
+      [ngClass]="selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''"
+    >
+      <ion-avatar
+        (click)="showProfile(message.fromuser.id)"
+        *ngIf="auth.currentUserValue?.id !== message?.fromuser?.id && 
+          message?.fromuser?.thumbnail &&
+          (message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)"
+      >
+        <img [src]="message.fromuser.thumbnail" />
+      </ion-avatar>
+      <ion-card>
+        <div *ngIf="message.reply_to" class="replyfrom">
+          <ion-thumbnail *ngIf="message?.reply_to?.image">
+            <img [src]="message?.reply_to?.image" />
+          </ion-thumbnail>
+          <div class="replyfrom-message">
+            <p class="replyfrom-name">
+              {{message?.reply_to?.fromuser?.username}}
+            </p>
+            <p class="replyfrom-text">{{message?.reply_to?.text}}</p>
+          </div>
+        </div>
+        <div *ngIf="message.image">
+          <ion-img
+            (click)="openViewer(message.image, message.fromuser.username + ', ' + utils.niceDate(message.time_creation), message.text)"
+            [src]="message.image"
+          ></ion-img>
+          <ion-note class="note-image" *ngIf="!message?.text">
+            <span *ngIf="message?.edited">Editado</span>
+            {{ message.time_creation | date: "shortTime" }}
+            <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
+              <ion-icon *ngIf="message.sending" name="time"></ion-icon>
+              <ion-icon
+                *ngIf="!message.sending && !message.time_read"
+                name="checkmark"
+              ></ion-icon>
+              <ion-icon
+                *ngIf="message.time_read"
+                color="secondary"
+                name="checkmark-done"
+              ></ion-icon>
+            </span>
+          </ion-note>
+        </div>
+        <ion-card-content *ngIf="message.text">
+          <p
+            class="text-name"
+            *ngIf="auth.currentUserValue?.id !== message?.fromuser?.id && 
+          message?.fromuser?.thumbnail &&
+          (message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)"
+          >
+            <a (click)="showProfile(message.fromuser.id)"
+              >{{message.fromuser.username}}</a
+            >
+          </p>
+          <span
+            class="text"
+            [innerHTML]="message.text | linky:{className: 'linkified', mention: 'twitter'}"
+            (click)="$event.stopImmediatePropagation(); openUrl($event);"
+          ></span>
+          <ion-note class="note-text">
+            <span *ngIf="message?.edited">Editado</span>
+            {{ message.time_creation | date: "shortTime" }}
+            <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
+              <ion-icon *ngIf="message.sending" name="time"></ion-icon>
+              <ion-icon
+                *ngIf="!message.sending && !message.time_read"
+                name="checkmark"
+              ></ion-icon>
+              <ion-icon
+                *ngIf="message.time_read"
+                color="secondary"
+                name="checkmark-done"
+              ></ion-icon>
+            </span>
+          </ion-note>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </span>
+</ion-content>
+<ion-footer *ngIf="room?.visible">
+  <app-chat-input
+    (onWriting)="setWriting()"
+    (onSubmit)="sendMessage($event)"
+    [(replying)]="replying"
+    [(editing)]="editing"
+    [selectedMessage]="selectedMessage"
+    [mentions]="true"
+  ></app-chat-input>
+</ion-footer>

@@ -43,7 +43,7 @@ export class ChatService {
     formData.set("image", image);
     formData.set("touser", "" + id);
     formData.set("text", text);
-    this.uploadSvc.upload("chat-upload", formData);
+    return (await this.uploadSvc.upload("chat-upload", formData)) as Chat;
   }
 
   async writing(fromuser: number, touser: number) {

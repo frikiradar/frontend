@@ -16,7 +16,7 @@ export class UserService {
     private toast: ToastController
   ) {}
 
-  async getUser(id: User["id"]): Promise<User> {
+  async getUser(id: User["id"] | User["username"]): Promise<User> {
     try {
       return (await this.rest.get(`user/${id}`).toPromise()) as User;
     } catch (e) {
@@ -82,6 +82,12 @@ export class UserService {
     return this.rest
       .post(`search?page=${page}`, { query, order })
       .toPromise() as Promise<User[]>;
+  }
+
+  searchUsernames(query: string) {
+    return this.rest.get(`search-usernames/${query}`).toPromise() as Promise<
+      User[]
+    >;
   }
 
   activateUser(verification_code: string) {

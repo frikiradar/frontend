@@ -177,10 +177,7 @@
         >
       </ion-select>
     </ion-item>
-    <ion-item
-      *ngIf="
-        registerForm.get('meet').value"
-    >
+    <ion-item *ngIf="registerForm.get('meet').value">
       <ion-label position="floating">
         {{
           registerForm.get("meet").value === "friend"
@@ -244,24 +241,24 @@
       <ion-label
         ><p>
           Acepto el
-          <a (click)="urlSvc.openUrl('https://frikiradar.com/tos')">Aviso legal</a>
+          <a (click)="urlSvc.openUrl('https://frikiradar.com/tos')"
+            >Aviso legal</a
+          >
           y la
-          <a (click)="urlSvc.openUrl('https://frikiradar.com/politica-de-privacidad/')">Política de privacidad</a
+          <a
+            (click)="
+              urlSvc.openUrl('https://frikiradar.com/politica-de-privacidad/')
+            "
+            >Política de privacidad</a
           >
           de FrikiRadar.
         </p></ion-label
       >
-      <ion-checkbox
-        slot="start"
-        formControlName="acceptos"
-      ></ion-checkbox>
+      <ion-checkbox slot="start" formControlName="acceptos"></ion-checkbox>
     </ion-item>
     <ion-item lines="none">
       <ion-label><p>Confirmo ser mayor de edad.</p></ion-label>
-      <ion-checkbox
-        slot="start"
-        formControlName="adult"
-      ></ion-checkbox>
+      <ion-checkbox slot="start" formControlName="adult"></ion-checkbox>
     </ion-item>
     <ion-button color="primary" type="submit" expand="block"
       >Registrarme</ion-button
