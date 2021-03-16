@@ -132,7 +132,7 @@
           </p>
           <span
             class="text"
-            [innerHTML]="message.text | linky:{className: 'linkified', mention: 'twitter'}"
+            [innerHTML]="message.text | linky:{className: 'linkified'} | mentions:{mentions: message.mentions}"
             (click)="$event.stopImmediatePropagation(); openUrl($event);"
           ></span>
           <ion-note class="note-text">

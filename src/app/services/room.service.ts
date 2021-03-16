@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Chat } from "../models/chat";
 
 import { Room } from "../models/room";
+import { User } from "../models/user";
 import { Config, ConfigService } from "./config.service";
 import { PushService } from "./push.service";
 import { RestService } from "./rest.service";
@@ -47,18 +48,27 @@ export class RoomService {
     slug: string,
     name: string,
     text: string,
-    replyto?: number
+    replyto?: number,
+    mentions?: User["username"][]
   ) {
     return (await this.rest
-      .put("room-message", { slug, name, text, replyto })
+      .put("room-message", { slug, name, text, replyto, mentions })
       .toPromise()) as Chat;
   }
 
-  async sendImage(slug: string, image: File, text: string) {
+  async sendImage(
+    slug: string,
+    name: string,
+    image: File,
+    text: string,
+    mentions?: User["username"][]
+  ) {
     const formData: FormData = new FormData();
     formData.set("image", image);
     formData.set("slug", "" + slug);
+    formData.set("name", "" + name);
     formData.set("text", text);
+    formData.set("mentions", JSON.stringify(mentions));
     return (await this.uploadSvc.upload("room-upload", formData)) as Chat;
   }
 

@@ -27,7 +27,7 @@ ion-header {
   a {
     text-decoration: none;
 
-    &.linkified {
+    &.linkified, &.mention {
       color: #C4D83B !important;
     }
   }

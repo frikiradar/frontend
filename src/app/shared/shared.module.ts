@@ -16,11 +16,13 @@ import { NiceDatePipe } from "../nice-date.pipe";
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
 import { ChatInputComponent } from "../chat/chat-input/chat-input.component";
+import { MentionsPipe } from "../mentions.pipe";
 
 @NgModule({
   declarations: [
     ImagePreloadDirective,
     NiceDatePipe,
+    MentionsPipe,
     AmbassadorModal,
     CreditsModal,
     RequestGeolocationModal,
@@ -46,7 +48,12 @@ import { ChatInputComponent } from "../chat/chat-input/chat-input.component";
     WebcamModule,
     PickerModule
   ],
-  exports: [ImagePreloadDirective, NiceDatePipe, ChatInputComponent],
+  exports: [
+    ImagePreloadDirective,
+    NiceDatePipe,
+    MentionsPipe,
+    ChatInputComponent
+  ],
   providers: [Camera]
 })
 export class SharedModule {}

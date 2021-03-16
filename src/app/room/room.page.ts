@@ -241,6 +241,7 @@ export class RoomPage implements OnInit {
   async sendMessage(message?: Chat) {
     const text = message.text;
     const image = message.image;
+    const mentions = message.mentions;
 
     if (this.editing) {
       const chat = await this.chatSvc
@@ -262,7 +263,8 @@ export class RoomPage implements OnInit {
             text,
             image,
             time_creation: new Date(),
-            sending: true
+            sending: true,
+            mentions
           }
         ]
       ].filter((m: Chat) => m.text || m.image);
@@ -275,12 +277,12 @@ export class RoomPage implements OnInit {
       try {
         if (!image) {
           const chat = await this.roomSvc
-            .sendMessage(this.slug, this.room.name, text, replyToId)
+            .sendMessage(this.slug, this.room.name, text, replyToId, mentions)
             .then();
         } else if (image) {
           const imageFile = await this.utils.urlToFile(image);
           const chat = await this.roomSvc
-            .sendImage(this.slug, imageFile, text)
+            .sendImage(this.slug, this.room.name, imageFile, text, mentions)
             .then();
         }
 
@@ -390,13 +392,14 @@ export class RoomPage implements OnInit {
 
   async openUrl(event: any) {
     if (event.srcElement.href && event.target.className.includes("linkified")) {
-      if (event.target.innerHTML.includes("@")) {
-        event.preventDefault();
-        this.showProfile(event.target.innerHTML.replace("@", ""));
-      } else {
-        this.urlSvc.openUrl(event.srcElement.href);
-      }
+      this.urlSvc.openUrl(event.srcElement.href);
     }
+
+    if (event.srcElement.href && event.target.className.includes("mention")) {
+      event.preventDefault();
+      this.showProfile(event.target.innerHTML.replace("@", ""));
+    }
+
     return false;
   }
 

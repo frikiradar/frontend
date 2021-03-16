@@ -54,6 +54,7 @@ export class ChatInputComponent implements OnInit {
   textarea: IonTextarea;
   private inputAt = false;
   private mention: string;
+  public userMentions: User["username"][] = [];
   public usernames: User[];
   private writing = false;
 
@@ -151,7 +152,8 @@ export class ChatInputComponent implements OnInit {
 
     const message = {
       text: this.message.value ? this.message.value.trim() : "",
-      image: this.image
+      image: this.image,
+      mentions: this.userMentions
     };
 
     this.onSubmit.emit(message);
@@ -218,6 +220,7 @@ export class ChatInputComponent implements OnInit {
     this.message.setValue(
       this.message.value.replace(this.mention, `@${username}`)
     );
+    this.userMentions = [...this.userMentions, username];
     this.focusTextArea();
   }
 
@@ -228,13 +231,8 @@ export class ChatInputComponent implements OnInit {
           this.inputAt = true;
         }
 
-        if (text.charAt(text.length - 1) == " ") {
-          this.usernames = [];
-          this.inputAt = false;
-        }
-
         if (this.inputAt) {
-          const pattern = /\B@[a-z0-9._-]+/gi;
+          const pattern = /\B@[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+/gi;
           const matches = text.match(pattern);
           if (matches) {
             this.mention = matches[matches.length - 1];
