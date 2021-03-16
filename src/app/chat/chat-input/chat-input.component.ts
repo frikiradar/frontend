@@ -234,7 +234,7 @@ export class ChatInputComponent implements OnInit {
         }
 
         if (this.inputAt) {
-          const pattern = /\B@[a-z0-9_-]+/gi;
+          const pattern = /\B@[a-z0-9._-]+/gi;
           const matches = text.match(pattern);
           if (matches) {
             this.mention = matches[matches.length - 1];
@@ -251,7 +251,11 @@ export class ChatInputComponent implements OnInit {
         this.onWriting.emit(true);
       }
 
-      if (this.mention?.length > 3 && this.message.value.length > 3) {
+      if (
+        this.inputAt &&
+        this.mention?.length > 3 &&
+        this.message.value.length > 3
+      ) {
         this.usernames = await this.userSvc.searchUsernames(
           this.mention.replace("@", "")
         );
