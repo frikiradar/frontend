@@ -1,4 +1,4 @@
-Versión 2.0 Final:
+Versión 2.0 Final (Azeroth):
 --
 Novedades:
 * Nueva pestaña Comunidad con nuevas opciones sociales para FrikiRadar:

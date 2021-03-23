@@ -55,6 +55,7 @@ export class ViewStoriesModal implements OnInit {
     bottomClose: true,
     buttonDestroy: false,
     showDraggable: false,
+    handleKeyboard: false,
     onBackdropTap: () => {
       this.pane.destroy({ animate: true });
       this.slides.startAutoplay();
