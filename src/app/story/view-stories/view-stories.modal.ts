@@ -31,7 +31,7 @@ import { StoryService } from "../../services/story.service";
 })
 export class ViewStoriesModal implements OnInit {
   @Input() stories: Story[];
-  @ViewChild("slides", { static: false })
+  @ViewChild("slides", { static: true })
   public slides: IonSlides;
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
@@ -90,10 +90,6 @@ export class ViewStoriesModal implements OnInit {
     this.story = this.stories[0];
     this.setLikeStory();
     this.viewStory(this.stories[0]);
-  }
-
-  ngAfterViewInit() {
-    this.slides.update();
   }
 
   async showProfile(id: User["id"]) {
