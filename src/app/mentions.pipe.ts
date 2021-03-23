@@ -7,7 +7,6 @@ import { Pipe, PipeTransform } from "@angular/core";
 export class MentionsPipe implements PipeTransform {
   transform(value: any, data?: any) {
     if (data.mentions.length) {
-      console.log(value, data.mentions);
       const mentions = data.mentions;
       mentions.forEach((mention: string) => {
         value = value.replaceAll(

@@ -113,7 +113,7 @@ export class RoomPage implements OnInit {
     this.slug = this.route.snapshot.paramMap.get("slug");
     this.room = await this.roomSvc.getRoom(this.slug);
 
-    this.roomSvc.setNotifications(this.room);
+    // this.roomSvc.setNotifications(this.room);
 
     this.page = 1;
     try {
@@ -148,7 +148,7 @@ export class RoomPage implements OnInit {
           message.writing &&
           message.fromuser.name !== this.auth.currentUserValue.name
         ) {
-          this.toUserWriting = "Escribiendo " + message.fromuser.name + "...";
+          this.toUserWriting = message.fromuser.name + " está escribiendo...";
           setTimeout(() => {
             this.toUserWriting = "";
           }, 10000);

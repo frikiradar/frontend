@@ -8,6 +8,7 @@ import { ImageCropperModule } from "ngx-image-cropper";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { WebcamModule } from "ngx-webcam";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
+import { LinkyModule } from "ngx-linky";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
@@ -17,6 +18,8 @@ import { RequestGeolocationModal } from "../radar/request-geolocation-modal/requ
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
 import { ChatInputComponent } from "../chat/chat-input/chat-input.component";
 import { MentionsPipe } from "../mentions.pipe";
+import { StoryModal } from "../story/story.modal";
+import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { MentionsPipe } from "../mentions.pipe";
     RequestGeolocationModal,
     CropperModal,
     WebcamModal,
-    ChatInputComponent
+    ChatInputComponent,
+    StoryModal,
+    ViewStoriesModal
   ],
   entryComponents: [
     AmbassadorModal,
@@ -36,7 +41,9 @@ import { MentionsPipe } from "../mentions.pipe";
     RequestGeolocationModal,
     CropperModal,
     WebcamModal,
-    ChatInputComponent
+    ChatInputComponent,
+    StoryModal,
+    ViewStoriesModal
   ],
   imports: [
     FormsModule,
@@ -46,13 +53,15 @@ import { MentionsPipe } from "../mentions.pipe";
     NgxIonicImageViewerModule,
     ImageCropperModule,
     WebcamModule,
-    PickerModule
+    PickerModule,
+    LinkyModule
   ],
   exports: [
     ImagePreloadDirective,
     NiceDatePipe,
     MentionsPipe,
-    ChatInputComponent
+    ChatInputComponent,
+    LinkyModule
   ],
   providers: [Camera]
 })

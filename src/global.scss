@@ -197,3 +197,12 @@ ul {
     z-index: 1;
   }
 }
+
+.pane {
+  --cupertino-pane-background: #1a1a1a !important;
+  padding: 15px;
+
+  ion-label {
+    color: white !important;
+  }
+}

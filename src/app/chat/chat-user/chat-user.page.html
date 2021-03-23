@@ -22,9 +22,8 @@
               color="secondary"
               *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
               >&nbsp;</ion-badge
-            >{{ toUserWriting && auth.isMaster() ? toUserWriting :
-            ((user?.last_login | niceDate) === 'Ahora mismo' ? 'En línea' :
-            (user?.last_login | niceDate))}}
+            >{{ toUserWriting ? toUserWriting : ((user?.last_login | niceDate)
+            === 'Ahora mismo' ? 'En línea' : (user?.last_login | niceDate))}}
           </p>
         </ion-label>
       </ion-button>
@@ -53,14 +52,14 @@
     <ion-buttons slot="end" *ngIf="pressOptions">
       <ion-button
         (click)="edit()"
-        *ngIf="auth.isMaster() && selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
       >
         <ion-icon slot="icon-only" name="pencil-sharp"></ion-icon>
       </ion-button>
       <ion-button (click)="copy()">
         <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="auth.isMaster()" (click)="reply()">
+      <ion-button (click)="reply()">
         <ion-icon slot="icon-only" name="arrow-undo-outline"></ion-icon>
       </ion-button>
       <ion-button

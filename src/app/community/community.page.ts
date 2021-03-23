@@ -1,11 +1,23 @@
 import { Component, ViewChild } from "@angular/core";
-import { Event, NavigationStart, Router } from "@angular/router";
-import { IonSlides, MenuController } from "@ionic/angular";
+import {
+  ActivatedRoute,
+  Event,
+  NavigationStart,
+  Router
+} from "@angular/router";
+import { IonSlides, MenuController, ModalController } from "@ionic/angular";
+import { ItemReorderEventDetail } from "@ionic/core";
+import { Vibration } from "@ionic-native/vibration/ngx";
+
 import { Room } from "../models/room";
 import { Config, ConfigService } from "../services/config.service";
 import { RoomService } from "../services/room.service";
-
 import { AuthService } from "./../services/auth.service";
+import { StoryService } from "../services/story.service";
+import { Story } from "../models/story";
+import { StoryModal } from "../story/story.modal";
+import { User } from "../models/user";
+import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 
 @Component({
   selector: "app-community",
@@ -13,12 +25,12 @@ import { AuthService } from "./../services/auth.service";
   styleUrls: ["./community.page.scss"]
 })
 export class CommunityPage {
-  @ViewChild("stories", { static: false })
-  stories: IonSlides;
+  @ViewChild("storiesSlides", { static: false })
+  storiesSlides: IonSlides;
   public rooms: Room[];
+  public stories: Story[];
 
-  showSkeleton = true;
-  public param: "delivered" | "received" = "received";
+  public reorderActive = false;
 
   public storiesOpts = {
     slidesPerView: 4.5,
@@ -34,11 +46,16 @@ export class CommunityPage {
     public auth: AuthService,
     public menu: MenuController,
     private roomSvc: RoomService,
-    private config: ConfigService
+    private storySvc: StoryService,
+    private config: ConfigService,
+    public vibration: Vibration,
+    private modal: ModalController,
+    private route: ActivatedRoute
   ) {
     this.router.events.subscribe(async (event: Event) => {
       if (event instanceof NavigationStart) {
         if (event.url === "/tabs/community") {
+          this.getStories();
           this.getRooms();
         }
       }
@@ -46,15 +63,52 @@ export class CommunityPage {
   }
 
   async ngOnInit() {
+    const id = this.route.snapshot.paramMap.get("id");
+    if (id) {
+      try {
+        const story = await this.storySvc.getStory(+id);
+        this.showStory(story);
+      } catch (e) {
+        console.error("Historia no encontrada");
+        this.getStories();
+      }
+    } else {
+      this.getStories();
+    }
     this.getRooms();
   }
 
+  async getStories() {
+    this.stories = await this.storySvc.getStories();
+    this.stories.sort((a, b) => {
+      if (a.user.id === this.auth.currentUserValue.id) {
+        return 1;
+      }
+      if (a.user.id < b.user.id) {
+        return -1;
+      }
+      if (a.user.id > b.user.id) {
+        return 1;
+      }
+      return 0;
+    });
+
+    this.stories.map(s => {
+      if (
+        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.user.id === this.auth.currentUserValue.id
+      ) {
+        s.viewed = true;
+      }
+    });
+  }
+
   async getRooms() {
-    this.rooms = await this.roomSvc.getRooms();
+    let rooms = await this.roomSvc.getRooms();
     const rooms_config = (await this.config.get(
       "rooms_config"
     )) as Config["rooms_config"];
-    this.rooms.map(r => {
+    rooms.map(r => {
       let configRoom = rooms_config?.find(room => room.slug === r.slug);
       if (
         configRoom?.last_message < r?.last_message ||
@@ -63,9 +117,70 @@ export class CommunityPage {
         r.unread = true;
       }
     });
+
+    rooms = rooms.filter(r => {
+      if (this.auth.currentUserValue?.roles?.includes(r.permissions[0])) {
+        return r;
+      }
+    });
+
+    this.rooms = await this.roomSvc.orderRooms(rooms);
+  }
+
+  async newStory() {
+    const modal = await this.modal.create({
+      component: StoryModal,
+      keyboardClose: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+    await this.getStories();
+  }
+
+  async showStories(id: User["id"]) {
+    let stories = this.stories.filter(s => s.user.id === id);
+    stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
+    const modal = await this.modal.create({
+      component: ViewStoriesModal,
+      componentProps: { stories },
+      keyboardClose: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+    await this.getStories();
+  }
+
+  async showStory(story: Story) {
+    const stories = [story];
+    const modal = await this.modal.create({
+      component: ViewStoriesModal,
+      componentProps: { stories },
+      keyboardClose: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+    await this.getStories();
   }
 
   async showRoom(slug: Room["slug"]) {
-    this.router.navigate(["/room", slug]);
+    if (!this.reorderActive) {
+      this.router.navigate(["/room", slug]);
+    }
+  }
+
+  activateOptions() {
+    this.reorderActive = true;
+    this.vibration.vibrate(5);
+  }
+
+  reorderRooms(event: CustomEvent<ItemReorderEventDetail>) {
+    this.roomSvc.reorderRooms(event.detail.from, event.detail.to);
+    event.detail.complete();
   }
 }

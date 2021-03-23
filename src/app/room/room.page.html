@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!pressOptions">
       <ion-back-button
-        (click)="source.close()"
+        (click)="source?.close()"
         text=""
         defaultHref="/tabs/community"
       ></ion-back-button>
@@ -22,11 +22,11 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end" *ngIf="!pressOptions">
+    <!--<ion-buttons slot="end" *ngIf="!pressOptions">
       <ion-button (click)="showOptions($event)">
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons>-->
     <ion-buttons slot="end" *ngIf="pressOptions">
       <ion-button
         (click)="edit()"
@@ -126,9 +126,18 @@
           message?.fromuser?.thumbnail &&
           (message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)"
           >
-            <a (click)="showProfile(message.fromuser.id)"
+            <a
+              (click)="showProfile(message.fromuser.id)"
+              [ngClass]="message.fromuser?.roles?.includes('ROLE_MASTER') ? 'master' : ''"
               >{{message.fromuser.username}}</a
             >
+            <ion-icon
+              *ngIf="message.fromuser?.verified || message.fromuser?.roles?.includes('ROLE_MASTER')"
+              [name]="message.fromuser?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
+              slot="icon-only"
+              [color]="message.fromuser?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+              (click)="userSvc.showRole(message.fromuser)"
+            ></ion-icon>
           </p>
           <span
             class="text"

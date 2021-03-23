@@ -80,12 +80,26 @@ ion-label {
     }
 
     ion-card-content {
-      background: #9a1c42;
+      background: #42021f;
     }
   }
 
-  .text-name a{
-    color: #C4D83B !important;
+  .text-name {
+    a{
+      font-weight: bold;
+      color: #C4D83B !important;
+    }
+
+    a.master {
+      color: #5260ff !important;
+      font-weight: bold;
+    }
+
+    ion-icon {
+      font-size: 12px;
+      margin-left: 5px;
+      vertical-align: baseline;
+    }
   }
 
   .text {

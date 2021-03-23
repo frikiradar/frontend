@@ -1,0 +1,137 @@
+ion-label {
+    p,
+    h2 {
+        text-transform: none;
+        letter-spacing: normal;
+        margin: 0 0 0 10px;
+        text-align: left;
+    }
+
+    p {
+        font-size: 12px;
+
+        ion-badge {
+        margin-right: 5px;
+        border-radius: 15px;
+        z-index: 1;
+        width: 10px;
+        height: 10px;
+        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+        }
+    }
+}
+
+ion-card {
+    box-shadow: none;
+    background: transparent;
+    ion-thumbnail {
+        width: auto;
+        height: auto;
+        --border-radius: 15px;
+    }
+}
+
+#text-input, #comment-input {
+    ion-buttons {
+        margin: 0;
+    }
+
+    form {
+        width: 100%;
+    }
+
+    ion-item {
+      background: white;
+      border-radius: 30px;
+      margin-left: 8px;
+    }
+
+    ion-textarea {
+      --placeholder-color: #555555 !important;
+      color: #353535 !important;
+      padding: 5px 0 4px 15px;
+      margin: 0;
+      font-size: 12pt;
+    }
+
+    ion-label {
+      position: absolute;
+      z-index: 2;
+      right: 20px;
+      width: 30px !important;
+      min-width: 0px !important;
+      margin: 2px 0 !important;
+
+      ion-icon {
+        font-size: 30px;
+      }
+    }
+  }
+
+ion-footer {
+    ion-icon {
+        margin-right: 5px;
+    }
+    ion-label {
+        text-transform: none;
+    }
+}
+
+.views-pane {
+    display: none;
+
+    ion-avatar {
+        margin-right: 10px;
+    }
+}
+
+.comments-pane {
+    display: none;     
+
+    .text{
+        a{
+            color: #C4D83B !important;
+        }
+
+        span {
+            color: white;
+        }
+    }
+    
+    .note-date {
+        font-size: 10px;
+        color: #bbbbbb;
+        margin-left: 10px;
+    }
+    
+    ion-item {
+        margin-top: 3px;
+        margin-bottom: 3px;
+    }
+    
+    ion-avatar {
+        min-width: 40px;
+    }
+
+    ion-footer {
+        position: absolute;
+        bottom: 0;
+    }
+}
+
+
+#usernames {
+    position: absolute;
+    bottom: 70px;
+    right: 60px;
+    left: 60px;
+    box-shadow: 2px 2px 5px 1px rgb(0 0 0 / 75%);
+
+    ion-avatar {
+        margin-right: 10px;
+    }
+
+    ion-label {
+        color:white;
+    }
+}

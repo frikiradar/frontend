@@ -211,4 +211,74 @@ export class RoomService {
     this.config.set("rooms_config", rooms_config);
     this.push.removeChannel(room.slug);
   }
+
+  async reorderRooms(from: number, to: number) {
+    let rooms_config = (await this.config.get(
+      "rooms_config"
+    )) as Config["rooms_config"];
+
+    rooms_config.map((r, index) => {
+      if (r.order === from) {
+        r.order = to;
+      } else if (r.order > from && r.order <= to) {
+        r.order--;
+      } else if (r.order < from && r.order >= to) {
+        r.order++;
+      }
+    });
+    await this.config.set("rooms_config", rooms_config);
+  }
+
+  async orderRooms(rooms: Room[]): Promise<Room[]> {
+    let rooms_config = (await this.config.get(
+      "rooms_config"
+    )) as Config["rooms_config"];
+
+    if (rooms_config?.some(r => r.order)) {
+      // Ordename según la config
+      rooms.sort((a, b) => {
+        return (
+          rooms_config.find(r => r.slug === a.slug).order -
+          rooms_config.find(r => r.slug === b.slug).order
+        );
+      });
+    } else {
+      await this.initOrderRoom(rooms);
+    }
+    return rooms;
+  }
+
+  async initOrderRoom(rooms: Room[]) {
+    let rooms_config = (await this.config.get(
+      "rooms_config"
+    )) as Config["rooms_config"];
+    rooms.forEach((room, index) => {
+      if (rooms_config) {
+        if (rooms_config.some(r => r.slug === room.slug)) {
+          rooms_config.map(r => {
+            if (r.slug === room.slug) {
+              r.order = index;
+            }
+          });
+        } else {
+          rooms_config = [
+            ...rooms_config,
+            {
+              slug: room.slug,
+              order: index
+            }
+          ];
+        }
+      } else {
+        rooms_config = [
+          {
+            slug: room.slug,
+            order: index
+          }
+        ];
+      }
+    });
+
+    await this.config.set("rooms_config", rooms_config);
+  }
 }

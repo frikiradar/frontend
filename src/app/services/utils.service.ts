@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { SafeUrl } from "@angular/platform-browser";
 import { Camera } from "@ionic-native/camera/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";

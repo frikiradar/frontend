@@ -51,10 +51,7 @@
         [name]="emojis ? 'close-outline' : 'happy-outline'"
       ></ion-icon>
     </ion-button>
-    <ion-button
-      *ngIf="auth.isMaster() && !replying"
-      (click)="openPictureSheet()"
-    >
+    <ion-button *ngIf="!replying" (click)="openPictureSheet()">
       <ion-icon slot="icon-only" name="camera"></ion-icon>
     </ion-button>
     <input

@@ -47,6 +47,13 @@ const routes: Routes = [
               import("../community/community.module").then(
                 m => m.CommunityPageModule
               )
+          },
+          {
+            path: "story/:id",
+            loadChildren: () =>
+              import("../community/community.module").then(
+                m => m.CommunityPageModule
+              )
           }
         ]
       },

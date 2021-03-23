@@ -13,6 +13,7 @@ import {
   PopoverController,
   ToastController
 } from "@ionic/angular";
+import { Vibration } from "@ionic-native/vibration/ngx";
 
 import { Chat } from "../../models/chat";
 import { User } from "../../models/user";
@@ -69,7 +70,8 @@ export class ChatUserPage implements OnInit {
     private urlSvc: UrlService,
     public utils: UtilsService,
     public modalController: ModalController,
-    private popover: PopoverController
+    private popover: PopoverController,
+    private vibration: Vibration
   ) {}
 
   async ngOnInit() {
@@ -211,7 +213,12 @@ export class ChatUserPage implements OnInit {
       });
 
       this.source.addEventListener("error", async error => {
-        console.error("Error al conectarse al servidor de chat", error);
+        console.error(
+          "Error al conectarse al servidor de chat",
+          `connected: ${this.connected}`,
+          `conErrors: ${this.conErrors}`,
+          error
+        );
         this.conErrors++;
         if (error.type === "error" && this.conErrors === 5) {
           (
@@ -362,7 +369,7 @@ export class ChatUserPage implements OnInit {
 
   selectMessage(event: Event, message: Chat) {
     event.preventDefault();
-
+    this.vibration.vibrate(5);
     this.selectedMessage = message;
     this.pressOptions = true;
   }

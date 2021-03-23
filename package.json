@@ -68,6 +68,7 @@
     "cordova-promise-polyfill": "0.0.2",
     "cordova.plugins.diagnostic": "^3.9.2",
     "core-js": "^3.9.1",
+    "cupertino-pane": "^1.2.6",
     "es6-promise-plugin": "4.2.2",
     "event-source-polyfill": "^1.0.22",
     "firebase": "^8.2.9",

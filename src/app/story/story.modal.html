@@ -1,0 +1,74 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="publish()" [disabled]="!imageFile">
+        <ion-label color="primary">Publicar historia</ion-label>
+        <ion-icon color="primary" name="arrow-up-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form
+    [formGroup]="storyForm"
+    autocomplete="off"
+    class="ion-padding"
+    *ngIf="image"
+  >
+    <ion-thumbnail *ngIf="image">
+      <img [src]="image" />
+    </ion-thumbnail>
+    <ion-item *ngIf="image">
+      <ion-textarea
+        placeholder="Escribe un comentario o describe la foto"
+        rows="3"
+        formControlName="text"
+      ></ion-textarea>
+    </ion-item>
+  </form>
+  <div *ngIf="!image" class="full-center ion-padding">
+    <ion-icon name="camera-outline"></ion-icon>
+    <h2>Añade una imagen</h2>
+    <p>
+      Haz una foto o selecciona una imagen de tu galería para mostrar tu
+      historia.
+    </p>
+  </div>
+  <input
+    type="file"
+    accept="image/*"
+    #imageInput
+    style="display: none;"
+    name="avatar"
+    (change)="cropImagebyEvent($event)"
+  />
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="selectPicture('gallery')">
+        <ion-icon name="image-outline"></ion-icon>
+        <ion-label>Galería</ion-label>
+      </ion-button>
+      <!--<ion-button (click)="selectPicture('camera')">
+        <ion-icon name="camera-outline"></ion-icon>
+        <ion-label>Cámara</ion-label>
+      </ion-button>-->
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <!--<ion-button (click)="selectText()">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <ion-label>Texto</ion-label>
+      </ion-button>-->
+      <ion-button (click)="selectPicture('camera')">
+        <ion-icon name="camera-outline"></ion-icon>
+        <ion-label>Cámara</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

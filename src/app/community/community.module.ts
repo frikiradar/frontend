@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: "",
     component: CommunityPage
+  },
+  {
+    path: "story/:id",
+    component: CommunityPage
   }
 ];
 

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
-import { LinkyModule } from "ngx-linky";
 
 import { SharedModule } from "../shared/shared.module";
 import { RoomPage } from "./room.page";
@@ -25,7 +24,6 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LinkyModule,
     SharedModule,
     PickerModule
   ],

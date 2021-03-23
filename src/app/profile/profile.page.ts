@@ -39,7 +39,7 @@ export class ProfilePage implements OnInit {
     private toast: ToastController,
     private vibration: Vibration,
     private alert: AlertController,
-    private auth: AuthService
+    public auth: AuthService
   ) {}
 
   async ngOnInit() {
@@ -86,7 +86,7 @@ export class ProfilePage implements OnInit {
 
   async switchLike() {
     if (!this.user.like) {
-      this.vibration.vibrate(50);
+      this.vibration.vibrate(5);
       this.user = await this.userSvc.like(this.user.id);
       if (
         this.user.block_messages ||

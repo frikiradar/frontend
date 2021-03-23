@@ -66,6 +66,6 @@ export class ConfigService {
       config = {};
     }
     (config as any)[parameter] = value;
-    this.setConfig(config);
+    await this.setConfig(config);
   }
 }

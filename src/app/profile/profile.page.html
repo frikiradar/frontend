@@ -203,7 +203,7 @@
   </ng-template>
 </ion-content>
 
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border" *ngIf="auth.currentUserValue.id !== user?.id">
   <ion-toolbar>
     <ion-buttons *ngIf="user">
       <ion-grid>
