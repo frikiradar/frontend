@@ -234,16 +234,21 @@ export class RoomService {
       "rooms_config"
     )) as Config["rooms_config"];
 
-    if (rooms_config?.some(r => r.order)) {
+    if (
+      rooms_config &&
+      !rooms_config?.some(r => r.order === undefined) &&
+      rooms_config?.length === rooms.length
+    ) {
       // Ordename según la config
       rooms.sort((a, b) => {
         return (
-          rooms_config.find(r => r.slug === a.slug).order -
-          rooms_config.find(r => r.slug === b.slug).order
+          rooms_config.find(r => r.slug === a.slug)?.order -
+          rooms_config.find(r => r.slug === b.slug)?.order
         );
       });
     } else {
       await this.initOrderRoom(rooms);
+      await this.orderRooms(rooms);
     }
     return rooms;
   }
@@ -257,7 +262,9 @@ export class RoomService {
         if (rooms_config.some(r => r.slug === room.slug)) {
           rooms_config.map(r => {
             if (r.slug === room.slug) {
-              r.order = index;
+              if (r.order === undefined) {
+                r.order = index;
+              }
             }
           });
         } else {
