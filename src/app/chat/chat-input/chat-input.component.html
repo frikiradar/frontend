@@ -8,6 +8,9 @@
     *ngFor="let u of usernames"
     (click)="setMention(u.username)"
   >
+    <ion-avatar>
+      <img [src]="u.thumbnail" />
+    </ion-avatar>
     <ion-label>{{ u.username }}</ion-label>
   </ion-item>
 </ion-list>

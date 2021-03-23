@@ -22,10 +22,14 @@ ion-thumbnail {
     left: 60px;
     box-shadow: 2px 2px 5px 1px rgb(0 0 0 / 75%);
 
-    ion-label {
-      color:white;
+    ion-avatar {
+        margin-right: 10px;
     }
-  }
+
+    ion-label {
+        color:white;
+    }
+}
 
   ion-item#reply-to, ion-item#edit {
     ion-icon {
