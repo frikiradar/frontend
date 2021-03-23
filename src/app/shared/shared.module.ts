@@ -20,6 +20,7 @@ import { ChatInputComponent } from "../chat/chat-input/chat-input.component";
 import { MentionsPipe } from "../mentions.pipe";
 import { StoryModal } from "../story/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
     WebcamModal,
     ChatInputComponent,
     StoryModal,
-    ViewStoriesModal
+    ViewStoriesModal,
+    CommentLikesModal
   ],
   entryComponents: [
     AmbassadorModal,
@@ -43,7 +45,8 @@ import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
     WebcamModal,
     ChatInputComponent,
     StoryModal,
-    ViewStoriesModal
+    ViewStoriesModal,
+    CommentLikesModal
   ],
   imports: [
     FormsModule,

@@ -172,7 +172,10 @@
         <ion-note class="note-date">
           <span>{{ comment.time_creation | date: "shortTime" }}</span>
           &nbsp;&nbsp;&nbsp;
-          <span *ngIf="comment?.likes.length"
+          <span
+            *ngIf="comment?.likes.length"
+            button
+            (click)="viewCommentLikes(comment.likes)"
             >{{ comment.likes.length }} kokoros</span
           >
           &nbsp;&nbsp;&nbsp;

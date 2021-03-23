@@ -23,6 +23,7 @@ import { AuthService } from "src/app/services/auth.service";
 import { UrlService } from "src/app/services/url.service";
 import { UserService } from "src/app/services/user.service";
 import { StoryService } from "../../services/story.service";
+import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
 
 @Component({
   selector: "view-stories-modal",
@@ -72,6 +73,7 @@ export class ViewStoriesModal implements OnInit {
 
   constructor(
     public modal: ModalController,
+    private likeModal: ModalController,
     public formBuilder: FormBuilder,
     public platform: Platform,
     private storySvc: StoryService,
@@ -257,6 +259,22 @@ export class ViewStoriesModal implements OnInit {
     await actionSheet.present();
     await actionSheet.onDidDismiss();
     this.slides.startAutoplay();
+  }
+
+  async viewCommentLikes(likes: Story["comments"][0]["likes"]) {
+    const modal = await this.likeModal.create({
+      component: CommentLikesModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      componentProps: { likes },
+      cssClass: "medium-modal"
+    });
+
+    await modal.present();
+    const data = await modal.onDidDismiss();
+    if (data?.data?.showProfile) {
+      this.close();
+    }
   }
 
   async reply(comment: Story["comments"][0]) {

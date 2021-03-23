@@ -168,10 +168,19 @@ ion-toast.md {
 }
 
 .full-modal .modal-wrapper {
-  @media (min-width: 992px) {
+  @media (min-width: 668px) {
     --height: 100%;
     --width: 50%;
     --border-radius: 8px;
+  }
+}
+
+.medium-modal .modal-wrapper {
+  @media (max-width: 667px) {
+    --height: 70%;
+    --width: 70%;
+    --border-radius: 8px;
+    box-shadow: 1px 1px 100px 1px;
   }
 }
 
