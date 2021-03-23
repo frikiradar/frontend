@@ -146,7 +146,8 @@ export class CommunityPage {
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,
-      showBackdrop: true
+      showBackdrop: true,
+      cssClass: "full-modal"
     });
 
     await modal.present();
@@ -160,7 +161,8 @@ export class CommunityPage {
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,
-      showBackdrop: true
+      showBackdrop: true,
+      cssClass: "full-modal"
     });
 
     await modal.present();

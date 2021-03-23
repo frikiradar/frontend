@@ -163,10 +163,16 @@ ion-toast.md {
   --color: #353535;
 }
 
-.preview-modal .modal-wrapper {
-  --height: 80%;
-  --width: 80%;
-  --border-radius: 8px;
+.ion-page, .modal-wrapper {
+  background: #1a1a1a !important;
+}
+
+.full-modal .modal-wrapper {
+  @media (min-width: 992px) {
+    --height: 100%;
+    --width: 50%;
+    --border-radius: 8px;
+  }
 }
 
 ul {

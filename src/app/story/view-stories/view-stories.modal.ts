@@ -56,6 +56,7 @@ export class ViewStoriesModal implements OnInit {
     buttonDestroy: false,
     showDraggable: false,
     handleKeyboard: false,
+    initialBreak: "top",
     onBackdropTap: () => {
       this.pane.destroy({ animate: true });
       this.slides.startAutoplay();
@@ -210,10 +211,7 @@ export class ViewStoriesModal implements OnInit {
 
   async viewComments() {
     this.slides.stopAutoplay();
-    this.pane = new CupertinoPane(".comments-pane", {
-      initialBreak: "top",
-      ...this.paneSettings
-    });
+    this.pane = new CupertinoPane(".comments-pane", this.paneSettings);
     this.pane.present({ animate: true });
   }
 

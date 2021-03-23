@@ -11,7 +11,6 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
-import { firebase } from "@firebase/app";
 
 import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
@@ -19,7 +18,6 @@ import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
 import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
-import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-root",
@@ -108,21 +106,26 @@ export class AppComponent {
   async backButtonStatus() {
     this.platform.backButton.subscribe(async () => {
       if (this.router.url.includes("/tabs/")) {
-        this.backButtonCount++;
+        const modal = await this.modal.getTop();
+        if (modal) {
+          modal.dismiss();
+        } else {
+          this.backButtonCount++;
 
-        switch (this.backButtonCount) {
-          case 1:
-            (
-              await this.toastController.create({
-                message: "Pulsa de nuevo para salir de la aplicación",
-                duration: 2000,
-                position: "bottom"
-              })
-            ).present();
-            break;
+          switch (this.backButtonCount) {
+            case 1:
+              (
+                await this.toastController.create({
+                  message: "Pulsa de nuevo para salir de la aplicación",
+                  duration: 2000,
+                  position: "bottom"
+                })
+              ).present();
+              break;
 
-          default:
-            navigator["app"].exitApp();
+            default:
+              navigator["app"].exitApp();
+          }
         }
       } else {
         // this.nav.back();

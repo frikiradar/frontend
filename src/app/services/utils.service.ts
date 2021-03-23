@@ -75,7 +75,8 @@ export class UtilsService {
       componentProps: {
         event,
         src
-      }
+      },
+      cssClass: "full-modal"
     });
     await modal.present();
 
@@ -92,7 +93,8 @@ export class UtilsService {
 
   async webcamImage(name: string = "default"): Promise<File | boolean> {
     const modal = await this.modal.create({
-      component: WebcamModal
+      component: WebcamModal,
+      cssClass: "full-modal"
     });
     await modal.present();
 
