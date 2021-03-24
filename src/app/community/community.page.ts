@@ -79,21 +79,15 @@ export class CommunityPage {
   }
 
   async getStories() {
-    this.stories = await this.storySvc.getStories();
-    this.stories.sort((a, b) => {
-      if (a.user.id === this.auth.currentUserValue.id) {
-        return 1;
-      }
-      if (a.user.id < b.user.id) {
-        return -1;
-      }
-      if (a.user.id > b.user.id) {
-        return 1;
-      }
-      return 0;
-    });
+    let stories = await this.storySvc.getStories();
+    stories.sort((a, b) => a.user.id - b.user.id);
 
-    this.stories.map(s => {
+    stories = [
+      ...stories.filter(s => s.user.id === this.auth.currentUserValue.id),
+      ...stories.filter(s => s.user.id !== this.auth.currentUserValue.id)
+    ];
+
+    stories.map(s => {
       if (
         s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
         s.user.id === this.auth.currentUserValue.id
@@ -101,6 +95,8 @@ export class CommunityPage {
         s.viewed = true;
       }
     });
+
+    this.stories = stories;
   }
 
   async getRooms() {

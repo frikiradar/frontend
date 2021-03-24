@@ -133,7 +133,10 @@ export class ViewStoriesModal implements OnInit {
 
   setLikeStory() {
     this.story.viewStories.map(
-      v => (v.user.like = !!this.story.likeStories.some(l => l.user))
+      v =>
+        (v.user.like = this.story.likeStories.some(
+          l => l.user.id === v.user.id
+        ))
     );
     this.story.like = !!this.story.likeStories.some(
       l => l.user.id === this.auth.currentUserValue.id
@@ -226,7 +229,7 @@ export class ViewStoriesModal implements OnInit {
           icon: "trash-outline",
           handler: async () => {
             try {
-              this.storySvc.deleteStory(story.id);
+              await this.storySvc.deleteStory(story.id);
               (
                 await this.toast.create({
                   message: "Historia eliminada correctamente",
