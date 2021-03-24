@@ -17,7 +17,7 @@ import { StoryService } from "../services/story.service";
 import { Story } from "../models/story";
 import { StoryModal } from "../story/story.modal";
 import { User } from "../models/user";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { UtilsService } from "../services/utils.service";
 
 @Component({
   selector: "app-community",
@@ -29,6 +29,7 @@ export class CommunityPage {
   storiesSlides: IonSlides;
   public rooms: Room[];
   public stories: Story[];
+  public groupedStories: Story[] = [];
 
   public reorderActive = false;
 
@@ -50,7 +51,8 @@ export class CommunityPage {
     private config: ConfigService,
     public vibration: Vibration,
     private modal: ModalController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private utils: UtilsService
   ) {
     this.router.events.subscribe(async (event: Event) => {
       if (event instanceof NavigationStart) {
@@ -87,16 +89,13 @@ export class CommunityPage {
       ...stories.filter(s => s.user.id !== this.auth.currentUserValue.id)
     ];
 
-    stories.map(s => {
-      if (
-        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
-        s.user.id === this.auth.currentUserValue.id
-      ) {
-        s.viewed = true;
+    this.stories = stories;
+
+    stories.forEach(s => {
+      if (!this.groupedStories.some(g => g.user.id === s.user.id)) {
+        this.groupedStories.push(s);
       }
     });
-
-    this.stories = stories;
   }
 
   async getRooms() {
@@ -138,31 +137,13 @@ export class CommunityPage {
   async showStories(id: User["id"]) {
     let stories = this.stories.filter(s => s.user.id === id);
     stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
-    const modal = await this.modal.create({
-      component: ViewStoriesModal,
-      componentProps: { stories },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal"
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
+    await this.utils.showStories(stories);
     await this.getStories();
   }
 
   async showStory(story: Story) {
     const stories = [story];
-    const modal = await this.modal.create({
-      component: ViewStoriesModal,
-      componentProps: { stories },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal"
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
+    await this.utils.showStories(stories);
     await this.getStories();
   }
 

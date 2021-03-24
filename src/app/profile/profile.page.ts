@@ -10,9 +10,11 @@ import {
   ToastController
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
+import { Story } from "../models/story";
 
 import { User } from "../models/user";
 import { OptionsPopover } from "../options-popover/options-popover";
+import { StoryService } from "../services/story.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { AuthService } from "./../services/auth.service";
@@ -25,7 +27,7 @@ import { AuthService } from "./../services/auth.service";
 })
 export class ProfilePage implements OnInit {
   public user: User;
-  public avatar: SafeResourceUrl;
+  public stories: Story[];
   public loading = true;
   public pulse: any;
 
@@ -39,7 +41,8 @@ export class ProfilePage implements OnInit {
     private toast: ToastController,
     private vibration: Vibration,
     private alert: AlertController,
-    public auth: AuthService
+    public auth: AuthService,
+    private storiesSvc: StoryService
   ) {}
 
   async ngOnInit() {
@@ -47,10 +50,8 @@ export class ProfilePage implements OnInit {
     try {
       this.loading = true;
       this.user = await this.userSvc.getUser(id);
-      if (this.user.avatar) {
-        this.avatar = this.user.avatar;
-      }
       this.loading = false;
+      this.stories = await this.storiesSvc.getUserStories(+id);
     } catch (e) {
       this.loading = false;
     }
@@ -163,6 +164,13 @@ export class ProfilePage implements OnInit {
       }
     });
     return await popover.present();
+  }
+
+  async showStories(id: User["id"]) {
+    let stories = this.stories.filter(s => s.user.id === id);
+    stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
+    await this.utils.showStories(stories);
+    this.stories = await this.storiesSvc.getUserStories(+id);
   }
 
   back() {

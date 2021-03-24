@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   Output,
   ViewChild,
   EventEmitter,
@@ -29,7 +28,7 @@ import { User } from "src/app/models/user";
   templateUrl: "./chat-input.component.html",
   styleUrls: ["./chat-input.component.scss"]
 })
-export class ChatInputComponent implements OnInit {
+export class ChatInputComponent {
   @Output() onWriting: EventEmitter<boolean> = new EventEmitter();
   @Output() onSubmit: EventEmitter<Chat> = new EventEmitter();
   @Output() editingChange: EventEmitter<boolean> = new EventEmitter(true);
@@ -71,12 +70,6 @@ export class ChatInputComponent implements OnInit {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required])
     });
-  }
-
-  ngOnInit() {
-    setTimeout(() => {
-      this.focusTextArea();
-    }, 1000);
   }
 
   ngOnChanges(changes: SimpleChanges) {

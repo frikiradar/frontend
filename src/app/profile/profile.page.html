@@ -56,6 +56,14 @@
           <img [src]="image" default="/assets/img/users/default.jpg" />
         </ion-slide>
       </ion-slides>
+      <div *ngIf="stories?.length" id="stories">
+        <ion-avatar
+          [ngClass]="stories[0].viewed ? '' : 'not-view'"
+          (click)="showStories(stories[0].user.id)"
+        >
+          <img [src]="stories[0].image" [alt]="stories[0]?.text" />
+        </ion-avatar>
+      </div>
 
       <div class="match full-center">{{ user.match }}%</div>
 

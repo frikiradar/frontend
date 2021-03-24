@@ -33,34 +33,3 @@
         box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
       }
 }
-
-#stories {
-    ion-avatar {
-        width: 58px;
-        height: 58px;
-
-        &.not-view {
-            border: 2px solid #e91e63;
-        }
-    }
-
-    ion-badge {
-        position: absolute;
-        left: 45px;
-        border-radius: 15px;
-        z-index: 1;
-        width: 22px;
-        height: 22px;
-        bottom: 7px;
-        border: 2px solid #1a1a1a;
-        font-size: 14pt;
-        line-height: 0.7;
-    }
-
-    ion-label {
-        font-size: 12px;
-        color: white;
-        position: relative;
-        bottom: 10px;
-    }
-}

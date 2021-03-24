@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
+import { ModalController } from "@ionic/angular";
 
 import { Story } from "../models/story";
 import { User } from "../models/user";
+import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
@@ -9,14 +11,45 @@ import { UploadService } from "./upload.service";
   providedIn: "root"
 })
 export class StoryService {
-  constructor(private rest: RestService, private uploadSvc: UploadService) {}
+  constructor(
+    private rest: RestService,
+    private uploadSvc: UploadService,
+    private auth: AuthService,
+    private modal: ModalController
+  ) {}
 
   async getStory(id: Story["id"]) {
     return (await this.rest.get(`story/${id}`).toPromise()) as Story;
   }
 
+  async getUserStories(id: User["id"]) {
+    const stories = (await this.rest
+      .get(`user-stories/${id}`)
+      .toPromise()) as Story[];
+    stories.map(s => {
+      if (
+        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.user.id === this.auth.currentUserValue.id
+      ) {
+        s.viewed = true;
+      }
+    });
+
+    return stories;
+  }
+
   async getStories() {
-    return (await this.rest.get("stories").toPromise()) as Story[];
+    const stories = (await this.rest.get("stories").toPromise()) as Story[];
+    stories.map(s => {
+      if (
+        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.user.id === this.auth.currentUserValue.id
+      ) {
+        s.viewed = true;
+      }
+    });
+
+    return stories;
   }
 
   async sendStory(image: File, text: string) {

@@ -390,6 +390,14 @@ export class RoomPage implements OnInit {
     }
   }
 
+  async dragItem(event: any, message: Chat) {
+    this.selectedMessage = message;
+    if (event.detail.ratio < -0.9) {
+      event.target.close();
+      this.reply();
+    }
+  }
+
   async openUrl(event: any) {
     if (event.srcElement.href && event.target.className.includes("linkified")) {
       this.urlSvc.openUrl(event.srcElement.href);

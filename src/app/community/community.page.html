@@ -54,21 +54,19 @@
             <ion-badge color="tertiary">+</ion-badge>
           </ion-avatar>
         </ion-item>
-        <ion-label>Añadir</ion-label>
+        <ion-label>Añadir historia</ion-label>
       </div>
     </ion-slide>
-    <span *ngFor="let story of stories; let i = index">
-      <ion-slide *ngIf="story?.user?.id !== stories[i - 1]?.user?.id">
-        <div>
-          <ion-item button lines="none" (click)="showStories(story.user.id)">
-            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
-              <img [src]="story.image" [alt]="story.text" />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>{{story.user.username}}</ion-label>
-        </div>
-      </ion-slide>
-    </span>
+    <ion-slide *ngFor="let story of groupedStories; let i = index">
+      <div>
+        <ion-item button lines="none" (click)="showStories(story.user.id)">
+          <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
+            <img [src]="story.image" [alt]="story.text" />
+          </ion-avatar>
+        </ion-item>
+        <ion-label>{{story.user.username}}</ion-label>
+      </div>
+    </ion-slide>
   </ion-slides>
 
   <ion-label>
