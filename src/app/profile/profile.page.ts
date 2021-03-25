@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
   AlertController,
+  ModalController,
   NavController,
   PopoverController,
   ToastController
@@ -17,6 +18,7 @@ import { OptionsPopover } from "../options-popover/options-popover";
 import { StoryService } from "../services/story.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
+import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { AuthService } from "./../services/auth.service";
 
 @Component({
@@ -42,19 +44,31 @@ export class ProfilePage implements OnInit {
     private vibration: Vibration,
     private alert: AlertController,
     public auth: AuthService,
-    private storiesSvc: StoryService
+    private storiesSvc: StoryService,
+    private modal: ModalController
   ) {}
 
   async ngOnInit() {
-    const id = this.route.snapshot.paramMap.get("id");
+    const param = this.route.snapshot.paramMap.get("id");
+    let id = undefined;
+    if (!param) {
+      id = this.auth.currentUserValue.id;
+    } else {
+      id = param;
+    }
+    console.log(id);
     try {
       this.loading = true;
       this.user = await this.userSvc.getUser(id);
       this.loading = false;
-      this.stories = await this.storiesSvc.getUserStories(+id);
+      this.stories = await this.storiesSvc.getUserStories(this.user.id);
     } catch (e) {
       this.loading = false;
     }
+  }
+
+  editProfile() {
+    this.router.navigate(["/edit-profile"]);
   }
 
   getTagsCategory(category: string) {
@@ -169,7 +183,15 @@ export class ProfilePage implements OnInit {
   async showStories(id: User["id"]) {
     let stories = this.stories.filter(s => s.user.id === id);
     stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
-    await this.utils.showStories(stories);
+    const modal = await this.modal.create({
+      component: ViewStoriesModal,
+      componentProps: { stories },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal"
+    });
+    await modal.present();
+    await modal.onDidDismiss();
     this.stories = await this.storiesSvc.getUserStories(+id);
   }
 

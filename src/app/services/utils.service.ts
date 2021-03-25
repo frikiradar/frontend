@@ -7,6 +7,7 @@ import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, ModalController, Platform } from "@ionic/angular";
 import { CropperModal } from "../cropper/cropper.modal";
 import { Story } from "../models/story";
+import { StoryModal } from "../story/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 
@@ -245,18 +246,5 @@ export class UtilsService {
 
   format_two_digits(n: string | number) {
     return n < 10 ? "0" + n : n;
-  }
-
-  async showStories(stories: Story[]) {
-    const modal = await this.modal.create({
-      component: ViewStoriesModal,
-      componentProps: { stories },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal"
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
   }
 }

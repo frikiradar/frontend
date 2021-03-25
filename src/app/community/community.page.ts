@@ -18,6 +18,7 @@ import { Story } from "../models/story";
 import { StoryModal } from "../story/story.modal";
 import { User } from "../models/user";
 import { UtilsService } from "../services/utils.service";
+import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 
 @Component({
   selector: "app-community",
@@ -137,14 +138,27 @@ export class CommunityPage {
   async showStories(id: User["id"]) {
     let stories = this.stories.filter(s => s.user.id === id);
     stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
-    await this.utils.showStories(stories);
+    await this.showStoriesModal(stories);
     await this.getStories();
   }
 
   async showStory(story: Story) {
     const stories = [story];
-    await this.utils.showStories(stories);
+    await this.showStoriesModal(stories);
     await this.getStories();
+  }
+
+  async showStoriesModal(stories: Story[]) {
+    const modal = await this.modal.create({
+      component: ViewStoriesModal,
+      componentProps: { stories },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal"
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   async showRoom(slug: Room["slug"]) {

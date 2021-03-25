@@ -93,69 +93,82 @@
         >{{ message.time_creation | date: "fullDate" }}</ion-label
       >
     </ion-chip>
-    <ion-item
-      lines="none"
-      button
-      (press)="selectMessage($event, message)"
-      [ngClass]="selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''"
-    >
-      <ion-card>
-        <div *ngIf="message.reply_to" class="replyfrom">
-          <ion-thumbnail *ngIf="message?.reply_to?.image">
-            <img [src]="message?.reply_to?.image" />
-          </ion-thumbnail>
-          <div class="replyfrom-message">
-            <p class="replyfrom-name">{{message?.reply_to?.fromuser?.name}}</p>
-            <p class="replyfrom-text">{{message?.reply_to?.text}}</p>
+    <ion-item-sliding (ionDrag)="dragItem($event, message);">
+      <ion-item-options side="start">
+        <ion-item-option color="#1a1a1a">
+          <ion-icon
+            slot="icon-only"
+            name="arrow-undo-outline"
+            color="light"
+          ></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+      <ion-item
+        lines="none"
+        button
+        (press)="selectMessage($event, message)"
+        [ngClass]="selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''"
+      >
+        <ion-card>
+          <div *ngIf="message.reply_to" class="replyfrom">
+            <ion-thumbnail *ngIf="message?.reply_to?.image">
+              <img [src]="message?.reply_to?.image" />
+            </ion-thumbnail>
+            <div class="replyfrom-message">
+              <p class="replyfrom-name">
+                {{message?.reply_to?.fromuser?.name}}
+              </p>
+              <p class="replyfrom-text">{{message?.reply_to?.text}}</p>
+            </div>
           </div>
-        </div>
-        <div *ngIf="message.image">
-          <ion-img
-            (click)="openViewer(message.image, message.fromuser.name + ', ' + utils.niceDate(message.time_creation), message.text)"
-            [src]="message.image"
-          ></ion-img>
-          <ion-note class="note-image" *ngIf="!message?.text">
-            <span *ngIf="message?.edited">Editado</span>
-            {{ message.time_creation | date: "shortTime" }}
-            <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
-              <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-              <ion-icon
-                *ngIf="!message.sending && !message.time_read"
-                name="checkmark"
-              ></ion-icon>
-              <ion-icon
-                *ngIf="message.time_read"
-                color="secondary"
-                name="checkmark-done"
-              ></ion-icon>
-            </span>
-          </ion-note>
-        </div>
-        <ion-card-content *ngIf="message.text">
-          <span
-            class="text"
-            [innerHTML]="message.text | linky:{className: 'linkified'}"
-            (click)="$event.stopImmediatePropagation(); openUrl($event);"
-          ></span>
-          <ion-note class="note-text">
-            <span *ngIf="message?.edited">Editado</span>
-            {{ message.time_creation | date: "shortTime" }}
-            <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
-              <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-              <ion-icon
-                *ngIf="!message.sending && !message.time_read"
-                name="checkmark"
-              ></ion-icon>
-              <ion-icon
-                *ngIf="message.time_read"
-                color="secondary"
-                name="checkmark-done"
-              ></ion-icon>
-            </span>
-          </ion-note>
-        </ion-card-content>
-      </ion-card>
-    </ion-item>
+          <div *ngIf="message.image">
+            <ion-img
+              (click)="openViewer(message.image, message.fromuser.name + ', ' + utils.niceDate(message.time_creation), message.text)"
+              [src]="message.image"
+            ></ion-img>
+            <ion-note class="note-image" *ngIf="!message?.text">
+              <span *ngIf="message?.edited">Editado</span>
+              {{ message.time_creation | date: "shortTime" }}
+              <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
+                <ion-icon *ngIf="message.sending" name="time"></ion-icon>
+                <ion-icon
+                  *ngIf="!message.sending && !message.time_read"
+                  name="checkmark"
+                ></ion-icon>
+                <ion-icon
+                  *ngIf="message.time_read"
+                  color="secondary"
+                  name="checkmark-done"
+                ></ion-icon>
+              </span>
+            </ion-note>
+          </div>
+          <ion-card-content *ngIf="message.text">
+            <span
+              class="text"
+              [innerHTML]="message.text | linky:{className: 'linkified'}"
+              (click)="$event.stopImmediatePropagation(); openUrl($event);"
+            ></span>
+            <ion-note class="note-text">
+              <span *ngIf="message?.edited">Editado</span>
+              {{ message.time_creation | date: "shortTime" }}
+              <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
+                <ion-icon *ngIf="message.sending" name="time"></ion-icon>
+                <ion-icon
+                  *ngIf="!message.sending && !message.time_read"
+                  name="checkmark"
+                ></ion-icon>
+                <ion-icon
+                  *ngIf="message.time_read"
+                  color="secondary"
+                  name="checkmark-done"
+                ></ion-icon>
+              </span>
+            </ion-note>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+    </ion-item-sliding>
   </span>
 </ion-content>
 <ion-footer *ngIf="user?.active && !user?.roles?.includes('ROLE_DEMO')">

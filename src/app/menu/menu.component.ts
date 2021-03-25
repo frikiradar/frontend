@@ -29,8 +29,8 @@ export class MenuComponent {
     public userSvc: UserService
   ) {}
 
-  editProfile() {
-    this.router.navigate(["/edit-profile"]);
+  viewProfile() {
+    this.router.navigate(["/profile"]);
     this.menu.close();
   }
 

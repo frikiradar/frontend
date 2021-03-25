@@ -24,6 +24,7 @@ import { UrlService } from "src/app/services/url.service";
 import { UserService } from "src/app/services/user.service";
 import { StoryService } from "../../services/story.service";
 import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
+import { StoryModal } from "../story.modal";
 
 @Component({
   selector: "view-stories-modal",
@@ -73,6 +74,7 @@ export class ViewStoriesModal implements OnInit {
 
   constructor(
     public modal: ModalController,
+    private modalCreate: ModalController,
     private likeModal: ModalController,
     public formBuilder: FormBuilder,
     public platform: Platform,
@@ -106,6 +108,7 @@ export class ViewStoriesModal implements OnInit {
   async slide() {
     this.comment.setValue("");
     this.slides.getActiveIndex().then(index => {
+      console.log(index);
       this.story = this.stories[index];
       this.setLikeStory();
       this.viewStory(this.stories[index]);
@@ -206,6 +209,7 @@ export class ViewStoriesModal implements OnInit {
       text,
       this.userMentions
     );
+    this.setLikeStory();
   }
 
   async viewViews() {
@@ -224,6 +228,20 @@ export class ViewStoriesModal implements OnInit {
     this.slides.stopAutoplay();
     const actionSheet = await this.sheet.create({
       buttons: [
+        {
+          text: "Añadir nueva historia",
+          icon: "add",
+          handler: async () => {
+            const modal = await this.modalCreate.create({
+              component: StoryModal,
+              keyboardClose: true,
+              showBackdrop: true
+            });
+
+            await modal.present();
+            await modal.onDidDismiss();
+          }
+        },
         {
           text: "Eliminar historia",
           icon: "trash-outline",
@@ -250,13 +268,6 @@ export class ViewStoriesModal implements OnInit {
             }
           }
         }
-        /*{
-          text: "Desde tus fotos",
-          icon: "images",
-          handler: async () => {
-
-          }
-        }*/
       ]
     });
     await actionSheet.present();
@@ -349,6 +360,7 @@ export class ViewStoriesModal implements OnInit {
     ).present();
     try {
       this.story = await this.storySvc.deleteComment(comment.id);
+      this.setLikeStory();
       (
         await this.toast.create({
           message: "Comentario eliminado correctamente",

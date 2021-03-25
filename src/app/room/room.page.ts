@@ -27,8 +27,6 @@ import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { Room } from "../models/room";
 import { RoomService } from "../services/room.service";
 import { RoomPopover } from "./room-popover/room-popover";
-import { PushService } from "../services/push.service";
-import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-room",
@@ -80,8 +78,7 @@ export class RoomPage implements OnInit {
     public sheet: ActionSheetController,
     public utils: UtilsService,
     public modalController: ModalController,
-    public popover: PopoverController,
-    private userSvc: UserService
+    public popover: PopoverController
   ) {}
 
   async ngOnInit() {
@@ -94,9 +91,12 @@ export class RoomPage implements OnInit {
     this.alertError = await this.alert.create({
       header: `Ups, error al conectar`,
       message:
-        "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
+        "Es posible que el servicio de chat esté en mantenimiento en estos momentos.",
       backdropDismiss: false,
       buttons: [
+        {
+          text: "Intentar reconectar"
+        },
         {
           text: "Ok, seré paciente",
           handler: () => {

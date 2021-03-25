@@ -431,6 +431,14 @@ export class ChatUserPage implements OnInit {
     }
   }
 
+  async dragItem(event: any, message: Chat) {
+    this.selectedMessage = message;
+    if (event.detail.ratio < -0.9) {
+      event.target.close();
+      this.reply();
+    }
+  }
+
   openUrl(event: any) {
     if (event.srcElement.href && event.target.className.includes("linkified")) {
       this.urlSvc.openUrl(event.srcElement.href);

@@ -3,9 +3,21 @@
     <ion-buttons slot="start">
       <ion-back-button text="" defaultHref="/tabs/radar"></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end" *ngIf="user?.active">
-      <ion-button (click)="showOptions($event)">
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="showOptions($event)"
+        *ngIf="user?.active && user?.id !== auth.currentUserValue.id"
+      >
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+      <ion-button
+        id="edit-profile"
+        (click)="editProfile()"
+        *ngIf="user?.id === auth.currentUserValue.id"
+        shape="round"
+      >
+        <ion-icon name="create-outline"></ion-icon>
+        <ion-label>Editar perfil</ion-label>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
