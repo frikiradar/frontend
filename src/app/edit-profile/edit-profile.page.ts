@@ -315,7 +315,7 @@ export class EditProfilePage {
 
     const actionSheet = await this.sheet.create({
       header:
-        "Consejo: Si pones una foto tuya transmitirás mucha más confianza. Puedes subir hasta 9 fotos.",
+        "Consejo: Recuerda que subir fotos con contenido explícito puede ser motivo de expulsión.",
       buttons: [
         {
           text: "Desde la cámara",

@@ -24,4 +24,5 @@ export interface Story {
     likes?: Partial<User>[];
     time_creation?: Date;
   }[];
+  mentions?: string[];
 }

@@ -24,7 +24,7 @@ import { UrlService } from "src/app/services/url.service";
 import { UserService } from "src/app/services/user.service";
 import { StoryService } from "../../services/story.service";
 import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
-import { StoryModal } from "../story.modal";
+import { StoryModal } from "../story-modal/story.modal";
 
 @Component({
   selector: "view-stories-modal",
@@ -108,7 +108,6 @@ export class ViewStoriesModal implements OnInit {
   async slide() {
     this.comment.setValue("");
     this.slides.getActiveIndex().then(index => {
-      console.log(index);
       this.story = this.stories[index];
       this.setLikeStory();
       this.viewStory(this.stories[index]);
@@ -235,7 +234,8 @@ export class ViewStoriesModal implements OnInit {
             const modal = await this.modalCreate.create({
               component: StoryModal,
               keyboardClose: true,
-              showBackdrop: true
+              showBackdrop: true,
+              cssClass: "full-modal"
             });
 
             await modal.present();
@@ -293,7 +293,7 @@ export class ViewStoriesModal implements OnInit {
 
   async reply(comment: Story["comments"][0]) {
     if (comment.user.id !== this.auth.currentUserValue.id) {
-      this.comment.setValue(`@${comment.user.username}`);
+      this.comment.setValue(`@${comment.user.username} `);
       this.setMention(comment.user.username);
     }
     this.textarea.setFocus();
@@ -306,7 +306,7 @@ export class ViewStoriesModal implements OnInit {
     this.usernames = [];
     this.inputAt = false;
     this.comment.setValue(
-      this.comment.value.replace(this.mention, `@${username}`)
+      this.comment.value.replace(this.mention, `@${username} `)
     );
     this.userMentions = [...this.userMentions, username];
     this.textarea.setFocus();

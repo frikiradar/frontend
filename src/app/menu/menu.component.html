@@ -47,13 +47,7 @@
           ></ion-icon>
         </span>
         <span>{{ auth.currentUserValue?.name }}</span>
-        <span
-          *ngIf="
-            auth.currentUserValue?.username !== auth.currentUserValue?.name
-          "
-        >
-          ({{ auth.currentUserValue?.username }})</span
-        >
+        <span> (@{{ auth.currentUserValue?.username }})</span>
       </div>
     </ion-header>
     <ion-content>

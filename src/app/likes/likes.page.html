@@ -28,7 +28,7 @@
 <ion-content>
   <div *ngIf="likes?.length || showSkeleton; else noNotifications">
     <ion-list *ngIf="showSkeleton; else notificationItems">
-      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
+      <ion-item *ngFor="let i of [].constructor(8)">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-avatar>
@@ -48,7 +48,6 @@
           (click)="viewProfile(like.user.id)"
           *ngFor="let like of likes"
           button
-          lines="full"
         >
           <ion-avatar slot="start">
             <img

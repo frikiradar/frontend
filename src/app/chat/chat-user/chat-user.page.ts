@@ -84,9 +84,12 @@ export class ChatUserPage implements OnInit {
     this.alertError = await this.alert.create({
       header: `Ups, error al conectar`,
       message:
-        "El servicio de chat está en mantenimiento en estos momentos, regresa en unos minutos.",
+        "Es posible que el servicio de chat esté en mantenimiento en estos momentos.",
       backdropDismiss: false,
       buttons: [
+        {
+          text: "Intentar reconectar"
+        },
         {
           text: "Ok, seré paciente",
           handler: () => {

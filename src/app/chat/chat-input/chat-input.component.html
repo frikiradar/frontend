@@ -14,14 +14,14 @@
     <ion-label>{{ u.username }}</ion-label>
   </ion-item>
 </ion-list>
-<div id="image-preview" *ngIf="image">
+<div id="image-preview" *ngIf="image && imagePreview">
   <ion-icon
     name="close-circle"
     slot="icon-only"
-    (click)="image = ''"
+    (click)="image = ''; imagePreview = ''"
   ></ion-icon>
   <ion-thumbnail>
-    <img [src]="image" />
+    <img [src]="imagePreview" />
   </ion-thumbnail>
 </div>
 <ion-item id="reply-to" lines="none" *ngIf="replying">

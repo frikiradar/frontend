@@ -252,3 +252,15 @@ ul {
       bottom: 10px;
   }
 }
+
+#usernames {
+  box-shadow: 2px 2px 5px 1px rgb(0 0 0 / 75%);
+
+  ion-avatar {
+      margin-right: 10px;
+  }
+
+  ion-label {
+      color:white;
+  }
+}

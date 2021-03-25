@@ -54,9 +54,12 @@ export class ProfilePage implements OnInit {
     if (!param) {
       id = this.auth.currentUserValue.id;
     } else {
-      id = param;
+      if (param.toLowerCase() === "frikiradar" || +param == 1) {
+        this.router.navigate(["/profile"]);
+      } else {
+        id = param;
+      }
     }
-    console.log(id);
     try {
       this.loading = true;
       this.user = await this.userSvc.getUser(id);

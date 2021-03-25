@@ -52,10 +52,25 @@ export class StoryService {
     return stories;
   }
 
-  async sendStory(image: File, text: string) {
+  async getAllStories() {
+    const stories = (await this.rest.get("all-stories").toPromise()) as Story[];
+    stories.map(s => {
+      if (
+        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.user.id === this.auth.currentUserValue.id
+      ) {
+        s.viewed = true;
+      }
+    });
+
+    return stories;
+  }
+
+  async sendStory(image: File, text: string, mentions?: Story["mentions"]) {
     const formData: FormData = new FormData();
     formData.set("image", image);
     formData.set("text", text);
+    formData.set("mentions", JSON.stringify(mentions));
     return (await this.uploadSvc.upload("story-upload", formData)) as Story;
   }
 

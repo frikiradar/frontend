@@ -16,6 +16,7 @@ import {
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -43,6 +44,7 @@ export class ChatInputComponent {
   imageInput: ElementRef;
   public emojis: boolean = false;
   public image: string;
+  public imagePreview: SafeUrl;
 
   @Input() replying: boolean = false;
   @Input() editing = false;
@@ -65,7 +67,8 @@ export class ChatInputComponent {
     private androidPermissions: AndroidPermissions,
     public sheet: ActionSheetController,
     public utils: UtilsService,
-    private userSvc: UserService
+    private userSvc: UserService,
+    private sanitizer: DomSanitizer
   ) {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required])
@@ -108,6 +111,7 @@ export class ChatInputComponent {
   }
 
   openEmojis() {
+    this.keyboard.setKeyboardStyle;
     this.emojis = !this.emojis;
 
     if (this.emojis) {
@@ -163,26 +167,37 @@ export class ChatInputComponent {
       ]);
     }
 
-    if (this.platform.is("cordova")) {
-      const actionSheet = await this.sheet.create({
-        buttons: [
-          {
-            text: "Desde la cámara",
-            icon: "camera",
-            handler: async () => {
+    const actionSheet = await this.sheet.create({
+      header:
+        "Enviar contenido explícito sin el consentimiento del receptor puede ser motivo de expulsión.",
+      buttons: [
+        {
+          text: "Desde la cámara",
+          icon: "camera",
+          handler: async () => {
+            if (this.platform.is("cordova")) {
               const image = (await this.utils.takePicture(
                 "camera",
-                false,
+                true,
                 "default",
                 true
               )) as string;
               this.addPicture(image);
+            } else {
+              const image = await this.utils.webcamImage("default");
+              if (!image || typeof image === "boolean") {
+                actionSheet.dismiss();
+                return false;
+              }
+              this.addPicture(image);
             }
-          },
-          {
-            text: "Desde tus fotos",
-            icon: "images",
-            handler: async () => {
+          }
+        },
+        {
+          text: "Desde tus fotos",
+          icon: "images",
+          handler: async () => {
+            if (this.platform.is("cordova")) {
               const image = (await this.utils.takePicture(
                 "gallery",
                 false,
@@ -190,14 +205,16 @@ export class ChatInputComponent {
                 true
               )) as string;
               this.addPicture(image);
+            } else {
+              this.imageInput.nativeElement.dispatchEvent(
+                new MouseEvent("click")
+              );
             }
           }
-        ]
-      });
-      await actionSheet.present();
-    } else {
-      this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
-    }
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   async addPicture(image: string | File) {
@@ -205,13 +222,14 @@ export class ChatInputComponent {
       image = await this.utils.fileToBase64(image);
     }
     this.image = image;
+    this.imagePreview = this.sanitizer.bypassSecurityTrustUrl(image);
   }
 
   setMention(username: string) {
     this.usernames = [];
     this.inputAt = false;
     this.message.setValue(
-      this.message.value.replace(this.mention, `@${username}`)
+      this.message.value.replace(this.mention, `@${username} `)
     );
     this.userMentions = [...this.userMentions, username];
     this.focusTextArea();

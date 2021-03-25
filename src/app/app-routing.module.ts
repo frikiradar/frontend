@@ -64,6 +64,10 @@ const routes: Routes = [
     loadChildren: () =>
       import("./admin/admin.module").then(m => m.AdminPageModule),
     canActivate: [AdminGuard]
+  },
+  {
+    path: 'story',
+    loadChildren: () => import('./story/story.module').then( m => m.StoryPageModule)
   }
 ];
 @NgModule({

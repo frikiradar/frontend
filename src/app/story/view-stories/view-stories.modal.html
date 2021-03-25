@@ -1,27 +1,18 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button
-        (click)="showProfile(story?.user?.id)"
-        *ngIf="story?.user?.id !== auth.currentUserValue.id"
-      >
+      <ion-button shape="round" (click)="showProfile(story?.user?.id)">
         <ion-avatar>
           <img [src]="story.user?.thumbnail" [alt]="story.user?.username" />
         </ion-avatar>
         <ion-label>
-          <h2>{{ story.user?.name }}</h2>
+          <h2>
+            {{ story.user.id !== auth.currentUserValue.id ? story.user?.name :
+            'Mi historia' }}
+          </h2>
           <p>{{(story?.time_creation | niceDate)}}</p>
         </ion-label>
       </ion-button>
-      <ion-item lines="none" *ngIf="story.user.id === auth.currentUserValue.id">
-        <ion-avatar>
-          <img [src]="story.user?.thumbnail" [alt]="story.user?.username" />
-        </ion-avatar>
-        <ion-label>
-          <h2>Mi historia</h2>
-          <p>{{(story?.time_creation | niceDate)}}</p>
-        </ion-label>
-      </ion-item>
       <ion-icon
         *ngIf="story.user?.verified || story.user?.roles?.includes('ROLE_MASTER')"
         [name]="story.user?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
@@ -59,7 +50,10 @@
           <img [src]="story?.image" [alt]="story?.user.username" />
         </ion-thumbnail>
         <ion-card-content>
-          <p>{{story?.text}}</p>
+          <p
+            (click)="$event.stopImmediatePropagation(); openUrl($event);"
+            [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions}"
+          ></p>
         </ion-card-content>
       </ion-card>
     </ion-slide>
@@ -101,20 +95,23 @@
 <ion-footer class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="viewViews()">
+      <ion-button (click)="viewViews()" shape="round">
         <ion-icon name="heart"></ion-icon>
         <ion-label>{{story?.likeStories.length}} kokoros</ion-label> /
         <ion-label>{{story?.viewStories.length}} vistas</ion-label>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="viewComments()">
+      <ion-button (click)="viewComments()" shape="round">
         <ion-icon name="chatbubble-ellipses"></ion-icon>
         <ion-label>{{story.comments.length}} Comentarios</ion-label>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
+
+<!-- panes -->
+
 <div class="views-pane">
   <p>Visualizaciones y kokoros</p>
   <ion-list *ngIf="story?.viewStories?.length > 0">

@@ -7,7 +7,7 @@ import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, ModalController, Platform } from "@ionic/angular";
 import { CropperModal } from "../cropper/cropper.modal";
 import { Story } from "../models/story";
-import { StoryModal } from "../story/story.modal";
+import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 

@@ -18,7 +18,7 @@ import { RequestGeolocationModal } from "../radar/request-geolocation-modal/requ
 import { ImagePreloadDirective } from "../shared/image-preload.directive";
 import { ChatInputComponent } from "../chat/chat-input/chat-input.component";
 import { MentionsPipe } from "../mentions.pipe";
-import { StoryModal } from "../story/story.modal";
+import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 

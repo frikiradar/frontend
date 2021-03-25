@@ -1,0 +1,28 @@
+ion-item {
+    --background: #1a1a1a;
+    --border-color: #e91e63;
+  
+    p {
+      color: #dddddd;
+    }
+  
+    ion-badge {
+      position: absolute;
+      left: 45px;
+      border-radius: 15px;
+      z-index: 1;
+      width: 20px;
+      box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+    }
+}
+  
+#all-stories {
+    ion-avatar {
+        width: 55px;
+        height: 55px;
+  
+        &.not-view {
+            border: 2px solid #e91e63;
+        }
+    }
+}

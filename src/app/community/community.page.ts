@@ -15,7 +15,7 @@ import { RoomService } from "../services/room.service";
 import { AuthService } from "./../services/auth.service";
 import { StoryService } from "../services/story.service";
 import { Story } from "../models/story";
-import { StoryModal } from "../story/story.modal";
+import { StoryModal } from "../story/story-modal/story.modal";
 import { User } from "../models/user";
 import { UtilsService } from "../services/utils.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
@@ -83,7 +83,13 @@ export class CommunityPage {
 
   async getStories() {
     let stories = await this.storySvc.getStories();
-    stories.sort((a, b) => a.user.id - b.user.id);
+    stories
+      .sort((a, b) => a.user.id - b.user.id)
+      .sort(
+        (a, b) =>
+          new Date(b.time_creation).getTime() -
+          new Date(a.time_creation).getTime()
+      );
 
     stories = [
       ...stories.filter(s => s.user.id === this.auth.currentUserValue.id),
@@ -91,8 +97,8 @@ export class CommunityPage {
     ];
 
     this.stories = stories;
-
-    stories.forEach(s => {
+    this.groupedStories = [];
+    this.stories.forEach(s => {
       if (!this.groupedStories.some(g => g.user.id === s.user.id)) {
         this.groupedStories.push(s);
       }
@@ -127,7 +133,8 @@ export class CommunityPage {
     const modal = await this.modal.create({
       component: StoryModal,
       keyboardClose: true,
-      showBackdrop: true
+      showBackdrop: true,
+      cssClass: "full-modal"
     });
 
     await modal.present();
@@ -159,6 +166,10 @@ export class CommunityPage {
 
     await modal.present();
     await modal.onDidDismiss();
+  }
+
+  async showAllStories() {
+    this.router.navigate(["/story"]);
   }
 
   async showRoom(slug: Room["slug"]) {

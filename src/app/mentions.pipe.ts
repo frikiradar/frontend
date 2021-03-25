@@ -1,4 +1,3 @@
-import { DatePipe } from "@angular/common";
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
@@ -6,7 +5,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 })
 export class MentionsPipe implements PipeTransform {
   transform(value: any, data?: any) {
-    if (data.mentions.length) {
+    if (data.mentions?.length) {
       const mentions = data.mentions;
       mentions.forEach((mention: string) => {
         value = value.replaceAll(

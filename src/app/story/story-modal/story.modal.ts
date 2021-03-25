@@ -1,12 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
+import { Keyboard } from "@ionic-native/keyboard/ngx";
 import {
   IonTextarea,
   ModalController,
@@ -14,8 +10,10 @@ import {
   ToastController
 } from "@ionic/angular";
 
-import { StoryService } from "../services/story.service";
-import { UtilsService } from "../services/utils.service";
+import { User } from "../../models/user";
+import { StoryService } from "../../services/story.service";
+import { UserService } from "../../services/user.service";
+import { UtilsService } from "../../services/utils.service";
 
 @Component({
   selector: "story-modal",
@@ -25,7 +23,7 @@ import { UtilsService } from "../services/utils.service";
 export class StoryModal implements OnInit {
   @ViewChild("imageInput", { static: true })
   imageInput: ElementRef;
-  @ViewChild("textarea", { static: true })
+  @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
 
   public storyForm: FormGroup;
@@ -34,6 +32,11 @@ export class StoryModal implements OnInit {
   }
   public image: SafeUrl;
   public imageFile: File;
+  private inputAt = false;
+  private mention: string;
+  public userMentions: User["username"][] = [];
+  public usernames: User[];
+  private writing = false;
 
   constructor(
     public modal: ModalController,
@@ -43,7 +46,9 @@ export class StoryModal implements OnInit {
     private utils: UtilsService,
     private sanitizer: DomSanitizer,
     private storySvc: StoryService,
-    private toast: ToastController
+    private toast: ToastController,
+    public keyboard: Keyboard,
+    private userSvc: UserService
   ) {
     this.storyForm = formBuilder.group({
       text: new FormControl()
@@ -130,7 +135,7 @@ export class StoryModal implements OnInit {
       if (this.text.value) {
         text = this.text.value.trim();
       }
-      await this.storySvc.sendStory(this.imageFile, text);
+      await this.storySvc.sendStory(this.imageFile, text, this.userMentions);
       this.toast.dismiss();
       (
         await this.toast.create({
@@ -150,6 +155,52 @@ export class StoryModal implements OnInit {
           color: "danger"
         })
       ).present();
+    }
+  }
+
+  setMention(username: string) {
+    this.usernames = [];
+    this.inputAt = false;
+    this.text.setValue(this.text.value.replace(this.mention, `@${username} `));
+    this.userMentions = [...this.userMentions, username];
+    this.textarea.setFocus();
+    if (this.platform.is("cordova")) {
+      this.keyboard.show();
+    }
+  }
+
+  async setWriting(text: string) {
+    if (this.text.value) {
+      if (text.charAt(text.length - 1) == "@") {
+        this.inputAt = true;
+      }
+
+      if (this.inputAt) {
+        const pattern = /\B@[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+/gi;
+        const matches = text.match(pattern);
+        if (matches) {
+          this.mention = matches[matches.length - 1];
+        }
+
+        if (this.writing) {
+          return;
+        }
+        this.writing = true;
+
+        if (this.mention?.length > 3 && this.text.value.length > 3) {
+          this.usernames = await this.userSvc.searchUsernames(
+            this.mention.replace("@", "")
+          );
+        } else {
+          this.usernames = [];
+        }
+
+        setTimeout(async () => {
+          this.writing = false;
+        }, 500);
+      }
+    } else {
+      this.usernames = [];
     }
   }
 

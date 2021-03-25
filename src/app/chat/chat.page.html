@@ -28,7 +28,7 @@
 <ion-content>
   <div *ngIf="chats?.length || showSkeleton; else noChats">
     <ion-list *ngIf="showSkeleton; else chatItems">
-      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
+      <ion-item *ngFor="let i of [].constructor(8)">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-avatar>
@@ -57,7 +57,7 @@
               <ion-icon slot="icon-only" name="mail-open"></ion-icon>
             </ion-item-option>
           </ion-item-options>
-          <ion-item button (click)="showChat(chat.user?.id)" lines="full">
+          <ion-item button (click)="showChat(chat.user?.id)">
             <ion-avatar slot="start">
               <img
                 [src]="chat.user?.thumbnail"

@@ -146,7 +146,7 @@ export class RoomPage implements OnInit {
 
         if (
           message.writing &&
-          message.fromuser.name !== this.auth.currentUserValue.name
+          message.fromuser.username !== this.auth.currentUserValue.username
         ) {
           this.toUserWriting = message.fromuser.name + " está escribiendo...";
           setTimeout(() => {
@@ -508,7 +508,7 @@ export class RoomPage implements OnInit {
       return;
     }
     this.writing = true;
-    await this.roomSvc.writing(this.auth.currentUserValue.name, this.slug);
+    await this.roomSvc.writing(this.auth.currentUserValue.username, this.slug);
     setTimeout(async () => {
       this.writing = false;
     }, 2500);

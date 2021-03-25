@@ -1,0 +1,30 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="" defaultHref="/tabs/community"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Historias</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list id="all-stories">
+    <ion-item
+      button
+      *ngFor="let story of groupedStories"
+      lines="none"
+      (click)="showStories(story.user.id)"
+    >
+      <ion-avatar slot="start" [ngClass]="story?.viewed ? '' : 'not-view'">
+        <img [src]="story.image" [alt]="story.text" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{story.user.name}}</h2>
+        <p>{{story.text}}</p>
+      </ion-label>
+      <ion-note slot="end">
+        {{ story.time_creation | niceDate }}
+      </ion-note>
+    </ion-item>
+  </ion-list>
+</ion-content>

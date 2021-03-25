@@ -23,11 +23,29 @@
     <ion-thumbnail *ngIf="image">
       <img [src]="image" />
     </ion-thumbnail>
+    <ion-list
+      id="usernames"
+      *ngIf="usernames?.length && text?.value?.length > 3"
+    >
+      <ion-item
+        lines="none"
+        button
+        *ngFor="let u of usernames"
+        (click)="setMention(u.username)"
+      >
+        <ion-avatar>
+          <img [src]="u.thumbnail" />
+        </ion-avatar>
+        <ion-label>{{ u.username }}</ion-label>
+      </ion-item>
+    </ion-list>
     <ion-item *ngIf="image">
       <ion-textarea
         placeholder="Escribe un comentario o describe la foto"
         rows="3"
         formControlName="text"
+        (ionChange)="setWriting($event.detail.value)"
+        #textarea
       ></ion-textarea>
     </ion-item>
   </form>
