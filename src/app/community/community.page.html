@@ -23,6 +23,12 @@
 </ion-header>
 
 <ion-content>
+  <ion-item lines="none" (click)="showAllStories()" button>
+    <ion-label color="light">
+      <h2 class="section">Historias de los usuarios</h2>
+    </ion-label>
+    <ion-icon name="arrow-forward" slot="end" color="light"></ion-icon>
+  </ion-item>
   <div *ngIf="!stories">
     <ion-slides [options]="storiesOpts">
       <ion-slide *ngFor="let i of [].constructor(8)">
@@ -68,22 +74,15 @@
       </div>
     </ion-slide>
   </ion-slides>
-  <ion-item
-    lines="none"
-    button
-    (click)="showAllStories()"
-    id="show-all-stories"
-  >
-    <ion-label color="light">Ver más</ion-label>
-    <ion-icon name="chevron-down" color="light"></ion-icon>
-  </ion-item>
 
-  <ion-label>
-    <h2 class="section">Salas de chat</h2>
-    <p class="subtitle">
-      ¡Entra y habla con la comunidad FrikiRadar!
-    </p>
-  </ion-label>
+  <ion-item lines="none">
+    <ion-label>
+      <h2 class="section">Salas de chat</h2>
+      <p class="subtitle">
+        ¡Entra y habla con la comunidad FrikiRadar!
+      </p>
+    </ion-label>
+  </ion-item>
   <div *ngIf="!rooms" id="rooms">
     <ion-item *ngFor="let i of [].constructor(8)">
       <ion-thumbnail>

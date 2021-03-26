@@ -66,6 +66,34 @@ export class StoryService {
     return stories;
   }
 
+  orderStories(stories: Story[]) {
+    stories.sort((a, b) => a.user.id - b.user.id);
+    return stories;
+  }
+
+  groupStories(stories: Story[]) {
+    const groupedStories = [];
+    stories.forEach(s => {
+      if (!groupedStories.some(g => g.user.id === s.user.id)) {
+        const filterStories = stories.filter(sf => sf.user.id === s.user.id);
+        groupedStories.push(filterStories[filterStories.length - 1]);
+      }
+    });
+
+    groupedStories.sort(
+      (a, b) =>
+        new Date(b.time_creation).getTime() -
+        new Date(a.time_creation).getTime()
+    );
+
+    return [
+      ...groupedStories.filter(
+        s => s.user.id === this.auth.currentUserValue.id
+      ),
+      ...groupedStories.filter(s => s.user.id !== this.auth.currentUserValue.id)
+    ];
+  }
+
   async sendStory(image: File, text: string, mentions?: Story["mentions"]) {
     const formData: FormData = new FormData();
     formData.set("image", image);

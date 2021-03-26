@@ -113,6 +113,12 @@ export class RoomPage implements OnInit {
     this.slug = this.route.snapshot.paramMap.get("slug");
     this.room = await this.roomSvc.getRoom(this.slug);
 
+    if (
+      !this.auth.currentUserValue?.roles?.includes(this.room.permissions[0])
+    ) {
+      this.auth.logout();
+    }
+
     // this.roomSvc.setNotifications(this.room);
 
     this.page = 1;

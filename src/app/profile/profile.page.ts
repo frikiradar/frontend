@@ -30,6 +30,7 @@ import { AuthService } from "./../services/auth.service";
 export class ProfilePage implements OnInit {
   public user: User;
   public stories: Story[];
+  public story: Story;
   public loading = true;
   public pulse: any;
 
@@ -65,6 +66,7 @@ export class ProfilePage implements OnInit {
       this.user = await this.userSvc.getUser(id);
       this.loading = false;
       this.stories = await this.storiesSvc.getUserStories(this.user.id);
+      this.story = this.stories[this.stories.length - 1];
     } catch (e) {
       this.loading = false;
     }

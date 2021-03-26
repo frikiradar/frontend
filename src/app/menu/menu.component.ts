@@ -62,6 +62,11 @@ export class MenuComponent {
     return await modal.present();
   }
 
+  bugs() {
+    this.router.navigate(["/room/frikiradar-bugs"]);
+    this.menu.close();
+  }
+
   logout() {
     this.auth.logout();
     this.menu.enable(false);

@@ -82,27 +82,9 @@ export class CommunityPage {
   }
 
   async getStories() {
-    let stories = await this.storySvc.getStories();
-    stories
-      .sort((a, b) => a.user.id - b.user.id)
-      .sort(
-        (a, b) =>
-          new Date(b.time_creation).getTime() -
-          new Date(a.time_creation).getTime()
-      );
-
-    stories = [
-      ...stories.filter(s => s.user.id === this.auth.currentUserValue.id),
-      ...stories.filter(s => s.user.id !== this.auth.currentUserValue.id)
-    ];
-
-    this.stories = stories;
-    this.groupedStories = [];
-    this.stories.forEach(s => {
-      if (!this.groupedStories.some(g => g.user.id === s.user.id)) {
-        this.groupedStories.push(s);
-      }
-    });
+    const stories = await this.storySvc.getStories();
+    this.stories = this.storySvc.orderStories(stories);
+    this.groupedStories = this.storySvc.groupStories(this.stories);
   }
 
   async getRooms() {

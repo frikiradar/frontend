@@ -5,6 +5,7 @@ import { Story } from "../models/story";
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
 import { StoryService } from "../services/story.service";
+import { StoryModal } from "./story-modal/story.modal";
 import { ViewStoriesModal } from "./view-stories/view-stories.modal";
 
 @Component({
@@ -27,27 +28,9 @@ export class StoryPage implements OnInit {
   }
 
   async getStories() {
-    let stories = await this.storySvc.getAllStories();
-    stories
-      .sort((a, b) => a.user.id - b.user.id)
-      .sort(
-        (a, b) =>
-          new Date(b.time_creation).getTime() -
-          new Date(a.time_creation).getTime()
-      );
-
-    stories = [
-      ...stories.filter(s => s.user.id === this.auth.currentUserValue.id),
-      ...stories.filter(s => s.user.id !== this.auth.currentUserValue.id)
-    ];
-
-    this.stories = stories;
-    this.groupedStories = [];
-    this.stories.forEach(s => {
-      if (!this.groupedStories.some(g => g.user.id === s.user.id)) {
-        this.groupedStories.push(s);
-      }
-    });
+    const stories = await this.storySvc.getAllStories();
+    this.stories = this.storySvc.orderStories(stories);
+    this.groupedStories = this.storySvc.groupStories(this.stories);
   }
 
   async showStories(id: User["id"]) {
@@ -65,5 +48,18 @@ export class StoryPage implements OnInit {
     await modal.present();
     await modal.onDidDismiss();
     this.getStories();
+  }
+
+  async newStory() {
+    const modal = await this.modal.create({
+      component: StoryModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal"
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+    await this.getStories();
   }
 }

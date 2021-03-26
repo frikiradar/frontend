@@ -7,8 +7,8 @@
         </ion-avatar>
         <ion-label>
           <h2>
-            {{ story.user.id !== auth.currentUserValue.id ? story.user?.name :
-            'Mi historia' }}
+            {{ story.user.id !== auth.currentUserValue.id ? story.user?.username
+            : 'Mi historia' }}
           </h2>
           <p>{{(story?.time_creation | niceDate)}}</p>
         </ion-label>
@@ -123,7 +123,7 @@
       <ion-avatar>
         <img [src]="view?.user?.thumbnail" />
       </ion-avatar>
-      <ion-label>{{view?.user?.name}}</ion-label>
+      <ion-label>{{view?.user?.username}}</ion-label>
       <ion-icon name="heart" color="primary" *ngIf="view?.user?.like"
         >{{view?.user?.like}}</ion-icon
       >
@@ -158,7 +158,9 @@
       </ion-avatar>
       <ion-label>
         <p class="text">
-          <a (click)="showProfile(comment.user.id)">{{comment.user.name}}</a>
+          <a (click)="showProfile(comment.user.id)"
+            >{{comment.user.username}}</a
+          >
           &nbsp;
           <span
             [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions}"

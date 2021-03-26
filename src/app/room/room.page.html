@@ -176,7 +176,7 @@
     </ion-item-sliding>
   </span>
 </ion-content>
-<ion-footer *ngIf="room?.visible">
+<ion-footer>
   <app-chat-input
     (onWriting)="setWriting()"
     (onSubmit)="sendMessage($event)"
