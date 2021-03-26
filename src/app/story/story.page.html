@@ -3,19 +3,19 @@
     <ion-buttons slot="start">
       <ion-back-button text="" defaultHref="/tabs/community"></ion-back-button>
     </ion-buttons>
-    <ion-title>Historias de los usuarios</ion-title>
+    <ion-title>Historias</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list id="all-stories">
-    <ion-item button lines="none" (click)="newStory()">
+    <ion-item button detail="false" lines="none" (click)="newStory()" mode="md">
       <ion-avatar slot="start">
         <img
           [src]="auth.currentUserValue?.thumbnail"
           alt="auth.currentUserValue?.name"
         />
-        <ion-badge color="tertiary">+</ion-badge>
+        <ion-badge color="tertiary" mode="md">+</ion-badge>
       </ion-avatar>
       <ion-label>
         <h2>Añadir historia</h2>
@@ -23,6 +23,7 @@
     </ion-item>
     <ion-item
       button
+      detail="false"
       *ngFor="let story of groupedStories"
       lines="none"
       (click)="showStories(story.user.id)"

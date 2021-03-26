@@ -118,6 +118,7 @@
     <ion-item
       *ngFor="let view of story?.viewStories"
       button
+      detail="false"
       (click)="showProfile(view.user.id)"
     >
       <ion-avatar>
@@ -142,6 +143,7 @@
     <ion-item
       lines="none"
       button
+      detail="false"
       *ngFor="let u of usernames"
       (click)="setMention(u.username)"
     >
@@ -152,7 +154,12 @@
     </ion-item>
   </ion-list>
   <ion-list *ngIf="story?.comments.length > 0">
-    <ion-item *ngFor="let comment of story.comments" button lines="none">
+    <ion-item
+      *ngFor="let comment of story.comments"
+      button
+      detail="false"
+      lines="none"
+    >
       <ion-avatar (click)="showProfile(comment.user.id)">
         <img [src]="comment.user.thumbnail" />
       </ion-avatar>

@@ -10,7 +10,7 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-@import '~@ctrl/ngx-emoji-mart/picker';
+@import "~@ctrl/ngx-emoji-mart/picker";
 
 body {
   background-color: #1a1a1a;
@@ -27,8 +27,9 @@ ion-header {
   a {
     text-decoration: none;
 
-    &.linkified, &.mention {
-      color: #C4D83B !important;
+    &.linkified,
+    &.mention {
+      color: #c4d83b !important;
     }
   }
 }
@@ -163,7 +164,8 @@ ion-toast.md {
   --color: #353535;
 }
 
-.ion-page, .modal-wrapper {
+.ion-page,
+.modal-wrapper {
   background: #1a1a1a !important;
 }
 
@@ -224,37 +226,37 @@ ul {
 
 #stories {
   ion-avatar {
-      width: 65px;
-      height: 65px;
+    width: 65px;
+    height: 65px;
 
-      &.not-view {
-          border: 2px solid #e91e63;
-      }
+    &.not-view {
+      border: 2px solid #e91e63;
+    }
   }
 
   ion-badge {
-      position: absolute;
-      left: 45px;
-      border-radius: 15px;
-      z-index: 1;
-      width: 22px;
-      height: 22px;
-      bottom: 7px;
-      border: 2px solid #1a1a1a;
-      font-size: 14pt;
-      line-height: 0.7;
+    position: absolute;
+    left: 45px;
+    border-radius: 15px;
+    z-index: 1;
+    width: 22px;
+    height: 22px;
+    bottom: 7px;
+    border: 2px solid #1a1a1a;
+    font-size: 14pt;
+    line-height: 0.7;
   }
 
   ion-label {
-      font-size: 12px;
-      color: white;
-      width: 90px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+    font-size: 12px;
+    color: white;
+    width: 90px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -262,10 +264,14 @@ ul {
   box-shadow: 2px 2px 5px 1px rgb(0 0 0 / 75%);
 
   ion-avatar {
-      margin-right: 10px;
+    margin-right: 10px;
   }
 
   ion-label {
-      color:white;
+    color: white;
   }
+}
+
+ion-item {
+  --detail-icon-color: white;
 }

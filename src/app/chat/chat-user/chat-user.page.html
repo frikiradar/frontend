@@ -106,6 +106,7 @@
       <ion-item
         lines="none"
         button
+        detail="false"
         (press)="selectMessage($event, message)"
         [ngClass]="selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''"
       >

@@ -23,14 +23,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-item lines="none" (click)="showAllStories()" button>
+  <ion-item lines="none" (click)="showAllStories()" button detail="false">
     <ion-label color="light">
       <h2 class="section">Historias de los usuarios</h2>
     </ion-label>
-    <ion-icon name="arrow-forward" slot="end" color="light"></ion-icon>
+    <ion-icon
+      md="arrow-forward"
+      ios="chevron-forward"
+      slot="end"
+      color="light"
+    ></ion-icon>
   </ion-item>
   <div *ngIf="!stories">
-    <ion-slides [options]="storiesOpts">
+    <ion-slides [options]="storiesOpts" mode="md">
       <ion-slide *ngFor="let i of [].constructor(8)">
         <div>
           <ion-avatar>
@@ -47,6 +52,7 @@
     #storiesSlides
     id="stories"
     [options]="storiesOpts"
+    mode="md"
     *ngIf="stories"
   >
     <ion-slide>
