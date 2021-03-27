@@ -78,6 +78,7 @@
         rows="1"
         (ionFocus)="emojis = false"
         (ionChange)="setWriting($event.detail.value)"
+        (paste)="onPaste($event)"
       >
       </ion-textarea>
     </ion-item>

@@ -75,6 +75,10 @@ export class ChatInputComponent {
     });
   }
 
+  onPaste(event: ClipboardEvent) {
+    console.log(event);
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     // console.log(changes);
     if (

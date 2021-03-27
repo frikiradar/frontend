@@ -234,10 +234,7 @@ export class ChatUserPage implements OnInit {
           ).present();
         }
 
-        if (
-          error.type === "error" &&
-          (!this.connected || this.conErrors >= 10)
-        ) {
+        if (error.type === "error" && this.conErrors >= 10) {
           this.source.close();
 
           await this.alertError.present();
