@@ -127,7 +127,7 @@ export class RoomPage implements OnInit {
         .filter(m => m.text || m.image || m.audio)
         .reverse();
 
-      if (messages.length) {
+      if (messages.length && this.room.visible) {
         this.roomSvc.setLastMessage(
           this.slug,
           messages[messages.length - 1].id
@@ -159,7 +159,9 @@ export class RoomPage implements OnInit {
             this.toUserWriting = "";
           }, 10000);
         } else if (!message.writing) {
-          this.roomSvc.setLastMessage(this.slug, message.id);
+          if (this.room.visible) {
+            this.roomSvc.setLastMessage(this.slug, message.id);
+          }
 
           this.toUserWriting = "";
           // borramos los enviando
