@@ -66,12 +66,23 @@ const routes: Routes = [
     canActivate: [AdminGuard]
   },
   {
-    path: 'story',
-    loadChildren: () => import('./story/story.module').then( m => m.StoryPageModule)
+    path: "story",
+    loadChildren: () =>
+      import("./story/story.module").then(m => m.StoryPageModule)
+  },
+  {
+    path: ":id",
+    loadChildren: () =>
+      import("./profile/profile.module").then(m => m.ProfilePageModule)
   }
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],
+  imports: [
+    RouterModule.forRoot(routes, {
+      relativeLinkResolution: "legacy",
+      useHash: false
+    })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

@@ -14,41 +14,44 @@
       }"
     >
       <div id="banner"></div>
-      <ion-avatar>
-        <img
-          [src]="auth.currentUserValue?.thumbnail"
-          [alt]="auth.currentUserValue?.username"
-          default="/assets/img/users/default.jpg"
-        />
-      </ion-avatar>
-      <div id="info">
-        <span>
-          <ion-icon
-            (click)="userSvc.showRole(auth.currentUserValue)"
-            *ngIf="
-              auth.currentUserValue?.verified ||
-              auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
-              auth.currentUserValue?.roles?.includes('ROLE_MASTER')
-            "
-            [name]="
-              auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
-              auth.currentUserValue?.roles?.includes('ROLE_MASTER')
-                ? 'shield-checkmark'
-                : 'checkmark-circle'
-            "
-            slot="icon-only"
-            size="small"
-            [color]="
-              auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
-              auth.currentUserValue?.roles?.includes('ROLE_MASTER')
-                ? 'tertiary'
-                : 'secondary'
-            "
-          ></ion-icon>
-        </span>
-        <span>{{ auth.currentUserValue?.name }}</span>
-        <span> (@{{ auth.currentUserValue?.username }})</span>
-      </div>
+      <ion-item lines="none" id="info" button (click)="viewProfile()">
+        <ion-avatar slot="start">
+          <img
+            [src]="auth.currentUserValue?.thumbnail"
+            [alt]="auth.currentUserValue?.username"
+            default="/assets/img/users/default.jpg"
+          />
+        </ion-avatar>
+        <ion-label>
+          <h2>
+            {{ auth.currentUserValue?.name }}
+            <span>
+              <ion-icon
+                size="15px"
+                *ngIf="
+                  auth.currentUserValue?.verified ||
+                  auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
+                  auth.currentUserValue?.roles?.includes('ROLE_MASTER')
+                "
+                [name]="
+                  auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
+                  auth.currentUserValue?.roles?.includes('ROLE_MASTER')
+                    ? 'shield-checkmark'
+                    : 'checkmark-circle'
+                "
+                slot="icon-only"
+                [color]="
+                  auth.currentUserValue?.roles?.includes('ROLE_ADMIN') ||
+                  auth.currentUserValue?.roles?.includes('ROLE_MASTER')
+                    ? 'tertiary'
+                    : 'secondary'
+                "
+              ></ion-icon>
+            </span>
+          </h2>
+          <p>@{{ auth.currentUserValue?.username }}</p>
+        </ion-label>
+      </ion-item>
     </ion-header>
     <ion-content>
       <ion-list>

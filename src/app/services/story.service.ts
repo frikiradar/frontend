@@ -67,7 +67,18 @@ export class StoryService {
   }
 
   orderStories(stories: Story[]) {
-    stories.sort((a, b) => a.user.id - b.user.id);
+    stories.sort((a, b) => {
+      if (
+        new Date(b.time_creation).getTime() >
+        new Date(a.time_creation).getTime()
+      )
+        return 1;
+      if (
+        new Date(b.time_creation).getTime() <
+        new Date(a.time_creation).getTime()
+      )
+        return -1;
+    });
     return stories;
   }
 
@@ -79,12 +90,6 @@ export class StoryService {
         groupedStories.push(filterStories[filterStories.length - 1]);
       }
     });
-
-    groupedStories.sort(
-      (a, b) =>
-        new Date(b.time_creation).getTime() -
-        new Date(a.time_creation).getTime()
-    );
 
     return [
       ...groupedStories.filter(

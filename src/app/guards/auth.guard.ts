@@ -37,6 +37,8 @@ export class AuthGuard implements CanActivate {
       } else {
         return true;
       }
+    } else if (state.url.includes("/profile")) {
+      return true;
     }
 
     // not logged in so redirect to login page with the return url

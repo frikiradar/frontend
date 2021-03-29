@@ -28,10 +28,6 @@ export class RestService {
   }
 
   put(endpoint: string, data) {
-    if (!localStorage.getItem("currentUser")) {
-      return;
-    }
-
     return this.http.put(
       `${this.apiUrl}${endpoint}`,
       JSON.stringify(data),

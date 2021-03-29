@@ -1,6 +1,5 @@
 :host {
   ion-header {
-    padding: 20px;
     height: 100px;
     background: #1a1a1a;
     background-position: center center;
@@ -17,16 +16,11 @@
     }
 
     #info {
-      margin-top: 10px;
-
-      span {
-        vertical-align: text-top;
+      margin-top: 15px;
+      ion-avatar {
+        width: 48px;
+        height: 48px;
       }
-    }
-
-    ion-avatar {
-      width: 48px;
-      height: 48px;
     }
   }
 

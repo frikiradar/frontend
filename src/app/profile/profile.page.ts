@@ -54,6 +54,9 @@ export class ProfilePage implements OnInit {
     let id = undefined;
     if (!param) {
       id = this.auth.currentUserValue.id;
+      this.auth.currentUser.subscribe(async authUser => {
+        this.user = { ...this.user, ...authUser };
+      });
     } else {
       if (param.toLowerCase() === "frikiradar" || +param == 1) {
         this.router.navigate(["/profile"]);
@@ -63,10 +66,17 @@ export class ProfilePage implements OnInit {
     }
     try {
       this.loading = true;
-      this.user = await this.userSvc.getUser(id);
+      if (this.auth.currentUserValue) {
+        this.user = await this.userSvc.getUser(id);
+      } else {
+        this.user = await this.userSvc.getPublicUser(id);
+        // si no recibe entonces poner que no es public
+      }
       this.loading = false;
-      this.stories = await this.storiesSvc.getUserStories(this.user.id);
-      this.story = this.stories[this.stories.length - 1];
+      if (this.auth.currentUserValue) {
+        this.stories = await this.storiesSvc.getUserStories(this.user.id);
+        this.story = this.stories[this.stories.length - 1];
+      }
     } catch (e) {
       this.loading = false;
     }
@@ -83,13 +93,20 @@ export class ProfilePage implements OnInit {
   }
 
   async showChat() {
+    if (!this.auth.currentUserValue) {
+      this.nav.navigateRoot(["/login"], {
+        queryParams: { returnUrl: this.router.url }
+      });
+      return;
+    }
+
     if (this.user.chat && !this.user.block) {
       this.router.navigate(["/chat", this.user.id]);
     } else {
       if (
         this.user.match > 0 ||
         this.user.from_like ||
-        this.auth.isVerified()
+        this.auth?.isVerified()
       ) {
         this.router.navigate(["/chat", this.user.id]);
       } else {
@@ -105,6 +122,13 @@ export class ProfilePage implements OnInit {
   }
 
   async switchLike() {
+    if (!this.auth.currentUserValue) {
+      this.nav.navigateRoot(["/login"], {
+        queryParams: { returnUrl: this.router.url }
+      });
+      return;
+    }
+
     if (!this.user.like) {
       this.vibration.vibrate(5);
       this.user = await this.userSvc.like(this.user.id);

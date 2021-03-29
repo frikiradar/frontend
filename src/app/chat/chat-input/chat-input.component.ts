@@ -141,7 +141,6 @@ export class ChatInputComponent {
 
   closeReplying() {
     this.replying = false;
-    this.message.setValue("");
     this.replyingChange.emit(this.replying);
   }
 

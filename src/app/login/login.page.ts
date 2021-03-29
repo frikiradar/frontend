@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Facebook, FacebookLoginResponse } from "@ionic-native/facebook/ngx";
 import {
   AlertController,
@@ -34,9 +34,11 @@ export class LoginPage {
   }
   public clearPassword = false;
   public activeView: "login" | "register" = "login";
+  private returnUrl: string;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private auth: AuthService,
     private alert: AlertController,
     private modal: ModalController,
@@ -60,6 +62,10 @@ export class LoginPage {
         Validators.minLength(8)
       ])
     });
+  }
+
+  ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
   }
 
   async submitLogin() {
@@ -94,7 +100,9 @@ export class LoginPage {
 
   async loginSuccess(user: User) {
     if (user && user.two_step) {
-      this.nav.navigateRoot(["/login/two-step"]);
+      this.nav.navigateRoot(["/login/two-step"], {
+        queryParams: { returnUrl: this.returnUrl }
+      });
     } else {
       this.auth.setAuthUser(user);
       (
@@ -104,7 +112,7 @@ export class LoginPage {
           position: "bottom"
         })
       ).present();
-      this.nav.navigateRoot(["/tabs/radar"]);
+      this.nav.navigateRoot([this.returnUrl]);
     }
   }
 

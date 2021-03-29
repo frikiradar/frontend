@@ -5,6 +5,8 @@ import {
   HttpRequest
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { NavController } from "@ionic/angular";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 
@@ -12,7 +14,11 @@ import { AuthService } from "./../app/services/auth.service";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthService) {}
+  constructor(
+    private auth: AuthService,
+    private nav: NavController,
+    private router: Router
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -20,9 +26,15 @@ export class ErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError(err => {
-        if (err.status === 401 && localStorage.getItem("currentUser")) {
-          // auto logout if 401 response returned from api
-          this.auth.logout();
+        if (err.status === 401) {
+          if (localStorage.getItem("currentUser")) {
+            // auto logout if 401 response returned from api
+            this.auth.logout();
+          } else {
+            this.nav.navigateRoot(["/login"], {
+              queryParams: { returnUrl: this.router.url }
+            });
+          }
         }
 
         const error = err.error.message || err.statusText;
