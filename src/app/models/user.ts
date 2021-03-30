@@ -61,6 +61,7 @@ export interface User {
   two_step?: boolean;
   hide_connection?: boolean;
   mailing?: boolean;
+  public?: boolean;
 
   num_logins: number;
   last_login?: Date;
