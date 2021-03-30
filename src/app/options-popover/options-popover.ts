@@ -2,13 +2,17 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   AlertController,
+  Platform,
   PopoverController,
   ToastController
 } from "@ionic/angular";
+import { Clipboard } from "@ionic-native/clipboard/ngx";
+
 import { User } from "src/app/models/user";
 import { AdminService } from "../services/admin.service";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
+import { UtilsService } from "../services/utils.service";
 
 @Component({
   selector: "options-popover",
@@ -26,7 +30,10 @@ export class OptionsPopover {
     private userSvc: UserService,
     private alert: AlertController,
     private toast: ToastController,
-    private admin: AdminService
+    private admin: AdminService,
+    private utils: UtilsService,
+    public platform: Platform,
+    private clipboard: Clipboard
   ) {}
 
   close() {
@@ -89,6 +96,40 @@ export class OptionsPopover {
     });
 
     await alert.present();
+    this.close();
+  }
+
+  async copyProfile() {
+    const url = `https://frikiradar.app/${this.user.username}`;
+    try {
+      if (this.platform.is("cordova")) {
+        await this.clipboard.copy(url);
+      } else {
+        await navigator.clipboard.writeText(url);
+      }
+
+      (
+        await this.toast.create({
+          message: "URL copiada correctamente",
+          duration: 2000,
+          position: "middle"
+        })
+      ).present();
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: "Error al copiar la URL",
+          duration: 2000,
+          position: "middle"
+        })
+      ).present();
+    }
+    this.close();
+  }
+
+  shareProfile() {
+    const url = `https://frikiradar.app/${this.user.username}`;
+    this.utils.share(url);
     this.close();
   }
 

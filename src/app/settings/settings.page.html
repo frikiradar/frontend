@@ -114,6 +114,21 @@
           (ngModelChange)="onChangeCheck('hide_connection', $event)"
         ></ion-checkbox>
       </ion-item>
+      <ion-item lines="full">
+        <ion-icon name="people-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Perfil privado</h2>
+          <p>
+            No quiero que mi perfil sea visible públicamente desde internet
+            compartiendo una URL.
+          </p>
+        </ion-label>
+        <ion-checkbox
+          slot="end"
+          [(ngModel)]="!user.public"
+          (ngModelChange)="onChangeCheck('public', $event)"
+        ></ion-checkbox>
+      </ion-item>
       <ion-item (click)="blockUsersModal()" button lines="full">
         <ion-icon name="hand-left-outline" slot="start"></ion-icon>
         <ion-label>Usuarios bloqueados</ion-label>

@@ -11,6 +11,14 @@
     <ion-icon name="ban" slot="start"></ion-icon>
     <ion-label>Bloquear</ion-label>
   </ion-item>
+  <ion-item button (click)="copyProfile()" *ngIf="page !== 'chat'">
+    <ion-icon name="copy" slot="start"></ion-icon>
+    <ion-label>Copiar URL del perfil</ion-label>
+  </ion-item>
+  <ion-item button (click)="shareProfile()" *ngIf="page !== 'chat'">
+    <ion-icon name="share-social" slot="start"></ion-icon>
+    <ion-label>Compartir el perfil</ion-label>
+  </ion-item>
   <ion-item button (click)="warn(user)" *ngIf="auth.isMaster()">
     <ion-icon color="danger" name="warning" slot="start"></ion-icon>
     <ion-label color="danger">Advertir al usuario</ion-label>

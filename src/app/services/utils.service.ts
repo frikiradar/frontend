@@ -188,7 +188,11 @@ export class UtilsService {
     await alert.present();
   }
 
-  share() {
+  share(url = "") {
+    if (!url) {
+      url = "https://frikiradar.com";
+    }
+
     const referrer = this.auth.currentUserValue
       ? this.auth.currentUserValue.username
       : "app";
@@ -198,7 +202,7 @@ export class UtilsService {
         message:
           "Conoce a personas con tus mismos gustos con FrikiRadar, la app de citas y chat para frikis.", // not supported on some apps (Facebook, Instagram)
         subject: "FrikiRadar, la app de citas y chat para frikis", // fi. for email
-        url: `https://frikiradar.com?referrer=${referrer}`,
+        url: `${url}?referrer=${referrer}`,
         chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
       };
 
@@ -208,7 +212,7 @@ export class UtilsService {
         title: "FrikiRadar, la app de citas y chat para frikis",
         text:
           "Conoce a personas con tus mismos gustos con FrikiRadar, la app de citas y chat para frikis.",
-        url: `https://frikiradar.com?referrer=${referrer}`
+        url: `${url}?referrer=${referrer}`
       })
         .then(() => {
           console.log("Thanks for sharing!");

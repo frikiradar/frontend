@@ -56,7 +56,6 @@ export class ViewStoriesModal implements OnInit {
     backdrop: true,
     bottomClose: true,
     buttonDestroy: false,
-    showDraggable: false,
     handleKeyboard: false,
     initialBreak: "top",
     onBackdropTap: () => {
