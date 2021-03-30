@@ -88,13 +88,15 @@ export class LoginPage {
         }
       }
     } else {
-      const alert = await this.alert.create({
-        header: "¿Te has dado cuenta?",
-        message: "Para dos cosas que te pedimos y las pones mal... 🤭",
-        buttons: ["Tendré más cuidado"]
-      });
+      if (!this.username.value) {
+        const alert = await this.alert.create({
+          header: "¿Te has dado cuenta?",
+          message: "Para dos cosas que te pedimos y las pones mal... 🤭",
+          buttons: ["Tendré más cuidado"]
+        });
 
-      await alert.present();
+        await alert.present();
+      }
     }
   }
 
