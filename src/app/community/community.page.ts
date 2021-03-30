@@ -154,6 +154,10 @@ export class CommunityPage {
     this.router.navigate(["/story"]);
   }
 
+  async showAllRooms() {
+    this.router.navigate(["/rooms"]);
+  }
+
   async showRoom(slug: Room["slug"]) {
     if (!this.reorderActive) {
       this.router.navigate(["/room", slug]);

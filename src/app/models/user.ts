@@ -16,7 +16,7 @@ export interface User {
   relationship: string;
   status: string;
   age: number;
-  coordinates: { longitude: number; latitude: number };
+  coordinates?: { longitude: number; latitude: number };
 
   lovegender: string[];
   minage: number;

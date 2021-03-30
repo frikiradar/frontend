@@ -100,7 +100,10 @@ export class OptionsPopover {
   }
 
   async copyProfile() {
-    const url = `https://frikiradar.app/${this.user.username}`;
+    const referrer = this.auth.currentUserValue
+      ? this.auth.currentUserValue.username
+      : "app";
+    const url = `https://frikiradar.app/${this.user.username}?referrer=${referrer}`;
     try {
       if (this.platform.is("cordova")) {
         await this.clipboard.copy(url);

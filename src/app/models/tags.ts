@@ -3,4 +3,5 @@ export interface Tag {
   category: { name: string; id?: number };
   count?: number;
   user?: number;
+  id?: number;
 }

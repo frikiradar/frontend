@@ -103,17 +103,18 @@ export class RadarPage {
         const oldCoordinates = this.authUser.coordinates;
         if (
           oldCoordinates === undefined ||
+          oldCoordinates.latitude === undefined ||
           this.coordinates.latitude.toFixed(3) !==
             oldCoordinates?.latitude.toFixed(3) ||
           this.coordinates.longitude.toFixed(3) !==
             oldCoordinates?.longitude.toFixed(3)
         ) {
-          const authUser = await this.userSvc.setCoordinates(
+          const coordinates = await this.userSvc.setCoordinates(
             this.coordinates.longitude,
             this.coordinates.latitude
           );
-          authUser.coordinates = this.coordinates;
-          // this.auth.setAuthUser(authUser);
+          this.authUser.coordinates = coordinates;
+          this.auth.setAuthUser(this.authUser);
         }
       } catch (e) {
         console.error(e);

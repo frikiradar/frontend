@@ -67,7 +67,7 @@ export class GeolocationService {
       }
 
       const coordinates = await this.geolocation.getCurrentPosition({
-        // timeout: 15000,
+        timeout: 8000,
         maximumAge: 15000
       });
       const longitude = coordinates.coords.longitude;
@@ -76,10 +76,12 @@ export class GeolocationService {
       this.toastController.dismiss();
       return { longitude, latitude };
     } catch (e) {
-      this.config.set("geolocation", false);
+      // this.config.set("geolocation", false);
+      this.config.set("geolocation", true);
       this.toastController.dismiss();
-      await this.forcePermission();
-      return await this.getCoordinates();
+      // await this.forcePermission();
+      // return await this.getCoordinates();
+      return { longitude: 0, latitude: 0 };
     }
   }
 }

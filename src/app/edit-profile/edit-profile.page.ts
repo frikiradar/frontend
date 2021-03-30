@@ -144,7 +144,7 @@ export class EditProfilePage {
         await this.toast.create({
           message: "Cambios guardados correctamente.",
           duration: 5000,
-          position: "bottom"
+          position: "middle"
         })
       ).present();
     } catch (e) {
@@ -152,7 +152,8 @@ export class EditProfilePage {
         await this.toast.create({
           message: `Error al guardar los cambios ${e}.`,
           duration: 5000,
-          position: "bottom"
+          color: "danger",
+          position: "middle"
         })
       ).present();
     }
@@ -240,7 +241,7 @@ export class EditProfilePage {
             {
               text: `${op.name} (${op.total})`,
               handler: () => {
-                this.inputTag(op.name, category);
+                this.addTag(op.name, category);
               }
             }
           ];
@@ -255,7 +256,7 @@ export class EditProfilePage {
     }
   }
 
-  async inputTag(name: string, catName: string) {
+  async addTag(name: string, catName: string) {
     if (
       name &&
       !this.tags.some(t => t.name === name && t.category.name === catName)
@@ -263,20 +264,46 @@ export class EditProfilePage {
       const tags = name.split(",").map((t: string) => {
         return { name: t.trim(), category: { name: catName } };
       });
-
-      this.tags = [...this.tags, ...tags];
-      this.submitTags();
+      tags.forEach(async t => {
+        try {
+          const tag = await this.tagSvc.addTag(t.name, t.category.name);
+          this.tags = [...this.tags, ...[tag]];
+          console.log(this.tags);
+        } catch (e) {
+          (
+            await this.toast.create({
+              message: `Error al añadir la etiqueta ${t.name}.`,
+              color: "danger",
+              duration: 5000,
+              position: "middle"
+            })
+          ).present();
+          console.error(e);
+        }
+      });
     }
     this.role.value = this.music.value = this.games.value = this.films.value = this.books.value =
       "";
   }
 
-  async removeTag(name: string, catName: string) {
+  async removeTag(id: number) {
     this.tags.splice(
-      this.tags.findIndex(t => t.category.name === catName && t.name === name),
+      this.tags.findIndex(t => t.id === id),
       1
     );
-    this.submitTags();
+    try {
+      await this.tagSvc.removeTag(id);
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: `Error al eliminar la etiqueta.`,
+          color: "danger",
+          duration: 5000,
+          position: "middle"
+        })
+      ).present();
+      console.error(e);
+    }
   }
 
   getTagsCategory(category: string) {
@@ -284,25 +311,6 @@ export class EditProfilePage {
       return;
     }
     return this.tags.filter(t => t.category.name === category);
-  }
-
-  async submitTags() {
-    this.user = {
-      ...this.user,
-      ...{ tags: this.tags }
-    } as User;
-
-    try {
-      this.user = await this.userSvc.updateUser(this.user);
-    } catch (e) {
-      (
-        await this.toast.create({
-          message: `Error al guardar la etiqueta ${e}.`,
-          duration: 5000,
-          position: "bottom"
-        })
-      ).present();
-    }
   }
 
   async openPictureSheet() {

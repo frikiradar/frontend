@@ -277,7 +277,7 @@
                 (ionChange)="searchTag($event.detail.value, 'games')"
                 [debounce]="500"
                 (keyup.enter)="
-                        inputTag($event.target.value, 'games'); games.value = ''
+                        addTag($event.target.value, 'games'); games.value = ''
                       "
                 spellcheck="false"
               ></ion-input>
@@ -290,7 +290,7 @@
                 >
                   <ion-icon
                     name="close-circle"
-                    (click)="removeTag(tag.name, 'games')"
+                    (click)="removeTag(tag.id)"
                   ></ion-icon>
                   <ion-label>{{ tag.name }}</ion-label>
                 </ion-chip>
@@ -309,7 +309,7 @@
                 (ionChange)="searchTag($event.detail.value, 'films')"
                 [debounce]="500"
                 (keyup.enter)="
-                        inputTag($event.target.value, 'films'); films.value = ''
+                        addTag($event.target.value, 'films'); films.value = ''
                       "
               ></ion-input>
             </ion-item>
@@ -340,7 +340,7 @@
                 (ionChange)="searchTag($event.detail.value, 'books')"
                 [debounce]="500"
                 (keyup.enter)="
-                        inputTag($event.target.value, 'books'); books.value = ''
+                        addTag($event.target.value, 'books'); books.value = ''
                       "
               ></ion-input>
             </ion-item>
@@ -371,7 +371,7 @@
                 (ionChange)="searchTag($event.detail.value, 'role')"
                 [debounce]="500"
                 (keyup.enter)="
-                        inputTag($event.target.value, 'role'); role.value = ''
+                        addTag($event.target.value, 'role'); role.value = ''
                       "
               ></ion-input>
             </ion-item>
@@ -402,7 +402,7 @@
                 (ionChange)="searchTag($event.detail.value, 'music')"
                 [debounce]="500"
                 (keyup.enter)="
-                        inputTag($event.target.value, 'music'); music.value = ''
+                        addTag($event.target.value, 'music'); music.value = ''
                       "
               ></ion-input>
             </ion-item>
