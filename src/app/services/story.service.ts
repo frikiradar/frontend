@@ -68,26 +68,21 @@ export class StoryService {
 
   orderStories(stories: Story[]) {
     stories.sort((a, b) => {
-      if (
-        new Date(b.time_creation).getTime() >
-        new Date(a.time_creation).getTime()
-      )
-        return 1;
-      if (
-        new Date(b.time_creation).getTime() <
-        new Date(a.time_creation).getTime()
-      )
-        return -1;
+      return (
+        new Date(a.time_creation).getTime() -
+        new Date(b.time_creation).getTime()
+      );
     });
     return stories;
   }
 
   groupStories(stories: Story[]) {
     const groupedStories = [];
+    stories = stories.reverse();
     stories.forEach(s => {
       if (!groupedStories.some(g => g.user.id === s.user.id)) {
         const filterStories = stories.filter(sf => sf.user.id === s.user.id);
-        groupedStories.push(filterStories[filterStories.length - 1]);
+        groupedStories.push(filterStories[0]);
       }
     });
 

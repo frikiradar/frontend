@@ -10,5 +10,5 @@ export interface Room {
   image?: string;
   creator?: Partial<User>;
   last_message?: number;
-  unread?: boolean;
+  unread: number | boolean;
 }

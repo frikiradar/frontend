@@ -309,7 +309,9 @@ export class RadarPage {
   async slide() {
     this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
-      this.userSvc.view(this.user?.id);
+      if (this.user?.id) {
+        this.userSvc.view(this.user?.id);
+      }
       if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }

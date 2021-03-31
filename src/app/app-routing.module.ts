@@ -41,6 +41,11 @@ const routes: Routes = [
       )
   },
   {
+    path: "rooms",
+    loadChildren: () =>
+      import("./room/rooms/rooms.module").then(m => m.RoomsPageModule)
+  },
+  {
     path: "room/:slug",
     loadChildren: () => import("./room/room.module").then(m => m.RoomPageModule)
   },

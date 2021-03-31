@@ -89,7 +89,9 @@ ion-footer {
 
 .comments-pane {
   display: none;
+}
 
+.comments-pane, .comments {
   .text {
     a {
       color: #c4d83b !important;

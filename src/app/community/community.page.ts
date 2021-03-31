@@ -6,7 +6,6 @@ import {
   Router
 } from "@angular/router";
 import { IonSlides, MenuController, ModalController } from "@ionic/angular";
-import { ItemReorderEventDetail } from "@ionic/core";
 import { Vibration } from "@ionic-native/vibration/ngx";
 
 import { Room } from "../models/room";
@@ -17,7 +16,6 @@ import { StoryService } from "../services/story.service";
 import { Story } from "../models/story";
 import { StoryModal } from "../story/story-modal/story.modal";
 import { User } from "../models/user";
-import { UtilsService } from "../services/utils.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 
 @Component({
@@ -31,8 +29,6 @@ export class CommunityPage {
   public rooms: Room[];
   public stories: Story[];
   public groupedStories: Story[] = [];
-
-  public reorderActive = false;
 
   public storiesOpts = {
     slidesPerView: 4.5,
@@ -52,8 +48,7 @@ export class CommunityPage {
     private config: ConfigService,
     public vibration: Vibration,
     private modal: ModalController,
-    private route: ActivatedRoute,
-    private utils: UtilsService
+    private route: ActivatedRoute
   ) {
     this.router.events.subscribe(async (event: Event) => {
       if (event instanceof NavigationStart) {
@@ -159,18 +154,6 @@ export class CommunityPage {
   }
 
   async showRoom(slug: Room["slug"]) {
-    if (!this.reorderActive) {
-      this.router.navigate(["/room", slug]);
-    }
-  }
-
-  activateOptions() {
-    this.reorderActive = true;
-    this.vibration.vibrate(5);
-  }
-
-  reorderRooms(event: CustomEvent<ItemReorderEventDetail>) {
-    this.roomSvc.reorderRooms(event.detail.from, event.detail.to);
-    event.detail.complete();
+    this.router.navigate(["/room", slug]);
   }
 }
