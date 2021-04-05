@@ -1,6 +1,5 @@
 import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
-import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
@@ -11,10 +10,12 @@ import {
   ToastController
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
-import { Story } from "../models/story";
 
+import { Story } from "../models/story";
+import { Tag } from "../models/tags";
 import { User } from "../models/user";
 import { OptionsPopover } from "../options-popover/options-popover";
+import { PageService } from "../services/page.service";
 import { StoryService } from "../services/story.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
@@ -46,7 +47,8 @@ export class ProfilePage implements OnInit {
     private alert: AlertController,
     public auth: AuthService,
     private storiesSvc: StoryService,
-    private modal: ModalController
+    private modal: ModalController,
+    private pageSvc: PageService
   ) {}
 
   async ngOnInit() {
@@ -209,6 +211,38 @@ export class ProfilePage implements OnInit {
     return await popover.present();
   }
 
+  async showTag(tag: Tag) {
+    if (tag.category.name === "games") {
+      if (tag.slug) {
+        this.router.navigate(["/page", tag.slug]);
+      } else {
+        try {
+          (
+            await this.toast.create({
+              message: "Creando página...",
+              position: "middle"
+            })
+          ).present();
+          const page = await this.pageSvc.setPage(tag.id);
+          this.toast.dismiss();
+          this.user.tags.map(t => {
+            if (t.id === tag.id) {
+              t.slug = page.slug;
+            }
+          });
+          if (this.auth.currentUserValue.id === this.user.id) {
+            this.auth.setAuthUser(this.user);
+          }
+          this.router.navigate(["/page", page.slug]);
+        } catch (e) {
+          this.router.navigate(["/search", tag.name]);
+        }
+      }
+    } else {
+      this.router.navigate(["/search", tag.name]);
+    }
+  }
+
   async showStories(id: User["id"]) {
     let stories = this.stories.filter(s => s.user.id === id);
     stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
@@ -222,6 +256,11 @@ export class ProfilePage implements OnInit {
     await modal.present();
     await modal.onDidDismiss();
     this.stories = await this.storiesSvc.getUserStories(+id);
+  }
+
+  share() {
+    const url = `https://frikiradar.app/${this.user.username}`;
+    this.utils.share(url);
   }
 
   back() {

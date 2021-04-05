@@ -50,6 +50,7 @@ export class ChatInputComponent {
   @Input() editing = false;
   @Input() selectedMessage: Chat;
   @Input() mentions: boolean;
+  @Input() events: boolean;
 
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;

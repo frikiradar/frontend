@@ -1,11 +1,11 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   ActivatedRoute,
   Event,
   NavigationStart,
   Router
 } from "@angular/router";
-import { IonSlides, MenuController, ModalController } from "@ionic/angular";
+import { MenuController, ModalController } from "@ionic/angular";
 import { Vibration } from "@ionic-native/vibration/ngx";
 
 import { Room } from "../models/room";
@@ -17,6 +17,9 @@ import { Story } from "../models/story";
 import { StoryModal } from "../story/story-modal/story.modal";
 import { User } from "../models/user";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { Page } from "../models/page";
+import { PageService } from "../services/page.service";
+import { Chat } from "../models/chat";
 
 @Component({
   selector: "app-community",
@@ -24,17 +27,26 @@ import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
   styleUrls: ["./community.page.scss"]
 })
 export class CommunityPage {
-  @ViewChild("storiesSlides", { static: false })
-  storiesSlides: IonSlides;
   public rooms: Room[];
   public stories: Story[];
+  public pages: Page[];
   public groupedStories: Story[] = [];
+  private source: EventSource;
 
   public storiesOpts = {
     slidesPerView: 4.5,
     breakpoints: {
       1024: {
         slidesPerView: 6.5
+      }
+    }
+  };
+
+  public pagesOpts = {
+    slidesPerView: 3.5,
+    breakpoints: {
+      1024: {
+        slidesPerView: 8.5
       }
     }
   };
@@ -48,13 +60,13 @@ export class CommunityPage {
     private config: ConfigService,
     public vibration: Vibration,
     private modal: ModalController,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private pageSvc: PageService
   ) {
     this.router.events.subscribe(async (event: Event) => {
       if (event instanceof NavigationStart) {
         if (event.url === "/tabs/community") {
           this.getStories();
-          this.getRooms();
         }
       }
     });
@@ -74,15 +86,20 @@ export class CommunityPage {
       this.getStories();
     }
     this.getRooms();
+    this.getPages();
+    this.connectSSE();
   }
 
   async getStories() {
+    this.stories = undefined;
+    this.groupedStories = undefined;
     const stories = await this.storySvc.getStories();
     this.stories = this.storySvc.orderStories(stories);
     this.groupedStories = this.storySvc.groupStories(this.stories);
   }
 
   async getRooms() {
+    this.rooms = undefined;
     let rooms = await this.roomSvc.getRooms();
     const rooms_config = (await this.config.get(
       "rooms_config"
@@ -104,6 +121,10 @@ export class CommunityPage {
     });
 
     this.rooms = await this.roomSvc.orderRooms(rooms);
+  }
+
+  async getPages() {
+    this.pages = await this.pageSvc.getPages();
   }
 
   async newStory() {
@@ -155,5 +176,43 @@ export class CommunityPage {
 
   async showRoom(slug: Room["slug"]) {
     this.router.navigate(["/room", slug]);
+    this.rooms.map(r => {
+      if (r.slug === slug) {
+        r.unread = false;
+      }
+    });
+  }
+
+  showPages() {
+    this.router.navigate(["/pages"]);
+  }
+
+  async showPage(slug: Page["slug"]) {
+    this.router.navigate(["/page", slug]);
+  }
+
+  async connectSSE() {
+    this.source = await this.roomSvc.register(`rooms`);
+    this.source.addEventListener("message", async (res: any) => {
+      let message = JSON.parse(res.data) as Chat;
+      this.rooms.map(m => {
+        if (m.slug === message.conversationId) {
+          if (message.fromuser.id !== this.auth.currentUserValue.id) {
+            m.unread = true;
+          }
+        }
+      });
+    });
+
+    this.source.addEventListener("error", async error => {
+      console.error("Escucha al servidor de salas perdida", error);
+      this.source.close();
+      this.connectSSE();
+    });
+  }
+
+  ngOnDestroy() {
+    console.log("cerramos stream");
+    this.source.close();
   }
 }

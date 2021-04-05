@@ -19,4 +19,5 @@ export interface Chat {
   deleted?: boolean;
   writing?: boolean;
   mentions?: string[];
+  conversationId?: string;
 }

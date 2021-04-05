@@ -224,7 +224,7 @@ export class AuthService {
     }
 
     // Eliminamos la sesión y configuraciones
-    localStorage.removeItem("currentUser");
+    localStorage.clear();
     sessionStorage.clear();
     this.currentUserSubject.next(undefined);
 

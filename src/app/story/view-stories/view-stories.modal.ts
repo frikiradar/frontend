@@ -380,13 +380,14 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async openUrl(event: any) {
-    if (event.srcElement.href && event.target.className.includes("linkified")) {
-      this.urlSvc.openUrl(event.srcElement.href);
-    }
+    this.urlSvc.openUrl(event);
 
-    if (event.srcElement.href && event.target.className.includes("mention")) {
-      event.preventDefault();
-      this.showProfile(event.target.innerHTML.replace("@", ""));
+    if (
+      event.srcElement.href &&
+      (event.target.className.includes("mention") ||
+        event.target.className.includes("hashtag"))
+    ) {
+      this.close();
     }
 
     return false;

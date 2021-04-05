@@ -17,6 +17,7 @@ export class ChatPage implements OnInit {
   showSkeleton: boolean;
   showOptions = false;
   selectedChat: Chat;
+  source: EventSource;
 
   constructor(
     private chatSvc: ChatService,
@@ -26,19 +27,13 @@ export class ChatPage implements OnInit {
     private toast: ToastController
   ) {
     this.showSkeleton = true;
-
-    this.router.events.subscribe(async (event: Event) => {
-      if (event instanceof NavigationStart) {
-        if (event.url === "/tabs/chat") {
-          this.chats = await this.chatSvc.getChats();
-        }
-      }
-    });
   }
 
   async ngOnInit() {
     this.chats = await this.chatSvc.getChats();
     this.showSkeleton = false;
+
+    this.connectSSE();
   }
 
   async showChat(id: User["id"]) {
@@ -89,5 +84,50 @@ export class ChatPage implements OnInit {
       this.selectedChat = chat;
       this.showOptions = true;
     }
+  }
+
+  async connectSSE() {
+    this.source = await this.chatSvc.register(
+      `chats-${this.auth.currentUserValue.id}`
+    );
+    this.source.addEventListener("message", async (res: any) => {
+      let message = JSON.parse(res.data) as Chat;
+      this.chats.map(m => {
+        if (m.conversationId === message.conversationId) {
+          if (message.writing) {
+            const oldText = m.text;
+            m.text = "⌨ Escribiendo...";
+            setTimeout(() => {
+              m.text = oldText;
+            }, 5000);
+          } else {
+            m.text = message.text;
+            m.time_creation = message.time_creation;
+            m.time_read = message.time_read;
+            if (message.time_read) {
+              if (m.count > 0) {
+                m.count--;
+              }
+            } else if (message.fromuser.id !== this.auth.currentUserValue.id) {
+              m.count++;
+            }
+          }
+        }
+      });
+      if (!message.writing) {
+        this.chats.sort((a, b) => {
+          return (
+            new Date(b.time_creation).getTime() -
+            new Date(a.time_creation).getTime()
+          );
+        });
+      }
+    });
+
+    this.source.addEventListener("error", async error => {
+      console.error("Escucha al servidor de chat perdida", error);
+      this.source.close();
+      this.connectSSE();
+    });
   }
 }

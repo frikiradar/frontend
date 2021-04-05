@@ -440,9 +440,7 @@ export class ChatUserPage implements OnInit {
   }
 
   openUrl(event: any) {
-    if (event.srcElement.href && event.target.className.includes("linkified")) {
-      this.urlSvc.openUrl(event.srcElement.href);
-    }
+    this.urlSvc.openUrl(event);
     return false;
   }
 
@@ -492,7 +490,7 @@ export class ChatUserPage implements OnInit {
       return;
     }
     this.writing = true;
-    await this.chatSvc.writing(this.auth.currentUserValue.id, this.user.id);
+    await this.chatSvc.writing(this.auth.currentUserValue.id, this.userId);
     setTimeout(async () => {
       this.writing = false;
     }, 2500);

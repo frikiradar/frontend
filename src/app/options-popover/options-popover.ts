@@ -48,6 +48,70 @@ export class OptionsPopover {
     this.close();
   }
 
+  async report(user: User) {
+    const alert = await this.alert.create({
+      header: `¿Quieres reportar a ${user.username}?`,
+      message:
+        "Nos llegará un aviso para que revisemos el caso y actuemos en consecuencia. Describe a continuación el motivo del reporte.",
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: "Motivo del reporte"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel",
+          cssClass: "secondary"
+        },
+        {
+          text: "Reportar",
+          role: "block",
+          handler: async data => {
+            if (data.note.trim().length) {
+              try {
+                await this.userSvc.report(user.id, data.note);
+                (
+                  await this.toast.create({
+                    message: "Usuario reportado correctamente",
+                    duration: 2000,
+                    position: "bottom"
+                  })
+                ).present();
+              } catch (e) {
+                (
+                  await this.toast.create({
+                    message: `Error al reportar al usuario ${e}`,
+                    duration: 2000,
+                    position: "bottom",
+                    color: "danger"
+                  })
+                ).present();
+                alert.present();
+              }
+            } else {
+              (
+                await this.toast.create({
+                  message: `El mensaje de reporte no puede estar en blanco`,
+                  duration: 2000,
+                  position: "middle",
+                  color: "danger"
+                })
+              ).present();
+
+              this.report(this.user);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    this.close();
+  }
+
   async block(user: User) {
     const alert = await this.alert.create({
       header: `¿Quieres bloquear a ${user.username}?`,

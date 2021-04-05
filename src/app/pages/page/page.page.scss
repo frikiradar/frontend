@@ -1,0 +1,119 @@
+ion-toolbar {
+    position: absolute;
+    --background: transparent;
+  
+    ion-back-button {
+      background: #2f2f2f87;
+      height: 50px;
+      width: 50px;
+      border-radius: 50px;
+    }
+
+    ion-title {
+        text-shadow: 1px 1px 1px black;
+    }
+}
+
+#artwork {
+    -webkit-filter: blur(1px); /* Safari 6.0 - 9.0 */
+    filter: blur(1px);
+    height: 230px;
+    width: 100%;
+    object-fit: cover;
+}
+
+ion-thumbnail#cover {
+    position: absolute;
+    top: 120px;
+    left: 20px;
+    display: inline-flex;
+
+    --border-radius: 5px;
+    padding: 5px;
+    --size: 120px;
+    height: auto;
+
+    img {
+        box-shadow: 2px 2px 8px;;
+    }
+}
+
+#add-tag {
+    position: absolute;
+    top: 180px;
+    right: 20px;
+    height: fit-content;
+    width: max-content;
+
+    ion-label {
+        color: #C4D83B;
+    }
+    ion-chip {
+        background: #19282a;
+    }
+}
+
+#release {
+    position: relative;
+    left: 150px;
+    top: 8px;
+    color: white;
+    min-height: 40px;
+}
+
+#description {
+    p {
+        color: white;
+        text-align: justify;
+        font-size: 13px;
+    }
+}
+
+#description.collapsed {
+    height: 70px;
+    p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+}
+
+#description.expanded {
+    height: max-content;
+    p {
+        height: max-content;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal !important;
+    }
+}
+
+#stories {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 25px;
+}
+
+#room {
+    ion-thumbnail {
+        --border-radius: 8px;
+        margin-right: 10px;
+    }
+
+    .room-description {
+        white-space: initial;
+        color: rgb(172, 172, 172);
+    }
+
+    ion-badge {
+        position: absolute;
+        left: 45px;
+        border-radius: 15px;
+        z-index: 1;
+        width: 20px;
+        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+      }
+}

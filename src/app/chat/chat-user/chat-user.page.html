@@ -123,10 +123,10 @@
             </div>
           </div>
           <div *ngIf="message.image">
-            <ion-img
+            <img
               (click)="openViewer(message.image, message.fromuser.name + ', ' + utils.niceDate(message.time_creation), message.text)"
               [src]="message.image"
-            ></ion-img>
+            />
             <ion-note class="note-image" *ngIf="!message?.text">
               <span *ngIf="message?.edited">Editado</span>
               {{ message.time_creation | date: "shortTime" }}
@@ -147,7 +147,7 @@
           <ion-card-content *ngIf="message.text">
             <span
               class="text"
-              [innerHTML]="message.text | linky:{className: 'linkified'}"
+              [innerHTML]="message.text | linky:{className: 'linkified'} | hashtag"
               (click)="$event.stopImmediatePropagation(); openUrl($event);"
             ></span>
             <ion-note class="note-text">
@@ -172,12 +172,15 @@
     </ion-item-sliding>
   </span>
 </ion-content>
-<ion-footer *ngIf="user?.active && !user?.roles?.includes('ROLE_DEMO')">
+<ion-footer
+  *ngIf="(user?.active && !user?.roles?.includes('ROLE_DEMO')) || (auth.currentUserValue?.roles?.includes('ROLE_DEMO') && user?.roles?.includes('ROLE_DEMO'))"
+>
   <app-chat-input
     (onWriting)="setWriting()"
     (onSubmit)="sendMessage($event)"
     [(replying)]="replying"
     [(editing)]="editing"
     [selectedMessage]="selectedMessage"
+    [events]="auth.isMaster() && messages.length > 10"
   ></app-chat-input>
 </ion-footer>

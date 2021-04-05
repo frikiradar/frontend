@@ -28,7 +28,8 @@ ion-header {
     text-decoration: none;
 
     &.linkified,
-    &.mention {
+    &.mention,
+    &.hashtag {
       color: #c4d83b !important;
     }
   }
@@ -55,8 +56,11 @@ h2.section {
 }
 
 .show-more {
-  color: white;
   font-size: 12px;
+
+  ion-label {
+    color: white !important;
+  }
 }
 
 ion-item {

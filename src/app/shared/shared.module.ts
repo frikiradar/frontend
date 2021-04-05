@@ -21,12 +21,14 @@ import { MentionsPipe } from "../mentions.pipe";
 import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
+import { HashtagPipe } from "../hashtag.pipe";
 
 @NgModule({
   declarations: [
     ImagePreloadDirective,
     NiceDatePipe,
     MentionsPipe,
+    HashtagPipe,
     AmbassadorModal,
     CreditsModal,
     RequestGeolocationModal,
@@ -63,6 +65,7 @@ import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
     ImagePreloadDirective,
     NiceDatePipe,
     MentionsPipe,
+    HashtagPipe,
     ChatInputComponent,
     LinkyModule
   ],

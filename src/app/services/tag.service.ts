@@ -15,9 +15,9 @@ export class TagService {
     }
   }
 
-  async addTag(name: string, category: string) {
+  async addTag(name: string, category: string, slug?: string) {
     return (await this.rest
-      .put("add-tag", { name, category })
+      .put("add-tag", { name, category, slug })
       .toPromise()) as Tag;
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { NavigationStart, Event, Router } from "@angular/router";
 import { ItemReorderEventDetail } from "@ionic/core";
-import { Vibration } from "@ionic-native/vibration/ngx";
+import { Chat } from "src/app/models/chat";
 
 import { Room } from "src/app/models/room";
 import { AuthService } from "src/app/services/auth.service";
@@ -15,17 +15,18 @@ import { RoomService } from "src/app/services/room.service";
 })
 export class RoomsPage implements OnInit {
   public rooms: Room[];
+  private source: EventSource;
 
   constructor(
     private roomSvc: RoomService,
     private config: ConfigService,
     private auth: AuthService,
-    private router: Router,
-    private vibration: Vibration
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.getRooms();
+    this.connectSSE();
   }
 
   async getRooms() {
@@ -54,10 +55,35 @@ export class RoomsPage implements OnInit {
 
   async showRoom(slug: Room["slug"]) {
     this.router.navigate(["/room", slug]);
+    this.rooms.map(r => {
+      if (r.slug === slug) {
+        r.unread = false;
+      }
+    });
   }
 
   reorderRooms(event: CustomEvent<ItemReorderEventDetail>) {
     this.roomSvc.reorderRooms(event.detail.from, event.detail.to);
     event.detail.complete();
+  }
+
+  async connectSSE() {
+    this.source = await this.roomSvc.register(`rooms`);
+    this.source.addEventListener("message", async (res: any) => {
+      let message = JSON.parse(res.data) as Chat;
+      this.rooms.map(m => {
+        if (m.slug === message.conversationId) {
+          if (message.fromuser.id !== this.auth.currentUserValue.id) {
+            m.unread = true;
+          }
+        }
+      });
+    });
+
+    this.source.addEventListener("error", async error => {
+      console.error("Escucha al servidor de salas perdida", error);
+      this.source.close();
+      this.connectSSE();
+    });
   }
 }

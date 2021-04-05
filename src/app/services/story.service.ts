@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ModalController } from "@ionic/angular";
 
 import { Story } from "../models/story";
 import { User } from "../models/user";
@@ -14,8 +13,7 @@ export class StoryService {
   constructor(
     private rest: RestService,
     private uploadSvc: UploadService,
-    private auth: AuthService,
-    private modal: ModalController
+    private auth: AuthService
   ) {}
 
   async getStory(id: Story["id"]) {
@@ -40,6 +38,22 @@ export class StoryService {
 
   async getStories() {
     const stories = (await this.rest.get("stories").toPromise()) as Story[];
+    stories.map(s => {
+      if (
+        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.user.id === this.auth.currentUserValue.id
+      ) {
+        s.viewed = true;
+      }
+    });
+
+    return stories;
+  }
+
+  async getStoriesSlug(slug: string) {
+    const stories = (await this.rest
+      .get(`stories-slug/${slug}`)
+      .toPromise()) as Story[];
     stories.map(s => {
       if (
         s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||

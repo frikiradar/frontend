@@ -1,3 +1,4 @@
+import { Page } from "./page";
 import { User } from "./user";
 
 export interface Room {
@@ -10,5 +11,6 @@ export interface Room {
   image?: string;
   creator?: Partial<User>;
   last_message?: number;
-  unread: number | boolean;
+  unread?: number | boolean;
+  page?: Page;
 }

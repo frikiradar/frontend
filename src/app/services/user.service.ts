@@ -176,6 +176,10 @@ export class UserService {
     return this.rest.delete(`block/${id}`).toPromise() as Promise<User[]>;
   }
 
+  report(id: User["id"], note?: string) {
+    return this.rest.put("report", { user: id, note }).toPromise();
+  }
+
   getHides() {
     return this.rest.get("hides").toPromise() as Promise<User[]>;
   }

@@ -1,0 +1,52 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="" defaultHref="/tabs/community"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Páginas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list id="all-pages" *ngIf="!pages">
+    <ion-item
+      button
+      detail="false"
+      *ngFor="let i of [].constructor(8)"
+      lines="none"
+    >
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+        </h2>
+        <p>
+          <ion-skeleton-text animated style="width: 40%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list id="all-pages" *ngIf="pages">
+    <ion-item
+      button
+      detail="false"
+      *ngFor="let page of pages"
+      lines="none"
+      (click)="showPage(page.slug)"
+    >
+      <ion-thumbnail slot="start">
+        <img
+          [src]="page.cover"
+          [alt]="page.name"
+          default="/assets/img/pages/default-games-page.jpg"
+        />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{page.name}}</h2>
+        <p>#{{page.slug}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

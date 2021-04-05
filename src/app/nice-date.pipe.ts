@@ -12,7 +12,7 @@ export class NiceDatePipe implements PipeTransform {
       return convertToNiceDate(value);
     } else {
       const datePipe = new DatePipe("es-ES");
-      return dif <= 365
+      return dif <= 30
         ? datePipe.transform(value, "d 'de' MMMM")
         : datePipe.transform(value, "d MMM 'de' yyyy");
     }

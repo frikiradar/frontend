@@ -76,6 +76,16 @@ const routes: Routes = [
       import("./story/story.module").then(m => m.StoryPageModule)
   },
   {
+    path: "page/:slug",
+    loadChildren: () =>
+      import("./pages/page/page.module").then(m => m.PagePageModule)
+  },
+  {
+    path: "pages",
+    loadChildren: () =>
+      import("./pages/pages.module").then(m => m.PagesPageModule)
+  },
+  {
     path: ":id",
     loadChildren: () =>
       import("./profile/profile.module").then(m => m.ProfilePageModule)

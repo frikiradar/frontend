@@ -321,7 +321,7 @@
                 >
                   <ion-icon
                     name="close-circle"
-                    (click)="removeTag(tag.name, 'films')"
+                    (click)="removeTag(tag.id)"
                   ></ion-icon>
                   <ion-label>{{ tag.name }}</ion-label>
                 </ion-chip>
@@ -352,7 +352,7 @@
                 >
                   <ion-icon
                     name="close-circle"
-                    (click)="removeTag(tag.name, 'books')"
+                    (click)="removeTag(tag.id)"
                   ></ion-icon>
                   <ion-label>{{ tag.name }}</ion-label>
                 </ion-chip>
@@ -383,7 +383,7 @@
                 >
                   <ion-icon
                     name="close-circle"
-                    (click)="removeTag(tag.name, 'role')"
+                    (click)="removeTag(tag.id)"
                   ></ion-icon>
                   <ion-label>{{ tag.name }}</ion-label>
                 </ion-chip>
@@ -414,7 +414,7 @@
                 >
                   <ion-icon
                     name="close-circle"
-                    (click)="removeTag(tag.name, 'music')"
+                    (click)="removeTag(tag.id)"
                   ></ion-icon>
                   <ion-label>{{ tag.name }}</ion-label>
                 </ion-chip>

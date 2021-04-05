@@ -4,4 +4,5 @@ export interface Tag {
   count?: number;
   user?: number;
   id?: number;
+  slug?: string;
 }

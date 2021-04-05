@@ -1,5 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { AlertController, ModalController } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  NavController
+} from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -25,7 +29,8 @@ export class SettingsPage implements OnInit {
     private modal: ModalController,
     private auth: AuthService,
     private userSvc: UserService,
-    private alert: AlertController
+    private alert: AlertController,
+    private nav: NavController
   ) {}
 
   async ngOnInit() {
@@ -58,6 +63,30 @@ export class SettingsPage implements OnInit {
       component: HideUsersModal
     });
     return await modal.present();
+  }
+
+  async clearLocalStorage() {
+    localStorage.removeItem("config");
+    await caches.keys().then(keyList => {
+      keyList.forEach(cache => {
+        caches.delete(cache);
+      });
+    });
+
+    const alert = await this.alert.create({
+      header: "Eliminado correctamente",
+      message: "Datos de configuración local y cache eliminados.",
+      buttons: [
+        {
+          text: "¡Ok!",
+          handler: () => {
+            window.location.reload();
+          }
+        }
+      ]
+    });
+
+    alert.present();
   }
 
   async usernameModal() {

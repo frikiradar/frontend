@@ -141,6 +141,23 @@
 
     <ion-item-group>
       <ion-item-divider color="primary">
+        <ion-icon name="apps" slot="start"></ion-icon>
+        <ion-label><h2>Aplicación</h2></ion-label>
+      </ion-item-divider>
+      <ion-item lines="full" (click)="clearLocalStorage()" button>
+        <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h2>Eliminar datos de configuración local y caché</h2>
+          <p>
+            Esto eliminará los datos de configuración almacenados en tu
+            dispositivo actual. Úsalo solamente si sabes lo que haces.
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="primary">
         <ion-icon name="person-circle" slot="start"></ion-icon>
         <ion-label><h2>Cuenta</h2></ion-label>
       </ion-item-divider>

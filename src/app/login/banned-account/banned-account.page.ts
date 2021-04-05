@@ -115,9 +115,7 @@ export class BannedAccountPage {
   }
 
   openUrl(event: any) {
-    if (event.srcElement.href && event.target.className.includes("linkified")) {
-      this.urlSvc.openUrl(event.srcElement.href);
-    }
+    this.urlSvc.openUrl(event);
     return false;
   }
 

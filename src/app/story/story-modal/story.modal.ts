@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
@@ -21,6 +21,8 @@ import { UtilsService } from "../../services/utils.service";
   styleUrls: ["./story.modal.scss"]
 })
 export class StoryModal implements OnInit {
+  @Input() hash: string;
+  @ViewChild("slides", { static: true })
   @ViewChild("imageInput", { static: true })
   imageInput: ElementRef;
   @ViewChild("textarea", { static: false })
@@ -55,7 +57,11 @@ export class StoryModal implements OnInit {
     });
   }
 
-  async ngOnInit() {}
+  async ngOnInit() {
+    if (this.hash) {
+      this.text.setValue(this.hash + " ");
+    }
+  }
 
   async selectPicture(type: "camera" | "gallery") {
     if (this.platform.is("android") && this.platform.is("cordova")) {

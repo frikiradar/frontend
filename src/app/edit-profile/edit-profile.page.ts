@@ -267,8 +267,9 @@ export class EditProfilePage {
       tags.forEach(async t => {
         try {
           const tag = await this.tagSvc.addTag(t.name, t.category.name);
-          this.tags = [...this.tags, ...[tag]];
-          console.log(this.tags);
+          this.tags = [...[tag], ...this.tags];
+          this.user.tags = this.tags;
+          this.auth.setAuthUser(this.user);
         } catch (e) {
           (
             await this.toast.create({
@@ -436,6 +437,6 @@ export class EditProfilePage {
   }
 
   back() {
-    this.router.navigate(["/tabs/radar"]);
+    this.router.navigate(["/profile"]);
   }
 }

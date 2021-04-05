@@ -85,11 +85,18 @@
   </form>
   <ion-buttons ion-activatable slot="end">
     <ion-button
+      *ngIf="!events || message.value || image"
       color="primary"
       [disabled]="!message.value && !image"
       (click)="sendMessage()"
     >
       <ion-icon slot="icon-only" name="send"></ion-icon>
+    </ion-button>
+    <ion-button
+      *ngIf="!message.value && !image && events"
+      (click)="createEvent()"
+    >
+      <ion-icon slot="icon-only" name="calendar"></ion-icon>
     </ion-button>
   </ion-buttons>
 </ion-toolbar>

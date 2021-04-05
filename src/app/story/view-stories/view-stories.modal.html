@@ -24,7 +24,7 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button
-        *ngIf="story.user.id === auth.currentUserValue.id"
+        *ngIf="story.user.id === auth.currentUserValue.id || auth.isMaster()"
         (click)="showOptions(story)"
       >
         <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
@@ -52,7 +52,7 @@
         <ion-card-content>
           <p
             (click)="$event.stopImmediatePropagation(); openUrl($event);"
-            [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions}"
+            [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions} | hashtag"
           ></p>
         </ion-card-content>
       </ion-card>
@@ -94,7 +94,7 @@
   <div class="comments">
     <ion-list *ngIf="story?.comments.length > 0">
       <ion-item
-        *ngFor="let comment of story.comments.reverse().slice(0, 1)"
+        *ngFor="let comment of story.comments.slice(-1)"
         button
         detail="false"
         lines="none"
@@ -109,7 +109,7 @@
             >
             &nbsp;
             <span
-              [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions}"
+              [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions} | hashtag"
               (click)="$event.stopImmediatePropagation(); openUrl($event);"
             ></span>
           </p>
@@ -243,7 +243,7 @@
           >
           &nbsp;
           <span
-            [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions}"
+            [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions} | hashtag"
             (click)="$event.stopImmediatePropagation(); openUrl($event);"
           ></span>
         </p>

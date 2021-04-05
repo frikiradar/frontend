@@ -27,6 +27,8 @@ import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { Room } from "../models/room";
 import { RoomService } from "../services/room.service";
 import { RoomPopover } from "./room-popover/room-popover";
+import { PageService } from "../services/page.service";
+import { Page } from "../models/page";
 
 @Component({
   selector: "app-room",
@@ -45,6 +47,7 @@ export class RoomPage implements OnInit {
   public toggled: boolean = false;
 
   public room: Room;
+  public roomPage: Page;
   slug: Room["slug"];
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
@@ -66,6 +69,7 @@ export class RoomPage implements OnInit {
     private route: ActivatedRoute,
     private nav: NavController,
     private roomSvc: RoomService,
+    private pageSvc: PageService,
     private chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
@@ -111,7 +115,12 @@ export class RoomPage implements OnInit {
     }
 
     this.slug = this.route.snapshot.paramMap.get("slug");
-    this.room = await this.roomSvc.getRoom(this.slug);
+    try {
+      this.room = await this.roomSvc.getRoom(this.slug);
+      this.roomPage = this.room.page;
+    } catch (e) {
+      // console.error(`No se ha podido cargar la sala. Error: ${e}`);
+    }
 
     if (
       !this.auth.currentUserValue?.roles?.includes(this.room.permissions[0])
@@ -127,7 +136,7 @@ export class RoomPage implements OnInit {
         .filter(m => m.text || m.image || m.audio)
         .reverse();
 
-      if (messages.length && this.room.visible) {
+      if (messages.length && (this.room.visible || this.roomPage)) {
         this.roomSvc.setLastMessage(
           this.slug,
           messages[messages.length - 1].id
@@ -159,7 +168,7 @@ export class RoomPage implements OnInit {
             this.toUserWriting = "";
           }, 10000);
         } else if (!message.writing) {
-          if (this.room.visible) {
+          if (this.room.visible || this.roomPage) {
             this.roomSvc.setLastMessage(this.slug, message.id);
           }
 
@@ -380,9 +389,11 @@ export class RoomPage implements OnInit {
     this.pressOptions = false;
     try {
       await this.chatSvc.deleteMessage(this.selectedMessage.id);
-      this.messages = this.messages.filter(
-        m => m.id !== this.selectedMessage.id
-      );
+      if (this.selectedMessage.fromuser.id === this.auth.currentUserValue.id) {
+        this.messages = this.messages.filter(
+          m => m.id !== this.selectedMessage.id
+        );
+      }
     } catch (e) {
       (
         await this.toast.create({
@@ -405,15 +416,7 @@ export class RoomPage implements OnInit {
   }
 
   async openUrl(event: any) {
-    if (event.srcElement.href && event.target.className.includes("linkified")) {
-      this.urlSvc.openUrl(event.srcElement.href);
-    }
-
-    if (event.srcElement.href && event.target.className.includes("mention")) {
-      event.preventDefault();
-      this.showProfile(event.target.innerHTML.replace("@", ""));
-    }
-
+    this.urlSvc.openUrl(event);
     return false;
   }
 
@@ -518,6 +521,12 @@ export class RoomPage implements OnInit {
     setTimeout(async () => {
       this.writing = false;
     }, 2500);
+  }
+
+  async showPage(slug: Page["slug"]) {
+    if (this.roomPage?.slug) {
+      this.router.navigate(["/page", slug]);
+    }
   }
 
   back() {

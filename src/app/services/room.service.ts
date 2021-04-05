@@ -233,7 +233,11 @@ export class RoomService {
     let rooms_config = (await this.config.get(
       "rooms_config"
     )) as Config["rooms_config"];
-
+    rooms_config = rooms_config?.filter(r => {
+      if (rooms.find(room => room.slug === r.slug)) {
+        return r;
+      }
+    });
     if (
       rooms_config &&
       !rooms_config?.some(r => r.order === undefined) &&

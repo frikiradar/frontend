@@ -6,16 +6,26 @@
         text=""
         defaultHref="/tabs/community"
       ></ion-back-button>
-      <ion-avatar>
-        <ion-img *ngIf="room" [src]="room?.image" [alt]="room?.name"></ion-img>
-        <ion-skeleton-text animated *ngIf="!room"></ion-skeleton-text>
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ room?.name }}</h2>
-        <p>
-          {{ toUserWriting}}
-        </p>
-      </ion-label>
+      <ion-button (click)="showPage(room.slug)" shape="round">
+        <ion-avatar>
+          <img
+            *ngIf="room"
+            [src]="room?.image"
+            [alt]="room?.name"
+            default="/assets/img/pages/default-games-page.jpg"
+          />
+          <ion-skeleton-text animated *ngIf="!room"></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ room?.name || roomPage?.name }}</h2>
+          <p *ngIf="toUserWriting">
+            {{ toUserWriting}}
+          </p>
+          <p *ngIf="!toUserWriting">
+            #{{room?.slug}}
+          </p>
+        </ion-label>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="pressOptions">
       <ion-button (click)="pressOptions = false">
@@ -42,7 +52,7 @@
       </ion-button>
       <ion-button
         (click)="deleteMessage()"
-        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id || auth.isMaster()"
       >
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
@@ -109,10 +119,10 @@
             </div>
           </div>
           <div *ngIf="message.image">
-            <ion-img
+            <img
               (click)="openViewer(message.image, message.fromuser.username + ', ' + utils.niceDate(message.time_creation), message.text)"
               [src]="message.image"
-            ></ion-img>
+            />
             <ion-note class="note-image" *ngIf="!message?.text">
               <span *ngIf="message?.edited">Editado</span>
               {{ message.time_creation | date: "shortTime" }}
@@ -152,7 +162,7 @@
             </p>
             <span
               class="text"
-              [innerHTML]="message.text | linky:{className: 'linkified'} | mentions:{mentions: message.mentions}"
+              [innerHTML]="message.text | linky:{className: 'linkified'} | mentions:{mentions: message.mentions} | hashtag"
               (click)="$event.stopImmediatePropagation(); openUrl($event);"
             ></span>
             <ion-note class="note-text">
@@ -185,5 +195,6 @@
     [(editing)]="editing"
     [selectedMessage]="selectedMessage"
     [mentions]="true"
+    [events]="auth.isMaster() && roomPage && roomPage.game_mode === 'online' ? true : false"
   ></app-chat-input>
 </ion-footer>
