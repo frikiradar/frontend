@@ -183,13 +183,15 @@ export class RoomPage implements OnInit {
                 m.time_read = message.time_read;
                 m.edited = message.edited;
                 m.deleted = message.deleted;
+                m.modded = message.modded;
               }
             });
-            // Borramos los deleted
-            this.messages = this.messages.filter(m => !m.deleted);
           } else {
             this.messages = [...this.messages, message];
           }
+
+          // Borramos los deleted
+          this.messages = this.messages.filter(m => !m.deleted);
 
           this.scrollDown();
         }

@@ -20,4 +20,5 @@ export interface Chat {
   writing?: boolean;
   mentions?: string[];
   conversationId?: string;
+  modded?: boolean;
 }

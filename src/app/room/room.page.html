@@ -16,7 +16,7 @@
           />
           <ion-skeleton-text animated *ngIf="!room"></ion-skeleton-text>
         </ion-avatar>
-        <ion-label>
+        <ion-label *ngIf="room">
           <h2>{{ room?.name || roomPage?.name }}</h2>
           <p *ngIf="toUserWriting">
             {{ toUserWriting}}
@@ -37,7 +37,7 @@
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-buttons>-->
-    <ion-buttons slot="end" *ngIf="pressOptions">
+    <ion-buttons slot="end" *ngIf="pressOptions && !selectedMessage?.modded">
       <ion-button
         (click)="edit()"
         *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
