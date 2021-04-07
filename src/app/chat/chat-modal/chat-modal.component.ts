@@ -41,7 +41,6 @@ import { OptionsPopover } from "../../options-popover/options-popover";
 })
 export class ChatModalComponent implements OnInit {
   @Input() userId: User["id"];
-  @Output() newChat: EventEmitter<Chat> = new EventEmitter();
 
   @ViewChild("chatlist", { static: false })
   chatlist: IonContent;
@@ -216,10 +215,6 @@ export class ChatModalComponent implements OnInit {
                   await this.alertError.present();
                 }
               }
-            }
-
-            if (this.messages.length === 1) {
-              this.newChat.emit(message);
             }
 
             if (message.fromuser.id === this.user.id) {

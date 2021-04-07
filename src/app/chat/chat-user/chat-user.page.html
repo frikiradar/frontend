@@ -4,8 +4,4 @@
   [selected]="userId"
   (chatsChange)="chatsChange($event)"
 ></app-chat-list>
-<app-chat-modal
-  *ngIf="userId"
-  [userId]="userId"
-  (newChat)="newChat($event)"
-></app-chat-modal>
+<app-chat-modal *ngIf="userId" [userId]="userId"></app-chat-modal>

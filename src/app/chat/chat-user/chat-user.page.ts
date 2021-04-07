@@ -28,16 +28,6 @@ export class ChatUserPage implements OnInit {
     if (chats?.length < this.chats?.length) {
       this.userId = undefined;
     }
-    // console.log("chats cambiados");
     this.chats = chats;
-  }
-
-  newChat(chat: Chat) {
-    chat.user =
-      chat.fromuser.id === this.auth.currentUserValue.id
-        ? chat.touser
-        : chat.fromuser;
-
-    this.chats = [chat, ...this.chats];
   }
 }

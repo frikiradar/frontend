@@ -114,28 +114,42 @@ export class ChatListComponent {
     );
     this.source.addEventListener("message", async (res: any) => {
       let message = JSON.parse(res.data) as Chat;
-      this.chats.map(m => {
-        if (m.conversationId === message.conversationId) {
-          if (message.writing) {
-            const oldText = m.text;
-            m.text = "⌨ Escribiendo...";
-            setTimeout(() => {
-              m.text = oldText;
-            }, 5000);
-          } else {
-            m.text = message.text;
-            m.time_creation = message.time_creation;
-            m.time_read = message.time_read;
-            if (message.time_read) {
-              if (m.count > 0) {
-                m.count--;
+      if (this.chats.some(m => m.conversationId === message.conversationId)) {
+        this.chats.map(m => {
+          if (m.conversationId === message.conversationId) {
+            if (m.writing && !message.writing) {
+              m.writing = false;
+            }
+
+            if (message.writing) {
+              const oldText = m.text;
+              m.writing = true;
+              setTimeout(() => {
+                m.writing = false;
+              }, 10000);
+            } else {
+              m.text = message.text;
+              m.time_creation = message.time_creation;
+              m.time_read = message.time_read;
+              if (message.time_read) {
+                if (m.count > 0) {
+                  m.count--;
+                }
+              } else if (
+                message.fromuser.id !== this.auth.currentUserValue.id
+              ) {
+                m.count++;
               }
-            } else if (message.fromuser.id !== this.auth.currentUserValue.id) {
-              m.count++;
             }
           }
-        }
-      });
+        });
+      } else if (!message.writing) {
+        message.user =
+          message.fromuser.id === this.auth.currentUserValue.id
+            ? message.touser
+            : message.fromuser;
+        this.chats = [message, ...this.chats];
+      }
       if (!message.writing) {
         this.chats.sort((a, b) => {
           return (

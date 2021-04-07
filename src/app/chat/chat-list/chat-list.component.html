@@ -82,7 +82,11 @@
               <p>{{ chat.text }}</p>
             </ion-label>
             <ion-note slot="end">
-              <span *ngIf="chat.fromuser == auth.currentUserValue?.id">
+              <span
+                *ngIf="
+                  chat.fromuser == auth.currentUserValue?.id && !chat.writing
+                "
+              >
                 <ion-icon *ngIf="!chat.time_read" name="checkmark"></ion-icon>
                 <ion-icon
                   *ngIf="chat.time_read"
@@ -90,7 +94,11 @@
                   name="checkmark-done"
                 ></ion-icon>
               </span>
-              {{ chat.time_creation | niceDate }}
+              {{
+                chat.writing
+                  ? "⌨ Escribiendo..."
+                  : (chat.time_creation | niceDate)
+              }}
             </ion-note>
           </ion-item>
           <ion-item-options
