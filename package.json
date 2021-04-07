@@ -31,7 +31,7 @@
     "@ionic-native/clipboard": "^5.31.1",
     "@ionic-native/core": "^5.31.1",
     "@ionic-native/device": "^5.31.1",
-    "@ionic-native/diagnostic": "^5.31.1",
+    "@ionic-native/diagnostic": "^5.32.0",
     "@ionic-native/facebook": "^5.31.1",
     "@ionic-native/firebase-x": "^5.31.1",
     "@ionic-native/geolocation": "^5.31.1",
