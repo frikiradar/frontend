@@ -303,3 +303,15 @@ ul {
 ion-item {
   --detail-icon-color: white;
 }
+
+@media (min-width: 992px) {
+  .hide-landscape {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .hide-portrait {
+    display: none;
+  }
+}

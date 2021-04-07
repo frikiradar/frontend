@@ -1,6 +1,13 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!showOptions">
+      <ion-back-button
+        *ngIf="selected"
+        class="hide-portrait"
+        (click)="source.close()"
+        text=""
+        defaultHref="/tabs/chat"
+      ></ion-back-button>
       <ion-menu-toggle>
         <ion-avatar>
           <img
