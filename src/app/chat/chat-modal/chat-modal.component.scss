@@ -1,4 +1,4 @@
-@import "../../theme/variables.scss";
+@import "../../../theme/variables.scss";
 
 ion-label {
   p,
@@ -11,6 +11,7 @@ ion-label {
 
   p {
     font-size: 12px;
+    color: white;
 
     ion-badge {
       margin-right: 5px;
@@ -44,7 +45,7 @@ ion-label {
       }
 
       .replyfrom-name {
-        color: #C4D83B;
+        color: #c4d83b;
         margin-bottom: 0;
         margin-right: 15px;
         margin-top: 0px;
@@ -81,23 +82,6 @@ ion-label {
 
     ion-card-content {
       background: #8c1242;
-    }
-  }
-
-  .text-name {
-    a{
-      color: #C4D83B !important;
-    }
-
-    a.master {
-      color: #5260ff !important;
-      font-weight: bold;
-    }
-
-    ion-icon {
-      font-size: 12px;
-      margin-left: 5px;
-      vertical-align: baseline;
     }
   }
 
@@ -142,11 +126,8 @@ ion-label {
 
   ion-item.pressed {
     background: #9a1c424d;
-  }
-
-  ion-avatar {
-    min-width: 40px;
-    min-height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
@@ -164,4 +145,14 @@ ion-chip {
   margin-top: 20px;
   margin-bottom: 20px;
   clear: both;
+}
+
+ion-content {
+  --padding-bottom: 114px;
+}
+
+ion-footer {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
 }
