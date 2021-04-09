@@ -19,9 +19,9 @@ ion-list {
     margin-right: 15px;
   }
 
-  &.info ion-label {
+  &.resume ion-label {
     --color: white;
-    white-space: normal;
+    white-space: pre-wrap;
   }
 }
 
@@ -51,12 +51,11 @@ ion-grid {
   padding-bottom: 0;
 
   ion-badge {
-    margin-right: 5px;
+    margin-left: 5px;
     border-radius: 15px;
     z-index: 1;
     width: 10px;
     height: 10px;
-    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
     padding: 0;
   }
 
@@ -75,34 +74,15 @@ ion-grid {
     }
   }
 
-  .username {
-    margin-top: -25px;
-    margin-bottom: 10px;
-  }
-
-  ion-item {
-    margin-left: -15px;
-  }
-
   h1,
   h3 {
     margin: 0;
   }
 
-  p {
-    margin-bottom: 0;
-    white-space: pre-wrap;
-    color: white;
-  }
-
-  .location {
-    font-size: 14px;
-    color: #e91e63 !important;
-
-    ion-icon {
-      margin-right: 5px;
-      vertical-align: text-bottom;
-    }
+  .unread-likes {
+    position: absolute;
+    top: 12px;
+    left: 84px;
   }
 }
 
@@ -116,6 +96,10 @@ ion-chip {
 
 ion-item {
   --border-color: #e91e63;
+}
+
+.likes {
+  cursor: pointer;
 }
 
 #stories {
@@ -140,5 +124,19 @@ ion-item {
 
   ion-icon {
     margin-right: 5px;
+  }
+}
+
+.likes-pane {
+  display: none;
+
+  ion-badge {
+    position: absolute;
+    left: 47px;
+    border-radius: 15px;
+    z-index: 1;
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+    width: 15px;
+    height: 15px;
   }
 }

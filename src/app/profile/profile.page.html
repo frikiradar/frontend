@@ -80,70 +80,87 @@
       <div *ngIf="user.match" class="match full-center">{{ user.match }}%</div>
 
       <div class="ion-padding">
-        <ion-list class="resume ion-padding">
+        <ion-list class="resume">
           <ion-item lines="none">
-            <ion-badge
-              color="secondary"
-              *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
-              >&nbsp;</ion-badge
-            >
+            <ion-icon
+              slot="start"
+              *ngIf="user?.verified || user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ROLE_MASTER')"
+              [name]="user?.roles?.includes('ROLE_ADMIN') ||
+              user?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
+              [color]="user?.roles?.includes('ROLE_ADMIN') ||
+              user?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+              (click)="userSvc.showRole(user)"
+            ></ion-icon>
             <ion-label>
               <span class="name">{{ user.name }}</span>
               <span *ngIf="user?.age" class="age">, {{ user.age }}</span>
-              <ion-icon
-                *ngIf="user?.verified || user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ROLE_MASTER')"
-                [name]="user?.roles?.includes('ROLE_ADMIN') ||
-              user?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
-                slot="icon-only"
-                size="small"
-                [color]="user?.roles?.includes('ROLE_ADMIN') ||
-              user?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
-                (click)="userSvc.showRole(user)"
-              ></ion-icon>
-            </ion-label>
-          </ion-item>
-          <ion-item lines="none" class="username">
-            <ion-label>
+              <ion-badge
+                color="secondary"
+                *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+                >&nbsp;</ion-badge
+              >
               <p>@{{user.username}}</p>
             </ion-label>
           </ion-item>
-          <h3 class="location" *ngIf="user?.distance !== undefined">
+          <ion-item lines="none" id="kokoro" *ngIf="auth.currentUserValue">
+            <ion-icon name="heart" slot="start" color="primary"></ion-icon>
+            <ion-label>
+              <span class="likes" (click)="showLikes('received')"
+                ><strong>{{user.likes.received}}</strong> recibidos</span
+              >
+              <ion-badge
+                color="primary"
+                class="unread-likes"
+                *ngIf="counters?.likes > 0"
+                >&nbsp;</ion-badge
+              >
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="likes" (click)="showLikes('delivered')"
+                ><strong>{{user.likes.delivered}}</strong> entregados</span
+              >
+            </ion-label>
+          </ion-item>
+          <ion-item
+            lines="none"
+            class="location"
+            *ngIf="user?.distance !== undefined"
+          >
             <ion-icon
               name="location-sharp"
               slot="start"
-              size="xs"
-              color="primary"
+              color="secondary"
             ></ion-icon>
-            <span>A {{ user?.distance }}km de distancia</span>
-          </h3>
-          <p>{{ user?.description }}</p>
-        </ion-list>
-        <ion-list class="info" *ngIf="auth.currentUserValue">
+            <ion-label>A {{ user?.distance }}km de distancia</ion-label>
+          </ion-item>
+          <ion-item lines="none" class="description" *ngIf="user?.description">
+            <ion-icon name="document-text"></ion-icon>
+            <ion-label>{{ user?.description }}</ion-label>
+          </ion-item>
           <ion-item lines="none" *ngIf="user?.last_login">
+            <ion-icon name="time"></ion-icon>
             <ion-label
               >Última conexión: {{ (user?.last_login | niceDate) === 'Ahora
               mismo' ? 'En línea' : (user?.last_login | niceDate) }}</ion-label
             >
           </ion-item>
           <ion-item lines="none" *ngIf="user?.location">
-            <ion-label>Vive en: {{ user.location }}</ion-label>
+            <ion-icon name="home"></ion-icon>
+            <ion-label>{{ user.location }}</ion-label>
           </ion-item>
-          <ion-item *ngIf="user?.gender" lines="none">
-            <ion-label
-              >Identidad de género: {{ user.gender }}
-              <span *ngIf="user?.pronoun">({{ user.pronoun }})</span></ion-label
-            >
-          </ion-item>
-          <ion-item *ngIf="user?.orientation" lines="none">
-            <ion-label>Orientación sexual: {{ user.orientation }}</ion-label>
-          </ion-item>
-          <ion-item *ngIf="user?.status" lines="none">
-            <ion-label>Estado: {{ user.status }}</ion-label>
-          </ion-item>
-          <ion-item *ngIf="user?.relationship" lines="none">
-            <ion-label>Tipo de relación: {{ user.relationship }}</ion-label>
+          <ion-item
+            *ngIf="user?.gender || user?.pronoun || user?.orientation || user?.relationship"
+            lines="none"
+          >
+            <ion-icon name="body"></ion-icon>
+            <ion-label>
+              {{user?.orientation ? user.orientation + ' | ' : ''}} {{
+              user?.gender ? user.gender + ' | ' : '' }} {{ user?.pronoun ?
+              user.pronoun + ' | ' : ''}} {{ user?.status ? user.status + ' | '
+              : ''}} {{ user?.relationship ? user.relationship : ''}}
+            </ion-label>
           </ion-item>
           <ion-item *ngIf="user?.connection?.length">
+            <ion-icon name="search-outline"></ion-icon>
             <ion-label>Buscando: {{ user.connection.join(", ") }}</ion-label>
           </ion-item>
         </ion-list>
@@ -258,3 +275,43 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
+<!-- panes -->
+
+<div class="likes-pane">
+  <p>Kokoros {{param === 'received' ? 'recibidos' : 'entregados'}}</p>
+  <ion-list *ngIf="likes[param]?.length > 0">
+    <ion-item
+      *ngFor="let like of likes[param]"
+      button
+      detail="false"
+      (click)="viewProfile(like.user.id)"
+      lines="none"
+    >
+      <ion-avatar slot="start">
+        <img
+          [src]="like.user.thumbnail"
+          [alt]="like.user.username"
+          default="/assets/img/users/default.jpg"
+        />
+        <ion-badge
+          color="primary"
+          *ngIf="!like?.time_read && param == 'received' && auth.currentUserValue.id === user.id"
+          >&nbsp;</ion-badge
+        >
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ like.user.name }}</h2>
+        <p>{{ like.user.description }}</p>
+      </ion-label>
+      <ion-icon
+        name="heart"
+        color="primary"
+        *ngIf="auth.currentUserValue.id === like.user.id"
+      ></ion-icon>
+      <ion-note slot="end">{{ like.date | niceDate }}</ion-note>
+    </ion-item>
+  </ion-list>
+  <ion-item lines="none" *ngIf="likes[param]?.length == 0">
+    <p>No hay kokoros</p>
+  </ion-item>
+</div>

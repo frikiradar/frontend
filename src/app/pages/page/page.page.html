@@ -32,7 +32,8 @@
     </ion-chip>
   </div>
   <div id="release">
-    {{page.release_date | niceDate}}
+    {{page.release_date | date : 'Y'}}{{page?.developer ? ' • ' + page.developer
+    : ''}}
   </div>
   <ion-item
     *ngIf="page.description"

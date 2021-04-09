@@ -29,12 +29,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: "likes",
+        path: "events",
         children: [
           {
             path: "",
             loadChildren: () =>
-              import("../likes/likes.module").then(m => m.LikesPageModule)
+              import("../events/events.module").then(m => m.EventsPageModule)
           }
         ]
       },

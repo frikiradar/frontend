@@ -1,5 +1,5 @@
 import { transition, trigger, useAnimation } from "@angular/animations";
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
@@ -9,12 +9,19 @@ import {
   PopoverController,
   ToastController
 } from "@ionic/angular";
+import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { pulse } from "ng-animate";
 
+import { Like } from "../models/like";
 import { Story } from "../models/story";
 import { Tag } from "../models/tags";
 import { User } from "../models/user";
 import { OptionsPopover } from "../options-popover/options-popover";
+import { LikeService } from "../services/like.service";
+import {
+  NotificationService,
+  Notification
+} from "../services/notification.service";
 import { PageService } from "../services/page.service";
 import { StoryService } from "../services/story.service";
 import { UserService } from "../services/user.service";
@@ -32,8 +39,26 @@ export class ProfilePage implements OnInit {
   public user: User;
   public stories: Story[];
   public story: Story;
+  public likes: { delivered: Like[]; received: Like[] } = {
+    delivered: undefined,
+    received: undefined
+  };
   public loading = true;
   public pulse: any;
+  public pane: CupertinoPane;
+  public param: "received" | "delivered";
+  public counters: Notification;
+
+  private paneSettings: CupertinoSettings = {
+    backdrop: true,
+    bottomClose: true,
+    buttonDestroy: false,
+    handleKeyboard: false,
+    initialBreak: "middle",
+    onBackdropTap: () => {
+      this.pane.destroy({ animate: true });
+    }
+  };
 
   constructor(
     public popover: PopoverController,
@@ -48,7 +73,10 @@ export class ProfilePage implements OnInit {
     public auth: AuthService,
     private storiesSvc: StoryService,
     private modal: ModalController,
-    private pageSvc: PageService
+    private pageSvc: PageService,
+    private likeSvc: LikeService,
+    private notificationSvc: NotificationService,
+    public detectorRef: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -82,6 +110,11 @@ export class ProfilePage implements OnInit {
     } catch (e) {
       this.loading = false;
     }
+
+    this.notificationSvc.notification.subscribe(notification => {
+      this.counters = notification;
+      this.detectorRef.detectChanges();
+    });
   }
 
   editProfile() {
@@ -256,6 +289,33 @@ export class ProfilePage implements OnInit {
     await modal.present();
     await modal.onDidDismiss();
     this.stories = await this.storiesSvc.getUserStories(+id);
+  }
+
+  async showLikes(param: "received" | "delivered") {
+    if (
+      this.user.id === this.auth.currentUserValue.id ||
+      !this.user.hide_likes
+    ) {
+      this.param = param;
+      if (!this.likes[param]?.length) {
+        this.likes[param] = await this.likeSvc.getLikes(param, 1, this.user.id);
+      }
+      this.pane = new CupertinoPane(".likes-pane", this.paneSettings);
+      this.pane.present({ animate: true });
+    }
+  }
+
+  async viewProfile(id: number) {
+    this.pane.destroy({ animate: true });
+    if (
+      this.param === "received" &&
+      this.user.id === this.auth.currentUserValue.id
+    ) {
+      if (!this.likes[this.param].find(l => l.user.id === id).time_read) {
+        await this.likeSvc.readLike(id);
+      }
+    }
+    this.nav.navigateRoot(["/profile/", id]);
   }
 
   share() {

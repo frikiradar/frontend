@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { Like } from "../models/like";
+import { User } from "../models/user";
 import { RestService } from "./rest.service";
 
 @Injectable({
@@ -9,9 +10,9 @@ import { RestService } from "./rest.service";
 export class LikeService {
   constructor(private rest: RestService) {}
 
-  async getLikes(param: "received" | "delivered", page = 1) {
+  async getLikes(param: "received" | "delivered", page = 1, user?: User["id"]) {
     const likes = (await this.rest
-      .get(`likes?param=${param}&page=${page}`)
+      .get(`likes?param=${param}&page=${page}&user=${user}`)
       .toPromise()) as Like[];
 
     return likes;

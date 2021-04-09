@@ -16,17 +16,14 @@
       <ion-label>Chat</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="likes">
-      <ion-icon name="heart-outline"></ion-icon>
-      <ion-badge color="primary" *ngIf="counters?.likes > 0"
-        >{{ counters.likes }}</ion-badge
-      >
-      <ion-label>Kokoros</ion-label>
-    </ion-tab-button>
-
     <ion-tab-button tab="community">
       <ion-icon name="people-outline"></ion-icon>
       <ion-label>Comunidad</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="events" *ngIf="auth.isMaster()">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <ion-label>Eventos</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

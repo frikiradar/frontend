@@ -49,7 +49,6 @@ export class RoomsPage implements OnInit {
         return r;
       }
     });
-
     this.rooms = await this.roomSvc.orderRooms(rooms);
   }
 

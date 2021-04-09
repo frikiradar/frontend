@@ -61,6 +61,8 @@ export class ChatListComponent {
   }
 
   async deleteChat(chat: Chat) {
+    this.selected = undefined;
+    this.selectedChat = undefined;
     this.showOptions = false;
     const chats = this.chats;
     this.chats = this.chats.filter(c => c.user.id !== chat.user.id);

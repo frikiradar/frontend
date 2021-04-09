@@ -60,6 +60,7 @@ export interface User {
   block_messages?: boolean;
   two_step?: boolean;
   hide_connection?: boolean;
+  hide_likes?: boolean;
   mailing?: boolean;
   public?: boolean;
 

@@ -90,3 +90,21 @@ form {
 #description {
   --border-color: white;
 }
+
+ion-item-group {
+  ion-item-divider {
+    margin-top: 20px;
+  }
+
+  ion-item {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+ion-item ion-label {
+  p {
+    color: #b9b9b9;
+    white-space: normal;
+  }
+}

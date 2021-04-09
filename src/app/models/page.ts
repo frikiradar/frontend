@@ -9,6 +9,8 @@ export interface Page {
   cover?: string;
   artwork?: string;
   rating?: number;
+  release_date?: Date;
+  developer?: string;
   game_mode?: "offline" | "online";
   slug: string;
   category: string;
