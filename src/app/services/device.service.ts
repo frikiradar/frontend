@@ -35,7 +35,7 @@ export class DeviceService {
   async setDevice(token?: string) {
     if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
       const device = await this.getCurrentDevice(token);
-      console.log("device", device);
+      // console.log("device", device);
       let uuid = null;
       if (this.platform.is("cordova")) {
         uuid = this.device.uuid;
@@ -52,8 +52,8 @@ export class DeviceService {
             d => d.device_id === device.device_id || d.token === device.token
           )
         ) {
-          console.log("devices", devices);
-          console.log("dispositivo desconocido", device);
+          // log("devices", devices);
+          console.log("dispositivo desconocido", devices, device);
           // dispositivo desconocido, enviar email avisando
           await this.unknownDevice(device).toPromise();
         }

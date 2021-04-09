@@ -123,14 +123,19 @@
           <ion-item
             lines="none"
             class="location"
-            *ngIf="user?.distance !== undefined"
+            *ngIf="user?.distance !== undefined || user?.ip"
           >
             <ion-icon
               name="location-sharp"
               slot="start"
               color="secondary"
             ></ion-icon>
-            <ion-label>A {{ user?.distance }}km de distancia</ion-label>
+            <ion-label>
+              <span *ngIf="user?.distance !== undefined"
+                >A {{ user?.distance }}km de distancia
+              </span>
+              <span *ngIf="user?.ip"> ({{user?.ip}})</span>
+            </ion-label>
           </ion-item>
           <ion-item lines="none" class="description" *ngIf="user?.description">
             <ion-icon name="document-text"></ion-icon>

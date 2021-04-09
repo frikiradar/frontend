@@ -4,7 +4,7 @@ import { Chat } from "../models/chat";
 import { Room } from "../models/room";
 import { User } from "../models/user";
 import { Config, ConfigService } from "./config.service";
-import { PushService } from "./push.service";
+// import { PushService } from "./push.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
@@ -15,9 +15,9 @@ export class RoomService {
   constructor(
     private rest: RestService,
     private config: ConfigService,
-    private uploadSvc: UploadService,
-    private push: PushService
-  ) {}
+    private uploadSvc: UploadService
+  ) // private push: PushService
+  {}
 
   async getRooms() {
     return (await this.rest.get("rooms").toPromise()) as Room[];
@@ -175,7 +175,7 @@ export class RoomService {
     }
 
     this.config.set("rooms_config", rooms_config);
-    this.push.setChannel(room.slug, room.name, room.description);
+    // this.push.setChannel(room.slug, room.name, room.description);
   }
 
   async disableNotifications(room: Room) {
@@ -209,7 +209,7 @@ export class RoomService {
     }
 
     this.config.set("rooms_config", rooms_config);
-    this.push.removeChannel(room.slug);
+    // this.push.removeChannel(room.slug);
   }
 
   async reorderRooms(from: number, to: number) {

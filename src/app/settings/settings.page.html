@@ -115,17 +115,18 @@
         ></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
-        <ion-icon name="heart-outline" slot="start"></ion-icon>
+        <ion-icon name="heart-dislike-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Mostrar kokoros</h2>
+          <h2>Ocultar kokoros</h2>
           <p>
-            Mostrar quien me ha dado o a quien le he entregado kokoro.
+            No quiero que puedan ver quien me ha dado o a quien le he entregado
+            kokoro.
           </p>
         </ion-label>
         <ion-checkbox
           slot="end"
-          [(ngModel)]="!user.hide_likes"
-          (ngModelChange)="onChangeCheck('hide_likes', $event)"
+          [(ngModel)]="user.hide_likes"
+          (ngModelChange)="onChangeCheck('hide_likes', !$event)"
         ></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
@@ -140,7 +141,7 @@
         <ion-checkbox
           slot="end"
           [(ngModel)]="user.public"
-          (ngModelChange)="onChangeCheck('public', $event)"
+          (ngModelChange)="onChangeCheck('public', !$event)"
         ></ion-checkbox>
       </ion-item>
       <ion-item (click)="blockUsersModal()" button lines="full">

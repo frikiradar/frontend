@@ -294,7 +294,8 @@ export class ProfilePage implements OnInit {
   async showLikes(param: "received" | "delivered") {
     if (
       this.user.id === this.auth.currentUserValue.id ||
-      !this.user.hide_likes
+      !this.user.hide_likes ||
+      this.auth.isMaster()
     ) {
       this.param = param;
       if (!this.likes[param]?.length) {

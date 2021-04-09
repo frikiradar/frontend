@@ -33,6 +33,7 @@ export class UrlService {
     }
 
     if (url) {
+      url = this.convertUrl(url);
       if (this.platform.is("cordova")) {
         this.browserTab.isAvailable().then(isAvailable => {
           if (isAvailable) {
@@ -68,5 +69,21 @@ export class UrlService {
       }
       return;
     }
+  }
+
+  convertUrl(url: string): string {
+    if (this.platform.is("hybrid")) {
+      // si estoy en app y recibo https://frikiradar.app/albertoi -> convierto a /albertoi
+      if (url.includes("https://frikiradar.app/")) {
+        url = url.replace("https://frikiradar.app/", "/");
+      }
+    } else {
+      // si estoy en web y recibo /albertoi -> convierto a https://frikiradar.app/albertoi
+      if (url.charAt(0) === "/") {
+        url = url.replace("/", "https://frikiradar.app/");
+      }
+    }
+
+    return url;
   }
 }

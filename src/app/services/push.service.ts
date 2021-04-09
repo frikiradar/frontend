@@ -4,12 +4,12 @@ import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/messaging";
+import { mergeMapTo } from "rxjs/operators";
+import { SwPush } from "@angular/service-worker";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
 import { Notification, NotificationService } from "./notification.service";
-import { RestService } from "./rest.service";
-import { mergeMapTo } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -24,9 +24,9 @@ export class PushService {
     private notificationSvc: NotificationService,
     private localNotifications: LocalNotifications,
     private platform: Platform,
-    private rest: RestService,
     private auth: AuthService,
-    private afMessaging: AngularFireMessaging
+    private afMessaging: AngularFireMessaging,
+    private swPush: SwPush
   ) {
     this.platform.ready().then(() => {
       if (this.platform.is("cordova")) {
@@ -43,6 +43,10 @@ export class PushService {
 
         this.localNotifications.on("reply").subscribe(notification => {
           console.log("onreply", notification);
+        });
+      } else {
+        this.swPush.notificationClicks.subscribe(payload => {
+          this.router.navigate([payload.notification.data.url]);
         });
       }
     });
@@ -105,7 +109,9 @@ export class PushService {
     } else {
       await this.requestPermission();
       this.afMessaging.messages.subscribe((payload: any) => {
-        console.log("new message received. ", payload);
+        // console.log("new message received. ", payload);
+        this.localNotification(payload);
+
         this.notificationSvc.getUnread().then((notification: Notification) => {
           this.notificationSvc.setNotification(notification);
         });
