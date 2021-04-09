@@ -15,7 +15,7 @@ export interface Config {
   push_url?: string;
   geolocation?: boolean;
   patreon?: string;
-  rooms_config?: {
+  rooms?: {
     slug: string;
     notifications?: boolean;
     last_message?: number;

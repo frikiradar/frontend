@@ -119,7 +119,7 @@ export class RoomPage implements OnInit {
       this.room = await this.roomSvc.getRoom(this.slug);
       this.roomPage = this.room.page;
     } catch (e) {
-      // console.error(`No se ha podido cargar la sala. Error: ${e}`);
+      console.error(`No se ha podido cargar la sala. Error: ${e}`);
     }
 
     if (
@@ -137,10 +137,8 @@ export class RoomPage implements OnInit {
         .reverse();
 
       if (messages.length && (this.room.visible || this.roomPage)) {
-        this.roomSvc.setLastMessage(
-          this.slug,
-          messages[messages.length - 1].id
-        );
+        this.room.last_message = messages[messages.length - 1].id;
+        this.roomSvc.setLastMessage(this.room);
       }
 
       this.messages = [...this.messages, ...messages];
@@ -168,10 +166,6 @@ export class RoomPage implements OnInit {
             this.toUserWriting = "";
           }, 10000);
         } else if (!message.writing) {
-          if (this.room.visible || this.roomPage) {
-            this.roomSvc.setLastMessage(this.slug, message.id);
-          }
-
           this.toUserWriting = "";
           // borramos los enviando
           this.messages = this.messages.filter(m => !m.sending);
@@ -534,5 +528,12 @@ export class RoomPage implements OnInit {
   back() {
     this.nav.back();
     this.source.close();
+  }
+
+  ngOnDestroy() {
+    if (this.room.visible || this.roomPage) {
+      this.room.last_message = this.messages[this.messages.length - 1].id;
+      this.roomSvc.setLastMessage(this.room);
+    }
   }
 }

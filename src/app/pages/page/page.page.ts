@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalController, ToastController } from "@ionic/angular";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
+
 import { Room } from "src/app/models/room";
 import { ConfigService, Config } from "src/app/services/config.service";
-
+import { RoomService } from "src/app/services/room.service";
 import { Page } from "../../models/page";
 import { Story } from "../../models/story";
 import { Tag } from "../../models/tags";
@@ -41,6 +42,7 @@ export class PagePage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private pageSvc: PageService,
+    private roomSvc: RoomService,
     private storySvc: StoryService,
     private auth: AuthService,
     private tagSvc: TagService,
@@ -56,9 +58,7 @@ export class PagePage implements OnInit {
     this.tag = this.auth.currentUserValue.tags.find(t => t.slug === slug);
     this.getStories();
 
-    const rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    const rooms_config = await this.roomSvc.getRoomsConfig();
     let configRoom = rooms_config?.find(room => room.slug === this.page.slug);
     if (
       configRoom?.last_message < this.page?.room.last_message ||

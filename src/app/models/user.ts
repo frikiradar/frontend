@@ -1,5 +1,6 @@
 import { SafeResourceUrl } from "@angular/platform-browser";
 
+import { Config } from "../services/config.service";
 import { Device } from "./device";
 import { Tag } from "./tags";
 
@@ -66,4 +67,5 @@ export interface User {
 
   num_logins: number;
   last_login?: Date;
+  config?: Partial<Config>;
 }

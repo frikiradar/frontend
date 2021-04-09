@@ -33,7 +33,6 @@
         lines="none"
         (click)="showRoom(room.slug)"
         *ngFor="let room of rooms"
-        (press)="activateOptions()"
       >
         <ion-thumbnail>
           <img [src]="room.image" [alt]="room.name" />

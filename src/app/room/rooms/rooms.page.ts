@@ -31,9 +31,7 @@ export class RoomsPage implements OnInit {
 
   async getRooms() {
     let rooms = await this.roomSvc.getRooms();
-    const rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    const rooms_config = await this.roomSvc.getRoomsConfig();
     rooms.map(r => {
       let configRoom = rooms_config?.find(room => room.slug === r.slug);
       if (

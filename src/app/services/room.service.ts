@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
+import { last } from "rxjs/operators";
 import { Chat } from "../models/chat";
 
 import { Room } from "../models/room";
 import { User } from "../models/user";
+import { AuthService } from "./auth.service";
 import { Config, ConfigService } from "./config.service";
 // import { PushService } from "./push.service";
 import { RestService } from "./rest.service";
@@ -15,9 +17,9 @@ export class RoomService {
   constructor(
     private rest: RestService,
     private config: ConfigService,
-    private uploadSvc: UploadService
-  ) // private push: PushService
-  {}
+    private uploadSvc: UploadService, // private push: PushService
+    private auth: AuthService
+  ) {}
 
   async getRooms() {
     return (await this.rest.get("rooms").toPromise()) as Room[];
@@ -72,43 +74,48 @@ export class RoomService {
     return (await this.uploadSvc.upload("room-upload", formData)) as Chat;
   }
 
-  async setLastMessage(slug: string, value: number) {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+  async setLastMessage(room: Room) {
+    const value = room.last_message;
+    const slug = room.slug;
+    let rooms_config = await this.getRoomsConfig();
 
-    if (rooms_config) {
-      if (rooms_config.some(r => r.slug === slug)) {
-        rooms_config.map(r => {
-          if (r.slug === slug) {
-            r.last_message = value;
-          }
-        });
+    let last_message = 0;
+    if (rooms_config?.find(c => c.slug === slug)?.last_message) {
+      last_message = rooms_config?.find(c => c.slug === slug).last_message;
+    }
+
+    if (value > last_message) {
+      if (rooms_config) {
+        if (rooms_config.some(r => r.slug === slug)) {
+          rooms_config.map(r => {
+            if (r.slug === slug) {
+              r.last_message = value;
+            }
+          });
+        } else {
+          rooms_config = [
+            ...rooms_config,
+            {
+              slug,
+              last_message: value
+            }
+          ];
+        }
       } else {
         rooms_config = [
-          ...rooms_config,
           {
             slug,
             last_message: value
           }
         ];
       }
-    } else {
-      rooms_config = [
-        {
-          slug,
-          last_message: value
-        }
-      ];
-    }
 
-    this.config.set("rooms_config", rooms_config);
+      await this.setRoomsConfig(rooms_config);
+    }
   }
 
   async setNotifications(room: Room) {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    let rooms_config = await this.getRoomsConfig();
 
     if (rooms_config) {
       if (
@@ -128,9 +135,7 @@ export class RoomService {
   }
 
   async getNotificationsSettings(room: Room): Promise<boolean> {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    let rooms_config = await this.getRoomsConfig();
 
     if (rooms_config) {
       const roomConfig = rooms_config.find(r => r.slug === room.slug);
@@ -145,9 +150,7 @@ export class RoomService {
   }
 
   async activateNotifications(room: Room) {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    let rooms_config = await this.getRoomsConfig();
 
     if (rooms_config) {
       if (rooms_config.some(r => r.slug === room.slug)) {
@@ -174,14 +177,12 @@ export class RoomService {
       ];
     }
 
-    this.config.set("rooms_config", rooms_config);
+    await this.setRoomsConfig(rooms_config);
     // this.push.setChannel(room.slug, room.name, room.description);
   }
 
   async disableNotifications(room: Room) {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    let rooms_config = await this.getRoomsConfig();
 
     if (rooms_config) {
       if (rooms_config.some(r => r.slug === room.slug)) {
@@ -208,14 +209,12 @@ export class RoomService {
       ];
     }
 
-    this.config.set("rooms_config", rooms_config);
+    await this.setRoomsConfig(rooms_config);
     // this.push.removeChannel(room.slug);
   }
 
   async reorderRooms(from: number, to: number) {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    let rooms_config = await this.getRoomsConfig();
 
     rooms_config.map((r, index) => {
       if (r.order === from) {
@@ -226,13 +225,12 @@ export class RoomService {
         r.order++;
       }
     });
-    await this.config.set("rooms_config", rooms_config);
+    await this.setRoomsConfig(rooms_config);
   }
 
   async orderRooms(rooms: Room[]): Promise<Room[]> {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    let rooms_config = await this.getRoomsConfig();
+
     rooms_config = rooms_config?.filter(r => {
       if (rooms.find(room => room.slug === r.slug)) {
         return r;
@@ -258,9 +256,8 @@ export class RoomService {
   }
 
   async initOrderRoom(rooms: Room[]) {
-    let rooms_config = (await this.config.get(
-      "rooms_config"
-    )) as Config["rooms_config"];
+    let rooms_config = await this.getRoomsConfig();
+
     rooms.forEach((room, index) => {
       if (rooms_config) {
         if (rooms_config.some(r => r.slug === room.slug)) {
@@ -290,6 +287,18 @@ export class RoomService {
       }
     });
 
-    await this.config.set("rooms_config", rooms_config);
+    await this.setRoomsConfig(rooms_config);
+  }
+
+  async setRoomsConfig(rooms_config: Config["rooms"]) {
+    const user = (await this.rest
+      .put("rooms-config", { rooms_config })
+      .toPromise()) as User;
+    this.auth.setAuthUser(user);
+  }
+
+  async getRoomsConfig() {
+    const config = this.auth.currentUserValue?.config;
+    return config?.rooms;
   }
 }
