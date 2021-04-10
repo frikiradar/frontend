@@ -102,7 +102,11 @@
               <p>@{{user.username}}</p>
             </ion-label>
           </ion-item>
-          <ion-item lines="none" id="kokoro" *ngIf="auth.currentUserValue">
+          <ion-item
+            lines="none"
+            id="kokoro"
+            *ngIf="auth.currentUserValue && user?.likes"
+          >
             <ion-icon name="heart" slot="start" color="primary"></ion-icon>
             <ion-label>
               <span class="likes" (click)="showLikes('received')"

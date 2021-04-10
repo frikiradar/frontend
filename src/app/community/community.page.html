@@ -113,7 +113,11 @@
       *ngFor="let room of rooms.slice(0,3)"
     >
       <ion-thumbnail>
-        <img [src]="room.image" [alt]="room.name" />
+        <img
+          [src]="room.image"
+          [alt]="room.name"
+          default="/assets/img/pages/default-games-page.jpg"
+        />
         <ion-badge color="primary" *ngIf="room?.unread">&nbsp;</ion-badge>
       </ion-thumbnail>
       <ion-label>
