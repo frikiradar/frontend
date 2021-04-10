@@ -193,12 +193,6 @@ export class ChatModalComponent implements OnInit {
                   m.deleted = message.deleted;
                 }
               });
-              // Borramos los deleted
-              this.messages = this.messages.filter(m => {
-                if (!m.deleted) {
-                  return m;
-                }
-              });
             } else {
               this.messages = [...this.messages, message];
               if (
@@ -220,6 +214,13 @@ export class ChatModalComponent implements OnInit {
             if (message.fromuser.id === this.user.id) {
               this.user = message.fromuser;
             }
+
+            // Borramos los deleted
+            this.messages = this.messages.filter(m => {
+              if (!m.deleted) {
+                return m;
+              }
+            });
 
             this.scrollDown();
           }
