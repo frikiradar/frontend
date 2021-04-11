@@ -313,11 +313,6 @@ export class ProfilePage implements OnInit {
     this.nav.navigateRoot(["/profile/", id]);
   }
 
-  share() {
-    const url = `https://frikiradar.app/${this.user.username}`;
-    this.utils.share(url);
-  }
-
   back() {
     this.nav.back();
   }

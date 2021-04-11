@@ -212,5 +212,6 @@
     [(editing)]="editing"
     [selectedMessage]="selectedMessage"
     [events]="auth.isMaster() && messages.length > 10"
+    [microphone]="auth.isMaster()"
   ></app-chat-input>
 </ion-footer>

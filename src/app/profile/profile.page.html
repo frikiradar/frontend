@@ -115,7 +115,7 @@
               <ion-badge
                 color="primary"
                 class="unread-likes"
-                *ngIf="counters?.likes > 0"
+                *ngIf="auth.currentUserValue.id === user.id && counters?.likes > 0"
                 >&nbsp;</ion-badge
               >
               &nbsp;&nbsp;&nbsp;&nbsp;

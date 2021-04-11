@@ -1,3 +1,5 @@
+/// <reference types="@types/dom-mediacapture-record" />
+
 import {
   Component,
   Output,
@@ -42,15 +44,24 @@ export class ChatInputComponent {
 
   @ViewChild("imageInput", { static: false })
   imageInput: ElementRef;
+  @ViewChild("player", { static: false })
+  player: ElementRef;
+
   public emojis: boolean = false;
   public image: string;
   public imagePreview: SafeUrl;
+  private mediaRecorder: MediaRecorder;
+  public recording: boolean = false;
+  public recorded: boolean = false;
+  public audio: string;
+  public audioPreview: SafeUrl;
 
   @Input() replying: boolean = false;
   @Input() editing = false;
   @Input() selectedMessage: Chat;
   @Input() mentions: boolean;
   @Input() events: boolean;
+  @Input() microphone: boolean;
 
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
@@ -146,6 +157,7 @@ export class ChatInputComponent {
   }
 
   sendMessage(event?: Event) {
+    this.recorded = false;
     this.emojis = false;
     if (event) {
       event.preventDefault();
@@ -154,6 +166,7 @@ export class ChatInputComponent {
     const message = {
       text: this.message.value ? this.message.value.trim() : "",
       image: this.image,
+      audio: this.audio,
       mentions: this.userMentions
     };
 
@@ -219,6 +232,49 @@ export class ChatInputComponent {
       ]
     });
     await actionSheet.present();
+  }
+
+  async openMic() {
+    if (navigator.mediaDevices) {
+      let chunks = [];
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: false })
+        .then(stream => {
+          const tracks = stream.getTracks();
+          this.mediaRecorder = new MediaRecorder(stream);
+          this.mediaRecorder.start();
+          this.recording = true;
+
+          this.mediaRecorder.addEventListener("stop", async error => {
+            this.recording = false;
+            this.recorded = true;
+
+            tracks.forEach(track => {
+              track.stop();
+            });
+
+            console.log("data available after MediaRecorder.stop() called.");
+            // audio.controls = true;
+            const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+            chunks = [];
+            this.audio = URL.createObjectURL(blob);
+            this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(
+              this.audio
+            );
+            console.log("recorder stopped");
+          });
+
+          this.mediaRecorder.addEventListener("dataavailable", async e => {
+            console.log("entra", e.data);
+            chunks.push(e.data);
+          });
+        });
+    }
+  }
+
+  async stopMic() {
+    this.mediaRecorder.stop();
+    console.log(this.mediaRecorder.state);
   }
 
   async addPicture(image: string | File) {

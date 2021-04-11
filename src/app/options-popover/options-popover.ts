@@ -167,7 +167,10 @@ export class OptionsPopover {
     const referrer = this.auth.currentUserValue
       ? this.auth.currentUserValue.username
       : "app";
-    const url = `https://frikiradar.app/${this.user.username}?referrer=${referrer}`;
+    const url = `https://frikiradar.app/${this.user.username.replace(
+      " ",
+      "%20"
+    )}?referrer=${referrer}`;
     try {
       if (this.platform.is("cordova")) {
         await this.clipboard.copy(url);
@@ -195,7 +198,10 @@ export class OptionsPopover {
   }
 
   shareProfile() {
-    const url = `https://frikiradar.app/${this.user.username}`;
+    const url = `https://frikiradar.app/${this.user.username.replace(
+      " ",
+      "%20"
+    )}`;
     this.utils.share(url);
     this.close();
   }
