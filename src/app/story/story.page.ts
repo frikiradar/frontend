@@ -34,8 +34,11 @@ export class StoryPage implements OnInit {
   }
 
   async showStories(id: User["id"]) {
-    let stories = this.stories.filter(s => s.user.id === id);
-    stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
+    let stories = this.stories.reverse().filter(s => s.user.id === id);
+    stories = [
+      ...stories,
+      ...this.stories.reverse().filter(s => s.user.id !== id)
+    ];
 
     const modal = await this.modal.create({
       component: ViewStoriesModal,

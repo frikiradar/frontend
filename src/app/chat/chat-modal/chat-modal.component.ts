@@ -163,108 +163,7 @@ export class ChatModalComponent implements OnInit {
           }
         }
 
-        const min = Math.min(this.auth.currentUserValue.id, this.userId);
-        const max = Math.max(this.auth.currentUserValue.id, this.userId);
-        const channel = `${min}_${max}`;
-
-        // Nos suscribimos al canal
-        this.source = await this.chatSvc.register(channel);
-        this.source.addEventListener("message", async (res: any) => {
-          this.connected = true;
-          this.conErrors = 0;
-          let message = JSON.parse(res.data) as Chat;
-          if (message.writing && message.fromuser.id === this.user.id) {
-            this.toUserWriting = "Escribiendo...";
-            setTimeout(() => {
-              this.toUserWriting = "";
-            }, 10000);
-          } else if (!message.writing) {
-            this.toUserWriting = "";
-            // borramos los enviando
-            this.messages = this.messages.filter(m => !m.sending);
-
-            if (this.messages.some(m => m.id === message.id)) {
-              // Si ya existe el mensaje lo actualizamos
-              this.messages.map(m => {
-                if (m.id === message.id) {
-                  m.text = message.text;
-                  m.time_read = message.time_read;
-                  m.edited = message.edited;
-                  m.deleted = message.deleted;
-                }
-              });
-            } else {
-              this.messages = [...this.messages, message];
-              if (
-                message.fromuser.id === this.user.id &&
-                (message.text || message.image || message.audio)
-              ) {
-                // marcamos como leido
-                try {
-                  if (this.user.id !== this.auth.currentUserValue.id) {
-                    message = await this.chatSvc.readChat(message.id);
-                  }
-                } catch (e) {
-                  console.error(e);
-                  await this.alertError.present();
-                }
-              }
-            }
-
-            if (message.fromuser.id === this.user.id) {
-              this.user = message.fromuser;
-            }
-
-            // Borramos los deleted
-            this.messages = this.messages.filter(m => {
-              if (!m.deleted) {
-                return m;
-              }
-            });
-
-            this.scrollDown();
-          }
-        });
-
-        this.source.addEventListener("error", async error => {
-          console.error(
-            "Error al conectarse al servidor de chat",
-            `connected: ${this.connected}`,
-            `conErrors: ${this.conErrors}`,
-            error
-          );
-          this.conErrors++;
-          if (error.type === "error" && this.conErrors === 5) {
-            (
-              await this.toast.create({
-                message: "Se ha perdido la conexión con el servidor de chat",
-                duration: 2000,
-                position: "bottom",
-                color: "danger"
-              })
-            ).present();
-          }
-
-          if (error.type === "error" && this.conErrors >= 10) {
-            this.source.close();
-
-            await this.alertError.present();
-          }
-        });
-
-        this.source.addEventListener("open", async error => {
-          if (this.conErrors === 5) {
-            (
-              await this.toast.create({
-                message: "¡Conexión al servidor de chat restablecida!",
-                duration: 2000,
-                position: "bottom",
-                color: "success"
-              })
-            ).present();
-          }
-          this.conErrors = 0;
-        });
+        this.connectSSE();
 
         window.addEventListener("keyboardDidShow", event => {
           this.scrollDown();
@@ -498,6 +397,109 @@ export class ChatModalComponent implements OnInit {
     setTimeout(async () => {
       this.writing = false;
     }, 2500);
+  }
+
+  async connectSSE() {
+    const min = Math.min(this.auth.currentUserValue.id, this.userId);
+    const max = Math.max(this.auth.currentUserValue.id, this.userId);
+    const channel = `${min}_${max}`;
+
+    // Nos suscribimos al canal
+    this.source = await this.chatSvc.register(channel);
+    this.source.addEventListener("message", async (res: any) => {
+      this.connected = true;
+      this.conErrors = 0;
+      let message = JSON.parse(res.data) as Chat;
+      if (message.writing && message.fromuser.id === this.user.id) {
+        this.toUserWriting = "Escribiendo...";
+        setTimeout(() => {
+          this.toUserWriting = "";
+        }, 10000);
+      } else if (!message.writing) {
+        this.toUserWriting = "";
+        // borramos los enviando
+        this.messages = this.messages.filter(m => !m.sending);
+
+        if (this.messages.some(m => m.id === message.id)) {
+          // Si ya existe el mensaje lo actualizamos
+          this.messages.map(m => {
+            if (m.id === message.id) {
+              m.text = message.text;
+              m.time_read = message.time_read;
+              m.edited = message.edited;
+              m.deleted = message.deleted;
+            }
+          });
+        } else {
+          this.messages = [...this.messages, message];
+          if (
+            message.fromuser.id === this.user.id &&
+            (message.text || message.image || message.audio)
+          ) {
+            // marcamos como leido
+            try {
+              if (this.user.id !== this.auth.currentUserValue.id) {
+                message = await this.chatSvc.readChat(message.id);
+              }
+            } catch (e) {
+              console.error(e);
+              await this.alertError.present();
+            }
+          }
+        }
+
+        if (message.fromuser.id === this.user.id) {
+          this.user = message.fromuser;
+        }
+
+        // Borramos los deleted
+        this.messages = this.messages.filter(m => {
+          if (!m.deleted) {
+            return m;
+          }
+        });
+
+        this.scrollDown();
+      }
+    });
+
+    this.source.addEventListener("error", async error => {
+      /*console.error(
+        "Error al conectarse al servidor de chat",
+        `connected: ${this.connected}`,
+        `conErrors: ${this.conErrors}`,
+        error
+      );*/
+      this.conErrors++;
+      if (error.type === "error" && this.conErrors === 5) {
+        (
+          await this.toast.create({
+            message: "Se ha perdido la conexión con el servidor de chat",
+            duration: 2000,
+            position: "bottom",
+            color: "danger"
+          })
+        ).present();
+      }
+
+      if (error.type === "error") {
+        this.connectSSE();
+      }
+    });
+
+    this.source.addEventListener("open", async error => {
+      if (this.conErrors === 5) {
+        (
+          await this.toast.create({
+            message: "¡Conexión al servidor de chat restablecida!",
+            duration: 2000,
+            position: "bottom",
+            color: "success"
+          })
+        ).present();
+      }
+      this.conErrors = 0;
+    });
   }
 
   back() {

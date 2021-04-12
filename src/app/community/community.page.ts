@@ -140,8 +140,11 @@ export class CommunityPage {
   }
 
   async showStories(id: User["id"]) {
-    let stories = this.stories.filter(s => s.user.id === id);
-    stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
+    let stories = this.stories.reverse().filter(s => s.user.id === id);
+    stories = [
+      ...stories,
+      ...this.stories.reverse().filter(s => s.user.id !== id)
+    ];
     await this.showStoriesModal(stories);
     await this.getStories();
   }
@@ -211,7 +214,6 @@ export class CommunityPage {
   }
 
   ngOnDestroy() {
-    console.log("cerramos stream");
     this.source.close();
   }
 }

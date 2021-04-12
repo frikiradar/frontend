@@ -143,7 +143,12 @@
           </ion-item>
           <ion-item lines="none" class="description" *ngIf="user?.description">
             <ion-icon name="document-text"></ion-icon>
-            <ion-label>{{ user?.description }}</ion-label>
+            <ion-label
+              [innerHTML]="
+            user?.description | linky: { className: 'linkified' } | mentions | hashtag
+          "
+              (click)="$event.stopImmediatePropagation(); openUrl($event)"
+            ></ion-label>
           </ion-item>
           <ion-item lines="none" *ngIf="user?.last_login">
             <ion-icon name="time"></ion-icon>
@@ -163,9 +168,10 @@
             <ion-icon name="body"></ion-icon>
             <ion-label>
               {{user?.orientation ? user.orientation + ' | ' : ''}} {{
-              user?.gender ? user.gender + ' | ' : '' }} {{ user?.pronoun ?
-              user.pronoun + ' | ' : ''}} {{ user?.status ? user.status + ' | '
-              : ''}} {{ user?.relationship ? user.relationship : ''}}
+              user?.gender ? user.gender : '' }} {{ user?.pronoun ? '(' +
+              user.pronoun.toLowerCase() + ') | ' : '|'}} {{ user?.status ?
+              user.status + ' | ' : ''}} {{ user?.relationship ?
+              user.relationship : ''}}
             </ion-label>
           </ion-item>
           <ion-item *ngIf="user?.connection?.length">

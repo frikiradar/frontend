@@ -71,13 +71,15 @@ ion-thumbnail {
     ion-textarea {
       --placeholder-color: #555555 !important;
       color: #353535 !important;
-      margin: 5px;
       font-size: 12pt;
-      min-height: 40px;
+      min-height: 45px !important;
+      margin: 0;
+      margin-top: 5px;
 
       ::ng-deep {
         textarea {
-          min-height: 40px;
+          min-height: 45px !important;
+          margin: 0;
         }
       }
     }

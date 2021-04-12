@@ -150,86 +150,7 @@ export class RoomPage implements OnInit {
 
       this.scrollDown(500);
 
-      // Nos suscribimos al canal
-      this.source = await this.roomSvc.register(this.slug);
-      this.source.addEventListener("message", async (res: any) => {
-        this.connected = true;
-        this.conErrors = 0;
-        let message = JSON.parse(res.data) as Chat;
-
-        if (
-          message.writing &&
-          message.fromuser.username !== this.auth.currentUserValue.username
-        ) {
-          this.toUserWriting = message.fromuser.name + " está escribiendo...";
-          setTimeout(() => {
-            this.toUserWriting = "";
-          }, 10000);
-        } else if (!message.writing) {
-          this.toUserWriting = "";
-          // borramos los enviando
-          this.messages = this.messages.filter(m => !m.sending);
-          if (this.messages.some(m => m.id === message.id)) {
-            // Si ya existe el mensaje lo actualizamos
-            this.messages.map(m => {
-              if (m.id === message.id) {
-                m.text = message.text;
-                m.time_read = message.time_read;
-                m.edited = message.edited;
-                m.deleted = message.deleted;
-                m.modded = message.modded;
-              }
-            });
-          } else {
-            this.messages = [...this.messages, message];
-          }
-
-          // Borramos los deleted
-          this.messages = this.messages.filter(m => !m.deleted);
-
-          this.scrollDown();
-        }
-      });
-
-      this.source.addEventListener("error", async error => {
-        console.error(
-          "Error al conectarse al servidor de chat",
-          `connected: ${this.connected}`,
-          `conErrors: ${this.conErrors}`,
-          error
-        );
-        this.conErrors++;
-        if (error.type === "error" && this.conErrors === 5) {
-          (
-            await this.toast.create({
-              message: "Se ha perdido la conexión con el servidor de chat",
-              duration: 2000,
-              position: "bottom",
-              color: "danger"
-            })
-          ).present();
-        }
-
-        if (error.type === "error" && this.conErrors >= 10) {
-          this.source.close();
-
-          await this.alertError.present();
-        }
-      });
-
-      this.source.addEventListener("open", async error => {
-        if (this.conErrors === 5) {
-          (
-            await this.toast.create({
-              message: "¡Conexión al servidor de chat restablecida!",
-              duration: 2000,
-              position: "bottom",
-              color: "success"
-            })
-          ).present();
-        }
-        this.conErrors = 0;
-      });
+      this.connectSSE();
 
       window.addEventListener("keyboardDidShow", event => {
         this.scrollDown();
@@ -523,6 +444,87 @@ export class RoomPage implements OnInit {
     if (this.roomPage?.slug) {
       this.router.navigate(["/page", slug]);
     }
+  }
+
+  async connectSSE() {
+    // Nos suscribimos al canal
+    this.source = await this.roomSvc.register(this.slug);
+    this.source.addEventListener("message", async (res: any) => {
+      this.connected = true;
+      this.conErrors = 0;
+      let message = JSON.parse(res.data) as Chat;
+
+      if (
+        message.writing &&
+        message.fromuser.username !== this.auth.currentUserValue.username
+      ) {
+        this.toUserWriting = message.fromuser.name + " está escribiendo...";
+        setTimeout(() => {
+          this.toUserWriting = "";
+        }, 10000);
+      } else if (!message.writing) {
+        this.toUserWriting = "";
+        // borramos los enviando
+        this.messages = this.messages.filter(m => !m.sending);
+        if (this.messages.some(m => m.id === message.id)) {
+          // Si ya existe el mensaje lo actualizamos
+          this.messages.map(m => {
+            if (m.id === message.id) {
+              m.text = message.text;
+              m.time_read = message.time_read;
+              m.edited = message.edited;
+              m.deleted = message.deleted;
+              m.modded = message.modded;
+            }
+          });
+        } else {
+          this.messages = [...this.messages, message];
+        }
+
+        // Borramos los deleted
+        this.messages = this.messages.filter(m => !m.deleted);
+
+        this.scrollDown();
+      }
+    });
+
+    this.source.addEventListener("error", async error => {
+      /*console.error(
+        "Error al conectarse al servidor de chat",
+        `connected: ${this.connected}`,
+        `conErrors: ${this.conErrors}`,
+        error
+      );*/
+      this.conErrors++;
+      if (error.type === "error" && this.conErrors === 5) {
+        (
+          await this.toast.create({
+            message: "Se ha perdido la conexión con el servidor de chat",
+            duration: 2000,
+            position: "bottom",
+            color: "danger"
+          })
+        ).present();
+      }
+
+      if (error.type === "error") {
+        this.connectSSE();
+      }
+    });
+
+    this.source.addEventListener("open", async error => {
+      if (this.conErrors === 5) {
+        (
+          await this.toast.create({
+            message: "¡Conexión al servidor de chat restablecida!",
+            duration: 2000,
+            position: "bottom",
+            color: "success"
+          })
+        ).present();
+      }
+      this.conErrors = 0;
+    });
   }
 
   back() {

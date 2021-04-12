@@ -24,6 +24,7 @@ import {
 } from "../services/notification.service";
 import { PageService } from "../services/page.service";
 import { StoryService } from "../services/story.service";
+import { UrlService } from "../services/url.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
@@ -76,7 +77,8 @@ export class ProfilePage implements OnInit {
     private pageSvc: PageService,
     private likeSvc: LikeService,
     private notificationSvc: NotificationService,
-    public detectorRef: ChangeDetectorRef
+    public detectorRef: ChangeDetectorRef,
+    private urlSvc: UrlService
   ) {}
 
   async ngOnInit() {
@@ -119,6 +121,11 @@ export class ProfilePage implements OnInit {
 
   editProfile() {
     this.router.navigate(["/edit-profile"]);
+  }
+
+  openUrl(event: any) {
+    this.urlSvc.openUrl(event);
+    return false;
   }
 
   getTagsCategory(category: string) {
