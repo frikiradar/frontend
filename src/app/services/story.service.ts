@@ -108,7 +108,7 @@ export class StoryService {
     ];
   }
 
-  async sendStory(image: File, text: string, mentions?: Story["mentions"]) {
+  async sendStory(image: Blob, text: string, mentions?: Story["mentions"]) {
     const formData: FormData = new FormData();
     formData.set("image", image);
     formData.set("text", text);

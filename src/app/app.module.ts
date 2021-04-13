@@ -43,6 +43,8 @@ import {
   ServiceWorkerModule,
   SwRegistrationOptions
 } from "@angular/service-worker";
+import { Media } from "@ionic-native/media/ngx";
+import { File as NativeFile } from "@ionic-native/file/ngx";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
@@ -115,7 +117,9 @@ registerLocaleData(localeEs, "es");
     BrowserTab,
     InAppBrowser,
     FirebaseX,
-    { provide: WebcamImage }
+    { provide: WebcamImage },
+    Media,
+    NativeFile
   ],
   bootstrap: [AppComponent]
 })

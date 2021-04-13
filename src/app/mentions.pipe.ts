@@ -8,13 +8,13 @@ export class MentionsPipe implements PipeTransform {
     if (data?.mentions?.length) {
       const mentions = data.mentions;
       mentions.forEach((mention: string) => {
-        value = value.replaceAll(
+        value = value?.replace(
           `@${mention}`,
           `<a href='#' class="mention">@${mention}</a>`
         );
       });
     } else {
-      value = value.replaceAll(
+      value = value?.replace(
         /@([a-z\d_]+)/gi,
         `<a href='#' class="mention">@$1</a>`
       );

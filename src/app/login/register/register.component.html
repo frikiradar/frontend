@@ -96,7 +96,9 @@
       <ion-label>Fecha de nacimiento</ion-label>
       <ion-datetime
         min="1900-01"
-        max="{{ (today | date: 'y') - 18 }}"
+        max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
+          today | date: 'dd'
+        }}"
         cancel-text="Cancelar"
         done-text="Hecho"
         displayFormat="DD MMM de YYYY"

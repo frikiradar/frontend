@@ -211,7 +211,7 @@ export class RoomPage implements OnInit {
             .sendMessage(this.slug, this.room.name, text, replyToId, mentions)
             .then();
         } else if (image) {
-          const imageFile = await this.utils.urlToFile(image);
+          const imageFile = await this.utils.urltoBlob(image);
           const chat = await this.roomSvc
             .sendImage(this.slug, this.room.name, imageFile, text, mentions)
             .then();

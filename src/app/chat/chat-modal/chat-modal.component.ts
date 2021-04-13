@@ -186,6 +186,7 @@ export class ChatModalComponent implements OnInit {
   async sendMessage(message?: Chat) {
     const text = message.text;
     const image = message.image;
+    const audio = message.audio;
 
     if (this.editing) {
       const chat = await this.chatSvc
@@ -206,11 +207,12 @@ export class ChatModalComponent implements OnInit {
             fromuser: { id: this.auth.currentUserValue.id },
             text,
             image,
+            audio,
             time_creation: new Date(),
             sending: true
           }
         ]
-      ].filter((m: Chat) => m.text || m.image);
+      ].filter((m: Chat) => m.text || m.image || m.audio);
 
       this.scrollDown();
       let replyToId =
@@ -218,14 +220,19 @@ export class ChatModalComponent implements OnInit {
       this.replying = false;
 
       try {
-        if (!image) {
+        if (!image && !audio) {
           const chat = await this.chatSvc
             .sendMessage(this.user.id, text, replyToId)
             .then();
         } else if (image) {
-          const imageFile = await this.utils.urlToFile(image);
+          const imageFile = await this.utils.urltoBlob(image);
           const chat = await this.chatSvc
             .sendImage(this.user.id, imageFile, text)
+            .then();
+        } else if (audio) {
+          const audioFile = await this.utils.urltoBlob(audio);
+          const chat = await this.chatSvc
+            .sendAudio(this.user.id, audioFile)
             .then();
         }
 

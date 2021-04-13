@@ -380,7 +380,7 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async openUrl(event: any) {
-    this.urlSvc.openUrl(event);
+    await this.urlSvc.openUrl(event);
 
     if (
       event.srcElement.href &&

@@ -18,7 +18,7 @@ import { UtilsService } from "src/app/services/utils.service";
 export class CreateRoomModal {
   @Input() room: Room;
   public roomForm: FormGroup;
-  private imageFile: File;
+  private imageFile: Blob;
   public editing = false;
   public src: string = "";
   public slug: string = "";
@@ -118,7 +118,7 @@ export class CreateRoomModal {
 
       if (typeof src == "string") {
         this.src = src;
-        this.imageFile = await this.utils.urlToFile(src);
+        this.imageFile = await this.utils.urltoBlob(src);
       }
     } catch (e) {
       console.error(e);

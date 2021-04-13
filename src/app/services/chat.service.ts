@@ -38,11 +38,18 @@ export class ChatService {
       .toPromise()) as Chat;
   }
 
-  async sendImage(id: number, image: File, text: string) {
+  async sendImage(id: number, image: Blob, text: string) {
     const formData: FormData = new FormData();
     formData.set("image", image);
     formData.set("touser", "" + id);
     formData.set("text", text);
+    return (await this.uploadSvc.upload("chat-upload", formData)) as Chat;
+  }
+
+  async sendAudio(id: number, audio: Blob) {
+    const formData: FormData = new FormData();
+    formData.set("audio", audio);
+    formData.set("touser", "" + id);
     return (await this.uploadSvc.upload("chat-upload", formData)) as Chat;
   }
 

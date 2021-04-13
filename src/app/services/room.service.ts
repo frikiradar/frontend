@@ -61,7 +61,7 @@ export class RoomService {
   async sendImage(
     slug: string,
     name: string,
-    image: File,
+    image: Blob,
     text: string,
     mentions?: User["username"][]
   ) {

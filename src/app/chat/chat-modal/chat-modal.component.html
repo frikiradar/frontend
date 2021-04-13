@@ -168,6 +168,32 @@
               </span>
             </ion-note>
           </div>
+          <ion-card-content *ngIf="message.audio">
+            <ion-item lines="none">
+              <audio-player [src]="message.audio"></audio-player>
+              <ion-note class="note-text note-audio" slot="end">
+                {{ message.time_creation | date: "shortTime" }}
+                <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
+                  <ion-icon *ngIf="message.sending" name="time"></ion-icon>
+                  <ion-icon
+                    *ngIf="!message.sending && !message.time_read"
+                    name="checkmark"
+                  ></ion-icon>
+                  <ion-icon
+                    *ngIf="message.time_read"
+                    color="secondary"
+                    name="checkmark-done"
+                  ></ion-icon>
+                </span>
+              </ion-note>
+              <ion-avatar slot="end">
+                <img
+                  [src]="message.fromuser?.thumbnail"
+                  [alt]="message.fromuser?.username"
+                />
+              </ion-avatar>
+            </ion-item>
+          </ion-card-content>
           <ion-card-content *ngIf="message.text">
             <span
               class="text"

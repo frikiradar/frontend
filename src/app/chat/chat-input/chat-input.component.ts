@@ -19,6 +19,9 @@ import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { Media, MediaObject } from "@ionic-native/media/ngx";
+import { File as NativeFile, FileEntry } from "@ionic-native/file/ngx";
+import { WebView } from "@ionic-native/ionic-webview/ngx";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -55,6 +58,8 @@ export class ChatInputComponent {
   public recorded: boolean = false;
   public audio: string;
   public audioPreview: SafeUrl;
+  private audioMedia: MediaObject;
+  private audioFile: FileEntry;
 
   @Input() replying: boolean = false;
   @Input() editing = false;
@@ -80,7 +85,10 @@ export class ChatInputComponent {
     public sheet: ActionSheetController,
     public utils: UtilsService,
     private userSvc: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private file: NativeFile,
+    private webview: WebView,
+    private media: Media
   ) {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required])
@@ -172,6 +180,7 @@ export class ChatInputComponent {
 
     this.onSubmit.emit(message);
     this.message.setValue("");
+    this.audioMedia?.release();
     this.image = "";
     this.focusTextArea();
   }
@@ -235,7 +244,35 @@ export class ChatInputComponent {
   }
 
   async openMic() {
-    if (navigator.mediaDevices) {
+    if (this.platform.is("cordova")) {
+      if (this.platform.is("android")) {
+        await this.androidPermissions.requestPermissions([
+          this.androidPermissions.PERMISSION.RECORD_AUDIO,
+          this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+          this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
+        ]);
+      }
+
+      try {
+        let path = this.file.dataDirectory;
+        let extension = "";
+        if (this.platform.is("ios")) {
+          // path = this.file.dataDirectory;
+          extension = ".m4a";
+        } else {
+          // path = this.file.dataDirectory;
+          extension = ".mp3";
+        }
+        const name = `record_${new Date().getTime() + extension}`;
+        this.audioFile = await this.file.createFile(path, name, true);
+        // const audioMediaSrc = this.audioFile.nativeURL.replace(/^file:[\/]+/, "");
+        this.audioMedia = this.media.create(this.audioFile.toInternalURL());
+        this.audioMedia.startRecord();
+        this.recording = true;
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (navigator.mediaDevices) {
       let chunks = [];
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: false })
@@ -253,19 +290,15 @@ export class ChatInputComponent {
               track.stop();
             });
 
-            console.log("data available after MediaRecorder.stop() called.");
-            // audio.controls = true;
             const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
             chunks = [];
             this.audio = URL.createObjectURL(blob);
             this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(
               this.audio
             );
-            console.log("recorder stopped");
           });
 
           this.mediaRecorder.addEventListener("dataavailable", async e => {
-            console.log("entra", e.data);
             chunks.push(e.data);
           });
         });
@@ -273,11 +306,32 @@ export class ChatInputComponent {
   }
 
   async stopMic() {
-    this.mediaRecorder.stop();
-    console.log(this.mediaRecorder.state);
+    if (this.platform.is("cordova") && this.audioFile) {
+      try {
+        this.audioMedia.stopRecord();
+        this.recording = false;
+        this.recorded = true;
+        await this.utils.delay(200);
+        // this.audioMedia.play();
+        this.audio = this.webview.convertFileSrc(this.audioFile.nativeURL);
+        this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      this.mediaRecorder.stop();
+      // console.log(this.mediaRecorder.state);
+    }
   }
 
-  async addPicture(image: string | File) {
+  removeRecorded() {
+    this.recorded = false;
+    if (this.platform.is("cordova")) {
+      this.audioMedia?.release();
+    }
+  }
+
+  async addPicture(image: string | Blob) {
     if (typeof image !== "string") {
       image = await this.utils.fileToBase64(image);
     }

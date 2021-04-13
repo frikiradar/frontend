@@ -1,0 +1,47 @@
+<ion-item lines="none">
+  <ion-button
+    fill="clear"
+    class="toggle"
+    (click)="download()"
+    *ngIf="!downloaded && !downloading"
+    slot="start"
+  >
+    <ion-icon name="download" color="light"></ion-icon>
+  </ion-button>
+  <ion-button
+    fill="clear"
+    class="toggle"
+    *ngIf="!downloaded && downloading"
+    slot="start"
+  >
+    <ion-spinner name="crescent" color="light"></ion-spinner>
+  </ion-button>
+  <ion-button
+    fill="clear"
+    class="toggle"
+    (click)="togglePlayer(false)"
+    *ngIf="downloaded && !isPlaying"
+    slot="start"
+  >
+    <ion-icon name="play" color="light"></ion-icon>
+  </ion-button>
+  <ion-button
+    class="toggle"
+    fill="clear"
+    (click)="downloaded && togglePlayer(true)"
+    *ngIf="isPlaying"
+    slot="start"
+  >
+    <ion-icon name="pause" color="light"></ion-icon>
+  </ion-button>
+  <ion-range
+    #range
+    [(ngModel)]="progress"
+    max="100"
+    color="success"
+    (touchend)="seek()"
+    (mouseup)="seek()"
+  >
+  </ion-range>
+  <ion-note slot="start">{{ progress ? timeProgress : timeDuration }}</ion-note>
+</ion-item>

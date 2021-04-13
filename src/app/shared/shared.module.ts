@@ -24,6 +24,7 @@ import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 import { HashtagPipe } from "../hashtag.pipe";
 import { ChatListComponent } from "../chat/chat-list/chat-list.component";
 import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
+import { AudioPlayerComponent } from "../audio-player/audio-player.component";
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
     CropperModal,
     WebcamModal,
     ChatInputComponent,
+    AudioPlayerComponent,
     ChatListComponent,
     ChatModalComponent,
     StoryModal,
@@ -50,6 +52,7 @@ import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
     CropperModal,
     WebcamModal,
     ChatInputComponent,
+    AudioPlayerComponent,
     ChatListComponent,
     ChatModalComponent,
     StoryModal,
@@ -75,7 +78,8 @@ import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
     ChatInputComponent,
     ChatListComponent,
     ChatModalComponent,
-    LinkyModule
+    LinkyModule,
+    AudioPlayerComponent
   ],
   providers: [Camera]
 })

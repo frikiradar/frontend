@@ -1,16 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { SafeUrl } from "@angular/platform-browser";
 import { Camera } from "@ionic-native/camera/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, ModalController, Platform } from "@ionic/angular";
-import { CropperModal } from "../cropper/cropper.modal";
-import { Story } from "../models/story";
-import { StoryModal } from "../story/story-modal/story.modal";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
-import { WebcamModal } from "../webcam/webcam.modal";
 
+import { CropperModal } from "../cropper/cropper.modal";
+import { WebcamModal } from "../webcam/webcam.modal";
 import { AuthService } from "./auth.service";
 
 @Injectable({
@@ -33,7 +29,7 @@ export class UtilsService {
     crop?: boolean,
     name?: string,
     returnsrc = false
-  ): Promise<File | string> {
+  ): Promise<Blob | string> {
     const fileUri = await this.camera.getPicture({
       quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -58,12 +54,12 @@ export class UtilsService {
           return;
         }
       }
-      console.log(src);
+      // console.log(src);
       if (returnsrc) {
         return src;
       }
-      const file = await this.urlToFile(src, name);
-      return file;
+      const blob = await this.urltoBlob(src);
+      return blob;
     } catch (e) {
       console.error("Error al recortar la imagen.", e);
     }
@@ -94,7 +90,7 @@ export class UtilsService {
     return false;
   }
 
-  async webcamImage(name: string = "default"): Promise<File | boolean> {
+  async webcamImage(name: string = "default"): Promise<Blob | boolean> {
     const modal = await this.modal.create({
       component: WebcamModal,
       cssClass: "full-modal"
@@ -106,8 +102,8 @@ export class UtilsService {
       if (data.data) {
         const src = await this.cropImage("", data.data);
         if (typeof src == "string") {
-          const file = await this.urlToFile(src, name);
-          return file;
+          const blob = await this.urltoBlob(src);
+          return blob;
         } else {
           return;
         }
@@ -131,6 +127,10 @@ export class UtilsService {
   }
 
   urltoBlob(url: string): Promise<Blob> {
+    /*const response = await fetch(url);
+    const blob = await response.blob();
+    return blob;
+    */
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onerror = reject;
@@ -143,12 +143,6 @@ export class UtilsService {
       xhr.responseType = "blob"; // convert type
       xhr.send();
     });
-  }
-
-  async urlToFile(url: string, name?: string) {
-    const blob = await this.urltoBlob(url);
-    const blobFile: File = new File([blob], name ? name : "default" + ".png");
-    return blobFile;
   }
 
   fileToBase64(file: Blob | File): Promise<string> {
@@ -250,5 +244,9 @@ export class UtilsService {
 
   format_two_digits(n: string | number) {
     return n < 10 ? "0" + n : n;
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

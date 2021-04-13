@@ -51,7 +51,7 @@ export class UserService {
     }
   }
 
-  async uploadAvatar(file: File) {
+  async uploadAvatar(file: Blob) {
     const formData: FormData = new FormData();
     formData.set("avatar", file);
     const user = (await this.uploadSvc.upload("avatar", formData)) as User;

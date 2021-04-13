@@ -380,7 +380,7 @@ export class EditProfilePage {
     try {
       const src = await this.utils.cropImage(event);
       if (typeof src == "string") {
-        const imageFile = await this.utils.urlToFile(src);
+        const imageFile = await this.utils.urltoBlob(src);
         this.uploadPicture(imageFile);
       }
     } catch (e) {
@@ -388,7 +388,7 @@ export class EditProfilePage {
     }
   }
 
-  async uploadPicture(avatar: File) {
+  async uploadPicture(avatar: Blob) {
     try {
       const user = await this.userSvc.uploadAvatar(avatar);
       this.auth.setAuthUser(user);

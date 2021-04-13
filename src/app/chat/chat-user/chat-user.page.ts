@@ -13,11 +13,16 @@ import { AuthService } from "src/app/services/auth.service";
 export class ChatUserPage implements OnInit {
   userId: User["id"];
   chats: Chat[];
+  public desktop = false;
 
   constructor(private route: ActivatedRoute, private auth: AuthService) {}
 
   async ngOnInit() {
     this.userId = +this.route.snapshot.paramMap.get("id");
+    if (window.innerWidth > 991) {
+      this.desktop = true;
+    }
+    window.onresize = () => (this.desktop = window.innerWidth > 991);
   }
 
   showChat(id: User["id"]) {

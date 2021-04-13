@@ -40,10 +40,12 @@
     <platform name="android">
         <preference name="Scheme" value="https" />
         <preference name="MixedContentMode" value="0" />
+        <preference name="AndroidPersistentFileLocation" value="Compatibility" />
         <allow-intent href="market:*" />
         <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
             <application android:largeHeap="true" />
+            <application android:requestLegacyExternalStorage="true" />
         </edit-config>
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
             <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/notification_icon" />

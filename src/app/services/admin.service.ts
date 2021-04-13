@@ -56,7 +56,7 @@ export class AdminService {
     description: string,
     permissions: string,
     visible: boolean,
-    image: File
+    image: Blob
   ) {
     const formData: FormData = new FormData();
     formData.set("name", name);
@@ -73,7 +73,7 @@ export class AdminService {
     description: string,
     permissions: string,
     visible: boolean,
-    image: File
+    image: Blob
   ) {
     const formData: FormData = new FormData();
     formData.set("id", "" + id);

@@ -117,6 +117,11 @@ ion-label {
       font-size: 14px;
       vertical-align: text-bottom;
     }
+
+    &.note-audio {
+      right: 80px;
+      position: absolute;
+    }
   }
 
   ion-item {

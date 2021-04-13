@@ -36,7 +36,7 @@
     controls="true"
   ></audio>
   <ion-buttons slot="end">
-    <ion-button (click)="recorded = false">
+    <ion-button (click)="removeRecorded()">
       <ion-icon slot="icon-only" name="close-outline" color="danger"></ion-icon>
     </ion-button>
     <ion-button (click)="sendMessage()">
@@ -83,7 +83,7 @@
         </ion-button>
       </ion-buttons>
       <ion-textarea
-        placeholder="書く"
+        placeholder="書く！"
         autocapitalize="on"
         (keydown.enter)="sendMessage($event)"
         formControlName="message"

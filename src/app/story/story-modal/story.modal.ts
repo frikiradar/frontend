@@ -33,7 +33,7 @@ export class StoryModal implements OnInit {
     return this.storyForm.get("text");
   }
   public image: SafeUrl;
-  public imageFile: File;
+  public imageFile: Blob;
   private inputAt = false;
   private mention: string;
   public userMentions: User["username"][] = [];
@@ -109,20 +109,20 @@ export class StoryModal implements OnInit {
     this.image = "";
   }
 
-  async addPicture(imageFile: File) {
-    if (typeof imageFile !== "string") {
-      const image = await this.utils.fileToBase64(imageFile);
+  async addPicture(blob: Blob) {
+    if (typeof blob !== "string") {
+      const image = await this.utils.fileToBase64(blob);
       this.image = this.sanitizer.bypassSecurityTrustUrl(image);
     }
-    this.imageFile = imageFile;
+    this.imageFile = blob;
   }
 
   async cropImagebyEvent(event: any) {
     try {
       const src = await this.utils.cropImage(event);
       if (typeof src == "string") {
-        const file = await this.utils.urlToFile(src);
-        this.addPicture(file);
+        const blob = await this.utils.urltoBlob(src);
+        this.addPicture(blob);
       }
     } catch (e) {
       console.error(e);
