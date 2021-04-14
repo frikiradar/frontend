@@ -201,7 +201,9 @@
       },
       "cordova-plugin-ionic-webview": {},
       "cordova-clipboard": {},
-      "cordova-plugin-media": {},
+      "cordova-plugin-media": {
+        "KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE": "NO"
+      },
       "cordova-plugin-file": {}
     },
     "platforms": [
