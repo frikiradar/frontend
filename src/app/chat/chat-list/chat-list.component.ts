@@ -165,7 +165,7 @@ export class ChatListComponent {
 
     this.source.addEventListener("error", async error => {
       this.conErrors++;
-      console.error("Escucha al servidor de chat perdida", error);
+      // console.error("Escucha al servidor de chat perdida", error);
       this.source.close();
 
       if (error.type === "error" && this.conErrors < 10) {

@@ -80,7 +80,7 @@ export class RoomsPage implements OnInit {
 
     this.source.addEventListener("error", async error => {
       this.conErrors++;
-      console.error("Escucha al servidor de salas perdida", error);
+      // console.error("Escucha al servidor de salas perdida", error);
       this.source.close();
       if (error.type === "error" && this.conErrors < 10) {
         this.connectSSE();
