@@ -182,6 +182,7 @@ export class ChatInputComponent {
     this.message.setValue("");
     this.audioMedia?.release();
     this.image = "";
+    this.audio = "";
     this.focusTextArea();
   }
 
