@@ -81,12 +81,6 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-        <config-file parent="GADApplicationIdentifier" target="*-Info.plist">
-            <string>ca-app-pub-8367506635932865~2997335912</string>
-        </config-file>
-        <config-file parent="GADIsAdManagerApp" platform="ios" target="*-Info.plist">
-            <true />
-        </config-file>
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
             <string>Necesario para hacer una nueva foto de perfil.</string>
         </config-file>
