@@ -126,23 +126,10 @@ export class UtilsService {
     return new Blob([byteArray], { type: "image/png" });
   }
 
-  urltoBlob(url: string): Promise<Blob> {
-    /*const response = await fetch(url);
+  async urltoBlob(url: string): Promise<Blob> {
+    const response = await fetch(url);
     const blob = await response.blob();
     return blob;
-    */
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onerror = reject;
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          resolve(xhr.response);
-        }
-      };
-      xhr.open("GET", url);
-      xhr.responseType = "blob"; // convert type
-      xhr.send();
-    });
   }
 
   fileToBase64(file: Blob | File): Promise<string> {
@@ -170,6 +157,11 @@ export class UtilsService {
         resolve(dataURL);
       };
     });
+  }
+
+  async getDataURI(url: string): Promise<string> {
+    const blob = await this.urltoBlob(url);
+    return await this.fileToBase64(blob);
   }
 
   async test() {

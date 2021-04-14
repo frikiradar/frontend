@@ -168,7 +168,7 @@
               </span>
             </ion-note>
           </div>
-          <ion-card-content *ngIf="message.audio">
+          <ion-card-content *ngIf="message.audio" class="audio-content">
             <ion-item lines="none">
               <audio-player [src]="message.audio"></audio-player>
               <ion-note class="note-text note-audio" slot="end">

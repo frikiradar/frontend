@@ -2,6 +2,8 @@ import { Howl } from "howler";
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { IonRange } from "@ionic/angular";
 
+import { UtilsService } from "../services/utils.service";
+
 @Component({
   selector: "audio-player",
   templateUrl: "./audio-player.component.html",
@@ -20,7 +22,7 @@ export class AudioPlayerComponent implements OnInit {
   public timeProgress: string;
   @ViewChild("range", { static: false }) range: IonRange;
 
-  constructor() {}
+  constructor(private utils: UtilsService) {}
 
   ngOnInit() {}
 
@@ -29,12 +31,13 @@ export class AudioPlayerComponent implements OnInit {
     this.start();
   }
 
-  start() {
+  async start() {
     if (this.player) {
       this.player.stop();
     }
+    const src = await this.utils.getDataURI(this.src);
     this.player = new Howl({
-      src: this.src,
+      src,
       html5: true,
       onplay: () => {
         this.isPlaying = true;
@@ -52,7 +55,7 @@ export class AudioPlayerComponent implements OnInit {
       this.timeProgress = this.timeDuration;
       this.downloading = false;
       this.downloaded = true;
-    }, 1500);
+    }, 2000);
   }
 
   togglePlayer(pause: boolean) {
