@@ -126,6 +126,15 @@ export class UserService {
       .toPromise() as Promise<User>;
   }
 
+  removeAccount(password: string, note: string) {
+    return this.rest
+      .put("remove-account", {
+        password,
+        note
+      })
+      .toPromise() as Promise<User>;
+  }
+
   changePassword(old_password: string, new_password: string) {
     return this.rest
       .put("password", {

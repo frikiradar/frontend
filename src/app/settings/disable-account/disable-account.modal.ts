@@ -22,6 +22,7 @@ import { UserService } from "./../../services/user.service";
 export class DisableAccountModal {
   public disableForm: FormGroup;
   public clearPassword = false;
+  public type: "disable" | "remove" = "disable";
 
   constructor(
     public fb: FormBuilder,
@@ -42,18 +43,37 @@ export class DisableAccountModal {
 
   async submitForm() {
     try {
-      const user = await this.userSvc.disableUser(
-        this.disableForm.get("password").value,
-        this.disableForm.get("note").value
-      );
+      if (this.type === "disable") {
+        const user = await this.userSvc.disableUser(
+          this.disableForm.get("password").value,
+          this.disableForm.get("note").value
+        );
 
-      this.auth.setAuthUser(user);
+        this.auth.setAuthUser(user);
 
-      (await this.toast.create({
-        message: "¡Cuenta desactivada correctamente!",
-        duration: 5000,
-        position: "bottom"
-      })).present();
+        (
+          await this.toast.create({
+            message: "¡Cuenta desactivada correctamente!",
+            duration: 5000,
+            position: "bottom"
+          })
+        ).present();
+      } else if (this.type === "remove") {
+        const user = await this.userSvc.removeAccount(
+          this.disableForm.get("password").value,
+          this.disableForm.get("note").value
+        );
+
+        this.auth.setAuthUser(user);
+
+        (
+          await this.toast.create({
+            message: "¡Cuenta eliminada correctamente!",
+            duration: 5000,
+            position: "bottom"
+          })
+        ).present();
+      }
 
       this.modal.dismiss();
       this.auth.logout();
@@ -66,6 +86,10 @@ export class DisableAccountModal {
 
       alert.present();
     }
+  }
+
+  changeType(type: "disable" | "remove") {
+    this.type = type;
   }
 
   close() {

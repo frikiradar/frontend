@@ -105,7 +105,8 @@ export class SettingsPage implements OnInit {
 
   async disableAccountModal() {
     const modal = await this.modal.create({
-      component: DisableAccountModal
+      component: DisableAccountModal,
+      cssClass: "full-modal"
     });
     return await modal.present();
   }

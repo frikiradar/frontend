@@ -32,6 +32,7 @@ export class CommunityPage {
   public pages: Page[];
   public groupedStories: Story[] = [];
   private source: EventSource;
+  private conErrors = 0;
 
   public storiesOpts = {
     slidesPerView: 4.5,
@@ -207,9 +208,16 @@ export class CommunityPage {
     });
 
     this.source.addEventListener("error", async error => {
+      this.conErrors++;
       console.error("Escucha al servidor de salas perdida", error);
       this.source.close();
-      this.connectSSE();
+      if (error.type === "error" && this.conErrors < 10) {
+        this.connectSSE();
+      }
+    });
+
+    this.source.addEventListener("open", async error => {
+      this.conErrors = 0;
     });
   }
 

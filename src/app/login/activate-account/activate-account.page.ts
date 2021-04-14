@@ -12,6 +12,7 @@ import {
 } from "@ionic/angular";
 
 import { User } from "src/app/models/user";
+import { ConfigService } from "src/app/services/config.service";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 
@@ -32,7 +33,8 @@ export class ActivateAccountPage {
     private auth: AuthService,
     private alert: AlertController,
     private nav: NavController,
-    private toast: ToastController
+    private toast: ToastController,
+    private config: ConfigService
   ) {
     this.user = this.auth.currentUserValue;
 
@@ -58,6 +60,7 @@ export class ActivateAccountPage {
         this.codeForm.get("code").value.toUpperCase()
       );
       this.auth.setAuthUser(this.user);
+      this.config.getConfig(true);
       const alert = await this.alert.create({
         header: `¡Cuenta activada correctamente!`,
         message:

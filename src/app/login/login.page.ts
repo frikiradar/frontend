@@ -16,6 +16,7 @@ import {
 } from "@ionic/angular";
 
 import { User } from "../models/user";
+import { ConfigService } from "../services/config.service";
 import { AuthService } from "./../services/auth.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 
@@ -46,7 +47,8 @@ export class LoginPage {
     public fb: FormBuilder,
     private nav: NavController, // private fb: Facebook
     public platform: Platform,
-    private facebook: Facebook
+    private facebook: Facebook,
+    private config: ConfigService
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -101,6 +103,7 @@ export class LoginPage {
   }
 
   async loginSuccess(user: User) {
+    this.config.getConfig(true);
     if (user && user.two_step) {
       this.nav.navigateRoot(["/login/two-step"], {
         queryParams: { returnUrl: this.returnUrl }

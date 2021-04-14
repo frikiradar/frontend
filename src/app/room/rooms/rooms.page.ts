@@ -16,6 +16,7 @@ import { RoomService } from "src/app/services/room.service";
 export class RoomsPage implements OnInit {
   public rooms: Room[];
   private source: EventSource;
+  private conErrors = 0;
 
   constructor(
     private roomSvc: RoomService,
@@ -78,9 +79,16 @@ export class RoomsPage implements OnInit {
     });
 
     this.source.addEventListener("error", async error => {
+      this.conErrors++;
       console.error("Escucha al servidor de salas perdida", error);
       this.source.close();
-      this.connectSSE();
+      if (error.type === "error" && this.conErrors < 10) {
+        this.connectSSE();
+      }
+    });
+
+    this.source.addEventListener("open", async error => {
+      this.conErrors = 0;
     });
   }
 }

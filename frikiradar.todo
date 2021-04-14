@@ -16,7 +16,7 @@ IDEAS
 ☐ - Canal de youtube o twitch para directos usando discord para poder hablar con invitados y pregunten dudas, etc.
 ☐ - Sistema de reportes de usuario con captura cuando el usuario denuncia o cuando selecciona los mensajes que quiere denunciar
 ✔ - Añadir botón para enviar fotos de la galería/cámara @done (26/3/2021 19:38:46)
-☐ - Añadir botón en chat para enviar audios de voz
+✔ - Añadir botón en chat para enviar audios de voz @done (14/4/2021 13:05:41)
 ✔ - Chats grupales para que todo el mundo pueda hablar y conocerse entre sí (También con emoticonos, audios y fotos) @done (26/3/2021 19:38:11)
 ✔ - Añadir 3 puntitos a la derecha del nombre en un chat privado para tener un acceso rápido al bloqueo y demás @done (3/3/2021 9:42:11)
 ✔ - Al bloquear a los usuarios poder poner el motivo y que les salga "Tu cuenta ha sido desactivada por un moderador" y la razón. @done (3/3/2021 9:42:18)
@@ -24,11 +24,9 @@ IDEAS
 ✔ - Añadir escudo de moderador al lado del nombre, a la derecha del de verificado @done (3/3/2021 9:42:29)
 ✔ - Poder gestionar el color del nombre de un usuario y de qué color escribe en los chats grupales @done (24/3/2021 11:30:42)
 ☐ - si alguien te da un kokoro y tu se lo das también que ponga ¡Felicidades! os habeis kokoreado mutuamente, ya podéis chatear. Porque pone que hay que esperar también al otro aunque te lo haya dado
-☐ - Notificación match
+✔ - Notificación match @done (14/4/2021 13:05:31)
 ✔ - Escribiendo... @done (24/3/2021 11:30:34)
 ✔ - Enviar email al correo cuando se banea @done (26/3/2021 19:37:55)
-☐ - Revisar kokoros
-☐ - Switch boton ocultar usuario
 ☐ - Borrar menciones al borrar original
 ✔ - Que pueda ver los estados de la gente (Solamente quiero ver como lo utilizan, me hace ilusión ver como los estrenan juas) @done (24/3/2021 16:58:04)
 ✔ - Que al abrir un chat no se abra el teclado sin darle tú @done (24/3/2021 13:07:28)
@@ -49,4 +47,4 @@ IDEAS
 ☐ - Diferenciar en comunidad la parte de Historias frikis, Salas de chat y Páginas por colores, que se destaque que son distintas partes pero de la misma categoría
 ☐ - Poder poner lo que escribes en negrita, en cursiva, tachado.
 ☐ - Poder archivar chats y salas.
-☐ - Mover configuracion de salas y chats a servidor.
+✔ - Mover configuracion de salas y chats a servidor. @done (14/4/2021 13:03:22)

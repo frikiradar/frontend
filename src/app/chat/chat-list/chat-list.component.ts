@@ -28,6 +28,7 @@ export class ChatListComponent {
   showOptions = false;
   public selectedChat: Chat;
   source: EventSource;
+  conErrors = 0;
 
   constructor(
     private chatSvc: ChatService,
@@ -163,9 +164,27 @@ export class ChatListComponent {
     });
 
     this.source.addEventListener("error", async error => {
+      this.conErrors++;
       console.error("Escucha al servidor de chat perdida", error);
       this.source.close();
-      this.connectSSE();
+
+      if (error.type === "error" && this.conErrors < 10) {
+        this.connectSSE();
+      }
+    });
+
+    this.source.addEventListener("open", async error => {
+      /*if (this.conErrors >= 10) {
+        (
+          await this.toast.create({
+            message: "¡Conexión al servidor de chat restablecida!",
+            duration: 2000,
+            position: "bottom",
+            color: "success"
+          })
+        ).present();
+      }*/
+      this.conErrors = 0;
     });
   }
 }

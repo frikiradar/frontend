@@ -179,11 +179,7 @@ export class RadarPage {
       this.page++;
 
       const resUsers = await this.userSvc.getRadarUsers(this.page, this.ratio);
-      let users = [];
-      users =
-        this.authUser?.tags?.length > 0
-          ? resUsers.filter(u => u.match && u.match > 0)
-          : resUsers;
+      let users = resUsers;
 
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
