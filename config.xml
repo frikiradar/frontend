@@ -87,7 +87,7 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>Necesitamos saber tu ubicación para usar el radar con mayor precisión.</string>
         </edit-config>
-        <edit-config file="*-Info.plist" mode="merge" target="NSBluetoothAllwaysUsageDescription">
+        <edit-config file="*-Info.plist" mode="merge" target="NSBluetoothAlwaysUsageDescription">
             <string>Es posible que la app te pida activar el bluetooth para mejorar la geolocalización.</string>
         </edit-config>
         <config-file mode="add" parent="ITSAppUsesNonExemptEncryption" target="*-Info.plist">
