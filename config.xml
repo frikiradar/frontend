@@ -82,7 +82,7 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
-            <string>Necesario para hacer una nueva foto de perfil.</string>
+            <string>Necesitamos acceder a tu cámara para distintas funciones: hacer una nueva foto de perfil, poder enviar fotos por chat o subir una nueva historia.</string>
         </config-file>
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>Necesitamos saber tu ubicación para usar el radar con mayor precisión.</string>

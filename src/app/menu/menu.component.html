@@ -67,7 +67,12 @@
             Configuración y privacidad
           </ion-label>
         </ion-item>
-        <ion-item button lines="none" (click)="showAmbassador()">
+        <ion-item
+          button
+          lines="none"
+          (click)="showAmbassador()"
+          *ngIf="!platform.is('ios')"
+        >
           <ion-icon name="people-outline" slot="start"></ion-icon>
           <ion-label>
             <h2>Patreon de embajador</h2>
