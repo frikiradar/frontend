@@ -16,4 +16,9 @@ ion-note {
     top: 23px;
     left: 36px;
     color: white;
+
+    &.ios {
+        font-size: 10px;
+        top: 42px;
+    }
 }

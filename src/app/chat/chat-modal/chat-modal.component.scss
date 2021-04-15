@@ -125,6 +125,10 @@ ion-label {
     &.note-audio {
       right: 80px;
       position: absolute;
+
+      &.ios {
+        bottom: 0;
+      }
     }
   }
 
@@ -157,7 +161,13 @@ ion-chip {
 }
 
 ion-content {
-  --offset-bottom: -130px !important;
+  &.md {
+    --offset-bottom: -130px !important;
+  }
+
+  &.ios {
+    --offset-bottom: -180px !important;
+  }
 }
 
 ion-footer {
