@@ -14,7 +14,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["hammerjs", "linkifyjs", "platform"],
+            "allowedCommonJsDependencies": ["hammerjs", "linkifyjs", "platform", "howler"],
             "aot": false,
             "outputPath": "www",
             "index": "src/index.html",

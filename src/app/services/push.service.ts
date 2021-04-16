@@ -221,7 +221,8 @@ export class PushService {
         });
       }
     } else {
-      if (this.router.url !== notification?.data.url) {
+      console.log(notification);
+      if (this.router.url !== notification?.data?.url) {
         try {
           const registration = await navigator.serviceWorker.ready;
           // Customize notification here
