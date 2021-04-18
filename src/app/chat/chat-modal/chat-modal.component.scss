@@ -161,9 +161,7 @@ ion-chip {
 }
 
 ion-content {
-  &.md {
-    --offset-bottom: -130px !important;
-  }
+  --offset-bottom: -130px !important;
 
   &.ios {
     --offset-bottom: -200px !important;
