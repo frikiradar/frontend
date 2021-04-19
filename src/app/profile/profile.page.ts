@@ -9,6 +9,7 @@ import {
   PopoverController,
   ToastController
 } from "@ionic/angular";
+import { Location } from "@angular/common";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { pulse } from "ng-animate";
 
@@ -78,7 +79,8 @@ export class ProfilePage implements OnInit {
     private likeSvc: LikeService,
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
-    private urlSvc: UrlService
+    private urlSvc: UrlService,
+    private location: Location
   ) {}
 
   async ngOnInit() {
@@ -321,6 +323,6 @@ export class ProfilePage implements OnInit {
   }
 
   back() {
-    this.nav.back();
+    this.location.back();
   }
 }
