@@ -59,7 +59,7 @@ const routes: Routes = [
       },
       {
         path: "",
-        redirectTo: "/tabs/radar",
+        redirectTo: "/",
         pathMatch: "full"
       }
     ]

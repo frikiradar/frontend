@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button text="" defaultHref="/tabs/radar"></ion-back-button>
+      <ion-back-button text="" defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="auth.currentUserValue">
       <ion-button
@@ -105,7 +105,7 @@
           <ion-item
             lines="none"
             id="kokoro"
-            *ngIf="auth.currentUserValue && user?.likes"
+            *ngIf="auth.currentUserValue && user?.likes && auth.isAdult()"
           >
             <ion-icon name="heart" slot="start" color="primary"></ion-icon>
             <ion-label>
@@ -127,7 +127,7 @@
           <ion-item
             lines="none"
             class="location"
-            *ngIf="user?.distance !== undefined || user?.ip"
+            *ngIf="auth.isAdult() && (user?.distance !== undefined || user?.ip)"
           >
             <ion-icon
               name="location-sharp"
@@ -162,7 +162,7 @@
             <ion-label>{{ user.location }}</ion-label>
           </ion-item>
           <ion-item
-            *ngIf="user?.gender || user?.pronoun || user?.orientation || user?.relationship"
+            *ngIf="auth.isAdult() && (user?.gender || user?.pronoun || user?.orientation || user?.relationship)"
             lines="none"
           >
             <ion-icon name="body"></ion-icon>
@@ -174,7 +174,7 @@
               user.relationship : ''}}
             </ion-label>
           </ion-item>
-          <ion-item *ngIf="user?.connection?.length">
+          <ion-item *ngIf="auth.isAdult() && user?.connection?.length">
             <ion-icon name="search-outline"></ion-icon>
             <ion-label>Buscando: {{ user.connection.join(", ") }}</ion-label>
           </ion-item>
@@ -258,7 +258,10 @@
     <ion-buttons *ngIf="user">
       <ion-grid>
         <ion-row class="ion-align-items-center">
-          <ion-col class="ion-text-center" *ngIf="auth.currentUserValue">
+          <ion-col
+            class="ion-text-center"
+            *ngIf="auth.currentUserValue && auth.isAdult()"
+          >
             <ion-button (click)="hideProfile()">
               <ion-icon
                 slot="icon-only"
@@ -275,7 +278,7 @@
               <ion-icon slot="icon-only" name="chatbubbles-outline"></ion-icon>
             </ion-button>
           </ion-col>
-          <ion-col class="ion-text-center">
+          <ion-col class="ion-text-center" *ngIf="auth.isAdult()">
             <ion-button (click)="switchLike()">
               <ion-icon
                 [@pulse]="user.like"

@@ -70,7 +70,7 @@ export class ActivateAccountPage {
           {
             text: "Buscar personas",
             handler: () => {
-              this.nav.navigateRoot(["/tabs/radar"]);
+              this.nav.navigateRoot(["/"]);
             }
           },
           {

@@ -96,7 +96,7 @@
       <ion-label>Fecha de nacimiento</ion-label>
       <ion-datetime
         min="1900-01"
-        max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
+        max="{{ (today | date: 'y') - 14 }}-{{ today | date: 'MM' }}-{{
           today | date: 'dd'
         }}"
         cancel-text="Cancelar"
@@ -104,9 +104,10 @@
         displayFormat="DD MMM de YYYY"
         monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
         formControlName="birthday"
+        (ionChange)="changeAge($event)"
       ></ion-datetime>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="adult">
       <ion-label
         >Mi identidad de género
         {{ platform.is("ios") ? "(opcional)" : "" }}</ion-label
@@ -134,7 +135,7 @@
       <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
       una opción
     </div>
-    <ion-item>
+    <ion-item *ngIf="adult">
       <ion-label>Estoy buscando (opcional)</ion-label>
       <ion-select
         cancel-text="Cancelar"
@@ -259,8 +260,8 @@
       <ion-checkbox slot="start" formControlName="acceptos"></ion-checkbox>
     </ion-item>
     <ion-item lines="none">
-      <ion-label><p>Confirmo ser mayor de edad.</p></ion-label>
-      <ion-checkbox slot="start" formControlName="adult"></ion-checkbox>
+      <ion-label><p>La fecha de nacimiento indicada es correcta.</p></ion-label>
+      <ion-checkbox slot="start" formControlName="age"></ion-checkbox>
     </ion-item>
     <ion-button color="primary" type="submit" expand="block"
       >Registrarme</ion-button

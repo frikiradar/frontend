@@ -3,13 +3,14 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { AdminGuard } from "./guards/admin.guard";
 import { AuthGuard } from "./guards/auth.guard";
+import { TabGuard } from "./guards/tab.guard";
 
 const routes: Routes = [
   {
     path: "",
     loadChildren: () =>
       import("./tabs/tabs.module").then(m => m.TabsPageModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, TabGuard]
   },
   {
     path: "login",

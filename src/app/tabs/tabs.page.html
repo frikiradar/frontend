@@ -1,19 +1,11 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="radar">
+    <ion-tab-button tab="radar" *ngIf="auth.isAdult()">
       <ion-icon name="location-outline"></ion-icon>
       <ion-badge color="primary" *ngIf="counters?.radar > 0"
         >{{ counters.radar }}</ion-badge
       >
       <ion-label>Radar</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="chat">
-      <ion-icon name="chatbubbles-outline"></ion-icon>
-      <ion-badge color="primary" *ngIf="counters?.chats > 0"
-        >{{ counters.chats }}</ion-badge
-      >
-      <ion-label>Chat</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="community">
@@ -24,6 +16,14 @@
     <ion-tab-button tab="events" *ngIf="auth.isMaster()">
       <ion-icon name="calendar-outline"></ion-icon>
       <ion-label>Eventos</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="chat">
+      <ion-icon name="chatbubbles-outline"></ion-icon>
+      <ion-badge color="primary" *ngIf="counters?.chats > 0"
+        >{{ counters.chats }}</ion-badge
+      >
+      <ion-label>Chat</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

@@ -204,6 +204,18 @@ export class AuthService {
     return user.verified;
   }
 
+  isAdult(birthday?: string) {
+    if (!birthday) {
+      birthday = this.currentUserValue.birthday;
+    }
+    const today = Date.now();
+    const date = new Date(birthday).getTime();
+    const ms = today - date;
+    const age = +(ms / 1000 / 3600 / 24 / 365).toFixed(0);
+
+    return age >= 18;
+  }
+
   async logout() {
     let uuid = null;
     if (this.platform.is("cordova")) {

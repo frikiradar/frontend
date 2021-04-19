@@ -236,7 +236,6 @@ export class RoomPage implements OnInit {
   }
 
   async loadChats(event: any) {
-    console.log(event);
     if (!this.messages.length) {
       return;
     }

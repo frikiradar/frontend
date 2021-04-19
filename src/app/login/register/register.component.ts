@@ -28,6 +28,7 @@ export class RegisterComponent {
   public today: number = Date.now();
   public clearPassword = false;
   public usernameSuggestion = "";
+  public adult = false;
 
   constructor(
     private alert: AlertController,
@@ -66,7 +67,7 @@ export class RegisterComponent {
       meet: [""],
       referral: [""],
       acceptos: new FormControl(false, Validators.requiredTrue),
-      adult: new FormControl(false, Validators.requiredTrue)
+      age: new FormControl(false, Validators.requiredTrue)
     });
 
     this.registerForm.get("username").valueChanges.subscribe(async username => {
@@ -80,6 +81,14 @@ export class RegisterComponent {
         }
       }
     });
+  }
+
+  changeAge(event: CustomEvent) {
+    if (this.auth.isAdult(event.detail.value)) {
+      this.adult = true;
+    } else {
+      this.adult = false;
+    }
   }
 
   async submitRegister() {
@@ -154,7 +163,7 @@ export class RegisterComponent {
       1
     );
 
-    this.ngZone.run(() => this.nav.navigateRoot(["/tabs/radar"])).then();
+    this.ngZone.run(() => this.nav.navigateRoot(["/"])).then();
   }
 
   async registerError(error: string) {

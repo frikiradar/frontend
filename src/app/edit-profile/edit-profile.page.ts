@@ -38,8 +38,6 @@ export class EditProfilePage {
     return this.profileForm.get("maxage");
   }
 
-  @ViewChild("slider", { static: true })
-  slider: IonSlides;
   @ViewChild("imageSlider", { static: true })
   imageSlider: IonSlides;
   @ViewChild("segment", { static: true })
@@ -65,7 +63,6 @@ export class EditProfilePage {
   public tagsInput: string;
   public list: { name: string; total: number }[];
   public activeImage = 0;
-  public activeTab = "info";
 
   constructor(
     public fb: FormBuilder,
@@ -84,7 +81,7 @@ export class EditProfilePage {
       name: [""],
       description: [""],
       location: [""],
-      birthday: [""],
+      birthday: new FormControl({ value: "", disabled: true }),
       gender: [""],
       orientation: [""],
       pronoun: [""],
@@ -92,10 +89,7 @@ export class EditProfilePage {
       status: [""],
       lovegender: [""],
       minage: [""],
-      maxage: new FormControl(
-        { value: "", disabled: true },
-        Validators.required
-      ),
+      maxage: new FormControl({ value: "", disabled: true }),
       connection: [""],
       tags: [""]
     });
@@ -134,7 +128,7 @@ export class EditProfilePage {
       ...{ tags: this.tags }
     } as User;
 
-    this.user.birthday = this.user.birthday.split("T")[0];
+    // this.user.birthday = this.user.birthday.split("T")[0];
 
     try {
       this.user = await this.userSvc.updateUser(this.user);
@@ -158,30 +152,6 @@ export class EditProfilePage {
       ).present();
     }
     this.back();
-  }
-
-  async showSegment(event: string) {
-    switch (event) {
-      case "info":
-        this.slider.slideTo(0);
-        break;
-      case "tags":
-        this.slider.slideTo(1);
-        break;
-    }
-  }
-
-  async slideSegment(i: Promise<number>) {
-    i.then(index => {
-      switch (index) {
-        case 0:
-          this.segment.value = "info";
-          break;
-        case 1:
-          this.segment.value = "tags";
-          break;
-      }
-    });
   }
 
   async openPicker(typeage: string) {
