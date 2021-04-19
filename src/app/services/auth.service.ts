@@ -206,7 +206,7 @@ export class AuthService {
 
   isAdult(birthday?: string) {
     if (!birthday) {
-      birthday = this.currentUserValue.birthday;
+      birthday = this.currentUserValue?.birthday;
     }
     const today = Date.now();
     const date = new Date(birthday).getTime();

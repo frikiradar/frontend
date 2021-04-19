@@ -321,8 +321,4 @@ export class ProfilePage implements OnInit {
     }
     this.nav.navigateRoot(["/profile/", id]);
   }
-
-  back() {
-    this.location.back();
-  }
 }
