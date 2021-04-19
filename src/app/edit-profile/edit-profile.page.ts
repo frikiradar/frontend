@@ -68,7 +68,7 @@ export class EditProfilePage {
     public fb: FormBuilder,
     public userSvc: UserService,
     private tagSvc: TagService,
-    private auth: AuthService,
+    public auth: AuthService,
     private picker: PickerController,
     public sheet: ActionSheetController,
     private utils: UtilsService,
