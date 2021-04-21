@@ -309,7 +309,7 @@ export class EditProfilePage {
               )) as File;
               this.uploadPicture(avatar);
             } else {
-              const avatar = await this.utils.webcamImage("avatar");
+              const avatar = await this.utils.webcamImage("avatar", true);
               if (!avatar || typeof avatar === "boolean") {
                 actionSheet.dismiss();
                 return false;

@@ -50,7 +50,7 @@ export class RadarPage {
   page = 0;
   ratio = -1;
   authUser: User;
-  users: User[];
+  users: User[] = [];
   public user: User;
   public view: "cards" | "list" = "cards";
   coordinates: User["coordinates"];
@@ -147,7 +147,6 @@ export class RadarPage {
     } else {
       await this.slides.slideTo(0);
     }
-
     this.getRadarUsers();
   }
 
@@ -157,7 +156,7 @@ export class RadarPage {
         this.auth.currentUser
           .pipe(takeWhile(u => !!u?.id))
           .subscribe(async authUser => {
-            if (this.users) {
+            if (this.users?.length) {
               this.showSkeleton = true;
               this.authUser = authUser;
               this.page = 0;
@@ -191,7 +190,6 @@ export class RadarPage {
 
         if (this.users[0]?.id) {
           this.user = this.users[0];
-          this.userSvc.view(this.user.id);
         }
       } else {
         if (event) {
@@ -305,9 +303,6 @@ export class RadarPage {
   async slide() {
     this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
-      if (this.user?.id) {
-        this.userSvc.view(this.user?.id);
-      }
       if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }

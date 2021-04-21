@@ -6,6 +6,10 @@ import { MenuController, ModalController, Platform } from "@ionic/angular";
 import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { CreditsModal } from "../credits/credits.modal";
 import { AuthService } from "../services/auth.service";
+import {
+  NotificationService,
+  NotificationCounters
+} from "../services/notification.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { User } from "./../models/user";
@@ -18,6 +22,7 @@ import { User } from "./../models/user";
 export class MenuComponent {
   avatar: SafeResourceUrl;
   public user: User;
+  public counters: NotificationCounters;
 
   constructor(
     public menu: MenuController,
@@ -26,11 +31,21 @@ export class MenuComponent {
     private router: Router,
     private modal: ModalController,
     public platform: Platform,
-    public userSvc: UserService
-  ) {}
+    public userSvc: UserService,
+    private notificationSvc: NotificationService
+  ) {
+    this.notificationSvc.notification.subscribe(notification => {
+      this.counters = notification;
+    });
+  }
 
   viewProfile() {
     this.router.navigate(["/profile"]);
+    this.menu.close();
+  }
+
+  notifications() {
+    this.router.navigate(["/notification"]);
     this.menu.close();
   }
 

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { AuthService } from "../services/auth.service";
 
 import {
-  Notification,
+  NotificationCounters,
   NotificationService
 } from "../services/notification.service";
 
@@ -12,7 +12,7 @@ import {
   styleUrls: ["tabs.page.scss"]
 })
 export class TabsPage implements OnInit {
-  public counters: Notification;
+  public counters: NotificationCounters;
 
   constructor(
     private notificationSvc: NotificationService,
@@ -28,7 +28,7 @@ export class TabsPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    this.counters = (await this.notificationSvc.getUnread()) as Notification;
+    this.counters = (await this.notificationSvc.getUnread()) as NotificationCounters;
     this.notificationSvc.setNotification(this.counters);
   }
 }

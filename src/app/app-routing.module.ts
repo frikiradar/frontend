@@ -35,6 +35,13 @@ const routes: Routes = [
       import("./profile/profile.module").then(m => m.ProfilePageModule)
   },
   {
+    path: "notification",
+    loadChildren: () =>
+      import("./notification/notification.module").then(
+        m => m.NotificationPageModule
+      )
+  },
+  {
     path: "chat/:id",
     loadChildren: () =>
       import("./chat/chat-user/chat-user.module").then(

@@ -61,21 +61,17 @@
             Ver perfil
           </ion-label>
         </ion-item>
-        <ion-item
-          button
-          lines="none"
-          (click)="settings()"
-          *ngIf="auth.isMaster()"
-        >
+        <ion-item button lines="none" (click)="notifications()">
           <ion-icon name="notifications-outline" slot="start"></ion-icon>
-          <ion-badge
-            color="primary"
-            *ngIf="counters?.radar || counters?.likes"
-            >{{ counters.chats }}</ion-badge
-          >
           <ion-label>
             Notificaciones
           </ion-label>
+          <ion-badge
+            slot="end"
+            color="primary"
+            *ngIf="counters?.notifications"
+            >{{ counters.notifications }}</ion-badge
+          >
         </ion-item>
         <ion-item button lines="full" (click)="settings()">
           <ion-icon name="settings-outline" slot="start"></ion-icon>

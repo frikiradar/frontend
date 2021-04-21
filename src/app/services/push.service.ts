@@ -4,18 +4,22 @@ import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/messaging";
-import { mergeMapTo } from "rxjs/operators";
+import { first, mergeMapTo, take, takeUntil, takeWhile } from "rxjs/operators";
 import { SwPush } from "@angular/service-worker";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
-import { Notification, NotificationService } from "./notification.service";
+import {
+  NotificationCounters,
+  NotificationService
+} from "./notification.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class PushService {
   notifications: any = [];
+  token: string = "";
 
   constructor(
     private device: DeviceService,
@@ -96,7 +100,7 @@ export class PushService {
 
             this.notificationSvc
               .getUnread()
-              .then((notification: Notification) => {
+              .then((notification: NotificationCounters) => {
                 this.notificationSvc.setNotification(notification);
               });
             // console.log("Received in foreground");
@@ -112,9 +116,11 @@ export class PushService {
         // console.log("new message received. ", payload);
         this.localNotification(payload);
 
-        this.notificationSvc.getUnread().then((notification: Notification) => {
-          this.notificationSvc.setNotification(notification);
-        });
+        this.notificationSvc
+          .getUnread()
+          .then((notification: NotificationCounters) => {
+            this.notificationSvc.setNotification(notification);
+          });
       });
     }
   }
@@ -278,10 +284,13 @@ export class PushService {
   }
 
   async requestPermission(): Promise<void> {
-    this.afMessaging.requestPermission
-      .pipe(mergeMapTo(this.afMessaging.tokenChanges))
+    await this.afMessaging.requestPermission.toPromise();
+
+    this.afMessaging.tokenChanges
+      .pipe(takeWhile(token => this.token !== token))
       .subscribe(
         async token => {
+          this.token = token;
           // console.log("Notification token:", token);
           await this.device.setDevice(token);
         },

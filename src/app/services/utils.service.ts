@@ -90,7 +90,10 @@ export class UtilsService {
     return false;
   }
 
-  async webcamImage(name: string = "default"): Promise<Blob | boolean> {
+  async webcamImage(
+    name: string = "default",
+    crop?: boolean
+  ): Promise<Blob | boolean> {
     const modal = await this.modal.create({
       component: WebcamModal,
       cssClass: "full-modal"
@@ -100,7 +103,10 @@ export class UtilsService {
     try {
       const data = await modal.onDidDismiss();
       if (data.data) {
-        const src = await this.cropImage("", data.data);
+        let src = data.data;
+        if (crop) {
+          src = await this.cropImage("", src);
+        }
         if (typeof src == "string") {
           const blob = await this.urltoBlob(src);
           return blob;

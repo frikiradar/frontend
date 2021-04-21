@@ -1,5 +1,5 @@
 import { transition, trigger, useAnimation } from "@angular/animations";
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
@@ -9,7 +9,6 @@ import {
   PopoverController,
   ToastController
 } from "@ionic/angular";
-import { Location } from "@angular/common";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { pulse } from "ng-animate";
 
@@ -19,10 +18,6 @@ import { Tag } from "../models/tags";
 import { User } from "../models/user";
 import { OptionsPopover } from "../options-popover/options-popover";
 import { LikeService } from "../services/like.service";
-import {
-  NotificationService,
-  Notification
-} from "../services/notification.service";
 import { PageService } from "../services/page.service";
 import { StoryService } from "../services/story.service";
 import { UrlService } from "../services/url.service";
@@ -49,7 +44,6 @@ export class ProfilePage implements OnInit {
   public pulse: any;
   public pane: CupertinoPane;
   public param: "received" | "delivered";
-  public counters: Notification;
 
   private paneSettings: CupertinoSettings = {
     backdrop: true,
@@ -77,10 +71,7 @@ export class ProfilePage implements OnInit {
     private modal: ModalController,
     private pageSvc: PageService,
     private likeSvc: LikeService,
-    private notificationSvc: NotificationService,
-    public detectorRef: ChangeDetectorRef,
-    private urlSvc: UrlService,
-    private location: Location
+    private urlSvc: UrlService
   ) {}
 
   async ngOnInit() {
@@ -114,11 +105,6 @@ export class ProfilePage implements OnInit {
     } catch (e) {
       this.loading = false;
     }
-
-    this.notificationSvc.notification.subscribe(notification => {
-      this.counters = notification;
-      this.detectorRef.detectChanges();
-    });
   }
 
   editProfile() {

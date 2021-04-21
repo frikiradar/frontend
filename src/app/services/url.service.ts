@@ -34,23 +34,27 @@ export class UrlService {
 
     if (url) {
       url = this.convertUrl(url);
-      if (this.platform.is("cordova")) {
-        this.browserTab.isAvailable().then(isAvailable => {
-          if (isAvailable) {
-            this.browserTab.openUrl(url);
-          } else {
-            const browser = this.iab.create(url);
-            browser.show();
-          }
-        });
+      if (url.charAt(0) == "/") {
+        this.router.navigate([url]);
       } else {
-        const browser = this.iab.create(url);
-        browser.show();
+        if (this.platform.is("cordova")) {
+          this.browserTab.isAvailable().then(isAvailable => {
+            if (isAvailable) {
+              this.browserTab.openUrl(url);
+            } else {
+              const browser = this.iab.create(url);
+              browser.show();
+            }
+          });
+        } else {
+          const browser = this.iab.create(url);
+          browser.show();
+        }
+        return;
       }
-      return;
     }
 
-    if (event.srcElement.href && event.target.className.includes("mention")) {
+    if (event.srcElement?.href && event.target.className.includes("mention")) {
       const id = event.target.innerHTML.replace("@", "");
       if (id !== 1) {
         this.router.navigate(["/profile", id]);
@@ -58,7 +62,7 @@ export class UrlService {
       return;
     }
 
-    if (event.srcElement.href && event.target.className.includes("hashtag")) {
+    if (event.srcElement?.href && event.target.className.includes("hashtag")) {
       let slug = event.target.innerHTML.replace("#", "");
       slug = slug === "frikiradar" ? "frikiradar-room" : slug;
       const room = await this.roomSvc.getRoom(slug);
@@ -72,16 +76,9 @@ export class UrlService {
   }
 
   convertUrl(url: string): string {
-    if (this.platform.is("hybrid")) {
-      // si estoy en app y recibo https://frikiradar.app/albertoi -> convierto a /albertoi
-      if (url.includes("https://frikiradar.app/")) {
-        url = url.replace("https://frikiradar.app/", "/");
-      }
-    } else {
-      // si estoy en web y recibo /albertoi -> convierto a https://frikiradar.app/albertoi
-      if (url.charAt(0) === "/") {
-        url = url.replace("/", "https://frikiradar.app/");
-      }
+    // si estoy en app y recibo https://frikiradar.app/albertoi -> convierto a /albertoi
+    if (url.includes("https://frikiradar.app/")) {
+      url = url.replace("https://frikiradar.app/", "/");
     }
 
     return url;

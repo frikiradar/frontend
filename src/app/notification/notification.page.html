@@ -1,0 +1,124 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Notificaciones</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="removeNotifications()" *ngIf="notifications?.length">
+        <ion-icon
+          slot="icon-only"
+          src="/assets/icon/delete_sweep_white_24dp.svg"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list *ngIf="!notifications">
+    <ion-item *ngFor="let i of [].constructor(15)">
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h2>
+          <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+        </h2>
+        <p>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="notifications?.length || !notifications; else noNotifications">
+    <ion-list>
+      <ion-item
+        button
+        lines="full"
+        *ngFor="let notification of notifications"
+        (click)="showNotification(notification)"
+        [ngClass]="!notification?.time_read ? 'unread' : ''"
+      >
+        <ion-avatar slot="start">
+          <img
+            [src]="notification.fromuser.thumbnail"
+            default="/assets/img/users/default.jpg"
+          />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ notification.title }}</h2>
+          <p>{{notification.body}}</p>
+          <ion-note>{{notification.date | niceDate}}</ion-note>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button (click)="showOptions($event, notification)">
+            <ion-icon
+              slot="icon-only"
+              color="primary"
+              name="ellipsis-vertical"
+            ></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+  </div>
+  <ng-template #noNotifications>
+    <div class="full-center ion-padding">
+      <ion-icon name="notifications-off"></ion-icon>
+      <h2>Sin notificaciones</h2>
+      <p>
+        No tienes ninguna notificación.
+      </p>
+    </div>
+  </ng-template>
+</ion-content>
+
+<!-- panes -->
+
+<div class="notifications-pane">
+  <ion-item *ngIf="notification">
+    <ion-avatar slot="start">
+      <img
+        [src]="notification.fromuser.thumbnail"
+        default="/assets/img/users/default.jpg"
+      />
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ notification.title }}</h2>
+      <p>{{notification.body}}</p>
+      <ion-note>{{notification.date | niceDate}}</ion-note>
+    </ion-label>
+  </ion-item>
+  <ion-list *ngIf="notification">
+    <ion-item
+      button
+      detail="false"
+      (click)="removeNotification(notification)"
+      lines="none"
+    >
+      <ion-icon slot="start" name="close-outline" color="light"></ion-icon>
+      <ion-label>Eliminar la notificación</ion-label>
+    </ion-item>
+    <ion-item
+      button
+      detail="false"
+      (click)="readNotification(notification)"
+      lines="none"
+      *ngIf="!notification?.time_read"
+    >
+      <ion-icon slot="start" name="eye-outline" color="light"></ion-icon>
+      <ion-label>Marcar como leída</ion-label>
+    </ion-item>
+    <ion-item
+      button
+      detail="false"
+      (click)="unreadNotification(notification)"
+      lines="none"
+      *ngIf="notification?.time_read"
+    >
+      <ion-icon slot="start" name="eye-off-outline" color="light"></ion-icon>
+      <ion-label>Marcar como no leída</ion-label>
+    </ion-item>
+  </ion-list>
+</div>

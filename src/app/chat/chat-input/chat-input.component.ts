@@ -205,7 +205,7 @@ export class ChatInputComponent {
             if (this.platform.is("cordova")) {
               const image = (await this.utils.takePicture(
                 "camera",
-                true,
+                false,
                 "default",
                 true
               )) as string;
