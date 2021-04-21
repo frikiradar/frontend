@@ -111,6 +111,11 @@ export class ChatListComponent {
     }
   }
 
+  hideOptions() {
+    this.showOptions = false;
+    this.selectedChat = undefined;
+  }
+
   async connectSSE() {
     this.source = await this.chatSvc.register(
       `chats-${this.auth.currentUserValue.id}`
