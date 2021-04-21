@@ -68,7 +68,7 @@ export class ActivateAccountPage {
         backdropDismiss: false,
         buttons: [
           {
-            text: "Buscar personas",
+            text: "¡Comenzar!",
             handler: () => {
               this.nav.navigateRoot(["/"]);
             }

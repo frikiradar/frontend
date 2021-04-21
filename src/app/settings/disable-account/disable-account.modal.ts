@@ -23,6 +23,7 @@ export class DisableAccountModal {
   public disableForm: FormGroup;
   public clearPassword = false;
   public type: "disable" | "remove" = "disable";
+  public showBackdrop = false;
 
   constructor(
     public fb: FormBuilder,
@@ -44,13 +45,21 @@ export class DisableAccountModal {
   async submitForm() {
     try {
       if (this.type === "disable") {
+        this.showBackdrop = true;
+        (
+          await this.toast.create({
+            message: "Desactivando cuenta...",
+            duration: 5000,
+            position: "bottom"
+          })
+        ).present();
         const user = await this.userSvc.disableUser(
           this.disableForm.get("password").value,
           this.disableForm.get("note").value
         );
 
         this.auth.setAuthUser(user);
-
+        this.showBackdrop = false;
         (
           await this.toast.create({
             message: "¡Cuenta desactivada correctamente!",
@@ -59,11 +68,19 @@ export class DisableAccountModal {
           })
         ).present();
       } else if (this.type === "remove") {
+        this.showBackdrop = true;
+        (
+          await this.toast.create({
+            message: "Eliminando cuenta...",
+            duration: 5000,
+            position: "bottom"
+          })
+        ).present();
         const user = await this.userSvc.removeAccount(
           this.disableForm.get("password").value,
           this.disableForm.get("note").value
         );
-
+        this.showBackdrop = false;
         this.auth.setAuthUser(user);
 
         (
@@ -78,6 +95,7 @@ export class DisableAccountModal {
       this.modal.dismiss();
       this.auth.logout();
     } catch (e) {
+      this.showBackdrop = false;
       const alert = await this.alert.create({
         header: "La contraseña introducida no es válida",
         message: "Revísala y vuelve a intentarlo.",

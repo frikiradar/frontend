@@ -11,6 +11,11 @@ import {
   Platform,
   ToastController
 } from "@ionic/angular";
+import {
+  CodePush,
+  InstallMode,
+  SyncOptions
+} from "@ionic-native/code-push/ngx";
 
 import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
@@ -43,7 +48,8 @@ export class AppComponent {
     private appVersion: AppVersion,
     private toastController: ToastController,
     private modal: ModalController,
-    private push: PushService
+    private push: PushService,
+    private codePush: CodePush
   ) {
     this.initializeApp();
   }
@@ -54,6 +60,7 @@ export class AppComponent {
         this.push.init();
         this.statusBar.backgroundColorByHexString("#1a1a1a");
         this.splashScreen.hide();
+        this.checkCodePush();
       } else {
         if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
           this.push.init();
@@ -101,6 +108,22 @@ export class AppComponent {
       ).present();
       this.internet = false;
     });
+  }
+
+  checkCodePush() {
+    let syncOptions: SyncOptions = {
+      updateDialog: false,
+      installMode: InstallMode.ON_NEXT_RESUME
+    };
+
+    this.codePush.sync(syncOptions).subscribe(
+      data => {
+        console.log("CODE PUSH SUCCESSFUL: " + data);
+      },
+      err => {
+        console.log("CODE PUSH ERROR: " + err);
+      }
+    );
   }
 
   async backButtonStatus() {

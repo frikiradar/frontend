@@ -1,4 +1,4 @@
-import { LocationStrategy, registerLocaleData } from "@angular/common";
+import { registerLocaleData } from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import localeEs from "@angular/common/locales/es";
 import { LOCALE_ID, NgModule } from "@angular/core";
@@ -45,6 +45,7 @@ import {
 } from "@angular/service-worker";
 import { Media } from "@ionic-native/media/ngx";
 import { File as NativeFile } from "@ionic-native/file/ngx";
+import { CodePush } from "@ionic-native/code-push/ngx";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
@@ -119,7 +120,8 @@ registerLocaleData(localeEs, "es");
     FirebaseX,
     { provide: WebcamImage },
     Media,
-    NativeFile
+    NativeFile,
+    CodePush
   ],
   bootstrap: [AppComponent]
 })

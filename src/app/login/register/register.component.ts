@@ -60,9 +60,7 @@ export class RegisterComponent {
         Validators.minLength(8)
       ]),
       birthday: new FormControl("", Validators.required),
-      gender: this.platform.is("ios")
-        ? [""]
-        : new FormControl("", Validators.required),
+      gender: [""],
       lovegender: [""],
       meet: [""],
       referral: [""],

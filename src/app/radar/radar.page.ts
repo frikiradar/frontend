@@ -54,6 +54,7 @@ export class RadarPage {
   public user: User;
   public view: "cards" | "list" = "cards";
   coordinates: User["coordinates"];
+  public showBackdrop = false;
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -99,7 +100,9 @@ export class RadarPage {
     // Y despues iniciamos la geolocalización
     if (!this.authUser.roles?.includes("ROLE_DEMO")) {
       try {
+        this.showBackdrop = true;
         this.coordinates = await this.geolocationSvc.getGeolocation();
+        this.showBackdrop = false;
         const oldCoordinates = this.authUser.coordinates;
         if (
           oldCoordinates === undefined ||

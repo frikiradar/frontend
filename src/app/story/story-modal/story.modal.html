@@ -10,7 +10,7 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="publish()" [disabled]="!imageFile">
+      <ion-button (click)="publish()" [disabled]="!imageFile || showBackdrop">
         <ion-label color="primary">Publicar historia</ion-label>
         <ion-icon color="primary" name="arrow-up-circle-outline"></ion-icon>
       </ion-button>
@@ -94,3 +94,4 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
+<ion-backdrop visible="true" *ngIf="showBackdrop"></ion-backdrop>

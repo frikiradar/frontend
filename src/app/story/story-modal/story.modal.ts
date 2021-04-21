@@ -39,6 +39,7 @@ export class StoryModal implements OnInit {
   public userMentions: User["username"][] = [];
   public usernames: User[];
   private writing = false;
+  public showBackdrop = false;
 
   constructor(
     public modal: ModalController,
@@ -131,6 +132,7 @@ export class StoryModal implements OnInit {
 
   async publish() {
     try {
+      this.showBackdrop = true;
       (
         await this.toast.create({
           message: "Publicando...",
@@ -150,8 +152,10 @@ export class StoryModal implements OnInit {
           position: "middle"
         })
       ).present();
+      this.showBackdrop = false;
       this.modal.dismiss();
     } catch (e) {
+      this.showBackdrop = false;
       this.toast.dismiss();
       (
         await this.toast.create({
