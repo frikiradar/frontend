@@ -38,6 +38,12 @@ ion-thumbnail {
     height: 100px;
   }
 
+  @media (min-width: 1920px) {
+    .swiper-slide img {
+      height: 170px;
+    }
+  }
+
   ion-thumbnail {
     --border-radius: 5px;
     padding: 5px;
