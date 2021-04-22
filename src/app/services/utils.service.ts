@@ -67,13 +67,15 @@ export class UtilsService {
 
   async cropImage(
     event: any = "",
-    src: string = ""
+    src: string = "",
+    square = true
   ): Promise<string | boolean> {
     const modal = await this.modal.create({
       component: CropperModal,
       componentProps: {
         event,
-        src
+        src,
+        square
       },
       cssClass: "full-modal"
     });

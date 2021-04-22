@@ -9,7 +9,9 @@
     class="full-center"
     [imageURL]="src"
     [imageChangedEvent]="imageChangedEvent"
-    [maintainAspectRatio]="true"
+    [maintainAspectRatio]="maintainAspectRatio"
+    [aspectRatio]="aspectRatio"
+    [containWithinAspectRatio]="maintainAspectRatio"
     [resizeToWidth]="512"
     [cropperMinWidth]="256"
     format="png"
@@ -41,6 +43,11 @@
       </ion-button>
       <ion-button (click)="zoomOut()">
         <ion-icon name="remove-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="toggleAspect()" *ngIf="!square">
+        <ion-icon
+          [src]="maintainAspectRatio ? '/assets/icon/crop_free_white_24dp.svg' : '/assets/icon/crop_square_white_24dp.svg'"
+        ></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">

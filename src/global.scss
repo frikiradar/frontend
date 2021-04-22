@@ -36,7 +36,7 @@ ion-header {
 }
 
 .no-scroll {
-  --offset-bottom: auto!important;
+  --offset-bottom: auto !important;
   --overflow: hidden;
   overflow: auto;
   &::-webkit-scrollbar {
@@ -241,6 +241,11 @@ ul {
   ion-avatar {
     width: 65px;
     height: 65px;
+
+    img {
+      width: 65px;
+      height: 65px;
+    }
 
     &.not-view {
       border: 2px solid #e91e63;

@@ -10,9 +10,12 @@ import { ImageCroppedEvent, ImageTransform } from "ngx-image-cropper";
 export class CropperModal implements OnInit {
   @Input() src: string;
   @Input() event: any;
+  @Input() square: boolean;
   public imageChangedEvent: any = "";
   public croppedImage: any = "";
   public transform: ImageTransform = {};
+  public aspectRatio: number = 1 / 1;
+  public maintainAspectRatio: any = true;
 
   constructor(public modal: ModalController) {}
 
@@ -69,6 +72,10 @@ export class CropperModal implements OnInit {
       ...this.transform,
       scale: this.transform.scale ? this.transform.scale - 0.1 : 0.99
     };
+  }
+
+  toggleAspect() {
+    this.maintainAspectRatio = !this.maintainAspectRatio;
   }
 
   ok() {
