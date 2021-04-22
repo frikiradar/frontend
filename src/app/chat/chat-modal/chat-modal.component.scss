@@ -169,7 +169,15 @@ ion-content {
 }
 
 ion-footer {
-  position: sticky;
+  position: absolute;
   bottom: 0;
-  width: 100%;
+  right: 0;
+  left: 0;
+  width: initial;
+}
+
+@media (min-width: 992px) {
+  ion-footer {
+    left: 350px;
+  }
 }

@@ -1,16 +1,17 @@
 :host {
   display: flex;
   flex-direction: row;
-  align-items: stretch
+  align-items: stretch;
 }
 
 app-chat-list {
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   height: 94vh;
 
   ::ng-deep {
-    ion-list, ion-item {
+    ion-list,
+    ion-item {
       --background: #181818 !important;
       background: #181818 !important;
     }
