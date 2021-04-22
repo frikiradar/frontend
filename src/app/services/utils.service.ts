@@ -28,7 +28,8 @@ export class UtilsService {
     mode?: string,
     crop?: boolean,
     name?: string,
-    returnsrc = false
+    returnsrc = false,
+    square = true
   ): Promise<Blob | string> {
     const fileUri = await this.camera.getPicture({
       quality: 70,
@@ -47,7 +48,7 @@ export class UtilsService {
 
     try {
       if (crop) {
-        const res = await this.cropImage("", src);
+        const res = await this.cropImage("", src, square);
         if (typeof res == "string") {
           src = res;
         } else {
@@ -94,7 +95,8 @@ export class UtilsService {
 
   async webcamImage(
     name: string = "default",
-    crop?: boolean
+    crop?: boolean,
+    square = true
   ): Promise<Blob | boolean> {
     const modal = await this.modal.create({
       component: WebcamModal,
@@ -107,7 +109,7 @@ export class UtilsService {
       if (data.data) {
         let src = data.data;
         if (crop) {
-          src = await this.cropImage("", src);
+          src = await this.cropImage("", src, square);
         }
         if (typeof src == "string") {
           const blob = await this.urltoBlob(src);

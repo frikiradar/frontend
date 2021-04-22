@@ -78,11 +78,12 @@ export class StoryModal implements OnInit {
           "camera",
           true,
           "default",
+          false,
           false
         )) as File;
         this.addPicture(image);
       } else {
-        const image = await this.utils.webcamImage("avatar", true);
+        const image = await this.utils.webcamImage("avatar", true, false);
         if (!image || typeof image === "boolean") {
           return false;
         }
