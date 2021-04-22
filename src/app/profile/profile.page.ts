@@ -240,7 +240,7 @@ export class ProfilePage implements OnInit {
   }
 
   async showTag(tag: Tag) {
-    if (tag.category.name === "games") {
+    if (tag.category.name === "games" || tag.category.name === "films") {
       if (tag.slug) {
         this.router.navigate(["/page", tag.slug]);
       } else {
@@ -263,6 +263,7 @@ export class ProfilePage implements OnInit {
           }
           this.router.navigate(["/page", page.slug]);
         } catch (e) {
+          this.toast.dismiss();
           this.router.navigate(["/search", tag.name]);
         }
       }
