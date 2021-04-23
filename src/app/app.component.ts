@@ -113,7 +113,7 @@ export class AppComponent {
   checkCodePush() {
     let syncOptions: SyncOptions = {
       updateDialog: false,
-      installMode: InstallMode.ON_NEXT_RESUME
+      installMode: InstallMode.ON_NEXT_RESTART
     };
 
     this.codePush.sync(syncOptions).subscribe(

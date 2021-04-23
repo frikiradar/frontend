@@ -4,11 +4,11 @@
       <ion-buttons slot="start">
         <ion-back-button text="" defaultHref="/"></ion-back-button>
       </ion-buttons>
-      <ion-buttons slot="end" *ngIf="activeImage > 0">
+      <ion-buttons slot="end">
         <ion-button (click)="deleteImage()">
           <ion-icon slot="icon-only" name="trash"></ion-icon>
         </ion-button>
-        <ion-button (click)="setAvatar()">
+        <ion-button (click)="setAvatar()" *ngIf="activeImage > 0">
           <ion-icon slot="icon-only" name="star-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -16,7 +16,7 @@
   </ion-header>
   <ion-slides
     #imageSlider
-    [pager]="user?.images?.length"
+    [pager]="true"
     (ionSlideDidChange)="setActiveImage(imageSlider.getActiveIndex())"
   >
     <ion-slide>

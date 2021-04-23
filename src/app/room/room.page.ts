@@ -533,7 +533,7 @@ export class RoomPage implements OnInit {
 
   ngOnDestroy() {
     if (this.room.visible || this.roomPage) {
-      this.room.last_message = this.messages[this.messages.length - 1].id;
+      this.room.last_message = this.messages[this.messages.length - 1]?.id;
       this.roomSvc.setLastMessage(this.room);
     }
   }

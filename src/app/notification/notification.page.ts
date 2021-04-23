@@ -58,6 +58,7 @@ export class NotificationPage implements OnInit {
         }
       });
       this.pane.destroy({ animate: true });
+      await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al marcar como leída`);
     }
@@ -74,6 +75,7 @@ export class NotificationPage implements OnInit {
         }
       });
       this.pane.destroy({ animate: true });
+      await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al desmarcar como leída`);
     }
@@ -83,6 +85,7 @@ export class NotificationPage implements OnInit {
     try {
       await this.notificationSvc.removeNotifications();
       this.notifications = [];
+      await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al eliminar las notificaciones`);
     }
@@ -95,6 +98,7 @@ export class NotificationPage implements OnInit {
         n => n.id !== notification.id
       );
       this.pane.destroy({ animate: true });
+      await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al eliminar la notificación`);
     }
