@@ -95,6 +95,7 @@ export class StoryModal implements OnInit {
           "gallery",
           true,
           "default",
+          false,
           false
         );
         if (!image || typeof image == "string") {
