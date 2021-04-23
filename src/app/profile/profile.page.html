@@ -176,7 +176,7 @@
           </ion-item>
           <ion-item *ngIf="auth.isAdult() && user?.connection?.length">
             <ion-icon name="search-outline"></ion-icon>
-            <ion-label>Buscando: {{ user.connection.join(", ") }}</ion-label>
+            <ion-label>Buscando: {{ user?.connection?.join(", ") }}</ion-label>
           </ion-item>
         </ion-list>
         <ion-list class="tags">

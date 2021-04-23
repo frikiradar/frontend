@@ -97,6 +97,11 @@ export class ProfilePage implements OnInit {
         this.user = await this.userSvc.getPublicUser(id);
         // si no recibe entonces poner que no es public
       }
+
+      if (typeof this.user.connection === "string") {
+        this.user.connection = [this.user.connection];
+      }
+
       this.loading = false;
       if (this.auth.currentUserValue) {
         this.stories = await this.storiesSvc.getUserStories(this.user.id);
@@ -241,10 +246,10 @@ export class ProfilePage implements OnInit {
 
   async showTag(tag: Tag) {
     if (tag.category.name === "games" || tag.category.name === "films") {
-      if (tag.slug) {
-        this.router.navigate(["/page", tag.slug]);
-      } else {
-        try {
+      try {
+        if (tag.slug) {
+          this.router.navigate(["/page", tag.slug]);
+        } else {
           (
             await this.toast.create({
               message: "Creando página...",
@@ -262,10 +267,10 @@ export class ProfilePage implements OnInit {
             this.auth.setAuthUser(this.user);
           }
           this.router.navigate(["/page", page.slug]);
-        } catch (e) {
-          this.toast.dismiss();
-          this.router.navigate(["/search", tag.name]);
         }
+      } catch (e) {
+        this.toast.dismiss();
+        this.router.navigate(["/search", tag.name]);
       }
     } else {
       this.router.navigate(["/search", tag.name]);
