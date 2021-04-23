@@ -112,12 +112,7 @@ export class AppComponent {
 
   checkCodePush() {
     let syncOptions: SyncOptions = {
-      updateDialog: {
-        updateTitle: "Nueva actualización",
-        descriptionPrefix: "Novedades: \r\n",
-        mandatoryContinueButtonLabel: "Continuar",
-        appendReleaseDescription: true
-      },
+      updateDialog: false,
       installMode: InstallMode.ON_NEXT_RESTART
     };
 
