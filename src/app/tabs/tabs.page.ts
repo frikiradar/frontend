@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { Event, NavigationEnd, Router } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 
 import {
@@ -13,12 +14,20 @@ import {
 })
 export class TabsPage implements OnInit {
   public counters: NotificationCounters;
+  public selected: string;
 
   constructor(
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
-    public auth: AuthService
-  ) {}
+    public auth: AuthService,
+    private router: Router
+  ) {
+    this.router.events.subscribe(async (event: Event) => {
+      if (event instanceof NavigationEnd && event.url.includes("/tabs/")) {
+        this.selected = event.url.split("/")[2];
+      }
+    });
+  }
 
   async ngOnInit() {
     this.notificationSvc.notification.subscribe(notification => {
