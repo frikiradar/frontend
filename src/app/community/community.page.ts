@@ -209,14 +209,16 @@ export class CommunityPage {
 
     this.source.addEventListener("error", async error => {
       this.conErrors++;
-      // console.error("Escucha al servidor de salas perdida", error);
-      this.source.close();
-      if (error.type === "error" && this.conErrors < 10) {
-        this.connectSSE();
-      }
+      console.error(
+        "Escucha al servidor de community perdida",
+        error,
+        this.source.url,
+        `conErrors: ${this.conErrors}`
+      );
     });
 
     this.source.addEventListener("open", async error => {
+      console.log("Conexión establecida", this.source.url);
       this.conErrors = 0;
     });
   }

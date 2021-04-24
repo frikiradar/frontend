@@ -1,24 +1,26 @@
 #rooms {
-    ion-thumbnail {
-        --border-radius: 8px;
-        margin-right: 10px;
-    }
+  ion-thumbnail {
+    --border-radius: 8px;
+    margin-right: 10px;
+  }
 
-    .room-name.unread {
-        font-weight: bolder;
-    }
+  .room-name.unread {
+    font-weight: bolder;
+  }
 
-    .room-description {
-        white-space: initial;
-        color: rgb(172, 172, 172);
-    }
+  .room-description {
+    white-space: initial;
+    color: rgb(172, 172, 172);
+  }
 
-    ion-badge {
-        position: absolute;
-        left: 45px;
-        border-radius: 15px;
-        z-index: 1;
-        width: 20px;
-        box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
-      }
+  ion-badge {
+    position: relative;
+    left: 45px;
+    border-radius: 15px;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    bottom: 12px;
+    border: 2px solid #1a1a1a;
+  }
 }

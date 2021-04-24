@@ -436,7 +436,7 @@ export class RoomPage implements OnInit {
     await this.roomSvc.writing(this.auth.currentUserValue.username, this.slug);
     setTimeout(async () => {
       this.writing = false;
-    }, 2500);
+    }, 15000);
   }
 
   async showPage(slug: Page["slug"]) {
@@ -488,6 +488,12 @@ export class RoomPage implements OnInit {
     });
 
     this.source.addEventListener("error", async error => {
+      console.error(
+        "Escucha al servidor de " + this.slug + " perdida",
+        error,
+        this.source.url,
+        `conErrors: ${this.conErrors}`
+      );
       /*console.error(
         "Error al conectarse al servidor de chat",
         `connected: ${this.connected}`,
@@ -505,13 +511,10 @@ export class RoomPage implements OnInit {
           })
         ).present();
       }
-
-      if (error.type === "error") {
-        this.connectSSE();
-      }
     });
 
     this.source.addEventListener("open", async error => {
+      console.log("Conexión establecida", this.source.url);
       if (this.conErrors === 5) {
         (
           await this.toast.create({
@@ -532,6 +535,7 @@ export class RoomPage implements OnInit {
   }
 
   ngOnDestroy() {
+    this.source.close();
     if (this.room.visible || this.roomPage) {
       this.room.last_message = this.messages[this.messages.length - 1]?.id;
       this.roomSvc.setLastMessage(this.room);

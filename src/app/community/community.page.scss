@@ -19,12 +19,14 @@ ion-thumbnail {
   }
 
   ion-badge {
-    position: absolute;
+    position: relative;
     left: 45px;
     border-radius: 15px;
     z-index: 1;
     width: 20px;
-    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+    height: 20px;
+    bottom: 12px;
+    border: 2px solid #1a1a1a;
   }
 }
 

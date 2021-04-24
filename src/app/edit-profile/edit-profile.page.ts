@@ -399,7 +399,6 @@ export class EditProfilePage {
       image = this.user.images[this.activeImage - 1];
     }
     const user = await this.userSvc.deleteAvatar(image);
-    console.log(user);
     this.auth.setAuthUser(user);
     this.user = this.auth.currentUserValue;
     await this.imageSlider.update();

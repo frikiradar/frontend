@@ -9,7 +9,7 @@
 
 <ion-content>
   <div *ngIf="!rooms" id="rooms">
-    <ion-item *ngFor="let i of [].constructor(8)">
+    <ion-item *ngFor="let i of [].constructor(12)">
       <ion-thumbnail>
         <ion-skeleton-text animated></ion-skeleton-text>
       </ion-thumbnail>
@@ -35,11 +35,10 @@
         *ngFor="let room of rooms"
       >
         <ion-thumbnail>
-          <img
-            [src]="room.image"
+          <ion-img
+            [src]="room.image ? room.image : '/assets/img/pages/default-games-page.jpg'"
             [alt]="room.name"
-            default="/assets/img/pages/default-games-page.jpg"
-          />
+          ></ion-img>
           <ion-badge color="primary" *ngIf="room?.unread">&nbsp;</ion-badge>
         </ion-thumbnail>
         <ion-label>

@@ -10,11 +10,10 @@
       ></ion-back-button>
       <ion-menu-toggle>
         <ion-avatar>
-          <img
+          <ion-img
             [src]="auth.currentUserValue?.thumbnail"
             [alt]="auth.currentUserValue?.username"
-            default="/assets/img/users/default.jpg"
-          />
+          ></ion-img>
         </ion-avatar>
       </ion-menu-toggle>
     </ion-buttons>
@@ -74,11 +73,14 @@
             "
           >
             <ion-avatar slot="start">
-              <img
-                [src]="chat.user?.thumbnail"
+              <ion-img
+                [src]="
+                  chat.user?.thumbnail
+                    ? chat.user?.thumbnail
+                    : '/assets/img/users/default.jpg'
+                "
                 [alt]="chat.user?.username"
-                default="/assets/img/users/default.jpg"
-              />
+              ></ion-img>
               <ion-badge color="primary" *ngIf="chat?.count > 0">{{
                 chat?.count
               }}</ion-badge>

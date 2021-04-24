@@ -106,11 +106,7 @@
 
   <ion-item id="room" button lines="none" (click)="showRoom(page.slug)">
     <ion-thumbnail>
-      <img
-        [src]="page.cover"
-        [alt]="page.name"
-        default="/assets/img/pages/default-games-page.jpg"
-      />
+      <ion-img [src]="page.cover" [alt]="page.name"></ion-img>
       <ion-badge color="primary" *ngIf="room?.unread">&nbsp;</ion-badge>
     </ion-thumbnail>
     <ion-label>
@@ -125,11 +121,7 @@
 
   <ion-item id="room" button lines="none" *ngIf="page.game_mode === 'online'">
     <ion-thumbnail>
-      <img
-        [src]="page.cover"
-        [alt]="page.name"
-        default="/assets/img/pages/default-games-page.jpg"
-      />
+      <ion-img [src]="page.cover" [alt]="page.name"></ion-img>
     </ion-thumbnail>
     <ion-label>
       <h2 class="room-name">

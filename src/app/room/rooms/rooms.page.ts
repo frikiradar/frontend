@@ -79,16 +79,23 @@ export class RoomsPage implements OnInit {
     });
 
     this.source.addEventListener("error", async error => {
+      console.error(
+        "Escucha al servidor de salas perdida",
+        error,
+        this.source.url,
+        `conErrors: ${this.conErrors}`
+      );
+
       this.conErrors++;
-      // console.error("Escucha al servidor de salas perdida", error);
-      this.source.close();
-      if (error.type === "error" && this.conErrors < 10) {
-        this.connectSSE();
-      }
     });
 
     this.source.addEventListener("open", async error => {
+      console.log("Conexión establecida", this.source.url);
       this.conErrors = 0;
     });
+  }
+
+  ngOnDestroy() {
+    this.source.close();
   }
 }
