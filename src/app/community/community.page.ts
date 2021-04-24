@@ -68,6 +68,9 @@ export class CommunityPage {
       if (event instanceof NavigationStart) {
         if (event.url === "/tabs/community") {
           this.getStories();
+          if (this.source.readyState === 2) {
+            this.getRooms();
+          }
         }
       }
     });
@@ -88,7 +91,6 @@ export class CommunityPage {
     }
     this.getRooms();
     this.getPages();
-    this.connectSSE();
   }
 
   async getStories() {
@@ -121,6 +123,7 @@ export class CommunityPage {
     });
 
     this.rooms = await this.roomSvc.orderRooms(rooms);
+    this.connectSSE();
   }
 
   async getPages() {
@@ -174,6 +177,8 @@ export class CommunityPage {
   }
 
   async showAllRooms() {
+    this.source.close();
+    // console.log("Conexión cerrada", this.source.url);
     this.router.navigate(["/rooms"]);
   }
 
@@ -218,7 +223,7 @@ export class CommunityPage {
     });
 
     this.source.addEventListener("open", async error => {
-      console.log("Conexión establecida", this.source.url);
+      // console.log("Conexión establecida", this.source.url);
       this.conErrors = 0;
     });
   }

@@ -178,7 +178,7 @@ export class ChatListComponent {
     });
 
     this.source.addEventListener("open", async error => {
-      console.log("Conexión establecida", this.source.url);
+      // console.log("Conexión establecida", this.source.url);
       /*if (this.conErrors >= 10) {
         (
           await this.toast.create({

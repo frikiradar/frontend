@@ -102,7 +102,8 @@ export class ChatModalComponent implements OnInit {
         {
           text: "Ok, seré paciente",
           handler: () => {
-            this.back();
+            this.nav.back();
+            this.source.close();
           }
         }
       ]
@@ -163,7 +164,9 @@ export class ChatModalComponent implements OnInit {
           }
         }
 
-        this.connectSSE();
+        if (this.userId !== 1) {
+          this.connectSSE();
+        }
 
         window.addEventListener("keyboardDidShow", event => {
           this.scrollDown();
@@ -497,7 +500,7 @@ export class ChatModalComponent implements OnInit {
     });
 
     this.source.addEventListener("open", async error => {
-      console.log("Conexión establecida", this.source.url);
+      // console.log("Conexión establecida", this.source.url);
       if (this.conErrors === 5) {
         (
           await this.toast.create({
@@ -512,8 +515,10 @@ export class ChatModalComponent implements OnInit {
     });
   }
 
-  back() {
-    this.nav.back();
-    this.source.close();
+  ngOnDestroy() {
+    if (this.source?.url) {
+      this.source.close();
+      // console.log("Conexión cerrada", this.source.url);
+    }
   }
 }

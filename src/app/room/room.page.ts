@@ -104,7 +104,8 @@ export class RoomPage implements OnInit {
         {
           text: "Ok, seré paciente",
           handler: () => {
-            this.back();
+            this.nav.back();
+            this.source.close();
           }
         }
       ]
@@ -514,7 +515,7 @@ export class RoomPage implements OnInit {
     });
 
     this.source.addEventListener("open", async error => {
-      console.log("Conexión establecida", this.source.url);
+      // console.log("Conexión establecida", this.source.url);
       if (this.conErrors === 5) {
         (
           await this.toast.create({
@@ -529,13 +530,9 @@ export class RoomPage implements OnInit {
     });
   }
 
-  back() {
-    this.nav.back();
-    this.source.close();
-  }
-
   ngOnDestroy() {
     this.source.close();
+    // console.log("Conexión cerrada", this.source.url);
     if (this.room.visible || this.roomPage) {
       this.room.last_message = this.messages[this.messages.length - 1]?.id;
       this.roomSvc.setLastMessage(this.room);

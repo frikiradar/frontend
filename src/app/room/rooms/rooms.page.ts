@@ -90,12 +90,13 @@ export class RoomsPage implements OnInit {
     });
 
     this.source.addEventListener("open", async error => {
-      console.log("Conexión establecida", this.source.url);
+      // console.log("Conexión establecida", this.source.url);
       this.conErrors = 0;
     });
   }
 
   ngOnDestroy() {
     this.source.close();
+    // console.log("Conexión cerrada", this.source.url);
   }
 }
