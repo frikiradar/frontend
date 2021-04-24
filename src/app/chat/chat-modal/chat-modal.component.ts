@@ -106,7 +106,8 @@ export class ChatModalComponent implements OnInit {
             this.source.close();
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     if (!config.chat && !this.auth.isAdmin()) {

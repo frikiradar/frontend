@@ -53,11 +53,13 @@ export class ChangeEmailModal {
 
       this.auth.setAuthUser(user);
 
-      (await this.toast.create({
-        message: "¡Cuenta de correo cambiada correctamente!",
-        duration: 2000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: "¡Cuenta de correo cambiada correctamente!",
+          duration: 2000,
+          position: "bottom"
+        })
+      ).present();
 
       this.modal.dismiss();
     } catch (e) {
@@ -65,7 +67,8 @@ export class ChangeEmailModal {
         header: "Ha habido un error",
         message:
           "¿Es posible que este correo ya esté en uso? Vuelve a intentarlo transcurridos unos minutos.",
-        buttons: ["¡De acuerdo!"]
+        buttons: ["¡De acuerdo!"],
+        cssClass: "round-alert"
       });
 
       alert.present();

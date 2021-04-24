@@ -1,9 +1,20 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>events</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-avatar>
+          <img
+            [src]="auth.currentUserValue?.thumbnail"
+            [alt]="auth.currentUserValue?.username"
+            default="/assets/img/users/default.jpg"
+          />
+        </ion-avatar>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>Eventos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <p>Update obligatorio v4!!</p>
+  <p>Próximamente</p>
 </ion-content>

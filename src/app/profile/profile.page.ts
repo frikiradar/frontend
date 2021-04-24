@@ -148,7 +148,8 @@ export class ProfilePage implements OnInit {
         const alert = await this.alert.create({
           header: "No puedes iniciar un chat con esta persona",
           message: `Para poder iniciar una conversación es necesario tener temas de conversación en común o haber recibido su kokoro ❤️.`,
-          buttons: ["Entendido, gracias!"]
+          buttons: ["Entendido, gracias!"],
+          cssClass: "round-alert"
         });
 
         await alert.present();

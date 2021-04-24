@@ -71,7 +71,8 @@ export class ForgotPasswordModal {
       const alert = await this.alert.create({
         header: "Nombre de usuario o email no válido",
         message: "No existe ninguna cuenta asociada a esta información.",
-        buttons: ["Ok, gracias"]
+        buttons: ["Ok, gracias"],
+        cssClass: "round-alert"
       });
 
       alert.present();
@@ -97,7 +98,8 @@ export class ForgotPasswordModal {
       const alert = await this.alert.create({
         header: "Código de seguridad no válido",
         message: "Revisa el código introducido y vuelve a intentarlo.",
-        buttons: ["Ok, gracias"]
+        buttons: ["Ok, gracias"],
+        cssClass: "round-alert"
       });
 
       alert.present();
@@ -106,11 +108,13 @@ export class ForgotPasswordModal {
 
   async recoverSuccess(user: User) {
     this.auth.setAuthUser(user);
-    (await this.toast.create({
-      message: "Acceso concedido",
-      duration: 2000,
-      position: "bottom"
-    })).present();
+    (
+      await this.toast.create({
+        message: "Acceso concedido",
+        duration: 2000,
+        position: "bottom"
+      })
+    ).present();
     this.router.navigate(["/"]);
     this.close();
   }

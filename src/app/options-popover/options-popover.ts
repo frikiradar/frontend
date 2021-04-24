@@ -105,7 +105,8 @@ export class OptionsPopover {
             }
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     await alert.present();
@@ -156,7 +157,8 @@ export class OptionsPopover {
             }
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     await alert.present();
@@ -249,7 +251,8 @@ export class OptionsPopover {
             }
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     await alert.present();
@@ -313,7 +316,8 @@ export class OptionsPopover {
             }
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     await alert.present();

@@ -79,7 +79,8 @@ export class ActivateAccountPage {
               this.nav.navigateRoot(["/edit-profile"]);
             }
           }
-        ]
+        ],
+        cssClass: "round-alert"
       });
 
       alert.present();
@@ -89,7 +90,8 @@ export class ActivateAccountPage {
       const alert = await this.alert.create({
         header: "Código de seguridad no válido",
         message: "Revisa el código introducido y vuelve a intentarlo.",
-        buttons: ["Ok, gracias"]
+        buttons: ["Ok, gracias"],
+        cssClass: "round-alert"
       });
 
       alert.present();
@@ -120,7 +122,8 @@ export class ActivateAccountPage {
       const alert = await this.alert.create({
         header: "Error al cambiar el email",
         message: "Revisa el email introducido y vuelve a intentarlo.",
-        buttons: ["Ok, gracias"]
+        buttons: ["Ok, gracias"],
+        cssClass: "round-alert"
       });
 
       alert.present();

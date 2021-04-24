@@ -190,6 +190,10 @@ ion-toast.md {
   }
 }
 
+.round-alert .alert-wrapper {
+  border-radius: 25px;
+}
+
 .medium-modal .modal-wrapper {
   @media (max-width: 667px) {
     --height: 70%;

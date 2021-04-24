@@ -50,7 +50,8 @@ export class TwoStepPage implements OnInit {
       const alert = await this.alert.create({
         header: "Código de seguridad no válido",
         message: "Revisa el código introducido y vuelve a intentarlo.",
-        buttons: ["Ok, gracias"]
+        buttons: ["Ok, gracias"],
+        cssClass: "round-alert"
       });
 
       alert.present();

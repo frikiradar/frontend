@@ -54,12 +54,14 @@ export class ChangeUsernameModal {
 
       this.auth.setAuthUser(user);
 
-      (await this.toast.create({
-        message:
-          "¡Nombre de usuario cambiado correctamente! Vuelve a iniciar sesión.",
-        duration: 2000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message:
+            "¡Nombre de usuario cambiado correctamente! Vuelve a iniciar sesión.",
+          duration: 2000,
+          position: "bottom"
+        })
+      ).present();
 
       this.modal.dismiss();
       this.auth.logout();
@@ -67,7 +69,8 @@ export class ChangeUsernameModal {
       const alert = await this.alert.create({
         header: "Ha habido un error",
         message: "Ya hay alguien utilizando este nombre de usuario.",
-        buttons: ["¡Ok, probaré otro!"]
+        buttons: ["¡Ok, probaré otro!"],
+        cssClass: "round-alert"
       });
 
       alert.present();

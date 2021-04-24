@@ -83,7 +83,8 @@ export class SettingsPage implements OnInit {
             window.location.reload();
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     alert.present();
@@ -127,7 +128,8 @@ export class SettingsPage implements OnInit {
       const alert = await this.alert.create({
         header: "Error al guardar los cambios",
         message: "Vuelve a intentarlo transcurridos unos minutos.",
-        buttons: ["¡Ok!"]
+        buttons: ["¡Ok!"],
+        cssClass: "round-alert"
       });
 
       alert.present();

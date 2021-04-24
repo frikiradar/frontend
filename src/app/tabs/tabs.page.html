@@ -17,7 +17,7 @@
       <ion-label>Comunidad</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="events" *ngIf="auth.isMaster()">
+    <ion-tab-button tab="events" (click)="goToEvents($event)">
       <ion-icon
         [name]="'calendar' + (selected === 'events' ? '' : '-outline')"
       ></ion-icon>

@@ -178,7 +178,8 @@ export class UtilsService {
     const alert = await this.alert.create({
       header: "Función aún no disponible",
       message: "Esta acción se encuentra aún en desarrollo.",
-      buttons: ["Gracias por avisar"]
+      buttons: ["Gracias por avisar"],
+      cssClass: "round-alert"
     });
 
     await alert.present();

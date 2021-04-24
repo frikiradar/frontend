@@ -61,7 +61,8 @@ export class DevicesSettingsModal implements OnInit {
       (
         await this.alert.create({
           message: "¡No puedes eliminar tu dispositivo actual!",
-          buttons: ["Entendido"]
+          buttons: ["Entendido"],
+          cssClass: "round-alert"
         })
       ).present();
     }

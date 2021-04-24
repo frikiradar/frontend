@@ -99,7 +99,8 @@ export class DisableAccountModal {
       const alert = await this.alert.create({
         header: "La contraseña introducida no es válida",
         message: "Revísala y vuelve a intentarlo.",
-        buttons: ["¡Vale!"]
+        buttons: ["¡Vale!"],
+        cssClass: "round-alert"
       });
 
       alert.present();

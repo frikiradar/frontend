@@ -5,8 +5,18 @@
         <ion-back-button text="" defaultHref="/"></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="end">
+        <ion-button
+          *ngIf="user?.images?.length < 9"
+          (click)="openPictureSheet()"
+        >
+          <ion-icon
+            slot="icon-only"
+            src="/assets/icon/add_a_photo_white_24dp.svg"
+            size="large"
+          ></ion-icon>
+        </ion-button>
         <ion-button (click)="deleteImage()">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
         <ion-button (click)="setAvatar()" *ngIf="activeImage > 0">
           <ion-icon slot="icon-only" name="star-outline"></ion-icon>
@@ -26,18 +36,7 @@
       <img [src]="image" default="/assets/img/users/default.jpg" />
     </ion-slide>
   </ion-slides>
-  <ion-label
-    icon-only
-    button
-    id="camera-icon"
-    *ngIf="user?.images?.length < 9"
-    (click)="openPictureSheet()"
-  >
-    <ion-icon
-      [name]="user?.avatar ? 'add-circle-outline' : 'camera'"
-      size="large"
-    ></ion-icon>
-  </ion-label>
+
   <input
     type="file"
     accept="image/*"

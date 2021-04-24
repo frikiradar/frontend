@@ -53,18 +53,21 @@ export class ChangePasswordModal {
 
       this.auth.setAuthUser(user);
 
-      (await this.toast.create({
-        message: "¡Contraseña cambiada correctamente!",
-        duration: 2000,
-        position: "bottom"
-      })).present();
+      (
+        await this.toast.create({
+          message: "¡Contraseña cambiada correctamente!",
+          duration: 2000,
+          position: "bottom"
+        })
+      ).present();
 
       this.modal.dismiss();
     } catch (e) {
       const alert = await this.alert.create({
         header: "La contraseña actual introducida no es válida",
         message: "Revísala y vuelve a intentarlo.",
-        buttons: ["¡Vale!"]
+        buttons: ["¡Vale!"],
+        cssClass: "round-alert"
       });
 
       alert.present();

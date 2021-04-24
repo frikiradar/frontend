@@ -94,7 +94,8 @@ export class LoginPage {
         const alert = await this.alert.create({
           header: "¿Te has dado cuenta?",
           message: "Para dos cosas que te pedimos y las pones mal... 🤭",
-          buttons: ["Tendré más cuidado"]
+          buttons: ["Tendré más cuidado"],
+          cssClass: "round-alert"
         });
 
         await alert.present();
@@ -152,7 +153,8 @@ export class LoginPage {
     const alert = await this.alert.create({
       header,
       message,
-      buttons: ["Oki doki"]
+      buttons: ["Oki doki"],
+      cssClass: "round-alert"
     });
 
     await alert.present();

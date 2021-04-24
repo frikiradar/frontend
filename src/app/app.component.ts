@@ -189,16 +189,22 @@ export class AppComponent {
             text: "¡Quiero informarme!",
             handler: async () => {
               const modal = await this.modal.create({
-                component: AmbassadorModal
+                component: AmbassadorModal,
+                cssClass: "full-modal"
               });
               return await modal.present();
             }
           }
-        ]
+        ],
+        cssClass: "round-alert"
       });
 
       await alert.present();
-    } else if (openTimes >= 3 && !config.review) {
+    } else if (
+      openTimes >= 3 &&
+      !config.review &&
+      this.platform.is("cordova")
+    ) {
       const alert = await this.alert.create({
         header: "¡Únete a la batalla!",
         message:
@@ -230,7 +236,8 @@ export class AppComponent {
               this.config.setConfig(config);
             }
           }
-        ]
+        ],
+        cssClass: "round-alert"
       });
 
       await alert.present();
@@ -249,7 +256,8 @@ export class AppComponent {
             this.utils.share();
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     await alert.present();
@@ -273,7 +281,8 @@ export class AppComponent {
             }
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     try {
@@ -299,7 +308,8 @@ export class AppComponent {
                   this.launchReview.launch().then();
                 }
               }
-            ]
+            ],
+            cssClass: "round-alert"
           });
 
           versionAlert.present();

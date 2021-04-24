@@ -120,3 +120,14 @@ ion-thumbnail#cover {
     border: 2px solid #1a1a1a;
   }
 }
+
+ion-footer {
+  text-align: center;
+  ion-text {
+    font-size: 12px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}

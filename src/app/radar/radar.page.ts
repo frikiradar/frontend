@@ -193,6 +193,7 @@ export class RadarPage {
 
         if (this.users[0]?.id) {
           this.user = this.users[0];
+          this.userSvc.view(this.user.id);
         }
       } else {
         if (event) {
@@ -306,6 +307,9 @@ export class RadarPage {
   async slide() {
     this.slides.getActiveIndex().then(index => {
       this.user = this.users[index];
+      if (this.user?.id) {
+        this.userSvc.view(this.user?.id);
+      }
       if (index >= this.users?.length - 10) {
         this.getRadarUsers();
       }
@@ -343,7 +347,8 @@ export class RadarPage {
               this.utils.share();
             }
           }
-        ]
+        ],
+        cssClass: "round-alert"
       });
       this.config.set("radarAdv", true);
       await alert.present();

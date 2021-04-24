@@ -108,7 +108,8 @@ export class RoomPage implements OnInit {
             this.source.close();
           }
         }
-      ]
+      ],
+      cssClass: "round-alert"
     });
 
     if (!config.chat && !this.auth.isAdmin()) {
@@ -362,7 +363,7 @@ export class RoomPage implements OnInit {
             }
           },
           {
-            text: "Desde tus fotos",
+            text: "Desde la galería",
             icon: "images",
             handler: async () => {
               const image = (await this.utils.takePicture(

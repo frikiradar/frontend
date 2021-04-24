@@ -130,7 +130,8 @@ export class RegisterComponent {
               }
             }
           }
-        ]
+        ],
+        cssClass: "round-alert"
       });
 
       await alert.present();
@@ -138,7 +139,8 @@ export class RegisterComponent {
       const alert = await this.alert.create({
         header: "Revisa la información",
         message: "Es necesario rellenar todos los campos.",
-        buttons: ["Ok, Tendré más cuidado"]
+        buttons: ["Ok, Tendré más cuidado"],
+        cssClass: "round-alert"
       });
 
       await alert.present();
@@ -168,7 +170,8 @@ export class RegisterComponent {
     const alert = await this.alert.create({
       header: "Error de registro",
       message: error,
-      buttons: ["Ok"]
+      buttons: ["Ok"],
+      cssClass: "round-alert"
     });
 
     await alert.present();

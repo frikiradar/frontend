@@ -54,7 +54,7 @@
     "@ionic/lab": "^3.2.10",
     "@ionic/pro": "^2.0.4",
     "autolinker": "^3.14.3",
-    "cordova-android": "^9.0.0",
+    "cordova-android": "^9.1.0",
     "cordova-ios": "^6.2.0",
     "cordova-launch-review": "4.0.1",
     "cordova-plugin-android-permissions": "^1.1.2",

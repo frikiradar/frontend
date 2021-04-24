@@ -319,7 +319,7 @@ export class EditProfilePage {
           }
         },
         {
-          text: "Desde tus fotos",
+          text: "Desde la galería",
           icon: "images",
           handler: async () => {
             if (this.platform.is("cordova")) {
