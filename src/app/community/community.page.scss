@@ -26,7 +26,7 @@ ion-thumbnail {
     width: 20px;
     height: 20px;
     bottom: 12px;
-    border: 2px solid #1a1a1a;
+    border: 2px solid #212121;
   }
 }
 
@@ -37,7 +37,8 @@ ion-thumbnail {
 
 #pages {
   .swiper-slide img {
-    height: 100px;
+    height: 130px;
+    width: auto;
   }
 
   @media (min-width: 1920px) {
@@ -49,9 +50,8 @@ ion-thumbnail {
   ion-thumbnail {
     --border-radius: 5px;
     padding: 5px;
-    --size: 120px;
-    height: auto;
-    width: auto;
+    height: max-content;
+    width: max-content;
     margin-left: auto;
     margin-right: auto;
   }

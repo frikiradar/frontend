@@ -179,7 +179,7 @@
       },
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-browsertab": {
-        "CUSTOM_TAB_COLOR_RGB": "#1a1a1a"
+        "CUSTOM_TAB_COLOR_RGB": "#212121"
       },
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"

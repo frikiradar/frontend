@@ -27,7 +27,7 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="ShowSplashScreenSpinner" value="false" />
-    <preference name="NavigationBarBackgroundColor" value="#1a1a1a" />
+    <preference name="NavigationBarBackgroundColor" value="#212121" />
     <preference name="SplashScreenDelay" value="30000" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="KeyboardStyle" value="dark" />

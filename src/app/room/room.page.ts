@@ -104,8 +104,7 @@ export class RoomPage implements OnInit {
         {
           text: "Ok, seré paciente",
           handler: () => {
-            this.nav.back();
-            this.source.close();
+            this.back();
           }
         }
       ],
@@ -529,6 +528,11 @@ export class RoomPage implements OnInit {
       }
       this.conErrors = 0;
     });
+  }
+
+  back() {
+    this.nav.back();
+    this.source.close();
   }
 
   ngOnDestroy() {

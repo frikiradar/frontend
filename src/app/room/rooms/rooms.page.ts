@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NavigationStart, Event, Router } from "@angular/router";
+import { NavController } from "@ionic/angular";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { Chat } from "src/app/models/chat";
 
@@ -22,7 +23,8 @@ export class RoomsPage implements OnInit {
     private roomSvc: RoomService,
     private config: ConfigService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private nav: NavController
   ) {}
 
   ngOnInit() {
@@ -93,6 +95,11 @@ export class RoomsPage implements OnInit {
       // console.log("Conexión establecida", this.source.url);
       this.conErrors = 0;
     });
+  }
+
+  back() {
+    this.nav.back();
+    this.source.close();
   }
 
   ngOnDestroy() {

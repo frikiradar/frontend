@@ -260,7 +260,7 @@
         <ion-row class="ion-align-items-center">
           <ion-col
             class="ion-text-center"
-            *ngIf="auth.currentUserValue && auth.isAdult()"
+            *ngIf="auth.currentUserValue && auth.isAdult() && user?.age >= 18"
           >
             <ion-button (click)="hideProfile()">
               <ion-icon
@@ -278,7 +278,10 @@
               <ion-icon slot="icon-only" name="chatbubbles-outline"></ion-icon>
             </ion-button>
           </ion-col>
-          <ion-col class="ion-text-center" *ngIf="auth.isAdult()">
+          <ion-col
+            class="ion-text-center"
+            *ngIf="auth.isAdult() && user?.age >= 18"
+          >
             <ion-button (click)="switchLike()">
               <ion-icon
                 [@pulse]="user.like"

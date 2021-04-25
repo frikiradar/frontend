@@ -13,7 +13,7 @@
 @import "~@ctrl/ngx-emoji-mart/picker";
 
 body {
-  background-color: #1a1a1a;
+  background-color: #212121;
 }
 
 ion-content,
@@ -21,7 +21,7 @@ ion-toolbar,
 ion-tab-bar,
 ion-list,
 ion-header {
-  --background: #1a1a1a;
+  --background: #212121;
   color: white;
 
   a {
@@ -46,7 +46,7 @@ ion-header {
 
 ion-footer,
 ion-list {
-  background: #1a1a1a !important;
+  background: #212121 !important;
   color: white;
 }
 
@@ -99,7 +99,7 @@ ion-header {
 }
 
 [padding] {
-  --background: #1a1a1a;
+  --background: #212121;
   --padding-start: var(--ion-padding, 32px);
   --padding-end: var(--ion-padding, 32px);
   --padding-top: var(--ion-padding, 32px);
@@ -159,8 +159,8 @@ form {
 }
 
 ion-segment-button {
-  --background: #1a1a1a;
-  --background-checked: #1a1a1a;
+  --background: #212121;
+  --background-checked: #212121;
   --color: white;
   --indicator-color: #e91e63;
   text-transform: none;
@@ -179,7 +179,7 @@ ion-toast.md {
 
 .ion-page,
 .modal-wrapper {
-  background: #1a1a1a !important;
+  background: #212121 !important;
 }
 
 .full-modal .modal-wrapper {
@@ -237,7 +237,7 @@ ion-slides {
 }
 
 .pane {
-  --cupertino-pane-background: #1a1a1a !important;
+  --cupertino-pane-background: #212121 !important;
   padding: 15px;
 
   ion-label {
@@ -268,7 +268,7 @@ ion-slides {
     width: 22px;
     height: 22px;
     bottom: 7px;
-    border: 2px solid #1a1a1a;
+    border: 2px solid #212121;
     font-size: 14pt;
     line-height: 0.7;
   }

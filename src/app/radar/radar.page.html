@@ -86,7 +86,7 @@
       </ion-slide>
       <ng-template #radarItems>
         <ion-slide *ngFor="let user of users;">
-          <ion-card (click)="showProfile(user.id)">
+          <ion-card (click)="showProfile(user.id)" class="no-scroll">
             <img
               [src]="user?.avatar"
               [alt]="users?.username"

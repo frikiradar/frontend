@@ -133,7 +133,7 @@
     </ion-label>
   </ion-item>
 </ion-content>
-<ion-footer class="ion-padding">
+<ion-footer class="ion-padding" *ngIf="page?.description">
   <ion-text *ngIf="page?.category === 'games'"
     >Información obtenida de <a href="https://www.igdb.com/">IGDB</a></ion-text
   >

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ModalController } from "@ionic/angular";
+import { ModalController, NavController } from "@ionic/angular";
 
 import { Story } from "../models/story";
 import { User } from "../models/user";
@@ -20,7 +20,8 @@ export class StoryPage implements OnInit {
   constructor(
     private storySvc: StoryService,
     private modal: ModalController,
-    public auth: AuthService
+    public auth: AuthService,
+    private nav: NavController
   ) {}
 
   async ngOnInit() {
@@ -64,5 +65,9 @@ export class StoryPage implements OnInit {
     await modal.present();
     await modal.onDidDismiss();
     await this.getStories();
+  }
+
+  back() {
+    this.nav.back();
   }
 }
