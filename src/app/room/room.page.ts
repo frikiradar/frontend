@@ -295,11 +295,13 @@ export class RoomPage implements OnInit {
   reply() {
     this.replying = true;
     this.pressOptions = false;
+    this.scrollDown();
   }
 
   edit() {
     this.editing = true;
     this.pressOptions = false;
+    this.scrollDown();
   }
 
   async deleteMessage() {
@@ -333,7 +335,10 @@ export class RoomPage implements OnInit {
   }
 
   async openUrl(event: any) {
-    this.urlSvc.openUrl(event);
+    if (event?.target?.href) {
+      event.stopImmediatePropagation();
+      this.urlSvc.openUrl(event);
+    }
     return false;
   }
 
@@ -528,6 +533,17 @@ export class RoomPage implements OnInit {
       }
       this.conErrors = 0;
     });
+  }
+
+  goToMessage(message: Chat) {
+    if (message?.reply_to?.id) {
+      const el = document.getElementById("" + message.reply_to.id);
+      el.scrollIntoView(true);
+      el.classList.add("clicked");
+      setTimeout(() => {
+        el.classList.remove("clicked");
+      }, 500);
+    }
   }
 
   back() {

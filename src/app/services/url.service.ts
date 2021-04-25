@@ -19,8 +19,7 @@ export class UrlService {
 
   async openUrl(event: string | any) {
     let url = "";
-
-    if (typeof event !== "string") {
+    if (typeof event !== "string" && event?.srcElement?.href) {
       event.preventDefault();
     }
     if (

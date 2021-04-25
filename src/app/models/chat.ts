@@ -14,7 +14,7 @@ export interface Chat {
   id?: number;
   sending?: boolean;
   count?: number;
-  replyto?: Partial<Chat>;
+  reply_to?: Partial<Chat>;
   edited?: boolean;
   deleted?: boolean;
   writing?: boolean;

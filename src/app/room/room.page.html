@@ -65,8 +65,8 @@
   </ion-infinite-scroll>
   <span
     class="bubble"
-    [ngClass]="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | niceDate) !==
-        (messages[i - 1]?.time_creation | niceDate) ? '' : 'same-user'"
+    [ngClass]="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate') ? '' : 'same-user'"
     *ngFor="let message of messages; let i = index"
   >
     <ion-chip
@@ -81,7 +81,13 @@
         >{{ message.time_creation | date: "fullDate" }}</ion-label
       >
     </ion-chip>
-    <ion-item *ngIf="message.reply_to" class="replyfrom" lines="none">
+    <ion-item
+      *ngIf="message.reply_to"
+      class="replyfrom"
+      lines="none"
+      button
+      (click)="goToMessage(message)"
+    >
       <ion-icon name="arrow-undo" color="light" slot="start"></ion-icon>
       <ion-thumbnail *ngIf="message?.reply_to?.image">
         <img [src]="message?.reply_to?.image" />
@@ -103,6 +109,7 @@
         </ion-item-option>
       </ion-item-options>
       <ion-item
+        [id]="message.id"
         lines="none"
         button
         detail="false"
@@ -111,8 +118,8 @@
         [ngClass]="selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''"
       >
         <ion-avatar
-          *ngIf="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | niceDate) !==
-        (messages[i - 1]?.time_creation | niceDate)"
+          *ngIf="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')"
         >
           <img
             (click)="showProfile(message.fromuser.id)"
@@ -120,8 +127,8 @@
           />
         </ion-avatar>
         <div
-          *ngIf="message?.fromuser?.id === messages[i - 1]?.fromuser?.id && !message?.reply_to && (message?.time_creation | niceDate) ===
-        (messages[i - 1]?.time_creation | niceDate)"
+          *ngIf="message?.fromuser?.id === messages[i - 1]?.fromuser?.id && !message?.reply_to && (message?.time_creation | date: 'shortDate') ===
+        (messages[i - 1]?.time_creation | date: 'shortDate')"
         ></div>
         <ion-card>
           <div *ngIf="message.image">
@@ -149,8 +156,8 @@
           <ion-card-content *ngIf="message.text">
             <p
               class="text-name"
-              *ngIf="(message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)  || message?.reply_to || (message?.time_creation | niceDate) !==
-        (messages[i - 1]?.time_creation | niceDate)"
+              *ngIf="(message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)  || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')"
             >
               <a
                 (click)="showProfile(message.fromuser.id)"
@@ -166,7 +173,7 @@
               ></ion-icon>
 
               <span class="note-time">
-                · {{ message.time_creation | niceDate }}
+                · {{ message.time_creation | chatDate }}
               </span>
               <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                 <ion-icon *ngIf="message.sending" name="time"></ion-icon>
@@ -179,7 +186,7 @@
             <ion-text class="text">
               <span
                 [innerHTML]="message.text | linky:{className: 'linkified'} | mentions:{mentions: message.mentions} | hashtag"
-                (click)="$event.stopImmediatePropagation(); openUrl($event);"
+                (click)="openUrl($event);"
               ></span>
               <span class="edited" *ngIf="message?.edited"> · Editado</span>
             </ion-text>

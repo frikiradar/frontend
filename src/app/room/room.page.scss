@@ -35,6 +35,7 @@ ion-label {
   .message-item {
     --background-hover: #9a1c424d;
     --background-hover-opacity: 0.5;
+    transition: background 400ms;
 
     ion-avatar {
       margin-bottom: auto;
@@ -74,7 +75,6 @@ ion-label {
   &.same-user {
     margin-top: 0;
     position: relative;
-    bottom: 15px;
     margin-bottom: 0px;
   }
 
@@ -82,6 +82,7 @@ ion-label {
     background: none;
     box-shadow: none;
     margin-top: 0;
+    margin-bottom: 0;
 
     ion-card-content {
       padding-top: 0;
@@ -145,11 +146,14 @@ ion-label {
     }
   }
 
-  ion-item {
-  }
-
   ion-item.pressed {
     background: #9a1c424d;
+  }
+
+  ion-item.clicked {
+    background: #9a1c424d;
+    animation: ripple 600ms linear;
+    transition: background 400ms;
   }
 
   ion-avatar {

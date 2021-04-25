@@ -25,11 +25,13 @@ import { HashtagPipe } from "../hashtag.pipe";
 import { ChatListComponent } from "../chat/chat-list/chat-list.component";
 import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
 import { AudioPlayerComponent } from "../audio-player/audio-player.component";
+import { ChatDatePipe } from "../chat-date.pipe";
 
 @NgModule({
   declarations: [
     ImagePreloadDirective,
     NiceDatePipe,
+    ChatDatePipe,
     MentionsPipe,
     HashtagPipe,
     AmbassadorModal,
@@ -73,6 +75,7 @@ import { AudioPlayerComponent } from "../audio-player/audio-player.component";
   exports: [
     ImagePreloadDirective,
     NiceDatePipe,
+    ChatDatePipe,
     MentionsPipe,
     HashtagPipe,
     ChatInputComponent,
