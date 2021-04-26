@@ -84,7 +84,7 @@ export class ChatService {
     let chats_config = await this.getChatsConfig();
 
     if (chats_config) {
-      if (chats_config.some(c => c.conversationId === chat.conversationId)) {
+      if (chats_config?.some(c => c.conversationId === chat.conversationId)) {
         chats_config.map(c => {
           if (c.conversationId === chat.conversationId) {
             c.archived = true;
@@ -115,7 +115,7 @@ export class ChatService {
     let chats_config = await this.getChatsConfig();
 
     if (chats_config) {
-      if (chats_config.some(c => c.conversationId === chat.conversationId)) {
+      if (chats_config?.some(c => c.conversationId === chat.conversationId)) {
         chats_config.map(c => {
           if (c.conversationId === chat.conversationId) {
             c.archived = false;

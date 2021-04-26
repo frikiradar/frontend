@@ -48,14 +48,14 @@ export class ChatListComponent {
     this.allChats = await this.chatSvc.getChats();
     const config = await this.chatSvc.getChatsConfig();
     this.chats = this.allChats.filter(c => {
-      return !config.some(
+      return !config?.some(
         cc => cc.conversationId === c.conversationId && cc.archived
       );
     });
 
     this.chatsChange.emit(this.chats);
 
-    this.archivedChats = config.filter(cc => cc.archived);
+    this.archivedChats = config?.filter(cc => cc.archived);
 
     this.showSkeleton = false;
     this.selectedChat = this.chats.find(c => +c.user.id === this.selected);
@@ -179,7 +179,7 @@ export class ChatListComponent {
     this.showingArchived = true;
     const config = await this.chatSvc.getChatsConfig();
     this.chats = this.allChats.filter(c => {
-      return config.some(
+      return config?.some(
         cc => cc.conversationId === c.conversationId && cc.archived
       );
     });
@@ -191,7 +191,7 @@ export class ChatListComponent {
     this.showingArchived = false;
     const config = await this.chatSvc.getChatsConfig();
     this.chats = this.allChats.filter(c => {
-      return !config.some(
+      return !config?.some(
         cc => cc.conversationId === c.conversationId && cc.archived
       );
     });
@@ -205,7 +205,7 @@ export class ChatListComponent {
     );
     this.source.addEventListener("message", async (res: any) => {
       let message = JSON.parse(res.data) as Chat;
-      if (this.chats.some(m => m.conversationId === message.conversationId)) {
+      if (this.chats?.some(m => m.conversationId === message.conversationId)) {
         this.chats.map(m => {
           if (m.conversationId === message.conversationId) {
             if (m.writing && !message.writing) {
