@@ -295,11 +295,11 @@ export class ProfilePage implements OnInit {
 
   async showLikes(param: "received" | "delivered") {
     this.param = param;
+    this.pane = new CupertinoPane(".likes-pane", this.paneSettings);
+    this.pane.present({ animate: true });
     if (!this.likes[param]?.length) {
       this.likes[param] = await this.likeSvc.getLikes(param, 1, this.user.id);
     }
-    this.pane = new CupertinoPane(".likes-pane", this.paneSettings);
-    this.pane.present({ animate: true });
   }
 
   async viewProfile(id: number) {

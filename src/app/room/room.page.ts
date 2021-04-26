@@ -543,7 +543,7 @@ export class RoomPage implements OnInit {
         el.classList.add("clicked");
         setTimeout(() => {
           el.classList.remove("clicked");
-        }, 500);
+        }, 1000);
       }
     }
   }

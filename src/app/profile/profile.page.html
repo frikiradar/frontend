@@ -300,6 +300,21 @@
 
 <div class="likes-pane">
   <p>Kokoros {{param === 'received' ? 'recibidos' : 'entregados'}}</p>
+  <ion-list *ngIf="!likes[param]">
+    <ion-item *ngFor="let i of [].constructor(8)" lines="none">
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h2>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h2>
+        <p>
+          <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
   <ion-list *ngIf="likes[param]?.length > 0">
     <ion-item
       *ngFor="let like of likes[param]"
