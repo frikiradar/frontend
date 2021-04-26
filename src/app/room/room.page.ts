@@ -191,7 +191,7 @@ export class RoomPage implements OnInit {
         ...[
           {
             slug: this.slug,
-            fromuser: { id: this.auth.currentUserValue.id },
+            fromuser: this.auth.currentUserValue,
             text,
             image,
             time_creation: new Date(),
@@ -538,11 +538,13 @@ export class RoomPage implements OnInit {
   goToMessage(message: Chat) {
     if (message?.reply_to?.id) {
       const el = document.getElementById("" + message.reply_to.id);
-      el.scrollIntoView(true);
-      el.classList.add("clicked");
-      setTimeout(() => {
-        el.classList.remove("clicked");
-      }, 500);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("clicked");
+        setTimeout(() => {
+          el.classList.remove("clicked");
+        }, 500);
+      }
     }
   }
 

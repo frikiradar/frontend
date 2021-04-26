@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { Event, NavigationEnd, Router } from "@angular/router";
+import { Event, NavigationEnd, Router, RouterEvent } from "@angular/router";
 import { AlertController } from "@ionic/angular";
 import { AuthService } from "../services/auth.service";
 
@@ -24,7 +24,8 @@ export class TabsPage implements OnInit {
     private router: Router,
     private alert: AlertController
   ) {
-    this.router.events.subscribe(async (event: Event) => {
+    this.router.events.subscribe(async (event: RouterEvent) => {
+      event.url = event.url === "/" ? "/tabs/radar" : event.url;
       if (event instanceof NavigationEnd && event.url.includes("/tabs/")) {
         this.selected = event.url.split("/")[2];
       }

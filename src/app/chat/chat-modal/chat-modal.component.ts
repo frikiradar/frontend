@@ -207,8 +207,8 @@ export class ChatModalComponent implements OnInit {
         ...this.messages,
         ...[
           {
-            touser: { id: this.user?.id },
-            fromuser: { id: this.auth.currentUserValue.id },
+            touser: this.user,
+            fromuser: this.auth.currentUserValue,
             text,
             image,
             audio,

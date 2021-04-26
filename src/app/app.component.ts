@@ -8,6 +8,7 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 import {
   AlertController,
   ModalController,
+  NavController,
   Platform,
   ToastController
 } from "@ionic/angular";
@@ -49,7 +50,8 @@ export class AppComponent {
     private toastController: ToastController,
     private modal: ModalController,
     private push: PushService,
-    private codePush: CodePush
+    private codePush: CodePush,
+    private nav: NavController
   ) {
     this.initializeApp();
   }
@@ -139,7 +141,7 @@ export class AppComponent {
 
   async backButtonStatus() {
     this.platform.backButton.subscribe(async () => {
-      if (this.router.url.includes("/tabs/")) {
+      if (this.router.url.includes("/tabs/") || this.router.url === "/") {
         const modal = await this.modal.getTop();
         if (modal) {
           modal.dismiss();
@@ -162,7 +164,7 @@ export class AppComponent {
           }
         }
       } else {
-        // this.nav.back();
+        this.nav.back();
         this.backButtonCount = 0;
       }
     });

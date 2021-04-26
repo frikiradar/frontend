@@ -28,10 +28,6 @@ ion-label {
   margin-bottom: 10px;
   display: block;
 
-  ion-label {
-    margin-left: 20px; // size needed
-  }
-
   .message-item {
     --background-hover: #9a1c424d;
     --background-hover-opacity: 0.5;
@@ -69,6 +65,10 @@ ion-label {
       margin-right: 15px;
       margin-bottom: 0;
       color: #777777;
+    }
+
+    ion-label {
+      margin-left: 20px;
     }
   }
 
