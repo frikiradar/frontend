@@ -21,6 +21,12 @@ export interface Config {
     last_message?: number;
     order?: number;
   }[];
+  chats?: {
+    conversationId: string;
+    archived?: boolean;
+    unread?: boolean;
+    pinned?: boolean;
+  }[];
 }
 @Injectable({
   providedIn: "root"

@@ -522,4 +522,8 @@ export class ChatModalComponent implements OnInit {
       // console.log("Conexión cerrada", this.source.url);
     }
   }
+
+  back() {
+    this.nav.back();
+  }
 }

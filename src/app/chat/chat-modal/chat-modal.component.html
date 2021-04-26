@@ -1,11 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!pressOptions">
-      <ion-back-button
-        class="hide-landscape"
-        text=""
-        defaultHref="/tabs/chat"
-      ></ion-back-button>
+      <ion-button class="back" (click)="back()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
       <ion-button (click)="showProfile(userId)" shape="round">
         <ion-avatar>
           <ion-img

@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start" *ngIf="!showOptions">
+    <ion-buttons slot="start" *ngIf="!showOptions && !showingArchived">
       <ion-back-button
         *ngIf="selected"
         class="hide-portrait"
@@ -22,10 +22,24 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="!showOptions">Chat</ion-title>
+    <ion-buttons slot="start" *ngIf="showingArchived && !showOptions">
+      <ion-button (click)="showUnarchivedChats()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title *ngIf="!showOptions && !showingArchived">Chat</ion-title>
+    <ion-title *ngIf="showingArchived && !showOptions"
+      >Chats archivados</ion-title
+    >
     <ion-buttons slot="end" *ngIf="showOptions">
       <ion-button (click)="deleteChat(selectedChat)">
         <ion-icon name="trash"></ion-icon>
+      </ion-button>
+      <ion-button (click)="archiveChat(selectedChat)" *ngIf="!showingArchived">
+        <ion-icon name="archive"></ion-icon>
+      </ion-button>
+      <ion-button (click)="unarchiveChat(selectedChat)" *ngIf="showingArchived">
+        <ion-icon name="file-tray"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -115,14 +129,38 @@
             *ngIf="chat?.user?.username !== 'frikiradar'"
           >
             <ion-item-option
-              color="danger"
-              (click)="deleteChat(chat)"
+              *ngIf="!showingArchived"
+              color="warning"
+              (click)="archiveChat(chat)"
               expandable
             >
-              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
+            </ion-item-option>
+            <ion-item-option
+              *ngIf="showingArchived"
+              color="warning"
+              (click)="unarchiveChat(chat)"
+              expandable
+            >
+              <ion-icon slot="icon-only" name="file-tray-outline"></ion-icon>
             </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
+        <ion-item
+          button
+          *ngIf="!showingArchived && archivedChats.length"
+          lines="none"
+          (click)="showArchivedChats()"
+        >
+          <ion-icon
+            slot="start"
+            name="archive-outline"
+            color="light"
+          ></ion-icon>
+          <ion-label
+            ><p>Chats archivados ({{ archivedChats.length }})</p></ion-label
+          >
+        </ion-item>
       </ion-list>
     </ng-template>
   </div>

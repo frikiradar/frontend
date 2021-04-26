@@ -7,6 +7,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { MenuController, ToastController } from "@ionic/angular";
+import { Config } from "src/app/services/config.service";
 
 import { User } from "../../models/user";
 import { Chat } from "./../../models/chat";
@@ -27,6 +28,9 @@ export class ChatListComponent {
   showSkeleton: boolean;
   showOptions = false;
   public selectedChat: Chat;
+  public archivedChats: Config["chats"];
+  public allChats: Chat[];
+  public showingArchived = false;
   source: EventSource;
   conErrors = 0;
 
@@ -41,8 +45,18 @@ export class ChatListComponent {
   }
 
   async ngOnInit() {
-    this.chats = await this.chatSvc.getChats();
+    this.allChats = await this.chatSvc.getChats();
+    const config = await this.chatSvc.getChatsConfig();
+    this.chats = this.allChats.filter(c => {
+      return !config.some(
+        cc => cc.conversationId === c.conversationId && cc.archived
+      );
+    });
+
     this.chatsChange.emit(this.chats);
+
+    this.archivedChats = config.filter(cc => cc.archived);
+
     this.showSkeleton = false;
     this.selectedChat = this.chats.find(c => +c.user.id === this.selected);
     this.connectSSE();
@@ -90,6 +104,51 @@ export class ChatListComponent {
     }
   }
 
+  async archiveChat(chat: Chat) {
+    this.selected = undefined;
+    this.selectedChat = undefined;
+    this.showOptions = false;
+
+    try {
+      await this.chatSvc.archiveChat(chat);
+      const config = await this.chatSvc.getChatsConfig();
+      this.archivedChats = config.filter(cc => cc.archived);
+      this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
+      this.chatsChange.emit(this.chats);
+      const toast = await this.toast.create({
+        message: "Has archivado el chat con " + chat.user.name,
+        duration: 3000,
+        position: "bottom"
+      });
+      toast.present();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async unarchiveChat(chat: Chat) {
+    this.selected = undefined;
+    this.selectedChat = undefined;
+    this.showOptions = false;
+    const chats = this.chats;
+
+    try {
+      await this.chatSvc.unarchiveChat(chat);
+      const config = await this.chatSvc.getChatsConfig();
+      this.archivedChats = config.filter(cc => cc.archived);
+      this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
+      this.chatsChange.emit(this.chats);
+      const toast = await this.toast.create({
+        message: "Has desarchivado el chat con " + chat.user.name,
+        duration: 3000,
+        position: "bottom"
+      });
+      toast.present();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   async dragItem(event: any, id: number) {
     if (event.detail.ratio < -1.8) {
       await event.target.close();
@@ -114,6 +173,30 @@ export class ChatListComponent {
   hideOptions() {
     this.showOptions = false;
     this.selectedChat = undefined;
+  }
+
+  async showArchivedChats() {
+    this.showingArchived = true;
+    const config = await this.chatSvc.getChatsConfig();
+    this.chats = this.allChats.filter(c => {
+      return config.some(
+        cc => cc.conversationId === c.conversationId && cc.archived
+      );
+    });
+
+    this.chatsChange.emit(this.chats);
+  }
+
+  async showUnarchivedChats() {
+    this.showingArchived = false;
+    const config = await this.chatSvc.getChatsConfig();
+    this.chats = this.allChats.filter(c => {
+      return !config.some(
+        cc => cc.conversationId === c.conversationId && cc.archived
+      );
+    });
+
+    this.chatsChange.emit(this.chats);
   }
 
   async connectSSE() {

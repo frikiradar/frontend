@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
 
 import { Chat } from "../models/chat";
-import { ConfigService } from "./config.service";
+import { User } from "../models/user";
+import { AuthService } from "./auth.service";
+import { Config, ConfigService } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
@@ -12,7 +14,8 @@ export class ChatService {
   constructor(
     private rest: RestService,
     private config: ConfigService,
-    private uploadSvc: UploadService
+    private uploadSvc: UploadService,
+    private auth: AuthService
   ) {}
 
   async register(channel: string) {
@@ -71,48 +74,83 @@ export class ChatService {
 
   async deleteMessage(id: number) {
     await this.rest.delete(`chat-message/${id}`).toPromise();
-    let storagedMessages = this.getStoragedMessages();
-    storagedMessages = storagedMessages.filter(m => m.id !== id);
-
-    localStorage.setItem("chats", JSON.stringify(storagedMessages));
   }
 
   async deleteChat(touserid: number) {
     await this.rest.delete(`chat/${touserid}`).toPromise();
-    let storagedMessages = this.getStoragedMessages();
-    storagedMessages = storagedMessages.filter(
-      m => m.touser.id !== touserid && m.fromuser.id !== touserid
-    );
-
-    localStorage.setItem("chats", JSON.stringify(storagedMessages));
   }
 
-  getStoragedMessages(): Chat[] {
-    const storagedMessages = JSON.parse(localStorage.getItem("chats"));
-    return storagedMessages ? storagedMessages : [];
-  }
+  async archiveChat(chat: Chat) {
+    let chats_config = await this.getChatsConfig();
 
-  deleteStoragedMessages() {
-    localStorage.removeItem("chats");
-  }
-
-  setStoragedMessages(messages: Chat[]) {
-    let storagedMessages = this.getStoragedMessages();
-    messages.forEach(message => {
-      if (storagedMessages.some(m => m.id === message.id)) {
-        storagedMessages.map(m => {
-          if (m.id === message.id) {
-            m.time_read = message.time_read;
-            m.sending = message.sending;
+    if (chats_config) {
+      if (chats_config.some(c => c.conversationId === chat.conversationId)) {
+        chats_config.map(c => {
+          if (c.conversationId === chat.conversationId) {
+            c.archived = true;
           }
         });
       } else {
-        storagedMessages = [...storagedMessages, message];
+        chats_config = [
+          ...chats_config,
+          {
+            conversationId: chat.conversationId,
+            archived: true
+          }
+        ];
       }
-    });
+    } else {
+      chats_config = [
+        {
+          conversationId: chat.conversationId,
+          archived: true
+        }
+      ];
+    }
 
-    storagedMessages.sort((a, b) => a.id - b.id);
+    await this.setChatsConfig(chats_config);
+  }
 
-    localStorage.setItem("chats", JSON.stringify(storagedMessages));
+  async unarchiveChat(chat: Chat) {
+    let chats_config = await this.getChatsConfig();
+
+    if (chats_config) {
+      if (chats_config.some(c => c.conversationId === chat.conversationId)) {
+        chats_config.map(c => {
+          if (c.conversationId === chat.conversationId) {
+            c.archived = false;
+          }
+        });
+      } else {
+        chats_config = [
+          ...chats_config,
+          {
+            conversationId: chat.conversationId,
+            archived: false
+          }
+        ];
+      }
+    } else {
+      chats_config = [
+        {
+          conversationId: chat.conversationId,
+          archived: false
+        }
+      ];
+    }
+
+    await this.setChatsConfig(chats_config);
+  }
+
+  async setChatsConfig(chats_config: Config["chats"]) {
+    const user = (await this.rest
+      .put("chats-config", { chats_config })
+      .toPromise()) as User;
+    this.auth.setAuthUser(user);
+  }
+
+  async getChatsConfig() {
+    const config = this.auth.currentUserValue?.config;
+    return config?.chats;
   }
 }

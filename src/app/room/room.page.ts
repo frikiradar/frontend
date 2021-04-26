@@ -143,13 +143,12 @@ export class RoomPage implements OnInit {
       }
 
       this.messages = [...this.messages, ...messages];
-      // this.chatSvc.setStoragedMessages(messages);
 
       if (this.messages.length < 15) {
         this.infiniteScroll.disabled = true;
       }
 
-      this.scrollDown(500);
+      this.scrollDown(1000);
 
       this.connectSSE();
 
@@ -219,7 +218,6 @@ export class RoomPage implements OnInit {
         }
 
         replyToId = null;
-        // this.chatSvc.setStoragedMessages([chat]);
       } catch (e) {
         this.messages = this.messages.filter(m => m.sending !== true);
         console.error(e);

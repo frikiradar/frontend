@@ -2,7 +2,7 @@ ion-header ion-toolbar {
   position: absolute;
   --background: transparent;
 
-  ion-back-button {
+  .back {
     background: #2f2f2f87;
     height: 50px;
     width: 50px;
@@ -113,9 +113,11 @@ ion-item {
   z-index: 1;
 
   ion-avatar {
-    border: 2px solid white;
+    img {
+      border: 2px solid white;
+    }
 
-    &.not-view {
+    &.not-view img {
       border: 2px solid #e91e63 !important;
     }
   }
