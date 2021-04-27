@@ -4,6 +4,7 @@ import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { NotificationService } from "../services/notification.service";
 import { Notification } from "../models/notification";
 import { UrlService } from "../services/url.service";
+import { NavController } from "@ionic/angular";
 
 @Component({
   selector: "app-notification",
@@ -28,7 +29,8 @@ export class NotificationPage implements OnInit {
 
   constructor(
     private notificationSvc: NotificationService,
-    private url: UrlService
+    private url: UrlService,
+    private nav: NavController
   ) {}
 
   async ngOnInit() {
@@ -102,5 +104,9 @@ export class NotificationPage implements OnInit {
     } catch (e) {
       console.error(`Error al eliminar la notificación`);
     }
+  }
+
+  back() {
+    this.nav.back();
   }
 }

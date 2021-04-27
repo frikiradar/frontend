@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { AlertController, ModalController } from "@ionic/angular";
+import { ModalController, NavController } from "@ionic/angular";
 
 import { User } from "../models/user";
-import { PushService } from "../services/push.service";
-import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { BannedUsersModal } from "./banned-users/banned-users.modal";
 import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
@@ -20,9 +18,7 @@ export class AdminPage implements OnInit {
   constructor(
     private modal: ModalController,
     private auth: AuthService,
-    private userSvc: UserService,
-    private alert: AlertController,
-    private push: PushService
+    private nav: NavController
   ) {}
 
   async ngOnInit() {
@@ -48,5 +44,9 @@ export class AdminPage implements OnInit {
       component: EditRoomsModal
     });
     return await modal.present();
+  }
+
+  back() {
+    this.nav.back();
   }
 }

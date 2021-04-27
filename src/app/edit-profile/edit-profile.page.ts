@@ -1,17 +1,12 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from "@angular/forms";
-import { Router } from "@angular/router";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import {
   ActionSheetController,
   IonInput,
   IonSegment,
   IonSlides,
+  NavController,
   PickerController,
   Platform,
   ToastController
@@ -72,10 +67,10 @@ export class EditProfilePage {
     private picker: PickerController,
     public sheet: ActionSheetController,
     private utils: UtilsService,
-    private router: Router,
     private toast: ToastController,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions
+    private androidPermissions: AndroidPermissions,
+    private nav: NavController
   ) {
     this.profileForm = this.fb.group({
       name: [""],
@@ -412,6 +407,6 @@ export class EditProfilePage {
   }
 
   back() {
-    this.router.navigate(["/profile"]);
+    this.nav.back();
   }
 }

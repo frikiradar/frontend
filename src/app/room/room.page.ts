@@ -492,12 +492,7 @@ export class RoomPage implements OnInit {
     });
 
     this.source.addEventListener("error", async error => {
-      console.error(
-        "Escucha al servidor de " + this.slug + " perdida",
-        error,
-        this.source.url,
-        `conErrors: ${this.conErrors}`
-      );
+      console.error("Escucha al servidor de " + this.slug + " perdida", error);
       /*console.error(
         "Error al conectarse al servidor de chat",
         `connected: ${this.connected}`,

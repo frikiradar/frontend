@@ -135,4 +135,8 @@ export class SettingsPage implements OnInit {
       alert.present();
     }
   }
+
+  back() {
+    this.nav.back();
+  }
 }

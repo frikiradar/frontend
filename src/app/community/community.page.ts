@@ -214,12 +214,7 @@ export class CommunityPage {
 
     this.source.addEventListener("error", async error => {
       this.conErrors++;
-      console.error(
-        "Escucha al servidor de community perdida",
-        error,
-        this.source.url,
-        `conErrors: ${this.conErrors}`
-      );
+      console.error("Escucha al servidor de community perdida", error);
     });
 
     this.source.addEventListener("open", async error => {

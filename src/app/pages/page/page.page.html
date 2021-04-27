@@ -2,10 +2,9 @@
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button
-          text=""
-          defaultHref="/tabs/community"
-        ></ion-back-button>
+        <ion-button (click)="back()">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
       </ion-buttons>
       <ion-title>{{page?.name}}</ion-title>
     </ion-toolbar>
@@ -29,6 +28,12 @@
     <ion-chip color="secondary">
       <ion-label>Me gusta</ion-label>
       <ion-icon name="heart-outline"></ion-icon>
+    </ion-chip>
+  </div>
+  <div id="add-tag" *ngIf="tag">
+    <ion-chip color="secondary">
+      <ion-label>{{page?.likes}} me gusta</ion-label>
+      <ion-icon name="heart"></ion-icon>
     </ion-chip>
   </div>
   <div id="release">

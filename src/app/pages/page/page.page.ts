@@ -1,6 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ModalController, ToastController } from "@ionic/angular";
+import {
+  ModalController,
+  NavController,
+  ToastController
+} from "@ionic/angular";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 
 import { Room } from "src/app/models/room";
@@ -49,7 +53,8 @@ export class PagePage implements OnInit {
     private toast: ToastController,
     private modal: ModalController,
     private router: Router,
-    private config: ConfigService
+    private config: ConfigService,
+    private nav: NavController
   ) {}
 
   async ngOnInit() {
@@ -175,5 +180,9 @@ export class PagePage implements OnInit {
 
   async showRoom(slug: Page["slug"]) {
     this.router.navigate(["/room", slug]);
+  }
+
+  back() {
+    this.nav.back();
   }
 }

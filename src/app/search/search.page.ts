@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IonInput, ToastController } from "@ionic/angular";
+import { IonInput, NavController, ToastController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -24,7 +24,8 @@ export class SearchPage implements OnInit {
     public userSvc: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private toast: ToastController
+    private toast: ToastController,
+    private nav: NavController
   ) {}
 
   async ngOnInit() {
@@ -116,5 +117,9 @@ export class SearchPage implements OnInit {
       await event.target.close();
       this.showProfile(id);
     }
+  }
+
+  back() {
+    this.nav.back();
   }
 }

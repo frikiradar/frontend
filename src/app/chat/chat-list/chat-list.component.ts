@@ -6,7 +6,7 @@ import {
   SimpleChanges
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { MenuController, ToastController } from "@ionic/angular";
+import { MenuController, NavController, ToastController } from "@ionic/angular";
 import { Config } from "src/app/services/config.service";
 
 import { User } from "../../models/user";
@@ -39,7 +39,8 @@ export class ChatListComponent {
     private router: Router,
     public auth: AuthService,
     public menu: MenuController,
-    private toast: ToastController
+    private toast: ToastController,
+    private nav: NavController
   ) {
     this.showSkeleton = true;
   }
@@ -253,11 +254,7 @@ export class ChatListComponent {
 
     this.source.addEventListener("error", async error => {
       this.conErrors++;
-      console.error(
-        "Escucha al servidor de salas perdida",
-        error,
-        this.source.url
-      );
+      console.error("Escucha al servidor de salas perdida", error);
     });
 
     this.source.addEventListener("open", async error => {
@@ -274,5 +271,9 @@ export class ChatListComponent {
       }*/
       this.conErrors = 0;
     });
+  }
+
+  back() {
+    this.nav.back();
   }
 }

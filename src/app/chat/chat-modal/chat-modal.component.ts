@@ -477,9 +477,7 @@ export class ChatModalComponent implements OnInit {
     this.source.addEventListener("error", async error => {
       console.error(
         "Escucha al servidor de " + this.user.username + " perdida",
-        error,
-        this.source.url,
-        `conErrors: ${this.conErrors}`
+        error
       );
       /*console.error(
         "Error al conectarse al servidor de chat",
