@@ -122,7 +122,7 @@ export class StoryModal implements OnInit {
 
   async cropImagebyEvent(event: any) {
     try {
-      const src = await this.utils.cropImage(event, "", false);
+      const src = await this.utils.cropImage(event, null, false);
       if (typeof src == "string") {
         const blob = await this.utils.urltoBlob(src);
         this.addPicture(blob);

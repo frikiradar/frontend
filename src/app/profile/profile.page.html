@@ -282,7 +282,7 @@
           </ion-col>
           <ion-col
             class="ion-text-center"
-            *ngIf="auth.isAdult() && user?.age >= 18"
+            *ngIf="!auth.currentUserValue || (auth.isAdult() && user?.age >= 18)"
           >
             <ion-button (click)="switchLike()">
               <ion-icon

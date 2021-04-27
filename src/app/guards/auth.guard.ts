@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
       } else {
         return true;
       }
-    } else if (state.url.includes("/profile")) {
+    } else if (state.url.includes("/profile") || state.url.includes("/page")) {
       return true;
     }
 

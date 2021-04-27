@@ -1,5 +1,6 @@
 import { transition, trigger, useAnimation } from "@angular/animations";
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import { Meta, Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import {
@@ -32,7 +33,7 @@ import { AuthService } from "./../services/auth.service";
   styleUrls: ["./profile.page.scss"],
   animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])]
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage {
   public user: User;
   public stories: Story[];
   public story: Story;
@@ -71,10 +72,12 @@ export class ProfilePage implements OnInit {
     private modal: ModalController,
     private pageSvc: PageService,
     private likeSvc: LikeService,
-    private urlSvc: UrlService
+    private urlSvc: UrlService,
+    private meta: Meta,
+    private title: Title
   ) {}
 
-  async ngOnInit() {
+  async ngAfterViewInit() {
     const param = this.route.snapshot.paramMap.get("id");
     let id = undefined;
     if (!param) {
@@ -97,6 +100,22 @@ export class ProfilePage implements OnInit {
         this.user = await this.userSvc.getPublicUser(id);
         // si no recibe entonces poner que no es public
       }
+
+      this.meta.addTags([
+        {
+          name: "keywords",
+          content: "frikiradar, friki, red social, " + this.user?.name
+        },
+        { name: "robots", content: "index, follow" },
+        { name: "author", content: "FrikiRadar" },
+        { charset: "UTF-8" }
+      ]);
+
+      this.title.setTitle("Perfil de " + this.user?.name + " en FrikiRadar");
+      this.meta.updateTag({
+        name: "description",
+        content: this.user?.description
+      });
 
       if (typeof this.user.connection === "string") {
         this.user.connection = [this.user.connection];

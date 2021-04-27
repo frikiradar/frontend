@@ -142,6 +142,11 @@ export class UtilsService {
     return blob;
   }
 
+  async blobToUrl(blob: Blob | File) {
+    const src = URL.createObjectURL(blob);
+    return src;
+  }
+
   fileToBase64(file: Blob | File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();

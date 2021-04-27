@@ -6,9 +6,10 @@ import {
   ToastController
 } from "@ionic/angular";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
+import { Meta, Title } from "@angular/platform-browser";
 
 import { Room } from "src/app/models/room";
-import { ConfigService, Config } from "src/app/services/config.service";
+import { ConfigService } from "src/app/services/config.service";
 import { RoomService } from "src/app/services/room.service";
 import { Page } from "../../models/page";
 import { Story } from "../../models/story";
@@ -26,7 +27,7 @@ import { ViewStoriesModal } from "../../story/view-stories/view-stories.modal";
   templateUrl: "./page.page.html",
   styleUrls: ["./page.page.scss"]
 })
-export class PagePage implements OnInit {
+export class PagePage {
   public page: Page;
   public tag: Tag;
   public stories: Story[];
@@ -48,20 +49,26 @@ export class PagePage implements OnInit {
     private pageSvc: PageService,
     private roomSvc: RoomService,
     private storySvc: StoryService,
-    private auth: AuthService,
+    public auth: AuthService,
     private tagSvc: TagService,
     private toast: ToastController,
     private modal: ModalController,
     private router: Router,
     private config: ConfigService,
-    private nav: NavController
+    private nav: NavController,
+    private meta: Meta,
+    private title: Title
   ) {}
 
-  async ngOnInit() {
+  async ngAfterViewInit() {
     const slug = this.route.snapshot.paramMap.get("slug");
-    this.page = await this.pageSvc.getPage(slug);
-    this.tag = this.auth.currentUserValue.tags.find(t => t.slug === slug);
-    this.getStories();
+    if (this.auth.currentUserValue) {
+      this.page = await this.pageSvc.getPage(slug);
+      this.tag = this.auth.currentUserValue.tags.find(t => t.slug === slug);
+      this.getStories();
+    } else {
+      this.page = await this.pageSvc.getPublicPage(slug);
+    }
 
     const rooms_config = await this.roomSvc.getRoomsConfig();
     let configRoom = rooms_config?.find(room => room.slug === this.page.slug);
@@ -71,6 +78,26 @@ export class PagePage implements OnInit {
     ) {
       this.room.unread = true;
     }
+
+    this.meta.addTags([
+      {
+        name: "keywords",
+        content:
+          "frikiradar, friki, red social, " +
+          this.page?.name +
+          ", " +
+          this.page?.category
+      },
+      { name: "robots", content: "index, follow" },
+      { name: "author", content: "FrikiRadar" },
+      { charset: "UTF-8" }
+    ]);
+
+    this.title.setTitle("Página de " + this.page?.name + " en FrikiRadar");
+    this.meta.updateTag({
+      name: "description",
+      content: this.page?.description
+    });
   }
 
   async getStories() {
@@ -132,54 +159,70 @@ export class PagePage implements OnInit {
   }
 
   async addTag() {
-    try {
-      const toast = await this.toast.create({
-        message: `Añadiendo etiqueta ${this.page.name}.`,
-        duration: 5000,
-        position: "top",
-        buttons: [
-          {
-            text: "Deshacer",
-            handler: () => {}
-          }
-        ]
-      });
-      toast.present();
+    if (this.auth.currentUserValue) {
+      try {
+        const toast = await this.toast.create({
+          message: `Añadiendo etiqueta ${this.page.name}.`,
+          duration: 5000,
+          position: "top",
+          buttons: [
+            {
+              text: "Deshacer",
+              handler: () => {}
+            }
+          ]
+        });
+        toast.present();
 
-      const log = await toast.onDidDismiss();
-      if (log.role === "timeout") {
-        this.tag = await this.tagSvc.addTag(
-          this.page.name,
-          this.page.category,
-          this.page.slug
-        );
+        const log = await toast.onDidDismiss();
+        if (log.role === "timeout") {
+          this.tag = await this.tagSvc.addTag(
+            this.page.name,
+            this.page.category,
+            this.page.slug
+          );
+          (
+            await this.toast.create({
+              message: `Etiqueta añadida ${this.page.name}.`,
+              duration: 5000,
+              position: "bottom"
+            })
+          ).present();
+        }
+
+        const user = this.auth.currentUserValue;
+        user.tags = [...[this.tag], ...user.tags];
+        this.auth.setAuthUser(user);
+      } catch (e) {
         (
           await this.toast.create({
-            message: `Etiqueta añadida ${this.page.name}.`,
+            message: `Error al añadir la etiqueta ${this.page.name}.`,
+            color: "danger",
             duration: 5000,
-            position: "bottom"
+            position: "middle"
           })
         ).present();
+        console.error(e);
       }
-
-      const user = this.auth.currentUserValue;
-      user.tags = [...[this.tag], ...user.tags];
-      this.auth.setAuthUser(user);
-    } catch (e) {
-      (
-        await this.toast.create({
-          message: `Error al añadir la etiqueta ${this.page.name}.`,
-          color: "danger",
-          duration: 5000,
-          position: "middle"
-        })
-      ).present();
-      console.error(e);
+    } else {
+      this.nav.navigateRoot(["/login"], {
+        queryParams: { returnUrl: this.router.url }
+      });
     }
   }
 
   async showRoom(slug: Page["slug"]) {
-    this.router.navigate(["/room", slug]);
+    if (this.auth.currentUserValue) {
+      this.router.navigate(["/room", slug]);
+    } else {
+      this.nav.navigateRoot(["/login"], {
+        queryParams: { returnUrl: this.router.url }
+      });
+    }
+  }
+
+  search() {
+    this.router.navigate(["/search", this.page.name]);
   }
 
   back() {
