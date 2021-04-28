@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { NavController } from "@ionic/angular";
 
 import { Page } from "../models/page";
+import { NavService } from "../services/navigation.service";
 import { PageService } from "../services/page.service";
 
 @Component({
@@ -16,7 +16,7 @@ export class PagesPage implements OnInit {
   constructor(
     private pagesSvc: PageService,
     private router: Router,
-    private nav: NavController
+    private nav: NavService
   ) {}
 
   async ngOnInit() {

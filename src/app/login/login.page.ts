@@ -17,6 +17,7 @@ import {
 
 import { User } from "../models/user";
 import { ConfigService } from "../services/config.service";
+import { NavService } from "../services/navigation.service";
 import { AuthService } from "./../services/auth.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 
@@ -45,7 +46,7 @@ export class LoginPage {
     private modal: ModalController,
     private toast: ToastController,
     public fb: FormBuilder,
-    private nav: NavController, // private fb: Facebook
+    private nav: NavService, // private fb: Facebook
     public platform: Platform,
     private facebook: Facebook,
     private config: ConfigService

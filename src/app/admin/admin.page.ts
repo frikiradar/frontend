@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { ModalController, NavController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
+import { NavService } from "../services/navigation.service";
 import { AuthService } from "./../services/auth.service";
 import { BannedUsersModal } from "./banned-users/banned-users.modal";
 import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
@@ -18,7 +19,7 @@ export class AdminPage implements OnInit {
   constructor(
     private modal: ModalController,
     private auth: AuthService,
-    private nav: NavController
+    private nav: NavService
   ) {}
 
   async ngOnInit() {

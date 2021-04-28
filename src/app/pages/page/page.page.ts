@@ -1,15 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  ModalController,
-  NavController,
-  ToastController
-} from "@ionic/angular";
+import { ModalController, ToastController } from "@ionic/angular";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { Meta, Title } from "@angular/platform-browser";
 
 import { Room } from "src/app/models/room";
-import { ConfigService } from "src/app/services/config.service";
 import { RoomService } from "src/app/services/room.service";
 import { Page } from "../../models/page";
 import { Story } from "../../models/story";
@@ -21,6 +16,7 @@ import { StoryService } from "../../services/story.service";
 import { TagService } from "../../services/tag.service";
 import { StoryModal } from "../../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../../story/view-stories/view-stories.modal";
+import { NavService } from "src/app/services/navigation.service";
 
 @Component({
   selector: "app-page",
@@ -54,8 +50,7 @@ export class PagePage {
     private toast: ToastController,
     private modal: ModalController,
     private router: Router,
-    private config: ConfigService,
-    private nav: NavController,
+    private nav: NavService,
     private meta: Meta,
     private title: Title
   ) {}

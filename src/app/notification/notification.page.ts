@@ -4,7 +4,7 @@ import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { NotificationService } from "../services/notification.service";
 import { Notification } from "../models/notification";
 import { UrlService } from "../services/url.service";
-import { NavController } from "@ionic/angular";
+import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-notification",
@@ -30,7 +30,7 @@ export class NotificationPage implements OnInit {
   constructor(
     private notificationSvc: NotificationService,
     private url: UrlService,
-    private nav: NavController
+    private nav: NavService
   ) {}
 
   async ngOnInit() {

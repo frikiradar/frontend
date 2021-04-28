@@ -1,12 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { NavigationStart, Event, Router } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { Router } from "@angular/router";
 import { ItemReorderEventDetail } from "@ionic/core";
 import { Chat } from "src/app/models/chat";
 
 import { Room } from "src/app/models/room";
 import { AuthService } from "src/app/services/auth.service";
-import { Config, ConfigService } from "src/app/services/config.service";
+import { NavService } from "src/app/services/navigation.service";
 import { RoomService } from "src/app/services/room.service";
 
 @Component({
@@ -21,10 +20,9 @@ export class RoomsPage implements OnInit {
 
   constructor(
     private roomSvc: RoomService,
-    private config: ConfigService,
     private auth: AuthService,
     private router: Router,
-    private nav: NavController
+    private nav: NavService
   ) {}
 
   ngOnInit() {

@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { ModalController, NavController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 
 import { Story } from "../models/story";
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
+import { NavService } from "../services/navigation.service";
 import { StoryService } from "../services/story.service";
 import { StoryModal } from "./story-modal/story.modal";
 import { ViewStoriesModal } from "./view-stories/view-stories.modal";
@@ -21,7 +22,7 @@ export class StoryPage implements OnInit {
     private storySvc: StoryService,
     private modal: ModalController,
     public auth: AuthService,
-    private nav: NavController
+    private nav: NavService
   ) {}
 
   async ngOnInit() {

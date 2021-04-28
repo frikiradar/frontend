@@ -1,9 +1,7 @@
 import {
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
   SimpleChanges,
   ViewChild
 } from "@angular/core";
@@ -16,7 +14,6 @@ import {
   IonContent,
   IonInfiniteScroll,
   ModalController,
-  NavController,
   Platform,
   PopoverController,
   ToastController
@@ -33,6 +30,7 @@ import { UserService } from "../../services/user.service";
 import { UtilsService } from "../../services/utils.service";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { OptionsPopover } from "../../options-popover/options-popover";
+import { NavService } from "src/app/services/navigation.service";
 
 @Component({
   selector: "app-chat-modal",
@@ -68,7 +66,6 @@ export class ChatModalComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
-    private nav: NavController,
     private chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
@@ -80,7 +77,8 @@ export class ChatModalComponent implements OnInit {
     public utils: UtilsService,
     public modalController: ModalController,
     private popover: PopoverController,
-    private vibration: Vibration
+    private vibration: Vibration,
+    private nav: NavService
   ) {}
 
   async ngOnInit() {

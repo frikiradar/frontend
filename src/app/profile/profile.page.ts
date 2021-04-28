@@ -19,6 +19,7 @@ import { Tag } from "../models/tags";
 import { User } from "../models/user";
 import { OptionsPopover } from "../options-popover/options-popover";
 import { LikeService } from "../services/like.service";
+import { NavService } from "../services/navigation.service";
 import { PageService } from "../services/page.service";
 import { StoryService } from "../services/story.service";
 import { UrlService } from "../services/url.service";
@@ -63,7 +64,6 @@ export class ProfilePage {
     private route: ActivatedRoute,
     public router: Router,
     public utils: UtilsService,
-    private nav: NavController,
     private toast: ToastController,
     private vibration: Vibration,
     private alert: AlertController,
@@ -74,7 +74,8 @@ export class ProfilePage {
     private likeSvc: LikeService,
     private urlSvc: UrlService,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    private nav: NavService
   ) {}
 
   async ngAfterViewInit() {

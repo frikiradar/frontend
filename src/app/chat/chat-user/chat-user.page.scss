@@ -11,7 +11,8 @@ app-chat-list {
 
   ::ng-deep {
     ion-list,
-    ion-item {
+    ion-item,
+    ion-content {
       --background: #181818 !important;
       background: #181818 !important;
     }

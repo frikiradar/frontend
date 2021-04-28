@@ -5,14 +5,11 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import {
-  AlertController,
-  NavController,
-  ToastController
-} from "@ionic/angular";
+import { AlertController, ToastController } from "@ionic/angular";
 
 import { User } from "src/app/models/user";
 import { ConfigService } from "src/app/services/config.service";
+import { NavService } from "src/app/services/navigation.service";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 
@@ -32,7 +29,7 @@ export class ActivateAccountPage {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private nav: NavController,
+    private nav: NavService,
     private toast: ToastController,
     private config: ConfigService
   ) {

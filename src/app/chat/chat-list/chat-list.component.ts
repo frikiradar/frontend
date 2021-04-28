@@ -5,9 +5,9 @@ import {
   Output,
   SimpleChanges
 } from "@angular/core";
-import { Router } from "@angular/router";
-import { MenuController, NavController, ToastController } from "@ionic/angular";
+import { MenuController, ToastController } from "@ionic/angular";
 import { Config, ConfigService } from "src/app/services/config.service";
+import { NavService } from "src/app/services/navigation.service";
 
 import { User } from "../../models/user";
 import { Chat } from "./../../models/chat";
@@ -36,11 +36,10 @@ export class ChatListComponent {
 
   constructor(
     private chatSvc: ChatService,
-    private router: Router,
     public auth: AuthService,
     public menu: MenuController,
     private toast: ToastController,
-    private nav: NavController,
+    private nav: NavService,
     private config: ConfigService
   ) {}
 

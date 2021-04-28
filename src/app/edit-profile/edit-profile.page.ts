@@ -6,7 +6,6 @@ import {
   IonInput,
   IonSegment,
   IonSlides,
-  NavController,
   PickerController,
   Platform,
   ToastController
@@ -14,6 +13,7 @@ import {
 
 import { Tag } from "../models/tags";
 import { User } from "../models/user";
+import { NavService } from "../services/navigation.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { TagService } from "./../services/tag.service";
@@ -70,7 +70,7 @@ export class EditProfilePage {
     private toast: ToastController,
     private platform: Platform,
     private androidPermissions: AndroidPermissions,
-    private nav: NavController
+    private nav: NavService
   ) {
     this.profileForm = this.fb.group({
       name: [""],

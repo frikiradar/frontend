@@ -1,9 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  AlertController,
-  ModalController,
-  NavController
-} from "@ionic/angular";
+import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -16,6 +12,7 @@ import { DevicesSettingsModal } from "./devices/devices.modal";
 import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { VerificationModal } from "./verification/verification.modal";
 import { HideUsersModal } from "./hide-users/hide-users.modal";
+import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-settings",
@@ -30,7 +27,7 @@ export class SettingsPage implements OnInit {
     private auth: AuthService,
     private userSvc: UserService,
     private alert: AlertController,
-    private nav: NavController
+    private nav: NavService
   ) {}
 
   async ngOnInit() {

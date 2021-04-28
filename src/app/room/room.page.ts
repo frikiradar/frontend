@@ -29,6 +29,7 @@ import { RoomService } from "../services/room.service";
 import { RoomPopover } from "./room-popover/room-popover";
 import { PageService } from "../services/page.service";
 import { Page } from "../models/page";
+import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-room",
@@ -67,9 +68,8 @@ export class RoomPage implements OnInit {
     public auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private nav: NavController,
+    private nav: NavService,
     private roomSvc: RoomService,
-    private pageSvc: PageService,
     private chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
