@@ -55,13 +55,11 @@ export class RoomsPage implements OnInit {
         return r;
       }
     });
-    this.rooms = await this.roomSvc.orderRooms(rooms);
+    rooms = await this.roomSvc.orderRooms(rooms);
 
     if (this.rooms) {
-      console.log("i");
       this.rooms.forEach((r, index) => {
         if (rooms[index].slug !== r.slug) {
-          console.log("i");
           this.rooms = rooms;
           return false;
         }
