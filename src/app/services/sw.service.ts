@@ -9,10 +9,10 @@ export class SwService {
   async init() {
     this.swUpdate.available.subscribe(async res => {
       const toast = await this.toast.create({
-        message: "¡Nueva actualización disponible! Recarga para actualizar.",
+        message: "¡Nueva actualización disponible!",
         buttons: [
           {
-            text: "Recargar",
+            text: "Instalar",
             handler: () => {
               window.location.reload();
             }

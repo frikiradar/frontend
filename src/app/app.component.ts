@@ -130,11 +130,16 @@ export class AppComponent {
     let syncOptions: SyncOptions = {
       updateDialog: {
         updateTitle: "¡Nueva actualización!",
+        optionalUpdateMessage:
+          "Hay una actualización disponible. ¿Quieres actualizar?",
+        mandatoryUpdateMessage: "Hay una actualización obligatoria disponible",
         descriptionPrefix: "",
-        mandatoryContinueButtonLabel: "Actualizar",
-        appendReleaseDescription: true
+        mandatoryContinueButtonLabel: "Instalar",
+        optionalIgnoreButtonLabel: "Más tarde",
+        optionalInstallButtonLabel: "Instalar",
+        appendReleaseDescription: false
       },
-      installMode: InstallMode.ON_NEXT_RESTART
+      installMode: InstallMode.IMMEDIATE
     };
 
     this.codePush.sync(syncOptions).subscribe(

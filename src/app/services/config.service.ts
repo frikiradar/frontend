@@ -3,6 +3,9 @@ import { Injectable } from "@angular/core";
 
 import { environment } from "../../environments/environment";
 import { Chat } from "../models/chat";
+import { Page } from "../models/page";
+import { Room } from "../models/room";
+import { User } from "../models/user";
 
 export interface Config {
   openTimes?: number;
@@ -16,13 +19,10 @@ export interface Config {
   push_url?: string;
   geolocation?: boolean;
   patreon?: string;
-  rooms?: {
-    slug: string;
-    notifications?: boolean;
-    last_message?: number;
-    order?: number;
-  }[];
+  rooms?: Room[];
   chats?: Chat[];
+  radar?: User[];
+  pages?: Page[];
 }
 @Injectable({
   providedIn: "root"

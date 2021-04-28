@@ -10,6 +10,7 @@
 </ion-header>
 
 <ion-content>
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
   <div *ngIf="!rooms" id="rooms">
     <ion-item *ngFor="let i of [].constructor(12)">
       <ion-thumbnail>

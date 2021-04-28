@@ -16,6 +16,8 @@
 </ion-header>
 
 <ion-content>
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+
   <ion-item lines="none" (click)="showAllStories()" button detail="false">
     <ion-label color="light">
       <h2 class="section">Historias frikis</h2>

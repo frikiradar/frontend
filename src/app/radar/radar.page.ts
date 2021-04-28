@@ -18,7 +18,7 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
-import { ConfigService } from "../services/config.service";
+import { Config, ConfigService } from "../services/config.service";
 import { PushService } from "../services/push.service";
 import { takeWhile } from "rxjs/operators";
 
@@ -45,16 +45,16 @@ export class RadarPage {
     }
   };
 
-  public showSkeleton = true;
   public hide = false;
   page = 0;
   ratio = -1;
   authUser: User;
-  users: User[] = [];
+  users: User[] = undefined;
   public user: User;
   public view: "cards" | "list" = "cards";
   coordinates: User["coordinates"];
   public showBackdrop = false;
+  public loading = true;
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -88,6 +88,10 @@ export class RadarPage {
     private firebase: FirebaseX,
     private push: PushService
   ) {}
+
+  async ngAfterViewInit() {
+    this.users = (await this.config.get("radar")) as Config["radar"];
+  }
 
   async ngOnInit() {
     this.authUser = this.auth.currentUserValue;
@@ -160,7 +164,6 @@ export class RadarPage {
           .pipe(takeWhile(u => !!u?.id))
           .subscribe(async authUser => {
             if (this.users?.length) {
-              this.showSkeleton = true;
               this.authUser = authUser;
               this.page = 0;
               if ((await this.config.get("radarView")) === "list") {
@@ -181,6 +184,11 @@ export class RadarPage {
       this.page++;
 
       const resUsers = await this.userSvc.getRadarUsers(this.page, this.ratio);
+      this.loading = false;
+      if (this.page === 1) {
+        this.config.set("radar", resUsers);
+      }
+
       let users = resUsers;
 
       this.users =
@@ -204,8 +212,6 @@ export class RadarPage {
           }
         }
       }
-
-      this.showSkeleton = false;
     } catch (e) {
       console.error(e);
     }
@@ -219,10 +225,9 @@ export class RadarPage {
     this.router.navigate(["/search"]);
   }
 
-  changeView() {
-    this.users = [];
-    this.showSkeleton = true;
+  async changeView() {
     this.page = 0;
+    this.users = undefined;
     if (this.view === "cards") {
       this.view = "list";
       this.ratio = 50;
@@ -239,8 +244,6 @@ export class RadarPage {
     if (this.users.length < 15) {
       this.radarAdv();
     }
-
-    this.showSkeleton = true;
 
     switch (value) {
       case 0:
@@ -263,7 +266,7 @@ export class RadarPage {
         break;
     }
     this.page = 0;
-    this.users = [];
+    this.users = undefined;
     this.radarlist?.scrollToTop(0);
     this.getRadarUsers();
   }

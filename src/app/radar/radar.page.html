@@ -13,7 +13,7 @@
     </ion-buttons>
     <ion-title>Radar</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="changeView()" *ngIf="!showSkeleton">
+      <ion-button (click)="changeView()" *ngIf="users">
         <ion-icon
           slot="icon-only"
           [name]="view === 'cards' ? 'list' : 'albums'"
@@ -26,9 +26,10 @@
   </ion-toolbar>
 </ion-header>
 <ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <div *ngIf="view === 'cards'; else listView" style="height: 100%;">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <div *ngIf="view === 'cards'" style="height: 100%;">
     <ion-slides #slides (ionSlideDidChange)="slide()" [options]="slideOpts">
-      <ion-slide *ngIf="showSkeleton; else radarItems">
+      <ion-slide *ngIf="!users || loading">
         <ion-card>
           <ion-card-header>
             <ion-skeleton-text
@@ -84,171 +85,151 @@
           </ion-card-content>
         </ion-card>
       </ion-slide>
-      <ng-template #radarItems>
-        <ion-slide *ngFor="let user of users;">
-          <ion-card (click)="showProfile(user.id)" class="no-scroll">
-            <img
-              [src]="user?.avatar"
-              [alt]="users?.username"
-              default="/assets/img/users/default.jpg"
-            />
-            <div class="match full-center">{{ user.match }}%</div>
-            <ion-card-header>
-              <ion-card-title>
-                <ion-badge
-                  *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
-                  color="secondary"
-                  >&nbsp;</ion-badge
-                >
-                <span class="name">{{ user.name }}</span>
-                <span class="age">, {{ user.age }}</span>
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <h3 class="location" *ngIf="user?.distance !== undefined">
-                <ion-icon
-                  name="location-sharp"
-                  slot="start"
-                  size="xs"
-                  color="primary"
-                ></ion-icon>
-                <span>A {{ user?.distance }}km de distancia</span>
-              </h3>
-              <p class="description">{{user.description}}</p>
-              <div class="tags" *ngIf="user.common_tags.length">
-                <p>Gustos en común:</p>
-                <ion-chip
-                  *ngFor="let tag of user.common_tags"
-                  color="secondary"
-                >
-                  <ion-label>{{ tag }}</ion-label>
-                </ion-chip>
-              </div></ion-card-content
-            >
-          </ion-card>
-        </ion-slide>
-        <ion-slide>
-          <div class="full-center ion-padding">
-            <ion-icon name="location"></ion-icon>
-            <h2>Sin resultados</h2>
-            <p>
-              Modifica tus ajustes de "Estoy buscando..." en tu configuración de
-              perfil y añade más "Gustos frikis" para mejorar los resultados.
-            </p>
-            <ion-button
-              shape="round"
-              (click)="router.navigate(['/edit-profile'])"
-              >Editar mi perfil</ion-button
-            >
-            <br />
-            <p>
-              También puedes probar suerte cambiando a la vista por kilómetros
-            </p>
-            <ion-button shape="round" (click)="changeView()"
-              ><ion-icon name="list" slot="start" size="small"></ion-icon
-              >Cambiar a vista por kilómetros</ion-button
-            >
-          </div>
-        </ion-slide>
-      </ng-template>
+      <ion-slide *ngFor="let user of users;">
+        <ion-card (click)="showProfile(user.id)" class="no-scroll">
+          <img
+            [src]="user?.avatar"
+            [alt]="users?.username"
+            default="/assets/img/users/default.jpg"
+          />
+          <div class="match full-center">{{ user.match }}%</div>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-badge
+                *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+                color="secondary"
+                >&nbsp;</ion-badge
+              >
+              <span class="name">{{ user.name }}</span>
+              <span class="age">, {{ user.age }}</span>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h3 class="location" *ngIf="user?.distance !== undefined">
+              <ion-icon
+                name="location-sharp"
+                slot="start"
+                size="xs"
+                color="primary"
+              ></ion-icon>
+              <span>A {{ user?.distance }}km de distancia</span>
+            </h3>
+            <p class="description">{{user.description}}</p>
+            <div class="tags" *ngIf="user?.common_tags?.length">
+              <p>Gustos en común:</p>
+              <ion-chip *ngFor="let tag of user.common_tags" color="secondary">
+                <ion-label>{{ tag }}</ion-label>
+              </ion-chip>
+            </div></ion-card-content
+          >
+        </ion-card>
+      </ion-slide>
+      <ion-slide>
+        <div class="full-center ion-padding">
+          <ion-icon name="location"></ion-icon>
+          <h2>Sin resultados</h2>
+          <p>
+            Modifica tus ajustes de "Estoy buscando..." en tu configuración de
+            perfil y añade más "Gustos frikis" para mejorar los resultados.
+          </p>
+          <ion-button shape="round" (click)="router.navigate(['/edit-profile'])"
+            >Editar mi perfil</ion-button
+          >
+          <br />
+          <p>
+            También puedes probar suerte cambiando a la vista por kilómetros
+          </p>
+          <ion-button shape="round" (click)="changeView()"
+            ><ion-icon name="list" slot="start" size="small"></ion-icon>Cambiar
+            a vista por kilómetros</ion-button
+          >
+        </div>
+      </ion-slide>
     </ion-slides>
   </div>
-  <ng-template #listView>
-    <div *ngIf="users?.length || showSkeleton; else noUsers">
-      <!--<p class="ion-padding">
+  <div *ngIf="view === 'list'">
+    <!--<p class="ion-padding">
         Estos son los resultados obtenidos
         <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un
         porcentaje de
         coincidencia más alto.
       </p>-->
-      <ion-list *ngIf="showSkeleton; else radarItems">
-        <ion-item *ngFor="let i of [].constructor(8)" lines="none">
+    <ion-list *ngIf="!users">
+      <ion-item *ngFor="let i of [].constructor(8)" lines="none">
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h2>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h2>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="users?.length > 0">
+      <ion-item-sliding
+        *ngFor="let user of users; "
+        (ionDrag)="dragItem($event, user.id)"
+      >
+        <ion-item-options side="start">
+          <ion-item-option (click)="showProfile(user.id)">
+            <ion-icon slot="icon-only" name="heart"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+        <ion-item button (click)="showProfile(user.id)">
           <ion-avatar slot="start">
-            <ion-skeleton-text animated></ion-skeleton-text>
+            <img
+              [src]="user?.thumbnail"
+              default="/assets/img/users/default.jpg"
+            />
+            <ion-badge
+              *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+              color="secondary"
+              >&nbsp;</ion-badge
+            >
           </ion-avatar>
           <ion-label>
             <h2>
-              <ion-skeleton-text
-                animated
-                style="width: 50%"
-              ></ion-skeleton-text>
+              <span class="name">{{ user.name }}</span>
+              <span class="age">, {{ user.age }}</span>
             </h2>
             <h3>
-              <ion-skeleton-text
-                animated
-                style="width: 80%"
-              ></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text
-                animated
-                style="width: 60%"
-              ></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-      <ng-template #radarItems>
-        <ion-list>
-          <ion-item-sliding
-            *ngFor="let user of users; "
-            (ionDrag)="dragItem($event, user.id)"
-          >
-            <ion-item-options side="start">
-              <ion-item-option (click)="showProfile(user.id)">
-                <ion-icon slot="icon-only" name="heart"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-            <ion-item button (click)="showProfile(user.id)">
-              <ion-avatar slot="start">
-                <img
-                  [src]="user?.thumbnail"
-                  default="/assets/img/users/default.jpg"
-                />
-                <ion-badge
-                  *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
-                  color="secondary"
-                  >&nbsp;</ion-badge
-                >
-              </ion-avatar>
-              <ion-label>
-                <h2>
-                  <span class="name">{{ user.name }}</span>
-                  <span class="age">, {{ user.age }}</span>
-                </h2>
-                <h3>
-                  <span *ngIf="user.distance !== undefined"
-                    >A {{ user.distance }}km de distancia</span
-                  >
-                </h3>
-                <p class="description">{{ user.description }}</p>
-              </ion-label>
-              <div class="match-list full-center" slot="end">
-                {{ user.match }}%
-              </div>
-            </ion-item>
-            <ion-item-options side="end">
-              <ion-item-option
-                color="danger"
-                (click)="hideProfile(user.id)"
-                expandable
+              <span *ngIf="user.distance !== undefined"
+                >A {{ user.distance }}km de distancia</span
               >
-                <ion-icon slot="icon-only" name="close-circle"></ion-icon>
-              </ion-item-option>
-            </ion-item-options>
-          </ion-item-sliding>
-          <ion-infinite-scroll
-            threshold="50%"
-            (ionInfinite)="getRadarUsers($event)"
-            position="bottom"
+            </h3>
+            <p class="description">{{ user.description }}</p>
+          </ion-label>
+          <div class="match-list full-center" slot="end">
+            {{ user.match }}%
+          </div>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option
+            color="danger"
+            (click)="hideProfile(user.id)"
+            expandable
           >
-            <ion-infinite-scroll-content loadingSpinner="dots">
-            </ion-infinite-scroll-content>
-          </ion-infinite-scroll>
-        </ion-list>
-      </ng-template>
-    </div>
-    <ng-template #noUsers>
+            <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+      <ion-infinite-scroll
+        threshold="50%"
+        (ionInfinite)="getRadarUsers($event)"
+        position="bottom"
+      >
+        <ion-infinite-scroll-content loadingSpinner="dots">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ion-list>
+    <div *ngIf="users?.length === 0">
       <div class="full-center ion-padding">
         <ion-icon name="location"></ion-icon>
         <h2>Sin resultados</h2>
@@ -260,12 +241,12 @@
           >Editar perfil</ion-button
         >
       </div>
-    </ng-template>
-  </ng-template>
+    </div>
+  </div>
 </ion-content>
 <ion-footer
   *ngIf="view === 'list'"
-  [class.hide-background]="hide || showSkeleton"
+  [class.hide-background]="hide || !users?.length"
 >
   <div id="radar-range">
     <ion-range

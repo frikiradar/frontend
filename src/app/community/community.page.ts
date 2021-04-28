@@ -33,6 +33,7 @@ export class CommunityPage {
   public groupedStories: Story[] = [];
   private source: EventSource;
   private conErrors = 0;
+  public loading = true;
 
   public storiesOpts = {
     slidesPerView: 4.5,
@@ -74,6 +75,11 @@ export class CommunityPage {
         }
       }
     });
+  }
+
+  async ngAfterViewInit() {
+    this.pages = (await this.config.get("pages")) as Config["pages"];
+    this.rooms = (await this.config.get("rooms")) as Config["rooms"];
   }
 
   async ngOnInit() {
@@ -122,12 +128,38 @@ export class CommunityPage {
       }
     });
 
-    this.rooms = await this.roomSvc.orderRooms(rooms);
+    rooms = await this.roomSvc.orderRooms(rooms);
+
+    if (this.rooms) {
+      this.rooms.forEach((r, index) => {
+        if (rooms[index].slug !== r.slug) {
+          this.rooms = rooms;
+          return false;
+        }
+      });
+    } else {
+      this.rooms = rooms;
+    }
+
+    this.config.set("rooms", rooms);
     this.connectSSE();
   }
 
   async getPages() {
-    this.pages = await this.pageSvc.getPages();
+    const pages = await this.pageSvc.getPages();
+    if (this.pages) {
+      this.pages.forEach((p, index) => {
+        if (pages[index].slug !== p.slug) {
+          this.pages = pages;
+          return false;
+        }
+      });
+    } else {
+      this.pages = pages;
+    }
+
+    this.config.set("pages", pages);
+    this.loading = false;
   }
 
   async newStory() {

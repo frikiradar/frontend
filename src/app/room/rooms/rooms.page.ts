@@ -1,10 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ItemReorderEventDetail } from "@ionic/core";
-import { Chat } from "src/app/models/chat";
 
+import { Chat } from "src/app/models/chat";
 import { Room } from "src/app/models/room";
 import { AuthService } from "src/app/services/auth.service";
+import { Config, ConfigService } from "src/app/services/config.service";
 import { NavService } from "src/app/services/navigation.service";
 import { RoomService } from "src/app/services/room.service";
 
@@ -17,13 +18,19 @@ export class RoomsPage implements OnInit {
   public rooms: Room[];
   private source: EventSource;
   private conErrors = 0;
+  public loading = true;
 
   constructor(
     private roomSvc: RoomService,
     private auth: AuthService,
     private router: Router,
-    private nav: NavService
+    private nav: NavService,
+    private config: ConfigService
   ) {}
+
+  async ngAfterViewInit() {
+    this.rooms = (await this.config.get("rooms")) as Config["rooms"];
+  }
 
   ngOnInit() {
     this.getRooms();
@@ -49,6 +56,22 @@ export class RoomsPage implements OnInit {
       }
     });
     this.rooms = await this.roomSvc.orderRooms(rooms);
+
+    if (this.rooms) {
+      console.log("i");
+      this.rooms.forEach((r, index) => {
+        if (rooms[index].slug !== r.slug) {
+          console.log("i");
+          this.rooms = rooms;
+          return false;
+        }
+      });
+    } else {
+      this.rooms = rooms;
+    }
+
+    this.config.set("rooms", rooms);
+    this.loading = false;
   }
 
   async showRoom(slug: Room["slug"]) {
@@ -60,9 +83,11 @@ export class RoomsPage implements OnInit {
     });
   }
 
-  reorderRooms(event: CustomEvent<ItemReorderEventDetail>) {
+  async reorderRooms(event: CustomEvent<ItemReorderEventDetail>) {
     this.roomSvc.reorderRooms(event.detail.from, event.detail.to);
     event.detail.complete();
+    const rooms = await this.roomSvc.orderRooms(this.rooms);
+    this.config.set("rooms", rooms);
   }
 
   async connectSSE() {
