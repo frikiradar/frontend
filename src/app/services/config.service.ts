@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 import { environment } from "../../environments/environment";
+import { Chat } from "../models/chat";
 
 export interface Config {
   openTimes?: number;
@@ -21,12 +22,7 @@ export interface Config {
     last_message?: number;
     order?: number;
   }[];
-  chats?: {
-    conversationId: string;
-    archived?: boolean;
-    unread?: boolean;
-    pinned?: boolean;
-  }[];
+  chats?: Chat[];
 }
 @Injectable({
   providedIn: "root"

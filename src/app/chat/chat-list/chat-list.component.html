@@ -42,125 +42,109 @@
 </ion-header>
 
 <ion-content class="no-scroll">
-  <div *ngIf="chats?.length || showSkeleton; else noChats">
-    <ion-list *ngIf="showSkeleton; else chatItems">
-      <ion-item *ngFor="let i of [].constructor(15)">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-list *ngIf="!allChats">
+    <ion-item *ngFor="let i of [].constructor(15)">
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h2>
+          <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+        </h2>
+        <p>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="allChats?.length > 0">
+    <ion-item-sliding
+      *ngFor="let chat of chats"
+      (press)="selectChat(chat)"
+      (ionDrag)="dragItem($event, chat.user?.id)"
+    >
+      <ion-item-options side="start">
+        <ion-item-option (click)="showChat(chat.user?.id)" color="secondary">
+          <ion-icon slot="icon-only" name="mail-open"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+      <ion-item
+        button
+        (click)="showChat(chat.user?.id)"
+        [ngClass]="
+          selectedChat?.conversationId == chat?.conversationId ? 'selected' : ''
+        "
+      >
         <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-label>
-          <h2>
-            <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
-          </h2>
-          <p>
-            <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-    <ng-template #chatItems>
-      <ion-list *ngIf="chats?.length; else noChats">
-        <ion-item-sliding
-          *ngFor="let chat of chats"
-          (press)="selectChat(chat)"
-          (ionDrag)="dragItem($event, chat.user?.id)"
-        >
-          <ion-item-options side="start">
-            <ion-item-option
-              (click)="showChat(chat.user?.id)"
-              color="secondary"
-            >
-              <ion-icon slot="icon-only" name="mail-open"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-          <ion-item
-            button
-            (click)="showChat(chat.user?.id)"
-            [ngClass]="
-              selectedChat?.conversationId == chat?.conversationId
-                ? 'selected'
-                : ''
+          <ion-img
+            [src]="
+              chat.user?.thumbnail
+                ? chat.user?.thumbnail
+                : '/assets/img/users/default.jpg'
             "
-          >
-            <ion-avatar slot="start">
-              <ion-img
-                [src]="
-                  chat.user?.thumbnail
-                    ? chat.user?.thumbnail
-                    : '/assets/img/users/default.jpg'
-                "
-                [alt]="chat.user?.username"
-              ></ion-img>
-              <ion-badge color="primary" *ngIf="chat?.count > 0">{{
-                chat?.count
-              }}</ion-badge>
-            </ion-avatar>
+            [alt]="chat.user?.username"
+          ></ion-img>
+          <ion-badge color="primary" *ngIf="chat?.count > 0">{{
+            chat?.count
+          }}</ion-badge>
+        </ion-avatar>
 
-            <ion-label>
-              <h2>{{ chat.user?.name }}</h2>
-              <p>{{ chat.text }}</p>
-            </ion-label>
-            <ion-note slot="end">
-              <span
-                *ngIf="
-                  chat.fromuser == auth.currentUserValue?.id && !chat.writing
-                "
-              >
-                <ion-icon *ngIf="!chat.time_read" name="checkmark"></ion-icon>
-                <ion-icon
-                  *ngIf="chat.time_read"
-                  color="secondary"
-                  name="checkmark-done"
-                ></ion-icon>
-              </span>
-              {{
-                chat.writing
-                  ? "⌨ Escribiendo..."
-                  : (chat.time_creation | niceDate)
-              }}
-            </ion-note>
-          </ion-item>
-          <ion-item-options
-            side="end"
-            *ngIf="chat?.user?.username !== 'frikiradar'"
+        <ion-label>
+          <h2>{{ chat.user?.name }}</h2>
+          <p>{{ chat.text }}</p>
+        </ion-label>
+        <ion-note slot="end">
+          <span
+            *ngIf="chat.fromuser == auth.currentUserValue?.id && !chat.writing"
           >
-            <ion-item-option
-              *ngIf="!showingArchived"
-              color="warning"
-              (click)="archiveChat(chat)"
-              expandable
-            >
-              <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
-            </ion-item-option>
-            <ion-item-option
-              *ngIf="showingArchived"
-              color="warning"
-              (click)="unarchiveChat(chat)"
-              expandable
-            >
-              <ion-icon slot="icon-only" name="file-tray-outline"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-        <ion-item
-          button
-          *ngIf="!showingArchived && archivedChats?.length"
-          lines="none"
-          (click)="showArchivedChats()"
+            <ion-icon *ngIf="!chat.time_read" name="checkmark"></ion-icon>
+            <ion-icon
+              *ngIf="chat.time_read"
+              color="secondary"
+              name="checkmark-done"
+            ></ion-icon>
+          </span>
+          {{
+            chat.writing ? "⌨ Escribiendo..." : (chat.time_creation | niceDate)
+          }}
+        </ion-note>
+      </ion-item>
+      <ion-item-options
+        side="end"
+        *ngIf="chat?.user?.username !== 'frikiradar'"
+      >
+        <ion-item-option
+          *ngIf="!showingArchived"
+          color="warning"
+          (click)="archiveChat(chat)"
+          expandable
         >
-          <ion-icon
-            slot="start"
-            name="archive-outline"
-            color="light"
-          ></ion-icon>
-          <ion-label
-            ><p>Chats archivados ({{ archivedChats?.length }})</p></ion-label
-          >
-        </ion-item>
-      </ion-list>
-    </ng-template>
-  </div>
-  <ng-template #noChats>
+          <ion-icon slot="icon-only" name="archive-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option
+          *ngIf="showingArchived"
+          color="warning"
+          (click)="unarchiveChat(chat)"
+          expandable
+        >
+          <ion-icon slot="icon-only" name="file-tray-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    <ion-item
+      button
+      *ngIf="!showingArchived && archivedChats?.length"
+      lines="none"
+      (click)="showArchivedChats()"
+    >
+      <ion-icon slot="start" name="archive-outline" color="light"></ion-icon>
+      <ion-label
+        ><p>Chats archivados ({{ archivedChats?.length }})</p></ion-label
+      >
+    </ion-item>
+  </ion-list>
+  <div *ngIf="allChats?.length === 0">
     <div class="full-center ion-padding">
       <ion-icon name="chatbubbles"></ion-icon>
       <h2>Sin conversaciones</h2>
@@ -169,5 +153,5 @@
         hecho.
       </p>
     </div>
-  </ng-template>
+  </div>
 </ion-content>

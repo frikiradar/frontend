@@ -21,4 +21,7 @@ export interface Chat {
   mentions?: string[];
   conversationId?: string;
   modded?: boolean;
+  archived?: boolean;
+  unread?: boolean;
+  pinned?: boolean;
 }

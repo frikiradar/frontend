@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { MenuController, NavController, ToastController } from "@ionic/angular";
-import { Config } from "src/app/services/config.service";
+import { Config, ConfigService } from "src/app/services/config.service";
 
 import { User } from "../../models/user";
 import { Chat } from "./../../models/chat";
@@ -22,14 +22,14 @@ import { ChatService } from "./../../services/chat.service";
 export class ChatListComponent {
   @Output() userChange: EventEmitter<User["id"]> = new EventEmitter();
   @Output() chatsChange: EventEmitter<Chat[]> = new EventEmitter();
-  @Input() chats: Chat[];
+  @Input() chats: Chat[] = null;
   @Input() selected: User["id"];
 
-  showSkeleton: boolean;
-  showOptions = false;
+  public loading = false;
+  public showOptions = false;
   public selectedChat: Chat;
   public archivedChats: Config["chats"];
-  public allChats: Chat[];
+  public allChats: Chat[] = null;
   public showingArchived = false;
   source: EventSource;
   conErrors = 0;
@@ -40,13 +40,34 @@ export class ChatListComponent {
     public auth: AuthService,
     public menu: MenuController,
     private toast: ToastController,
-    private nav: NavController
-  ) {
-    this.showSkeleton = true;
+    private nav: NavController,
+    private config: ConfigService
+  ) {}
+
+  async ngAfterViewInit() {
+    this.allChats = (await this.config.get("chats")) as Config["chats"];
+    if (this.allChats) {
+      this.setChats();
+    }
   }
 
   async ngOnInit() {
-    this.allChats = await this.chatSvc.getChats();
+    this.loading = true;
+    const allChats = await this.chatSvc.getChats();
+    this.loading = false;
+    if (
+      (this.allChats && allChats[0].id !== this.allChats[0].id) ||
+      !this.allChats
+    ) {
+      this.allChats = allChats;
+      this.setChats();
+    }
+
+    this.connectSSE();
+  }
+
+  async setChats() {
+    this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
     this.chats = this.allChats.filter(c => {
       return !config?.some(
@@ -57,10 +78,7 @@ export class ChatListComponent {
     this.chatsChange.emit(this.chats);
 
     this.archivedChats = config?.filter(cc => cc.archived);
-
-    this.showSkeleton = false;
     this.selectedChat = this.chats.find(c => +c.user.id === this.selected);
-    this.connectSSE();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -254,7 +272,7 @@ export class ChatListComponent {
 
     this.source.addEventListener("error", async error => {
       this.conErrors++;
-      console.error("Escucha al servidor de salas perdida", error);
+      console.error("Escucha al servidor de chats perdida", error);
     });
 
     this.source.addEventListener("open", async error => {
