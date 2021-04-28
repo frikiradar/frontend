@@ -8,7 +8,6 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 import {
   AlertController,
   ModalController,
-  NavController,
   Platform,
   ToastController
 } from "@ionic/angular";
@@ -24,6 +23,8 @@ import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
 import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
+import { NavService } from "./services/navigation.service";
+import { SwService } from "./services/sw.service";
 
 @Component({
   selector: "app-root",
@@ -51,7 +52,8 @@ export class AppComponent {
     private modal: ModalController,
     private push: PushService,
     private codePush: CodePush,
-    private nav: NavController
+    private nav: NavService,
+    private sw: SwService
   ) {
     this.initializeApp();
   }
@@ -67,6 +69,7 @@ export class AppComponent {
         if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
           this.push.init();
         }
+        this.sw.init();
       }
 
       this.loadConfig();
