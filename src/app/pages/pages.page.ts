@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import * as deepEqual from "deep-equal";
 
 import { Page } from "../models/page";
 import { Config, ConfigService } from "../services/config.service";
@@ -29,12 +30,9 @@ export class PagesPage implements OnInit {
   async ngOnInit() {
     const pages = await this.pagesSvc.getPages();
     if (this.pages) {
-      this.pages.forEach((p, index) => {
-        if (pages[index].slug !== p.slug) {
-          this.pages = pages;
-          return false;
-        }
-      });
+      if (!deepEqual(this.pages, pages)) {
+        this.pages = pages;
+      }
     } else {
       this.pages = pages;
     }

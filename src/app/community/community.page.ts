@@ -7,6 +7,7 @@ import {
 } from "@angular/router";
 import { MenuController, ModalController } from "@ionic/angular";
 import { Vibration } from "@ionic-native/vibration/ngx";
+import * as deepEqual from "deep-equal";
 
 import { Room } from "../models/room";
 import { Config, ConfigService } from "../services/config.service";
@@ -131,12 +132,9 @@ export class CommunityPage {
     rooms = await this.roomSvc.orderRooms(rooms);
 
     if (this.rooms) {
-      this.rooms.forEach((r, index) => {
-        if (rooms[index].slug !== r.slug) {
-          this.rooms = rooms;
-          return false;
-        }
-      });
+      if (!deepEqual(this.rooms, rooms)) {
+        this.rooms = rooms;
+      }
     } else {
       this.rooms = rooms;
     }
@@ -148,12 +146,9 @@ export class CommunityPage {
   async getPages() {
     const pages = await this.pageSvc.getPages();
     if (this.pages) {
-      this.pages.forEach((p, index) => {
-        if (pages[index].slug !== p.slug) {
-          this.pages = pages;
-          return false;
-        }
-      });
+      if (!deepEqual(this.pages, pages)) {
+        this.pages = pages;
+      }
     } else {
       this.pages = pages;
     }

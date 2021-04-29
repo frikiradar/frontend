@@ -147,7 +147,7 @@
       </ion-slide>
     </ion-slides>
   </div>
-  <div *ngIf="view === 'list'">
+  <div *ngIf="view === 'list'" style="height: 100%;">
     <!--<p class="ion-padding">
         Estos son los resultados obtenidos
         <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un
@@ -229,25 +229,20 @@
         </ion-infinite-scroll-content>
       </ion-infinite-scroll>
     </ion-list>
-    <div *ngIf="users?.length === 0">
-      <div class="full-center ion-padding">
-        <ion-icon name="location"></ion-icon>
-        <h2>Sin resultados</h2>
-        <p>
-          Modifica tus ajustes de "Estoy buscando..." en tu configuración de
-          perfil y añade tus "Gustos frikis" para mejorar los resultados.
-        </p>
-        <ion-button (click)="router.navigate(['/edit-profile'])"
-          >Editar perfil</ion-button
-        >
-      </div>
+    <div class="full-center ion-padding" *ngIf="users?.length === 0">
+      <ion-icon name="location"></ion-icon>
+      <h2>Sin resultados</h2>
+      <p>
+        Modifica tus ajustes de "Estoy buscando..." en tu configuración de
+        perfil y añade tus "Gustos frikis" para mejorar los resultados.
+      </p>
+      <ion-button (click)="router.navigate(['/edit-profile'])"
+        >Editar perfil</ion-button
+      >
     </div>
   </div>
 </ion-content>
-<ion-footer
-  *ngIf="view === 'list'"
-  [class.hide-background]="hide || !users?.length"
->
+<ion-footer *ngIf="view === 'list'" [class.hide-background]="hide || !users">
   <div id="radar-range">
     <ion-range
       mode="md"

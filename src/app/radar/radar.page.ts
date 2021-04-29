@@ -193,7 +193,6 @@ export class RadarPage {
 
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
-
       if (this.ratio === -1) {
         if (resUsers?.length > 0 && !this.users?.length) {
           this.users = [...this.users, ...resUsers];

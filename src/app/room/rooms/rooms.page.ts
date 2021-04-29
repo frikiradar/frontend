@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ItemReorderEventDetail } from "@ionic/core";
+import * as deepEqual from "deep-equal";
 
 import { Chat } from "src/app/models/chat";
 import { Room } from "src/app/models/room";
@@ -58,12 +59,9 @@ export class RoomsPage implements OnInit {
     rooms = await this.roomSvc.orderRooms(rooms);
 
     if (this.rooms) {
-      this.rooms.forEach((r, index) => {
-        if (rooms[index].slug !== r.slug) {
-          this.rooms = rooms;
-          return false;
-        }
-      });
+      if (!deepEqual(this.rooms, rooms)) {
+        this.rooms = rooms;
+      }
     } else {
       this.rooms = rooms;
     }

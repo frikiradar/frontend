@@ -225,13 +225,17 @@ export class RoomPage implements OnInit {
     }
   }
 
-  scrollDown(delay = 1) {
-    if (!this.chatlist) {
-      return;
+  async scrollDown(delay = 1) {
+    const scroll = await this.chatlist.getScrollElement();
+
+    if (scroll.scrollTop + scroll.offsetHeight + 100 >= scroll.scrollHeight) {
+      if (!this.chatlist) {
+        return;
+      }
+      setTimeout(() => {
+        this.chatlist.scrollToBottom(0);
+      }, delay);
     }
-    setTimeout(() => {
-      this.chatlist.scrollToBottom(0);
-    }, delay);
   }
 
   async loadChats(event: any) {

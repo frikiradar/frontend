@@ -8,6 +8,7 @@ import {
 import { MenuController, ToastController } from "@ionic/angular";
 import { Config, ConfigService } from "src/app/services/config.service";
 import { NavService } from "src/app/services/navigation.service";
+import * as deepEqual from "deep-equal";
 
 import { User } from "../../models/user";
 import { Chat } from "./../../models/chat";
@@ -54,10 +55,7 @@ export class ChatListComponent {
     this.loading = true;
     const allChats = await this.chatSvc.getChats();
     this.loading = false;
-    if (
-      (this.allChats && allChats[0].id !== this.allChats[0].id) ||
-      !this.allChats
-    ) {
+    if (!deepEqual(this.allChats, allChats) || !this.allChats) {
       this.allChats = allChats;
       this.setChats();
     }
