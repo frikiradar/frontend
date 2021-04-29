@@ -200,7 +200,7 @@ export class RoomPage implements OnInit {
         ]
       ].filter((m: Chat) => m.text || m.image);
 
-      this.scrollDown();
+      this.scrollDown(1, true);
       let replyToId =
         this.selectedMessage && this.replying ? this.selectedMessage.id : null;
       this.replying = false;
@@ -225,14 +225,15 @@ export class RoomPage implements OnInit {
     }
   }
 
-  async scrollDown(delay = 1) {
+  async scrollDown(delay = 1, force = false) {
     const scroll = await this.chatlist.getScrollElement();
 
     if (
       scroll.scrollTop +
         scroll.offsetHeight +
         (scroll.offsetHeight - 200) / 2 >=
-      scroll.scrollHeight
+        scroll.scrollHeight ||
+      force
     ) {
       if (!this.chatlist) {
         return;
