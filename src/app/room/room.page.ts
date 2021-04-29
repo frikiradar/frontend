@@ -228,7 +228,12 @@ export class RoomPage implements OnInit {
   async scrollDown(delay = 1) {
     const scroll = await this.chatlist.getScrollElement();
 
-    if (scroll.scrollTop + scroll.offsetHeight + 100 >= scroll.scrollHeight) {
+    if (
+      scroll.scrollTop +
+        scroll.offsetHeight +
+        (scroll.offsetHeight - 200) / 2 >=
+      scroll.scrollHeight
+    ) {
       if (!this.chatlist) {
         return;
       }
