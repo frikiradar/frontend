@@ -164,12 +164,9 @@ export class ChatInputComponent {
     this.replyingChange.emit(this.replying);
   }
 
-  sendMessage(event?: Event) {
+  sendMessage() {
     this.recorded = false;
     this.emojis = false;
-    if (event) {
-      event.preventDefault();
-    }
 
     const message = {
       text: this.message.value ? this.message.value.trim() : "",
@@ -392,6 +389,13 @@ export class ChatInputComponent {
       }, 500);
     } else {
       this.usernames = [];
+    }
+  }
+
+  keydownEnter(event: Event) {
+    if (!this.platform.is("hybrid")) {
+      event.preventDefault();
+      this.sendMessage();
     }
   }
 

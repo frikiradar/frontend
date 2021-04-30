@@ -132,7 +132,7 @@ export class CommunityPage {
     rooms = await this.roomSvc.orderRooms(rooms);
 
     if (this.rooms) {
-      if (!deepEqual(this.rooms, rooms)) {
+      if (!deepEqual(this.rooms.slice(0, 3), rooms.slice(0, 3))) {
         this.rooms = rooms;
       }
     } else {

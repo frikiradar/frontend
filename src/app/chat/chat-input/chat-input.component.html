@@ -85,7 +85,7 @@
       <ion-textarea
         placeholder="書く！"
         autocapitalize="on"
-        (keydown.enter)="sendMessage($event)"
+        (keydown.enter)="keydownEnter($event)"
         formControlName="message"
         #textarea
         autoGrow
