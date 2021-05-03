@@ -32,12 +32,13 @@ export class PagesPage implements OnInit {
     if (this.pages) {
       if (!deepEqual(this.pages, pages)) {
         this.pages = pages;
+        this.config.set("pages", pages);
       }
     } else {
       this.pages = pages;
+      this.config.set("pages", pages);
     }
 
-    this.config.set("pages", pages);
     this.loading = false;
   }
 

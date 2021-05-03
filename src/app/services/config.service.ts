@@ -5,6 +5,7 @@ import { environment } from "../../environments/environment";
 import { Chat } from "../models/chat";
 import { Page } from "../models/page";
 import { Room } from "../models/room";
+import { Story } from "../models/story";
 import { User } from "../models/user";
 
 export interface Config {
@@ -23,6 +24,7 @@ export interface Config {
   chats?: Chat[];
   radar?: User[];
   pages?: Page[];
+  stories?: Story[];
 }
 @Injectable({
   providedIn: "root"

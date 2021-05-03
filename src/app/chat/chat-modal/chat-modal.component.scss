@@ -25,123 +25,187 @@ ion-label {
 }
 
 .bubble {
-  ion-card {
-    border-radius: 25px;
-    margin-top: 2px;
-    margin-bottom: 2px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: block;
 
-    .replyfrom {
+  ion-avatar {
+    margin-bottom: auto;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .message-item {
+    --background-hover: #9a1c424d;
+    --background-hover-opacity: 0.5;
+    transition: background 400ms;
+  }
+
+  .replyfrom {
+    font-size: 12px;
+
+    ion-icon {
+      font-size: 12px;
+    }
+
+    ion-avatar {
+      min-height: 20px;
+      min-width: 20px;
+      height: 20px;
+      width: 20px;
+    }
+
+    ion-thumbnail {
+      margin-right: 5px;
+      --border-radius: 5px;
+      width: 25px;
+      height: 25px;
+    }
+
+    .replyfrom-text {
+      margin-left: 0;
       margin-top: 5px;
-      margin-bottom: 5px;
-      padding-left: 5px;
+      margin-right: 15px;
+      margin-bottom: 0;
+      color: #777777;
+    }
+
+    ion-label {
       margin-left: 20px;
-      border-left: 2px solid #bdd03a;
-      display: flex;
-
-      ion-thumbnail {
-        margin-right: 5px;
-        --border-radius: 5px;
-        --size: 50px;
-      }
-
-      .replyfrom-name {
-        color: #c4d83b;
-        margin-bottom: 0;
-        margin-right: 15px;
-        margin-top: 0px;
-      }
-
-      .replyfrom-text {
-        margin-top: 5px;
-        margin-right: 15px;
-        margin-bottom: 0;
-      }
     }
   }
 
-  &.from {
-    ion-card {
-      --color: white;
-      --background: none;
-      margin-left: auto;
-    }
+  &.same-user {
+    margin-top: 0;
+    position: relative;
+    margin-bottom: 0px;
+  }
+
+  ion-card {
+    background: none;
+    box-shadow: none;
+    margin-top: 0;
+    margin-bottom: 0;
 
     ion-card-content {
-      background: #5a5a5a;
+      padding-top: 0;
+      padding-bottom: 0;
     }
   }
 
-  &.to {
-    ion-card {
-      margin-right: 40px;
-      --color: white;
-      --background: none;
-      float: left;
-      clear: both;
+  .text-name {
+    font-size: 16px;
+    font-weight: bold;
+
+    a {
+      color: white !important;
     }
 
-    ion-card-content {
-      background: #313131;
+    a.verified {
+      color: #c4d83b !important;
     }
-  }
 
-  .audio-content {
-    padding: 2px !important;
+    a.master {
+      color: #5260ff !important;
+    }
+
+    ion-icon {
+      font-size: 12px;
+      margin-left: 5px;
+      vertical-align: baseline;
+    }
+
+    .note-time {
+      font-size: 12px;
+      color: #777;
+    }
   }
 
   .text {
-    margin-right: 10px;
-    word-break: break-word;
-    white-space: pre-line;
+    .message-text {
+      margin-right: 10px;
+      word-break: break-word;
+      white-space: pre-line;
+      color: white;
+    }
+
+    .edited,
+    .text-note-time {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .text-note-time {
+      display: none;
+    }
+  }
+}
+
+.audio-content {
+  padding: 2px !important;
+}
+
+.text {
+  margin-right: 10px;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+.note-image {
+  font-size: 10px;
+  position: absolute;
+  color: white;
+  bottom: 15px;
+  right: 15px;
+  background: #212121bb;
+  padding: 5px;
+  border-radius: 10px;
+
+  ion-icon {
+    font-size: 14px;
+    vertical-align: text-bottom;
+  }
+}
+
+.note-text {
+  font-size: 10px;
+  position: relative;
+  bottom: -8px;
+  color: #bbbbbb;
+
+  ion-icon {
+    font-size: 14px;
+    vertical-align: text-bottom;
   }
 
-  .note-image {
-    font-size: 10px;
+  &.note-audio {
+    right: 80px;
     position: absolute;
-    color: white;
-    bottom: 15px;
-    right: 15px;
-    background: #212121bb;
-    padding: 5px;
-    border-radius: 10px;
 
-    ion-icon {
-      font-size: 14px;
-      vertical-align: text-bottom;
+    &.ios {
+      bottom: 0;
     }
   }
+}
 
-  .note-text {
-    font-size: 10px;
-    position: relative;
-    bottom: -8px;
-    color: #bbbbbb;
+ion-item.pressed {
+  background: #9a1c424d;
+}
 
-    ion-icon {
-      font-size: 14px;
-      vertical-align: text-bottom;
-    }
-
-    &.note-audio {
-      right: 80px;
-      position: absolute;
-
-      &.ios {
-        bottom: 0;
-      }
-    }
+ion-item:hover {
+  .text-note-time {
+    display: initial !important;
   }
+}
 
-  ion-item {
-    margin-top: 3px;
-    margin-bottom: 3px;
-  }
+ion-item.clicked {
+  background: #9a1c424d;
+  animation: ripple 600ms linear;
+  transition: background 400ms;
+}
 
-  ion-item.pressed {
-    background: #9a1c424d;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
+div {
+  min-width: 40px;
 }
 
 /*.from ion-card {

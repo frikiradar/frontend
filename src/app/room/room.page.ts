@@ -560,6 +560,7 @@ export class RoomPage implements OnInit {
     this.source.close();
     // console.log("Conexión cerrada", this.source.url);
     if (this.room.visible || this.roomPage) {
+      console.log("entra?");
       this.room.last_message = this.messages[this.messages.length - 1]?.id;
       this.roomSvc.setLastMessage(this.room);
     }

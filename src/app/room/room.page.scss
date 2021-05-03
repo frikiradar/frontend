@@ -124,9 +124,11 @@ ion-label {
     white-space: pre-line;
     color: white;
 
-    .edited {
+    .edited,
+    .text-note-time {
       font-size: 12px;
       color: #777;
+      display: none;
     }
   }
 
@@ -148,6 +150,12 @@ ion-label {
 
   ion-item.pressed {
     background: #9a1c424d;
+  }
+
+  ion-item:hover {
+    .text-note-time {
+      display: initial !important;
+    }
   }
 
   ion-item.clicked {

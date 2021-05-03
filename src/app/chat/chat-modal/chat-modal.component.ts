@@ -522,6 +522,19 @@ export class ChatModalComponent implements OnInit {
     });
   }
 
+  goToMessage(message: Chat) {
+    if (message?.reply_to?.id) {
+      const el = document.getElementById("" + message.reply_to.id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("clicked");
+        setTimeout(() => {
+          el.classList.remove("clicked");
+        }, 1000);
+      }
+    }
+  }
+
   ngOnDestroy() {
     if (this.source?.url) {
       this.source.close();

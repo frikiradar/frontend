@@ -10,6 +10,8 @@
 </ion-header>
 
 <ion-content>
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+
   <ion-list id="all-stories">
     <ion-item button detail="false" lines="none" (click)="newStory()" mode="md">
       <ion-avatar slot="start">

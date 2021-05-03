@@ -61,12 +61,13 @@ export class RoomsPage implements OnInit {
     if (this.rooms) {
       if (!deepEqual(this.rooms, rooms)) {
         this.rooms = rooms;
+        this.config.set("rooms", rooms);
       }
     } else {
       this.rooms = rooms;
+      this.config.set("rooms", rooms);
     }
 
-    this.config.set("rooms", rooms);
     this.loading = false;
   }
 

@@ -189,6 +189,9 @@
                 (click)="openUrl($event);"
               ></span>
               <span class="edited" *ngIf="message?.edited"> · Editado</span>
+              <span class="text-note-time">
+                · {{ message.time_creation | date: "shortTime" }}
+              </span>
             </ion-text>
           </ion-card-content>
         </ion-card>

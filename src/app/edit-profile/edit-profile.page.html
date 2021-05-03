@@ -47,7 +47,7 @@
     name="avatar"
     (change)="cropImagebyEvent($event)"
   />
-  <form (submit)="submitProfile()" [formGroup]="profileForm">
+  <form [formGroup]="profileForm">
     <ion-list>
       <ion-item-group>
         <ion-item-divider color="primary">
@@ -265,14 +265,6 @@
         </ion-item>
       </ion-item-group>
     </ion-list>
-    <ion-button
-      class="ion-padding"
-      color="primary"
-      type="submit"
-      [disabled]="!profileForm.valid"
-      expand="block"
-      >Guardar cambios
-    </ion-button>
   </form>
   <ion-list>
     <ion-item-group>
@@ -449,3 +441,14 @@
     </ion-item-group>
   </ion-list>
 </ion-content>
+<ion-footer>
+  <ion-button
+    (click)="submitProfile()"
+    class="ion-padding"
+    color="primary"
+    [disabled]="!profileForm.valid"
+    expand="block"
+    shape="round"
+    >Guardar y salir
+  </ion-button>
+</ion-footer>

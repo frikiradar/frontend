@@ -6,8 +6,6 @@ import { Pipe, PipeTransform } from "@angular/core";
 })
 export class ChatDatePipe implements PipeTransform {
   transform(value: string) {
-    const date = Number(new Date(value));
-    const dif = Math.floor((Date.now() - date) / 1000 / 86400);
     return convertToChatDate(value);
   }
 }
@@ -15,14 +13,14 @@ export class ChatDatePipe implements PipeTransform {
 function convertToChatDate(time: string) {
   const date = new Date(time);
   const datePipe = new DatePipe("es-ES");
-  const today = +datePipe.transform(new Date(), "d");
-  const day = +datePipe.transform(date, "d");
+  const today = new Date();
   const diff = (new Date().getTime() - date.getTime()) / 1000;
-  const daydiff = today - day;
 
-  if (isNaN(daydiff) || daydiff < 0 || daydiff >= 61) {
-    return "";
-  }
+  const daydiff = Math.floor(
+    (Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) -
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())) /
+      (1000 * 60 * 60 * 24)
+  );
 
   return (
     (daydiff === 0 &&

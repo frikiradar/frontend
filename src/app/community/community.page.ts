@@ -134,12 +134,13 @@ export class CommunityPage {
     if (this.rooms) {
       if (!deepEqual(this.rooms.slice(0, 3), rooms.slice(0, 3))) {
         this.rooms = rooms;
+        this.config.set("rooms", rooms);
       }
     } else {
       this.rooms = rooms;
+      this.config.set("rooms", rooms);
     }
 
-    this.config.set("rooms", rooms);
     this.connectSSE();
   }
 
@@ -148,12 +149,13 @@ export class CommunityPage {
     if (this.pages) {
       if (!deepEqual(this.pages, pages)) {
         this.pages = pages;
+        this.config.set("pages", pages);
       }
     } else {
       this.pages = pages;
+      this.config.set("pages", pages);
     }
 
-    this.config.set("pages", pages);
     this.loading = false;
   }
 
