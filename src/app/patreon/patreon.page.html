@@ -1,0 +1,21 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Patreon x FrikiRadar</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <p class="ion-text-center">
+    Vincula tu cuenta de FrikiRadar con Patreon para tener acceso a todas las
+    ventajas exclusivas
+  </p>
+  <ion-button (click)="link()" shape="round" expand="block" class="patreon"
+    >Vincular con Patreon</ion-button
+  >
+
+  <ion-input [value]="code" *ngIf="code"></ion-input>
+</ion-content>

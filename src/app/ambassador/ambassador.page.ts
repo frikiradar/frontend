@@ -23,23 +23,7 @@ export class AmbassadorPage implements OnInit {
   }
 
   public goToPatreon() {
-    let url = "";
-    if (this.auth.isMaster()) {
-      const client_id =
-        "T6KMsWw673-ffH__MVNHOkzEMMavJ6IP_TMv1UHmNqv96PHC-_DsDmiYOyOvwloj";
-      const client_secret =
-        "_dyBkMG-HQB4uPIZD4mYdFNOBMPGCnqMIDvmvJkJxTYpFxdz_qYSf1ZEPiooZO7Q";
-
-      const redirect_url = "https://frikiradar.app/ambassador";
-      url =
-        "https://www.patreon.com/oauth2/authorize?response_type=code&client_id=" +
-        client_id +
-        "&redirect_uri=" +
-        redirect_url;
-    } else {
-      url = "https://patreon.com/frikiradar";
-    }
-
+    const url = "https://patreon.com/frikiradar";
     this.urlSvc.openUrl(url);
   }
 

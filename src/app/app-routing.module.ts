@@ -99,6 +99,11 @@ const routes: Routes = [
       import("./ambassador/ambassador.module").then(m => m.AmbassadorPageModule)
   },
   {
+    path: "patreon",
+    loadChildren: () =>
+      import("./patreon/patreon.module").then(m => m.PatreonPageModule)
+  },
+  {
     path: ":id",
     loadChildren: () =>
       import("./profile/profile.module").then(m => m.ProfilePageModule)
