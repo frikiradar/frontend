@@ -13,6 +13,7 @@ import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { VerificationModal } from "./verification/verification.modal";
 import { HideUsersModal } from "./hide-users/hide-users.modal";
 import { NavService } from "../services/navigation.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-settings",
@@ -27,7 +28,8 @@ export class SettingsPage implements OnInit {
     public auth: AuthService,
     private userSvc: UserService,
     private alert: AlertController,
-    private nav: NavService
+    private nav: NavService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -133,7 +135,9 @@ export class SettingsPage implements OnInit {
     }
   }
 
-  patreon() {}
+  patreon() {
+    this.router.navigate(["/patreon"]);
+  }
 
   back() {
     this.nav.back();

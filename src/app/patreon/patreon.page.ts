@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
+import { NavService } from "../services/navigation.service";
 import { UrlService } from "../services/url.service";
 
 @Component({
@@ -12,7 +13,11 @@ export class PatreonPage implements OnInit {
   public code: string;
   // private state: string;
 
-  constructor(private urlSvc: UrlService, private route: ActivatedRoute) {}
+  constructor(
+    private urlSvc: UrlService,
+    private route: ActivatedRoute,
+    private nav: NavService
+  ) {}
 
   ngOnInit() {
     this.code = this.route.snapshot.queryParamMap.get("code");
@@ -31,5 +36,9 @@ export class PatreonPage implements OnInit {
       client_id;
 
     this.urlSvc.openUrl(url);
+  }
+
+  close() {
+    this.nav.back();
   }
 }
