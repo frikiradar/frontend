@@ -94,6 +94,11 @@ const routes: Routes = [
       import("./pages/pages.module").then(m => m.PagesPageModule)
   },
   {
+    path: "ambassador",
+    loadChildren: () =>
+      import("./ambassador/ambassador.module").then(m => m.AmbassadorPageModule)
+  },
+  {
     path: ":id",
     loadChildren: () =>
       import("./profile/profile.module").then(m => m.ProfilePageModule)

@@ -11,7 +11,6 @@ import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { LinkyModule } from "ngx-linky";
 
 import { CropperModal } from "../cropper/cropper.modal";
-import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { CreditsModal } from "../credits/credits.modal";
 import { NiceDatePipe } from "../nice-date.pipe";
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
@@ -26,6 +25,7 @@ import { ChatListComponent } from "../chat/chat-list/chat-list.component";
 import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
 import { AudioPlayerComponent } from "../audio-player/audio-player.component";
 import { ChatDatePipe } from "../chat-date.pipe";
+import { EventModal } from "../events/event-modal/event.modal";
 
 @NgModule({
   declarations: [
@@ -34,7 +34,6 @@ import { ChatDatePipe } from "../chat-date.pipe";
     ChatDatePipe,
     MentionsPipe,
     HashtagPipe,
-    AmbassadorModal,
     CreditsModal,
     RequestGeolocationModal,
     CropperModal,
@@ -44,11 +43,11 @@ import { ChatDatePipe } from "../chat-date.pipe";
     ChatListComponent,
     ChatModalComponent,
     StoryModal,
+    EventModal,
     ViewStoriesModal,
     CommentLikesModal
   ],
   entryComponents: [
-    AmbassadorModal,
     CreditsModal,
     RequestGeolocationModal,
     CropperModal,
@@ -58,6 +57,7 @@ import { ChatDatePipe } from "../chat-date.pipe";
     ChatListComponent,
     ChatModalComponent,
     StoryModal,
+    EventModal,
     ViewStoriesModal,
     CommentLikesModal
   ],

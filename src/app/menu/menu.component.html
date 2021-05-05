@@ -85,8 +85,11 @@
           (click)="showAmbassador()"
           *ngIf="!platform.is('ios')"
         >
-          <ion-icon name="people-outline" slot="start"></ion-icon>
-          <ion-label>
+          <ion-icon
+            src="/assets/icon/patreon_coral.svg"
+            slot="start"
+          ></ion-icon>
+          <ion-label class="patreon">
             <h2>Patreon de embajador</h2>
             <p>Consigue ventajas exclusivas</p>
           </ion-label>

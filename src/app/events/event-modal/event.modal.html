@@ -1,0 +1,131 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title
+      >{{editing ? 'Editando evento ' + room.name : 'Crea un nuevo
+      evento'}}</ion-title
+    >
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <p *ngIf="!editing">
+    Indica el tema del evento, la fecha y donde se realizará (por internet o en
+    persona).
+  </p>
+  <ion-list>
+    <form [formGroup]="eventForm" (submit)="submitRoom()" autocomplete="off">
+      <ion-item>
+        <ion-input
+          formControlName="title"
+          placeholder="Título del evento"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-textarea
+          placeholder="Escribe aquí la descripción"
+          rows="3"
+          formControlName="description"
+        ></ion-textarea>
+      </ion-item>
+      <ion-item lines="none" class="show-more">
+        <ion-label>Fecha y hora de inicio</ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>Fecha de inicio</ion-label>
+        <ion-datetime
+          displayFormat="DD MMM de YYYY"
+          monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+          placeholder="dd mm de yyyy"
+          cancel-text="Cancelar"
+          done-text="Hecho"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Hora de inicio</ion-label>
+        <ion-datetime
+          displayFormat="HH:mm"
+          placeholder="hh:mm"
+          cancel-text="Cancelar"
+          done-text="Hecho"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item
+        button
+        (click)="endDate = !endDate"
+        lines="none"
+        class="show-more"
+      >
+        <ion-label>+ Fecha y hora de finalización</ion-label>
+        <ion-icon name="chevron-down" color="light" size="small"></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="endDate" lines="none">
+        <ion-label>Fecha de fin</ion-label>
+        <ion-datetime
+          displayFormat="DD MMM de YYYY"
+          monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+          placeholder="dd mm de yyyy"
+          cancel-text="Cancelar"
+          done-text="Hecho"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item *ngIf="endDate">
+        <ion-label>Hora de fin</ion-label>
+        <ion-datetime
+          displayFormat="HH:mm"
+          placeholder="hh:mm"
+          cancel-text="Cancelar"
+          done-text="Hecho"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          formControlName="url"
+          placeholder="URL del evento"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          formControlName="location"
+          debounce="2000"
+          placeholder="Lugar del evento"
+          (ionChange)="changeLocation($event)"
+        ></ion-input>
+      </ion-item>
+      <iframe
+        *ngIf="eventForm.get('location').value"
+        width="100%"
+        height="300"
+        style="border:0"
+        loading="lazy"
+        allowfullscreen
+        [src]="mapSrc"
+      ></iframe>
+      <ion-item>
+        <ion-thumbnail *ngIf="src || room?.image">
+          <img [src]="src ? src : room?.image" />
+        </ion-thumbnail>
+        <ion-input
+          type="file"
+          accept="image/*"
+          formControlName="image"
+          placeholder="Elige una imagen"
+          clearInput="true"
+          (change)="cropImagebyEvent($event)"
+          (ionChange)="removeImage($event)"
+        ></ion-input>
+      </ion-item>
+      <ion-button
+        color="primary"
+        type="submit"
+        shape="round"
+        expand="block"
+        [disabled]="eventForm.invalid"
+        >{{editing ? 'Guardar cambios' : 'Publicar evento'}}</ion-button
+      >
+    </form>
+  </ion-list>
+</ion-content>

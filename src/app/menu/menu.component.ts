@@ -3,7 +3,6 @@ import { SafeResourceUrl } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { MenuController, ModalController, Platform } from "@ionic/angular";
 
-import { AmbassadorModal } from "../ambassador/ambassador.modal";
 import { CreditsModal } from "../credits/credits.modal";
 import { AuthService } from "../services/auth.service";
 import {
@@ -60,10 +59,8 @@ export class MenuComponent {
   }
 
   async showAmbassador() {
-    const modal = await this.modal.create({
-      component: AmbassadorModal
-    });
-    return await modal.present();
+    this.router.navigate(["/ambassador"]);
+    this.menu.close();
   }
 
   share() {

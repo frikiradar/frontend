@@ -19,7 +19,8 @@
               "linkifyjs",
               "platform",
               "howler",
-              "deep-equal"
+              "deep-equal",
+              "patreon"
             ],
             "aot": false,
             "outputPath": "www",

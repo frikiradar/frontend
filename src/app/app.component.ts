@@ -17,7 +17,6 @@ import {
   SyncOptions
 } from "@ionic-native/code-push/ngx";
 
-import { AmbassadorModal } from "./ambassador/ambassador.modal";
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
 import { ConfigService } from "./services/config.service";
@@ -203,11 +202,7 @@ export class AppComponent {
           {
             text: "¡Quiero informarme!",
             handler: async () => {
-              const modal = await this.modal.create({
-                component: AmbassadorModal,
-                cssClass: "full-modal"
-              });
-              return await modal.present();
+              this.router.navigate(["/ambassador"]);
             }
           }
         ],

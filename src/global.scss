@@ -313,3 +313,16 @@ ion-item {
     display: none;
   }
 }
+
+.patreon {
+  h2 {
+    color: #ff424d;
+  }
+  p {
+    color: white !important;
+  }
+}
+
+ion-button.patreon {
+  --background: #ff424d;
+}
