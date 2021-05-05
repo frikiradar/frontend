@@ -62,7 +62,7 @@ export class EventModal {
     this.mapSrc = this.sanitizer.bypassSecurityTrustResourceUrl(search);
   }
 
-  async submitRoom() {
+  async submitEvent() {
     if (this.eventForm.valid) {
       if (this.event?.id) {
         try {

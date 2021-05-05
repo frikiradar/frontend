@@ -24,7 +24,7 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private modal: ModalController,
-    private auth: AuthService,
+    public auth: AuthService,
     private userSvc: UserService,
     private alert: AlertController,
     private nav: NavService
@@ -132,6 +132,8 @@ export class SettingsPage implements OnInit {
       alert.present();
     }
   }
+
+  patreon() {}
 
   back() {
     this.nav.back();

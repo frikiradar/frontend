@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { patreon as patreonAPI, oauth as patreonOAuth } from "patreon";
 
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";

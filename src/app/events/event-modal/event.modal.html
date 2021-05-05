@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title
-      >{{editing ? 'Editando evento ' + room.name : 'Crea un nuevo
+      >{{editing ? 'Editando evento ' + event.title : 'Crea un nuevo
       evento'}}</ion-title
     >
   </ion-toolbar>
@@ -17,7 +17,7 @@
     persona).
   </p>
   <ion-list>
-    <form [formGroup]="eventForm" (submit)="submitRoom()" autocomplete="off">
+    <form [formGroup]="eventForm" (submit)="submitEvent()" autocomplete="off">
       <ion-item>
         <ion-input
           formControlName="title"
@@ -105,8 +105,8 @@
         [src]="mapSrc"
       ></iframe>
       <ion-item>
-        <ion-thumbnail *ngIf="src || room?.image">
-          <img [src]="src ? src : room?.image" />
+        <ion-thumbnail *ngIf="src || event?.image">
+          <img [src]="src ? src : event?.image" />
         </ion-thumbnail>
         <ion-input
           type="file"
