@@ -9,7 +9,7 @@ import { UrlService } from "../services/url.service";
   styleUrls: ["./patreon.page.scss"]
 })
 export class PatreonPage implements OnInit {
-  private code: string;
+  public code: string;
   // private state: string;
 
   constructor(private urlSvc: UrlService, private route: ActivatedRoute) {}
