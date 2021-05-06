@@ -190,6 +190,13 @@ export class AuthService {
     return user?.roles?.includes("ROLE_MASTER");
   }
 
+  isPatreon(user?: User) {
+    if (!user) {
+      user = this.currentUserValue;
+    }
+    return user?.roles?.includes("ROLE_PATREON");
+  }
+
   isDemo(user?: User) {
     if (!user) {
       user = this.currentUserValue;

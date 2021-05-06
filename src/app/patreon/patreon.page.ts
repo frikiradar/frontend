@@ -1,8 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
+import { AuthService } from "../services/auth.service";
 import { NavService } from "../services/navigation.service";
 import { UrlService } from "../services/url.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-patreon",
@@ -16,13 +18,22 @@ export class PatreonPage implements OnInit {
   constructor(
     private urlSvc: UrlService,
     private route: ActivatedRoute,
-    private nav: NavService
+    private nav: NavService,
+    private router: Router,
+    private userSvc: UserService,
+    public auth: AuthService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.code = this.route.snapshot.queryParamMap.get("code");
     // this.state = this.route.snapshot.queryParamMap.get("state");
     if (this.code) {
+      try {
+        await this.userSvc.linkToPatreon(this.code);
+      } catch (e) {
+        console.error("error al vincular");
+      }
+      this.router.navigate(["/patreon"]);
     }
   }
 
@@ -39,6 +50,6 @@ export class PatreonPage implements OnInit {
   }
 
   close() {
-    this.nav.back();
+    this.nav.navigateRoot("/settings");
   }
 }

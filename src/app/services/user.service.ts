@@ -229,6 +229,10 @@ export class UserService {
     ).present();
   }
 
+  async linkToPatreon(code: string) {
+    await this.rest.put("link-patreon", { oauth_code: code }).toPromise();
+  }
+
   getOrientations() {
     return [
       "Heterosexual",

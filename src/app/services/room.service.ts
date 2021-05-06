@@ -239,6 +239,13 @@ export class RoomService {
     if (
       rooms_config &&
       !rooms_config?.some(r => r.order === undefined) &&
+      !rooms_config?.some(r => {
+        if (
+          rooms_config.some(r1 => r1.slug !== r.slug && r1.order === r.order)
+        ) {
+          return true;
+        }
+      }) &&
       rooms_config?.length === rooms.length
     ) {
       // Ordename según la config
@@ -250,7 +257,6 @@ export class RoomService {
       });
     } else {
       await this.initOrderRoom(rooms);
-      await this.orderRooms(rooms);
     }
     return rooms;
   }
@@ -263,9 +269,7 @@ export class RoomService {
         if (rooms_config.some(r => r.slug === room.slug)) {
           rooms_config.map(r => {
             if (r.slug === room.slug) {
-              if (r.order === undefined) {
-                r.order = index;
-              }
+              r.order = index;
             }
           });
         } else {
@@ -286,7 +290,6 @@ export class RoomService {
         ];
       }
     });
-
     await this.setRoomsConfig(rooms_config);
   }
 

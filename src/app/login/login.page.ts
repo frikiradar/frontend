@@ -119,7 +119,7 @@ export class LoginPage {
           position: "bottom"
         })
       ).present();
-      this.nav.navigateRoot([this.returnUrl]);
+      this.nav.navigateRoot(this.returnUrl);
     }
   }
 

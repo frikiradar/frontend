@@ -101,7 +101,14 @@ const routes: Routes = [
   {
     path: "patreon",
     loadChildren: () =>
-      import("./patreon/patreon.module").then(m => m.PatreonPageModule)
+      import("./patreon/patreon.module").then(m => m.PatreonPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "patreon/",
+    loadChildren: () =>
+      import("./patreon/patreon.module").then(m => m.PatreonPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: ":id",
