@@ -218,15 +218,17 @@ export class RoomPage implements OnInit {
 
       try {
         if (!image) {
-          const chat = await this.roomSvc
+          message = await this.roomSvc
             .sendMessage(this.slug, this.room.name, text, replyToId, mentions)
             .then();
         } else if (image) {
           const imageFile = await this.utils.urltoBlob(image);
-          const chat = await this.roomSvc
+          message = await this.roomSvc
             .sendImage(this.slug, this.room.name, imageFile, text, mentions)
             .then();
         }
+        this.room.last_message = message.id;
+        this.roomSvc.setLastMessage(this.room);
 
         replyToId = null;
       } catch (e) {

@@ -200,7 +200,7 @@
     <ion-item
       lines="none"
       color="dark"
-      *ngIf="message?.id === oldLastMessage"
+      *ngIf="message?.id === oldLastMessage && oldLastMessage !== undefined"
       style="margin: 15px 0 15px 0;"
     >
       <ion-label class="ion-text-center" color="primary">
