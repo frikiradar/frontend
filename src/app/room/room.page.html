@@ -197,6 +197,16 @@
         </ion-card>
       </ion-item>
     </ion-item-sliding>
+    <ion-item
+      lines="none"
+      color="dark"
+      *ngIf="message?.id === oldLastMessage"
+      style="margin: 15px 0 15px 0;"
+    >
+      <ion-label class="ion-text-center" color="primary">
+        Mensajes sin leer
+      </ion-label>
+    </ion-item>
   </span>
 </ion-content>
 <ion-footer>

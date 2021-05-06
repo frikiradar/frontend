@@ -68,4 +68,13 @@ export interface User {
   num_logins: number;
   last_login?: Date;
   config?: Partial<Config>;
+
+  patreon?: {
+    access_token: string;
+    email: string;
+    full_name: string;
+    id: string;
+    patron_status: string | boolean;
+    refresh_token: string;
+  };
 }

@@ -46,6 +46,7 @@ export class RoomPage implements OnInit {
 
   source: EventSource;
   public toggled: boolean = false;
+  public oldLastMessage: number;
 
   public room: Room;
   public roomPage: Page;
@@ -118,6 +119,16 @@ export class RoomPage implements OnInit {
     this.slug = this.route.snapshot.paramMap.get("slug");
     try {
       this.room = await this.roomSvc.getRoom(this.slug);
+
+      const rooms_config = await this.roomSvc.getRoomsConfig();
+      if (
+        this.room.last_message >
+        rooms_config.find(r => r.slug === this.room.slug).last_message
+      ) {
+        this.oldLastMessage = rooms_config.find(
+          r => r.slug === this.room.slug
+        ).last_message;
+      }
       this.roomPage = this.room.page;
     } catch (e) {
       console.error(`No se ha podido cargar la sala. Error: ${e}`);

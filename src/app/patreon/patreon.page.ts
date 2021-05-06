@@ -50,6 +50,6 @@ export class PatreonPage implements OnInit {
   }
 
   close() {
-    this.nav.navigateRoot("/settings");
+    this.nav.navigateRoot("/");
   }
 }

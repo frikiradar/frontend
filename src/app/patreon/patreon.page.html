@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <div *ngIf="auth.isPatreon()">
+  <div *ngIf="!auth.currentUserValue?.patreon">
     <p class="ion-text-center">
       Vincula tu cuenta de FrikiRadar con Patreon para tener acceso a todas las
       ventajas exclusivas.
@@ -18,11 +18,24 @@
       >Vincular con Patreon</ion-button
     >
   </div>
-  <div *ngIf="auth.isPatreon()">
+  <div *ngIf="auth.currentUserValue?.patreon">
     <p class="ion-text-center">
-      ¡Enhorabuena, tu cuenta está vinculada correctamente con Patreon! Desde
-      este momento tienes acceso a todas las ventajas exclusivas.
+      ¡Enhorabuena, tu cuenta está vinculada correctamente con Patreon!
     </p>
+    <ion-item>
+      <ion-icon
+        src="/assets/icon/patreon_coral.svg"
+        slot="start"
+        color="secondary"
+      ></ion-icon>
+      <ion-label>
+        <h2>Estado:</h2>
+        <h1>
+          Suscripción {{ auth.currentUserValue.patreon.patron_status ===
+          'active_patron' ? "activa" : "inactiva" }}
+        </h1>
+      </ion-label>
+    </ion-item>
   </div>
   <ion-list>
     <ion-item>
