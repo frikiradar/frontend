@@ -4,24 +4,24 @@ export interface Story {
   id?: number;
   text?: string;
   image?: string;
-  user?: Partial<User>;
+  user?: User;
   time_creation?: Date;
   like?: boolean;
   likeStories?: {
     date: string;
-    user: Partial<User>;
+    user: User;
   }[];
   viewed?: boolean;
   viewStories?: {
     date: string;
-    user: Partial<User>;
+    user: User;
   }[];
   comments?: {
     id: number;
     text?: string;
-    user?: Partial<User>;
+    user?: User;
     like?: boolean;
-    likes?: Partial<User>[];
+    likes?: User[];
     time_creation?: Date;
   }[];
   mentions?: string[];
