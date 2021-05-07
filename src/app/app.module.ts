@@ -15,7 +15,6 @@ import { AppVersion } from "@ionic-native/app-version/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Diagnostic } from "@ionic-native/diagnostic/ngx";
-import { Facebook } from "@ionic-native/facebook/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
@@ -99,7 +98,6 @@ registerLocaleData(localeEs, "es");
       provide: SwRegistrationOptions,
       useFactory: () => ({ enabled: environment.production })
     },
-    Facebook,
     Device,
     Network,
     Vibration,
