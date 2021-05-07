@@ -14,11 +14,12 @@
         </ion-label>
       </ion-button>
       <ion-icon
-        *ngIf="story.user?.verified || story.user?.roles?.includes('ROLE_MASTER')"
-        [name]="story.user?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
+        *ngIf="auth.getRoleIcon(story.user)"
+        [name]="auth.getRoleIcon(story.user)"
+        [src]="auth.getRoleIcon(story.user)"
         slot="icon-only"
         size="small"
-        [color]="story.user?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+        [color]="auth.getRoleColor(story.user)"
         (click)="userSvc.showRole(story.user)"
       ></ion-icon>
     </ion-buttons>

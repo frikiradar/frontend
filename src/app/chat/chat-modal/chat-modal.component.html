@@ -31,17 +31,12 @@
         </ion-label>
       </ion-button>
       <ion-icon
-        *ngIf="user?.verified || user?.roles?.includes('ROLE_MASTER')"
-        [name]="
-          user?.roles?.includes('ROLE_MASTER')
-            ? 'shield-checkmark'
-            : 'checkmark-circle'
-        "
+        *ngIf="user && auth.getRoleIcon(user)"
+        [name]="auth.getRoleIcon(user)"
+        [src]="auth.getRoleIcon(user)"
         slot="icon-only"
         size="small"
-        [color]="
-          user?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'
-        "
+        [color]="auth.getRoleColor(user)"
         (click)="userSvc.showRole(user)"
       ></ion-icon>
     </ion-buttons>
@@ -240,33 +235,17 @@
                   (messages[i - 1]?.time_creation | date: 'shortDate')
               "
             >
-              <a
-                (click)="showProfile(message.fromuser.id)"
-                [ngClass]="
-                  message.fromuser?.roles?.includes('ROLE_MASTER')
-                    ? 'master'
-                    : message.fromuser.verified
-                    ? 'verified'
-                    : ''
-                "
-                >{{ message.fromuser.username }}</a
+              <a (click)="showProfile(message.fromuser.id)"
+                ><ion-text [color]="auth.getRoleColor(message.fromuser)">{{
+                  message.fromuser.username
+                }}</ion-text></a
               >
               <ion-icon
-                *ngIf="
-                  message.fromuser?.verified ||
-                  message.fromuser?.roles?.includes('ROLE_MASTER')
-                "
-                [name]="
-                  message.fromuser?.roles?.includes('ROLE_MASTER')
-                    ? 'shield-checkmark'
-                    : 'checkmark-circle'
-                "
+                *ngIf="auth.getRoleIcon(message.fromuser)"
+                [name]="auth.getRoleIcon(message.fromuser)"
+                [src]="auth.getRoleIcon(message.fromuser)"
                 slot="icon-only"
-                [color]="
-                  message.fromuser?.roles?.includes('ROLE_MASTER')
-                    ? 'tertiary'
-                    : 'secondary'
-                "
+                [color]="auth.getRoleColor(message.fromuser)"
                 (click)="userSvc.showRole(message.fromuser)"
               ></ion-icon>
               <span class="note-time">

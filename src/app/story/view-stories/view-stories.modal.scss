@@ -25,6 +25,10 @@ ion-label {
 ion-card {
   box-shadow: none;
   background: transparent;
+
+  img {
+    max-height: 50vh;
+  }
   ion-thumbnail {
     width: auto;
     height: auto;
@@ -91,7 +95,8 @@ ion-footer {
   display: none;
 }
 
-.comments-pane, .comments {
+.comments-pane,
+.comments {
   .text {
     a {
       color: #c4d83b !important;

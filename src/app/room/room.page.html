@@ -159,16 +159,17 @@
               *ngIf="(message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)  || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate')"
             >
-              <a
-                (click)="showProfile(message.fromuser.id)"
-                [ngClass]="message.fromuser?.roles?.includes('ROLE_MASTER') ? 'master' : (message.fromuser.verified ? 'verified' : '')"
-                >{{message.fromuser.username}}</a
+              <a (click)="showProfile(message.fromuser.id)"
+                ><ion-text [color]="auth.getRoleColor(message.fromuser)"
+                  >{{message.fromuser.username}}</ion-text
+                ></a
               >
               <ion-icon
-                *ngIf="message.fromuser?.verified || message.fromuser?.roles?.includes('ROLE_MASTER')"
-                [name]="message.fromuser?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
+                *ngIf="auth.getRoleIcon(message.fromuser)"
+                [name]="auth.getRoleIcon(message.fromuser)"
+                [src]="auth.getRoleIcon(message.fromuser)"
                 slot="icon-only"
-                [color]="message.fromuser?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+                [color]="auth.getRoleColor(message.fromuser)"
                 (click)="userSvc.showRole(message.fromuser)"
               ></ion-icon>
 

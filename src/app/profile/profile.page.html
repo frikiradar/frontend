@@ -86,11 +86,10 @@
           <ion-item lines="none">
             <ion-icon
               slot="start"
-              *ngIf="user?.verified || user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ROLE_MASTER')"
-              [name]="user?.roles?.includes('ROLE_ADMIN') ||
-              user?.roles?.includes('ROLE_MASTER') ? 'shield-checkmark' : 'checkmark-circle'"
-              [color]="user?.roles?.includes('ROLE_ADMIN') ||
-              user?.roles?.includes('ROLE_MASTER') ? 'tertiary' : 'secondary'"
+              *ngIf="auth.getRoleIcon(user)"
+              [name]="auth.getRoleIcon(user)"
+              [src]="auth.getRoleIcon(user)"
+              [color]="auth.getRoleColor(user)"
               (click)="userSvc.showRole(user)"
             ></ion-icon>
             <ion-label>
