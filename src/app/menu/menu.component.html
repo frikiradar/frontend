@@ -28,11 +28,11 @@
             <span>
               <ion-icon
                 size="15px"
-                *ngIf="auth.getRoleIcon()"
-                [name]="auth.getRoleIcon()"
-                [src]="auth.getRoleIcon()"
+                *ngIf="userSvc.getRoleIcon()"
+                [name]="userSvc.getRoleIcon()"
+                [src]="userSvc.getRoleIcon()"
                 slot="icon-only"
-                [color]="auth.getRoleColor()"
+                [color]="userSvc.getRoleColor()"
               ></ion-icon>
             </span>
           </h2>

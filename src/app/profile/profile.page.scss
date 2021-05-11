@@ -112,14 +112,8 @@ ion-item {
   left: 15px;
   z-index: 1;
 
-  ion-avatar {
-    img {
-      border: 2px solid white;
-    }
-
-    &.not-view img {
-      border: 2px solid #e91e63 !important;
-    }
+  ion-avatar img {
+    border: 2px solid white;
   }
 }
 

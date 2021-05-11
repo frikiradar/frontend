@@ -5,7 +5,7 @@ import {
   SimpleChanges,
   ViewChild
 } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
@@ -62,9 +62,8 @@ export class ChatModalComponent implements OnInit {
 
   constructor(
     public auth: AuthService,
-    private userSvc: UserService,
+    public userSvc: UserService,
     private router: Router,
-    private route: ActivatedRoute,
     private location: Location,
     private chatSvc: ChatService,
     private toast: ToastController,

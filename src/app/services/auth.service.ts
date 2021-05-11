@@ -224,41 +224,6 @@ export class AuthService {
     return age >= 18;
   }
 
-  getRoleColor(user?: User) {
-    if (!user) {
-      user = this.currentUserValue;
-    }
-
-    if (user.roles.includes("ROLE_ADMIN")) {
-      return "danger";
-    } else if (user.roles.includes("ROLE_MASTER")) {
-      return "tertiary";
-    } else if (user.roles.includes("ROLE_PATREON")) {
-      return "warning";
-    } else if (user.verified) {
-      return "secondary";
-    }
-    return "light";
-  }
-
-  getRoleIcon(user?: User) {
-    if (!user) {
-      user = this.currentUserValue;
-    }
-
-    if (user.roles.includes("ROLE_ADMIN")) {
-      return "shield-checkmark";
-    } else if (user.roles.includes("ROLE_MASTER")) {
-      return "shield-checkmark";
-    } else if (user.roles.includes("ROLE_PATREON")) {
-      return "/assets/icon/patreon_coral.svg";
-    } else if (user.verified) {
-      return "checkmark-circle";
-    }
-
-    return false;
-  }
-
   async logout() {
     let uuid = null;
     if (this.platform.is("cordova")) {

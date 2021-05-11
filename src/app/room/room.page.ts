@@ -30,6 +30,7 @@ import { RoomPopover } from "./room-popover/room-popover";
 import { PageService } from "../services/page.service";
 import { Page } from "../models/page";
 import { NavService } from "../services/navigation.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-room",
@@ -83,7 +84,8 @@ export class RoomPage implements OnInit {
     public sheet: ActionSheetController,
     public utils: UtilsService,
     public modalController: ModalController,
-    public popover: PopoverController
+    public popover: PopoverController,
+    public userSvc: UserService
   ) {}
 
   async ngOnInit() {

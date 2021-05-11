@@ -86,10 +86,10 @@
           <ion-item lines="none">
             <ion-icon
               slot="start"
-              *ngIf="auth.getRoleIcon(user)"
-              [name]="auth.getRoleIcon(user)"
-              [src]="auth.getRoleIcon(user)"
-              [color]="auth.getRoleColor(user)"
+              *ngIf="userSvc.getRoleIcon(user)"
+              [name]="userSvc.getRoleIcon(user)"
+              [src]="userSvc.getRoleIcon(user)"
+              [color]="userSvc.getRoleColor(user)"
               (click)="userSvc.showRole(user)"
             ></ion-icon>
             <ion-label>

@@ -14,12 +14,12 @@
         </ion-label>
       </ion-button>
       <ion-icon
-        *ngIf="auth.getRoleIcon(story.user)"
-        [name]="auth.getRoleIcon(story.user)"
-        [src]="auth.getRoleIcon(story.user)"
+        *ngIf="userSvc.getRoleIcon(story.user)"
+        [name]="userSvc.getRoleIcon(story.user)"
+        [src]="userSvc.getRoleIcon(story.user)"
         slot="icon-only"
         size="small"
-        [color]="auth.getRoleColor(story.user)"
+        [color]="userSvc.getRoleColor(story.user)"
         (click)="userSvc.showRole(story.user)"
       ></ion-icon>
     </ion-buttons>

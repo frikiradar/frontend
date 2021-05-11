@@ -255,8 +255,8 @@ ion-slides {
       height: 65px;
     }
 
-    &.not-view {
-      border: 2px solid #e91e63;
+    &.not-view img {
+      border: 2px solid #e91e63 !important;
     }
   }
 

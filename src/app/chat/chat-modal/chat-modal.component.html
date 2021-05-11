@@ -31,12 +31,12 @@
         </ion-label>
       </ion-button>
       <ion-icon
-        *ngIf="user && auth.getRoleIcon(user)"
-        [name]="auth.getRoleIcon(user)"
-        [src]="auth.getRoleIcon(user)"
+        *ngIf="user && userSvc.getRoleIcon(user)"
+        [name]="userSvc.getRoleIcon(user)"
+        [src]="userSvc.getRoleIcon(user)"
         slot="icon-only"
         size="small"
-        [color]="auth.getRoleColor(user)"
+        [color]="userSvc.getRoleColor(user)"
         (click)="userSvc.showRole(user)"
       ></ion-icon>
     </ion-buttons>
@@ -236,16 +236,16 @@
               "
             >
               <a (click)="showProfile(message.fromuser.id)"
-                ><ion-text [color]="auth.getRoleColor(message.fromuser)">{{
+                ><ion-text [color]="userSvc.getRoleColor(message.fromuser)">{{
                   message.fromuser.username
                 }}</ion-text></a
               >
               <ion-icon
-                *ngIf="auth.getRoleIcon(message.fromuser)"
-                [name]="auth.getRoleIcon(message.fromuser)"
-                [src]="auth.getRoleIcon(message.fromuser)"
+                *ngIf="userSvc.getRoleIcon(message.fromuser)"
+                [name]="userSvc.getRoleIcon(message.fromuser)"
+                [src]="userSvc.getRoleIcon(message.fromuser)"
                 slot="icon-only"
-                [color]="auth.getRoleColor(message.fromuser)"
+                [color]="userSvc.getRoleColor(message.fromuser)"
                 (click)="userSvc.showRole(message.fromuser)"
               ></ion-icon>
               <span class="note-time">
