@@ -24,7 +24,7 @@ function convertToNiceDate(time: string) {
   const diff = (new Date().getTime() - date.getTime()) / 1000;
   const daydiff = Math.floor(diff / 86400);
 
-  if (isNaN(daydiff) || daydiff < 0 || daydiff >= 31) {
+  if (isNaN(daydiff) || daydiff < 0 || daydiff >= 60) {
     return "";
   }
 

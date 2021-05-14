@@ -35,7 +35,9 @@ export class TabsPage implements OnInit {
   async ngOnInit() {
     this.notificationSvc.notification.subscribe(notification => {
       this.counters = notification;
-      this.detectorRef.detectChanges();
+      if (!this.detectorRef["destroyed"]) {
+        this.detectorRef.detectChanges();
+      }
     });
   }
 
