@@ -202,8 +202,8 @@ export class UtilsService {
     if (this.platform.is("hybrid")) {
       const options = {
         message:
-          "Conoce a personas con tus mismos gustos con FrikiRadar, la app de citas y chat para frikis.", // not supported on some apps (Facebook, Instagram)
-        subject: "FrikiRadar, la app de citas y chat para frikis", // fi. for email
+          "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.", // not supported on some apps (Facebook, Instagram)
+        subject: "FrikiRadar, conoce a personas frikis como tú", // fi. for email
         url: `${url}?referrer=${referrer}`,
         chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
       };
@@ -211,9 +211,9 @@ export class UtilsService {
       this.socialSharing.shareWithOptions(options);
     } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
-        title: "FrikiRadar, la app de citas y chat para frikis",
+        title: "FrikiRadar, conoce a personas frikis como tú",
         text:
-          "Conoce a personas con tus mismos gustos con FrikiRadar, la app de citas y chat para frikis.",
+          "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.",
         url: `${url}?referrer=${referrer}`
       })
         .then(() => {
