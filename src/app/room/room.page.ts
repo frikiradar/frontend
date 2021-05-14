@@ -150,7 +150,7 @@ export class RoomPage implements OnInit {
         .filter(m => m.text || m.image || m.audio)
         .reverse();
 
-      if (messages.length && (this.room.visible || this.roomPage)) {
+      if (messages.length && (this.room?.visible || this.roomPage)) {
         this.room.last_message = messages[messages.length - 1].id;
         this.roomSvc.setLastMessage(this.room);
       }
@@ -174,7 +174,7 @@ export class RoomPage implements OnInit {
       });
 
       this.platform.backButton.subscribe(() => {
-        this.source.close();
+        this.source?.close();
       });
     } catch (e) {
       console.error(e);
@@ -229,6 +229,9 @@ export class RoomPage implements OnInit {
             .sendImage(this.slug, this.room.name, imageFile, text, mentions)
             .then();
         }
+        this.messages.map(m => {
+          m.sending = false;
+        });
         this.room.last_message = message.id;
         this.roomSvc.setLastMessage(this.room);
 
@@ -568,13 +571,13 @@ export class RoomPage implements OnInit {
 
   back() {
     this.nav.back();
-    this.source.close();
+    this.source?.close();
   }
 
   ngOnDestroy() {
-    this.source.close();
+    this.source?.close();
     // console.log("Conexión cerrada", this.source.url);
-    if (this.room.visible || this.roomPage) {
+    if (this.room?.visible || this.roomPage) {
       this.room.last_message = this.messages[this.messages.length - 1]?.id;
       this.roomSvc.setLastMessage(this.room);
     }

@@ -100,7 +100,7 @@ export class ChatModalComponent implements OnInit {
           text: "Ok, seré paciente",
           handler: () => {
             this.nav.back();
-            this.source.close();
+            this.source?.close();
           }
         }
       ],
@@ -175,7 +175,7 @@ export class ChatModalComponent implements OnInit {
         });
 
         this.platform.backButton.subscribe(() => {
-          this.source.close();
+          this.source?.close();
         });
       } catch (e) {
         console.error(e);
@@ -236,6 +236,10 @@ export class ChatModalComponent implements OnInit {
             .sendAudio(this.user.id, audioFile)
             .then();
         }
+
+        this.messages.map(m => {
+          m.sending = false;
+        });
 
         replyToId = null;
       } catch (e) {
@@ -536,7 +540,7 @@ export class ChatModalComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.source?.url) {
-      this.source.close();
+      this.source?.close();
       // console.log("Conexión cerrada", this.source.url);
     }
   }

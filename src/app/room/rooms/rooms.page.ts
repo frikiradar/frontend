@@ -114,11 +114,11 @@ export class RoomsPage implements OnInit {
 
   back() {
     this.nav.back();
-    this.source.close();
+    this.source?.close();
   }
 
   ngOnDestroy() {
-    this.source.close();
+    this.source?.close();
     // console.log("Conexión cerrada", this.source.url);
   }
 }

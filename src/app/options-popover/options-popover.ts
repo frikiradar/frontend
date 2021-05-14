@@ -171,7 +171,7 @@ export class OptionsPopover {
       : "app";
     const url = `https://frikiradar.app/${this.user.username.replace(
       " ",
-      "%20"
+      "+"
     )}?referrer=${referrer}`;
     try {
       if (this.platform.is("cordova")) {
@@ -202,7 +202,7 @@ export class OptionsPopover {
   shareProfile() {
     const url = `https://frikiradar.app/${this.user.username.replace(
       " ",
-      "%20"
+      "+"
     )}`;
     this.utils.share(url);
     this.close();

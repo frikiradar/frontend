@@ -206,7 +206,7 @@ export class CommunityPage {
   }
 
   async showAllRooms() {
-    this.source.close();
+    this.source?.close();
     // console.log("Conexión cerrada", this.source.url);
     this.router.navigate(["/rooms"]);
   }
@@ -253,6 +253,6 @@ export class CommunityPage {
   }
 
   ngOnDestroy() {
-    this.source.close();
+    this.source?.close();
   }
 }
