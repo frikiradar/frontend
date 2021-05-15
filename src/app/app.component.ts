@@ -153,27 +153,28 @@ export class AppComponent {
 
   async backButtonStatus() {
     this.platform.backButton.subscribe(async () => {
-      if (this.router.url.includes("/tabs/") || this.router.url === "/") {
-        const modal = await this.modal.getTop();
-        if (modal) {
-          modal.dismiss();
-        } else {
-          this.backButtonCount++;
+      const modal = await this.modal.getTop();
+      if (modal) {
+        modal.dismiss();
+      } else if (
+        this.router.url.includes("/tabs/") ||
+        this.router.url === "/"
+      ) {
+        this.backButtonCount++;
 
-          switch (this.backButtonCount) {
-            case 1:
-              (
-                await this.toastController.create({
-                  message: "Pulsa de nuevo para salir de la aplicación",
-                  duration: 2000,
-                  position: "bottom"
-                })
-              ).present();
-              break;
+        switch (this.backButtonCount) {
+          case 1:
+            (
+              await this.toastController.create({
+                message: "Pulsa de nuevo para salir de la aplicación",
+                duration: 2000,
+                position: "bottom"
+              })
+            ).present();
+            break;
 
-            default:
-              navigator["app"].exitApp();
-          }
+          default:
+            navigator["app"].exitApp();
         }
       } else {
         this.nav.back();

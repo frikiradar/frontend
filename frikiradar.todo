@@ -1,7 +1,6 @@
 ✔ - Mensaje si no hay personas cerca, cambia a vista por km @done (5/1/2021 11:41:02)
 ☐ - Página bajas correo
-☐ - Eliminar perfiles
-☐ - Añadir opción: ocultar perfiles deslizados
+✔ - Eliminar perfiles @done (15/5/2021 12:29:59)
 ☐ - Permitir desactivar cuenta desde link y email
 ☐ - Sistema de citas con calendario
 ✔ - Quitar toda referencia a premium o frikiradar ilimitado @done (15/1/2021 12:54:50)
@@ -23,7 +22,7 @@ IDEAS
 ☐ - Crear sistema cómodo de moderación dentro de la app para gestionar de forma fácil a todos los usuarios
 ✔ - Añadir escudo de moderador al lado del nombre, a la derecha del de verificado @done (3/3/2021 9:42:29)
 ✔ - Poder gestionar el color del nombre de un usuario y de qué color escribe en los chats grupales @done (24/3/2021 11:30:42)
-☐ - si alguien te da un kokoro y tu se lo das también que ponga ¡Felicidades! os habeis kokoreado mutuamente, ya podéis chatear. Porque pone que hay que esperar también al otro aunque te lo haya dado
+✔ - si alguien te da un kokoro y tu se lo das también que ponga ¡Felicidades! os habeis kokoreado mutuamente, ya podéis chatear. Porque pone que hay que esperar también al otro aunque te lo haya dado @done (15/5/2021 12:30:28)
 ✔ - Notificación match @done (14/4/2021 13:05:31)
 ✔ - Escribiendo... @done (24/3/2021 11:30:34)
 ✔ - Enviar email al correo cuando se banea @done (26/3/2021 19:37:55)
@@ -39,14 +38,16 @@ IDEAS
 ☐ - Que los usuarios puedan cambiar el fondo del chat privado y grupal a uno personalizado
 ☐ - Cambiar la paleta de colores de FrikiRadar a una más atractiva y bonita (ya que todo es mayormente negro y podría ser más atractivo, algun fondo un poco más bonito)
 ☐ - Poder alternar entre tema oscuro / tema claro
-☐ - Que la hora de la recepción de mensajes sea que en lugar de poner la hora exacta, hasta que no pase una hora de la recepción del mensaje ponga "Justo ahora" o "hace x minutos, hace 30 segundos"
+✔ - Que la hora de la recepción de mensajes sea que en lugar de poner la hora exacta, hasta que no pase una hora de la recepción del mensaje ponga "Justo ahora" o "hace x minutos, hace 30 segundos" @done (15/5/2021 12:28:30)
 ☐ - Que la gente pueda escoger el color de su nick de unos predefinidos para poder personalizarlo
 ☐ - Comandos de rol ( /me /d20)
 ☐ - Comandos de mod (/ban @pepito Mal comportamiento 60 - /mute @pepito Mal comportamiento 60)
 ☐ - Que la versión web se aproveche mejor, hay mucho espacio sobrante, las cosas podrían ser mas grandes como banner de tu perfil y demas
-☐ - Diferenciar en comunidad la parte de Historias frikis, Salas de chat y Páginas por colores, que se destaque que son distintas partes pero de la misma categoría
+✔ - Diferenciar en comunidad la parte de Historias frikis, Salas de chat y Páginas por colores, que se destaque que son distintas partes pero de la misma categoría @done (15/5/2021 12:28:45)
 ☐ - Poder poner lo que escribes en negrita, en cursiva, tachado.
-☐ - Poder archivar chats y salas.
+✔ - Poder archivar chats. @done (15/5/2021 12:29:05)
+☐ - Poder archivar salas.
 ✔ - Mover configuracion de salas y chats a servidor. @done (14/4/2021 13:03:22)
 ☐ - Añadir opción de mencionar a todos
 ☐ - Focus en escritorio al entrar en chat
+☐ - Sistema de experiencia/gamificación

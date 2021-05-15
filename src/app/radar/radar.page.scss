@@ -196,6 +196,15 @@ ion-content {
 
 #radar-range {
   color: white;
+  background: #292929f8;
+  border-radius: 30px;
+  width: 97%;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
 
   ion-range {
     padding-top: 0;
@@ -206,6 +215,10 @@ ion-content {
     font-size: 12px;
     text-align: end;
     padding: 0;
+
+    ion-col {
+      padding-top: 0;
+    }
   }
 }
 
