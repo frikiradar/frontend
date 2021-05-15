@@ -63,7 +63,7 @@
     </ion-buttons>
   </ion-item>
 
-  <div id="stories" *ngIf="auth.currentUserValue">
+  <div id="stories" *ngIf="auth.currentUserValue" class="ion-padding">
     <div *ngIf="!stories">
       <ion-slides [options]="storiesOpts" mode="md">
         <ion-slide *ngFor="let i of [].constructor(8)">
@@ -109,7 +109,7 @@
     </ion-slides>
   </div>
 
-  <ion-item id="room" button lines="none" (click)="showRoom(page.slug)">
+  <ion-item class="room" button lines="none" (click)="showRoom(page.slug)">
     <ion-thumbnail>
       <ion-img src="/assets/img/layout/room.png" alt="sala de chat"></ion-img>
       <ion-badge color="primary" *ngIf="room?.unread">&nbsp;</ion-badge>
@@ -124,7 +124,12 @@
     </ion-label>
   </ion-item>
 
-  <ion-item id="room" button lines="none" *ngIf="page.game_mode === 'online'">
+  <ion-item
+    class="room"
+    button
+    lines="none"
+    *ngIf="page.game_mode === 'online'"
+  >
     <ion-thumbnail>
       <ion-img src="/assets/img/layout/events.png" alt="eventos"></ion-img>
     </ion-thumbnail>
@@ -138,7 +143,7 @@
     </ion-label>
   </ion-item>
 
-  <ion-item id="room" button lines="none" (click)="search()">
+  <ion-item class="room" button lines="none" (click)="search()">
     <ion-thumbnail>
       <ion-img src="/assets/img/layout/search.png" alt="búsqueda"></ion-img>
     </ion-thumbnail>

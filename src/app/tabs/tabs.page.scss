@@ -1,11 +1,16 @@
 ion-tab-bar {
-  background-color: #212121;
+  background-color: #1f1f1f;
 
   ion-tab-button {
     color: white;
+    height: 80%;
+    margin-left: 5px;
+    margin-right: 5px;
 
     &.tab-selected {
       color: #e91e63;
+      background: #292929;
+      border-radius: 20px;
     }
   }
 }

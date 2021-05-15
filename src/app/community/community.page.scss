@@ -9,6 +9,11 @@ ion-thumbnail {
 }
 
 #rooms {
+  background: #292929;
+  margin: 0 10px 10px 10px;
+  border-radius: 25px;
+  padding: 10px 0;
+
   .room-name.unread {
     font-weight: bolder;
   }
@@ -26,16 +31,22 @@ ion-thumbnail {
     width: 20px;
     height: 20px;
     bottom: 12px;
-    border: 2px solid #212121;
+    border: 2px solid #1f1f1f;
   }
 }
 
 #stories {
-  padding-left: 15px;
-  padding-right: 15px;
+  margin: 10px 0 10px 10px;
+  background: #292929;
+  border-radius: 25px 0 0 25px;
 }
 
 #pages {
+  background: #292929;
+  margin: 0 0 10px 10px;
+  border-radius: 25px 0 0 25px;
+  padding: 15px 0 15px 0px;
+
   .swiper-slide img {
     height: 130px;
     width: auto;

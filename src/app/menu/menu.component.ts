@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { Router } from "@angular/router";
+import { NavigationEnd, Router, RouterEvent } from "@angular/router";
 import { MenuController, ModalController, Platform } from "@ionic/angular";
 
 import { CreditsModal } from "../credits/credits.modal";
@@ -22,6 +22,7 @@ export class MenuComponent {
   avatar: SafeResourceUrl;
   public user: User;
   public counters: NotificationCounters;
+  public selected: string;
 
   constructor(
     public menu: MenuController,
@@ -35,6 +36,12 @@ export class MenuComponent {
   ) {
     this.notificationSvc.notification.subscribe(notification => {
       this.counters = notification;
+    });
+
+    this.router.events.subscribe(async (event: RouterEvent) => {
+      if (event instanceof NavigationEnd) {
+        this.selected = event.url;
+      }
     });
   }
 
@@ -69,7 +76,8 @@ export class MenuComponent {
 
   async credits() {
     const modal = await this.modal.create({
-      component: CreditsModal
+      component: CreditsModal,
+      cssClass: "full-modal"
     });
     return await modal.present();
   }

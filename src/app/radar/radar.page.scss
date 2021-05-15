@@ -13,8 +13,9 @@ ion-slide {
 }
 
 ion-card {
-  background-color: #212121;
+  --background: #292929;
   overflow: auto;
+  border-radius: 25px;
 
   &.md {
     height: 97%;
@@ -26,17 +27,8 @@ ion-card {
 }
 
 ion-card-header {
-  position: relative;
-  width: 100%;
-  bottom: 34px;
-  margin: 0;
   text-align: left;
-  background: rgba(26, 26, 26, 0.8);
-  padding: 5px 10px;
-
-  &.ios {
-    bottom: 43px;
-  }
+  padding-bottom: 5px;
 
   ion-card-title {
     color: white;
@@ -51,7 +43,7 @@ ion-card-header {
     }
 
     .name {
-      font-size: 20px;
+      font-size: 24px;
     }
 
     .age {
@@ -61,21 +53,8 @@ ion-card-header {
 }
 
 ion-card-content {
+  min-height: 50%;
   text-align: left;
-  position: relative;
-  bottom: 30px;
-  clear: both;
-
-  .location {
-    font-size: 14px;
-    color: #e91e63 !important;
-    margin-bottom: 10px;
-
-    ion-icon {
-      margin-right: 5px;
-      vertical-align: text-bottom;
-    }
-  }
 
   .description {
     max-height: 37px;
@@ -96,14 +75,28 @@ ion-card-content {
   }
 }
 
+.card-footer {
+  position: sticky;
+  bottom: -1px;
+  background: #292929;
+
+  ion-icon {
+    margin-right: 15px;
+  }
+
+  ion-label {
+    color: white;
+  }
+}
+
 .match {
   position: absolute;
-  margin-top: -93px;
+  margin-top: -34px;
   color: white;
   font-size: 12px;
   border: 2px solid white;
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
   font-weight: bold;
   margin-left: 10px;
@@ -118,7 +111,7 @@ ion-content {
     background: #e91e63;
 
     ion-item {
-      --background: #212121;
+      --background: #1f1f1f;
 
       ion-avatar {
         &.md {
@@ -138,7 +131,7 @@ ion-content {
           z-index: 1;
           width: 20px;
           height: 20px;
-          border: 2px solid #212121;
+          border: 2px solid #1f1f1f;
           bottom: 25px;
         }
       }
@@ -201,7 +194,7 @@ ion-content {
   }
 }
 
-ion-footer.md {
+#radar-range.md {
   transition: max-height 0.5s;
   max-height: 100px;
   &.hide-background {

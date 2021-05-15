@@ -1,7 +1,7 @@
 :host {
   ion-header {
     height: 100px;
-    background: #212121;
+    background: #1f1f1f;
     background-position: center center;
     background-size: cover;
 
@@ -25,6 +25,11 @@
   }
 
   ion-item {
+    margin: 0 5px;
+    &.selected {
+      background: #292929;
+      border-radius: 20px;
+    }
     ion-label {
       --color: white !important;
     }
@@ -52,4 +57,8 @@
 ion-badge {
   border-radius: 15px;
   min-width: 20px;
+}
+
+ion-footer {
+  background: #1f1f1f;
 }
