@@ -194,12 +194,8 @@ ion-content {
   }
 }
 
-#radar-range.md {
-  transition: max-height 0.5s;
-  max-height: 100px;
-  &.hide-background {
-    max-height: 0;
-  }
+#radar-range {
+  color: white;
 
   ion-range {
     padding-top: 0;
@@ -210,5 +206,13 @@ ion-content {
     font-size: 12px;
     text-align: end;
     padding: 0;
+  }
+}
+
+#radar-range.md {
+  transition: max-height 0.5s;
+  max-height: 100px;
+  &.hide-background {
+    max-height: 0;
   }
 }
