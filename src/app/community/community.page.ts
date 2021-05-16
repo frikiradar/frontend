@@ -21,6 +21,7 @@ import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { Page } from "../models/page";
 import { PageService } from "../services/page.service";
 import { Chat } from "../models/chat";
+import { AnimateService } from "../services/animate.service";
 
 @Component({
   selector: "app-community",
@@ -66,7 +67,8 @@ export class CommunityPage {
     public vibration: Vibration,
     private modal: ModalController,
     private route: ActivatedRoute,
-    private pageSvc: PageService
+    private pageSvc: PageService,
+    private animate: AnimateService
   ) {
     this.router.events.subscribe(async (event: Event) => {
       if (event instanceof NavigationStart) {
@@ -81,6 +83,7 @@ export class CommunityPage {
   }
 
   async ngAfterViewInit() {
+    this.animate.animateSections("section", 600, 500);
     this.pages = (await this.config.get("pages")) as Config["pages"];
     this.rooms = (await this.config.get("rooms")) as Config["rooms"];
   }

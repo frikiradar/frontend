@@ -29,60 +29,39 @@
       color="light"
     ></ion-icon>
   </ion-item>
-  <div *ngIf="!stories">
-    <ion-slides [options]="storiesOpts" mode="md" id="stories">
-      <ion-slide *ngFor="let i of [].constructor(8)">
+  <section>
+    <ion-slides
+      id="stories"
+      class="ion-padding"
+      [options]="storiesOpts"
+      mode="md"
+    >
+      <ion-slide>
         <div>
-          <ion-item button lines="none">
+          <ion-item button lines="none" (click)="newStory()">
             <ion-avatar>
-              <ion-skeleton-text
-                animated
-                style="width: 100%"
-              ></ion-skeleton-text>
+              <img
+                [src]="auth.currentUserValue?.thumbnail"
+                alt="auth.currentUserValue?.name"
+              />
+              <ion-badge color="tertiary">+</ion-badge>
             </ion-avatar>
           </ion-item>
-          <ion-label>
-            <ion-skeleton-text
-              animated
-              style="width: 70px;"
-            ></ion-skeleton-text>
-          </ion-label>
+          <ion-label>Añadir historia</ion-label>
+        </div>
+      </ion-slide>
+      <ion-slide *ngFor="let story of groupedStories; let i = index">
+        <div>
+          <ion-item button lines="none" (click)="showStories(story.user.id)">
+            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
+              <img [src]="story.image" [alt]="story.text" />
+            </ion-avatar>
+          </ion-item>
+          <ion-label>{{story.user.username}}</ion-label>
         </div>
       </ion-slide>
     </ion-slides>
-  </div>
-  <ion-slides
-    id="stories"
-    class="ion-padding"
-    [options]="storiesOpts"
-    mode="md"
-    *ngIf="stories"
-  >
-    <ion-slide>
-      <div>
-        <ion-item button lines="none" (click)="newStory()">
-          <ion-avatar>
-            <img
-              [src]="auth.currentUserValue?.thumbnail"
-              alt="auth.currentUserValue?.name"
-            />
-            <ion-badge color="tertiary">+</ion-badge>
-          </ion-avatar>
-        </ion-item>
-        <ion-label>Añadir historia</ion-label>
-      </div>
-    </ion-slide>
-    <ion-slide *ngFor="let story of groupedStories; let i = index">
-      <div>
-        <ion-item button lines="none" (click)="showStories(story.user.id)">
-          <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
-            <img [src]="story.image" [alt]="story.text" />
-          </ion-avatar>
-        </ion-item>
-        <ion-label>{{story.user.username}}</ion-label>
-      </div>
-    </ion-slide>
-  </ion-slides>
+  </section>
 
   <ion-item lines="none" (click)="showAllRooms()" button detail="false">
     <ion-label color="light">
