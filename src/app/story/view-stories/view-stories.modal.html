@@ -43,7 +43,7 @@
     (ionSlidesDidLoad)="$event.target.update()"
     (click)="tap($event)"
     [options]="slideOpts"
-    scrollbar="true"
+    pager="true"
   >
     <ion-slide *ngFor="let story of stories">
       <ion-card>

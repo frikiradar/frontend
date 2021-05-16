@@ -68,6 +68,12 @@ export class ViewStoriesModal implements OnInit {
     speed: 500,
     autoplay: {
       delay: this.delay
+    },
+    grabCursor: true,
+    lazy: true,
+    pagination: {
+      el: ".swiper-pagination",
+      type: "progressbar"
     }
   };
 

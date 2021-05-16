@@ -5,12 +5,7 @@ import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-import {
-  AlertController,
-  ModalController,
-  Platform,
-  ToastController
-} from "@ionic/angular";
+import { AlertController, Platform, ToastController } from "@ionic/angular";
 import {
   CodePush,
   InstallMode,
@@ -31,7 +26,6 @@ import { SwService } from "./services/sw.service";
 })
 export class AppComponent {
   currentUser: User;
-  backButtonCount = 0;
   alertNetwork: HTMLIonAlertElement;
   public internet = true;
 
@@ -48,7 +42,6 @@ export class AppComponent {
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
     private toastController: ToastController,
-    private modal: ModalController,
     private push: PushService,
     private codePush: CodePush,
     private nav: NavService,
@@ -73,7 +66,7 @@ export class AppComponent {
 
       this.loadConfig();
       this.networkStatus();
-      this.backButtonStatus();
+      this.nav.backButtonStatus();
 
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
         const user = await this.auth.getAuthUser();
@@ -149,38 +142,6 @@ export class AppComponent {
         console.log("CODE PUSH ERROR: " + err);
       }
     );
-  }
-
-  async backButtonStatus() {
-    this.platform.backButton.subscribe(async () => {
-      const modal = await this.modal.getTop();
-      if (modal) {
-        modal.dismiss();
-      } else if (
-        this.router.url.includes("/tabs/") ||
-        this.router.url === "/"
-      ) {
-        this.backButtonCount++;
-
-        switch (this.backButtonCount) {
-          case 1:
-            (
-              await this.toastController.create({
-                message: "Pulsa de nuevo para salir de la aplicación",
-                duration: 2000,
-                position: "bottom"
-              })
-            ).present();
-            break;
-
-          default:
-            navigator["app"].exitApp();
-        }
-      } else {
-        this.nav.back();
-        this.backButtonCount = 0;
-      }
-    });
   }
 
   async countOpenTimes() {

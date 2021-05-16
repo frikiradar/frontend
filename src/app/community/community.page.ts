@@ -42,7 +42,8 @@ export class CommunityPage {
       1024: {
         slidesPerView: 6.5
       }
-    }
+    },
+    grabCursor: true
   };
 
   public pagesOpts = {
@@ -51,7 +52,8 @@ export class CommunityPage {
       1024: {
         slidesPerView: 8.5
       }
-    }
+    },
+    grabCursor: true
   };
 
   constructor(
