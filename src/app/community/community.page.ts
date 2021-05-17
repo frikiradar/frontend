@@ -106,11 +106,15 @@ export class CommunityPage {
   }
 
   async getStories() {
-    this.stories = undefined;
-    this.groupedStories = undefined;
-    const stories = await this.storySvc.getStories();
-    this.stories = this.storySvc.orderStories(stories);
-    this.groupedStories = this.storySvc.groupStories(this.stories);
+    let stories = await this.storySvc.getStories();
+    stories = this.storySvc.orderStories(stories);
+    if (!deepEqual(this.stories, stories)) {
+      this.stories = stories;
+      const groupedStories = this.storySvc.groupStories(stories);
+
+      console.log(this.groupedStories, groupedStories);
+      this.groupedStories = groupedStories;
+    }
   }
 
   async getRooms() {
