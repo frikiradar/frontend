@@ -435,9 +435,12 @@ export class RadarPage {
     if (this.view === "cards") {
       this.view = "list";
       this.ratio = 50;
-
-      radar_config.view = this.view;
-      radar_config.range = this.rangeValue;
+      if (radar_config) {
+        radar_config.view = this.view;
+        radar_config.range = this.rangeValue;
+      } else {
+        radar_config = { view: this.view, range: this.rangeValue };
+      }
     } else {
       this.view = "cards";
       this.ratio = -1;
@@ -639,8 +642,10 @@ export class RadarPage {
       "radar_config"
     )) as Config["radar_config"];
 
-    if (!radar_config?.options) {
+    if (radar_config?.options) {
       radar_config.options = this.searchOptions;
+    } else {
+      radar_config = { options: this.searchOptions };
     }
 
     radar_config.options[property] = value;
