@@ -594,16 +594,21 @@ export class RadarPage {
     const radar_config = (await this.config.get(
       "radar_config"
     )) as Config["radar_config"];
-    if (radar_config?.options) {
-      this.searchOptions = radar_config.options;
+    if (radar_config) {
+      if (radar_config?.options) {
+        this.searchOptions = radar_config.options;
+      }
+      if (radar_config?.extended) {
+        this.extended = radar_config.extended;
+      }
     }
-    if (!radar_config?.extended) {
+
+    if (this.extended) {
+      this.pane.present({ animate: true });
+    } else {
       this.pane.present({ animate: true });
       await this.utils.delay(100);
       this.pane.moveToBreak("bottom");
-    } else {
-      this.pane.present({ animate: true });
-      this.pane.moveToBreak("middle");
     }
   }
 
