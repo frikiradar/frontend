@@ -112,7 +112,6 @@ export class CommunityPage {
       this.stories = stories;
       const groupedStories = this.storySvc.groupStories(stories);
 
-      console.log(this.groupedStories, groupedStories);
       this.groupedStories = groupedStories;
     }
   }

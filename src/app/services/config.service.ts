@@ -11,7 +11,16 @@ import { User } from "../models/user";
 export interface Config {
   openTimes?: number;
   review?: boolean;
-  radarView?: "view" | "list";
+  radar_config?: {
+    view?: "cards" | "list";
+    range?: number;
+    extended?: boolean;
+    options?: {
+      identity: boolean;
+      range: boolean;
+      connection: boolean;
+    };
+  };
   radarAdv?: boolean;
   maintenance?: boolean;
   min_version?: string;

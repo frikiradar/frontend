@@ -89,10 +89,14 @@ export class UserService {
       .toPromise()) as Promise<User["coordinates"]>;
   }
 
-  getRadarUsers(page = 1, ratio = -1) {
-    return this.rest.put("radar", { page, ratio }).toPromise() as Promise<
-      User[]
-    >;
+  getRadarUsers(
+    page = 1,
+    ratio = -1,
+    options?: { identity: boolean; range: boolean; connection: boolean }
+  ) {
+    return this.rest
+      .put("radar", { page, ratio, options })
+      .toPromise() as Promise<User[]>;
   }
 
   searchUsers(query: string, order: "distance" | "match", page: number) {

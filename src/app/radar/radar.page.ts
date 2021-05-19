@@ -21,6 +21,7 @@ import { UtilsService } from "../services/utils.service";
 import { Config, ConfigService } from "../services/config.service";
 import { PushService } from "../services/push.service";
 import { takeWhile } from "rxjs/operators";
+import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 
 @Component({
   selector: "app-radar",
@@ -30,7 +31,7 @@ import { takeWhile } from "rxjs/operators";
 export class RadarPage {
   @ViewChild("slides", { static: false })
   slides: IonSlides;
-  @ViewChild("range", { static: true })
+  @ViewChild("range", { static: false })
   range: IonRange;
   @ViewChild("radarlist", { static: true })
   radarlist: IonContent;
@@ -167,14 +168,44 @@ export class RadarPage {
 
   public hide = false;
   page = 0;
-  ratio = -1;
+  public ratio = -1;
+  public automatic = true;
+  public rangeValue = 1;
   authUser: User;
   users: User[] = undefined;
   public user: User;
-  public view: "cards" | "list" = "cards";
+  public view: "cards" | "list";
   coordinates: User["coordinates"];
   public showBackdrop = false;
   public loading = true;
+  public pane: CupertinoPane;
+  public extended = true;
+  public searchOptions = {
+    identity: true,
+    range: false,
+    connection: false
+  };
+
+  private paneSettings: CupertinoSettings = {
+    backdrop: true,
+    bottomClose: true,
+    buttonDestroy: false,
+    handleKeyboard: false,
+    breaks: {
+      middle: { enabled: true, height: 500, bounce: true },
+      bottom: { enabled: true, height: 300, bounce: true }
+    },
+    initialBreak: "middle",
+
+    onBackdropTap: () => {
+      this.pane.destroy({ animate: true });
+      this.loading = true;
+      this.page = 0;
+      this.users = undefined;
+      this.radarlist?.scrollToTop(0);
+      this.getRadarUsers();
+    }
+  };
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -268,10 +299,28 @@ export class RadarPage {
         .catch(err => console.log("Error tracking view:", err));
     }
 
-    if ((await this.config.get("radarView")) === "list") {
+    const radar_config = (await this.config.get(
+      "radar_config"
+    )) as Config["radar_config"];
+    if (radar_config?.extended !== undefined) {
+      this.extended = radar_config.extended;
+    }
+    if (radar_config?.options !== undefined) {
+      this.searchOptions = radar_config.options;
+    }
+    if (radar_config?.view === "list") {
       this.view = "list";
-      this.ratio = 50;
+      const range = radar_config?.range;
+      if (range !== undefined) {
+        this.rangeValue = range;
+        this.ratio = this.getRatio(range);
+      } else {
+        this.ratio = 50;
+      }
     } else {
+      this.view = "cards";
+      this.ratio = -1;
+      await this.utils.delay(500);
       await this.slides.slideTo(0);
     }
     this.getRadarUsers();
@@ -286,9 +335,19 @@ export class RadarPage {
             if (this.users?.length) {
               this.authUser = authUser;
               this.page = 0;
-              if ((await this.config.get("radarView")) === "list") {
+
+              const radar_config = (await this.config.get(
+                "radar_config"
+              )) as Config["radar_config"];
+
+              if (radar_config?.view === "list") {
                 this.view = "list";
-                this.ratio = 50;
+                const range = radar_config?.range;
+                if (range) {
+                  this.range.value = range;
+                } else {
+                  this.ratio = 50;
+                }
               } else {
                 await this.slides.slideTo(0);
               }
@@ -302,8 +361,16 @@ export class RadarPage {
   async getRadarUsers(event?: any) {
     try {
       this.page++;
-
-      const resUsers = await this.userSvc.getRadarUsers(this.page, this.ratio);
+      let resUsers = [];
+      if (!this.extended) {
+        resUsers = await this.userSvc.getRadarUsers(this.page, this.ratio);
+      } else {
+        resUsers = await this.userSvc.getRadarUsers(
+          this.page,
+          this.ratio,
+          this.searchOptions
+        );
+      }
       this.loading = false;
       if (this.page === 1) {
         this.config.set("radar", resUsers);
@@ -313,23 +380,37 @@ export class RadarPage {
 
       this.users =
         this.page === 1 ? (this.users = users) : [...this.users, ...users];
-      if (this.ratio === -1) {
-        if (resUsers?.length > 0 && !this.users?.length) {
-          this.users = [...this.users, ...resUsers];
-        }
+      if (this.users?.length > 0) {
+        if (this.ratio === -1) {
+          if (resUsers?.length > 0 && !this.users?.length) {
+            this.users = [...this.users, ...resUsers];
+          }
 
-        if (this.users[0]?.id) {
-          this.user = this.users[0];
-          this.userSvc.view(this.user.id);
-        }
-      } else {
-        if (event) {
-          event.target.complete();
+          if (this.users[0]?.id) {
+            this.user = this.users[0];
+            this.userSvc.view(this.user.id);
+          }
+        } else {
+          if (event) {
+            event.target.complete();
 
-          if (users.length < 15) {
-            event.target.disabled = true;
+            if (users.length < 15) {
+              event.target.disabled = true;
+            }
           }
         }
+      } else if (
+        this.range.value > -1 &&
+        this.range.value < 5 &&
+        this.automatic
+      ) {
+        let value = this.range.value as number;
+        value++;
+        this.range.value = value;
+      }
+
+      if (await this.toast.getTop()) {
+        this.toast.dismiss();
       }
     } catch (e) {
       console.error(e);
@@ -347,47 +428,61 @@ export class RadarPage {
   async changeView() {
     this.page = 0;
     this.users = undefined;
+    let radar_config = (await this.config.get(
+      "radar_config"
+    )) as Config["radar_config"];
+
     if (this.view === "cards") {
       this.view = "list";
       this.ratio = 50;
+
+      radar_config.view = this.view;
+      radar_config.range = this.rangeValue;
     } else {
       this.view = "cards";
       this.ratio = -1;
-    }
 
-    this.config.set("radarView", this.view);
+      radar_config.view = this.view;
+      radar_config.range = -1;
+    }
+    this.config.set("radar_config", radar_config);
+
     this.getRadarUsers();
   }
 
   async changeRatio(value: number) {
-    if (this.users.length < 15) {
-      this.radarAdv();
-    }
+    if (value !== this.range.value) {
+      this.range.value = value;
+    } else {
+      if (this.users?.length < 15) {
+        this.radarAdv();
+      }
 
-    switch (value) {
-      case 0:
-        this.ratio = 10;
-        break;
-      case 1:
-        this.ratio = 50;
-        break;
-      case 2:
-        this.ratio = 100;
-        break;
-      case 3:
-        this.ratio = 500;
-        break;
-      case 4:
-        this.ratio = 1000;
-        break;
-      case 5:
-        this.ratio = 25000;
-        break;
+      this.ratio = this.getRatio(value);
+
+      let radar_config = (await this.config.get(
+        "radar_config"
+      )) as Config["radar_config"];
+      radar_config.view = this.view;
+      radar_config.range = value;
+      this.config.set("radar_config", radar_config);
+
+      (
+        await this.toast.create({
+          message:
+            this.ratio < 25000
+              ? "Buscando personas a " + this.ratio + "km"
+              : "Buscando personas mundialmente",
+          position: "middle",
+          color: "secondary"
+        })
+      ).present();
+
+      this.page = 0;
+      this.users = undefined;
+      this.radarlist?.scrollToTop(0);
+      this.getRadarUsers();
     }
-    this.page = 0;
-    this.users = undefined;
-    this.radarlist?.scrollToTop(0);
-    this.getRadarUsers();
   }
 
   async hideProfile(id: User["id"]) {
@@ -454,6 +549,23 @@ export class RadarPage {
     }
   }
 
+  getRatio(value: number) {
+    switch (value) {
+      case 0:
+        return 10;
+      case 1:
+        return 50;
+      case 2:
+        return 100;
+      case 3:
+        return 500;
+      case 4:
+        return 1000;
+      case 5:
+        return 25000;
+    }
+  }
+
   async radarAdv() {
     const radarAdv = this.config.get("radarAdv");
 
@@ -475,5 +587,59 @@ export class RadarPage {
       this.config.set("radarAdv", true);
       await alert.present();
     }
+  }
+
+  async filter() {
+    this.pane = new CupertinoPane(".radar-pane", this.paneSettings);
+    const radar_config = (await this.config.get(
+      "radar_config"
+    )) as Config["radar_config"];
+    if (radar_config?.options) {
+      this.searchOptions = radar_config.options;
+    }
+    if (!radar_config?.extended) {
+      this.pane.present({ animate: true });
+      await this.utils.delay(100);
+      this.pane.moveToBreak("bottom");
+    } else {
+      this.pane.present({ animate: true });
+      this.pane.moveToBreak("middle");
+    }
+  }
+
+  async radarSearchChange(extended: boolean) {
+    this.extended = extended;
+    let radar_config = (await this.config.get(
+      "radar_config"
+    )) as Config["radar_config"];
+    if (radar_config) {
+      radar_config.extended = extended;
+    } else {
+      radar_config = { extended };
+    }
+
+    this.config.set("radar_config", radar_config);
+    if (extended) {
+      this.pane.moveToBreak("middle");
+    } else {
+      this.pane.moveToBreak("bottom");
+    }
+  }
+
+  async radarSearchOptions(
+    property: keyof Config["radar_config"]["options"],
+    value: boolean
+  ) {
+    let radar_config = (await this.config.get(
+      "radar_config"
+    )) as Config["radar_config"];
+
+    if (!radar_config?.options) {
+      radar_config.options = this.searchOptions;
+    }
+
+    radar_config.options[property] = value;
+    this.config.set("radar_config", radar_config);
+    this.searchOptions = radar_config.options;
   }
 }

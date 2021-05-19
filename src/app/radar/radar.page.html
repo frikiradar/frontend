@@ -19,6 +19,9 @@
           [name]="view === 'cards' ? 'list' : 'albums'"
         ></ion-icon>
       </ion-button>
+      <ion-button (click)="filter()">
+        <ion-icon slot="icon-only" name="filter"></ion-icon>
+      </ion-button>
       <ion-button (click)="search()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
@@ -229,7 +232,10 @@
         </ion-infinite-scroll-content>
       </ion-infinite-scroll>
     </ion-list>
-    <div class="full-center ion-padding" *ngIf="users?.length === 0">
+    <div
+      class="full-center ion-padding"
+      *ngIf="users?.length === 0 && (!automatic || ratio === 25000)"
+    >
       <ion-icon name="location"></ion-icon>
       <h2>Sin resultados</h2>
       <p>
@@ -245,7 +251,7 @@
 <ion-footer
   id="radar-range"
   *ngIf="view === 'list'"
-  [class.hide-background]="hide || !users"
+  [class.hide-background]="!automatic && (hide || !users)"
 >
   <ion-range
     mode="md"
@@ -255,8 +261,9 @@
     step="1"
     snaps="true"
     [debounce]="250"
-    value="1"
+    [value]="rangeValue"
     (ionChange)="changeRatio($event.detail.value)"
+    (click)="automatic = false"
   >
     <ion-label slot="start">10km</ion-label>
     <ion-icon slot="end" name="globe" size="small"></ion-icon>
@@ -272,4 +279,75 @@
     </ion-row>
   </ion-grid>
 </ion-footer>
+
+<!-- panes -->
+
+<div class="radar-pane">
+  <ion-item lines="full">
+    <ion-label class="ion-text-center">Filtros de radar</ion-label>
+  </ion-item>
+  <ion-list>
+    <ion-item lines="none">
+      <ion-label *ngIf="!extended">Búsqueda estricta</ion-label>
+      <ion-label *ngIf="extended">Búsqueda ampliada</ion-label>
+      <ion-toggle
+        [ngModel]="extended"
+        (ngModelChange)="radarSearchChange($event)"
+      ></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap" *ngIf="!extended">
+        <p>
+          Se tiene en cuenta tu configuración del perfil en la búsqueda
+          (identidad de género, rango de edad y tipo de conexión).
+        </p>
+      </ion-label>
+      <ion-label class="ion-text-wrap" *ngIf="extended">
+        <p>
+          No se tiene en cuenta tu configuración del perfil en la búsqueda. Se
+          obtienen todos los resultados posibles.
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-item-group *ngIf="extended">
+      <ion-item lines="none" *ngIf="auth.currentUserValue?.lovegender">
+        <ion-label>
+          <h2>Identidad de género</h2>
+          <p>{{auth.currentUserValue?.lovegender}}</p>
+        </ion-label>
+        <ion-toggle
+          [ngModel]="searchOptions?.identity"
+          (ngModelChange)="radarSearchOptions('identity', $event)"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item
+        lines="none"
+        *ngIf="auth.currentUserValue?.minage && auth.currentUserValue?.maxage"
+      >
+        <ion-label>
+          <h2>Rango de edad</h2>
+          <p>
+            {{auth.currentUserValue?.minage}} -
+            {{auth.currentUserValue?.maxage}}
+          </p>
+        </ion-label>
+        <ion-toggle
+          [ngModel]="searchOptions?.range"
+          (ngModelChange)="radarSearchOptions('range', $event)"
+        ></ion-toggle>
+      </ion-item>
+      <ion-item lines="none" *ngIf="auth.currentUserValue?.connection?.length">
+        <ion-label>
+          <h2>Tipo de conexión</h2>
+          <p>{{auth.currentUserValue?.connection}}</p>
+        </ion-label>
+        <ion-toggle
+          [ngModel]="searchOptions?.connection"
+          (ngModelChange)="radarSearchOptions('connection', $event)"
+        ></ion-toggle>
+      </ion-item>
+    </ion-item-group>
+  </ion-list>
+</div>
+
 <ion-backdrop visible="true" *ngIf="showBackdrop"></ion-backdrop>

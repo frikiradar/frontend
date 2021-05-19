@@ -37,7 +37,12 @@ export class NavService {
 
   async backButtonStatus() {
     this.platform.backButton.subscribeWithPriority(1, async () => {
-      if (this.router.url.includes("/tabs/") || this.router.url === "/") {
+      if (!!document.querySelector(".cupertino-pane-wrapper")) {
+        this.backButtonCount = 0;
+      } else if (
+        this.router.url.includes("/tabs/") ||
+        this.router.url === "/"
+      ) {
         this.backButtonCount++;
 
         if (this.backButtonCount === 1) {

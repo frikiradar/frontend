@@ -2,7 +2,7 @@
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="radar" *ngIf="auth.isAdult()">
       <ion-icon
-        [name]="'location' + (selected === 'radar' ? '' : '-outline')"
+        [name]="selected === 'radar' ? 'location-sharp' : 'location-outline'"
       ></ion-icon>
       <ion-badge color="primary" *ngIf="counters?.radar > 0"
         >{{ counters.radar }}</ion-badge
