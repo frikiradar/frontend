@@ -11,6 +11,8 @@ import {
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { takeWhile } from "rxjs/operators";
+import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 
 import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
@@ -20,8 +22,6 @@ import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
 import { Config, ConfigService } from "../services/config.service";
 import { PushService } from "../services/push.service";
-import { takeWhile } from "rxjs/operators";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 
 @Component({
   selector: "app-radar",
@@ -185,6 +185,7 @@ export class RadarPage {
     range: false,
     connection: false
   };
+  private searchOptionsChanged = false;
 
   private paneSettings: CupertinoSettings = {
     backdrop: true,
@@ -199,11 +200,14 @@ export class RadarPage {
 
     onBackdropTap: () => {
       this.pane.destroy({ animate: true });
-      this.loading = true;
-      this.page = 0;
-      this.users = undefined;
-      this.radarlist?.scrollToTop(0);
-      this.getRadarUsers();
+      if (this.searchOptionsChanged) {
+        this.searchOptionsChanged = false;
+        this.loading = true;
+        this.page = 0;
+        this.users = undefined;
+        this.radarlist?.scrollToTop(0);
+        this.getRadarUsers();
+      }
     }
   };
 
@@ -460,7 +464,7 @@ export class RadarPage {
       if (this.users?.length < 15) {
         this.radarAdv();
       }
-
+      this.loading = true;
       this.ratio = this.getRatio(value);
 
       let radar_config = (await this.config.get(
@@ -616,6 +620,7 @@ export class RadarPage {
   }
 
   async radarSearchChange(extended: boolean) {
+    this.searchOptionsChanged = true;
     this.extended = extended;
     let radar_config = (await this.config.get(
       "radar_config"
@@ -638,6 +643,7 @@ export class RadarPage {
     property: keyof Config["radar_config"]["options"],
     value: boolean
   ) {
+    this.searchOptionsChanged = true;
     let radar_config = (await this.config.get(
       "radar_config"
     )) as Config["radar_config"];

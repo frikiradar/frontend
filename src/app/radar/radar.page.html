@@ -255,7 +255,7 @@
 <ion-footer
   id="radar-range"
   *ngIf="view === 'list'"
-  [class.hide-background]="!automatic && (hide || !users)"
+  [class.hide-background]="hide || loading"
 >
   <ion-range
     mode="md"
