@@ -75,7 +75,7 @@ export class ChatListComponent {
     this.chatsChange.emit(this.chats);
 
     this.archivedChats = config?.filter(cc => cc.archived);
-    this.selectedChat = this.chats.find(c => +c.user.id === this.selected);
+    this.selectedChat = this.chats.find(c => +c.user?.id === this.selected);
   }
 
   ngOnChanges(changes: SimpleChanges) {
