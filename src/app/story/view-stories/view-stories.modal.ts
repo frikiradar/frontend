@@ -391,7 +391,8 @@ export class ViewStoriesModal implements OnInit {
     if (
       event.srcElement.href &&
       (event.target.className.includes("mention") ||
-        event.target.className.includes("hashtag"))
+        event.target.className.includes("hashtag") ||
+        event.target.className.includes("linkified"))
     ) {
       this.close();
     }
