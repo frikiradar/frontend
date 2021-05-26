@@ -31,13 +31,12 @@ import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
-import { Pro } from "@ionic/pro";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { ImageCropperModule } from "ngx-image-cropper";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireMessagingModule } from "@angular/fire/messaging";
-import { WebcamImage, WebcamModule } from "ngx-webcam";
+import { WebcamModule } from "ngx-webcam";
 import {
   ServiceWorkerModule,
   SwRegistrationOptions
@@ -58,10 +57,6 @@ import { OptionsPopover } from "./options-popover/options-popover";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
 registerLocaleData(localeEs, "es");
-
-/*Pro.init("6e277455", {
-  appVersion: "1.0"
-});*/
 
 @NgModule({
   declarations: [AppComponent, MenuComponent, OptionsPopover],
@@ -116,7 +111,6 @@ registerLocaleData(localeEs, "es");
     BrowserTab,
     InAppBrowser,
     FirebaseX,
-    { provide: WebcamImage },
     Media,
     NativeFile,
     CodePush

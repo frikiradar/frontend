@@ -5,19 +5,10 @@ import { IonicModule } from "@ionic/angular";
 
 import { TabsPageRoutingModule } from "./tabs.router.module";
 
-import { ChatPageModule } from "../chat/chat.module";
-import { RadarPageModule } from "../radar/radar.module";
 import { TabsPage } from "./tabs.page";
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    TabsPageRoutingModule,
-    RadarPageModule,
-    ChatPageModule
-  ],
+  imports: [IonicModule, CommonModule, FormsModule, TabsPageRoutingModule],
   declarations: [TabsPage]
 })
 export class TabsPageModule {}
