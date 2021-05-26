@@ -22,9 +22,9 @@ import { UtilsService } from "../../services/utils.service";
 })
 export class StoryModal implements OnInit {
   @Input() hash: string;
-  @ViewChild("slides", { static: true })
-  @ViewChild("imageInput", { static: true })
+  @ViewChild("imageInput", { static: false })
   imageInput: ElementRef;
+
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
 

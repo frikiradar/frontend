@@ -117,6 +117,11 @@ export class BannedMessagesModal implements OnInit {
       days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
   }
 
+  openUrl(event: any) {
+    this.urlSvc.openUrl(event);
+    return false;
+  }
+
   close() {
     this.modal.dismiss();
   }

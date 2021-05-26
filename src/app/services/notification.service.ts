@@ -7,6 +7,7 @@ import { Notification } from "../models/notification";
 export interface NotificationCounters {
   notifications: number;
   chats: number;
+  radar: number;
 }
 
 @Injectable({

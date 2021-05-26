@@ -46,7 +46,7 @@ export class TabsPage implements OnInit {
     this.notificationSvc.setNotification(this.counters);
   }
 
-  async goToEvents(event: CustomEvent) {
+  async goToEvents(event: MouseEvent) {
     if (this.auth.isMaster()) {
       this.router.navigate(["/tabs/events"]);
     } else {

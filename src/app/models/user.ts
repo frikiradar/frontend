@@ -77,4 +77,6 @@ export interface User {
     patron_status: string | boolean;
     refresh_token: string;
   };
+
+  count?: number;
 }

@@ -231,7 +231,7 @@ export class RadarPage {
   constructor(
     public userSvc: UserService,
     public menu: MenuController,
-    private auth: AuthService,
+    public auth: AuthService,
     public router: Router,
     private geolocationSvc: GeolocationService,
     private deviceSvc: DeviceService,
