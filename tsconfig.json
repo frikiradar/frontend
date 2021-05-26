@@ -16,7 +16,7 @@
     "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
-    "enableIvy": false
+    "enableIvy": true
   },
   "allowSyntheticDefaultImports": true
 }
