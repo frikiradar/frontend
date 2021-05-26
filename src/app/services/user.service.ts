@@ -217,6 +217,8 @@ export class UserService {
       message = "Moderador";
     } else if (user.roles?.includes("ROLE_PATREON")) {
       message = "Patreon";
+    } else if (user.roles.includes("ROLE_DEMO")) {
+      message = "FrikiBot";
     } else if (user.verified) {
       message = "Usuario verificado";
     }
@@ -241,7 +243,9 @@ export class UserService {
     } else if (user.roles.includes("ROLE_MASTER")) {
       return "tertiary";
     } else if (user.roles.includes("ROLE_PATREON")) {
-      return "warning";
+      return "patreon";
+    } else if (user.roles.includes("ROLE_DEMO")) {
+      return "medium";
     } else if (user.verified) {
       return "secondary";
     }
@@ -259,6 +263,8 @@ export class UserService {
       return "shield-checkmark";
     } else if (user.roles.includes("ROLE_PATREON")) {
       return "/assets/icon/patreon_coral.svg";
+    } else if (user.roles.includes("ROLE_DEMO")) {
+      return "/assets/icon/smart_toy_white_24dp.svg";
     } else if (user.verified) {
       return "checkmark-circle";
     }

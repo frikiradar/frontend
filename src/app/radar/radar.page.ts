@@ -523,7 +523,7 @@ export class RadarPage {
     if ($event && $event.detail && $event.detail.deltaY) {
       this.hide =
         !($event.detail.deltaY < 0) &&
-        this.users.length > 10 &&
+        this.users?.length > 10 &&
         $event.detail.scrollTop > 200;
     }
   }
