@@ -92,7 +92,7 @@
               [color]="userSvc.getRoleColor(user)"
               (click)="userSvc.showRole(user)"
             ></ion-icon>
-            <ion-label>
+            <ion-label color="light">
               <span class="name">{{ user.name }}</span>
               <span *ngIf="user?.age" class="age">, {{ user.age }}</span>
               <ion-badge

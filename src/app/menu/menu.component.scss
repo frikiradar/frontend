@@ -17,6 +17,12 @@
 
     #info {
       margin-top: 15px;
+
+      ion-label h2,
+      p {
+        color: white !important;
+      }
+
       ion-avatar {
         width: 48px;
         height: 48px;
@@ -25,17 +31,9 @@
   }
 
   ion-item {
-    margin: 0 5px;
     &.selected {
-      background: #292929;
-      border-radius: 20px;
-    }
-    ion-label {
-      --color: white !important;
-    }
-
-    ion-icon {
-      color: white;
+      --background: var(--ion-color-dark-tint);
+      --border-radius: 20px;
     }
 
     ion-label {
@@ -60,5 +58,5 @@ ion-badge {
 }
 
 ion-footer {
-  background: #1f1f1f;
+  background: var(--ion-color-dark);
 }

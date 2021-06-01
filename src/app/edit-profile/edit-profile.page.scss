@@ -1,12 +1,16 @@
 ion-toolbar {
   position: absolute;
-  --background: transparent;
+  --background: transparent !important;
 
   ion-button.back {
     background: #2f2f2f87;
     height: 50px;
     width: 50px;
     border-radius: 50px;
+  }
+
+  ion-icon {
+    color: white !important;
   }
 }
 
@@ -16,14 +20,13 @@ ion-grid {
 }
 
 ion-item {
-  --border-color: white;
+  --border-color: var(--ion-color-light);
 }
 
 ion-list {
   background: transparent;
 
   .category-header ion-icon {
-    color: white;
     margin-right: 5px;
   }
 }
@@ -84,6 +87,11 @@ form {
 ion-item-group {
   ion-item-divider {
     margin-top: 20px;
+
+    h2,
+    ion-icon {
+      color: white;
+    }
   }
 
   ion-item {
@@ -100,7 +108,7 @@ ion-item ion-label {
 }
 
 ion-footer {
-  background: #1f1f1f;
+  background: var(--ion-color-dark);
   ion-button {
     margin-bottom: 30px;
   }

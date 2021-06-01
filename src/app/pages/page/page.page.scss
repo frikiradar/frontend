@@ -2,14 +2,15 @@ ion-toolbar {
   position: absolute;
   --background: transparent;
 
-  ion-back-button {
-    background: #2f2f2f87;
+  ion-button {
+    background: var(--ion-color-medium-dark);
     height: 50px;
     width: 50px;
     border-radius: 50px;
   }
 
   ion-title {
+    color: white;
     text-shadow: 1px 1px 1px black;
   }
 }
@@ -46,11 +47,8 @@ ion-thumbnail#cover {
   height: fit-content;
   width: max-content;
 
-  ion-label {
-    color: #c4d83b;
-  }
-  ion-chip {
-    background: #19282a;
+  ion-icon {
+    color: white;
   }
 }
 
@@ -94,13 +92,13 @@ ion-thumbnail#cover {
 
 #stories {
   margin: 10px 0 10px 10px;
-  background: #292929;
+  background: var(--ion-color-medium-dark);
   border-radius: 25px 0 0 25px;
 }
 
 .room {
   margin: 10px;
-  background: #292929;
+  background: var(--ion-color-medium-dark);
   border-radius: 25px;
 
   ion-thumbnail {

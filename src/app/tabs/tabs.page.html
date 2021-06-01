@@ -2,36 +2,48 @@
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="radar" *ngIf="auth.isAdult()">
       <ion-icon
+        [color]="selected === 'radar' ? 'primary' : 'light'"
         [name]="selected === 'radar' ? 'location-sharp' : 'location-outline'"
       ></ion-icon>
       <ion-badge color="primary" *ngIf="counters?.radar > 0"
         >{{ counters.radar }}</ion-badge
       >
-      <ion-label>Radar</ion-label>
+      <ion-label [color]="selected === 'radar' ? 'primary' : 'light'"
+        >Radar</ion-label
+      >
     </ion-tab-button>
 
     <ion-tab-button tab="community">
       <ion-icon
+        [color]="selected === 'community' ? 'primary' : 'light'"
         [name]="'people' + (selected === 'community' ? '' : '-outline')"
       ></ion-icon>
-      <ion-label>Comunidad</ion-label>
+      <ion-label [color]="selected === 'community' ? 'primary' : 'light'"
+        >Comunidad</ion-label
+      >
     </ion-tab-button>
 
     <ion-tab-button tab="events" (click)="goToEvents($event)">
       <ion-icon
+        [color]="selected === 'events' ? 'primary' : 'light'"
         [name]="'calendar' + (selected === 'events' ? '' : '-outline')"
       ></ion-icon>
-      <ion-label>Eventos</ion-label>
+      <ion-label [color]="selected === 'events' ? 'primary' : 'light'"
+        >Eventos</ion-label
+      >
     </ion-tab-button>
 
     <ion-tab-button tab="chat">
       <ion-icon
+        [color]="selected === 'chat' ? 'primary' : 'light'"
         [name]="'chatbubbles' + (selected === 'chat' ? '' : '-outline')"
       ></ion-icon>
       <ion-badge color="primary" *ngIf="counters?.chats > 0"
         >{{ counters.chats }}</ion-badge
       >
-      <ion-label>Chat</ion-label>
+      <ion-label [color]="selected === 'chat' ? 'primary' : 'light'"
+        >Chat</ion-label
+      >
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

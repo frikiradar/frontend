@@ -253,13 +253,14 @@
               </span>
             </p>
             <ion-text class="text">
-              <span
+              <ion-text
+                color="light"
                 class="message-text"
                 [innerHTML]="
                   message.text | linky: { className: 'linkified' } | hashtag
                 "
                 (click)="$event.stopImmediatePropagation(); openUrl($event)"
-              ></span>
+              ></ion-text>
               <span class="edited" *ngIf="message?.edited"> · Editado</span>
               <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                 <ion-icon *ngIf="message.sending" name="time"></ion-icon>

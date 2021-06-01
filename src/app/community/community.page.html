@@ -20,7 +20,9 @@
 
   <ion-item lines="none" (click)="showAllStories()" button detail="false">
     <ion-label color="light">
-      <h2 class="section">Historias frikis</h2>
+      <h2 class="section">
+        <ion-text color="ligth">Historias frikis</ion-text>
+      </h2>
     </ion-label>
     <ion-icon
       md="arrow-forward"
@@ -65,9 +67,11 @@
 
   <ion-item lines="none" (click)="showAllRooms()" button detail="false">
     <ion-label color="light">
-      <h2 class="section">Salas de chat</h2>
+      <h2 class="section"><ion-text color="ligth">Salas de chat</ion-text></h2>
       <p class="subtitle">
-        ¡Entra y habla con la comunidad FrikiRadar!
+        <ion-text color="ligth">
+          ¡Entra y habla con la comunidad FrikiRadar!
+        </ion-text>
       </p>
     </ion-label>
     <ion-icon
@@ -128,9 +132,15 @@
     *ngIf="pages"
   >
     <ion-label color="light">
-      <h2 class="section">Páginas</h2>
+      <h2 class="section">
+        <ion-text color="ligth">
+          Páginas
+        </ion-text>
+      </h2>
       <p class="subtitle">
-        Basadas en tus etiquetas de gustos
+        <ion-text color="ligth">
+          Basadas en tus etiquetas de gustos
+        </ion-text>
       </p>
     </ion-label>
     <ion-icon

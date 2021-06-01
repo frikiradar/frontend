@@ -8,12 +8,12 @@
     <ion-label>Silenciar notificaciones</ion-label>
   </ion-item>-->
   <ion-item button (click)="copyProfile()" *ngIf="page !== 'chat'">
-    <ion-icon name="copy" slot="start"></ion-icon>
-    <ion-label>Copiar URL del perfil</ion-label>
+    <ion-icon color="light" name="copy" slot="start"></ion-icon>
+    <ion-label color="light">Copiar URL del perfil</ion-label>
   </ion-item>
   <ion-item button (click)="shareProfile()" *ngIf="page !== 'chat'">
-    <ion-icon name="share-social" slot="start"></ion-icon>
-    <ion-label>Compartir el perfil</ion-label>
+    <ion-icon color="light" name="share-social" slot="start"></ion-icon>
+    <ion-label color="light">Compartir el perfil</ion-label>
   </ion-item>
   <ion-item
     button
@@ -21,8 +21,8 @@
     lines="full"
     *ngIf="auth?.currentUserValue?.id !== user?.id"
   >
-    <ion-icon name="warning" slot="start"></ion-icon>
-    <ion-label>Reportar</ion-label>
+    <ion-icon color="light" name="warning" slot="start"></ion-icon>
+    <ion-label color="light">Reportar</ion-label>
   </ion-item>
   <ion-item
     button
@@ -30,8 +30,8 @@
     lines="full"
     *ngIf="auth?.currentUserValue?.id !== user?.id"
   >
-    <ion-icon name="ban" slot="start"></ion-icon>
-    <ion-label>Bloquear</ion-label>
+    <ion-icon color="light" name="ban" slot="start"></ion-icon>
+    <ion-label color="light">Bloquear</ion-label>
   </ion-item>
   <ion-item
     button

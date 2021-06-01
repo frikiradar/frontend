@@ -83,12 +83,8 @@
       </ion-item>
     </form>
     <ion-buttons ion-activatable>
-      <ion-button
-        color="primary"
-        [disabled]="!comment.value"
-        (click)="sendComment()"
-      >
-        <ion-icon slot="icon-only" name="send"></ion-icon>
+      <ion-button [disabled]="!comment.value" (click)="sendComment()">
+        <ion-icon slot="icon-only" color="primary" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-item>
@@ -315,12 +311,8 @@
         </ion-item>
       </form>
       <ion-buttons ion-activatable>
-        <ion-button
-          color="primary"
-          [disabled]="!comment.value"
-          (click)="sendComment()"
-        >
-          <ion-icon slot="icon-only" name="send"></ion-icon>
+        <ion-button [disabled]="!comment.value" (click)="sendComment()">
+          <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-item>

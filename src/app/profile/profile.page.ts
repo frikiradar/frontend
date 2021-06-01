@@ -185,43 +185,56 @@ export class ProfilePage {
       return;
     }
 
-    if (!this.user.like) {
-      this.vibration.vibrate(5);
-      this.user = await this.userSvc.like(this.user.id);
-      if (
-        this.user.block_messages ||
-        !this.user.match ||
-        !this.auth.isVerified()
-      ) {
-        let message = "";
-        if (this.user.from_like) {
-          message = `¡Felicidades por el match! Ya puedes chatear con ${this.user.name}.`;
+    try {
+      if (!this.user.like) {
+        this.vibration.vibrate(5);
+        this.userSvc.like(this.user.id);
+        this.user.like = true;
+        if (
+          this.user.block_messages ||
+          !this.user.match ||
+          !this.auth.isVerified()
+        ) {
+          let message = "";
+          if (this.user.from_like) {
+            message = `¡Felicidades por el match! Ya puedes chatear con ${this.user.name}.`;
+          } else {
+            message = `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`;
+          }
+          (
+            await this.toast.create({
+              message,
+              duration: 5000,
+              position: "middle"
+            })
+          ).present();
         } else {
-          message = `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`;
+          (
+            await this.toast.create({
+              message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
+              duration: 5000,
+              position: "middle"
+            })
+          ).present();
         }
-        (
-          await this.toast.create({
-            message,
-            duration: 5000,
-            position: "middle"
-          })
-        ).present();
       } else {
+        this.userSvc.unlike(this.user.id);
+        this.user.like = false;
         (
           await this.toast.create({
-            message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
+            message: `Le has retirado tu kokoro a ${this.user.name}`,
             duration: 5000,
             position: "middle"
           })
         ).present();
       }
-    } else {
-      this.user = await this.userSvc.unlike(this.user.id);
+    } catch (e) {
       (
         await this.toast.create({
-          message: `Le has retirado tu kokoro a ${this.user.name}`,
+          message: `Error al entregar o retirar el kokoro`,
           duration: 5000,
-          position: "middle"
+          position: "middle",
+          color: "danger"
         })
       ).present();
     }

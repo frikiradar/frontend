@@ -37,6 +37,7 @@
       <ion-item lines="none">
         <ion-label>Fecha de inicio</ion-label>
         <ion-datetime
+          formControlName="date"
           displayFormat="DD MMM de YYYY"
           monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
           placeholder="dd mm de yyyy"
@@ -47,6 +48,7 @@
       <ion-item>
         <ion-label>Hora de inicio</ion-label>
         <ion-datetime
+          formControlName="time"
           displayFormat="HH:mm"
           placeholder="hh:mm"
           cancel-text="Cancelar"
@@ -60,11 +62,16 @@
         class="show-more"
       >
         <ion-label>+ Fecha y hora de finalización</ion-label>
-        <ion-icon name="chevron-down" color="light" size="small"></ion-icon>
+        <ion-icon
+          [name]="endDate ? 'chevron-up' : 'chevron-down'"
+          color="light"
+          size="small"
+        ></ion-icon>
       </ion-item>
       <ion-item *ngIf="endDate" lines="none">
         <ion-label>Fecha de fin</ion-label>
         <ion-datetime
+          formControlName="endDate"
           displayFormat="DD MMM de YYYY"
           monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
           placeholder="dd mm de yyyy"
@@ -75,6 +82,7 @@
       <ion-item *ngIf="endDate">
         <ion-label>Hora de fin</ion-label>
         <ion-datetime
+          formControlName="endTime"
           displayFormat="HH:mm"
           placeholder="hh:mm"
           cancel-text="Cancelar"
@@ -94,6 +102,32 @@
           placeholder="Lugar del evento"
           (ionChange)="changeLocation($event)"
         ></ion-input>
+      </ion-item>
+      <ion-item
+        button
+        (click)="showMore = !showMore"
+        lines="none"
+        class="show-more"
+      >
+        <ion-label>+ Configuración extra</ion-label>
+        <ion-icon
+          [name]="showMore ? 'chevron-up' : 'chevron-down'"
+          color="light"
+          size="small"
+        ></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="showMore" lines="none">
+        <ion-label slot="start">Edad mínima</ion-label>
+        <ion-input
+          formControlName="minage"
+          slot="start"
+          type="number"
+          min="0"
+          max="99"
+          maxlength="2"
+          placeholder="0"
+        ></ion-input>
+        <ion-label>años</ion-label>
       </ion-item>
       <iframe
         *ngIf="eventForm.get('location').value"

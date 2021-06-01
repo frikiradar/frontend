@@ -13,7 +13,7 @@
 @import "~@ctrl/ngx-emoji-mart/picker";
 
 body {
-  background-color: #1f1f1f;
+  background-color: var(--ion-color-dark);
 }
 
 ion-content,
@@ -21,8 +21,8 @@ ion-toolbar,
 ion-tab-bar,
 ion-list,
 ion-header {
-  --background: #1f1f1f;
-  color: white;
+  --background: var(--ion-color-dark);
+  color: var(--ion-color-light);
 
   a {
     text-decoration: none;
@@ -35,6 +35,11 @@ ion-header {
   }
 }
 
+ion-list {
+  background: var(--ion-color-dark) !important;
+  padding: 0 !important;
+}
+
 .no-scroll {
   --offset-bottom: auto !important;
   --overflow: hidden;
@@ -44,19 +49,41 @@ ion-header {
   }
 }
 
-ion-list {
-  background: #1f1f1f !important;
-  color: white;
-}
-
 h1,
 h2,
 h3,
 h4,
 h5,
 p {
-  color: white;
+  color: var(--ion-color-light);
   font-weight: normal;
+}
+
+ion-icon {
+  color: var(--ion-color-light);
+}
+
+ion-chip {
+  background: var(--ion-color-primary);
+
+  ion-label,
+  ion-icon {
+    color: white !important;
+  }
+}
+
+ion-label,
+.item.sc-ion-label-md-h,
+.item .sc-ion-label-md-h {
+  color: var(--ion-color-light);
+  p {
+    // white-space: normal;
+    color: var(--ion-color-light-shade) !important;
+  }
+}
+
+ion-segment-button.segment-button-checked ion-label {
+  color: var(--ion-color-primary);
 }
 
 h2.section {
@@ -67,7 +94,7 @@ h2.section {
   font-size: 12px;
 
   ion-label {
-    color: white !important;
+    color: var(--ion-color-light) !important;
   }
 }
 
@@ -98,7 +125,7 @@ ion-header {
 }
 
 [padding] {
-  --background: #1f1f1f;
+  --background: var(--ion-color-dark);
   --padding-start: var(--ion-padding, 32px);
   --padding-end: var(--ion-padding, 32px);
   --padding-top: var(--ion-padding, 32px);
@@ -121,6 +148,8 @@ ion-button {
 }
 
 form {
+  background-color: var(--ion-color-dark);
+
   ion-item {
     --padding-start: 0px !important;
     --highlight-color-invalid: #e91e63;
@@ -128,7 +157,7 @@ form {
   }
 
   ion-label {
-    --color: white !important;
+    --color: var(--ion-color-light) !important;
   }
 
   ion-button[type="submit"] {
@@ -156,14 +185,14 @@ form {
   }
 
   ion-icon {
-    color: white;
+    color: var(--ion-color-light);
     font-size: 48px;
   }
 }
 
 ion-segment-button {
-  --background: #1f1f1f;
-  --background-checked: #1f1f1f;
+  --background: var(--ion-color-dark);
+  --background-checked: var(--ion-color-dark);
   --color: white;
   --indicator-color: #e91e63;
   text-transform: none;
@@ -182,7 +211,7 @@ ion-toast.md {
 
 .ion-page,
 .modal-wrapper {
-  background: #1f1f1f !important;
+  background: var(--ion-color-dark) !important;
 }
 
 .modal-wrapper {
@@ -213,7 +242,7 @@ ion-toast.md {
 
 ul {
   li {
-    color: white;
+    color: var(--ion-color-light);
   }
 }
 
@@ -241,11 +270,11 @@ ul {
 }
 
 .pane {
-  --cupertino-pane-background: #1f1f1f !important;
+  --cupertino-pane-background: var(--ion-color-dark) !important;
   padding: 15px;
 
   ion-label {
-    color: white !important;
+    color: var(--ion-color-light) !important;
   }
 }
 
@@ -272,14 +301,14 @@ ul {
     width: 22px;
     height: 22px;
     bottom: 7px;
-    border: 2px solid #1f1f1f;
+    border: 2px solid var(--ion-color-dark);
     font-size: 14pt;
     line-height: 0.7;
   }
 
   ion-label {
     font-size: 13px;
-    color: white;
+    color: var(--ion-color-light);
     width: 90px;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -303,7 +332,7 @@ ul {
 }
 
 ion-item {
-  --detail-icon-color: white;
+  --detail-icon-color: var(--ion-color-dark);
 }
 
 @media (min-width: 992px) {
@@ -318,15 +347,12 @@ ion-item {
   }
 }
 
-.patreon {
-  h2 {
-    color: #ff424d;
-  }
-  p {
-    color: white !important;
-  }
-}
-
 ion-button.patreon {
   --background: #ff424d;
+}
+
+.picker-wrapper {
+  background: var(--ion-color-dark) !important;
+  border-radius: 20px 20px 0 0 !important;
+  color: white;
 }

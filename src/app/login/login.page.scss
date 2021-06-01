@@ -36,10 +36,6 @@ ion-button {
   width: 50%;
   max-width: 500px;
   form {
-    ion-item {
-      --border-color: white;
-    }
-
     ion-label {
       --color: #9c2c51 !important;
     }
@@ -49,12 +45,12 @@ ion-button {
       margin-right: -12px;
       color: #e91e63;
     }
-  
+
     .sc-ion-buttons-ios-h {
       position: relative;
       top: 20px;
       left: 20px;
-  
+
       ion-icon {
         color: #e91e63 !important;
       }

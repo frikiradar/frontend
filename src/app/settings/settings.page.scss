@@ -1,16 +1,33 @@
-ion-item {
-  ion-label {
-    --color: white !important;
-  }
-
+ion-item-divider {
+  h2,
   ion-icon {
     color: white;
   }
+}
 
-  ion-label {
-    p {
-      white-space: normal;
-      color: white;
+ion-item ion-label p {
+  white-space: normal;
+}
+
+#themes {
+  ion-slide {
+    ion-icon {
+      color: var(--ion-color-light);
+      position: absolute;
+      z-index: 2;
+      background: var(--ion-color-patreon);
+      padding: 2px;
+      border-radius: 20px;
+      border: 2px solid var(--ion-color-dark);
+      left: 0;
+    }
+
+    ion-label {
+      font-size: 12px;
+    }
+
+    ion-thumbnail {
+      --border-radius: 5px;
     }
   }
 }

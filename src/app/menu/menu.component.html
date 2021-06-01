@@ -48,20 +48,30 @@
           lines="none"
           (click)="viewProfile()"
           [ngClass]="selected?.includes('profile') ? 'selected' : ''"
+          color="dark"
         >
-          <ion-icon name="person-circle-outline" slot="start"></ion-icon>
-          <ion-label>
+          <ion-icon
+            name="person-circle-outline"
+            slot="start"
+            color="light"
+          ></ion-icon>
+          <ion-label color="light">
             Ver perfil
           </ion-label>
         </ion-item>
         <ion-item
+          color="dark"
           button
           lines="none"
           (click)="notifications()"
           [ngClass]="selected == '/notification' ? 'selected' : ''"
         >
-          <ion-icon name="notifications-outline" slot="start"></ion-icon>
-          <ion-label>
+          <ion-icon
+            name="notifications-outline"
+            slot="start"
+            color="light"
+          ></ion-icon>
+          <ion-label color="light">
             Notificaciones
           </ion-label>
           <ion-badge
@@ -72,17 +82,23 @@
           >
         </ion-item>
         <ion-item
+          color="dark"
           button
           lines="full"
           (click)="settings()"
           [ngClass]="selected == '/settings' ? 'selected' : ''"
         >
-          <ion-icon name="settings-outline" slot="start"></ion-icon>
-          <ion-label>
+          <ion-icon
+            color="light"
+            name="settings-outline"
+            slot="start"
+          ></ion-icon>
+          <ion-label color="light">
             Configuración y privacidad
           </ion-label>
         </ion-item>
         <ion-item
+          color="dark"
           button
           lines="none"
           (click)="showAmbassador()"
@@ -93,26 +109,29 @@
             src="/assets/icon/patreon_coral.svg"
             slot="start"
           ></ion-icon>
-          <ion-label class="patreon">
-            <h2>Patreon de embajador</h2>
-            <p>Ayúdanos y consigue ventajas exclusivas</p>
+          <ion-label>
+            <h2><ion-text color="patreon">Patreon de embajador</ion-text></h2>
+            <p>
+              Ayúdanos y consigue ventajas exclusivas
+            </p>
           </ion-label>
         </ion-item>
-        <ion-item button lines="none" (click)="share()">
-          <ion-icon name="share-outline" slot="start"></ion-icon>
+        <ion-item color="dark" button lines="none" (click)="share()">
+          <ion-icon color="light" name="share-outline" slot="start"></ion-icon>
           <ion-label>
             <h2>Comparte con tus amigos</h2>
             <p>¡Y así cada vez seremos más!</p>
           </ion-label>
         </ion-item>
-        <ion-item button lines="none" (click)="credits()">
-          <ion-icon name="rocket-outline" slot="start"></ion-icon>
+        <ion-item color="dark" button lines="none" (click)="credits()">
+          <ion-icon color="light" name="rocket-outline" slot="start"></ion-icon>
           <ion-label>
             <h2>Créditos</h2>
             <p>Las personas que hacemos posible FrikiRadar</p>
           </ion-label>
         </ion-item>
         <ion-item
+          color="dark"
           button
           lines="full"
           (click)="bugs()"
@@ -127,6 +146,7 @@
           </ion-label>
         </ion-item>
         <ion-item
+          color="dark"
           button
           lines="none"
           (click)="admin()"

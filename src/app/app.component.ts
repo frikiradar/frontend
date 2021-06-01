@@ -4,7 +4,6 @@ import { AppVersion } from "@ionic-native/app-version/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AlertController, Platform, ToastController } from "@ionic/angular";
 import {
   CodePush,
@@ -14,7 +13,7 @@ import {
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
-import { ConfigService } from "./services/config.service";
+import { Config, ConfigService } from "./services/config.service";
 import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
 import { NavService } from "./services/navigation.service";
@@ -33,7 +32,6 @@ export class AppComponent {
     private auth: AuthService,
     private alert: AlertController,
     private router: Router,
-    private statusBar: StatusBar,
     private network: Network,
     private splashScreen: SplashScreen,
     private platform: Platform,
@@ -54,7 +52,6 @@ export class AppComponent {
     this.platform.ready().then(async () => {
       if (this.platform.is("cordova")) {
         this.push.init();
-        this.statusBar.backgroundColorByHexString("#1f1f1f");
         this.splashScreen.hide();
         this.checkCodePush();
       } else {
@@ -68,6 +65,13 @@ export class AppComponent {
       this.networkStatus();
       this.nav.backButtonStatus();
 
+      // Obtenemos tema en configuración local. Si no hay le mandamos el dark
+      let theme = (await this.config.get("theme")) as Config["theme"];
+      if (!theme) {
+        theme = "dark";
+      }
+      this.utils.toggleTheme(theme);
+
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
         const user = await this.auth.getAuthUser();
         this.auth.setAuthUser(user);
@@ -77,17 +81,6 @@ export class AppComponent {
         // this.betaAdvertisement();
       }
     });
-
-    /*const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-    this.toggleDarkTheme(prefersDark.matches);
-
-    prefersDark.addEventListener('change', mediaQuery =>
-      this.toggleDarkTheme(mediaQuery.matches)
-    );*/
-  }
-
-  toggleDarkTheme(shouldAdd: boolean) {
-    document.body.classList.toggle("dark", shouldAdd);
   }
 
   async networkStatus() {

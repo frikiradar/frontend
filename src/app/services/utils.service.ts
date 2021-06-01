@@ -4,10 +4,13 @@ import { Camera } from "@ionic-native/camera/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, ModalController, Platform } from "@ionic/angular";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
+// import { NavigationBarColor } from "ionic-plugin-navigation-bar-color";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { AuthService } from "./auth.service";
+import { Config } from "./config.service";
 
 @Injectable({
   providedIn: "root"
@@ -21,7 +24,8 @@ export class UtilsService {
     private platform: Platform,
     private webview: WebView,
     private camera: Camera,
-    private modal: ModalController
+    private modal: ModalController,
+    private statusBar: StatusBar // private navigationBar: NavigationBarColor
   ) {}
 
   async takePicture(
@@ -256,5 +260,44 @@ export class UtilsService {
 
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  toggleTheme(theme: Config["theme"], oldTheme?: Config["theme"]) {
+    if (oldTheme) {
+      document.body.classList.toggle(oldTheme, false);
+    }
+    document.body.classList.toggle(theme, true);
+    if (this.platform.is("cordova")) {
+      switch (theme) {
+        case "dark":
+          this.statusBar.backgroundColorByHexString("#1f1f1f");
+          this.statusBar.styleBlackTranslucent();
+          // this.navigationBar.backgroundColorByHexString("#1f1f1f");
+          break;
+        case "light":
+          this.statusBar.backgroundColorByHexString("#fafafa");
+          this.statusBar.styleDefault();
+          // this.navigationBar.backgroundColorByHexString("#fafafa");
+          break;
+        case "cyberpunk":
+          this.statusBar.backgroundColorByHexString("#0c1340");
+          this.statusBar.styleBlackTranslucent();
+          // this.navigationBar.backgroundColorByHexString("#0c1340");
+          break;
+        case "black":
+          this.statusBar.backgroundColorByHexString("#000000");
+          this.statusBar.styleBlackTranslucent();
+          break;
+        case "fire":
+          this.statusBar.backgroundColorByHexString("#000000");
+          this.statusBar.styleBlackTranslucent();
+          // this.navigationBar.backgroundColorByHexString("#0c1340");
+          break;
+        default:
+          this.statusBar.backgroundColorByHexString("#1f1f1f");
+          this.statusBar.styleBlackTranslucent();
+        // this.navigationBar.backgroundColorByHexString("#1f1f1f");
+      }
+    }
   }
 }

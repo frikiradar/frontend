@@ -25,6 +25,7 @@ export class EventModal {
   public src: string = "";
   public slug: string = "";
   public endDate = false;
+  public showMore = false;
   public mapSrc: SafeUrl = "";
 
   constructor(
@@ -40,9 +41,12 @@ export class EventModal {
       description: new FormControl(),
       date: new FormControl("", [Validators.required]),
       time: new FormControl(),
-      recursion: new FormControl(),
+      endDate: new FormControl(),
+      endTime: new FormControl(),
+      // recursion: new FormControl(),
       url: new FormControl(),
       location: new FormControl(),
+      minage: new FormControl(),
       image: new FormControl()
     });
   }

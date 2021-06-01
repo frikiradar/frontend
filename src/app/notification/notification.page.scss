@@ -1,5 +1,5 @@
 ion-item.unread {
-  --background: #272727;
+  --background: var(--ion-color-dark-shade) !important;
 }
 
 ion-label p {

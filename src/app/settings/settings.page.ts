@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AlertController, ModalController } from "@ionic/angular";
+import { Router } from "@angular/router";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -13,7 +14,8 @@ import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { VerificationModal } from "./verification/verification.modal";
 import { HideUsersModal } from "./hide-users/hide-users.modal";
 import { NavService } from "../services/navigation.service";
-import { Router } from "@angular/router";
+import { UtilsService } from "../services/utils.service";
+import { ConfigService, Config } from "../services/config.service";
 
 @Component({
   selector: "app-settings",
@@ -23,13 +25,25 @@ import { Router } from "@angular/router";
 export class SettingsPage implements OnInit {
   public user: User;
 
+  public themesOpts = {
+    slidesPerView: 3.5,
+    breakpoints: {
+      1024: {
+        slidesPerView: 8.5
+      }
+    },
+    grabCursor: true
+  };
+
   constructor(
     private modal: ModalController,
     public auth: AuthService,
     private userSvc: UserService,
     private alert: AlertController,
     private nav: NavService,
-    private router: Router
+    private router: Router,
+    private utils: UtilsService,
+    private config: ConfigService
   ) {}
 
   async ngOnInit() {
@@ -137,6 +151,31 @@ export class SettingsPage implements OnInit {
 
   patreon() {
     this.router.navigate(["/patreon"]);
+  }
+
+  async toggleTheme(theme: Config["theme"]) {
+    if (this.auth.isPatreon() || theme === "dark" || theme === "light") {
+      const oldTheme = (await this.config.get("theme")) as Config["theme"];
+      this.utils.toggleTheme(theme, oldTheme);
+      await this.config.set("theme", theme);
+    } else {
+      const alert = await this.alert.create({
+        header: "Tema exlusivo para miembros de Patreon",
+        message:
+          "Conviértete en embajador Patreon de FrikiRadar y accede a ventajas exclusivas.",
+        buttons: [
+          {
+            text: "¡Quiero informarme!",
+            handler: () => {
+              this.patreon();
+            }
+          }
+        ],
+        cssClass: "round-alert"
+      });
+
+      alert.present();
+    }
   }
 
   back() {

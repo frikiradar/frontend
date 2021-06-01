@@ -34,6 +34,7 @@ export interface Config {
   radar?: User[];
   pages?: Page[];
   stories?: Story[];
+  theme?: "dark" | "light" | "cyberpunk" | "black" | "fire";
 }
 @Injectable({
   providedIn: "root"

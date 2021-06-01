@@ -13,7 +13,7 @@ app-chat-list {
     ion-list,
     ion-item,
     ion-content {
-      --background: #181818 !important;
+      --background: var(--ion-color-medium-dark) !important;
       background: #181818 !important;
     }
   }
