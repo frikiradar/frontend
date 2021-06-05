@@ -156,14 +156,14 @@ export class ProfilePage {
     }
 
     if (this.user.chat && !this.user.block) {
-      this.router.navigate(["/tabs/chat", this.user.id]);
+      this.router.navigate(["/chat", this.user.id]);
     } else {
       if (
         this.user.match > 0 ||
         this.user.from_like ||
         this.auth?.isVerified()
       ) {
-        this.router.navigate(["/tabs/chat", this.user.id]);
+        this.router.navigate(["/chat", this.user.id]);
       } else {
         const alert = await this.alert.create({
           header: "No puedes iniciar un chat con esta persona",
