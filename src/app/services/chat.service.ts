@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
@@ -11,17 +12,14 @@ import { UploadService } from "./upload.service";
   providedIn: "root"
 })
 export class ChatService {
+  public source: EventSource;
+
   constructor(
     private rest: RestService,
     private config: ConfigService,
     private uploadSvc: UploadService,
     private auth: AuthService
   ) {}
-
-  async register(channel: string) {
-    const config = await this.config.getConfig();
-    return new EventSource(`${config.push_url}?topic=${channel}`);
-  }
 
   async getChats() {
     const chats = (await this.rest.get(`chats`).toPromise()) as Chat[];
@@ -152,5 +150,28 @@ export class ChatService {
   async getChatsConfig() {
     const config = this.auth.currentUserValue?.config;
     return config?.chats;
+  }
+
+  async sseRegister(channel: string) {
+    const config = await this.config.getConfig();
+    this.source = new EventSource(`${config.push_url}?topic=${channel}`);
+  }
+
+  async sseListener(userid: User["id"]) {
+    if (!this.source || this.source.readyState === 2) {
+      this.sseRegister(`chats-${userid}`);
+    }
+
+    return new Observable(observer => {
+      this.source.onmessage = x => observer.next(JSON.parse(x.data) as Chat);
+      this.source.onerror = x => {
+        this.source.close();
+        observer.error(x);
+      };
+
+      return () => {
+        this.source.close();
+      };
+    });
   }
 }

@@ -1,4 +1,40 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
 app-chat-list {
   width: 100%;
   height: 84vh;
+}
+
+app-chat-modal {
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  app-chat-list {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  app-chat-list {
+    max-width: 350px;
+    height: 88vh;
+
+    ::ng-deep {
+      ion-list,
+      ion-item,
+      ion-content {
+        --background: var(--ion-color-medium-dark) !important;
+        background: var(--ion-color-medium-dark) !important;
+      }
+    }
+  }
 }

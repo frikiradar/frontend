@@ -85,9 +85,12 @@
             "
             [alt]="chat.user?.username"
           ></ion-img>
-          <ion-badge color="primary" *ngIf="chat?.count > 0">{{
-            chat?.count
-          }}</ion-badge>
+          <ion-badge
+            class="user-online"
+            color="secondary"
+            *ngIf="(chat.user?.last_login | niceDate) === 'Ahora mismo'"
+            >&nbsp;</ion-badge
+          >
         </ion-avatar>
 
         <ion-label>
@@ -108,6 +111,11 @@
           {{
             chat.writing ? "⌨ Escribiendo..." : (chat.time_creation | niceDate)
           }}
+          <ion-text class="chat-count ion-text-right">
+            <ion-badge color="primary" *ngIf="chat?.count > 0">{{
+              chat?.count
+            }}</ion-badge>
+          </ion-text>
         </ion-note>
       </ion-item>
       <ion-item-options

@@ -1,10 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { MenuController } from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { EventEmitter } from "@angular/core";
+import { Location } from "@angular/common";
+import { ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
+import { ChatService } from "../services/chat.service";
 import { Chat } from "./../models/chat";
 import { AuthService } from "./../services/auth.service";
+import { ChatModalComponent } from "./chat-modal/chat-modal.component";
 
 @Component({
   selector: "app-chat",
@@ -14,23 +18,67 @@ import { AuthService } from "./../services/auth.service";
 export class ChatPage implements OnInit {
   userId: User["id"];
   chats: Chat[];
-  showSkeleton: boolean;
-  showOptions = false;
-  selectedChat: Chat;
-  source: EventSource;
+  public desktop = false;
+  public messageEvent: EventEmitter<Chat> = new EventEmitter();
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     public auth: AuthService,
-    public menu: MenuController,
-    private router: Router
-  ) {
-    this.showSkeleton = true;
+    private chatSvc: ChatService,
+    private location: Location,
+    private modal: ModalController
+  ) {}
+
+  async ngOnInit() {
+    if (this.route.snapshot.paramMap.get("id")) {
+      this.userId = +this.route.snapshot.paramMap.get("id");
+
+      if (window.innerWidth <= 991) {
+        this.showChat(this.userId);
+      }
+    }
+
+    if (window.innerWidth > 991) {
+      this.desktop = true;
+    }
+    window.onresize = async () => {
+      const oldDesktop = this.desktop;
+      this.desktop = window.innerWidth > 991;
+      if ((await this.modal.getTop()) && oldDesktop !== this.desktop) {
+        this.modal.dismiss();
+      }
+    };
+    this.connectSSE();
   }
 
-  async ngOnInit() {}
-
   async showChat(id: User["id"]) {
-    // this.userId = id;
-    this.router.navigate(["/chat", id]);
+    this.userId = id;
+    this.location.replaceState("/chat/" + id);
+    if (window.innerWidth <= 991) {
+      const modal = await this.modal.create({
+        component: ChatModalComponent,
+        componentProps: { userId: this.userId, messageEvent: this.messageEvent }
+      });
+      await modal.present();
+      if (this.router.url !== "/tabs/chat") {
+        this.router.navigate(["/tabs/chat"]);
+      } else {
+        await modal.onDidDismiss();
+        this.location.replaceState("/tabs/chat");
+      }
+    }
+  }
+
+  async connectSSE() {
+    (await this.chatSvc.sseListener(this.auth.currentUserValue.id)).subscribe(
+      async (message: Chat) => {
+        this.messageEvent.emit(message);
+      },
+      error => {
+        console.error("Escucha al servidor de chats perdida", error);
+        this.connectSSE();
+      }
+    );
   }
 }

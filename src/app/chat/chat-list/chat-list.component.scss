@@ -7,16 +7,29 @@ ion-item {
     color: #dddddd;
   }
 
-  ion-badge {
+  .user-online {
     position: relative;
     left: 30px;
     border-radius: 15px;
     z-index: 1;
-    width: 20px;
-    height: 20px;
-    bottom: 15px;
+    width: 15px;
+    height: 15px;
+    bottom: 13px;
     border: 2px solid var(--ion-color-dark);
     font-size: 11px;
+  }
+
+  .chat-count {
+    display: block;
+
+    ion-badge {
+      margin-top: 5px;
+      border-radius: 15px;
+      width: 25px;
+      height: 25px;
+      border: 2px solid var(--ion-color-dark);
+      font-size: 14px;
+    }
   }
 
   ion-note {

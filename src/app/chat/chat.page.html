@@ -1,1 +1,17 @@
-<app-chat-list (userChange)="showChat($event)"></app-chat-list>
+<app-chat-list
+  (userChange)="showChat($event)"
+  [selected]="userId"
+  [messageEvent]="messageEvent"
+></app-chat-list>
+<app-chat-modal
+  *ngIf="userId && desktop"
+  [userId]="userId"
+  [messageEvent]="messageEvent"
+></app-chat-modal>
+<div class="full-center ion-padding" *ngIf="!userId && desktop">
+  <ion-icon name="chatbubbles"></ion-icon>
+  <h2>No hay mensajes</h2>
+  <p>
+    Selecciona un chat
+  </p>
+</div>

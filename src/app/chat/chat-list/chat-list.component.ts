@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -22,9 +23,8 @@ import { ChatService } from "./../../services/chat.service";
 })
 export class ChatListComponent {
   @Output() userChange: EventEmitter<User["id"]> = new EventEmitter();
-  @Output() chatsChange: EventEmitter<Chat[]> = new EventEmitter();
-  @Input() chats: Chat[] = null;
   @Input() selected: User["id"];
+  @Input() messageEvent: EventEmitter<Chat>;
 
   public loading = false;
   public showOptions = false;
@@ -32,8 +32,8 @@ export class ChatListComponent {
   public archivedChats: Config["chats"];
   public allChats: Chat[] = null;
   public showingArchived = false;
+  public chats: Chat[] = null;
   source: EventSource;
-  conErrors = 0;
 
   constructor(
     private chatSvc: ChatService,
@@ -41,7 +41,8 @@ export class ChatListComponent {
     public menu: MenuController,
     private toast: ToastController,
     private nav: NavService,
-    private config: ConfigService
+    private config: ConfigService,
+    private cd: ChangeDetectorRef
   ) {}
 
   async ngAfterViewInit() {
@@ -60,7 +61,57 @@ export class ChatListComponent {
       this.setChats();
     }
 
-    this.connectSSE();
+    this.messageEvent.subscribe(message => {
+      if (this.chats?.some(m => m.conversationId === message.conversationId)) {
+        this.chats.map(m => {
+          if (m.conversationId === message.conversationId) {
+            if (m.writing && !message.writing) {
+              m.writing = false;
+            }
+
+            if (message.writing) {
+              m.writing = true;
+              this.cd.detectChanges();
+              setTimeout(() => {
+                m.writing = false;
+                this.cd.detectChanges();
+              }, 10000);
+            } else {
+              m.text = message.text;
+              m.time_creation = message.time_creation;
+              m.time_read = message.time_read;
+              if (message.time_read) {
+                if (m.count > 0) {
+                  m.count--;
+                }
+              } else if (
+                message.fromuser.id !== this.auth.currentUserValue.id
+              ) {
+                m.count++;
+              }
+            }
+          }
+        });
+      } else if (!message.writing) {
+        message.user =
+          message.fromuser.id === this.auth.currentUserValue.id
+            ? message.touser
+            : message.fromuser;
+        if (this.chats) {
+          this.chats = [message, ...this.chats];
+        }
+      }
+      if (!message.writing) {
+        this.chats.sort((a, b) => {
+          return (
+            new Date(b.time_creation).getTime() -
+            new Date(a.time_creation).getTime()
+          );
+        });
+      }
+
+      this.cd.detectChanges();
+    });
   }
 
   async setChats() {
@@ -71,8 +122,6 @@ export class ChatListComponent {
         cc => cc.conversationId === c.conversationId && cc.archived
       );
     });
-
-    this.chatsChange.emit(this.chats);
 
     this.archivedChats = config?.filter(cc => cc.archived);
     this.selectedChat = this.chats.find(c => +c.user?.id === this.selected);
@@ -87,7 +136,6 @@ export class ChatListComponent {
   }
 
   async showChat(id: User["id"]) {
-    this.chatsChange.emit(this.chats);
     this.userChange.emit(id);
   }
 
@@ -97,7 +145,6 @@ export class ChatListComponent {
     this.showOptions = false;
     const chats = this.chats;
     this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
-    this.chatsChange.emit(this.chats);
     const toast = await this.toast.create({
       message: "Has eliminado el chat con " + chat.user.name,
       duration: 3000,
@@ -107,7 +154,6 @@ export class ChatListComponent {
           text: "Deshacer",
           handler: () => {
             this.chats = chats;
-            this.chatsChange.emit(this.chats);
           }
         }
       ]
@@ -130,7 +176,6 @@ export class ChatListComponent {
       const config = await this.chatSvc.getChatsConfig();
       this.archivedChats = config.filter(cc => cc.archived);
       this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
-      this.chatsChange.emit(this.chats);
       const toast = await this.toast.create({
         message: "Has archivado el chat con " + chat.user.name,
         duration: 3000,
@@ -153,7 +198,6 @@ export class ChatListComponent {
       const config = await this.chatSvc.getChatsConfig();
       this.archivedChats = config.filter(cc => cc.archived);
       this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
-      this.chatsChange.emit(this.chats);
       const toast = await this.toast.create({
         message: "Has desarchivado el chat con " + chat.user.name,
         duration: 3000,
@@ -199,8 +243,6 @@ export class ChatListComponent {
         cc => cc.conversationId === c.conversationId && cc.archived
       );
     });
-
-    this.chatsChange.emit(this.chats);
   }
 
   async showUnarchivedChats() {
@@ -210,81 +252,6 @@ export class ChatListComponent {
       return !config?.some(
         cc => cc.conversationId === c.conversationId && cc.archived
       );
-    });
-
-    this.chatsChange.emit(this.chats);
-  }
-
-  async connectSSE() {
-    this.source = await this.chatSvc.register(
-      `chats-${this.auth.currentUserValue.id}`
-    );
-    this.source.addEventListener("message", async (res: any) => {
-      let message = JSON.parse(res.data) as Chat;
-      if (this.chats?.some(m => m.conversationId === message.conversationId)) {
-        this.chats.map(m => {
-          if (m.conversationId === message.conversationId) {
-            if (m.writing && !message.writing) {
-              m.writing = false;
-            }
-
-            if (message.writing) {
-              const oldText = m.text;
-              m.writing = true;
-              setTimeout(() => {
-                m.writing = false;
-              }, 10000);
-            } else {
-              m.text = message.text;
-              m.time_creation = message.time_creation;
-              m.time_read = message.time_read;
-              if (message.time_read) {
-                if (m.count > 0) {
-                  m.count--;
-                }
-              } else if (
-                message.fromuser.id !== this.auth.currentUserValue.id
-              ) {
-                m.count++;
-              }
-            }
-          }
-        });
-      } else if (!message.writing) {
-        message.user =
-          message.fromuser.id === this.auth.currentUserValue.id
-            ? message.touser
-            : message.fromuser;
-        this.chats = [message, ...this.chats];
-      }
-      if (!message.writing) {
-        this.chats.sort((a, b) => {
-          return (
-            new Date(b.time_creation).getTime() -
-            new Date(a.time_creation).getTime()
-          );
-        });
-      }
-    });
-
-    this.source.addEventListener("error", async error => {
-      this.conErrors++;
-      console.error("Escucha al servidor de chats perdida", error);
-    });
-
-    this.source.addEventListener("open", async error => {
-      // console.log("Conexión establecida", this.source.url);
-      /*if (this.conErrors >= 10) {
-        (
-          await this.toast.create({
-            message: "¡Conexión al servidor de chat restablecida!",
-            duration: 2000,
-            position: "bottom",
-            color: "success"
-          })
-        ).present();
-      }*/
-      this.conErrors = 0;
     });
   }
 

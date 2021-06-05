@@ -36,6 +36,7 @@ ion-thumbnail {
 
 ion-item#reply-to,
 ion-item#edit {
+  --background: var(--ion-color-dark);
   ion-icon {
     margin-right: 15px;
     color: white;

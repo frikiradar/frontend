@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
-import { last } from "rxjs/operators";
+import { Observable } from "rxjs";
 import { Chat } from "../models/chat";
 
 import { Room } from "../models/room";
 import { User } from "../models/user";
 import { AuthService } from "./auth.service";
 import { Config, ConfigService } from "./config.service";
-// import { PushService } from "./push.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
@@ -14,6 +13,8 @@ import { UploadService } from "./upload.service";
   providedIn: "root"
 })
 export class RoomService {
+  public source: EventSource;
+
   constructor(
     private rest: RestService,
     private config: ConfigService,
@@ -29,9 +30,27 @@ export class RoomService {
     return (await this.rest.get(`room/${slug}`).toPromise()) as Room;
   }
 
-  async register(channel: string) {
+  async sseRegister(channel: string) {
     const config = await this.config.getConfig();
-    return new EventSource(`${config.push_url}?topic=${channel}`);
+    this.source = new EventSource(`${config.push_url}?topic=${channel}`);
+  }
+
+  async sseListener() {
+    if (!this.source || this.source.readyState === 2) {
+      this.sseRegister("rooms");
+    }
+
+    return new Observable(observer => {
+      this.source.onmessage = x => observer.next(JSON.parse(x.data) as Chat);
+      this.source.onerror = x => {
+        this.source.close();
+        observer.error(x);
+      };
+
+      return () => {
+        this.source.close();
+      };
+    });
   }
 
   async getMessages(slug: string, page = 1) {
@@ -303,5 +322,10 @@ export class RoomService {
   async getRoomsConfig() {
     const config = this.auth.currentUserValue?.config;
     return config?.rooms;
+  }
+
+  ngOnDestroy() {
+    this.source?.close();
+    // console.log("Conexión cerrada", this.source.url);
   }
 }

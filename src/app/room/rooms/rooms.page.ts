@@ -17,8 +17,6 @@ import { RoomService } from "src/app/services/room.service";
 })
 export class RoomsPage implements OnInit {
   public rooms: Room[];
-  private source: EventSource;
-  private conErrors = 0;
   public loading = true;
 
   constructor(
@@ -88,37 +86,25 @@ export class RoomsPage implements OnInit {
   }
 
   async connectSSE() {
-    this.source = await this.roomSvc.register(`rooms`);
-    this.source.addEventListener("message", async (res: any) => {
-      let message = JSON.parse(res.data) as Chat;
-      this.rooms.map(m => {
-        if (m.slug === message.conversationId) {
-          if (message.fromuser.id !== this.auth.currentUserValue.id) {
-            m.unread = true;
+    (await this.roomSvc.sseListener()).subscribe(
+      (message: Chat) => {
+        console.log(message);
+        this.rooms.map(m => {
+          if (m.slug === message.conversationId) {
+            if (message.fromuser.id !== this.auth.currentUserValue.id) {
+              m.unread = true;
+            }
           }
-        }
-      });
-    });
-
-    this.source.addEventListener("error", async error => {
-      console.error("Escucha al servidor de salas perdida", error);
-
-      this.conErrors++;
-    });
-
-    this.source.addEventListener("open", async error => {
-      // console.log("Conexión establecida", this.source.url);
-      this.conErrors = 0;
-    });
+        });
+      },
+      error => {
+        console.error("Escucha al servidor de salas perdida", error);
+        this.connectSSE();
+      }
+    );
   }
 
   back() {
     this.nav.back();
-    this.source?.close();
-  }
-
-  ngOnDestroy() {
-    this.source?.close();
-    // console.log("Conexión cerrada", this.source.url);
   }
 }

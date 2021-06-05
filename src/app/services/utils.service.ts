@@ -5,7 +5,6 @@ import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { AlertController, ModalController, Platform } from "@ionic/angular";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-// import { NavigationBarColor } from "ionic-plugin-navigation-bar-color";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";

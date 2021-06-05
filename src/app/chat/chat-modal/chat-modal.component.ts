@@ -1,12 +1,13 @@
 import {
+  ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnInit,
   SimpleChanges,
   ViewChild
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { Location } from "@angular/common";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import {
@@ -39,21 +40,18 @@ import { NavService } from "src/app/services/navigation.service";
 })
 export class ChatModalComponent implements OnInit {
   @Input() userId: User["id"];
+  @Input() messageEvent: EventEmitter<Chat>;
 
   @ViewChild("chatlist", { static: false })
   chatlist: IonContent;
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
 
-  source: EventSource;
-
   user: Partial<User>;
   messages: Chat[] = [];
   page = 0;
   pressOptions = false;
   selectedMessage: Chat;
-  conErrors = 0;
-  connected = false;
   alertError: any;
   public replying = false;
   public editing = false;
@@ -64,7 +62,6 @@ export class ChatModalComponent implements OnInit {
     public auth: AuthService,
     public userSvc: UserService,
     private router: Router,
-    private location: Location,
     private chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
@@ -77,10 +74,16 @@ export class ChatModalComponent implements OnInit {
     public modalController: ModalController,
     private popover: PopoverController,
     private vibration: Vibration,
-    private nav: NavService
+    private nav: NavService,
+    private cd: ChangeDetectorRef,
+    private modal: ModalController
   ) {}
 
   async ngOnInit() {
+    if (this.userId) {
+      this.getUser();
+    }
+
     const config: {
       maintenance: boolean;
       min_version: string;
@@ -100,7 +103,6 @@ export class ChatModalComponent implements OnInit {
           text: "Ok, seré paciente",
           handler: () => {
             this.nav.back();
-            this.source?.close();
           }
         }
       ],
@@ -110,77 +112,131 @@ export class ChatModalComponent implements OnInit {
     if (!config.chat && !this.auth.isAdmin()) {
       this.alertError.present();
     }
+
+    this.messageEvent.subscribe(async message => {
+      const min = Math.min(this.auth.currentUserValue.id, this.userId);
+      const max = Math.max(this.auth.currentUserValue.id, this.userId);
+      const conversationId = `${min}_${max}`;
+      if (message.conversationId === conversationId) {
+        if (message.writing && message.fromuser.id === this.user.id) {
+          this.toUserWriting = "Escribiendo...";
+          this.cd.detectChanges();
+          setTimeout(() => {
+            this.toUserWriting = "";
+            this.cd.detectChanges();
+          }, 10000);
+        } else if (!message.writing) {
+          this.toUserWriting = "";
+          this.cd.detectChanges();
+          // borramos los enviando
+          this.messages = this.messages.filter(m => !m.sending);
+
+          if (this.messages.some(m => m.id === message.id)) {
+            // Si ya existe el mensaje lo actualizamos
+            this.messages.map(m => {
+              if (m.id === message.id) {
+                m.text = message.text;
+                m.time_read = message.time_read;
+                m.edited = message.edited;
+                m.deleted = message.deleted;
+              }
+            });
+          } else {
+            this.messages = [...this.messages, message];
+            if (
+              message.fromuser?.id === this.user?.id &&
+              (message.text || message.image || message.audio)
+            ) {
+              // marcamos como leido
+              try {
+                if (this.user?.id !== this.auth.currentUserValue.id) {
+                  message = await this.chatSvc.readChat(message.id);
+                }
+              } catch (e) {
+                console.error(e);
+                await this.alertError.present();
+              }
+            }
+          }
+
+          if (message.fromuser?.id === this.user?.id) {
+            this.user = message.fromuser;
+          }
+
+          // Borramos los deleted
+          this.messages = this.messages.filter(m => {
+            if (!m.deleted) {
+              return m;
+            }
+          });
+          this.cd.detectChanges();
+          this.scrollDown();
+        }
+      }
+    });
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes.userId.currentValue !== changes.userId.previousValue) {
-      this.location.replaceState("/chat/" + changes.userId.currentValue);
+    if (changes?.userId?.currentValue !== changes?.userId?.previousValue) {
       this.userId = changes.userId.currentValue;
+      this.getUser();
+    }
+  }
 
-      this.page = 1;
+  async getUser() {
+    this.page = 1;
 
-      this.messages = [];
-      this.pressOptions = false;
-      this.selectedMessage = undefined;
-      this.conErrors = 0;
-      this.connected = false;
-      this.replying = false;
-      this.editing = false;
-      this.writing = false;
-      this.toUserWriting = "";
+    this.messages = [];
+    this.pressOptions = false;
+    this.selectedMessage = undefined;
+    this.replying = false;
+    this.editing = false;
+    this.writing = false;
+    this.toUserWriting = "";
 
-      try {
-        const messages = (
-          await this.chatSvc.getMessages(this.userId, true, this.page)
-        )
-          .filter(m => m.text || m.image || m.audio)
-          .reverse();
+    try {
+      const messages = (
+        await this.chatSvc.getMessages(this.userId, true, this.page)
+      )
+        .filter(m => m.text || m.image || m.audio)
+        .reverse();
 
-        this.messages = [...this.messages, ...messages];
+      this.messages = [...this.messages, ...messages];
 
-        if (this.messages.length < 15) {
-          this.infiniteScroll.complete();
-        } else {
-          this.infiniteScroll.complete();
-          this.infiniteScroll.disabled = false;
-          this.infiniteScroll.ionInfinite;
-        }
-
-        this.scrollDown(500);
-
-        if (this.messages.length > 0) {
-          if (this.userId == this.messages[0].fromuser.id) {
-            this.user = this.messages[0].fromuser;
-          } else {
-            this.user = this.messages[0].touser;
-          }
-        } else {
-          try {
-            this.user = await this.userSvc.getUser(this.userId);
-          } catch (e) {
-            console.error(e);
-          }
-        }
-
-        if (this.userId !== 1) {
-          this.connectSSE();
-        }
-
-        window.addEventListener("keyboardDidShow", event => {
-          this.scrollDown();
-        });
-
-        window.addEventListener("keyboardDidHide", event => {
-          this.scrollDown();
-        });
-
-        this.platform.backButton.subscribe(() => {
-          this.source?.close();
-        });
-      } catch (e) {
-        console.error(e);
-        await this.alertError.present();
+      if (this.messages.length < 15) {
+        this.infiniteScroll.complete();
+      } else {
+        this.infiniteScroll.complete();
+        this.infiniteScroll.disabled = false;
+        this.infiniteScroll.ionInfinite;
       }
+
+      this.scrollDown(500);
+
+      if (this.messages.length > 0) {
+        if (this.userId == this.messages[0].fromuser.id) {
+          this.user = this.messages[0].fromuser;
+        } else {
+          this.user = this.messages[0].touser;
+        }
+      } else {
+        try {
+          this.user = await this.userSvc.getUser(this.userId);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      window.addEventListener("keyboardDidShow", event => {
+        this.scrollDown();
+      });
+
+      window.addEventListener("keyboardDidHide", event => {
+        this.scrollDown();
+      });
+    } catch (e) {
+      console.error(e);
+      await this.alertError.present();
     }
   }
 
@@ -249,9 +305,8 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  async scrollDown(delay = 1, force = false) {
+  async scrollDown(delay = 500, force = false) {
     const scroll = await this.chatlist.getScrollElement();
-
     if (
       scroll.scrollTop +
         scroll.offsetHeight +
@@ -289,6 +344,9 @@ export class ChatModalComponent implements OnInit {
   async showProfile(id: User["id"]) {
     if (id !== 1) {
       this.router.navigate(["/profile", id]);
+      if (await this.modalController.getTop()) {
+        this.modalController.dismiss();
+      }
     }
   }
 
@@ -421,110 +479,6 @@ export class ChatModalComponent implements OnInit {
     }, 15000);
   }
 
-  async connectSSE() {
-    const min = Math.min(this.auth.currentUserValue.id, this.userId);
-    const max = Math.max(this.auth.currentUserValue.id, this.userId);
-    const channel = `${min}_${max}`;
-
-    // Nos suscribimos al canal
-    this.source = await this.chatSvc.register(channel);
-    this.source.addEventListener("message", async (res: any) => {
-      this.connected = true;
-      this.conErrors = 0;
-      let message = JSON.parse(res.data) as Chat;
-      if (message.writing && message.fromuser.id === this.user.id) {
-        this.toUserWriting = "Escribiendo...";
-        setTimeout(() => {
-          this.toUserWriting = "";
-        }, 10000);
-      } else if (!message.writing) {
-        this.toUserWriting = "";
-        // borramos los enviando
-        this.messages = this.messages.filter(m => !m.sending);
-
-        if (this.messages.some(m => m.id === message.id)) {
-          // Si ya existe el mensaje lo actualizamos
-          this.messages.map(m => {
-            if (m.id === message.id) {
-              m.text = message.text;
-              m.time_read = message.time_read;
-              m.edited = message.edited;
-              m.deleted = message.deleted;
-            }
-          });
-        } else {
-          this.messages = [...this.messages, message];
-          if (
-            message.fromuser.id === this.user.id &&
-            (message.text || message.image || message.audio)
-          ) {
-            // marcamos como leido
-            try {
-              if (this.user.id !== this.auth.currentUserValue.id) {
-                message = await this.chatSvc.readChat(message.id);
-              }
-            } catch (e) {
-              console.error(e);
-              await this.alertError.present();
-            }
-          }
-        }
-
-        if (message.fromuser.id === this.user.id) {
-          this.user = message.fromuser;
-        }
-
-        // Borramos los deleted
-        this.messages = this.messages.filter(m => {
-          if (!m.deleted) {
-            return m;
-          }
-        });
-
-        this.scrollDown();
-      }
-    });
-
-    this.source.addEventListener("error", async error => {
-      console.error(
-        "Escucha al servidor de " + this.user.username + " perdida",
-        error
-      );
-      /*console.error(
-        "Error al conectarse al servidor de chat",
-        `connected: ${this.connected}`,
-        `conErrors: ${this.conErrors}`,
-        error
-      );*/
-      this.conErrors++;
-      if (error.type === "error" && this.conErrors === 5) {
-        (
-          await this.toast.create({
-            message: "Se ha perdido la conexión con el servidor de chat",
-            duration: 2000,
-            position: "bottom",
-            color: "danger"
-          })
-        ).present();
-      }
-    });
-
-    this.source.addEventListener("open", async error => {
-      // console.log("Conexión establecida", this.source.url);
-      if (this.conErrors === 5) {
-        (
-          await this.toast.create({
-            message: "¡Conexión al servidor de chat restablecida!",
-            duration: 2000,
-            position: "bottom",
-            color: "success"
-          })
-        ).present();
-      }
-      this.conErrors = 0;
-    });
-  }
-
   goToMessage(message: Chat) {
     if (message?.reply_to?.id) {
       const el = document.getElementById("" + message.reply_to.id);
@@ -538,14 +492,8 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    if (this.source?.url) {
-      this.source?.close();
-      // console.log("Conexión cerrada", this.source.url);
-    }
-  }
-
   back() {
-    this.nav.back();
+    this.modal.dismiss();
+    // this.nav.back();
   }
 }

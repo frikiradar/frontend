@@ -1,8 +1,0 @@
-<app-chat-list
-  (userChange)="showChat($event)"
-  [chats]="chats"
-  *ngIf="desktop"
-  [selected]="userId"
-  (chatsChange)="chatsChange($event)"
-></app-chat-list>
-<app-chat-modal *ngIf="userId" [userId]="userId"></app-chat-modal>

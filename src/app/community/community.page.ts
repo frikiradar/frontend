@@ -33,8 +33,6 @@ export class CommunityPage {
   public stories: Story[];
   public pages: Page[];
   public groupedStories: Story[] = [];
-  private source: EventSource;
-  private conErrors = 0;
   public loading = true;
 
   public storiesOpts = {
@@ -74,9 +72,6 @@ export class CommunityPage {
       if (event instanceof NavigationStart) {
         if (event.url === "/tabs/community") {
           this.getStories();
-          if (this.source.readyState === 2) {
-            this.getRooms();
-          }
         }
       }
     });
@@ -214,8 +209,6 @@ export class CommunityPage {
   }
 
   async showAllRooms() {
-    this.source?.close();
-    // console.log("Conexión cerrada", this.source.url);
     this.router.navigate(["/rooms"]);
   }
 
@@ -237,30 +230,20 @@ export class CommunityPage {
   }
 
   async connectSSE() {
-    this.source = await this.roomSvc.register(`rooms`);
-    this.source.addEventListener("message", async (res: any) => {
-      let message = JSON.parse(res.data) as Chat;
-      this.rooms.map(m => {
-        if (m.slug === message.conversationId) {
-          if (message.fromuser.id !== this.auth.currentUserValue.id) {
-            m.unread = true;
+    (await this.roomSvc.sseListener()).subscribe(
+      (message: Chat) => {
+        this.rooms.map(m => {
+          if (m.slug === message.conversationId) {
+            if (message.fromuser.id !== this.auth.currentUserValue.id) {
+              m.unread = true;
+            }
           }
-        }
-      });
-    });
-
-    this.source.addEventListener("error", async error => {
-      this.conErrors++;
-      console.error("Escucha al servidor de community perdida", error);
-    });
-
-    this.source.addEventListener("open", async error => {
-      // console.log("Conexión establecida", this.source.url);
-      this.conErrors = 0;
-    });
-  }
-
-  ngOnDestroy() {
-    this.source?.close();
+        });
+      },
+      error => {
+        console.error("Escucha al servidor de community perdida", error);
+        this.connectSSE();
+      }
+    );
   }
 }
