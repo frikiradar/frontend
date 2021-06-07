@@ -4,12 +4,13 @@ import { EventEmitter } from "@angular/core";
 import { Location } from "@angular/common";
 import { ModalController, Platform } from "@ionic/angular";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 
 import { User } from "../models/user";
 import { Chat } from "./../models/chat";
 import { AuthService } from "./../services/auth.service";
 import { ChatModalComponent } from "./chat-modal/chat-modal.component";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { ChatService } from "../services/chat.service";
 
 @Component({
   selector: "app-chat",
@@ -30,7 +31,8 @@ export class ChatPage implements OnInit {
     private modal: ModalController,
     private afMessaging: AngularFireMessaging,
     private firebase: FirebaseX,
-    private platform: Platform
+    private platform: Platform,
+    private chatSvc: ChatService
   ) {}
 
   async ngOnInit() {
@@ -74,39 +76,41 @@ export class ChatPage implements OnInit {
   }
 
   async connectSSE() {
-    if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe(
-        payload => {
-          console.log("chat cordova", payload);
-          if (payload?.message) {
-            const message = JSON.parse(payload.message);
+    if (this.auth.isMaster()) {
+      if (this.platform.is("cordova")) {
+        this.firebase.onMessageReceived().subscribe(
+          payload => {
+            console.log("chat cordova", payload);
+            if (payload?.message) {
+              const message = JSON.parse(payload.message);
+              // console.log(message);
+              this.messageEvent.emit(message);
+            }
+          },
+          error => {
+            console.error("Error in notification", error);
+          }
+        );
+      } else {
+        this.afMessaging.messages.subscribe((payload: any) => {
+          console.log("chat web", payload);
+          if (payload?.data?.message) {
+            const message = JSON.parse(payload.data.message);
             // console.log(message);
             this.messageEvent.emit(message);
           }
+        });
+      }
+    } else {
+      (await this.chatSvc.sseListener(this.auth.currentUserValue.id)).subscribe(
+        async (message: Chat) => {
+          this.messageEvent.emit(message);
         },
         error => {
-          console.error("Error in notification", error);
+          console.error("Escucha al servidor de chats perdida", error);
+          this.connectSSE();
         }
       );
-    } else {
-      this.afMessaging.messages.subscribe((payload: any) => {
-        console.log("chat web", payload);
-        if (payload?.data?.message) {
-          const message = JSON.parse(payload.data.message);
-          // console.log(message);
-          this.messageEvent.emit(message);
-        }
-      });
     }
-
-    /*(await this.chatSvc.sseListener(this.auth.currentUserValue.id)).subscribe(
-      async (message: Chat) => {
-        this.messageEvent.emit(message);
-      },
-      error => {
-        console.error("Escucha al servidor de chats perdida", error);
-        this.connectSSE();
-      }
-    );*/
   }
 }

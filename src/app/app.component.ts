@@ -113,7 +113,7 @@ export class AppComponent {
 
   checkCodePush() {
     let syncOptions: SyncOptions = {
-      updateDialog: {
+      updateDialog: false /*{
         updateTitle: "¡Nueva actualización!",
         optionalUpdateMessage:
           "Hay una actualización disponible. ¿Quieres actualizar?",
@@ -123,7 +123,7 @@ export class AppComponent {
         optionalIgnoreButtonLabel: "Más tarde",
         optionalInstallButtonLabel: "Instalar",
         appendReleaseDescription: false
-      },
+      }*/,
       installMode: InstallMode.ON_NEXT_RESTART
     };
 
