@@ -293,9 +293,9 @@ export class ChatModalComponent implements OnInit {
             .then();
         }
 
-        /*this.messages.map(m => {
+        this.messages.map(m => {
           m.sending = false;
-        });*/
+        });
 
         replyToId = null;
       } catch (e) {
