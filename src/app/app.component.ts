@@ -124,7 +124,7 @@ export class AppComponent {
         optionalInstallButtonLabel: "Instalar",
         appendReleaseDescription: false
       },
-      installMode: InstallMode.IMMEDIATE
+      installMode: InstallMode.ON_NEXT_RESTART
     };
 
     this.codePush.sync(syncOptions).subscribe(

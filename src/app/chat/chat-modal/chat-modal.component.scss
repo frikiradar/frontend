@@ -221,19 +221,20 @@ ion-chip {
   clear: both;
 }
 
-ion-content {
-  --offset-bottom: -60px !important;
+@media (min-width: 992px) {
+  ion-content {
+    --offset-bottom: -118px !important;
+  }
 
-  &.ios {
-    --offset-bottom: -200px !important;
+  ion-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 }
 
 ion-footer {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
   width: initial;
 }
 

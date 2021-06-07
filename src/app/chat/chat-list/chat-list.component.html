@@ -112,9 +112,11 @@
             chat.writing ? "⌨ Escribiendo..." : (chat.time_creation | niceDate)
           }}
           <ion-text class="chat-count ion-text-right">
-            <ion-badge color="primary" *ngIf="chat?.count > 0">{{
-              chat?.count
-            }}</ion-badge>
+            <ion-badge
+              color="primary"
+              *ngIf="chat?.count > 0 && selected !== chat?.user?.id"
+              >{{ chat?.count }}</ion-badge
+            >
           </ion-text>
         </ion-note>
       </ion-item>

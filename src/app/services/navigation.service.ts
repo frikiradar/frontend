@@ -1,6 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd, UrlTree } from "@angular/router";
-import { NavController, Platform, ToastController } from "@ionic/angular";
+import {
+  ModalController,
+  NavController,
+  Platform,
+  ToastController
+} from "@ionic/angular";
 import { NavigationOptions } from "@ionic/angular/providers/nav-controller";
 
 @Injectable({ providedIn: "root" })
@@ -12,7 +17,8 @@ export class NavService {
     private router: Router,
     private nav: NavController,
     private platform: Platform,
-    private toast: ToastController
+    private toast: ToastController,
+    private modal: ModalController
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -39,6 +45,11 @@ export class NavService {
     this.platform.backButton.subscribeWithPriority(1, async () => {
       if (!!document.querySelector(".cupertino-pane-wrapper")) {
         this.backButtonCount = 0;
+      } else if (
+        location.href.includes("/chat/") &&
+        (await this.modal.getTop())
+      ) {
+        this.modal.dismiss();
       } else if (
         this.router.url.includes("/tabs/") ||
         this.router.url === "/"
