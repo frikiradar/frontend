@@ -2,10 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
 import { Location } from "@angular/common";
-import { ModalController, ToastController } from "@ionic/angular";
+import { ModalController, Platform } from "@ionic/angular";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 
 import { User } from "../models/user";
-import { ChatService } from "../services/chat.service";
 import { Chat } from "./../models/chat";
 import { AuthService } from "./../services/auth.service";
 import { ChatModalComponent } from "./chat-modal/chat-modal.component";
@@ -26,10 +26,11 @@ export class ChatPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public auth: AuthService,
-    private chatSvc: ChatService,
     private location: Location,
     private modal: ModalController,
-    private afMessaging: AngularFireMessaging
+    private afMessaging: AngularFireMessaging,
+    private firebase: FirebaseX,
+    private platform: Platform
   ) {}
 
   async ngOnInit() {
@@ -73,18 +74,30 @@ export class ChatPage implements OnInit {
   }
 
   async connectSSE() {
-    this.afMessaging.messages.subscribe(
-      (notification: any) => {
-        if (notification?.data?.message) {
-          const message = JSON.parse(notification.data.message);
+    if (this.platform.is("cordova")) {
+      this.firebase.onMessageReceived().subscribe(
+        payload => {
+          console.log("chat cordova", payload);
+          if (payload?.message) {
+            const message = JSON.parse(payload.message);
+            // console.log(message);
+            this.messageEvent.emit(message);
+          }
+        },
+        error => {
+          console.error("Error in notification", error);
+        }
+      );
+    } else {
+      this.afMessaging.messages.subscribe((payload: any) => {
+        console.log("chat web", payload);
+        if (payload?.data?.message) {
+          const message = JSON.parse(payload.data.message);
+          // console.log(message);
           this.messageEvent.emit(message);
         }
-      },
-      error => {
-        console.error("Escucha a firebase perdida", error);
-        // this.connectSSE();
-      }
-    );
+      });
+    }
 
     /*(await this.chatSvc.sseListener(this.auth.currentUserValue.id)).subscribe(
       async (message: Chat) => {

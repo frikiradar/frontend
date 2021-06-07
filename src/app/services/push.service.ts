@@ -4,7 +4,7 @@ import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/messaging";
-import { first, mergeMapTo, take, takeUntil, takeWhile } from "rxjs/operators";
+import { takeWhile } from "rxjs/operators";
 import { SwPush } from "@angular/service-worker";
 
 import { AuthService } from "./auth.service";
@@ -92,7 +92,7 @@ export class PushService {
 
       this.firebase.onMessageReceived().subscribe(
         payload => {
-          console.log("payload", payload);
+          // console.log("payload", payload);
           if (payload.tap) {
             this.router.navigate([payload.url]);
           } else {
@@ -113,14 +113,16 @@ export class PushService {
     } else {
       await this.requestPermission();
       this.afMessaging.messages.subscribe((payload: any) => {
-        // console.log("new message received. ", payload);
-        this.localNotification(payload);
+        if (payload?.notification) {
+          // console.log("new message received. ", payload);
+          this.localNotification(payload);
 
-        this.notificationSvc
-          .getUnread()
-          .then((notification: NotificationCounters) => {
-            this.notificationSvc.setNotification(notification);
-          });
+          this.notificationSvc
+            .getUnread()
+            .then((notification: NotificationCounters) => {
+              this.notificationSvc.setNotification(notification);
+            });
+        }
       });
     }
   }
@@ -227,7 +229,6 @@ export class PushService {
         });
       }
     } else {
-      console.log(notification);
       if (this.router.url !== notification?.data?.url) {
         try {
           const registration = await navigator.serviceWorker.ready;
