@@ -32,22 +32,27 @@ export class PushService {
     private afMessaging: AngularFireMessaging,
     private swPush: SwPush
   ) {
-    this.platform.ready().then(() => {
+    this.platform.ready().then(async () => {
       if (this.platform.is("cordova")) {
-        this.localNotifications.on("click").subscribe(notification => {
-          console.log("click", notification);
-          const data = notification.data;
-          this.router.navigate([data.url]);
-        });
+        try {
+          await this.firebase.hasPermission();
+          this.localNotifications.on("click").subscribe(notification => {
+            console.log("click", notification);
+            const data = notification.data;
+            this.router.navigate([data.url]);
+          });
 
-        this.localNotifications.on("trigger").subscribe(notification => {
-          console.log("trigger", notification);
-          const data = notification.data;
-        });
+          this.localNotifications.on("trigger").subscribe(notification => {
+            console.log("trigger", notification);
+            const data = notification.data;
+          });
 
-        this.localNotifications.on("reply").subscribe(notification => {
-          console.log("onreply", notification);
-        });
+          this.localNotifications.on("reply").subscribe(notification => {
+            console.log("onreply", notification);
+          });
+        } catch (e) {
+          console.error(e);
+        }
       } else {
         this.swPush.notificationClicks.subscribe(payload => {
           this.router.navigate([payload.notification.data.url]);
