@@ -101,16 +101,16 @@ export class ChatPage implements OnInit {
           }
         });
       }
-    } else {
-      (await this.chatSvc.sseListener(this.auth.currentUserValue.id)).subscribe(
-        async (message: Chat) => {
-          this.messageEvent.emit(message);
-        },
-        error => {
-          console.error("Escucha al servidor de chats perdida", error);
-          this.connectSSE();
-        }
-      );
     }
+
+    (await this.chatSvc.sseListener(this.auth.currentUserValue.id)).subscribe(
+      async (message: Chat) => {
+        this.messageEvent.emit(message);
+      },
+      error => {
+        console.error("Escucha al servidor de chats perdida", error);
+        this.connectSSE();
+      }
+    );
   }
 }
