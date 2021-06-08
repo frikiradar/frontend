@@ -39,11 +39,12 @@ export class AppComponent {
     private config: ConfigService,
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
-    private toastController: ToastController,
     private push: PushService,
     private codePush: CodePush,
     private nav: NavService,
-    private sw: SwService
+    private sw: SwService,
+    private toast: ToastController,
+    private toastUpdate: ToastController
   ) {
     this.initializeApp();
   }
@@ -87,7 +88,7 @@ export class AppComponent {
     this.network.onConnect().subscribe(async () => {
       if (!this.internet) {
         (
-          await this.toastController.create({
+          await this.toast.create({
             message: "¡Conexión a internet restablecida!",
             duration: 2000,
             position: "bottom",
@@ -100,7 +101,7 @@ export class AppComponent {
 
     this.network.onDisconnect().subscribe(async () => {
       (
-        await this.toastController.create({
+        await this.toast.create({
           message: "¡Te has quedado sin internet!",
           duration: 5000,
           position: "bottom",
@@ -128,7 +129,23 @@ export class AppComponent {
     };
 
     this.codePush.sync(syncOptions).subscribe(
-      data => {
+      async data => {
+        /*if (data === 1) {
+          const toast = await this.toastUpdate.create({
+            message: "¡Nueva actualización disponible!",
+            buttons: [
+              {
+                text: "Instalar",
+                handler: () => {
+                  window.location.reload();
+                }
+              }
+            ],
+            position: "bottom"
+          });
+
+          await toast.present();
+        }*/
         console.log("CODE PUSH SUCCESSFUL: " + data);
       },
       err => {

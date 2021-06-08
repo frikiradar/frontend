@@ -7,6 +7,7 @@
   *ngIf="userId && desktop"
   [userId]="userId"
   [messageEvent]="messageEvent"
+  (messageChange)="messageChange($event)"
 ></app-chat-modal>
 <div class="full-center ion-padding" *ngIf="!userId && desktop">
   <ion-icon name="chatbubbles"></ion-icon>

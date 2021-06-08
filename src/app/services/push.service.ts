@@ -98,11 +98,13 @@ export class PushService {
           } else {
             this.localNotification(payload);
 
-            this.notificationSvc
-              .getUnread()
-              .then((notification: NotificationCounters) => {
-                this.notificationSvc.setNotification(notification);
-              });
+            if (!this.router.url.includes("chat")) {
+              this.notificationSvc
+                .getUnread()
+                .then((notification: NotificationCounters) => {
+                  this.notificationSvc.setNotification(notification);
+                });
+            }
             // console.log("Received in foreground");
           }
         },
@@ -117,11 +119,13 @@ export class PushService {
           // console.log("new message received. ", payload);
           this.localNotification(payload);
 
-          this.notificationSvc
-            .getUnread()
-            .then((notification: NotificationCounters) => {
-              this.notificationSvc.setNotification(notification);
-            });
+          if (!this.router.url.includes("chat")) {
+            this.notificationSvc
+              .getUnread()
+              .then((notification: NotificationCounters) => {
+                this.notificationSvc.setNotification(notification);
+              });
+          }
         }
       });
     }

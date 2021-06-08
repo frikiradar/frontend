@@ -66,6 +66,8 @@ export class ChatPage implements OnInit {
         componentProps: { userId: this.userId, messageEvent: this.messageEvent }
       });
       await modal.present();
+      const data = await modal.onDidDismiss();
+      this.messageEvent.emit(data.data);
       if (this.router.url !== "/tabs/chat") {
         this.router.navigate(["/tabs/chat"]);
       } else {
@@ -80,7 +82,6 @@ export class ChatPage implements OnInit {
       if (this.platform.is("cordova")) {
         this.firebase.onMessageReceived().subscribe(
           payload => {
-            console.log("chat cordova", payload);
             if (payload?.message) {
               const message = JSON.parse(payload.message);
               // console.log(message);
@@ -93,10 +94,9 @@ export class ChatPage implements OnInit {
         );
       } else {
         this.afMessaging.messages.subscribe((payload: any) => {
-          console.log("chat web", payload);
           if (payload?.data?.message) {
             const message = JSON.parse(payload.data.message);
-            // console.log(message);
+            console.log(message);
             this.messageEvent.emit(message);
           }
         });
@@ -112,5 +112,9 @@ export class ChatPage implements OnInit {
         this.connectSSE();
       }
     );
+  }
+
+  messageChange(message: Chat) {
+    this.messageEvent.emit(message);
   }
 }

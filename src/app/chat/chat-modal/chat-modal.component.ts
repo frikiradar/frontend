@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild
 } from "@angular/core";
@@ -41,6 +42,7 @@ import { NavService } from "src/app/services/navigation.service";
 export class ChatModalComponent implements OnInit {
   @Input() userId: User["id"];
   @Input() messageEvent: EventEmitter<Chat>;
+  @Output() messageChange: EventEmitter<Chat> = new EventEmitter();
 
   @ViewChild("chatlist", { static: false })
   chatlist: IonContent;
@@ -81,7 +83,7 @@ export class ChatModalComponent implements OnInit {
 
   async ngOnInit() {
     if (this.userId) {
-      this.getUser();
+      await this.getUser();
     }
 
     const config: {
@@ -128,8 +130,6 @@ export class ChatModalComponent implements OnInit {
         } else if (!message.writing) {
           this.toUserWriting = "";
           this.cd.detectChanges();
-          // borramos los enviando
-          this.messages = this.messages.filter(m => !m.sending);
 
           if (this.messages.some(m => m.id === message.id)) {
             // Si ya existe el mensaje lo actualizamos
@@ -142,7 +142,13 @@ export class ChatModalComponent implements OnInit {
               }
             });
           } else {
-            this.messages = [...this.messages, message];
+            const messages = [...this.messages, message];
+            this.messages = messages.sort((a, b) => {
+              return (
+                new Date(a.time_creation).getTime() -
+                new Date(b.time_creation).getTime()
+              );
+            });
             if (
               message.fromuser?.id === this.user?.id &&
               (message.text || message.image || message.audio)
@@ -177,9 +183,12 @@ export class ChatModalComponent implements OnInit {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (changes?.userId?.currentValue !== changes?.userId?.previousValue) {
+    if (
+      changes?.userId?.currentValue !== changes?.userId?.previousValue &&
+      changes?.userId?.previousValue !== undefined
+    ) {
       this.userId = changes.userId.currentValue;
-      this.getUser();
+      await this.getUser();
     }
   }
 
@@ -256,20 +265,19 @@ export class ChatModalComponent implements OnInit {
       });
       this.editing = false;
     } else {
-      this.messages = [
-        ...this.messages,
-        ...[
-          {
-            touser: this.user,
-            fromuser: this.auth.currentUserValue,
-            text,
-            image,
-            audio,
-            time_creation: new Date(),
-            sending: true
-          }
-        ]
-      ].filter((m: Chat) => m.text || m.image || m.audio);
+      const message = {
+        touser: this.user,
+        fromuser: this.auth.currentUserValue,
+        text,
+        image,
+        audio,
+        time_creation: new Date(),
+        sending: true
+      };
+
+      this.messages = [...this.messages, ...[message]].filter(
+        (m: Chat) => m.text || m.image || m.audio
+      );
 
       this.scrollDown(1, true);
       let replyToId =
@@ -277,25 +285,32 @@ export class ChatModalComponent implements OnInit {
       this.replying = false;
 
       try {
+        let chat = null;
         if (!image && !audio) {
-          const chat = await this.chatSvc
+          chat = await this.chatSvc
             .sendMessage(this.user.id, text, replyToId)
             .then();
         } else if (image) {
           const imageFile = await this.utils.urltoBlob(image);
-          const chat = await this.chatSvc
+          chat = await this.chatSvc
             .sendImage(this.user.id, imageFile, text)
             .then();
         } else if (audio) {
           const audioFile = await this.utils.urltoBlob(audio);
-          const chat = await this.chatSvc
-            .sendAudio(this.user.id, audioFile)
-            .then();
+          chat = await this.chatSvc.sendAudio(this.user.id, audioFile).then();
         }
 
         this.messages.map(m => {
-          m.sending = false;
+          if (m.sending) {
+            m.id = chat.id;
+            m.time_creation = chat.time_creation;
+            m.sending = chat.sending;
+            m.time_read = chat.time_read;
+            m.conversationId = chat.conversationId;
+          }
         });
+
+        this.messageChange.emit(chat);
 
         replyToId = null;
       } catch (e) {
@@ -493,6 +508,7 @@ export class ChatModalComponent implements OnInit {
   }
 
   back() {
-    this.modal.dismiss();
+    const lastMessage = this.messages[this.messages.length - 1];
+    this.modal.dismiss(lastMessage);
   }
 }
