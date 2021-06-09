@@ -62,7 +62,10 @@ export class ChatListComponent {
     }
 
     this.messageEvent.subscribe(message => {
-      if (this.chats?.some(m => m.conversationId === message.conversationId)) {
+      if (!message) {
+        return;
+      }
+      if (this.chats?.some(m => m.conversationId === message?.conversationId)) {
         this.chats.map(m => {
           if (m.conversationId === message.conversationId) {
             if (m.writing && !message.writing) {

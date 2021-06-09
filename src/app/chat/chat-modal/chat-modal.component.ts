@@ -116,6 +116,10 @@ export class ChatModalComponent implements OnInit {
     }
 
     this.messageEvent.subscribe(async message => {
+      if (!message) {
+        return;
+      }
+
       const min = Math.min(this.auth.currentUserValue.id, this.userId);
       const max = Math.max(this.auth.currentUserValue.id, this.userId);
       const conversationId = `${min}_${max}`;

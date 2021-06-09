@@ -36,7 +36,9 @@ ion-item {
     color: white;
   }
 
-  &.selected {
-    --background: var(--ion-color-primary-shade) !important;
+  @media (min-width: 992px) {
+    &.selected {
+      --background: var(--ion-color-primary-shade) !important;
+    }
   }
 }

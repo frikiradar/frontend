@@ -59,7 +59,6 @@ export class ChatPage implements OnInit {
 
   async showChat(id: User["id"]) {
     this.userId = id;
-    this.location.replaceState("/chat/" + id);
     if (window.innerWidth <= 991) {
       const modal = await this.modal.create({
         component: ChatModalComponent,
@@ -68,12 +67,6 @@ export class ChatPage implements OnInit {
       await modal.present();
       const data = await modal.onDidDismiss();
       this.messageEvent.emit(data.data);
-      if (this.router.url !== "/tabs/chat") {
-        this.router.navigate(["/tabs/chat"]);
-      } else {
-        await modal.onDidDismiss();
-        this.location.replaceState("/tabs/chat");
-      }
     }
   }
 
@@ -95,7 +88,7 @@ export class ChatPage implements OnInit {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {
           const message = JSON.parse(payload.data.message);
-          console.log(message);
+          // console.log(message);
           this.messageEvent.emit(message);
         }
       });
