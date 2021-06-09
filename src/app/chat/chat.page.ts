@@ -78,40 +78,28 @@ export class ChatPage implements OnInit {
   }
 
   async connectSSE() {
-    if (this.auth.isMaster()) {
-      if (this.platform.is("cordova")) {
-        this.firebase.onMessageReceived().subscribe(
-          payload => {
-            if (payload?.message) {
-              const message = JSON.parse(payload.message);
-              // console.log(message);
-              this.messageEvent.emit(message);
-            }
-          },
-          error => {
-            console.error("Error in notification", error);
-          }
-        );
-      } else {
-        this.afMessaging.messages.subscribe((payload: any) => {
-          if (payload?.data?.message) {
-            const message = JSON.parse(payload.data.message);
-            console.log(message);
+    if (this.platform.is("cordova")) {
+      this.firebase.onMessageReceived().subscribe(
+        payload => {
+          if (payload?.message) {
+            const message = JSON.parse(payload.message);
+            // console.log(message);
             this.messageEvent.emit(message);
           }
-        });
-      }
+        },
+        error => {
+          console.error("Error in notification", error);
+        }
+      );
+    } else {
+      this.afMessaging.messages.subscribe((payload: any) => {
+        if (payload?.data?.message) {
+          const message = JSON.parse(payload.data.message);
+          console.log(message);
+          this.messageEvent.emit(message);
+        }
+      });
     }
-
-    (await this.chatSvc.sseListener(this.auth.currentUserValue.id)).subscribe(
-      async (message: Chat) => {
-        this.messageEvent.emit(message);
-      },
-      error => {
-        console.error("Escucha al servidor de chats perdida", error);
-        this.connectSSE();
-      }
-    );
   }
 
   messageChange(message: Chat) {
