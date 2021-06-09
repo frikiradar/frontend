@@ -83,6 +83,9 @@
         <preference name="CodePushDeploymentKey" value="bUeXBSfKJhnquAjVIZ-ySgQDFwLjdv_yKao0w" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <config-file parent="NSMicrophoneUsageDescription" platform="ios" target="*-Info.plist">
+            <string>Necesitamos acceder a tu micrófono para enviar mensajes de audio.</string>
+        </config-file>
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
             <string>Necesitamos acceder a tu cámara para distintas funciones: hacer una nueva foto de perfil, poder enviar fotos por chat o subir una nueva historia.</string>
         </config-file>
