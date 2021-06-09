@@ -5,6 +5,7 @@ import { Location } from "@angular/common";
 import { ModalController, Platform } from "@ionic/angular";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { AngularFireMessaging } from "@angular/fire/messaging";
+import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 
 import { User } from "../models/user";
 import { Chat } from "./../models/chat";
@@ -32,7 +33,8 @@ export class ChatPage implements OnInit {
     private afMessaging: AngularFireMessaging,
     private firebase: FirebaseX,
     private platform: Platform,
-    private chatSvc: ChatService
+    private chatSvc: ChatService,
+    private localNotifications: LocalNotifications
   ) {}
 
   async ngOnInit() {
@@ -58,7 +60,7 @@ export class ChatPage implements OnInit {
   }
 
   async showChat(id: User["id"]) {
-    this.userId = id;
+    this.userId = +id;
     if (window.innerWidth <= 991) {
       const modal = await this.modal.create({
         component: ChatModalComponent,
@@ -73,11 +75,30 @@ export class ChatPage implements OnInit {
   async connectSSE() {
     if (this.platform.is("cordova")) {
       this.firebase.onMessageReceived().subscribe(
-        payload => {
-          if (payload?.message) {
-            const message = JSON.parse(payload.message);
+        notification => {
+          if (notification?.message) {
+            const message = JSON.parse(notification.message) as Chat;
             // console.log(message);
             this.messageEvent.emit(message);
+
+            if (
+              this.router.url.includes("chat") &&
+              message?.fromuser?.id !== this.userId &&
+              !message?.writing
+            ) {
+              this.localNotifications.schedule({
+                title: notification?.title,
+                text: notification?.body,
+                sound: "file://assets/audio/bipbip.mp3",
+                smallIcon: "res://notification_icon",
+                color: "#e91e63",
+                icon: notification?.icon,
+                // attachments: notification?.attachments,
+                channel: notification?.topic,
+                data: notification
+                // actions
+              });
+            }
           }
         },
         error => {
@@ -87,7 +108,7 @@ export class ChatPage implements OnInit {
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {
-          const message = JSON.parse(payload.data.message);
+          const message = JSON.parse(payload.data.message) as Chat;
           // console.log(message);
           this.messageEvent.emit(message);
         }

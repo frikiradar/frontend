@@ -46,7 +46,7 @@ export class NavService {
       if (!!document.querySelector(".cupertino-pane-wrapper")) {
         this.backButtonCount = 0;
       } else if (
-        location.href.includes("/chat/") &&
+        this.router.url.includes("chat") &&
         (await this.modal.getTop())
       ) {
         this.modal.dismiss();

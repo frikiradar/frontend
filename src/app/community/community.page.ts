@@ -36,6 +36,8 @@ export class CommunityPage {
   public loading = true;
 
   public storiesOpts = {
+    preloadImages: false,
+    lazy: true,
     slidesPerView: 4.5,
     breakpoints: {
       1024: {
@@ -46,6 +48,8 @@ export class CommunityPage {
   };
 
   public pagesOpts = {
+    preloadImages: false,
+    lazy: true,
     slidesPerView: 3.5,
     breakpoints: {
       1024: {
