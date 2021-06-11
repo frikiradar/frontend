@@ -223,7 +223,10 @@ export class PushService {
       ] as any[];
     }*/
     if (this.platform.is("cordova")) {
-      if (!this.router.url.includes("chat") && notification?.notify) {
+      if (
+        !this.router.url.includes("chat") &&
+        notification?.notify === "true"
+      ) {
         this.localNotifications.schedule({
           title: notification?.title,
           text: notification?.body,
@@ -238,7 +241,10 @@ export class PushService {
         });
       }
     } else {
-      if (!this.router.url.includes("chat") && notification?.data?.notify) {
+      if (
+        !this.router.url.includes("chat") &&
+        notification?.data?.notify === "true"
+      ) {
         try {
           const registration = await navigator.serviceWorker.ready;
           // Customize notification here

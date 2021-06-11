@@ -513,6 +513,6 @@ export class ChatModalComponent implements OnInit {
 
   back() {
     const lastMessage = this.messages[this.messages.length - 1];
-    this.modal.dismiss(lastMessage);
+    this.modal.dismiss();
   }
 }

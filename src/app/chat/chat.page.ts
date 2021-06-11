@@ -84,7 +84,7 @@ export class ChatPage implements OnInit {
             if (
               this.router.url.includes("chat") &&
               message?.fromuser?.id !== this.userId &&
-              notification?.notify
+              notification?.notify === "true"
             ) {
               this.localNotifications.schedule({
                 title: notification?.title,
@@ -109,7 +109,7 @@ export class ChatPage implements OnInit {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {
           const message = JSON.parse(payload.data.message) as Chat;
-          // console.log(message);
+          console.log(payload.data);
           this.messageEvent.emit(message);
         }
       });
