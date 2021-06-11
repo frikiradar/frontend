@@ -114,7 +114,7 @@ export class AppComponent {
 
   checkCodePush() {
     let syncOptions: SyncOptions = {
-      updateDialog: false /*{
+      updateDialog: {
         updateTitle: "¡Nueva actualización!",
         optionalUpdateMessage:
           "Hay una actualización disponible. ¿Quieres actualizar?",
@@ -124,28 +124,12 @@ export class AppComponent {
         optionalIgnoreButtonLabel: "Más tarde",
         optionalInstallButtonLabel: "Instalar",
         appendReleaseDescription: false
-      }*/,
-      installMode: InstallMode.ON_NEXT_RESTART
+      },
+      installMode: InstallMode.IMMEDIATE
     };
 
     this.codePush.sync(syncOptions).subscribe(
       async data => {
-        /*if (data === 1) {
-          const toast = await this.toastUpdate.create({
-            message: "¡Nueva actualización disponible!",
-            buttons: [
-              {
-                text: "Instalar",
-                handler: () => {
-                  window.location.reload();
-                }
-              }
-            ],
-            position: "bottom"
-          });
-
-          await toast.present();
-        }*/
         console.log("CODE PUSH SUCCESSFUL: " + data);
       },
       err => {
