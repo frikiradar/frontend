@@ -84,7 +84,7 @@ export class ChatPage implements OnInit {
             if (
               this.router.url.includes("chat") &&
               message?.fromuser?.id !== this.userId &&
-              !message?.writing
+              notification?.notify
             ) {
               this.localNotifications.schedule({
                 title: notification?.title,
