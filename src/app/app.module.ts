@@ -44,6 +44,7 @@ import {
 import { Media } from "@ionic-native/media/ngx";
 import { File as NativeFile } from "@ionic-native/file/ngx";
 import { CodePush } from "@ionic-native/code-push/ngx";
+import { LazyLoadImagesModule } from "ngx-lazy-load-images";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
@@ -80,7 +81,8 @@ registerLocaleData(localeEs, "es");
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
-    WebcamModule
+    WebcamModule,
+    LazyLoadImagesModule
   ],
   providers: [
     StatusBar,

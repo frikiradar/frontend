@@ -152,12 +152,12 @@
   </ion-item>
   <section id="pages">
     <ion-slides [options]="pagesOpts" mode="md">
-      <ion-slide *ngFor="let page of pages">
+      <ion-slide *ngFor="let page of pages" lazy-load-images>
         <div>
           <ion-item button lines="none" (click)="showPage(page.slug)">
             <ion-thumbnail>
               <img
-                [src]="page.cover"
+                [attr.data-src]="page.cover"
                 [alt]="page.name"
                 default="/assets/img/pages/default-games-page.jpg"
               />

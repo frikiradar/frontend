@@ -38,10 +38,11 @@
       *ngFor="let page of pages"
       lines="none"
       (click)="showPage(page.slug)"
+      lazy-load-images
     >
       <ion-thumbnail slot="start">
         <img
-          [src]="page.cover"
+          [attr.data-src]="page.cover"
           [alt]="page.name"
           default="/assets/img/pages/default-games-page.jpg"
         />

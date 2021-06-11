@@ -68,6 +68,7 @@
     [ngClass]="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate') ? '' : 'same-user'"
     *ngFor="let message of messages; let i = index"
+    lazy-load-images
   >
     <ion-chip
       color="primary"
@@ -123,7 +124,8 @@
         >
           <img
             (click)="showProfile(message.fromuser.id)"
-            [src]="message.fromuser.thumbnail"
+            [attr.data-src]="message.fromuser.thumbnail"
+            default="/assets/img/users/default.jpg"
           />
         </ion-avatar>
         <div
@@ -134,7 +136,7 @@
           <div *ngIf="message.image">
             <img
               (click)="openViewer(message.image, message.fromuser.username + ', ' + utils.niceDate(message.time_creation), message.text)"
-              [src]="message.image"
+              [attr.data-src]="message.image"
             />
             <ion-note class="note-image" *ngIf="!message?.text">
               <span *ngIf="message?.edited">Editado</span>

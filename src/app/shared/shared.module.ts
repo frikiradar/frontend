@@ -9,6 +9,7 @@ import { WebcamModal } from "../webcam/webcam.modal";
 import { WebcamModule } from "ngx-webcam";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { LinkyModule } from "ngx-linky";
+import { LazyLoadImagesModule } from "ngx-lazy-load-images";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { CreditsModal } from "../credits/credits.modal";
@@ -70,7 +71,8 @@ import { EventModal } from "../events/event-modal/event.modal";
     ImageCropperModule,
     WebcamModule,
     PickerModule,
-    LinkyModule
+    LinkyModule,
+    LazyLoadImagesModule
   ],
   exports: [
     ImagePreloadDirective,
@@ -82,7 +84,8 @@ import { EventModal } from "../events/event-modal/event.modal";
     ChatListComponent,
     ChatModalComponent,
     LinkyModule,
-    AudioPlayerComponent
+    AudioPlayerComponent,
+    LazyLoadImagesModule
   ],
   providers: [Camera]
 })
