@@ -35,6 +35,7 @@ export interface Config {
   pages?: Page[];
   stories?: Story[];
   theme?: "dark" | "light" | "cyberpunk" | "black" | "fire";
+  rules?: boolean;
 }
 @Injectable({
   providedIn: "root"

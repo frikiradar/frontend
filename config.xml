@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.frikiradar.app" version="2.6.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.frikiradar.app" version="2.6.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/app/src/main/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>FrikiRadar</name>
     <description>FrikiRadar, conoce a personas frikis como tú.</description>
     <author email="hola@frikiradar.com" href="https://frikiradar.com/">FrikiRadar</author>
@@ -38,7 +38,7 @@
     <preference name="GradlePluginKotlinVersion" value="1.3.50" />
     <preference name="cordova.plugins.diagnostic.modules" value="LOCATION" />
     <platform name="android">
-        <preference name="CodePushDeploymentKey" value="h1LQfrGESONdGVOyDH9Sj_dPo3UjB9QJJUde_" />
+        <preference name="CodePushDeploymentKey" value="bSJAOBiMfPgiYbYBdhSqf7ixnwGMN2zVzTwk2" />
         <preference name="Scheme" value="https" />
         <preference name="MixedContentMode" value="0" />
         <preference name="AndroidPersistentFileLocation" value="Compatibility" />

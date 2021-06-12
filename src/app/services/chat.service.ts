@@ -174,4 +174,8 @@ export class ChatService {
       };
     });
   }
+
+  async report(message: Chat, note: string) {
+    return await this.rest.put("report-chat", { message, note }).toPromise();
+  }
 }

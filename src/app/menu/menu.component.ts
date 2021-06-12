@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterEvent } from "@angular/router";
 import { MenuController, ModalController, Platform } from "@ionic/angular";
 
 import { CreditsModal } from "../credits/credits.modal";
+import { RulesPage } from "../rules/rules.page";
 import { AuthService } from "../services/auth.service";
 import {
   NotificationService,
@@ -77,6 +78,14 @@ export class MenuComponent {
   async credits() {
     const modal = await this.modal.create({
       component: CreditsModal,
+      cssClass: "full-modal"
+    });
+    return await modal.present();
+  }
+
+  async rules() {
+    const modal = await this.modal.create({
+      component: RulesPage,
       cssClass: "full-modal"
     });
     return await modal.present();

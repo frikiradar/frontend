@@ -31,6 +31,8 @@ import { PageService } from "../services/page.service";
 import { Page } from "../models/page";
 import { NavService } from "../services/navigation.service";
 import { UserService } from "../services/user.service";
+import { RulesPage } from "../rules/rules.page";
+import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 
 @Component({
   selector: "app-room",
@@ -63,6 +65,20 @@ export class RoomPage implements OnInit {
   public editing = false;
   public writing = false;
   public toUserWriting = "";
+  public pane: CupertinoPane;
+
+  private paneSettings: CupertinoSettings = {
+    backdrop: true,
+    bottomClose: true,
+    buttonDestroy: false,
+    handleKeyboard: false,
+    initialBreak: "middle",
+    onBackdropTap: () => {
+      this.pane.destroy({ animate: true });
+      this.selectedMessage = undefined;
+      this.pressOptions = false;
+    }
+  };
 
   constructor(
     public auth: AuthService,
@@ -138,6 +154,15 @@ export class RoomPage implements OnInit {
       !this.auth.currentUserValue?.roles?.includes(this.room.permissions[0])
     ) {
       this.auth.logout();
+    }
+
+    const rules = await this.config.get("rules");
+    if (!rules) {
+      const modal = await this.modalController.create({
+        component: RulesPage,
+        cssClass: "full-modal"
+      });
+      return await modal.present();
     }
 
     // this.roomSvc.setNotifications(this.room);
@@ -350,6 +375,57 @@ export class RoomPage implements OnInit {
     }
   }
 
+  async reportMessage() {
+    const alert = await this.alert.create({
+      header: `¿Quieres reportar a el mensaje de ${this.selectedMessage?.fromuser?.username}?`,
+      message:
+        "Nos llegará un aviso para que revisemos el caso y actuemos en consecuencia.",
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: "Motivo del reporte (opcional)"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel",
+          cssClass: "secondary"
+        },
+        {
+          text: "Reportar",
+          role: "block",
+          handler: async data => {
+            try {
+              await this.chatSvc.report(this.selectedMessage, data.note);
+              (
+                await this.toast.create({
+                  message: "Mensaje reportado correctamente",
+                  duration: 2000,
+                  position: "bottom"
+                })
+              ).present();
+            } catch (e) {
+              (
+                await this.toast.create({
+                  message: `Error al reportar el mensaje ${e}`,
+                  duration: 2000,
+                  position: "bottom",
+                  color: "danger"
+                })
+              ).present();
+              alert.present();
+            }
+          }
+        }
+      ],
+      cssClass: "round-alert"
+    });
+
+    await alert.present();
+  }
+
   async dragItem(event: any, message: Chat) {
     this.selectedMessage = message;
     if (event.detail.ratio < -0.9) {
@@ -445,17 +521,9 @@ export class RoomPage implements OnInit {
     return await modal.present();
   }
 
-  async showOptions(event: any) {
-    const popover = await this.popover.create({
-      component: RoomPopover,
-      cssClass: "options-popover",
-      event: event,
-      translucent: true,
-      componentProps: {
-        room: this.room
-      }
-    });
-    return await popover.present();
+  async showOptions() {
+    this.pane = new CupertinoPane(".options-pane", this.paneSettings);
+    this.pane.present({ animate: true });
   }
 
   async setWriting() {

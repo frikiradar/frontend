@@ -30,11 +30,6 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <!--<ion-buttons slot="end" *ngIf="!pressOptions">
-      <ion-button (click)="showOptions($event)">
-        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
-      </ion-button>
-    </ion-buttons>-->
     <ion-buttons slot="end" *ngIf="pressOptions && !selectedMessage?.modded">
       <ion-button
         (click)="edit()"
@@ -48,11 +43,8 @@
       <ion-button (click)="reply()">
         <ion-icon slot="icon-only" name="arrow-undo-outline"></ion-icon>
       </ion-button>
-      <ion-button
-        (click)="deleteMessage()"
-        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id || auth.isMaster()"
-      >
-        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      <ion-button (click)="showOptions($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -223,3 +215,42 @@
     [events]="auth.isMaster() && roomPage && roomPage.game_mode === 'online' ? true : false"
   ></app-chat-input>
 </ion-footer>
+
+<!-- panes -->
+
+<div class="options-pane">
+  <ion-item *ngIf="selectedMessage" lines="full">
+    <ion-avatar slot="start">
+      <img
+        [src]="selectedMessage?.fromuser.thumbnail"
+        default="/assets/img/users/default.jpg"
+      />
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ selectedMessage?.fromuser.username }}</h2>
+      <p>{{selectedMessage?.text}}</p>
+    </ion-label>
+  </ion-item>
+  <ion-list>
+    <ion-item
+      button
+      detail="false"
+      (click)="deleteMessage()"
+      lines="none"
+      *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id || auth.isMaster()"
+    >
+      <ion-icon slot="start" name="trash-outline" color="light"></ion-icon>
+      <ion-label>Eliminar el mensaje</ion-label>
+    </ion-item>
+    <ion-item
+      button
+      detail="false"
+      (click)="reportMessage()"
+      lines="none"
+      *ngIf="selectedMessage?.fromuser?.id !== auth.currentUserValue.id"
+    >
+      <ion-icon slot="start" name="warning-outline" color="light"></ion-icon>
+      <ion-label>Reportar el mensaje</ion-label>
+    </ion-item>
+  </ion-list>
+</div>

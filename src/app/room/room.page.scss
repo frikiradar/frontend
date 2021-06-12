@@ -192,3 +192,11 @@ ion-chip {
   margin-bottom: 20px;
   clear: both;
 }
+
+.options-pane {
+  display: none;
+
+  ion-label p {
+    white-space: initial;
+  }
+}

@@ -134,6 +134,18 @@
           color="dark"
           button
           lines="full"
+          (click)="rules()"
+          [ngClass]="selected?.includes('rules') ? 'selected' : ''"
+        >
+          <ion-icon name="receipt-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h2>Normas de la comunidad</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item
+          color="dark"
+          button
+          lines="full"
           (click)="bugs()"
           [ngClass]="selected?.includes('frikiradar-bugs') ? 'selected' : ''"
         >
