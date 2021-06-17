@@ -9,12 +9,14 @@ import {
   IonContent,
   IonInfiniteScroll,
   ModalController,
-  NavController,
   Platform,
   PopoverController,
   ToastController
 } from "@ionic/angular";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
+import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
+import { AngularFireMessaging } from "@angular/fire/messaging";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
@@ -26,13 +28,10 @@ import { UtilsService } from "../services/utils.service";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { Room } from "../models/room";
 import { RoomService } from "../services/room.service";
-import { RoomPopover } from "./room-popover/room-popover";
-import { PageService } from "../services/page.service";
 import { Page } from "../models/page";
 import { NavService } from "../services/navigation.service";
 import { UserService } from "../services/user.service";
 import { RulesPage } from "../rules/rules.page";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 
 @Component({
   selector: "app-room",
@@ -99,8 +98,10 @@ export class RoomPage implements OnInit {
     public utils: UtilsService,
     public modalController: ModalController,
     public popover: PopoverController,
-    public userSvc: UserService
-  ) {}
+    public userSvc: UserService,
+    private afMessaging: AngularFireMessaging,
+    private firebase: FirebaseX,
+  ) { }
 
   async ngOnInit() {
     const config: {
@@ -160,7 +161,8 @@ export class RoomPage implements OnInit {
     if (!rules) {
       const modal = await this.modalController.create({
         component: RulesPage,
-        cssClass: "full-modal"
+        cssClass: "full-modal",
+        backdropDismiss: false
       });
       return await modal.present();
     }
@@ -271,9 +273,9 @@ export class RoomPage implements OnInit {
 
     if (
       scroll.scrollTop +
-        scroll.offsetHeight +
-        (scroll.offsetHeight - 200) / 2 >=
-        scroll.scrollHeight ||
+      scroll.offsetHeight +
+      (scroll.offsetHeight - 200) / 2 >=
+      scroll.scrollHeight ||
       force
     ) {
       if (!this.chatlist) {
@@ -544,53 +546,78 @@ export class RoomPage implements OnInit {
   }
 
   async connectSSE() {
-    // Nos suscribimos al canal
-    (await this.roomSvc.sseListener()).subscribe(
-      (message: Chat) => {
-        if (message.conversationId === this.slug) {
-          console.log(message);
-          if (
-            message.writing &&
-            message.fromuser.username !== this.auth.currentUserValue.username
-          ) {
-            this.toUserWriting = message.fromuser.name + " está escribiendo...";
-            setTimeout(() => {
-              this.toUserWriting = "";
-            }, 10000);
-          } else if (!message.writing) {
-            this.toUserWriting = "";
-            // borramos los enviando
-            this.messages = this.messages.filter(m => !m.sending);
-            if (this.messages.some(m => m.id === message.id)) {
-              // Si ya existe el mensaje lo actualizamos
-              this.messages.map(m => {
-                if (m.id === message.id) {
-                  m.text = message.text;
-                  m.time_read = message.time_read;
-                  m.edited = message.edited;
-                  m.deleted = message.deleted;
-                  m.modded = message.modded;
-                }
-              });
-            } else {
-              this.messages = [...this.messages, message];
+    if (this.auth.isMaster()) {
+      if (this.platform.is("cordova")) {
+        this.firebase.onMessageReceived().subscribe(
+          notification => {
+            if (notification?.message) {
+              const message = JSON.parse(notification.message) as Chat;
+              // console.log(message);
+              this.messageReceived(message);
             }
-
-            // Borramos los deleted
-            this.messages = this.messages.filter(m => !m.deleted);
-
-            this.scrollDown();
+          });
+      } else {
+        this.afMessaging.messages.subscribe((payload: any) => {
+          if (payload?.data?.message) {
+            const message = JSON.parse(payload.data.message) as Chat;
+            console.log(message);
+            this.messageReceived(message)
           }
-        }
-      },
-      async error => {
-        console.error(
-          "Escucha al servidor de " + this.slug + " perdida",
-          error
-        );
-        this.connectSSE();
+        });
       }
-    );
+    } else {
+      // Nos suscribimos al canal
+      (await this.roomSvc.sseListener()).subscribe(
+        (message: Chat) => {
+          this.messageReceived(message)
+        },
+        async error => {
+          console.error(
+            "Escucha al servidor de " + this.slug + " perdida",
+            error
+          );
+          this.connectSSE();
+        }
+      );
+    }
+  }
+
+  async messageReceived(message: Chat) {
+    if (message.conversationId === this.slug) {
+      // console.log(message);
+      if (
+        message.writing &&
+        message.fromuser.username !== this.auth.currentUserValue.username
+      ) {
+        this.toUserWriting = message.fromuser.name + " está escribiendo...";
+        setTimeout(() => {
+          this.toUserWriting = "";
+        }, 10000);
+      } else if (!message.writing) {
+        this.toUserWriting = "";
+        // borramos los enviando
+        this.messages = this.messages.filter(m => !m.sending);
+        if (this.messages.some(m => m.id === message.id)) {
+          // Si ya existe el mensaje lo actualizamos
+          this.messages.map(m => {
+            if (m.id === message.id) {
+              m.text = message.text;
+              m.time_read = message.time_read;
+              m.edited = message.edited;
+              m.deleted = message.deleted;
+              m.modded = message.modded;
+            }
+          });
+        } else {
+          this.messages = [...this.messages, message];
+        }
+
+        // Borramos los deleted
+        this.messages = this.messages.filter(m => !m.deleted);
+
+        this.scrollDown();
+      }
+    }
   }
 
   goToMessage(message: Chat) {

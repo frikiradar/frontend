@@ -5,9 +5,11 @@ import {
   NavigationStart,
   Router
 } from "@angular/router";
-import { MenuController, ModalController } from "@ionic/angular";
+import { MenuController, ModalController, Platform } from "@ionic/angular";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import * as deepEqual from "deep-equal";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 
 import { Room } from "../models/room";
 import { Config, ConfigService } from "../services/config.service";
@@ -70,7 +72,10 @@ export class CommunityPage {
     private modal: ModalController,
     private route: ActivatedRoute,
     private pageSvc: PageService,
-    private animate: AnimateService
+    private animate: AnimateService,
+    private afMessaging: AngularFireMessaging,
+    private firebase: FirebaseX,
+    private platform: Platform
   ) {
     this.router.events.subscribe(async (event: Event) => {
       if (event instanceof NavigationStart) {
@@ -234,20 +239,45 @@ export class CommunityPage {
   }
 
   async connectSSE() {
-    (await this.roomSvc.sseListener()).subscribe(
-      (message: Chat) => {
-        this.rooms.map(m => {
-          if (m.slug === message.conversationId) {
-            if (message.fromuser.id !== this.auth.currentUserValue.id) {
-              m.unread = true;
+    if (this.auth.isMaster()) {
+      if (this.platform.is("cordova")) {
+        this.firebase.onMessageReceived().subscribe(
+          notification => {
+            if (notification?.message) {
+              const message = JSON.parse(notification.message) as Chat;
+              // console.log(message);
+              this.messageReceived(message);
             }
+          });
+      } else {
+        this.afMessaging.messages.subscribe((payload: any) => {
+          if (payload?.data?.message) {
+            const message = JSON.parse(payload.data.message) as Chat;
+            console.log(message);
+            this.messageReceived(message)
           }
         });
-      },
-      error => {
-        console.error("Escucha al servidor de community perdida", error);
-        this.connectSSE();
       }
-    );
+    } else {
+      (await this.roomSvc.sseListener()).subscribe(
+        (message: Chat) => {
+          this.messageReceived(message)
+        },
+        error => {
+          console.error("Escucha al servidor de community perdida", error);
+          this.connectSSE();
+        }
+      );
+    }
+  }
+
+  async messageReceived(message: Chat) {
+    this.rooms.map(m => {
+      if (m.slug === message.conversationId) {
+        if (message.fromuser.id !== this.auth.currentUserValue.id) {
+          m.unread = true;
+        }
+      }
+    });
   }
 }

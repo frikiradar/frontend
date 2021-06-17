@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="close()">
+      <ion-button (click)="deny()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -26,34 +26,35 @@
     </ion-item>
     <ion-item>
       <ion-icon name="fish" slot="start" color="tertiary"></ion-icon>
-      <ion-label
-        ><p>
+      <ion-label>
+        <p>
           <strong>NO DESNUDOS O IMÁGENES EXPLÍCITAS.</strong> No publiques en
           las salas de chat públicas fotos de desnudo parcial o completo ni
           imágenes explícitas de ningún tipo. Recuerda que hay menores en la
           aplicación.
-        </p></ion-label
-      >
+        </p>
+      </ion-label>
     </ion-item>
     <ion-item>
       <ion-icon name="body" slot="start" color="primary"></ion-icon>
-      <ion-label
-        ><p>
+      <ion-label>
+        <p>
           <strong>RESPETO.</strong> En esta aplicación respetamos a todas las
           personas independientemente de su nacionalidad, color, etnia,
           identidad sexual, identidad de género o clase social. Si no te sientes
           agusto aquí mejor vete.
-        </p></ion-label
-      >
+        </p>
+      </ion-label>
     </ion-item>
   </ion-list>
   <p class="ion-text-center">
     En caso de dudas con alguna norma consulta con un moderador/administrador.
   </p>
-  <ion-button (click)="accept()" shape="round" expand="block" class="primary"
-    >He leído y acepto las normas</ion-button
-  >
-  <p class="ion-text-center" id="forgot-password">
-    <a (click)="deny()">No estoy de acuerdo</a>
-  </p>
+  <div *ngIf=!accepted>
+    <ion-button (click)="accept()" shape="round" expand="block" class="primary">He leído y acepto las normas
+    </ion-button>
+    <p class="ion-text-center" id="forgot-password">
+      <a (click)="deny()">No estoy de acuerdo</a>
+    </p>
+  </div>
 </ion-content>

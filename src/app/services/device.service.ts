@@ -58,11 +58,23 @@ export class DeviceService {
           await this.unknownDevice(device).toPromise();
         }
 
+        let platform = '' as Device['platform']
+        if (this.platform.is("cordova")) {
+          if (this.platform.is("android")) {
+            platform = 'android';
+          } else if (this.platform.is("ios")) {
+            platform = 'ios';
+          }
+        } else {
+          platform = 'web';
+        }
+
         const user = (await this.rest
           .put("device", {
             id: uuid,
             name: device.device_name,
-            token
+            token,
+            platform
           })
           .toPromise()) as User;
 

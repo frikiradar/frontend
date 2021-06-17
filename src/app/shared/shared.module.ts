@@ -27,6 +27,7 @@ import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
 import { AudioPlayerComponent } from "../audio-player/audio-player.component";
 import { ChatDatePipe } from "../chat-date.pipe";
 import { EventModal } from "../events/event-modal/event.modal";
+import { RulesPage } from "../rules/rules.page";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { EventModal } from "../events/event-modal/event.modal";
     StoryModal,
     EventModal,
     ViewStoriesModal,
-    CommentLikesModal
+    CommentLikesModal,
+    RulesPage
   ],
   entryComponents: [
     CreditsModal,

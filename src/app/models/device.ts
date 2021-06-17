@@ -8,4 +8,5 @@ export interface Device {
   last_update?: Date;
   token?: string;
   current?: boolean;
+  platform?: "android" | "ios" | "web"
 }

@@ -1,5 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 import { Router } from "@angular/router";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { Platform } from "@ionic/angular";
 import { ItemReorderEventDetail } from "@ionic/core";
 import * as deepEqual from "deep-equal";
 
@@ -24,8 +27,11 @@ export class RoomsPage implements OnInit {
     private auth: AuthService,
     private router: Router,
     private nav: NavService,
-    private config: ConfigService
-  ) {}
+    private config: ConfigService,
+    private afMessaging: AngularFireMessaging,
+    private firebase: FirebaseX,
+    private platform: Platform
+  ) { }
 
   async ngAfterViewInit() {
     this.rooms = (await this.config.get("rooms")) as Config["rooms"];
@@ -86,22 +92,47 @@ export class RoomsPage implements OnInit {
   }
 
   async connectSSE() {
-    (await this.roomSvc.sseListener()).subscribe(
-      (message: Chat) => {
-        console.log(message);
-        this.rooms.map(m => {
-          if (m.slug === message.conversationId) {
-            if (message.fromuser.id !== this.auth.currentUserValue.id) {
-              m.unread = true;
+    if (this.auth.isMaster()) {
+      if (this.platform.is("cordova")) {
+        this.firebase.onMessageReceived().subscribe(
+          notification => {
+            if (notification?.message) {
+              const message = JSON.parse(notification.message) as Chat;
+              // console.log(message);
+              this.messageReceived(message);
             }
+          });
+      } else {
+        this.afMessaging.messages.subscribe((payload: any) => {
+          if (payload?.data?.message) {
+            const message = JSON.parse(payload.data.message) as Chat;
+            console.log(message);
+            this.messageReceived(message)
           }
         });
-      },
-      error => {
-        console.error("Escucha al servidor de salas perdida", error);
-        this.connectSSE();
       }
-    );
+    } else {
+      (await this.roomSvc.sseListener()).subscribe(
+        (message: Chat) => {
+          this.messageReceived(message)
+        },
+        error => {
+          console.error("Escucha al servidor de salas perdida", error);
+          this.connectSSE();
+        }
+      );
+    }
+  }
+
+  async messageReceived(message: Chat) {
+    console.log(message);
+    this.rooms.map(m => {
+      if (m.slug === message.conversationId) {
+        if (message.fromuser.id !== this.auth.currentUserValue.id) {
+          m.unread = true;
+        }
+      }
+    });
   }
 
   back() {
