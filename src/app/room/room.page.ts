@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -65,6 +65,7 @@ export class RoomPage implements OnInit {
   public writing = false;
   public toUserWriting = "";
   public pane: CupertinoPane;
+  public realtimeChat = true;
 
   private paneSettings: CupertinoSettings = {
     backdrop: true,
@@ -85,7 +86,7 @@ export class RoomPage implements OnInit {
     private route: ActivatedRoute,
     private nav: NavService,
     private roomSvc: RoomService,
-    private chatSvc: ChatService,
+    public chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
     private clipboard: Clipboard,
@@ -101,6 +102,7 @@ export class RoomPage implements OnInit {
     public userSvc: UserService,
     private afMessaging: AngularFireMessaging,
     private firebase: FirebaseX,
+    private cd: ChangeDetectorRef,
   ) { }
 
   async ngOnInit() {
@@ -204,6 +206,14 @@ export class RoomPage implements OnInit {
     } catch (e) {
       console.error(e);
       await this.alertError.present();
+    }
+
+    if (!this.platform.is("cordova")) {
+      try {
+        await this.afMessaging.requestPermission.toPromise();
+      } catch (e) {
+        this.realtimeChat = false
+      }
     }
   }
 
@@ -546,52 +556,38 @@ export class RoomPage implements OnInit {
   }
 
   async connectSSE() {
-    if (this.auth.isMaster()) {
-      if (this.platform.is("cordova")) {
-        this.firebase.onMessageReceived().subscribe(
-          notification => {
-            if (notification?.message) {
-              const message = JSON.parse(notification.message) as Chat;
-              // console.log(message);
-              this.messageReceived(message);
-            }
-          });
-      } else {
-        this.afMessaging.messages.subscribe((payload: any) => {
-          if (payload?.data?.message) {
-            const message = JSON.parse(payload.data.message) as Chat;
-            console.log(message);
-            this.messageReceived(message)
+    if (this.platform.is("cordova")) {
+      this.firebase.onMessageReceived().subscribe(
+        notification => {
+          if (notification?.message) {
+            const message = JSON.parse(notification.message) as Chat;
+            // console.log(message);
+            this.messageReceived(message);
           }
         });
-      }
     } else {
-      // Nos suscribimos al canal
-      (await this.roomSvc.sseListener()).subscribe(
-        (message: Chat) => {
+      this.afMessaging.messages.subscribe((payload: any) => {
+        if (payload?.data?.message) {
+          const message = JSON.parse(payload.data.message) as Chat;
+          console.log(message);
           this.messageReceived(message)
-        },
-        async error => {
-          console.error(
-            "Escucha al servidor de " + this.slug + " perdida",
-            error
-          );
-          this.connectSSE();
         }
-      );
+      });
     }
   }
 
   async messageReceived(message: Chat) {
+    // console.log(message);
     if (message.conversationId === this.slug) {
-      // console.log(message);
       if (
         message.writing &&
         message.fromuser.username !== this.auth.currentUserValue.username
       ) {
         this.toUserWriting = message.fromuser.name + " está escribiendo...";
+        this.cd.detectChanges();
         setTimeout(() => {
           this.toUserWriting = "";
+          this.cd.detectChanges();
         }, 10000);
       } else if (!message.writing) {
         this.toUserWriting = "";
@@ -614,7 +610,7 @@ export class RoomPage implements OnInit {
 
         // Borramos los deleted
         this.messages = this.messages.filter(m => !m.deleted);
-
+        this.cd.detectChanges();
         this.scrollDown();
       }
     }

@@ -239,35 +239,23 @@ export class CommunityPage {
   }
 
   async connectSSE() {
-    if (this.auth.isMaster()) {
-      if (this.platform.is("cordova")) {
-        this.firebase.onMessageReceived().subscribe(
-          notification => {
-            if (notification?.message) {
-              const message = JSON.parse(notification.message) as Chat;
-              // console.log(message);
-              this.messageReceived(message);
-            }
-          });
-      } else {
-        this.afMessaging.messages.subscribe((payload: any) => {
-          if (payload?.data?.message) {
-            const message = JSON.parse(payload.data.message) as Chat;
-            console.log(message);
-            this.messageReceived(message)
+    if (this.platform.is("cordova")) {
+      this.firebase.onMessageReceived().subscribe(
+        notification => {
+          if (notification?.message) {
+            const message = JSON.parse(notification.message) as Chat;
+            // console.log(message);
+            this.messageReceived(message);
           }
         });
-      }
     } else {
-      (await this.roomSvc.sseListener()).subscribe(
-        (message: Chat) => {
+      this.afMessaging.messages.subscribe((payload: any) => {
+        if (payload?.data?.message) {
+          const message = JSON.parse(payload.data.message) as Chat;
+          console.log(message);
           this.messageReceived(message)
-        },
-        error => {
-          console.error("Escucha al servidor de community perdida", error);
-          this.connectSSE();
         }
-      );
+      });
     }
   }
 

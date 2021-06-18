@@ -7,7 +7,6 @@ import { PickerModule } from "@ctrl/ngx-emoji-mart";
 
 import { SharedModule } from "../shared/shared.module";
 import { RoomPage } from "./room.page";
-import { RoomPopover } from "./room-popover/room-popover";
 
 const routes: Routes = [
   {
@@ -17,7 +16,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  entryComponents: [RoomPopover],
   imports: [
     CommonModule,
     FormsModule,
@@ -27,6 +25,6 @@ const routes: Routes = [
     SharedModule,
     PickerModule
   ],
-  declarations: [RoomPage, RoomPopover]
+  declarations: [RoomPage]
 })
-export class RoomPageModule {}
+export class RoomPageModule { }

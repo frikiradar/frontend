@@ -35,7 +35,7 @@ export class ChatPage implements OnInit {
     private platform: Platform,
     private chatSvc: ChatService,
     private localNotifications: LocalNotifications
-  ) {}
+  ) { }
 
   async ngOnInit() {
     if (this.route.snapshot.paramMap.get("id")) {
@@ -76,7 +76,7 @@ export class ChatPage implements OnInit {
     if (this.platform.is("cordova")) {
       this.firebase.onMessageReceived().subscribe(
         notification => {
-          if (notification?.message) {
+          if (notification?.message && notification?.topic === 'chat') {
             const message = JSON.parse(notification.message) as Chat;
             // console.log(message);
             this.messageEvent.emit(message);
@@ -107,7 +107,8 @@ export class ChatPage implements OnInit {
       );
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
-        if (payload?.data?.message) {
+        console.log(payload)
+        if (payload?.data?.message && payload?.data?.topic === 'chat') {
           const message = JSON.parse(payload.data.message) as Chat;
           console.log(payload.data);
           this.messageEvent.emit(message);

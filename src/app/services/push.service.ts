@@ -156,6 +156,12 @@ export class PushService {
           "Recibe notificaciones cuando un usuario te entregue su kokoro."
       },
       {
+        id: "rooms",
+        name: "Notificaciones de salas de chat",
+        description:
+          "Recibe notificaciones de nuevos mensajes en salas de chat."
+      },
+      {
         id: "frikiradar",
         name: "Notificaciones de FrikiRadar",
         description:
@@ -265,37 +271,6 @@ export class PushService {
           console.error(e);
         }
       }
-    }
-  }
-
-  setChannel(slug: string, name: string, description: string) {
-    if (this.platform.is("cordova")) {
-      this.firebase
-        .createChannel({
-          id: slug,
-          name: name,
-          sound: "bipbip",
-          description: description
-        })
-        .then(response => {
-          console.log("Notification Channel created", slug, response);
-        })
-        .catch(error => {
-          console.error("Create notification channel error: " + error);
-        });
-    }
-  }
-
-  removeChannel(slug: string) {
-    if (this.platform.is("cordova")) {
-      this.firebase
-        .deleteChannel(slug)
-        .then(response => {
-          console.log("Notification Chanel deleted", slug, response);
-        })
-        .catch(error => {
-          console.error("Error deleting channel", error);
-        });
     }
   }
 

@@ -20,7 +20,7 @@ export class RoomService {
     private config: ConfigService,
     private uploadSvc: UploadService, // private push: PushService
     private auth: AuthService
-  ) {}
+  ) { }
 
   async getRooms() {
     return (await this.rest.get("rooms").toPromise()) as Room[];
@@ -131,105 +131,6 @@ export class RoomService {
 
       await this.setRoomsConfig(rooms_config);
     }
-  }
-
-  async setNotifications(room: Room) {
-    let rooms_config = await this.getRoomsConfig();
-
-    if (rooms_config) {
-      if (
-        rooms_config.some(
-          r =>
-            r.slug === room.slug &&
-            (r.notifications || r.notifications === false)
-        )
-      ) {
-        // console.log("Ya tiene notificaciones configuradas, ignoramos");
-      } else {
-        this.activateNotifications(room);
-      }
-    } else {
-      this.activateNotifications(room);
-    }
-  }
-
-  async getNotificationsSettings(room: Room): Promise<boolean> {
-    let rooms_config = await this.getRoomsConfig();
-
-    if (rooms_config) {
-      const roomConfig = rooms_config.find(r => r.slug === room.slug);
-      if (roomConfig.notifications) {
-        return true;
-      }
-
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  async activateNotifications(room: Room) {
-    let rooms_config = await this.getRoomsConfig();
-
-    if (rooms_config) {
-      if (rooms_config.some(r => r.slug === room.slug)) {
-        rooms_config.map(r => {
-          if (r.slug === room.slug) {
-            r.notifications = true;
-          }
-        });
-      } else {
-        rooms_config = [
-          ...rooms_config,
-          {
-            slug: room.slug,
-            notifications: true
-          }
-        ];
-      }
-    } else {
-      rooms_config = [
-        {
-          slug: room.slug,
-          notifications: true
-        }
-      ];
-    }
-
-    await this.setRoomsConfig(rooms_config);
-    // this.push.setChannel(room.slug, room.name, room.description);
-  }
-
-  async disableNotifications(room: Room) {
-    let rooms_config = await this.getRoomsConfig();
-
-    if (rooms_config) {
-      if (rooms_config.some(r => r.slug === room.slug)) {
-        rooms_config.map(r => {
-          if (r.slug === room.slug) {
-            r.notifications = false;
-          }
-        });
-      } else {
-        rooms_config = [
-          ...rooms_config,
-          {
-            slug: room.slug,
-            notifications: false
-          }
-        ];
-      }
-    } else {
-      rooms_config = [
-        {
-          slug: room.slug,
-          notifications: false
-        }
-      ];
-    }
-
-    await this.setRoomsConfig(rooms_config);
-    // this.push.removeChannel(room.slug);
   }
 
   async reorderRooms(from: number, to: number) {

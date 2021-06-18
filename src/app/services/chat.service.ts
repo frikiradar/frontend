@@ -1,4 +1,6 @@
 import { Injectable } from "@angular/core";
+import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AlertController } from "@ionic/angular";
 import { Observable } from "rxjs";
 
 import { Chat } from "../models/chat";
@@ -18,8 +20,10 @@ export class ChatService {
     private rest: RestService,
     private config: ConfigService,
     private uploadSvc: UploadService,
-    private auth: AuthService
-  ) {}
+    private auth: AuthService,
+    private alert: AlertController,
+    private afMessaging: AngularFireMessaging,
+  ) { }
 
   async getChats() {
     const chats = (await this.rest.get(`chats`).toPromise()) as Chat[];
@@ -177,5 +181,22 @@ export class ChatService {
 
   async report(message: Chat, note: string) {
     return await this.rest.put("report-chat", { message, note }).toPromise();
+  }
+
+  async realtimeChatInfo() {
+    (await this.alert.create({
+      header: "Notificaciones desactivadas",
+      message:
+        "Para tener chat en tiempo real es necesario activar las notificaciones. Actívalas para tener esta función.",
+      buttons: [
+        {
+          text: "Entendido!",
+          handler: async () => {
+            await this.afMessaging.requestPermission.toPromise();
+          }
+        }
+      ],
+      cssClass: "round-alert"
+    })).present();
   }
 }

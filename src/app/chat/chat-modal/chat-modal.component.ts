@@ -33,6 +33,7 @@ import { UtilsService } from "../../services/utils.service";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { OptionsPopover } from "../../options-popover/options-popover";
 import { NavService } from "src/app/services/navigation.service";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 
 @Component({
   selector: "app-chat-modal",
@@ -59,12 +60,13 @@ export class ChatModalComponent implements OnInit {
   public editing = false;
   public writing = false;
   public toUserWriting = "";
+  public realtimeChat = true
 
   constructor(
     public auth: AuthService,
     public userSvc: UserService,
     private router: Router,
-    private chatSvc: ChatService,
+    public chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
     private clipboard: Clipboard,
@@ -78,8 +80,9 @@ export class ChatModalComponent implements OnInit {
     private vibration: Vibration,
     private nav: NavService,
     private cd: ChangeDetectorRef,
-    private modal: ModalController
-  ) {}
+    private modal: ModalController,
+    private afMessaging: AngularFireMessaging,
+  ) { }
 
   async ngOnInit() {
     if (this.userId) {
@@ -184,6 +187,14 @@ export class ChatModalComponent implements OnInit {
         }
       }
     });
+
+    if (!this.platform.is("cordova")) {
+      try {
+        await this.afMessaging.requestPermission.toPromise();
+      } catch (e) {
+        this.realtimeChat = false
+      }
+    }
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -328,9 +339,9 @@ export class ChatModalComponent implements OnInit {
     const scroll = await this.chatlist.getScrollElement();
     if (
       scroll.scrollTop +
-        scroll.offsetHeight +
-        (scroll.offsetHeight - 200) / 2 >=
-        scroll.scrollHeight ||
+      scroll.offsetHeight +
+      (scroll.offsetHeight - 200) / 2 >=
+      scroll.scrollHeight ||
       force
     ) {
       if (!this.chatlist) {
