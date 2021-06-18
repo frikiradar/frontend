@@ -120,8 +120,8 @@ export class PushService {
     } else {
       await this.requestPermission();
       this.afMessaging.messages.subscribe((payload: any) => {
+        console.log("new message received. ", payload);
         if (payload?.notification) {
-          // console.log("new message received. ", payload);
           this.localNotification(payload);
 
           if (!this.router.url.includes("chat")) {

@@ -105,7 +105,6 @@ export class RoomsPage implements OnInit {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {
           const message = JSON.parse(payload.data.message) as Chat;
-          console.log(message);
           this.messageReceived(message)
         }
       });
@@ -113,7 +112,7 @@ export class RoomsPage implements OnInit {
   }
 
   async messageReceived(message: Chat) {
-    console.log(message);
+    // console.log(message);
     this.rooms.map(m => {
       if (m.slug === message.conversationId) {
         if (message.fromuser.id !== this.auth.currentUserValue.id) {

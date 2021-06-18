@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostListener,
   Input,
   OnInit,
   Output,
@@ -83,6 +84,11 @@ export class ChatModalComponent implements OnInit {
     private modal: ModalController,
     private afMessaging: AngularFireMessaging,
   ) { }
+
+  @HostListener('window:focus')
+  onFocus() {
+    this.getLastMessages();
+  }
 
   async ngOnInit() {
     if (this.userId) {
@@ -218,14 +224,35 @@ export class ChatModalComponent implements OnInit {
     this.writing = false;
     this.toUserWriting = "";
 
+    this.getLastMessages();
+  }
+
+  async getLastMessages() {
     try {
-      const messages = (
-        await this.chatSvc.getMessages(this.userId, true, this.page)
+      let messages = (
+        await this.chatSvc.getMessages(this.userId, true, 1)
       )
         .filter(m => m.text || m.image || m.audio)
         .reverse();
 
-      this.messages = [...this.messages, ...messages];
+      messages = messages.filter(m => {
+        if (!this.messages.some(me => me.id === m.id)) {
+          return m;
+        }
+      })
+
+      messages.forEach(message => {
+        if (this.messages.some(m => m.id === message.id)) {
+          this.messages.map(m => {
+            if (m.id === message.id && m.text !== message.text) {
+              m.text = message.text
+              m.edited = message.edited
+            }
+          })
+        } else {
+          this.messages = [...this.messages, message]
+        }
+      })
 
       if (this.messages.length < 15) {
         this.infiniteScroll.complete();
@@ -364,9 +391,9 @@ export class ChatModalComponent implements OnInit {
       .filter(m => m.text || m.image || m.audio)
       .reverse();
     this.messages = [...messages, ...this.messages];
-    event.target.complete();
+    this.infiniteScroll.complete();
 
-    if (this.messages.length < 15) {
+    if (messages.length < 15) {
       event.target.disabled = true;
     }
   }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -55,7 +55,7 @@ export class RoomPage implements OnInit {
   slug: Room["slug"];
   messages: Chat[] = [];
   avatar: SafeResourceUrl;
-  page = 0;
+  public page = 1;
   pressOptions = false;
   selectedMessage: Chat;
   alertError: any;
@@ -104,6 +104,11 @@ export class RoomPage implements OnInit {
     private firebase: FirebaseX,
     private cd: ChangeDetectorRef,
   ) { }
+
+  @HostListener('window:focus')
+  onFocus() {
+    this.getLastMessages()
+  }
 
   async ngOnInit() {
     const config: {
@@ -169,11 +174,20 @@ export class RoomPage implements OnInit {
       return await modal.present();
     }
 
-    // this.roomSvc.setNotifications(this.room);
+    this.getLastMessages();
 
-    this.page = 1;
+    if (!this.platform.is("cordova")) {
+      try {
+        await this.afMessaging.requestPermission.toPromise();
+      } catch (e) {
+        this.realtimeChat = false
+      }
+    }
+  }
+
+  async getLastMessages() {
     try {
-      const messages = (await this.roomSvc.getMessages(this.slug, this.page))
+      let messages = (await this.roomSvc.getMessages(this.slug, 1))
         .filter(m => m.text || m.image || m.audio)
         .reverse();
 
@@ -182,7 +196,24 @@ export class RoomPage implements OnInit {
         this.roomSvc.setLastMessage(this.room);
       }
 
-      this.messages = [...this.messages, ...messages];
+      messages = messages.filter(m => {
+        if (!this.messages.some(me => me.id === m.id)) {
+          return m;
+        }
+      })
+
+      messages.forEach(message => {
+        if (this.messages.some(m => m.id === message.id)) {
+          this.messages.map(m => {
+            if (m.id === message.id && m.text !== message.text) {
+              m.text = message.text
+              m.edited = message.edited
+            }
+          })
+        } else {
+          this.messages = [...this.messages, message]
+        }
+      })
 
       if (this.messages.length < 15) {
         this.infiniteScroll.disabled = true;
@@ -206,14 +237,6 @@ export class RoomPage implements OnInit {
     } catch (e) {
       console.error(e);
       await this.alertError.present();
-    }
-
-    if (!this.platform.is("cordova")) {
-      try {
-        await this.afMessaging.requestPermission.toPromise();
-      } catch (e) {
-        this.realtimeChat = false
-      }
     }
   }
 
@@ -366,7 +389,7 @@ export class RoomPage implements OnInit {
   }
 
   async deleteMessage() {
-    this.pressOptions = false;
+    this.pane.destroy({ animate: true });
     try {
       await this.chatSvc.deleteMessage(this.selectedMessage.id);
       if (this.selectedMessage.fromuser.id === this.auth.currentUserValue.id) {
@@ -436,6 +459,7 @@ export class RoomPage implements OnInit {
     });
 
     await alert.present();
+    this.pane.destroy({ animate: true });
   }
 
   async dragItem(event: any, message: Chat) {
@@ -569,7 +593,6 @@ export class RoomPage implements OnInit {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {
           const message = JSON.parse(payload.data.message) as Chat;
-          console.log(message);
           this.messageReceived(message)
         }
       });

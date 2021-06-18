@@ -107,7 +107,7 @@ export class ChatPage implements OnInit {
       );
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
-        console.log(payload)
+        // console.log(payload)
         if (payload?.data?.message && payload?.data?.topic === 'chat') {
           const message = JSON.parse(payload.data.message) as Chat;
           console.log(payload.data);
