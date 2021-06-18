@@ -110,7 +110,7 @@ export class ChatPage implements OnInit {
         // console.log(payload)
         if (payload?.data?.message && payload?.data?.topic === 'chat') {
           const message = JSON.parse(payload.data.message) as Chat;
-          console.log(payload.data);
+          // console.log(payload.data);
           this.messageEvent.emit(message);
         }
       });
