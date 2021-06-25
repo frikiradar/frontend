@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { AngularFireMessaging } from "@angular/fire/messaging";
-import { AlertController } from "@ionic/angular";
+import { Router } from "@angular/router";
+import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
+import { AlertController, Platform } from "@ionic/angular";
 import { Observable } from "rxjs";
 
 import { Chat } from "../models/chat";
@@ -23,6 +26,10 @@ export class ChatService {
     private auth: AuthService,
     private alert: AlertController,
     private afMessaging: AngularFireMessaging,
+    private platform: Platform,
+    private firebase: FirebaseX,
+    private router: Router,
+    private localNotifications: LocalNotifications
   ) { }
 
   async getChats() {
@@ -156,26 +163,36 @@ export class ChatService {
     return config?.chats;
   }
 
-  async sseRegister(channel: string) {
-    const config = await this.config.getConfig();
-    this.source = new EventSource(`${config.push_url}?topic=${channel}`);
-  }
-
-  async sseListener(userid: User["id"]) {
-    if (!this.source || this.source.readyState === 2) {
-      this.sseRegister(`chats-${userid}`);
-    }
-
+  async firebaseListener(): Promise<Observable<Chat>> {
     return new Observable(observer => {
-      this.source.onmessage = x => observer.next(JSON.parse(x.data) as Chat);
-      this.source.onerror = x => {
-        this.source.close();
-        observer.error(x);
-      };
 
-      return () => {
-        this.source.close();
-      };
+      if (this.platform.is("cordova")) {
+        this.firebase.onMessageReceived().subscribe(
+          notification => {
+            if (notification?.message && notification?.topic === 'chat') {
+              const message = JSON.parse(notification.message) as Chat;
+              observer.next(message);
+            }
+          },
+          error => {
+            console.error("Error in notification", error);
+            observer.error(error)
+          }
+        );
+      } else {
+        this.afMessaging.messages.subscribe((payload: any) => {
+          // console.log(payload)
+          if (payload?.data?.message && payload?.data?.topic === 'chat') {
+            const message = JSON.parse(payload.data.message) as Chat;
+            observer.next(message);
+          }
+        }, error => {
+          console.error("Error in notification", error);
+          observer.error(error)
+        });
+      }
+
+      return () => { };
     });
   }
 

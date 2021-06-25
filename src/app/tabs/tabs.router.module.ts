@@ -19,21 +19,6 @@ const routes: Routes = [
         ]
       },
       {
-        path: "chat",
-        children: [
-          {
-            path: "",
-            loadChildren: () =>
-              import("../chat/chat.module").then(m => m.ChatPageModule)
-          },
-          {
-            path: ":id",
-            loadChildren: () =>
-              import("../chat/chat.module").then(m => m.ChatPageModule)
-          }
-        ]
-      },
-      {
         path: "events",
         children: [
           {
@@ -80,4 +65,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }

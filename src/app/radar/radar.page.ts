@@ -122,16 +122,14 @@ export class RadarPage {
               : $slideEl.find(".swiper-slide-shadow-bottom");
             if ($shadowBeforeEl.length === 0) {
               $shadowBeforeEl = swiper.$(
-                `<div class="swiper-slide-shadow-${
-                  isHorizontal ? "left" : "top"
+                `<div class="swiper-slide-shadow-${isHorizontal ? "left" : "top"
                 }"></div>`
               );
               $slideEl.append($shadowBeforeEl);
             }
             if ($shadowAfterEl.length === 0) {
               $shadowAfterEl = swiper.$(
-                `<div class="swiper-slide-shadow-${
-                  isHorizontal ? "right" : "bottom"
+                `<div class="swiper-slide-shadow-${isHorizontal ? "right" : "bottom"
                 }"></div>`
               );
               $slideEl.append($shadowAfterEl);
@@ -242,7 +240,7 @@ export class RadarPage {
     private config: ConfigService,
     private firebase: FirebaseX,
     private push: PushService
-  ) {}
+  ) { }
 
   async ngAfterViewInit() {
     this.users = (await this.config.get("radar")) as Config["radar"];
@@ -267,9 +265,9 @@ export class RadarPage {
           oldCoordinates === undefined ||
           oldCoordinates.latitude === undefined ||
           this.coordinates.latitude.toFixed(3) !==
-            oldCoordinates?.latitude.toFixed(3) ||
+          oldCoordinates?.latitude.toFixed(3) ||
           this.coordinates.longitude.toFixed(3) !==
-            oldCoordinates?.longitude.toFixed(3)
+          oldCoordinates?.longitude.toFixed(3)
         ) {
           const coordinates = await this.userSvc.setCoordinates(
             this.coordinates.longitude,
@@ -325,7 +323,7 @@ export class RadarPage {
       this.view = "cards";
       this.ratio = -1;
       await this.utils.delay(500);
-      await this.slides.slideTo(0);
+      await this.slides?.slideTo(0);
     }
     this.getRadarUsers();
   }
@@ -353,7 +351,7 @@ export class RadarPage {
                   this.ratio = 50;
                 }
               } else {
-                await this.slides.slideTo(0);
+                await this.slides?.slideTo(0);
               }
               this.getRadarUsers();
             }

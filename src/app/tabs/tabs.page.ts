@@ -61,4 +61,8 @@ export class TabsPage implements OnInit {
       await alert.present();
     }
   }
+
+  openChat() {
+    this.router.navigate(["/chat"])
+  }
 }

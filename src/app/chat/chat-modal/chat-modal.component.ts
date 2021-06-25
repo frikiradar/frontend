@@ -45,6 +45,7 @@ export class ChatModalComponent implements OnInit {
   @Input() userId: User["id"];
   @Input() messageEvent: EventEmitter<Chat>;
   @Output() messageChange: EventEmitter<Chat> = new EventEmitter();
+  @Output() backToList: EventEmitter<any> = new EventEmitter();
 
   @ViewChild("chatlist", { static: false })
   chatlist: IonContent;
@@ -205,8 +206,7 @@ export class ChatModalComponent implements OnInit {
 
   async ngOnChanges(changes: SimpleChanges) {
     if (
-      changes?.userId?.currentValue !== changes?.userId?.previousValue &&
-      changes?.userId?.previousValue !== undefined
+      changes?.userId?.currentValue !== changes?.userId?.previousValue
     ) {
       this.userId = changes.userId.currentValue;
       await this.getUser();
@@ -228,6 +228,10 @@ export class ChatModalComponent implements OnInit {
   }
 
   async getLastMessages() {
+    if (!this.userId) {
+      return
+    }
+
     try {
       let messages = (
         await this.chatSvc.getMessages(this.userId, true, 1)
@@ -550,7 +554,6 @@ export class ChatModalComponent implements OnInit {
   }
 
   back() {
-    const lastMessage = this.messages[this.messages.length - 1];
-    this.modal.dismiss();
+    this.backToList.emit()
   }
 }

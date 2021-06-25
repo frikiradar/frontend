@@ -118,21 +118,25 @@ export class PushService {
         }
       );
     } else {
-      await this.requestPermission();
-      this.afMessaging.messages.subscribe((payload: any) => {
-        console.log("new message received. ", payload);
-        if (payload?.notification) {
-          this.localNotification(payload);
+      try {
+        await this.requestPermission();
+        this.afMessaging.messages.subscribe((payload: any) => {
+          console.log("new message received. ", payload);
+          if (payload?.notification) {
+            this.localNotification(payload);
 
-          if (!this.router.url.includes("chat")) {
-            this.notificationSvc
-              .getUnread()
-              .then((notification: NotificationCounters) => {
-                this.notificationSvc.setNotification(notification);
-              });
+            if (!this.router.url.includes("chat")) {
+              this.notificationSvc
+                .getUnread()
+                .then((notification: NotificationCounters) => {
+                  this.notificationSvc.setNotification(notification);
+                });
+            }
           }
-        }
-      });
+        });
+      } catch (e) {
+        // console.log("Notificaciones no permitidas")
+      }
     }
   }
 

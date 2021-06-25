@@ -14,7 +14,9 @@
     <ion-item-group>
       <ion-item-divider color="primary">
         <ion-icon name="lock-closed" slot="start"></ion-icon>
-        <ion-label><h2>Seguridad</h2></ion-label>
+        <ion-label>
+          <h2>Seguridad</h2>
+        </ion-label>
       </ion-item-divider>
       <!--<ion-item (click)="router.navigate(['settings/account'])" button lines="full">
                 <ion-icon name="person" slot="start"></ion-icon>
@@ -41,19 +43,10 @@
             inicies una nueva sesión.
           </p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="user.two_step"
-          (ngModelChange)="onChangeCheck('two_step', !$event)"
-        >
+        <ion-checkbox slot="end" [(ngModel)]="user.two_step" (ngModelChange)="onChangeCheck('two_step', !$event)">
         </ion-checkbox>
       </ion-item>
-      <ion-item
-        button
-        (click)="verificationModal()"
-        lines="full"
-        *ngIf="user.verified"
-      >
+      <ion-item button (click)="verificationModal()" lines="full" *ngIf="user.verified">
         <ion-icon name="ribbon-outline" slot="start"></ion-icon>
         <ion-label>
           <h2>Verificación de la cuenta</h2>
@@ -70,7 +63,9 @@
     <ion-item-group>
       <ion-item-divider color="primary">
         <ion-icon name="eye" slot="start"></ion-icon>
-        <ion-label><h2>Privacidad</h2></ion-label>
+        <ion-label>
+          <h2>Privacidad</h2>
+        </ion-label>
       </ion-item-divider>
       <ion-item lines="full">
         <ion-icon name="location-outline" slot="start"></ion-icon>
@@ -78,11 +73,8 @@
           <h2>Localización exacta</h2>
           <p>Mostrar mi distancia en kilómetros.</p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="!user.hide_location"
-          (ngModelChange)="onChangeCheck('hide_location', $event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="!user.hide_location"
+          (ngModelChange)="onChangeCheck('hide_location', $event)"></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
         <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
@@ -93,11 +85,8 @@
             que me gusta.
           </p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="!user.block_messages"
-          (ngModelChange)="onChangeCheck('block_messages', $event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="!user.block_messages"
+          (ngModelChange)="onChangeCheck('block_messages', $event)"></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
         <ion-icon name="time-outline" slot="start"></ion-icon>
@@ -108,11 +97,8 @@
             chat.
           </p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="!user.hide_connection"
-          (ngModelChange)="onChangeCheck('hide_connection', $event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="!user.hide_connection"
+          (ngModelChange)="onChangeCheck('hide_connection', $event)"></ion-checkbox>
       </ion-item>
       <ion-item lines="full">
         <ion-icon name="heart-dislike-outline" slot="start"></ion-icon>
@@ -123,11 +109,8 @@
             kokoro.
           </p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="user.hide_likes"
-          (ngModelChange)="onChangeCheck('hide_likes', !$event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="user.hide_likes" (ngModelChange)="onChangeCheck('hide_likes', !$event)">
+        </ion-checkbox>
       </ion-item>
       <ion-item lines="full">
         <ion-icon name="people-outline" slot="start"></ion-icon>
@@ -138,11 +121,8 @@
             URL (solamente nombre, avatar, descripción y gustos).
           </p>
         </ion-label>
-        <ion-checkbox
-          slot="end"
-          [(ngModel)]="user.public"
-          (ngModelChange)="onChangeCheck('public', !$event)"
-        ></ion-checkbox>
+        <ion-checkbox slot="end" [(ngModel)]="user.public" (ngModelChange)="onChangeCheck('public', !$event)">
+        </ion-checkbox>
       </ion-item>
       <ion-item (click)="blockUsersModal()" button lines="full">
         <ion-icon name="hand-left-outline" slot="start"></ion-icon>
@@ -157,7 +137,9 @@
     <ion-item-group>
       <ion-item-divider color="primary">
         <ion-icon name="apps" slot="start"></ion-icon>
-        <ion-label><h2>Aplicación</h2></ion-label>
+        <ion-label>
+          <h2>Aplicación</h2>
+        </ion-label>
       </ion-item-divider>
       <ion-item lines="full" (click)="patreon()" button>
         <ion-icon src="/assets/icon/patreon_coral.svg" slot="start"></ion-icon>
@@ -196,19 +178,10 @@
             </ion-slide>
             <ion-slide>
               <div>
-                <ion-icon
-                  [name]="auth.isPatreon() ? 'lock-open' : 'lock-closed'"
-                ></ion-icon>
-                <ion-item
-                  button
-                  lines="none"
-                  (click)="toggleTheme('cyberpunk')"
-                >
+                <ion-icon [name]="auth.isPatreon() ? 'lock-open' : 'lock-closed'"></ion-icon>
+                <ion-item button lines="none" (click)="toggleTheme('cyberpunk')">
                   <ion-thumbnail>
-                    <img
-                      src="/assets/img/layout/theme-cyberpunk.png"
-                      alt="cyberpunk"
-                    />
+                    <img src="/assets/img/layout/theme-cyberpunk.png" alt="cyberpunk" />
                   </ion-thumbnail>
                 </ion-item>
                 <ion-label>Cyberpunk</ion-label>
@@ -216,9 +189,7 @@
             </ion-slide>
             <ion-slide>
               <div>
-                <ion-icon
-                  [name]="auth.isPatreon() ? 'lock-open' : 'lock-closed'"
-                ></ion-icon>
+                <ion-icon [name]="auth.isPatreon() ? 'lock-open' : 'lock-closed'"></ion-icon>
                 <ion-item button lines="none" (click)="toggleTheme('fire')">
                   <ion-thumbnail>
                     <img src="/assets/img/layout/theme-fire.png" alt="fire" />
@@ -229,9 +200,7 @@
             </ion-slide>
             <ion-slide>
               <div>
-                <ion-icon
-                  [name]="auth.isPatreon() ? 'lock-open' : 'lock-closed'"
-                ></ion-icon>
+                <ion-icon [name]="auth.isPatreon() ? 'lock-open' : 'lock-closed'"></ion-icon>
                 <ion-item button lines="none" (click)="toggleTheme('black')">
                   <ion-thumbnail>
                     <img src="/assets/img/layout/theme-black.png" alt="black" />
@@ -244,9 +213,9 @@
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="clearLocalStorage()" button>
-        <ion-icon name="phone-portrait-outline" slot="start"></ion-icon>
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Eliminar datos de configuración local</h2>
+          <h2>Restablecer valores predeterminados</h2>
           <p>
             Esto eliminará los datos de configuración almacenados en tu
             dispositivo actual. Úsalo solamente si sabes lo que haces.
@@ -258,7 +227,9 @@
     <ion-item-group>
       <ion-item-divider color="primary">
         <ion-icon name="person-circle" slot="start"></ion-icon>
-        <ion-label><h2>Cuenta</h2></ion-label>
+        <ion-label>
+          <h2>Cuenta</h2>
+        </ion-label>
       </ion-item-divider>
       <ion-item lines="full" (click)="usernameModal()" button>
         <ion-icon name="person-outline" slot="start"></ion-icon>

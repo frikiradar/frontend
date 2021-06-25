@@ -1,5 +1,6 @@
-ion-list {
-  padding-bottom: 80px;
+:host {
+  display: flex;
+  flex-direction: column;
 }
 
 ion-item {

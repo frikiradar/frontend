@@ -14,7 +14,7 @@ export class StoryService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService
-  ) {}
+  ) { }
 
   async getStory(id: Story["id"]) {
     return (await this.rest.get(`story/${id}`).toPromise()) as Story;

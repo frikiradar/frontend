@@ -42,6 +42,10 @@ const routes: Routes = [
       )
   },
   {
+    path: "chat",
+    loadChildren: () => import("./chat/chat.module").then(m => m.ChatPageModule)
+  },
+  {
     path: "chat/:id",
     loadChildren: () => import("./chat/chat.module").then(m => m.ChatPageModule)
   },
@@ -127,4 +131,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

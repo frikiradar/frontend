@@ -50,26 +50,20 @@ export class ChatPage implements OnInit {
       this.desktop = true;
     }
     window.onresize = async () => {
-      const oldDesktop = this.desktop;
       this.desktop = window.innerWidth > 991;
-      if ((await this.modal.getTop()) && oldDesktop !== this.desktop) {
-        this.modal.dismiss();
-      }
     };
     this.connectSSE();
   }
 
   async showChat(id: User["id"]) {
     this.userId = +id;
-    if (window.innerWidth <= 991) {
-      const modal = await this.modal.create({
-        component: ChatModalComponent,
-        componentProps: { userId: this.userId, messageEvent: this.messageEvent }
-      });
-      await modal.present();
-      const data = await modal.onDidDismiss();
-      this.messageEvent.emit(data.data);
-    }
+
+    this.location.replaceState("/chat/" + this.userId);
+  }
+
+  async backToList() {
+    this.userId = undefined
+    this.location.replaceState("/chat");
   }
 
   async connectSSE() {

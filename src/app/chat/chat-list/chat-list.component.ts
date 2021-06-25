@@ -43,7 +43,7 @@ export class ChatListComponent {
     private nav: NavService,
     private config: ConfigService,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   async ngAfterViewInit() {
     this.allChats = (await this.config.get("chats")) as Config["chats"];

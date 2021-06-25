@@ -9,7 +9,7 @@ import { environment } from "../../environments/environment";
 export class UploadService {
   private apiUrl = environment.apiUrl;
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) { }
 
   async upload(endpoint: string, data: FormData) {
     const params = new HttpParams();

@@ -149,9 +149,9 @@ export class RoomPage implements OnInit {
         this.room.last_message >
         rooms_config.find(r => r.slug === this.room.slug).last_message
       ) {
-        this.oldLastMessage = rooms_config.find(
+        this.oldLastMessage = rooms_config?.find(
           r => r.slug === this.room.slug
-        ).last_message;
+        )?.last_message;
       }
       this.roomPage = this.room.page;
     } catch (e) {

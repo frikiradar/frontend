@@ -1,14 +1,11 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!showOptions && !showingArchived">
-      <ion-menu-toggle>
-        <ion-avatar>
-          <ion-img
-            [src]="auth.currentUserValue?.thumbnail"
-            [alt]="auth.currentUserValue?.username"
-          ></ion-img>
-        </ion-avatar>
-      </ion-menu-toggle>
+      <ion-button>
+        <ion-button (click)="back()">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="showOptions">
       <ion-button (click)="hideOptions()">
@@ -47,10 +44,10 @@
       </ion-avatar>
       <ion-label>
         <h2>
-          <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
         </h2>
         <p>
-          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
         </p>
       </ion-label>
     </ion-item>
