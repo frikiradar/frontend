@@ -25,7 +25,7 @@ export class UtilsService {
     private camera: Camera,
     private modal: ModalController,
     private statusBar: StatusBar // private navigationBar: NavigationBarColor
-  ) {}
+  ) { }
 
   async takePicture(
     mode?: string,
@@ -298,5 +298,16 @@ export class UtilsService {
         // this.navigationBar.backgroundColorByHexString("#1f1f1f");
       }
     }
+  }
+
+  makeId(length: number): string {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() *
+        charactersLength));
+    }
+    return result;
   }
 }

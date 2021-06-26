@@ -145,39 +145,7 @@ export class ChatModalComponent implements OnInit {
           this.toUserWriting = "";
           this.cd.detectChanges();
 
-          if (this.messages.some(m => m.id === message.id)) {
-            // Si ya existe el mensaje lo actualizamos
-            this.messages.map(m => {
-              if (m.id === message.id) {
-                m.text = message.text;
-                m.time_read = message.time_read;
-                m.edited = message.edited;
-                m.deleted = message.deleted;
-              }
-            });
-          } else {
-            const messages = [...this.messages, message];
-            this.messages = messages.sort((a, b) => {
-              return (
-                new Date(a.time_creation).getTime() -
-                new Date(b.time_creation).getTime()
-              );
-            });
-            if (
-              message.fromuser?.id === this.user?.id &&
-              (message.text || message.image || message.audio)
-            ) {
-              // marcamos como leido
-              try {
-                if (this.user?.id !== this.auth.currentUserValue.id) {
-                  message = await this.chatSvc.readChat(message.id);
-                }
-              } catch (e) {
-                console.error(e);
-                await this.alertError.present();
-              }
-            }
-          }
+          await this.newMessage(message)
 
           if (message.fromuser?.id === this.user?.id) {
             this.user = message.fromuser;
@@ -295,6 +263,44 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
+  async newMessage(message: Chat) {
+    if (this.messages.some(m => m.id === message.id || m.tmp_id === message.tmp_id)) {
+      // Si ya existe el mensaje lo actualizamos
+      this.messages.map(m => {
+
+        if ((m.id === message.id && m.id !== undefined) || (m.tmp_id === message.tmp_id && m.tmp_id !== undefined)) {
+          m.text = message.text;
+          m.time_read = message.time_read;
+          m.edited = message.edited;
+          m.deleted = message.deleted;
+          m.sending = false
+        }
+      });
+    } else {
+      const messages = [...this.messages, message];
+      this.messages = messages.sort((a, b) => {
+        return (
+          new Date(a.time_creation).getTime() -
+          new Date(b.time_creation).getTime()
+        );
+      });
+      if (
+        message.fromuser?.id === this.user?.id &&
+        (message.text || message.image || message.audio)
+      ) {
+        // marcamos como leido
+        try {
+          if (this.user?.id !== this.auth.currentUserValue.id) {
+            message = await this.chatSvc.readChat(message.id);
+          }
+        } catch (e) {
+          console.error(e);
+          await this.alertError.present();
+        }
+      }
+    }
+  }
+
   async sendMessage(message?: Chat) {
     const text = message.text;
     const image = message.image;
@@ -311,7 +317,10 @@ export class ChatModalComponent implements OnInit {
       });
       this.editing = false;
     } else {
+      const tmpId = this.utils.makeId(6)
+
       const message = {
+        tmp_id: tmpId,
         touser: this.user,
         fromuser: this.auth.currentUserValue,
         text,
@@ -319,7 +328,7 @@ export class ChatModalComponent implements OnInit {
         audio,
         time_creation: new Date(),
         sending: true
-      };
+      } as Chat;
 
       this.messages = [...this.messages, ...[message]].filter(
         (m: Chat) => m.text || m.image || m.audio
@@ -346,15 +355,9 @@ export class ChatModalComponent implements OnInit {
           chat = await this.chatSvc.sendAudio(this.user.id, audioFile).then();
         }
 
-        this.messages.map(m => {
-          if (m.sending) {
-            m.id = chat.id;
-            m.time_creation = chat.time_creation;
-            m.sending = chat.sending;
-            m.time_read = chat.time_read;
-            m.conversationId = chat.conversationId;
-          }
-        });
+        chat['tmp_id'] = tmpId
+
+        await this.newMessage(chat)
 
         this.messageChange.emit(chat);
 

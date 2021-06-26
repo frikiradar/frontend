@@ -44,13 +44,13 @@ export class ChatService {
       .toPromise()) as Chat[];
   }
 
-  async sendMessage(id: number, text: string, replyto?: number) {
+  async sendMessage(id: number, text: string, replyto?: number): Promise<Chat> {
     return (await this.rest
       .put("chat", { touser: id, text, replyto })
       .toPromise()) as Chat;
   }
 
-  async sendImage(id: number, image: Blob, text: string) {
+  async sendImage(id: number, image: Blob, text: string): Promise<Chat> {
     const formData: FormData = new FormData();
     formData.set("image", image);
     formData.set("touser", "" + id);
@@ -58,7 +58,7 @@ export class ChatService {
     return (await this.uploadSvc.upload("chat-upload", formData)) as Chat;
   }
 
-  async sendAudio(id: number, audio: Blob) {
+  async sendAudio(id: number, audio: Blob): Promise<Chat> {
     const formData: FormData = new FormData();
     formData.set("audio", audio);
     formData.set("touser", "" + id);

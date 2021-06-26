@@ -6,43 +6,67 @@
       </ion-button>
       <ion-button (click)="showProfile(userId)" shape="round">
         <ion-avatar>
-          <ion-img *ngIf="user" [src]="user?.thumbnail" [alt]="user?.username"></ion-img>
+          <ion-img
+            *ngIf="user"
+            [src]="user?.thumbnail"
+            [alt]="user?.username"
+          ></ion-img>
           <ion-skeleton-text animated *ngIf="!user"></ion-skeleton-text>
         </ion-avatar>
         <ion-label>
           <h2>{{ user?.name }}</h2>
           <p>
-            <ion-badge color="secondary" *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'">&nbsp;</ion-badge>{{
-            toUserWriting
-            ? toUserWriting
-            : (user?.last_login | niceDate) === "Ahora mismo"
-            ? "En línea"
-            : (user?.last_login | niceDate)
+            <ion-badge
+              color="secondary"
+              *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+              >&nbsp;</ion-badge
+            >{{
+              toUserWriting
+                ? toUserWriting
+                : (user?.last_login | niceDate) === "Ahora mismo"
+                ? "En línea"
+                : (user?.last_login | niceDate)
             }}
           </p>
         </ion-label>
       </ion-button>
-      <ion-icon *ngIf="user && userSvc.getRoleIcon(user)" [name]="userSvc.getRoleIcon(user)"
-        [src]="userSvc.getRoleIcon(user)" slot="icon-only" size="small" [color]="userSvc.getRoleColor(user)"
-        (click)="userSvc.showRole(user)"></ion-icon>
+      <ion-icon
+        *ngIf="user && userSvc.getRoleIcon(user)"
+        [name]="userSvc.getRoleIcon(user)"
+        [src]="userSvc.getRoleIcon(user)"
+        slot="icon-only"
+        size="small"
+        [color]="userSvc.getRoleColor(user)"
+        (click)="userSvc.showRole(user)"
+      ></ion-icon>
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="pressOptions">
       <ion-button (click)="pressOptions = false">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end" *ngIf="
+    <ion-buttons
+      slot="end"
+      *ngIf="
         !pressOptions && user?.active && !user?.roles?.includes('ROLE_DEMO')
-      ">
+      "
+    >
       <ion-button (click)="showOptions($event)">
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
       <ion-button (click)="chatSvc.realtimeChatInfo()" *ngIf="!realtimeChat">
-        <ion-icon slot="icon-only" name="timer-outline" color="danger"></ion-icon>
+        <ion-icon
+          slot="icon-only"
+          name="timer-outline"
+          color="danger"
+        ></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="pressOptions">
-      <ion-button (click)="edit()" *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id">
+      <ion-button
+        (click)="edit()"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+      >
         <ion-icon slot="icon-only" name="pencil-sharp"></ion-icon>
       </ion-button>
       <ion-button (click)="copy()">
@@ -51,7 +75,10 @@
       <ion-button (click)="reply()">
         <ion-icon slot="icon-only" name="arrow-undo-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="deleteMessage()" *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id">
+      <ion-button
+        (click)="deleteMessage()"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+      >
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -63,24 +90,38 @@
     <ion-infinite-scroll-content loadingSpinner="dots">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  <span class="bubble" [ngClass]="
+  <span
+    class="bubble"
+    [ngClass]="
       message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
       message?.reply_to ||
       (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate')
         ? ''
         : 'same-user'
-    " *ngFor="let message of messages; let i = index">
-    <ion-chip color="primary" class="center" *ngIf="
+    "
+    *ngFor="let message of messages; let i = index"
+  >
+    <ion-chip
+      color="primary"
+      class="center"
+      *ngIf="
         (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate')
-      ">
+      "
+    >
       <ion-label color="secondary">{{
         message.time_creation | date: "fullDate"
-        }}</ion-label>
+      }}</ion-label>
     </ion-chip>
 
-    <ion-item *ngIf="message.reply_to" class="replyfrom" lines="none" button (click)="goToMessage(message)">
+    <ion-item
+      *ngIf="message.reply_to"
+      class="replyfrom"
+      lines="none"
+      button
+      (click)="goToMessage(message)"
+    >
       <ion-icon name="arrow-undo" color="light" slot="start"></ion-icon>
       <ion-thumbnail *ngIf="message?.reply_to?.image">
         <img [src]="message?.reply_to?.image" />
@@ -96,29 +137,48 @@
     <ion-item-sliding (ionDrag)="dragItem($event, message)">
       <ion-item-options side="start">
         <ion-item-option color="#1f1f1f">
-          <ion-icon slot="icon-only" name="arrow-undo-outline" color="light"></ion-icon>
+          <ion-icon
+            slot="icon-only"
+            name="arrow-undo-outline"
+            color="light"
+          ></ion-icon>
         </ion-item-option>
       </ion-item-options>
-      <ion-item [id]="message.id" lines="none" button detail="false" (press)="selectMessage($event, message)" [ngClass]="
+      <ion-item
+        [id]="message.id"
+        lines="none"
+        button
+        detail="false"
+        (press)="selectMessage($event, message)"
+        [ngClass]="
           selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''
-        ">
-        <ion-avatar *ngIf="
+        "
+      >
+        <ion-avatar
+          *ngIf="
             message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
             message?.reply_to ||
             (message?.time_creation | date: 'shortDate') !==
               (messages[i - 1]?.time_creation | date: 'shortDate')
-          ">
-          <img (click)="showProfile(message.fromuser.id)" [src]="message.fromuser.thumbnail" />
+          "
+        >
+          <img
+            (click)="showProfile(message.fromuser.id)"
+            [src]="message.fromuser.thumbnail"
+          />
         </ion-avatar>
-        <div *ngIf="
+        <div
+          *ngIf="
             message?.fromuser?.id === messages[i - 1]?.fromuser?.id &&
             !message?.reply_to &&
             (message?.time_creation | date: 'shortDate') ===
               (messages[i - 1]?.time_creation | date: 'shortDate')
-          "></div>
+          "
+        ></div>
         <ion-card>
           <div *ngIf="message.image">
-            <img (click)="
+            <img
+              (click)="
                 openViewer(
                   message.image,
                   message.fromuser.name +
@@ -126,14 +186,23 @@
                     utils.niceDate(message.time_creation),
                   message.text
                 )
-              " [src]="message.image" />
+              "
+              [src]="message.image"
+            />
             <ion-note class="note-image" *ngIf="!message?.text">
               <span *ngIf="message?.edited">Editado</span>
               {{ message.time_creation | chatDate }}
               <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                 <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-                <ion-icon *ngIf="!message.sending && !message.time_read" name="checkmark"></ion-icon>
-                <ion-icon *ngIf="message.time_read" color="secondary" name="checkmark-done"></ion-icon>
+                <ion-icon
+                  *ngIf="!message.sending && !message.time_read"
+                  name="checkmark"
+                ></ion-icon>
+                <ion-icon
+                  *ngIf="message.time_read"
+                  color="secondary"
+                  name="checkmark-done"
+                ></ion-icon>
               </span>
             </ion-note>
           </div>
@@ -144,44 +213,74 @@
                 {{ message.time_creation | date: "shortTime" }}
                 <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                   <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-                  <ion-icon *ngIf="!message.sending && !message.time_read" name="checkmark"></ion-icon>
-                  <ion-icon *ngIf="message.time_read" color="secondary" name="checkmark-done"></ion-icon>
+                  <ion-icon
+                    *ngIf="!message.sending && !message.time_read"
+                    name="checkmark"
+                  ></ion-icon>
+                  <ion-icon
+                    *ngIf="message.time_read"
+                    color="secondary"
+                    name="checkmark-done"
+                  ></ion-icon>
                 </span>
               </ion-note>
               <ion-avatar slot="end">
-                <img [src]="message.fromuser?.thumbnail" [alt]="message.fromuser?.username" />
+                <img
+                  [src]="message.fromuser?.thumbnail"
+                  [alt]="message.fromuser?.username"
+                />
               </ion-avatar>
             </ion-item>
           </ion-card-content>
           <ion-card-content *ngIf="message.text">
-            <p class="text-name" *ngIf="
+            <p
+              class="text-name"
+              *ngIf="
                 message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
                 message?.reply_to ||
                 (message?.time_creation | date: 'shortDate') !==
                   (messages[i - 1]?.time_creation | date: 'shortDate')
-              ">
+              "
+            >
               <a (click)="showProfile(message.fromuser.id)">
                 <ion-text [color]="userSvc.getRoleColor(message.fromuser)">{{
                   message.fromuser.username
-                  }}</ion-text>
+                }}</ion-text>
               </a>
-              <ion-icon *ngIf="userSvc.getRoleIcon(message.fromuser)" [name]="userSvc.getRoleIcon(message.fromuser)"
-                [src]="userSvc.getRoleIcon(message.fromuser)" slot="icon-only"
-                [color]="userSvc.getRoleColor(message.fromuser)" (click)="userSvc.showRole(message.fromuser)">
+              <ion-icon
+                *ngIf="userSvc.getRoleIcon(message.fromuser)"
+                [name]="userSvc.getRoleIcon(message.fromuser)"
+                [src]="userSvc.getRoleIcon(message.fromuser)"
+                slot="icon-only"
+                [color]="userSvc.getRoleColor(message.fromuser)"
+                (click)="userSvc.showRole(message.fromuser)"
+              >
               </ion-icon>
               <span class="note-time">
                 · {{ message.time_creation | chatDate }}
               </span>
             </p>
             <ion-text class="text">
-              <ion-text color="light" class="message-text" [innerHTML]="
+              <ion-text
+                color="light"
+                class="message-text"
+                [innerHTML]="
                   message.text | linky: { className: 'linkified' } | hashtag
-                " (click)="$event.stopImmediatePropagation(); openUrl($event)"></ion-text>
+                "
+                (click)="$event.stopImmediatePropagation(); openUrl($event)"
+              ></ion-text>
               <span class="edited" *ngIf="message?.edited"> · Editado</span>
               <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                 <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-                <ion-icon *ngIf="!message.sending && !message.time_read" name="checkmark"></ion-icon>
-                <ion-icon *ngIf="message.time_read" color="secondary" name="checkmark-done"></ion-icon>
+                <ion-icon
+                  *ngIf="!message.sending && !message.time_read"
+                  name="checkmark"
+                ></ion-icon>
+                <ion-icon
+                  *ngIf="message.time_read"
+                  color="secondary"
+                  name="checkmark-done"
+                ></ion-icon>
               </span>
               <span class="text-note-time">
                 · {{ message.time_creation | date: "shortTime" }}
@@ -193,12 +292,20 @@
     </ion-item-sliding>
   </span>
 </ion-content>
-<ion-footer *ngIf="
+<ion-footer
+  *ngIf="
     (user?.active && !user?.roles?.includes('ROLE_DEMO')) ||
     (auth.currentUserValue?.roles?.includes('ROLE_DEMO') &&
       user?.roles?.includes('ROLE_DEMO'))
-  ">
-  <app-chat-input (onWriting)="setWriting()" (onSubmit)="sendMessage($event)" [(replying)]="replying"
-    [(editing)]="editing" [selectedMessage]="selectedMessage" [events]="auth.isMaster() && messages.length > 10"
-    [microphone]="true"></app-chat-input>
+  "
+>
+  <app-chat-input
+    (onWriting)="setWriting()"
+    (onSubmit)="sendMessage($event)"
+    [(replying)]="replying"
+    [(editing)]="editing"
+    [selectedMessage]="selectedMessage"
+    [events]="auth.isMaster() && messages.length > 10"
+    [microphone]="true"
+  ></app-chat-input>
 </ion-footer>

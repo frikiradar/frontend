@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
 import { Location } from "@angular/common";
-import { ModalController, Platform } from "@ionic/angular";
+import { Platform } from "@ionic/angular";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { AngularFireMessaging } from "@angular/fire/messaging";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
@@ -10,8 +10,6 @@ import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { User } from "../models/user";
 import { Chat } from "./../models/chat";
 import { AuthService } from "./../services/auth.service";
-import { ChatModalComponent } from "./chat-modal/chat-modal.component";
-import { ChatService } from "../services/chat.service";
 
 @Component({
   selector: "app-chat",
@@ -29,13 +27,12 @@ export class ChatPage implements OnInit {
     private router: Router,
     public auth: AuthService,
     private location: Location,
-    private modal: ModalController,
     private afMessaging: AngularFireMessaging,
     private firebase: FirebaseX,
     private platform: Platform,
-    private chatSvc: ChatService,
-    private localNotifications: LocalNotifications
-  ) { }
+    private localNotifications: LocalNotifications,
+  ) {
+  }
 
   async ngOnInit() {
     if (this.route.snapshot.paramMap.get("id")) {
@@ -57,7 +54,7 @@ export class ChatPage implements OnInit {
 
   async showChat(id: User["id"]) {
     this.userId = +id;
-
+    // this.router.navigate(["/chat/" + this.userId])
     this.location.replaceState("/chat/" + this.userId);
   }
 
