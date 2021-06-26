@@ -23,7 +23,7 @@ export class PushService {
 
   constructor(
     private device: DeviceService,
-    private firebase: FirebaseX,
+    private firebasex: FirebaseX,
     private router: Router,
     private notificationSvc: NotificationService,
     private localNotifications: LocalNotifications,
@@ -35,7 +35,7 @@ export class PushService {
     this.platform.ready().then(async () => {
       if (this.platform.is("cordova")) {
         try {
-          await this.firebase.hasPermission();
+          await this.firebasex.hasPermission();
           this.localNotifications.on("click").subscribe(notification => {
             console.log("click", notification);
             const data = notification.data;
@@ -58,14 +58,9 @@ export class PushService {
           return console.error("Service Worker not supported")
         }
 
-        navigator.serviceWorker.ready
-          .then(registration => registration.sync.register('syncAttendees'))
-          .then(() => console.log("Registered background sync"))
-          .catch(err => console.error("Error registering background sync", err))
-
-        self.addEventListener('sync', event => {
-          console.log(event)
-        });
+        this.afMessaging.onBackgroundMessage(p => {
+          console.log(p)
+        })
 
         this.swPush.notificationClicks.subscribe(payload => {
           this.router.navigate([payload.notification.data.url]);
@@ -78,7 +73,7 @@ export class PushService {
     if (this.platform.is("cordova")) {
       this.setChannels();
 
-      this.firebase.getToken().then(async token => {
+      this.firebasex.getToken().then(async token => {
         // console.log("Notification token:", token);
         await this.device.setDevice(token);
       });
@@ -88,7 +83,7 @@ export class PushService {
         await this.device.setDevice(token);
       });*/
 
-      this.firebase
+      this.firebasex
         .subscribe("frikiradar")
         .then(response =>
           console.log("Successfully subscribed to topic:", response)
@@ -98,7 +93,7 @@ export class PushService {
         });
 
       if (this.auth.isAdmin() || this.auth.isMaster()) {
-        this.firebase
+        this.firebasex
           .subscribe("test")
           .then(response =>
             console.log("Successfully subscribed to topic:", response)
@@ -108,7 +103,7 @@ export class PushService {
           });
       }
 
-      this.firebase.onMessageReceived().subscribe(
+      this.firebasex.onMessageReceived().subscribe(
         payload => {
           // console.log("payload", payload);
           if (payload.tap) {
@@ -199,7 +194,7 @@ export class PushService {
         continue;
       }
 
-      this.firebase
+      this.firebasex
         .createChannel({
           id: channel.id,
           name: channel.name,
@@ -214,7 +209,7 @@ export class PushService {
         });
     }
 
-    this.firebase
+    this.firebasex
       .deleteChannel("fcm_default_channel")
       .then(response => {
         // console.log(response);
