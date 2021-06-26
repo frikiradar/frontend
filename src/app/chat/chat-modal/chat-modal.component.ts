@@ -62,7 +62,7 @@ export class ChatModalComponent implements OnInit {
   public editing = false;
   public writing = false;
   public toUserWriting = "";
-  public realtimeChat = true
+  public realtimeChat = true;
 
   constructor(
     public auth: AuthService,
@@ -83,12 +83,12 @@ export class ChatModalComponent implements OnInit {
     private nav: NavService,
     private cd: ChangeDetectorRef,
     private modal: ModalController,
-    private afMessaging: AngularFireMessaging,
-  ) { }
+    private afMessaging: AngularFireMessaging
+  ) {}
 
-  @HostListener('window:focus')
-  onFocus() {
-    this.getLastMessages();
+  @HostListener("window:focus")
+  async onFocus() {
+    await this.getLastMessages();
   }
 
   async ngOnInit() {
@@ -145,20 +145,7 @@ export class ChatModalComponent implements OnInit {
           this.toUserWriting = "";
           this.cd.detectChanges();
 
-          await this.newMessage(message)
-
-          if (message.fromuser?.id === this.user?.id) {
-            this.user = message.fromuser;
-          }
-
-          // Borramos los deleted
-          this.messages = this.messages.filter(m => {
-            if (!m.deleted) {
-              return m;
-            }
-          });
-          this.cd.detectChanges();
-          this.scrollDown();
+          await this.newMessage(message);
         }
       }
     });
@@ -167,15 +154,13 @@ export class ChatModalComponent implements OnInit {
       try {
         await this.afMessaging.requestPermission.toPromise();
       } catch (e) {
-        this.realtimeChat = false
+        this.realtimeChat = false;
       }
     }
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes?.userId?.currentValue !== changes?.userId?.previousValue
-    ) {
+    if (changes?.userId?.currentValue !== changes?.userId?.previousValue) {
       this.userId = changes.userId.currentValue;
       await this.getUser();
     }
@@ -197,13 +182,11 @@ export class ChatModalComponent implements OnInit {
 
   async getLastMessages() {
     if (!this.userId) {
-      return
+      return;
     }
 
     try {
-      let messages = (
-        await this.chatSvc.getMessages(this.userId, true, 1)
-      )
+      let messages = (await this.chatSvc.getMessages(this.userId, true, 1))
         .filter(m => m.text || m.image || m.audio)
         .reverse();
 
@@ -211,20 +194,11 @@ export class ChatModalComponent implements OnInit {
         if (!this.messages.some(me => me.id === m.id)) {
           return m;
         }
-      })
+      });
 
-      messages.forEach(message => {
-        if (this.messages.some(m => m.id === message.id)) {
-          this.messages.map(m => {
-            if (m.id === message.id && m.text !== message.text) {
-              m.text = message.text
-              m.edited = message.edited
-            }
-          })
-        } else {
-          this.messages = [...this.messages, message]
-        }
-      })
+      messages.forEach(async message => {
+        await this.newMessage(message);
+      });
 
       if (this.messages.length < 15) {
         this.infiniteScroll.complete();
@@ -264,16 +238,24 @@ export class ChatModalComponent implements OnInit {
   }
 
   async newMessage(message: Chat) {
-    if (this.messages.some(m => m.id === message.id || m.tmp_id === message.tmp_id)) {
+    if (
+      this.messages.some(
+        m =>
+          (m.id === message.id && m.id !== undefined) ||
+          (m.tmp_id === message.tmp_id && m.tmp_id !== undefined)
+      )
+    ) {
       // Si ya existe el mensaje lo actualizamos
       this.messages.map(m => {
-
-        if ((m.id === message.id && m.id !== undefined) || (m.tmp_id === message.tmp_id && m.tmp_id !== undefined)) {
+        if (
+          (m.id === message.id && m.id !== undefined) ||
+          (m.tmp_id === message.tmp_id && m.tmp_id !== undefined)
+        ) {
           m.text = message.text;
           m.time_read = message.time_read;
           m.edited = message.edited;
           m.deleted = message.deleted;
-          m.sending = false
+          m.sending = false;
         }
       });
     } else {
@@ -299,6 +281,20 @@ export class ChatModalComponent implements OnInit {
         }
       }
     }
+
+    if (message.fromuser?.id === this.user?.id) {
+      this.user = message.fromuser;
+    }
+
+    // Borramos los deleted
+    this.messages = this.messages.filter(m => {
+      if (!m.deleted) {
+        return m;
+      }
+    });
+
+    this.cd.detectChanges();
+    this.scrollDown();
   }
 
   async sendMessage(message?: Chat) {
@@ -317,7 +313,7 @@ export class ChatModalComponent implements OnInit {
       });
       this.editing = false;
     } else {
-      const tmpId = this.utils.makeId(6)
+      const tmpId = this.utils.makeId(6);
 
       const message = {
         tmp_id: tmpId,
@@ -355,9 +351,9 @@ export class ChatModalComponent implements OnInit {
           chat = await this.chatSvc.sendAudio(this.user.id, audioFile).then();
         }
 
-        chat['tmp_id'] = tmpId
+        chat["tmp_id"] = tmpId;
 
-        await this.newMessage(chat)
+        await this.newMessage(chat);
 
         this.messageChange.emit(chat);
 
@@ -373,9 +369,9 @@ export class ChatModalComponent implements OnInit {
     const scroll = await this.chatlist.getScrollElement();
     if (
       scroll.scrollTop +
-      scroll.offsetHeight +
-      (scroll.offsetHeight - 200) / 2 >=
-      scroll.scrollHeight ||
+        scroll.offsetHeight +
+        (scroll.offsetHeight - 200) / 2 >=
+        scroll.scrollHeight ||
       force
     ) {
       if (!this.chatlist) {
@@ -557,6 +553,6 @@ export class ChatModalComponent implements OnInit {
   }
 
   back() {
-    this.backToList.emit()
+    this.backToList.emit();
   }
 }

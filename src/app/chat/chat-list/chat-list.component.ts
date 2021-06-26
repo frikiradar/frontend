@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostListener,
   Input,
   Output,
   SimpleChanges
@@ -43,7 +44,12 @@ export class ChatListComponent {
     private nav: NavService,
     private config: ConfigService,
     private cd: ChangeDetectorRef
-  ) { }
+  ) {}
+
+  @HostListener("window:focus")
+  async onFocus() {
+    await this.getLastMessages();
+  }
 
   async ngAfterViewInit() {
     this.allChats = (await this.config.get("chats")) as Config["chats"];
@@ -54,12 +60,7 @@ export class ChatListComponent {
 
   async ngOnInit() {
     this.loading = true;
-    const allChats = await this.chatSvc.getChats();
-    this.loading = false;
-    if (!deepEqual(this.allChats, allChats) || !this.allChats) {
-      this.allChats = allChats;
-      this.setChats();
-    }
+    await this.getLastMessages();
 
     this.messageEvent.subscribe(message => {
       if (!message) {
@@ -115,6 +116,15 @@ export class ChatListComponent {
 
       this.cd.detectChanges();
     });
+  }
+
+  async getLastMessages() {
+    const allChats = await this.chatSvc.getChats();
+    this.loading = false;
+    if (!deepEqual(this.allChats, allChats) || !this.allChats) {
+      this.allChats = allChats;
+      this.setChats();
+    }
   }
 
   async setChats() {

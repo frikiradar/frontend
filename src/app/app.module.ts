@@ -77,7 +77,7 @@ registerLocaleData(localeEs, "es");
     NgxIonicImageViewerModule,
     ImageCropperModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: environment.production
+      enabled: true
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
@@ -119,4 +119,4 @@ registerLocaleData(localeEs, "es");
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

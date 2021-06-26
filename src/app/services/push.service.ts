@@ -58,9 +58,9 @@ export class PushService {
           return console.error("Service Worker not supported")
         }
 
-        this.afMessaging.onBackgroundMessage(p => {
+        /*this.afMessaging.onBackgroundMessage(p => {
           console.log(p)
-        })
+        })*/
 
         this.swPush.notificationClicks.subscribe(payload => {
           this.router.navigate([payload.notification.data.url]);
