@@ -288,6 +288,6 @@ export class ChatListComponent {
   }
 
   back() {
-    this.nav.back();
+    this.router.navigateByUrl("/");
   }
 }
