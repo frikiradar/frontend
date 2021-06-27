@@ -64,7 +64,7 @@ registerLocaleData(localeEs, "es");
   entryComponents: [MenuComponent, OptionsPopover],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({ animated: false }),
     PickerModule,
     AppRoutingModule,
     HttpClientModule,
@@ -119,4 +119,4 @@ registerLocaleData(localeEs, "es");
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

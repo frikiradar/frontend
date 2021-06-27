@@ -10,6 +10,7 @@ import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { User } from "../models/user";
 import { Chat } from "./../models/chat";
 import { AuthService } from "./../services/auth.service";
+import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-chat",
@@ -31,16 +32,12 @@ export class ChatPage implements OnInit {
     private firebase: FirebaseX,
     private platform: Platform,
     private localNotifications: LocalNotifications,
-  ) {
-  }
+    private nav: NavService
+  ) {}
 
   async ngOnInit() {
     if (this.route.snapshot.paramMap.get("id")) {
       this.userId = +this.route.snapshot.paramMap.get("id");
-
-      if (window.innerWidth <= 991) {
-        this.showChat(this.userId);
-      }
     }
 
     if (window.innerWidth > 991) {
@@ -53,21 +50,18 @@ export class ChatPage implements OnInit {
   }
 
   async showChat(id: User["id"]) {
-    this.userId = +id;
-    // this.router.navigate(["/chat/" + this.userId])
-    this.location.replaceState("/chat/" + this.userId);
+    this.router.navigate(["/chat/", id]);
   }
 
   async backToList() {
-    this.userId = undefined
-    this.location.replaceState("/chat");
+    this.router.navigate(["/chat/"]);
   }
 
   async connectSSE() {
     if (this.platform.is("cordova")) {
       this.firebase.onMessageReceived().subscribe(
         notification => {
-          if (notification?.message && notification?.topic === 'chat') {
+          if (notification?.message && notification?.topic === "chat") {
             const message = JSON.parse(notification.message) as Chat;
             // console.log(message);
             this.messageEvent.emit(message);
@@ -99,7 +93,7 @@ export class ChatPage implements OnInit {
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         // console.log(payload)
-        if (payload?.data?.message && payload?.data?.topic === 'chat') {
+        if (payload?.data?.message && payload?.data?.topic === "chat") {
           const message = JSON.parse(payload.data.message) as Chat;
           // console.log(payload.data);
           this.messageEvent.emit(message);

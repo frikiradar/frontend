@@ -8,6 +8,7 @@ import {
   SimpleChanges
 } from "@angular/core";
 import { MenuController, ToastController } from "@ionic/angular";
+import { Router, Event, NavigationStart, NavigationEnd } from "@angular/router";
 import { Config, ConfigService } from "src/app/services/config.service";
 import { NavService } from "src/app/services/navigation.service";
 import * as deepEqual from "deep-equal";
@@ -43,8 +44,19 @@ export class ChatListComponent {
     private toast: ToastController,
     private nav: NavService,
     private config: ConfigService,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+    private router: Router
+  ) {
+    if (this.router.url === "/chat") {
+      this.router.events.subscribe(async (event: Event) => {
+        if (event instanceof NavigationEnd && this.router.url === "/chat") {
+          if (this.router.url === "/chat" && this.allChats?.length) {
+            await this.getLastMessages();
+          }
+        }
+      });
+    }
+  }
 
   @HostListener("window:focus")
   async onFocus() {
@@ -55,13 +67,20 @@ export class ChatListComponent {
     this.allChats = (await this.config.get("chats")) as Config["chats"];
     if (this.allChats) {
       this.setChats();
+    } else {
+      this.loading = true;
+    }
+
+    let desktop = false;
+    if (window.innerWidth > 991) {
+      desktop = true;
+    }
+    if (!this.selected || desktop) {
+      await this.getLastMessages();
     }
   }
 
   async ngOnInit() {
-    this.loading = true;
-    await this.getLastMessages();
-
     this.messageEvent.subscribe(message => {
       if (!message) {
         return;
@@ -120,10 +139,10 @@ export class ChatListComponent {
 
   async getLastMessages() {
     const allChats = await this.chatSvc.getChats();
-    this.loading = false;
     if (!deepEqual(this.allChats, allChats) || !this.allChats) {
       this.allChats = allChats;
-      this.setChats();
+      await this.setChats();
+      this.loading = false;
     }
   }
 

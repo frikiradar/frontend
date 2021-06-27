@@ -159,13 +159,6 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  async ngOnChanges(changes: SimpleChanges) {
-    if (changes?.userId?.currentValue !== changes?.userId?.previousValue) {
-      this.userId = changes.userId.currentValue;
-      await this.getUser();
-    }
-  }
-
   async getUser() {
     this.page = 1;
 
