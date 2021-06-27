@@ -132,7 +132,7 @@ export class ChatListComponent {
           );
         });
       }
-
+      this.setChats();
       this.cd.detectChanges();
     });
   }
