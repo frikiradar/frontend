@@ -113,20 +113,29 @@ export class AppComponent {
   }
 
   checkCodePush() {
-    let syncOptions: SyncOptions = {
-      updateDialog: {
-        updateTitle: "¡Nueva actualización!",
-        optionalUpdateMessage:
-          "Hay una actualización disponible. ¿Quieres actualizar?",
-        mandatoryUpdateMessage: "Hay una actualización obligatoria disponible",
-        descriptionPrefix: "",
-        mandatoryContinueButtonLabel: "Instalar",
-        optionalIgnoreButtonLabel: "Más tarde",
-        optionalInstallButtonLabel: "Instalar",
-        appendReleaseDescription: false
-      },
-      installMode: InstallMode.IMMEDIATE
-    };
+    let syncOptions: SyncOptions;
+    if (this.auth.isAdmin()) {
+      syncOptions = {
+        updateDialog: {
+          updateTitle: "¡Nueva actualización!",
+          optionalUpdateMessage:
+            "Hay una actualización disponible. ¿Quieres actualizar?",
+          mandatoryUpdateMessage:
+            "Hay una actualización obligatoria disponible",
+          descriptionPrefix: "",
+          mandatoryContinueButtonLabel: "Instalar",
+          optionalIgnoreButtonLabel: "Más tarde",
+          optionalInstallButtonLabel: "Instalar",
+          appendReleaseDescription: false
+        },
+        installMode: InstallMode.IMMEDIATE
+      };
+    } else {
+      syncOptions = {
+        updateDialog: false,
+        installMode: InstallMode.ON_NEXT_RESTART
+      };
+    }
 
     this.codePush.sync(syncOptions).subscribe(
       async data => {
@@ -183,10 +192,7 @@ export class AppComponent {
               config.review = true;
               this.config.setConfig(config);
               if (this.launchReview.isRatingSupported()) {
-                this.launchReview
-                  .rating()
-                  .toPromise()
-                  .then();
+                this.launchReview.rating().toPromise().then();
               } else {
                 this.launchReview.launch();
               }

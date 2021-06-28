@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { AlertController, Platform } from "@ionic/angular";
-import { Observable } from "rxjs";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
@@ -21,16 +20,11 @@ export class ChatService {
 
   constructor(
     private rest: RestService,
-    private config: ConfigService,
     private uploadSvc: UploadService,
     private auth: AuthService,
     private alert: AlertController,
-    private afMessaging: AngularFireMessaging,
-    private platform: Platform,
-    private firebase: FirebaseX,
-    private router: Router,
-    private localNotifications: LocalNotifications
-  ) { }
+    private afMessaging: AngularFireMessaging
+  ) {}
 
   async getChats() {
     const chats = (await this.rest.get(`chats`).toPromise()) as Chat[];
@@ -163,57 +157,26 @@ export class ChatService {
     return config?.chats;
   }
 
-  async firebaseListener(): Promise<Observable<Chat>> {
-    return new Observable(observer => {
-
-      if (this.platform.is("cordova")) {
-        this.firebase.onMessageReceived().subscribe(
-          notification => {
-            if (notification?.message && notification?.topic === 'chat') {
-              const message = JSON.parse(notification.message) as Chat;
-              observer.next(message);
-            }
-          },
-          error => {
-            console.error("Error in notification", error);
-            observer.error(error)
-          }
-        );
-      } else {
-        this.afMessaging.messages.subscribe((payload: any) => {
-          // console.log(payload)
-          if (payload?.data?.message && payload?.data?.topic === 'chat') {
-            const message = JSON.parse(payload.data.message) as Chat;
-            observer.next(message);
-          }
-        }, error => {
-          console.error("Error in notification", error);
-          observer.error(error)
-        });
-      }
-
-      return () => { };
-    });
-  }
-
   async report(message: Chat, note: string) {
     return await this.rest.put("report-chat", { message, note }).toPromise();
   }
 
   async realtimeChatInfo() {
-    (await this.alert.create({
-      header: "Notificaciones desactivadas",
-      message:
-        "Para tener chat en tiempo real es necesario activar las notificaciones. Actívalas para tener esta función.",
-      buttons: [
-        {
-          text: "Entendido!",
-          handler: async () => {
-            await this.afMessaging.requestPermission.toPromise();
+    (
+      await this.alert.create({
+        header: "Notificaciones desactivadas",
+        message:
+          "Para tener chat en tiempo real es necesario activar las notificaciones. Actívalas para tener esta función.",
+        buttons: [
+          {
+            text: "Entendido!",
+            handler: async () => {
+              await this.afMessaging.requestPermission.toPromise();
+            }
           }
-        }
-      ],
-      cssClass: "round-alert"
-    })).present();
+        ],
+        cssClass: "round-alert"
+      })
+    ).present();
   }
 }

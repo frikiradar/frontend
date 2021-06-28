@@ -8,10 +8,8 @@ import {
   SimpleChanges
 } from "@angular/core";
 import { MenuController, ToastController } from "@ionic/angular";
-import { Router, Event, NavigationStart, NavigationEnd } from "@angular/router";
+import { Router } from "@angular/router";
 import { Config, ConfigService } from "src/app/services/config.service";
-import { NavService } from "src/app/services/navigation.service";
-import * as deepEqual from "deep-equal";
 
 import { User } from "../../models/user";
 import { Chat } from "./../../models/chat";
@@ -42,30 +40,17 @@ export class ChatListComponent {
     public auth: AuthService,
     public menu: MenuController,
     private toast: ToastController,
-    private nav: NavService,
     private config: ConfigService,
     private cd: ChangeDetectorRef,
     private router: Router
-  ) {
-    if (this.router.url === "/chat") {
-      this.router.events.subscribe(async (event: Event) => {
-        if (event instanceof NavigationEnd && this.router.url === "/chat") {
-          if (this.router.url === "/chat" && this.allChats?.length) {
-            await this.getLastMessages();
-          }
-        }
-      });
-    }
-  }
+  ) {}
 
   @HostListener("window:focus")
   async onFocus() {
-    console.log("focus");
     await this.getLastMessages();
   }
 
   async ngAfterViewInit() {
-    console.log("after view");
     await this.getLastMessages();
   }
 
@@ -132,11 +117,6 @@ export class ChatListComponent {
   }
 
   async getLastMessages() {
-    if (this.allChats) {
-      return;
-    }
-
-    console.log("entra?", this.allChats);
     this.getCachedMessages();
     const allChats = await this.chatSvc.getChats();
     if (
@@ -160,7 +140,7 @@ export class ChatListComponent {
     });
 
     this.archivedChats = config?.filter(cc => cc.archived);
-    this.selectedChat = this.chats.find(c => +c.user?.id === this.selected);
+    this.selectedChat = this.chats?.find(c => +c.user?.id === this.selected);
   }
 
   ngOnChanges(changes: SimpleChanges) {

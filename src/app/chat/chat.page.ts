@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
-import { Location } from "@angular/common";
 import { Platform } from "@ionic/angular";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { AngularFireMessaging } from "@angular/fire/messaging";
@@ -27,7 +26,6 @@ export class ChatPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public auth: AuthService,
-    private location: Location,
     private afMessaging: AngularFireMessaging,
     private firebase: FirebaseX,
     private platform: Platform,
@@ -46,18 +44,18 @@ export class ChatPage implements OnInit {
     window.onresize = async () => {
       this.desktop = window.innerWidth > 991;
     };
-    this.connectSSE();
+    this.firebaseListener();
   }
 
   async showChat(id: User["id"]) {
-    this.router.navigate(["/chat/", id]);
+    this.nav.navigateRoot("/chat/" + id);
   }
 
   async backToList() {
-    this.router.navigate(["/chat/"]);
+    this.nav.navigateRoot("/chat");
   }
 
-  async connectSSE() {
+  async firebaseListener() {
     if (this.platform.is("cordova")) {
       this.firebase.onMessageReceived().subscribe(
         notification => {
@@ -92,7 +90,7 @@ export class ChatPage implements OnInit {
       );
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
-        // console.log(payload)
+        console.log(payload);
         if (payload?.data?.message && payload?.data?.topic === "chat") {
           const message = JSON.parse(payload.data.message) as Chat;
           // console.log(payload.data);

@@ -6,7 +6,6 @@ import {
   Input,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild
 } from "@angular/core";
 import { Router } from "@angular/router";
@@ -58,6 +57,7 @@ export class ChatModalComponent implements OnInit {
   pressOptions = false;
   selectedMessage: Chat;
   alertError: any;
+  private conversationId: string;
   public replying = false;
   public editing = false;
   public writing = false;
@@ -81,8 +81,7 @@ export class ChatModalComponent implements OnInit {
     private popover: PopoverController,
     private vibration: Vibration,
     private nav: NavService,
-    private cd: ChangeDetectorRef,
-    private modal: ModalController,
+    private dc: ChangeDetectorRef,
     private afMessaging: AngularFireMessaging
   ) {}
 
@@ -93,7 +92,11 @@ export class ChatModalComponent implements OnInit {
 
   async ngOnInit() {
     if (this.userId) {
-      await this.getUser();
+      const min = Math.min(this.auth.currentUserValue.id, this.userId);
+      const max = Math.max(this.auth.currentUserValue.id, this.userId);
+      this.conversationId = `${min}_${max}`;
+
+      this.getLastMessages();
     }
 
     const config: {
@@ -130,21 +133,11 @@ export class ChatModalComponent implements OnInit {
         return;
       }
 
-      const min = Math.min(this.auth.currentUserValue.id, this.userId);
-      const max = Math.max(this.auth.currentUserValue.id, this.userId);
-      const conversationId = `${min}_${max}`;
-      if (message.conversationId === conversationId) {
-        if (message.writing && message.fromuser.id === this.user.id) {
-          this.toUserWriting = "Escribiendo...";
-          this.cd.detectChanges();
-          setTimeout(() => {
-            this.toUserWriting = "";
-            this.cd.detectChanges();
-          }, 10000);
+      if (message.conversationId === this.conversationId) {
+        if (message.writing && message.fromuser?.id === this.user?.id) {
+          this.getWriting();
         } else if (!message.writing) {
           this.toUserWriting = "";
-          this.cd.detectChanges();
-
           await this.newMessage(message);
         }
       }
@@ -157,20 +150,6 @@ export class ChatModalComponent implements OnInit {
         this.realtimeChat = false;
       }
     }
-  }
-
-  async getUser() {
-    this.page = 1;
-
-    this.messages = [];
-    this.pressOptions = false;
-    this.selectedMessage = undefined;
-    this.replying = false;
-    this.editing = false;
-    this.writing = false;
-    this.toUserWriting = "";
-
-    this.getLastMessages();
   }
 
   async getLastMessages() {
@@ -201,7 +180,7 @@ export class ChatModalComponent implements OnInit {
         this.infiniteScroll.ionInfinite;
       }
 
-      this.scrollDown(500);
+      this.scrollDown();
 
       if (this.messages.length > 0) {
         if (this.userId == this.messages[0].fromuser.id) {
@@ -286,7 +265,7 @@ export class ChatModalComponent implements OnInit {
       }
     });
 
-    this.cd.detectChanges();
+    this.dc.detectChanges();
     this.scrollDown();
   }
 
@@ -358,7 +337,7 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  async scrollDown(delay = 500, force = false) {
+  async scrollDown(delay = 0, force = false) {
     const scroll = await this.chatlist.getScrollElement();
     if (
       scroll.scrollTop +
@@ -530,6 +509,13 @@ export class ChatModalComponent implements OnInit {
     setTimeout(async () => {
       this.writing = false;
     }, 15000);
+  }
+
+  async getWriting() {
+    this.toUserWriting = "Escribiendo...";
+    setTimeout(() => {
+      this.toUserWriting = "";
+    }, 10000);
   }
 
   goToMessage(message: Chat) {
