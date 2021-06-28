@@ -107,7 +107,6 @@ export class ChatListComponent {
         });
         this.setChats();
       }
-      this.cd.detectChanges();
     });
   }
 
@@ -141,6 +140,7 @@ export class ChatListComponent {
 
     this.archivedChats = config?.filter(cc => cc.archived);
     this.selectedChat = this.chats?.find(c => +c.user?.id === this.selected);
+    this.cd.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {

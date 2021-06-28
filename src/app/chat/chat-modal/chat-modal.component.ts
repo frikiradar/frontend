@@ -168,9 +168,13 @@ export class ChatModalComponent implements OnInit {
         }
       });
 
-      messages.forEach(async message => {
-        await this.newMessage(message);
-      });
+      if (this.messages.length) {
+        messages.forEach(async message => {
+          await this.newMessage(message);
+        });
+      } else {
+        this.messages = messages;
+      }
 
       if (this.messages.length < 15) {
         this.infiniteScroll.complete();
@@ -223,6 +227,7 @@ export class ChatModalComponent implements OnInit {
           (m.id === message.id && m.id !== undefined) ||
           (m.tmp_id === message.tmp_id && m.tmp_id !== undefined)
         ) {
+          m.id = message.id;
           m.text = message.text;
           m.time_read = message.time_read;
           m.edited = message.edited;
@@ -230,27 +235,32 @@ export class ChatModalComponent implements OnInit {
           m.sending = false;
         }
       });
+      // this.messageChange.emit(message);
     } else {
-      const messages = [...this.messages, message];
+      console.log("nuevo");
+      this.messages = [...this.messages, message];
+      // this.messageChange.emit(message);
+      /* //Opción para ordenar por orden de creación en lugar de recepción
       this.messages = messages.sort((a, b) => {
         return (
           new Date(a.time_creation).getTime() -
           new Date(b.time_creation).getTime()
         );
-      });
-      if (
-        message.fromuser?.id === this.user?.id &&
-        (message.text || message.image || message.audio)
-      ) {
-        // marcamos como leido
-        try {
-          if (this.user?.id !== this.auth.currentUserValue.id) {
-            message = await this.chatSvc.readChat(message.id);
-          }
-        } catch (e) {
-          console.error(e);
-          await this.alertError.present();
+      });*/
+    }
+
+    if (
+      message.fromuser?.id === this.user?.id &&
+      (message.text || message.image || message.audio)
+    ) {
+      // marcamos como leido
+      try {
+        if (this.user?.id !== this.auth.currentUserValue.id) {
+          message = await this.chatSvc.readChat(message.id);
         }
+      } catch (e) {
+        console.error(e);
+        await this.alertError.present();
       }
     }
 
@@ -337,7 +347,7 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  async scrollDown(delay = 0, force = false) {
+  async scrollDown(delay = 1, force = false) {
     const scroll = await this.chatlist.getScrollElement();
     if (
       scroll.scrollTop +
