@@ -60,24 +60,13 @@ export class ChatListComponent {
 
   @HostListener("window:focus")
   async onFocus() {
+    console.log("focus");
     await this.getLastMessages();
   }
 
   async ngAfterViewInit() {
-    this.allChats = (await this.config.get("chats")) as Config["chats"];
-    if (this.allChats) {
-      this.setChats();
-    } else {
-      this.loading = true;
-    }
-
-    let desktop = false;
-    if (window.innerWidth > 991) {
-      desktop = true;
-    }
-    if (!this.selected || desktop) {
-      await this.getLastMessages();
-    }
+    console.log("after view");
+    await this.getLastMessages();
   }
 
   async ngOnInit() {
@@ -125,21 +114,36 @@ export class ChatListComponent {
         }
       }
       if (!message.writing) {
-        this.chats.sort((a, b) => {
+        this.chats?.sort((a, b) => {
           return (
             new Date(b.time_creation).getTime() -
             new Date(a.time_creation).getTime()
           );
         });
+        this.setChats();
       }
-      this.setChats();
       this.cd.detectChanges();
     });
   }
 
+  async getCachedMessages() {
+    this.allChats = (await this.config.get("chats")) as Config["chats"];
+    await this.setChats();
+  }
+
   async getLastMessages() {
+    if (this.allChats) {
+      return;
+    }
+
+    console.log("entra?", this.allChats);
+    this.getCachedMessages();
     const allChats = await this.chatSvc.getChats();
-    if (!deepEqual(this.allChats, allChats) || !this.allChats) {
+    if (
+      !this.allChats ||
+      allChats[0]?.time_creation !== this.allChats[0]?.time_creation ||
+      allChats[0]?.time_read !== this.allChats[0]?.time_read
+    ) {
       this.allChats = allChats;
       await this.setChats();
       this.loading = false;
@@ -149,7 +153,7 @@ export class ChatListComponent {
   async setChats() {
     this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
-    this.chats = this.allChats.filter(c => {
+    this.chats = this.allChats?.filter(c => {
       return !config?.some(
         cc => cc.conversationId === c.conversationId && cc.archived
       );
