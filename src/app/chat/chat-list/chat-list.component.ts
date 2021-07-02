@@ -67,7 +67,6 @@ export class ChatListComponent {
             if (m.writing && !message.writing) {
               m.writing = false;
             }
-
             if (message.writing) {
               m.writing = true;
               this.cd.detectChanges();
@@ -75,7 +74,7 @@ export class ChatListComponent {
                 m.writing = false;
                 this.cd.detectChanges();
               }, 10000);
-            } else if (m.id > message.id) {
+            } else if (message.id > m.id) {
               m.text = message.text;
               m.time_creation = message.time_creation;
               m.time_read = message.time_read;

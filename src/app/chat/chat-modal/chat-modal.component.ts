@@ -336,7 +336,7 @@ export class ChatModalComponent implements OnInit {
 
         await this.newMessage(chat);
 
-        this.messageChange.emit(chat);
+        // this.messageChange.emit(chat);
 
         replyToId = null;
       } catch (e) {
