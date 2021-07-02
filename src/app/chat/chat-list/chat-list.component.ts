@@ -51,7 +51,7 @@ export class ChatListComponent {
   }
 
   async ngAfterViewInit() {
-    if (this.router.url === "/chat") {
+    if (this.router.url === "/chat" || window.innerWidth > 991) {
       await this.getLastMessages();
     }
   }
