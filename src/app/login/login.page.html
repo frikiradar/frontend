@@ -23,6 +23,7 @@
                   >Nombre de usuario o correo electrónico</ion-label
                 >
                 <ion-input
+                  outline
                   required
                   type="text"
                   formControlName="username"
@@ -63,9 +64,7 @@
               <a (click)="forgotPassword()">He olvidado mi contraseña</a>
             </p>
             <div class="ion-text-center register">
-              <p>
-                No tengo una cuenta,
-              </p>
+              <p>No tengo una cuenta,</p>
               <ion-button
                 color="primary"
                 (click)="activeView = 'register'"

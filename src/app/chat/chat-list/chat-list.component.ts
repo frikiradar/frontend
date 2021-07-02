@@ -51,7 +51,9 @@ export class ChatListComponent {
   }
 
   async ngAfterViewInit() {
-    await this.getLastMessages();
+    if (this.router.url === "/chat") {
+      await this.getLastMessages();
+    }
   }
 
   async ngOnInit() {
@@ -73,7 +75,7 @@ export class ChatListComponent {
                 m.writing = false;
                 this.cd.detectChanges();
               }, 10000);
-            } else {
+            } else if (m.id > message.id) {
               m.text = message.text;
               m.time_creation = message.time_creation;
               m.time_read = message.time_read;
@@ -118,25 +120,31 @@ export class ChatListComponent {
   async getLastMessages() {
     this.getCachedMessages();
     const allChats = await this.chatSvc.getChats();
-    if (
-      !this.allChats ||
-      allChats[0]?.time_creation !== this.allChats[0]?.time_creation ||
-      allChats[0]?.time_read !== this.allChats[0]?.time_read
-    ) {
-      this.allChats = allChats;
-      await this.setChats();
-      this.loading = false;
-    }
+    this.allChats = allChats;
+    await this.setChats();
+    this.loading = false;
   }
 
   async setChats() {
     this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
-    this.chats = this.allChats?.filter(c => {
+    let chats = this.allChats?.filter(c => {
       return !config?.some(
         cc => cc.conversationId === c.conversationId && cc.archived
       );
     });
+    if (this.chats) {
+      if (this.chats[0].id === chats[0].id) {
+        this.chats[0].time_read = chats[0].time_read;
+        this.chats[0].count = chats[0].count;
+        this.chats[0].user.last_login = chats[0].user.last_login;
+      } else {
+        // TODO: Actualizar cada user del listado, comprobando si algún user nuevo y añadiendolo
+        this.chats = chats;
+      }
+    } else {
+      this.chats = chats;
+    }
 
     this.archivedChats = config?.filter(cc => cc.archived);
     this.selectedChat = this.chats?.find(c => +c.user?.id === this.selected);

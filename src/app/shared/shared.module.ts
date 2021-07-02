@@ -9,7 +9,6 @@ import { WebcamModal } from "../webcam/webcam.modal";
 import { WebcamModule } from "ngx-webcam";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { LinkyModule } from "ngx-linky";
-import { LazyLoadImagesModule } from "ngx-lazy-load-images";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { CreditsModal } from "../credits/credits.modal";
@@ -73,8 +72,7 @@ import { RulesPage } from "../rules/rules.page";
     ImageCropperModule,
     WebcamModule,
     PickerModule,
-    LinkyModule,
-    LazyLoadImagesModule
+    LinkyModule
   ],
   exports: [
     ImagePreloadDirective,
@@ -86,8 +84,7 @@ import { RulesPage } from "../rules/rules.page";
     ChatListComponent,
     ChatModalComponent,
     LinkyModule,
-    AudioPlayerComponent,
-    LazyLoadImagesModule
+    AudioPlayerComponent
   ],
   providers: [Camera]
 })

@@ -36,11 +36,10 @@
         lines="none"
         (click)="showRoom(room.slug)"
         *ngFor="let room of rooms"
-        lazy-load-images
       >
         <ion-thumbnail>
           <img
-            [attr.data-src]="room.image"
+            [src]="room.image"
             default="/assets/img/pages/default-games-page.jpg"
             [alt]="room.name"
           />

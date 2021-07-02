@@ -44,7 +44,6 @@ import {
 import { Media } from "@ionic-native/media/ngx";
 import { File as NativeFile } from "@ionic-native/file/ngx";
 import { CodePush } from "@ionic-native/code-push/ngx";
-import { LazyLoadImagesModule } from "ngx-lazy-load-images";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
@@ -64,7 +63,7 @@ registerLocaleData(localeEs, "es");
   entryComponents: [MenuComponent, OptionsPopover],
   imports: [
     BrowserModule,
-    IonicModule.forRoot({ animated: false }),
+    IonicModule.forRoot({ animated: true }),
     PickerModule,
     AppRoutingModule,
     HttpClientModule,
@@ -81,8 +80,7 @@ registerLocaleData(localeEs, "es");
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
-    WebcamModule,
-    LazyLoadImagesModule
+    WebcamModule
   ],
   providers: [
     StatusBar,

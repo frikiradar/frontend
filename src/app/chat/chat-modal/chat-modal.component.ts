@@ -217,15 +217,15 @@ export class ChatModalComponent implements OnInit {
     if (
       this.messages.some(
         m =>
-          (m.id === message.id && m.id !== undefined) ||
-          (m.tmp_id === message.tmp_id && m.tmp_id !== undefined)
+          (m.id === message.id && !!m.id) ||
+          (m.tmp_id === message.tmp_id && !!m.tmp_id)
       )
     ) {
       // Si ya existe el mensaje lo actualizamos
       this.messages.map(m => {
         if (
-          (m.id === message.id && m.id !== undefined) ||
-          (m.tmp_id === message.tmp_id && m.tmp_id !== undefined)
+          (m.id === message.id && !!m.id) ||
+          (m.tmp_id === message.tmp_id && !!m.tmp_id)
         ) {
           m.id = message.id;
           m.text = message.text;
@@ -237,7 +237,6 @@ export class ChatModalComponent implements OnInit {
       });
       // this.messageChange.emit(message);
     } else {
-      console.log("nuevo");
       this.messages = [...this.messages, message];
       // this.messageChange.emit(message);
       /* //Opción para ordenar por orden de creación en lugar de recepción
@@ -321,19 +320,19 @@ export class ChatModalComponent implements OnInit {
         let chat = null;
         if (!image && !audio) {
           chat = await this.chatSvc
-            .sendMessage(this.user.id, text, replyToId)
+            .sendMessage(this.user.id, text, replyToId, tmpId)
             .then();
         } else if (image) {
           const imageFile = await this.utils.urltoBlob(image);
           chat = await this.chatSvc
-            .sendImage(this.user.id, imageFile, text)
+            .sendImage(this.user.id, imageFile, text, tmpId)
             .then();
         } else if (audio) {
           const audioFile = await this.utils.urltoBlob(audio);
-          chat = await this.chatSvc.sendAudio(this.user.id, audioFile).then();
+          chat = await this.chatSvc
+            .sendAudio(this.user.id, audioFile, tmpId)
+            .then();
         }
-
-        chat["tmp_id"] = tmpId;
 
         await this.newMessage(chat);
 

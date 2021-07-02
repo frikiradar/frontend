@@ -6,17 +6,18 @@
       </ion-button>
       <ion-button (click)="showPage(room.slug)" shape="round">
         <ion-avatar>
-          <img *ngIf="room" [src]="room?.image" [alt]="room?.name" default="/assets/img/pages/default-games-page.jpg" />
+          <img
+            *ngIf="room"
+            [src]="room?.image"
+            [alt]="room?.name"
+            default="/assets/img/pages/default-games-page.jpg"
+          />
           <ion-skeleton-text animated *ngIf="!room"></ion-skeleton-text>
         </ion-avatar>
         <ion-label *ngIf="room">
           <h2>{{ room?.name || roomPage?.name }}</h2>
-          <p *ngIf="toUserWriting">
-            {{ toUserWriting}}
-          </p>
-          <p *ngIf="!toUserWriting">
-            #{{room?.slug}}
-          </p>
+          <p *ngIf="toUserWriting">{{ toUserWriting}}</p>
+          <p *ngIf="!toUserWriting">#{{room?.slug}}</p>
         </ion-label>
       </ion-button>
     </ion-buttons>
@@ -26,7 +27,10 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="pressOptions && !selectedMessage?.modded">
-      <ion-button (click)="edit()" *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id">
+      <ion-button
+        (click)="edit()"
+        *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id"
+      >
         <ion-icon slot="icon-only" name="pencil-sharp"></ion-icon>
       </ion-button>
       <ion-button (click)="copy()">
@@ -41,7 +45,11 @@
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="!pressOptions && !realtimeChat">
       <ion-button (click)="chatSvc.realtimeChatInfo()">
-        <ion-icon slot="icon-only" name="timer-outline" color="danger"></ion-icon>
+        <ion-icon
+          slot="icon-only"
+          name="timer-outline"
+          color="danger"
+        ></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -52,16 +60,31 @@
     <ion-infinite-scroll-content loadingSpinner="dots">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  <span class="bubble" [ngClass]="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
+  <span
+    class="bubble"
+    [ngClass]="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate') ? '' : 'same-user'"
-    *ngFor="let message of messages; let i = index" lazy-load-images>
-    <ion-chip color="primary" class="center" *ngIf="
+    *ngFor="let message of messages; let i = index"
+  >
+    <ion-chip
+      color="primary"
+      class="center"
+      *ngIf="
         (message?.time_creation | date: 'shortDate') !==
         (messages[i - 1]?.time_creation | date: 'shortDate')
-      ">
-      <ion-label color="secondary">{{ message.time_creation | date: "fullDate" }}</ion-label>
+      "
+    >
+      <ion-label color="secondary"
+        >{{ message.time_creation | date: "fullDate" }}</ion-label
+      >
     </ion-chip>
-    <ion-item *ngIf="message.reply_to" class="replyfrom" lines="none" button (click)="goToMessage(message)">
+    <ion-item
+      *ngIf="message.reply_to"
+      class="replyfrom"
+      lines="none"
+      button
+      (click)="goToMessage(message)"
+    >
       <ion-icon name="arrow-undo" color="light" slot="start"></ion-icon>
       <ion-thumbnail *ngIf="message?.reply_to?.image">
         <img [src]="message?.reply_to?.image" />
@@ -75,42 +98,78 @@
     <ion-item-sliding (ionDrag)="dragItem($event, message);">
       <ion-item-options side="start">
         <ion-item-option color="#1f1f1f">
-          <ion-icon slot="icon-only" name="arrow-undo-outline" color="light"></ion-icon>
+          <ion-icon
+            slot="icon-only"
+            name="arrow-undo-outline"
+            color="light"
+          ></ion-icon>
         </ion-item-option>
       </ion-item-options>
-      <ion-item [id]="message.id" lines="none" button detail="false" (press)="selectMessage($event, message)"
-        class="message-item" [ngClass]="selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''">
-        <ion-avatar *ngIf="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
-        (messages[i - 1]?.time_creation | date: 'shortDate')">
-          <img (click)="showProfile(message.fromuser.id)" [attr.data-src]="message.fromuser.thumbnail"
-            default="/assets/img/users/default.jpg" />
+      <ion-item
+        [id]="message.id"
+        lines="none"
+        button
+        detail="false"
+        (press)="selectMessage($event, message)"
+        class="message-item"
+        [ngClass]="selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''"
+      >
+        <ion-avatar
+          *ngIf="message?.fromuser?.id !== messages[i - 1]?.fromuser?.id || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')"
+        >
+          <img
+            (click)="showProfile(message.fromuser.id)"
+            [src]="message.fromuser.thumbnail"
+            default="/assets/img/users/default.jpg"
+          />
         </ion-avatar>
-        <div *ngIf="message?.fromuser?.id === messages[i - 1]?.fromuser?.id && !message?.reply_to && (message?.time_creation | date: 'shortDate') ===
-        (messages[i - 1]?.time_creation | date: 'shortDate')"></div>
+        <div
+          *ngIf="message?.fromuser?.id === messages[i - 1]?.fromuser?.id && !message?.reply_to && (message?.time_creation | date: 'shortDate') ===
+        (messages[i - 1]?.time_creation | date: 'shortDate')"
+        ></div>
         <ion-card>
           <div *ngIf="message.image">
             <img
               (click)="openViewer(message.image, message.fromuser.username + ', ' + utils.niceDate(message.time_creation), message.text)"
-              [attr.data-src]="message.image" />
+              [src]="message.image"
+            />
             <ion-note class="note-image" *ngIf="!message?.text">
               <span *ngIf="message?.edited">Editado</span>
               {{ message.time_creation | date: "shortTime" }}
               <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                 <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-                <ion-icon *ngIf="!message.sending && !message.time_read" name="checkmark"></ion-icon>
-                <ion-icon *ngIf="message.time_read" color="secondary" name="checkmark-done"></ion-icon>
+                <ion-icon
+                  *ngIf="!message.sending && !message.time_read"
+                  name="checkmark"
+                ></ion-icon>
+                <ion-icon
+                  *ngIf="message.time_read"
+                  color="secondary"
+                  name="checkmark-done"
+                ></ion-icon>
               </span>
             </ion-note>
           </div>
           <ion-card-content *ngIf="message.text">
-            <p class="text-name" *ngIf="(message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)  || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
-        (messages[i - 1]?.time_creation | date: 'shortDate')">
+            <p
+              class="text-name"
+              *ngIf="(message?.fromuser?.id !== messages[i - 1]?.fromuser?.id)  || message?.reply_to || (message?.time_creation | date: 'shortDate') !==
+        (messages[i - 1]?.time_creation | date: 'shortDate')"
+            >
               <a (click)="showProfile(message.fromuser.id)">
-                <ion-text [color]="userSvc.getRoleColor(message.fromuser)">{{message.fromuser.username}}</ion-text>
+                <ion-text [color]="userSvc.getRoleColor(message.fromuser)"
+                  >{{message.fromuser.username}}</ion-text
+                >
               </a>
-              <ion-icon *ngIf="userSvc.getRoleIcon(message.fromuser)" [name]="userSvc.getRoleIcon(message.fromuser)"
-                [src]="userSvc.getRoleIcon(message.fromuser)" slot="icon-only"
-                [color]="userSvc.getRoleColor(message.fromuser)" (click)="userSvc.showRole(message.fromuser)">
+              <ion-icon
+                *ngIf="userSvc.getRoleIcon(message.fromuser)"
+                [name]="userSvc.getRoleIcon(message.fromuser)"
+                [src]="userSvc.getRoleIcon(message.fromuser)"
+                slot="icon-only"
+                [color]="userSvc.getRoleColor(message.fromuser)"
+                (click)="userSvc.showRole(message.fromuser)"
+              >
               </ion-icon>
 
               <span class="note-time">
@@ -118,13 +177,17 @@
               </span>
               <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                 <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-                <ion-icon *ngIf="!message.sending && !message.time_read" name="checkmark"></ion-icon>
+                <ion-icon
+                  *ngIf="!message.sending && !message.time_read"
+                  name="checkmark"
+                ></ion-icon>
               </span>
             </p>
             <ion-text class="text">
               <span
                 [innerHTML]="message.text | linky:{className: 'linkified'} | mentions:{mentions: message.mentions} | hashtag"
-                (click)="openUrl($event);"></span>
+                (click)="openUrl($event);"
+              ></span>
               <span class="edited" *ngIf="message?.edited"> · Editado</span>
               <span class="text-note-time">
                 · {{ message.time_creation | date: "shortTime" }}
@@ -134,8 +197,12 @@
         </ion-card>
       </ion-item>
     </ion-item-sliding>
-    <ion-item lines="none" color="dark" *ngIf="message?.id === oldLastMessage && oldLastMessage !== undefined"
-      style="margin: 15px 0 15px 0;">
+    <ion-item
+      lines="none"
+      color="dark"
+      *ngIf="message?.id === oldLastMessage && oldLastMessage !== undefined"
+      style="margin: 15px 0 15px 0"
+    >
       <ion-label class="ion-text-center" color="primary">
         Mensajes sin leer
       </ion-label>
@@ -143,9 +210,15 @@
   </span>
 </ion-content>
 <ion-footer>
-  <app-chat-input (onWriting)="setWriting()" (onSubmit)="sendMessage($event)" [(replying)]="replying"
-    [(editing)]="editing" [selectedMessage]="selectedMessage" [mentions]="true"
-    [events]="auth.isMaster() && roomPage && roomPage.game_mode === 'online' ? true : false"></app-chat-input>
+  <app-chat-input
+    (onWriting)="setWriting()"
+    (onSubmit)="sendMessage($event)"
+    [(replying)]="replying"
+    [(editing)]="editing"
+    [selectedMessage]="selectedMessage"
+    [mentions]="true"
+    [events]="auth.isMaster() && roomPage && roomPage.game_mode === 'online' ? true : false"
+  ></app-chat-input>
 </ion-footer>
 
 <!-- panes -->
@@ -153,7 +226,10 @@
 <div class="options-pane">
   <ion-item *ngIf="selectedMessage" lines="full">
     <ion-avatar slot="start">
-      <img [src]="selectedMessage?.fromuser.thumbnail" default="/assets/img/users/default.jpg" />
+      <img
+        [src]="selectedMessage?.fromuser.thumbnail"
+        default="/assets/img/users/default.jpg"
+      />
     </ion-avatar>
     <ion-label>
       <h2>{{ selectedMessage?.fromuser.username }}</h2>
@@ -161,13 +237,23 @@
     </ion-label>
   </ion-item>
   <ion-list>
-    <ion-item button detail="false" (click)="deleteMessage()" lines="none"
-      *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id || auth.isMaster()">
+    <ion-item
+      button
+      detail="false"
+      (click)="deleteMessage()"
+      lines="none"
+      *ngIf="selectedMessage?.fromuser?.id == auth.currentUserValue.id || auth.isMaster()"
+    >
       <ion-icon slot="start" name="trash-outline" color="light"></ion-icon>
       <ion-label>Eliminar el mensaje</ion-label>
     </ion-item>
-    <ion-item button detail="false" (click)="reportMessage()" lines="none"
-      *ngIf="selectedMessage?.fromuser?.id !== auth.currentUserValue.id">
+    <ion-item
+      button
+      detail="false"
+      (click)="reportMessage()"
+      lines="none"
+      *ngIf="selectedMessage?.fromuser?.id !== auth.currentUserValue.id"
+    >
       <ion-icon slot="start" name="warning-outline" color="light"></ion-icon>
       <ion-label>Reportar el mensaje</ion-label>
     </ion-item>

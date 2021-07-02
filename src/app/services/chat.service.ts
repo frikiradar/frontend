@@ -38,24 +38,36 @@ export class ChatService {
       .toPromise()) as Chat[];
   }
 
-  async sendMessage(id: number, text: string, replyto?: number): Promise<Chat> {
+  async sendMessage(
+    id: number,
+    text: string,
+    replyto?: number,
+    tmp_id?: string
+  ): Promise<Chat> {
     return (await this.rest
-      .put("chat", { touser: id, text, replyto })
+      .put("chat", { touser: id, text, replyto, tmp_id })
       .toPromise()) as Chat;
   }
 
-  async sendImage(id: number, image: Blob, text: string): Promise<Chat> {
+  async sendImage(
+    id: number,
+    image: Blob,
+    text: string,
+    tmp_id?: string
+  ): Promise<Chat> {
     const formData: FormData = new FormData();
     formData.set("image", image);
     formData.set("touser", "" + id);
     formData.set("text", text);
+    formData.set("tmp_id", tmp_id);
     return (await this.uploadSvc.upload("chat-upload", formData)) as Chat;
   }
 
-  async sendAudio(id: number, audio: Blob): Promise<Chat> {
+  async sendAudio(id: number, audio: Blob, tmp_id?: string): Promise<Chat> {
     const formData: FormData = new FormData();
     formData.set("audio", audio);
     formData.set("touser", "" + id);
+    formData.set("tmp_id", tmp_id);
     return (await this.uploadSvc.upload("chat-upload", formData)) as Chat;
   }
 

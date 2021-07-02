@@ -23,10 +23,10 @@
       </ion-thumbnail>
       <ion-label>
         <h2>
-          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
         </h2>
         <p>
-          <ion-skeleton-text animated style="width: 40%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
         </p>
       </ion-label>
     </ion-item>
@@ -38,11 +38,10 @@
       *ngFor="let page of pages"
       lines="none"
       (click)="showPage(page.slug)"
-      lazy-load-images
     >
       <ion-thumbnail slot="start">
         <img
-          [attr.data-src]="page.cover"
+          [src]="page.cover"
           [alt]="page.name"
           default="/assets/img/pages/default-games-page.jpg"
         />

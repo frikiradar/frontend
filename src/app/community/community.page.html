@@ -3,8 +3,11 @@
     <ion-buttons slot="start">
       <ion-menu-toggle>
         <ion-avatar>
-          <img [src]="auth.currentUserValue?.thumbnail" [alt]="auth.currentUserValue?.username"
-            default="/assets/img/users/default.jpg" />
+          <img
+            [src]="auth.currentUserValue?.thumbnail"
+            [alt]="auth.currentUserValue?.username"
+            default="/assets/img/users/default.jpg"
+          />
         </ion-avatar>
       </ion-menu-toggle>
     </ion-buttons>
@@ -21,15 +24,28 @@
         <ion-text color="ligth">Historias frikis</ion-text>
       </h2>
     </ion-label>
-    <ion-icon md="arrow-forward" ios="chevron-forward" slot="end" color="light"></ion-icon>
+    <ion-icon
+      md="arrow-forward"
+      ios="chevron-forward"
+      slot="end"
+      color="light"
+    ></ion-icon>
   </ion-item>
   <section>
-    <ion-slides id="stories" class="ion-padding" [options]="storiesOpts" mode="md">
+    <ion-slides
+      id="stories"
+      class="ion-padding"
+      [options]="storiesOpts"
+      mode="md"
+    >
       <ion-slide>
         <div>
           <ion-item button lines="none" (click)="newStory()">
             <ion-avatar>
-              <img [src]="auth.currentUserValue?.thumbnail" alt="auth.currentUserValue?.name" />
+              <img
+                [src]="auth.currentUserValue?.thumbnail"
+                alt="auth.currentUserValue?.name"
+              />
               <ion-badge color="tertiary">+</ion-badge>
             </ion-avatar>
           </ion-item>
@@ -60,7 +76,12 @@
         </ion-text>
       </p>
     </ion-label>
-    <ion-icon md="arrow-forward" ios="chevron-forward" slot="end" color="light"></ion-icon>
+    <ion-icon
+      md="arrow-forward"
+      ios="chevron-forward"
+      slot="end"
+      color="light"
+    ></ion-icon>
   </ion-item>
   <section id="rooms">
     <div *ngIf="!rooms">
@@ -79,9 +100,17 @@
       </ion-item>
     </div>
     <div *ngIf="rooms">
-      <ion-item button lines="none" (click)="showRoom(room.slug)" *ngFor="let room of rooms.slice(0,3)">
+      <ion-item
+        button
+        lines="none"
+        (click)="showRoom(room.slug)"
+        *ngFor="let room of rooms.slice(0,3)"
+      >
         <ion-thumbnail>
-          <ion-img [src]="room.image ? room.image : '/assets/img/pages/default-games-page.jpg'" [alt]="room.name">
+          <ion-img
+            [src]="room.image ? room.image : '/assets/img/pages/default-games-page.jpg'"
+            [alt]="room.name"
+          >
           </ion-img>
           <ion-badge color="primary" *ngIf="room?.unread">&nbsp;</ion-badge>
         </ion-thumbnail>
@@ -98,28 +127,35 @@
     </ion-item>
   </section>
 
-  <ion-item lines="none" (click)="showPages()" button detail="false" *ngIf="pages">
+  <ion-item
+    lines="none"
+    (click)="showPages()"
+    button
+    detail="false"
+    *ngIf="pages"
+  >
     <ion-label color="light">
       <h2 class="section">
-        <ion-text color="ligth">
-          Páginas
-        </ion-text>
+        <ion-text color="ligth"> Páginas </ion-text>
       </h2>
       <p class="subtitle">
-        <ion-text color="ligth">
-          Basadas en tus etiquetas de gustos
-        </ion-text>
+        <ion-text color="ligth"> Basadas en tus etiquetas de gustos </ion-text>
       </p>
     </ion-label>
-    <ion-icon md="arrow-forward" ios="chevron-forward" slot="end" color="light"></ion-icon>
+    <ion-icon
+      md="arrow-forward"
+      ios="chevron-forward"
+      slot="end"
+      color="light"
+    ></ion-icon>
   </ion-item>
   <section id="pages">
     <ion-slides [options]="pagesOpts" mode="md">
-      <ion-slide *ngFor="let page of pages" lazy-load-images>
+      <ion-slide *ngFor="let page of pages">
         <div>
           <ion-item button lines="none" (click)="showPage(page.slug)">
             <ion-thumbnail>
-              <img [attr.data-src]="page.cover" [alt]="page.name" />
+              <img [src]="page.cover" [alt]="page.name" />
             </ion-thumbnail>
           </ion-item>
           <ion-label>{{page.name}}</ion-label>
