@@ -91,9 +91,25 @@ ion-thumbnail#cover {
 }
 
 #stories {
+  padding: 10px;
   margin: 10px 0 10px 10px;
   background: var(--ion-color-medium-dark);
   border-radius: 25px 0 0 25px;
+
+  ion-avatar,
+  ion-avatar img {
+    width: 48px;
+    height: 48px;
+  }
+
+  ion-badge {
+    left: 35px;
+    bottom: 5px;
+  }
+
+  ion-label {
+    width: 72px;
+  }
 }
 
 .room {
@@ -123,13 +139,20 @@ ion-thumbnail#cover {
   }
 }
 
-ion-footer {
-  text-align: center;
-  ion-text {
-    font-size: 12px;
-  }
+#events {
+  ion-card {
+    border-radius: 20px;
+    --color: var(--ion-color-light) !important;
+    --background: var(--ion-color-medium-dark) !important;
 
-  a {
-    text-decoration: none;
+    ion-img {
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    ion-card-title {
+      --color: var(--ion-color-light) !important;
+    }
   }
 }

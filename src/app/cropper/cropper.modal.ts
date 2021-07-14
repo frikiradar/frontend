@@ -11,10 +11,10 @@ export class CropperModal implements OnInit {
   @Input() src: string;
   @Input() event: any;
   @Input() square: boolean;
+  @Input() aspectRatio: number = 1 / 1;
   public imageChangedEvent: any = "";
   public croppedImage: any = "";
   public transform: ImageTransform = {};
-  public aspectRatio: number = 1 / 1;
   public maintainAspectRatio: any = true;
 
   constructor(public modal: ModalController) {}

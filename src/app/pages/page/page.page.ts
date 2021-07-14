@@ -1,3 +1,4 @@
+import { EventService } from "src/app/services/event.service";
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalController, ToastController } from "@ionic/angular";
@@ -17,6 +18,8 @@ import { TagService } from "../../services/tag.service";
 import { StoryModal } from "../../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../../story/view-stories/view-stories.modal";
 import { NavService } from "src/app/services/navigation.service";
+import { Event } from "src/app/models/event";
+import { EventModal } from "src/app/events/event-modal/event.modal";
 
 @Component({
   selector: "app-page",
@@ -30,12 +33,13 @@ export class PagePage {
   public room: Partial<Room> = {};
   public groupedStories: Story[];
   public showDescription = false;
+  public events: Event[];
 
   public storiesOpts = {
-    slidesPerView: 4.5,
+    slidesPerView: 6.5,
     breakpoints: {
       1024: {
-        slidesPerView: 6.5
+        slidesPerView: 10.5
       }
     }
   };
@@ -52,7 +56,8 @@ export class PagePage {
     private router: Router,
     private nav: NavService,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    private eventSvc: EventService
   ) {}
 
   async ngAfterViewInit() {
@@ -61,6 +66,7 @@ export class PagePage {
       this.page = await this.pageSvc.getPage(slug);
       this.tag = this.auth.currentUserValue.tags.find(t => t.slug === slug);
       this.getStories();
+      this.getEvents();
     } else {
       this.page = await this.pageSvc.getPublicPage(slug);
     }
@@ -99,6 +105,32 @@ export class PagePage {
     const stories = await this.storySvc.getStoriesSlug(this.page.slug);
     this.stories = this.storySvc.orderStories(stories);
     this.groupedStories = this.storySvc.groupStories(this.stories);
+  }
+
+  async getEvents() {
+    this.events = await this.eventSvc.getEventsSlug(this.page.slug);
+    this.events.map(e => {
+      if (e.participants.some(p => p.id === this.auth.currentUserValue.id)) {
+        e.participate = true;
+      }
+    });
+  }
+
+  async newEvent() {
+    const modal = await this.modal.create({
+      component: EventModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal",
+      componentProps: { page: this.page }
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+  showEvent(event: Event) {
+    this.router.navigate(["/event", event.id]);
   }
 
   async newStory() {

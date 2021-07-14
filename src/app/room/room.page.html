@@ -128,7 +128,96 @@
           *ngIf="message?.fromuser?.id === messages[i - 1]?.fromuser?.id && !message?.reply_to && (message?.time_creation | date: 'shortDate') ===
         (messages[i - 1]?.time_creation | date: 'shortDate')"
         ></div>
-        <ion-card>
+
+        <ion-card
+          (click)="showEvent(message.event)"
+          *ngIf="message.event"
+          class="message-event"
+        >
+          <ion-img
+            [src]="message.event?.image"
+            [alt]="message.event?.title"
+          ></ion-img>
+          <ion-card-header>
+            <ion-card-subtitle
+              >{{ message.event?.date | date: "d MMM y, HH:mm" }} {{
+              message.event?.date_end ? " - " + (message.event?.date_end | date:
+              "d MMM y, HH:mm") : "" }}</ion-card-subtitle
+            >
+            <ion-card-title>{{ message.event?.title }}</ion-card-title>
+            <ion-text>
+              {{ message.event?.type === "online" ? "Online" :
+              message.event?.address + ", " + message.event?.country }}
+            </ion-text>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <!--Si cancelado o pasado-->
+                <ion-col
+                  *ngIf="
+                    message.event?.past || message.event.status == 'cancelled'
+                  "
+                >
+                  <ion-button
+                    shape="round"
+                    expand="full"
+                    disabled
+                    *ngIf="
+                      !message.event?.past &&
+                      message.event.status == 'cancelled'
+                    "
+                  >
+                    <ion-icon
+                      name="close-circle-outline"
+                      slot="start"
+                    ></ion-icon>
+                    Evento cancelado
+                  </ion-button>
+                  <ion-button
+                    shape="round"
+                    expand="full"
+                    *ngIf="
+                      message.event?.past &&
+                      message.event.status !== 'cancelled'
+                    "
+                    disabled
+                  >
+                    <ion-icon name="timer-outline" slot="start"></ion-icon>
+                    Evento pasado
+                  </ion-button>
+                </ion-col>
+
+                <ion-col
+                  *ngIf="
+                    !message.event?.past &&
+                    message.event.status !== 'cancelled' &&
+                    !message.event.participate
+                  "
+                >
+                  <ion-button shape="round" expand="full">
+                    <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                    Confirmar participación
+                  </ion-button>
+                </ion-col>
+                <ion-col
+                  *ngIf="
+                    !message.event?.past &&
+                    message.event.status !== 'cancelled' &&
+                    message.event.participate
+                  "
+                >
+                  <ion-button shape="round" expand="full">
+                    <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                    Participación confirmada
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="!message?.event">
           <div *ngIf="message.image">
             <img
               (click)="openViewer(message.image, message.fromuser.username + ', ' + utils.niceDate(message.time_creation), message.text)"
@@ -213,11 +302,12 @@
   <app-chat-input
     (onWriting)="setWriting()"
     (onSubmit)="sendMessage($event)"
+    (onCreateEvent)="createEvent()"
     [(replying)]="replying"
     [(editing)]="editing"
     [selectedMessage]="selectedMessage"
     [mentions]="true"
-    [events]="auth.isMaster() && roomPage && roomPage.game_mode === 'online' ? true : false"
+    [events]="roomPage ? true : false"
   ></app-chat-input>
 </ion-footer>
 

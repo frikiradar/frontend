@@ -5,14 +5,20 @@
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title
+    <ion-title *ngIf="!user && page?.category !== 'games'"
       >{{editing ? 'Editando evento ' + event.title : 'Crea un nuevo
       evento'}}</ion-title
+    >
+    <ion-title *ngIf="user">
+      Configurando una cita con {{user?.name}}
+    </ion-title>
+    <ion-title *ngIf="page?.category === 'games'">
+      Partida a {{page?.name}}</ion-title
     >
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <p *ngIf="!editing">
+  <p *ngIf="!editing && !user && !page">
     Indica el tema del evento, la fecha y donde se realizará (por internet o en
     persona).
   </p>
@@ -22,123 +28,190 @@
         <ion-input
           formControlName="title"
           placeholder="Título del evento"
+          [readonly]="!!user"
         ></ion-input>
       </ion-item>
       <ion-item>
         <ion-textarea
-          placeholder="Escribe aquí la descripción"
+          [placeholder]="user ? 'Escribe todos los detalles de la cita, para que no se te olvide nada.' : 'Escribe aquí la descripción del evento, en que consiste y toda la información que necesiten las personas interesadas en apuntarse'"
           rows="3"
           formControlName="description"
         ></ion-textarea>
       </ion-item>
-      <ion-item lines="none" class="show-more">
+      <ion-item lines="none" class="show-more" *ngIf="!user">
         <ion-label>Fecha y hora de inicio</ion-label>
       </ion-item>
       <ion-item lines="none">
-        <ion-label>Fecha de inicio</ion-label>
+        <ion-label>Fecha/hora de inicio</ion-label>
         <ion-datetime
           formControlName="date"
-          displayFormat="DD MMM de YYYY"
+          displayFormat="DD MMM de YYYY HH:mm"
           monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-          placeholder="dd mm de yyyy"
+          placeholder="dd mm de yyyy hh:mm"
           cancel-text="Cancelar"
           done-text="Hecho"
         ></ion-datetime>
       </ion-item>
-      <ion-item>
-        <ion-label>Hora de inicio</ion-label>
-        <ion-datetime
-          formControlName="time"
-          displayFormat="HH:mm"
-          placeholder="hh:mm"
-          cancel-text="Cancelar"
-          done-text="Hecho"
-        ></ion-datetime>
-      </ion-item>
-      <ion-item
-        button
-        (click)="endDate = !endDate"
-        lines="none"
-        class="show-more"
+      <ion-item-group *ngIf="!user">
+        <ion-item
+          button
+          (click)="endDate = !endDate"
+          lines="none"
+          class="show-more"
+        >
+          <ion-label>+ Fecha y hora de finalización</ion-label>
+          <ion-icon
+            [name]="endDate ? 'chevron-up' : 'chevron-down'"
+            color="light"
+            size="small"
+          ></ion-icon>
+        </ion-item>
+        <ion-item *ngIf="endDate" lines="none">
+          <ion-label>Fecha de fin</ion-label>
+          <ion-datetime
+            formControlName="endDate"
+            displayFormat="DD MMM de YYYY HH:mm"
+            monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
+            placeholder="dd mm de yyyy hh:mm"
+            cancel-text="Cancelar"
+            done-text="Hecho"
+            [min]="eventForm.get('date').value"
+          ></ion-datetime>
+        </ion-item>
+      </ion-item-group>
+      <ion-segment
+        mode="ios"
+        [value]="type"
+        (ionChange)="changeType($event.detail.value)"
       >
-        <ion-label>+ Fecha y hora de finalización</ion-label>
-        <ion-icon
-          [name]="endDate ? 'chevron-up' : 'chevron-down'"
-          color="light"
-          size="small"
-        ></ion-icon>
-      </ion-item>
-      <ion-item *ngIf="endDate" lines="none">
-        <ion-label>Fecha de fin</ion-label>
-        <ion-datetime
-          formControlName="endDate"
-          displayFormat="DD MMM de YYYY"
-          monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-          placeholder="dd mm de yyyy"
-          cancel-text="Cancelar"
-          done-text="Hecho"
-        ></ion-datetime>
-      </ion-item>
-      <ion-item *ngIf="endDate">
-        <ion-label>Hora de fin</ion-label>
-        <ion-datetime
-          formControlName="endTime"
-          displayFormat="HH:mm"
-          placeholder="hh:mm"
-          cancel-text="Cancelar"
-          done-text="Hecho"
-        ></ion-datetime>
-      </ion-item>
+        <ion-segment-button value="online">
+          <ion-label color="light">En línea</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="offline">
+          <ion-label color="light">En persona</ion-label>
+        </ion-segment-button>
+      </ion-segment>
       <ion-item>
         <ion-input
           formControlName="url"
-          placeholder="URL del evento"
+          [placeholder]="user ? 'URL de la cita' : 'URL del evento'"
+          inputmode="url"
         ></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-input
-          formControlName="location"
-          debounce="2000"
-          placeholder="Lugar del evento"
-          (ionChange)="changeLocation($event)"
-        ></ion-input>
-      </ion-item>
-      <ion-item
-        button
-        (click)="showMore = !showMore"
-        lines="none"
-        class="show-more"
-      >
-        <ion-label>+ Configuración extra</ion-label>
-        <ion-icon
-          [name]="showMore ? 'chevron-up' : 'chevron-down'"
-          color="light"
-          size="small"
-        ></ion-icon>
-      </ion-item>
-      <ion-item *ngIf="showMore" lines="none">
-        <ion-label slot="start">Edad mínima</ion-label>
-        <ion-input
-          formControlName="minage"
-          slot="start"
-          type="number"
-          min="0"
-          max="99"
-          maxlength="2"
-          placeholder="0"
-        ></ion-input>
-        <ion-label>años</ion-label>
-      </ion-item>
-      <iframe
-        *ngIf="eventForm.get('location').value"
-        width="100%"
-        height="300"
-        style="border:0"
-        loading="lazy"
-        allowfullscreen
-        [src]="mapSrc"
-      ></iframe>
-      <ion-item>
+      <div *ngIf="type === 'offline'">
+        <ion-item>
+          <ion-label>País</ion-label>
+          <ion-select
+            interface="action-sheet"
+            cancel-text="Cancelar"
+            placeholder="Selecciona uno"
+            formControlName="country"
+            [value]="country"
+            debounce="2000"
+            (ionChange)="changeLocation()"
+          >
+            <ion-select-option
+              *ngFor="let country of utils.getCountries()"
+              [value]="country"
+              >{{ country }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            debounce="2000"
+            (ionChange)="changeLocation()"
+            formControlName="city"
+            placeholder="Ciudad / localidad / municipio"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            debounce="2000"
+            (ionChange)="changeLocation()"
+            formControlName="address"
+            placeholder="Dirección / nombre del lugar"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            debounce="2000"
+            (ionChange)="changeLocation()"
+            formControlName="postal_code"
+            placeholder="Código postal"
+          ></ion-input>
+        </ion-item>
+        <iframe
+          *ngIf="mapSrc"
+          width="100%"
+          height="300"
+          style="border: 0"
+          loading="lazy"
+          allowfullscreen
+          [src]="mapSrc"
+        ></iframe>
+      </div>
+      <ion-item-group *ngIf="!user">
+        <ion-item
+          button
+          (click)="showMore = !showMore"
+          lines="none"
+          class="show-more"
+        >
+          <ion-label>+ Configuración extra</ion-label>
+          <ion-icon
+            [name]="showMore ? 'chevron-up' : 'chevron-down'"
+            color="light"
+            size="small"
+          ></ion-icon>
+        </ion-item>
+        <div *ngIf="showMore">
+          <ion-item lines="none">
+            <ion-label slot="start">Edad mínima</ion-label>
+            <ion-input
+              formControlName="minage"
+              slot="start"
+              type="number"
+              value="0"
+              min="0"
+              max="99"
+              maxlength="2"
+              placeholder="0"
+              inputmode="numeric"
+            ></ion-input>
+            <ion-label>años</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label slot="start">Precio</ion-label>
+            <ion-input
+              formControlName="price"
+              placeholder="Precio"
+              value="0"
+              type="number"
+              inputmode="decimal"
+              step="0.01"
+              min="0"
+            ></ion-input>
+          </ion-item>
+          <div *ngIf="type === 'offline'">
+            <ion-item>
+              <ion-input
+                formControlName="contact_phone"
+                placeholder="Teléfono de contacto"
+                inputmode="tel"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                formControlName="contact_email"
+                placeholder="Email de contacto"
+                inputmode="email"
+              ></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </ion-item-group>
+      <ion-item *ngIf="!user">
         <ion-thumbnail *ngIf="src || event?.image">
           <img [src]="src ? src : event?.image" />
         </ion-thumbnail>
@@ -158,7 +231,8 @@
         shape="round"
         expand="block"
         [disabled]="eventForm.invalid"
-        >{{editing ? 'Guardar cambios' : 'Publicar evento'}}</ion-button
+        >{{editing ? 'Guardar cambios' : (user ? 'Publicar cita' : 'Publicar
+        evento')}}</ion-button
       >
     </form>
   </ion-list>

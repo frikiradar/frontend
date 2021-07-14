@@ -48,7 +48,10 @@
     <ion-buttons
       slot="end"
       *ngIf="
-        !pressOptions && user?.active && !user?.roles?.includes('ROLE_DEMO')
+        !pressOptions &&
+        user?.active &&
+        !user?.banned &&
+        !user?.roles?.includes('ROLE_DEMO')
       "
     >
       <ion-button (click)="showOptions($event)">
@@ -159,7 +162,8 @@
             message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
             message?.reply_to ||
             (message?.time_creation | date: 'shortDate') !==
-              (messages[i - 1]?.time_creation | date: 'shortDate')
+              (messages[i - 1]?.time_creation | date: 'shortDate') ||
+            message?.event
           "
         >
           <img
@@ -172,10 +176,138 @@
             message?.fromuser?.id === messages[i - 1]?.fromuser?.id &&
             !message?.reply_to &&
             (message?.time_creation | date: 'shortDate') ===
-              (messages[i - 1]?.time_creation | date: 'shortDate')
+              (messages[i - 1]?.time_creation | date: 'shortDate') &&
+            !message?.event
           "
         ></div>
-        <ion-card>
+        <ion-card
+          (click)="showEvent(message.event)"
+          *ngIf="message.event"
+          class="message-event"
+        >
+          <ion-card-header>
+            <ion-card-subtitle
+              >{{ message.event?.date | date: "d MMM y, HH:mm" }}
+              {{
+                message.event?.date_end
+                  ? " -
+              " +
+                    (message.event?.date_end | date: "d MMM y, HH:mm")
+                  : ""
+              }}</ion-card-subtitle
+            >
+            <ion-card-title>{{ message.event?.title }}</ion-card-title>
+            <ion-text>
+              {{
+                message.event?.type === "online"
+                  ? "Online"
+                  : message.event?.address + ", " + message.event?.country
+              }}
+            </ion-text>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <!--Si cancelado o pasado-->
+                <ion-col
+                  *ngIf="
+                    message.event?.past || message.event.status == 'cancelled'
+                  "
+                >
+                  <ion-button
+                    shape="round"
+                    expand="full"
+                    disabled
+                    *ngIf="
+                      !message.event?.past &&
+                      message.event.status == 'cancelled'
+                    "
+                  >
+                    <ion-icon
+                      name="close-circle-outline"
+                      slot="start"
+                    ></ion-icon>
+                    Cita cancelada/rechazada
+                  </ion-button>
+                  <ion-button
+                    shape="round"
+                    expand="full"
+                    *ngIf="
+                      message.event?.past &&
+                      message.event.status !== 'cancelled'
+                    "
+                    disabled
+                  >
+                    <ion-icon name="timer-outline" slot="start"></ion-icon>
+                    Cita pasada
+                  </ion-button>
+                </ion-col>
+
+                <ion-col
+                  *ngIf="
+                    message.event?.participants?.length < 2 &&
+                    !message.event?.past &&
+                    message.event.status !== 'cancelled'
+                  "
+                >
+                  <ion-button
+                    shape="round"
+                    expand="full"
+                    *ngIf="message?.fromuser?.id == auth.currentUserValue.id"
+                    disabled
+                  >
+                    <ion-icon name="timer-outline" slot="start"></ion-icon>
+                    En espera de confirmación
+                  </ion-button>
+                  <ion-button
+                    shape="round"
+                    expand="full"
+                    *ngIf="message?.fromuser?.id !== auth.currentUserValue.id"
+                    (click)="$event.stopPropagation(); confirmDate(message)"
+                  >
+                    <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                    Confirmar cita
+                  </ion-button>
+                </ion-col>
+                <ion-col
+                  *ngIf="
+                    message.event?.participants?.length < 2 &&
+                    !message.event?.past &&
+                    message.event.status !== 'cancelled' &&
+                    message?.fromuser?.id !== auth.currentUserValue.id
+                  "
+                >
+                  <ion-button
+                    shape="round"
+                    expand="full"
+                    color="danger"
+                    (click)="$event.stopPropagation(); declineDate(message)"
+                  >
+                    <ion-icon
+                      name="close-circle-outline"
+                      slot="start"
+                    ></ion-icon>
+                    Rechazar cita
+                  </ion-button>
+                </ion-col>
+                <ion-col
+                  *ngIf="
+                    message.event?.participants?.length >= 2 &&
+                    !message.event?.past &&
+                    message.event.status !== 'cancelled'
+                  "
+                >
+                  <ion-button shape="round" expand="full">
+                    <ion-icon name="timer-outline" slot="start"></ion-icon>
+                    Cita confirmada
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngIf="!message?.event">
           <div *ngIf="message.image">
             <img
               (click)="
@@ -260,7 +392,7 @@
                 · {{ message.time_creation | chatDate }}
               </span>
             </p>
-            <ion-text class="text">
+            <ion-text class="text" *ngIf="!message?.event">
               <ion-text
                 color="light"
                 class="message-text"
@@ -294,7 +426,7 @@
 </ion-content>
 <ion-footer
   *ngIf="
-    (user?.active && !user?.roles?.includes('ROLE_DEMO')) ||
+    (!user?.banned && user?.active && !user?.roles?.includes('ROLE_DEMO')) ||
     (auth.currentUserValue?.roles?.includes('ROLE_DEMO') &&
       user?.roles?.includes('ROLE_DEMO'))
   "
@@ -302,10 +434,11 @@
   <app-chat-input
     (onWriting)="setWriting()"
     (onSubmit)="sendMessage($event)"
+    (onCreateEvent)="createEvent()"
     [(replying)]="replying"
     [(editing)]="editing"
     [selectedMessage]="selectedMessage"
-    [events]="auth.isMaster() && messages.length > 10"
+    [events]="messages.length > 10"
     [microphone]="true"
   ></app-chat-input>
 </ion-footer>

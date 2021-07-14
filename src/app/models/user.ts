@@ -26,6 +26,7 @@ export interface User {
 
   location: string;
   country: string;
+  city: string;
   distance: number;
 
   password?: string;

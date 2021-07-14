@@ -240,20 +240,19 @@ export class CommunityPage {
 
   async connectSSE() {
     if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe(
-        notification => {
-          if (notification?.message) {
-            const message = JSON.parse(notification.message) as Chat;
-            // console.log(message);
-            this.messageReceived(message);
-          }
-        });
+      this.firebase.onMessageReceived().subscribe(notification => {
+        if (notification?.message) {
+          const message = JSON.parse(notification.message) as Chat;
+          // console.log(message);
+          this.messageReceived(message);
+        }
+      });
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {
           const message = JSON.parse(payload.data.message) as Chat;
           console.log(message);
-          this.messageReceived(message)
+          this.messageReceived(message);
         }
       });
     }
@@ -267,5 +266,9 @@ export class CommunityPage {
         }
       }
     });
+  }
+
+  openChat() {
+    this.router.navigate(["/chat"]);
   }
 }

@@ -32,6 +32,7 @@
   </div>
   <div id="add-tag" *ngIf="tag" (click)="search()">
     <ion-chip color="secondary">
+      <ion-icon name="search"></ion-icon>
       <ion-label>{{page?.likes}} me gusta</ion-label>
       <ion-icon name="heart"></ion-icon>
     </ion-chip>
@@ -50,7 +51,18 @@
     [ngClass]="showDescription ? 'expanded' : 'collapsed'"
   >
     <ion-label>
-      <p class="ion-text-wrap">{{page.description}}</p>
+      <p class="ion-text-wrap">
+        {{page.description}}
+        <br /><br />
+        <ion-text *ngIf="page?.category === 'games'" color="light"
+          >Información obtenida de
+          <a href="https://www.igdb.com/">IGDB</a></ion-text
+        >
+        <ion-text *ngIf="page?.category === 'films'">
+          Información obtenida de
+          <a href="https://www.themoviedb.org/">TMDB</a></ion-text
+        >
+      </p>
     </ion-label>
     <ion-buttons slot="end">
       <ion-button>
@@ -63,7 +75,7 @@
     </ion-buttons>
   </ion-item>
 
-  <div id="stories" *ngIf="auth.currentUserValue" class="ion-padding">
+  <div id="stories" *ngIf="auth.currentUserValue">
     <div *ngIf="!stories">
       <ion-slides [options]="storiesOpts" mode="md">
         <ion-slide *ngFor="let i of [].constructor(8)">
@@ -93,7 +105,7 @@
               <ion-badge color="tertiary">+</ion-badge>
             </ion-avatar>
           </ion-item>
-          <ion-label>Añadir historia</ion-label>
+          <ion-label>Añadir</ion-label>
         </div>
       </ion-slide>
       <ion-slide *ngFor="let story of groupedStories; let i = index">
@@ -115,54 +127,82 @@
       <ion-badge color="primary" *ngIf="room?.unread">&nbsp;</ion-badge>
     </ion-thumbnail>
     <ion-label>
-      <h2 class="room-name">
-        Sala de chat temática
-      </h2>
+      <h2 class="room-name">Sala de chat temática</h2>
       <p class="room-description">
         Entra y habla con la comunidad de FrikiRadar sobre {{page?.name}}
       </p>
     </ion-label>
   </ion-item>
-
-  <ion-item
-    class="room"
-    button
-    lines="none"
-    *ngIf="page.game_mode === 'online'"
-  >
+  <ion-item class="room" button lines="none" (click)="newEvent()">
     <ion-thumbnail>
       <ion-img src="/assets/img/layout/events.png" alt="eventos"></ion-img>
     </ion-thumbnail>
-    <ion-label>
-      <h2 class="room-name">
-        Eventos y búsqueda de partidas
-      </h2>
+    <ion-label *ngIf="page?.category !== 'games'">
+      <h2 class="room-name">Crear evento</h2>
       <p class="room-description">
-        --- Muy muy pronto ---
+        Encuentra personas con las que hablar de {{page?.name}}
+      </p>
+    </ion-label>
+    <ion-label *ngIf="page?.category === 'games'">
+      <h2 class="room-name">Crear partida/torneo</h2>
+      <p class="room-description">
+        Encuentra personas con las que jugar a {{page?.name}}
       </p>
     </ion-label>
   </ion-item>
-
-  <ion-item class="room" button lines="none" (click)="search()">
-    <ion-thumbnail>
-      <ion-img src="/assets/img/layout/search.png" alt="búsqueda"></ion-img>
-    </ion-thumbnail>
-    <ion-label>
-      <h2 class="room-name">
-        Buscar personas
-      </h2>
-      <p class="room-description">
-        Busca personas a las que les guste {{page?.name}}
-      </p>
-    </ion-label>
-  </ion-item>
+  <ion-grid *ngIf="events?.length > 0 && !loading" id="events">
+    <ion-row>
+      <ion-col
+        sizeXs="12"
+        sizeSm="6"
+        sizeLg="6"
+        sizeXl="4"
+        sizeMd="4"
+        *ngFor="let event of events; let i = index"
+      >
+        <ion-card button (click)="showEvent(event)">
+          <ion-img [src]="event?.image" [alt]=""></ion-img>
+          <ion-card-header>
+            <ion-card-subtitle
+              >{{(event?.date) | date:'d MMM y, HH:mm'}} {{event?.date_end ? ' -
+              ' + (event?.date_end | date:'d MMM y, HH:mm') :
+              ''}}</ion-card-subtitle
+            >
+            <ion-card-title>{{event?.title}}</ion-card-title>
+            <ion-text>
+              {{event?.type === 'online' ? 'Online' : event?.address + ', ' +
+              event?.country}}
+            </ion-text>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-button
+              shape="round"
+              expand="full"
+              *ngIf="!event?.past && !event?.participate"
+            >
+              <ion-icon name="calendar" slot="start"></ion-icon>
+              Quiero participar
+            </ion-button>
+            <ion-button
+              shape="round"
+              expand="full"
+              *ngIf="!event?.past && event?.participate"
+            >
+              <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+              Participación confirmada
+            </ion-button>
+            <ion-button
+              shape="round"
+              expand="full"
+              *ngIf="event?.past"
+              disabled
+            >
+              <ion-icon name="timer-outline" slot="start"></ion-icon>
+              Evento pasado
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
-<ion-footer class="ion-padding" *ngIf="page?.description">
-  <ion-text *ngIf="page?.category === 'games'" color="light"
-    >Información obtenida de <a href="https://www.igdb.com/">IGDB</a></ion-text
-  >
-  <ion-text *ngIf="page?.category === 'films'">
-    Información obtenida de
-    <a href="https://www.themoviedb.org/">TMDB</a></ion-text
-  >
-</ion-footer>

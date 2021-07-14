@@ -1,0 +1,270 @@
+<ion-content [fullscreen]="true" *ngIf="event">
+  <ion-header class="ion-no-border">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="back()">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>{{event?.title}}</ion-title>
+      <ion-buttons
+        slot="end"
+        *ngIf="auth.currentUserValue?.id === event?.creator?.id"
+      >
+        <ion-button (click)="edit()">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-img id="artwork" [src]="event?.image" [alt]="event?.title"></ion-img>
+  <ion-item
+    *ngIf="event?.status === 'cancelled'"
+    lines="none"
+    class="cancelled"
+  >
+    <ion-icon name="timer-outline" slot="start"></ion-icon>
+    <ion-label>Evento cancelado</ion-label>
+  </ion-item>
+  <ion-item
+    lines="none"
+    *ngIf="!event.user"
+    button
+    (click)="showParticipants()"
+  >
+    <ion-icon name="people" slot="start"></ion-icon>
+    <ion-label class="ion-text-wrap"
+      >{{event?.participants?.length}} personas han confirmado
+      asistencia</ion-label
+    >
+  </ion-item>
+  <ion-item lines="none">
+    <ion-icon
+      [name]="event?.past ? 'timer-outline' : 'calendar'"
+      slot="start"
+    ></ion-icon>
+    <ion-label class="ion-text-wrap"
+      >{{(event?.date) | date:'d MMM y, HH:mm'}} {{event?.date_end ? ' - ' +
+      (event?.date_end | date:'d MMM y, HH:mm') : ''}} {{event?.past ? ' (Evento
+      pasado)' : ''}}</ion-label
+    >
+  </ion-item>
+  <ion-item lines="none" class="description" *ngIf="event?.description">
+    <ion-icon name="document-text" slot="start"></ion-icon>
+    <ion-label
+      [innerHTML]="
+            event?.description | linky: { className: 'linkified' } | mentions | hashtag
+          "
+      (click)="$event.stopImmediatePropagation(); openUrl($event)"
+    ></ion-label>
+  </ion-item>
+  <ion-item-group *ngIf="event?.type === 'offline'">
+    <ion-item lines="none">
+      <ion-icon name="earth" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap"
+        >{{event?.city}}, {{event?.postal_code}} {{event?.country}}</ion-label
+      >
+    </ion-item>
+    <ion-item lines="none">
+      <ion-icon name="location-sharp" slot="start"></ion-icon>
+      <ion-label class="ion-text-wrap">{{event?.address}}</ion-label>
+    </ion-item>
+    <ion-item lines="none" *ngIf="event.contact_phone">
+      <ion-icon name="call" slot="start"></ion-icon>
+      <ion-label>
+        <h2>Teléfono de contacto</h2>
+        <p [innerHTML]="event?.contact_phone | linky"></p>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" *ngIf="event.contact_email">
+      <ion-icon name="mail" slot="start"></ion-icon>
+      <ion-label>
+        <h2>Email de contacto</h2>
+        <p [innerHTML]="event?.contact_email | linky"></p>
+      </ion-label>
+    </ion-item>
+  </ion-item-group>
+  <ion-item lines="none" *ngIf="event.url">
+    <ion-icon name="link" slot="start"></ion-icon>
+    <ion-label>
+      <h2 *ngIf="event.type === 'offline'">
+        Más información o compra de boletos
+      </h2>
+      <h2 *ngIf="event.type === 'online'">Enlace de acceso al evento</h2>
+      <p [innerHTML]="event?.url | linky"></p>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="none" *ngIf="event.price">
+    <ion-icon name="price-tag" slot="start"></ion-icon>
+    <ion-label>
+      <h2>Precio en moneda local</h2>
+      <p>{{event?.price}}</p>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="full">
+    <iframe
+      *ngIf="mapSrc"
+      width="100%"
+      height="300"
+      style="border: 0"
+      loading="lazy"
+      allowfullscreen
+      [src]="mapSrc"
+    ></iframe>
+  </ion-item>
+  <ion-item-group *ngIf="!event?.user">
+    <ion-item lines="none">
+      <ion-label>Información adicional relacionada</ion-label>
+    </ion-item>
+    <ion-item class="room" lines="none">
+      <ion-thumbnail slot="start">
+        <ion-img [src]="event?.creator?.thumbnail"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>Evento organizado por {{event?.creator?.name}}</h2>
+        <p
+          *ngIf="!event?.creator?.roles.includes('ROLE_DEMO')"
+          [innerHTML]="'@' + event?.creator?.username | mentions"
+          (click)="$event.stopImmediatePropagation(); openUrl($event)"
+        ></p>
+      </ion-label>
+    </ion-item>
+    <ion-item
+      class="room"
+      button
+      lines="none"
+      (click)="showPage(event?.slug)"
+      *ngIf="event?.page"
+    >
+      <ion-thumbnail>
+        <ion-img [src]="event?.page?.cover" alt="página"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2 class="room-name">{{event?.page?.name}}</h2>
+        <p class="room-description">Página relacionada con el evento</p>
+      </ion-label>
+    </ion-item>
+    <ion-item class="room" button lines="none" (click)="showRoom()">
+      <ion-thumbnail slot="start">
+        <ion-img src="/assets/img/layout/room.png" alt="sala de chat"></ion-img>
+        <ion-badge color="primary" *ngIf="event?.room?.unread"
+          >&nbsp;</ion-badge
+        >
+      </ion-thumbnail>
+      <ion-label>
+        <h2 class="room-name">Sala de chat</h2>
+        <p class="room-description">
+          Entra y habla con la comunidad de FrikiRadar sobre este evento
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-item-group>
+  <ion-item
+    *ngIf="auth.currentUserValue?.id === event?.creator?.id"
+    lines="none"
+  >
+    <ion-grid>
+      <ion-row>
+        <ion-col
+          class="ion-align-items-center"
+          *ngIf="event?.status === 'active'"
+        >
+          <ion-button expand="full" fill="clear" (click)="cancel()"
+            >{{event?.user ? 'Cancelar cita': 'Cancelar evento'}}</ion-button
+          >
+        </ion-col>
+        <ion-col class="ion-align-items-center">
+          <ion-button expand="full" fill="clear" (click)="remove()"
+            >{{event?.user ? 'Eliminar cita': 'Eliminar evento'}}</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-content>
+
+<ion-footer *ngIf="event && !event?.user">
+  <ion-buttons>
+    <ion-grid>
+      <ion-row>
+        <ion-col
+          class="ion-align-items-center"
+          (click)="participate()"
+          *ngIf="!event?.past && event?.status !== 'cancelled' && !participant"
+        >
+          <ion-button>
+            <ion-icon slot="icon-only" name="calendar-outline"></ion-icon>
+          </ion-button>
+          <ion-label>Quiero asistir</ion-label>
+        </ion-col>
+        <ion-col
+          class="ion-align-items-center"
+          (click)="unparticipate()"
+          *ngIf="!event?.past && event?.status !== 'cancelled' && participant"
+        >
+          <ion-button>
+            <ion-icon
+              slot="icon-only"
+              name="checkmark-circle-outline"
+              color="success"
+            ></ion-icon>
+          </ion-button>
+          <ion-label color="success">Asistiré</ion-label>
+        </ion-col>
+        <ion-col
+          class="ion-align-items-center"
+          *ngIf="event?.past && event?.status !== 'cancelled'"
+        >
+          <ion-button disabled>
+            <ion-icon slot="icon-only" name="timer-outline"></ion-icon>
+          </ion-button>
+          <ion-label color="medium">Evento pasado</ion-label>
+        </ion-col>
+        <ion-col
+          class="ion-align-items-center"
+          *ngIf="event?.status === 'cancelled'"
+        >
+          <ion-button disabled>
+            <ion-icon slot="icon-only" name="timer-outline"></ion-icon>
+          </ion-button>
+          <ion-label color="medium">Evento cancelado</ion-label>
+        </ion-col>
+        <ion-col class="ion-align-items-center" (click)="showRoom()">
+          <ion-button>
+            <ion-icon slot="icon-only" name="chatbubbles-outline"></ion-icon>
+          </ion-button>
+          <ion-label>Chat del evento</ion-label>
+        </ion-col>
+        <ion-col class="ion-align-items-center" (click)="share()">
+          <ion-button>
+            <ion-icon slot="icon-only" name="share-social"></ion-icon>
+          </ion-button>
+          <ion-label>Compartir</ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-buttons>
+</ion-footer>
+
+<!-- panes -->
+
+<div class="participants-pane">
+  <p>Asistentes</p>
+  <ion-list *ngIf="event?.participants?.length > 0">
+    <ion-item
+      *ngFor="let participant of event?.participants"
+      button
+      detail="false"
+      (click)="showProfile(view.user.id)"
+    >
+      <ion-avatar slot="start">
+        <img [src]="participant?.thumbnail" />
+      </ion-avatar>
+      <ion-label>{{participant?.username}}</ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-item *ngIf="event?.participants?.length == 0">
+    <p>No hay asistentes</p>
+  </ion-item>
+</div>

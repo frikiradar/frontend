@@ -8,9 +8,6 @@
       <ion-badge color="primary" *ngIf="counters?.radar > 0"
         >{{ counters.radar }}</ion-badge
       >
-      <ion-label [color]="selected === 'radar' ? 'primary' : 'light'"
-        >Radar</ion-label
-      >
     </ion-tab-button>
 
     <ion-tab-button tab="community">
@@ -18,19 +15,13 @@
         [color]="selected === 'community' ? 'primary' : 'light'"
         [name]="'people' + (selected === 'community' ? '' : '-outline')"
       ></ion-icon>
-      <ion-label [color]="selected === 'community' ? 'primary' : 'light'"
-        >Comunidad</ion-label
-      >
     </ion-tab-button>
 
-    <ion-tab-button tab="events" (click)="goToEvents($event)">
+    <ion-tab-button tab="events">
       <ion-icon
         [color]="selected === 'events' ? 'primary' : 'light'"
         [name]="'calendar' + (selected === 'events' ? '' : '-outline')"
       ></ion-icon>
-      <ion-label [color]="selected === 'events' ? 'primary' : 'light'"
-        >Eventos</ion-label
-      >
     </ion-tab-button>
 
     <ion-tab-button (click)="openChat()">
@@ -40,9 +31,6 @@
       ></ion-icon>
       <ion-badge color="primary" *ngIf="counters?.chats > 0"
         >{{ counters.chats }}</ion-badge
-      >
-      <ion-label [color]="selected === 'chat' ? 'primary' : 'light'"
-        >Chat</ion-label
       >
     </ion-tab-button>
   </ion-tab-bar>

@@ -3,7 +3,12 @@ import { Injectable } from "@angular/core";
 import { Camera } from "@ionic-native/camera/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
-import { AlertController, ModalController, Platform } from "@ionic/angular";
+import {
+  AlertController,
+  ModalController,
+  Platform,
+  ToastController
+} from "@ionic/angular";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 
 import { CropperModal } from "../cropper/cropper.modal";
@@ -24,8 +29,9 @@ export class UtilsService {
     private webview: WebView,
     private camera: Camera,
     private modal: ModalController,
-    private statusBar: StatusBar // private navigationBar: NavigationBarColor
-  ) { }
+    private statusBar: StatusBar, // private navigationBar: NavigationBarColor
+    private toast: ToastController
+  ) {}
 
   async takePicture(
     mode?: string,
@@ -72,14 +78,16 @@ export class UtilsService {
   async cropImage(
     event: any = "",
     src: string = "",
-    square = true
+    square = true,
+    aspectRatio = 1 / 1
   ): Promise<string | boolean> {
     const modal = await this.modal.create({
       component: CropperModal,
       componentProps: {
         event,
         src,
-        square
+        square,
+        aspectRatio
       },
       cssClass: "full-modal"
     });
@@ -193,7 +201,7 @@ export class UtilsService {
     await alert.present();
   }
 
-  share(url = "") {
+  async share(url = "") {
     if (!url) {
       url = "https://frikiradar.com";
     }
@@ -215,8 +223,7 @@ export class UtilsService {
     } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
         title: "FrikiRadar, conoce a personas frikis como tú",
-        text:
-          "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.",
+        text: "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.",
         url: `${url}?referrer=${referrer}`
       })
         .then(() => {
@@ -225,6 +232,24 @@ export class UtilsService {
         .catch(console.error);
     } else {
       // fallback
+      try {
+        await navigator.clipboard.writeText(url);
+        (
+          await this.toast.create({
+            message: "Link copiado al portapapeles",
+            duration: 2000,
+            position: "middle"
+          })
+        ).present();
+      } catch (e) {
+        (
+          await this.toast.create({
+            message: "Error al copiar el link",
+            duration: 2000,
+            position: "middle"
+          })
+        ).present();
+      }
     }
   }
 
@@ -301,13 +326,216 @@ export class UtilsService {
   }
 
   makeId(length: number): string {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = "";
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() *
-        charactersLength));
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+  }
+
+  getCountries() {
+    return [
+      "España",
+      "México",
+      "Argentina",
+      "Chile",
+      "Perú",
+      "Afganistán",
+      "Albania",
+      "Alemania",
+      "Andorra",
+      "Angola",
+      "Antigua y Barbuda",
+      "Arabia Saudita",
+      "Argelia",
+      "Armenia",
+      "Australia",
+      "Austria",
+      "Azerbaiyán",
+      "Bahamas",
+      "Bangladés",
+      "Barbados",
+      "Baréin",
+      "Bélgica",
+      "Belice",
+      "Benín",
+      "Bielorrusia",
+      "Birmania",
+      "Bolivia",
+      "Bosnia y Herzegovina",
+      "Botsuana",
+      "Brasil",
+      "Brunéi",
+      "Bulgaria",
+      "Burkina Faso",
+      "Burundi",
+      "Bután",
+      "Cabo Verde",
+      "Camboya",
+      "Camerún",
+      "Canadá",
+      "Catar",
+      "Chad",
+      "China",
+      "Chipre",
+      "Ciudad del Vaticano",
+      "Colombia",
+      "Comoras",
+      "Corea del Norte",
+      "Corea del Sur",
+      "Costa de Marfil",
+      "Costa Rica",
+      "Croacia",
+      "Cuba",
+      "Dinamarca",
+      "Dominica",
+      "Ecuador",
+      "Egipto",
+      "El Salvador",
+      "Emiratos Árabes Unidos",
+      "Eritrea",
+      "Eslovaquia",
+      "Eslovenia",
+      "Estados Unidos",
+      "Estonia",
+      "Etiopía",
+      "Filipinas",
+      "Finlandia",
+      "Fiyi",
+      "Francia",
+      "Gabón",
+      "Gambia",
+      "Georgia",
+      "Ghana",
+      "Granada",
+      "Grecia",
+      "Guatemala",
+      "Guyana",
+      "Guinea",
+      "Guinea ecuatorial",
+      "Guinea-Bisáu",
+      "Haití",
+      "Honduras",
+      "Hungría",
+      "India",
+      "Indonesia",
+      "Irak",
+      "Irán",
+      "Irlanda",
+      "Islandia",
+      "Islas Marshall",
+      "Islas Salomón",
+      "Israel",
+      "Italia",
+      "Jamaica",
+      "Japón",
+      "Jordania",
+      "Kazajistán",
+      "Kenia",
+      "Kirguistán",
+      "Kiribati",
+      "Kuwait",
+      "Laos",
+      "Lesoto",
+      "Letonia",
+      "Líbano",
+      "Liberia",
+      "Libia",
+      "Liechtenstein",
+      "Lituania",
+      "Luxemburgo",
+      "Madagascar",
+      "Malasia",
+      "Malaui",
+      "Maldivas",
+      "Malí",
+      "Malta",
+      "Marruecos",
+      "Mauricio",
+      "Mauritania",
+      "Micronesia",
+      "Moldavia",
+      "Mónaco",
+      "Mongolia",
+      "Montenegro",
+      "Mozambique",
+      "Namibia",
+      "Nauru",
+      "Nepal",
+      "Nicaragua",
+      "Níger",
+      "Nigeria",
+      "Noruega",
+      "Nueva Zelanda",
+      "Omán",
+      "Países Bajos",
+      "Pakistán",
+      "Palaos",
+      "Panamá",
+      "Papúa Nueva Guinea",
+      "Paraguay",
+      "Polonia",
+      "Portugal",
+      "Reino Unido",
+      "República Centroafricana",
+      "República Checa",
+      "República de Macedonia",
+      "República del Congo",
+      "República Democrática del Congo",
+      "República Dominicana",
+      "República Sudafricana",
+      "Ruanda",
+      "Rumanía",
+      "Rusia",
+      "Samoa",
+      "San Cristóbal y Nieves",
+      "San Marino",
+      "San Vicente y las Granadinas",
+      "Santa Lucía",
+      "Santo Tomé y Príncipe",
+      "Senegal",
+      "Serbia",
+      "Seychelles",
+      "Sierra Leona",
+      "Singapur",
+      "Siria",
+      "Somalia",
+      "Sri Lanka",
+      "Suazilandia",
+      "Sudán",
+      "Sudán del Sur",
+      "Suecia",
+      "Suiza",
+      "Surinam",
+      "Tailandia",
+      "Tanzania",
+      "Tayikistán",
+      "Timor Oriental",
+      "Togo",
+      "Tonga",
+      "Trinidad y Tobago",
+      "Túnez",
+      "Turkmenistán",
+      "Turquía",
+      "Tuvalu",
+      "Ucrania",
+      "Uganda",
+      "Uruguay",
+      "Uzbekistán",
+      "Vanuatu",
+      "Venezuela",
+      "Vietnam",
+      "Yemen",
+      "Yibuti",
+      "Zambia",
+      "Zimbabue"
+    ];
+  }
+
+  getDeviceSymbols() {
+    return ["$", "€", "S/.", "¥", "£", ""];
   }
 }

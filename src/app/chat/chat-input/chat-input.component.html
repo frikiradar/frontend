@@ -9,7 +9,7 @@
     (click)="setMention(u.username)"
   >
     <ion-avatar>
-      <img [src]="u.thumbnail" />
+      <img [src]="u.thumbnail" default="/assets/img/users/default.jpg" />
     </ion-avatar>
     <ion-label>{{ u.username }}</ion-label>
   </ion-item>
@@ -109,7 +109,7 @@
           type="file"
           accept="image/*"
           #imageInput
-          style="display: none;"
+          style="display: none"
           name="default"
           (change)="addPicture($event.target.files[0])"
         />

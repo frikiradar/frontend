@@ -39,6 +39,7 @@ export class ChatInputComponent {
   @Output() onSubmit: EventEmitter<Chat> = new EventEmitter();
   @Output() editingChange: EventEmitter<boolean> = new EventEmitter(true);
   @Output() replyingChange: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() onCreateEvent: EventEmitter<void> = new EventEmitter();
 
   public chatForm: FormGroup;
   get message() {
@@ -404,5 +405,9 @@ export class ChatInputComponent {
     if (this.platform.is("cordova")) {
       this.keyboard.show();
     }
+  }
+
+  async createEvent() {
+    this.onCreateEvent.emit();
   }
 }

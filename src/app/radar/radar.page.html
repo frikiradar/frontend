@@ -30,10 +30,10 @@
 </ion-header>
 <ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
-  <div *ngIf="view === 'cards'" style="height: 100%;">
+  <div *ngIf="view === 'cards'" style="height: 100%">
     <ion-slides #slides (ionSlideDidChange)="slide()" [options]="slideOpts">
       <ion-slide *ngIf="!users || loading">
-        <ion-card>
+        <ion-card button>
           <ion-card-header>
             <ion-skeleton-text
               animated
@@ -89,7 +89,7 @@
         </ion-card>
       </ion-slide>
       <ion-slide *ngFor="let user of users;">
-        <ion-card (click)="showProfile(user.id)" class="no-scroll">
+        <ion-card (click)="showProfile(user.id)" class="no-scroll" button>
           <img
             [src]="user?.avatar"
             [alt]="users?.username"
@@ -163,7 +163,7 @@
       </ion-slide>
     </ion-slides>
   </div>
-  <div *ngIf="view === 'list'" style="height: 100%;">
+  <div *ngIf="view === 'list'" style="height: 100%">
     <!--<p class="ion-padding">
         Estos son los resultados obtenidos
         <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un
@@ -217,9 +217,7 @@
             </h2>
             <p class="description">{{ user.description }}</p>
           </ion-label>
-          <div class="match-list full-center" slot="end">
-            {{ user.match }}%
-          </div>
+          <div class="match-list full-center" slot="end">{{ user.match }}%</div>
         </ion-item>
         <ion-item-options side="end">
           <ion-item-option
@@ -250,7 +248,7 @@
         Modifica tus ajustes de "Estoy buscando..." en tu configuración de
         perfil y añade tus "Gustos frikis" para mejorar los resultados.
       </p>
-      <ion-button (click)="router.navigate(['/edit-profile'])"
+      <ion-button shape="round" (click)="router.navigate(['/edit-profile'])"
         >Editar perfil</ion-button
       >
     </div>

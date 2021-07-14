@@ -85,7 +85,8 @@ ion-label {
   }
 
   ion-card {
-    background: none;
+    border-radius: 20px;
+    --background: none;
     box-shadow: none;
     margin-top: 0;
     margin-bottom: 0;
@@ -93,6 +94,28 @@ ion-label {
     ion-card-content {
       padding-top: 0;
       padding-bottom: 0;
+    }
+  }
+
+  .message-event {
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    --color: var(--ion-color-light) !important;
+    --background: var(--ion-color-medium-dark) !important;
+
+    ion-img {
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    ion-card-title {
+      --color: var(--ion-color-light) !important;
+    }
+
+    ion-button {
+      margin-bottom: 10px;
     }
   }
 

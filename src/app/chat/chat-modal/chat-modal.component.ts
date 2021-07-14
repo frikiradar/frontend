@@ -1,3 +1,4 @@
+import { EventService } from "src/app/services/event.service";
 import {
   ChangeDetectorRef,
   Component,
@@ -34,6 +35,8 @@ import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { OptionsPopover } from "../../options-popover/options-popover";
 import { NavService } from "src/app/services/navigation.service";
 import { AngularFireMessaging } from "@angular/fire/messaging";
+import { EventModal } from "src/app/events/event-modal/event.modal";
+import { Event } from "src/app/models/event";
 
 @Component({
   selector: "app-chat-modal",
@@ -53,7 +56,7 @@ export class ChatModalComponent implements OnInit {
 
   user: Partial<User>;
   messages: Chat[] = [];
-  page = 0;
+  page = 1;
   pressOptions = false;
   selectedMessage: Chat;
   alertError: any;
@@ -82,7 +85,8 @@ export class ChatModalComponent implements OnInit {
     private vibration: Vibration,
     private nav: NavService,
     private dc: ChangeDetectorRef,
-    private afMessaging: AngularFireMessaging
+    private afMessaging: AngularFireMessaging,
+    private eventSvc: EventService
   ) {}
 
   @HostListener("window:focus")
@@ -168,6 +172,12 @@ export class ChatModalComponent implements OnInit {
         }
       });
 
+      messages.map(m => {
+        if (new Date(m?.event?.date) < new Date()) {
+          m.event.past = true;
+        }
+      });
+
       if (this.messages.length) {
         messages.forEach(async message => {
           await this.newMessage(message);
@@ -183,8 +193,6 @@ export class ChatModalComponent implements OnInit {
         this.infiniteScroll.disabled = false;
         this.infiniteScroll.ionInfinite;
       }
-
-      this.scrollDown();
 
       if (this.messages.length > 0) {
         if (this.userId == this.messages[0].fromuser.id) {
@@ -207,6 +215,8 @@ export class ChatModalComponent implements OnInit {
       window.addEventListener("keyboardDidHide", event => {
         this.scrollDown();
       });
+
+      this.scrollDown(200);
     } catch (e) {
       console.error(e);
       await this.alertError.present();
@@ -214,6 +224,7 @@ export class ChatModalComponent implements OnInit {
   }
 
   async newMessage(message: Chat) {
+    console.log(message);
     if (
       this.messages.some(
         m =>
@@ -233,6 +244,7 @@ export class ChatModalComponent implements OnInit {
           m.edited = message.edited;
           m.deleted = message.deleted;
           m.sending = false;
+          m.event = message.event;
         }
       });
       // this.messageChange.emit(message);
@@ -271,6 +283,12 @@ export class ChatModalComponent implements OnInit {
     this.messages = this.messages.filter(m => {
       if (!m.deleted) {
         return m;
+      }
+    });
+
+    this.messages.map(m => {
+      if (new Date(m?.event?.date) < new Date()) {
+        m.event.past = true;
       }
     });
 
@@ -375,6 +393,13 @@ export class ChatModalComponent implements OnInit {
       .filter(m => m.text || m.image || m.audio)
       .reverse();
     this.messages = [...messages, ...this.messages];
+
+    this.messages.map(m => {
+      if (new Date(m?.event?.date) < new Date()) {
+        m.event.past = true;
+      }
+    });
+
     this.infiniteScroll.complete();
 
     if (messages.length < 15) {
@@ -391,7 +416,7 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  selectMessage(event: Event, message: Chat) {
+  selectMessage(event: any, message: Chat) {
     event.preventDefault();
     this.vibration.vibrate(5);
     this.selectedMessage = message;
@@ -538,6 +563,31 @@ export class ChatModalComponent implements OnInit {
         }, 1000);
       }
     }
+  }
+
+  async createEvent() {
+    const modal = await this.modalController.create({
+      component: EventModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal",
+      componentProps: { user: this.user }
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+  async confirmDate(message: Chat) {
+    await this.eventSvc.confirmDate(message.id);
+  }
+
+  async declineDate(message: Chat) {
+    await this.eventSvc.declineDate(message.id);
+  }
+
+  showEvent(event: Event) {
+    this.router.navigate(["/event", event.id]);
   }
 
   back() {

@@ -1,3 +1,4 @@
+import { Event } from "./event";
 import { Room } from "./room";
 import { User } from "./user";
 
@@ -25,4 +26,5 @@ export interface Chat {
   archived?: boolean;
   unread?: boolean;
   pinned?: boolean;
+  event?: Event;
 }

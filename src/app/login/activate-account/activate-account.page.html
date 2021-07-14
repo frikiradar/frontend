@@ -22,9 +22,7 @@
       Te hemos enviado un código de seguridad a {{ user.email }}. Revisa tu
       carpeta de spam/no deseado si no lo encuentras.
     </h4>
-    <p>
-      Introduce el código de seguridad para activar tu cuenta.
-    </p>
+    <p>Introduce el código de seguridad para activar tu cuenta.</p>
     <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
       <ion-item id="code">
         <ion-input
@@ -45,7 +43,7 @@
       >
     </form>
     <p color="primary" class="ion-text-center" (click)="resendCode()">
-      No he recibido mi código
+      No he recibido mi código/código no válido
     </p>
   </div>
   <div *ngIf="changingEmail">

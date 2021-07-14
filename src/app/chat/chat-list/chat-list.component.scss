@@ -3,6 +3,10 @@
   flex-direction: column;
 }
 
+#chat-wrapper {
+  display: flex;
+}
+
 ion-item {
   p {
     color: #dddddd;

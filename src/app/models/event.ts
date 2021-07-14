@@ -1,18 +1,29 @@
-import { Time } from "@angular/common";
 import { User } from "./user";
 
 export interface Event {
   id?: number;
+  status: "active" | "cancelled";
   creator: User;
   title: string;
   description: string;
-  date: Date;
-  time: Time;
-  date_end?: Date;
-  time_end?: Time;
+  date: string;
+  date_end?: string;
   repeat?: string;
   slug?: string;
+  minage?: number;
   image?: string;
   url?: string;
-  location?: string;
+  price?: number;
+  type: "online" | "offline";
+  country?: string;
+  city?: string;
+  address?: string;
+  postal_code?: string;
+  contact_phone?: string;
+  contact_email?: string;
+  participants?: User[];
+  participate?: boolean;
+  user?: User;
+
+  past?: boolean;
 }

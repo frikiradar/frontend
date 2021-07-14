@@ -117,6 +117,11 @@ const routes: Routes = [
       import("./rules/rules.module").then(m => m.RulesPageModule)
   },
   {
+    path: "event/:id",
+    loadChildren: () =>
+      import("./events/event/event.module").then(m => m.EventPageModule)
+  },
+  {
     path: ":id",
     loadChildren: () =>
       import("./profile/profile.module").then(m => m.ProfilePageModule)
@@ -131,4 +136,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
