@@ -104,6 +104,13 @@ ion-label {
     --color: var(--ion-color-light) !important;
     --background: var(--ion-color-medium-dark) !important;
 
+    .event-details {
+      ion-label {
+        color: var(--ion-color-light) !important;
+        margin: 0;
+      }
+    }
+
     ion-img {
       height: 220px;
       object-fit: cover;

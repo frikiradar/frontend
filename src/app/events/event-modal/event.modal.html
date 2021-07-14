@@ -225,6 +225,10 @@
           (ionChange)="removeImage($event)"
         ></ion-input>
       </ion-item>
+      <ion-item lines="none" *ngIf="auth.isAdmin() && !user && !event?.id">
+        <ion-label>Evento oficial</ion-label>
+        <ion-checkbox slot="start" formControlName="official"></ion-checkbox>
+      </ion-item>
       <ion-button
         color="primary"
         type="submit"

@@ -11,6 +11,7 @@ import { ModalController, ToastController } from "@ionic/angular";
 import { Event } from "src/app/models/event";
 import { Page } from "src/app/models/page";
 import { User } from "src/app/models/user";
+import { AuthService } from "src/app/services/auth.service";
 import { EventService } from "src/app/services/event.service";
 import { UtilsService } from "src/app/services/utils.service";
 
@@ -41,7 +42,8 @@ export class EventModal {
     private modal: ModalController,
     public utils: UtilsService,
     private sanitizer: DomSanitizer,
-    private eventSvc: EventService
+    private eventSvc: EventService,
+    public auth: AuthService
   ) {
     this.eventForm = formBuilder.group({
       title: new FormControl("", [Validators.required]),
@@ -58,7 +60,8 @@ export class EventModal {
       contact_phone: new FormControl(),
       contact_email: new FormControl(),
       minage: new FormControl(0),
-      image: new FormControl()
+      image: new FormControl(),
+      official: new FormControl()
     });
   }
 
@@ -114,6 +117,7 @@ export class EventModal {
       const url = this.eventForm.get("url")?.value?.trim() ?? "";
       const price = this.eventForm.get("price")?.value ?? 0;
       const minage = this.eventForm.get("minage")?.value ?? 0;
+      const official = this.eventForm.get("official")?.value ?? false;
 
       let country = null;
       let city = null;
@@ -189,7 +193,8 @@ export class EventModal {
             minage,
             this.imageFile,
             this.user?.id,
-            this.page?.slug
+            this.page?.slug,
+            official
           );
 
           (

@@ -244,6 +244,7 @@
                 </ion-col>
 
                 <ion-col
+                  size="6"
                   *ngIf="
                     message.event?.participants?.length < 2 &&
                     !message.event?.past &&
@@ -270,6 +271,7 @@
                   </ion-button>
                 </ion-col>
                 <ion-col
+                  size="6"
                   *ngIf="
                     message.event?.participants?.length < 2 &&
                     !message.event?.past &&
@@ -298,12 +300,19 @@
                   "
                 >
                   <ion-button shape="round" expand="full">
-                    <ion-icon name="timer-outline" slot="start"></ion-icon>
+                    <ion-icon
+                      name="checkmark-circle-outline"
+                      slot="start"
+                    ></ion-icon>
                     Cita confirmada
                   </ion-button>
                 </ion-col>
               </ion-row>
             </ion-grid>
+            <ion-button shape="round" expand="full" color="dark" disabled>
+              <ion-icon name="add" slot="start"></ion-icon>
+              <ion-label>Ver detalles</ion-label>
+            </ion-button>
           </ion-card-content>
         </ion-card>
 

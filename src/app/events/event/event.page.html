@@ -9,7 +9,7 @@
       <ion-title>{{event?.title}}</ion-title>
       <ion-buttons
         slot="end"
-        *ngIf="auth.currentUserValue?.id === event?.creator?.id"
+        *ngIf="auth.currentUserValue?.id === event?.creator?.id || auth.isAdmin()"
       >
         <ion-button (click)="edit()">
           <ion-icon slot="icon-only" name="create-outline"></ion-icon>

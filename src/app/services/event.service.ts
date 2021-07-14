@@ -38,7 +38,8 @@ export class EventService {
     minage: Event["minage"],
     image: Blob,
     user?: User["id"],
-    slug?: Page["slug"]
+    slug?: Page["slug"],
+    official?: boolean
   ) {
     const formData: FormData = new FormData();
     formData.set("title", title);
