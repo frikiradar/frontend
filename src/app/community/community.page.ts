@@ -110,7 +110,7 @@ export class CommunityPage {
   }
 
   async getStories() {
-    let stories = await this.storySvc.getStories();
+    let stories = await this.storySvc.getAllStories();
     stories = this.storySvc.orderStories(stories);
     if (!deepEqual(this.stories, stories)) {
       this.stories = stories;
