@@ -12,6 +12,7 @@ import { Event } from "src/app/models/event";
 import { EventModal } from "../event-modal/event.modal";
 import { Page } from "src/app/models/page";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
+import { User } from "src/app/models/user";
 
 @Component({
   selector: "app-event",
@@ -131,6 +132,12 @@ export class EventPage implements OnInit {
     this.pane.present({ animate: true });
   }
 
+  async showProfile(id: User["id"]) {
+    if (id !== 1) {
+      this.router.navigate(["/profile", id]);
+    }
+  }
+
   share() {
     const url = `https://frikiradar.app/event/${this.event.id}`;
     this.utils.share(url);
@@ -147,7 +154,7 @@ export class EventPage implements OnInit {
 
   async remove() {
     try {
-      await this.eventSvc.deleteEvent(this.event.id);
+      await this.eventSvc.deleteEvent(this.event);
       this.back();
     } catch (e) {
       (

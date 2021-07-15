@@ -187,12 +187,12 @@
         >
           <ion-card-header>
             <ion-card-subtitle
-              >{{ message.event?.date | date: "d MMM y, HH:mm" }}
+              >{{ message.event?.date | date: "E d MMM y, HH:mm" }}
               {{
                 message.event?.date_end
                   ? " -
               " +
-                    (message.event?.date_end | date: "d MMM y, HH:mm")
+                    (message.event?.date_end | date: "E d MMM y, HH:mm")
                   : ""
               }}</ion-card-subtitle
             >
@@ -244,7 +244,6 @@
                 </ion-col>
 
                 <ion-col
-                  size="6"
                   *ngIf="
                     message.event?.participants?.length < 2 &&
                     !message.event?.past &&
@@ -271,7 +270,6 @@
                   </ion-button>
                 </ion-col>
                 <ion-col
-                  size="6"
                   *ngIf="
                     message.event?.participants?.length < 2 &&
                     !message.event?.past &&

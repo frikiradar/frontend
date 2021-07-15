@@ -140,9 +140,9 @@
           ></ion-img>
           <ion-card-header>
             <ion-card-subtitle
-              >{{ message.event?.date | date: "d MMM y, HH:mm" }} {{
+              >{{ message.event?.date | date: "E d MMM y, HH:mm" }} {{
               message.event?.date_end ? " - " + (message.event?.date_end | date:
-              "d MMM y, HH:mm") : "" }}</ion-card-subtitle
+              "E d MMM y, HH:mm") : "" }}</ion-card-subtitle
             >
             <ion-card-title>{{ message.event?.title }}</ion-card-title>
             <ion-text>

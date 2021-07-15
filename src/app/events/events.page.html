@@ -11,7 +11,7 @@
         </ion-avatar>
       </ion-menu-toggle>
     </ion-buttons>
-    <ion-title>Eventos</ion-title>
+    <ion-title>Eventos (beta)</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="showOptions()">
         <ion-icon slot="icon-only" name="location-outline"></ion-icon>
@@ -74,8 +74,8 @@
           <ion-img [src]="event?.image" [alt]="event?.title"></ion-img>
           <ion-card-header>
             <ion-card-subtitle
-              >{{(event?.date) | date:'d MMM y, HH:mm'}} {{event?.date_end ? ' -
-              ' + (event?.date_end | date:'d MMM y, HH:mm') :
+              >{{(event?.date) | date:'E d MMM y, HH:mm'}} {{event?.date_end ? '
+              - ' + (event?.date_end | date:'E d MMM y, HH:mm') :
               ''}}</ion-card-subtitle
             >
             <ion-card-title>{{event?.title}}</ion-card-title>

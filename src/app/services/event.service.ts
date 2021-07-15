@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Chat } from "../models/chat";
+import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
+import { DatePipe } from "@angular/common";
 
+import { Chat } from "../models/chat";
 import { Event } from "../models/event";
 import { Page } from "../models/page";
 import { User } from "../models/user";
@@ -11,7 +13,11 @@ import { UploadService } from "./upload.service";
   providedIn: "root"
 })
 export class EventService {
-  constructor(private rest: RestService, private uploadSvc: UploadService) {}
+  constructor(
+    private rest: RestService,
+    private uploadSvc: UploadService,
+    private localNotifications: LocalNotifications
+  ) {}
 
   async getEvent(id: Event["id"]): Promise<Event> {
     try {
@@ -75,7 +81,9 @@ export class EventService {
       }
     }
 
-    return (await this.uploadSvc.upload("event", formData)) as Event;
+    const event = (await this.uploadSvc.upload("event", formData)) as Event;
+    this.scheduleNotification(event);
+    return event;
   }
 
   async editEvent(
@@ -150,15 +158,20 @@ export class EventService {
 
   async cancelEvent(id: Event["id"]): Promise<Event> {
     try {
-      return (await this.rest.put("cancel-event", { id }).toPromise()) as Event;
+      const event = (await this.rest
+        .put("cancel-event", { id })
+        .toPromise()) as Event;
+      this.cancelNotification(event);
+      return event;
     } catch (e) {
       throw new Error("No se puede cancelar el evento");
     }
   }
 
-  async deleteEvent(id: Event["id"]) {
+  async deleteEvent(event: Event) {
     try {
-      await this.rest.delete(`delete-event/${id}`).toPromise();
+      await this.rest.delete(`delete-event/${event.id}`).toPromise();
+      this.cancelNotification(event);
     } catch (e) {
       throw new Error("No se puede eliminar el evento");
     }
@@ -166,9 +179,11 @@ export class EventService {
 
   async participateEvent(id: Event["id"]) {
     try {
-      return (await this.rest
+      const event = (await this.rest
         .post("participate-event", { id })
         .toPromise()) as Event;
+      this.scheduleNotification(event);
+      return event;
     } catch (e) {
       throw new Error("Error al participar en el evento");
     }
@@ -176,9 +191,11 @@ export class EventService {
 
   async unparticipateEvent(id: Event["id"]) {
     try {
-      return (await this.rest
+      const event = (await this.rest
         .delete(`remove-participant-event/${id}`)
         .toPromise()) as Event;
+      this.cancelNotification(event);
+      return event;
     } catch (e) {
       throw new Error("Error al quitar participación en el evento");
     }
@@ -186,7 +203,11 @@ export class EventService {
 
   async confirmDate(id: Chat["id"]) {
     try {
-      return (await this.rest.post("confirm-date", { id }).toPromise()) as Chat;
+      const event = (await this.rest
+        .post("confirm-date", { id })
+        .toPromise()) as Event;
+      this.scheduleNotification(event);
+      return event;
     } catch (e) {
       throw new Error("Error al confirmar la cita");
     }
@@ -194,9 +215,59 @@ export class EventService {
 
   async declineDate(id: Chat["id"]) {
     try {
-      return (await this.rest.put("decline-date", { id }).toPromise()) as Chat;
+      const event = (await this.rest
+        .put("decline-date", { id })
+        .toPromise()) as Event;
+      this.cancelNotification(event);
+      return event;
     } catch (e) {
       throw new Error("No se puede rechazar la cita");
     }
+  }
+
+  scheduleNotification(event: Event) {
+    const datePipe = new DatePipe("es-ES");
+
+    const text =
+      datePipe.transform(event.date, "HH:mm") + event.date_end
+        ? " - " + datePipe.transform(event.date_end, "HH:mm")
+        : "";
+
+    const date = new Date(event.date);
+
+    // Avisar una hora antes
+    this.localNotifications.schedule({
+      id: event.id + 60,
+      title: event.title,
+      text,
+      trigger: { at: new Date(date.getTime() - 60 * 1000 * 60) },
+      icon: event.image
+    });
+
+    // Avisar 10 minutos antes
+    this.localNotifications.schedule({
+      id: event.id + 10,
+      title: event.title,
+      text,
+      trigger: { at: new Date(date.getTime() - 10 * 1000 * 60) },
+      icon: event.image
+    });
+
+    // Avisar 1 minuto antes
+    this.localNotifications.schedule({
+      id: event.id + 1,
+      title: event.title,
+      text,
+      trigger: { at: new Date(date.getTime() - 1 * 1000 * 60) },
+      icon: event.image
+    });
+  }
+
+  async cancelNotification(event: Event) {
+    await this.localNotifications.cancel([
+      event.id + 60,
+      event.id + 10,
+      event.id + 1
+    ]);
   }
 }

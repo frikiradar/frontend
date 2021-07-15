@@ -45,9 +45,9 @@
       slot="start"
     ></ion-icon>
     <ion-label class="ion-text-wrap"
-      >{{(event?.date) | date:'d MMM y, HH:mm'}} {{event?.date_end ? ' - ' +
-      (event?.date_end | date:'d MMM y, HH:mm') : ''}} {{event?.past ? ' (Evento
-      pasado)' : ''}}</ion-label
+      >{{(event?.date) | date:'E d MMM y, HH:mm'}} {{event?.date_end ? ' - ' +
+      (event?.date_end | date:'E d MMM y, HH:mm') : ''}} {{event?.past ? '
+      (Evento pasado)' : ''}}</ion-label
     >
   </ion-item>
   <ion-item lines="none" class="description" *ngIf="event?.description">
@@ -74,14 +74,18 @@
       <ion-icon name="call" slot="start"></ion-icon>
       <ion-label>
         <h2>Teléfono de contacto</h2>
-        <p [innerHTML]="event?.contact_phone | linky"></p>
+        <p
+          [innerHTML]="event?.contact_phone | linky: { className: 'linkified' } "
+        ></p>
       </ion-label>
     </ion-item>
     <ion-item lines="none" *ngIf="event.contact_email">
       <ion-icon name="mail" slot="start"></ion-icon>
       <ion-label>
         <h2>Email de contacto</h2>
-        <p [innerHTML]="event?.contact_email | linky"></p>
+        <p
+          [innerHTML]="event?.contact_email | linky: { className: 'linkified' } "
+        ></p>
       </ion-label>
     </ion-item>
   </ion-item-group>
@@ -92,7 +96,10 @@
         Más información o compra de boletos
       </h2>
       <h2 *ngIf="event.type === 'online'">Enlace de acceso al evento</h2>
-      <p [innerHTML]="event?.url | linky"></p>
+      <p
+        (click)="$event.stopImmediatePropagation(); openUrl($event)"
+        [innerHTML]="event?.url | linky: { className: 'linkified' } "
+      ></p>
     </ion-label>
   </ion-item>
   <ion-item lines="none" *ngIf="event.price">
@@ -256,7 +263,7 @@
       *ngFor="let participant of event?.participants"
       button
       detail="false"
-      (click)="showProfile(view.user.id)"
+      (click)="showProfile(participant.id)"
     >
       <ion-avatar slot="start">
         <img [src]="participant?.thumbnail" />
