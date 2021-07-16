@@ -201,7 +201,7 @@ export class UtilsService {
     await alert.present();
   }
 
-  async share(url = "") {
+  async share(url = "", message = "") {
     if (!url) {
       url = "https://frikiradar.com";
     }
@@ -213,6 +213,7 @@ export class UtilsService {
     if (this.platform.is("hybrid")) {
       const options = {
         message:
+          message ??
           "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.", // not supported on some apps (Facebook, Instagram)
         subject: "FrikiRadar, conoce a personas frikis como tú", // fi. for email
         url: `${url}?referrer=${referrer}`,
@@ -223,7 +224,9 @@ export class UtilsService {
     } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
         title: "FrikiRadar, conoce a personas frikis como tú",
-        text: "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.",
+        text:
+          message ??
+          "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.",
         url: `${url}?referrer=${referrer}`
       })
         .then(() => {

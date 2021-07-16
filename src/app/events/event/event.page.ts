@@ -147,7 +147,10 @@ export class EventPage implements OnInit {
 
   share() {
     const url = `https://frikiradar.app/event/${this.event.id}`;
-    this.utils.share(url);
+    this.utils.share(
+      url,
+      "¡Ey, echa un vistazo a este evento en FrikiRadar! " + this.event.title
+    );
   }
 
   openUrl(event: any) {
