@@ -34,7 +34,7 @@ export class PageService {
         .get(`${environment.root}api/page/${slug}`, httpOptions)
         .toPromise()) as Page;
     } catch (e) {
-      throw new Error("No se puede la página");
+      throw new Error("No se puede obtener la página");
     }
   }
 }

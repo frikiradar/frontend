@@ -55,7 +55,12 @@ export class EventPage implements OnInit {
   }
 
   async getEvent(id: Event["id"]) {
-    let event = await this.eventSvc.getEvent(id);
+    let event = null;
+    if (this.auth.currentUserValue) {
+      event = await this.eventSvc.getEvent(id);
+    } else {
+      event = await this.eventSvc.getPublicEvent(id);
+    }
     if (new Date(event.date) < new Date()) {
       event.past = true;
     }
@@ -86,7 +91,9 @@ export class EventPage implements OnInit {
     } catch (e) {
       (
         await this.toast.create({
-          message: e,
+          message: this.auth.currentUserValue
+            ? e
+            : "Tienes que iniciar sesión o registrarte para apuntarte al evento",
           duration: 2000,
           position: "bottom",
           color: "danger"
