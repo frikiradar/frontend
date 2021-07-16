@@ -213,7 +213,9 @@ export class UtilsService {
 
     const referrer = this.auth.currentUserValue
       ? this.auth.currentUserValue.username
-      : "app";
+      : this.platform.is("cordova")
+      ? "app"
+      : "web";
 
     if (this.platform.is("hybrid")) {
       const options = {
@@ -237,7 +239,9 @@ export class UtilsService {
     } else {
       // fallback
       try {
-        await navigator.clipboard.writeText(message + ": " + url);
+        await navigator.clipboard.writeText(
+          `${message} ${url}?referrer=${referrer}`
+        );
         (
           await this.toast.create({
             message: "Link copiado al portapapeles",
