@@ -206,15 +206,18 @@ export class UtilsService {
       url = "https://frikiradar.com";
     }
 
+    if (!message) {
+      message =
+        "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis";
+    }
+
     const referrer = this.auth.currentUserValue
       ? this.auth.currentUserValue.username
       : "app";
 
     if (this.platform.is("hybrid")) {
       const options = {
-        message:
-          message ??
-          "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.", // not supported on some apps (Facebook, Instagram)
+        message, // not supported on some apps (Facebook, Instagram)
         subject: "FrikiRadar, conoce a personas frikis como tú", // fi. for email
         url: `${url}?referrer=${referrer}`,
         chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
@@ -224,9 +227,7 @@ export class UtilsService {
     } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
         title: "FrikiRadar, conoce a personas frikis como tú",
-        text:
-          message ??
-          "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis.",
+        text: message,
         url: `${url}?referrer=${referrer}`
       })
         .then(() => {
@@ -236,7 +237,7 @@ export class UtilsService {
     } else {
       // fallback
       try {
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard.writeText(message + ": " + url);
         (
           await this.toast.create({
             message: "Link copiado al portapapeles",
