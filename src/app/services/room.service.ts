@@ -20,7 +20,7 @@ export class RoomService {
     private config: ConfigService,
     private uploadSvc: UploadService, // private push: PushService
     private auth: AuthService
-  ) { }
+  ) {}
 
   async getRooms() {
     return (await this.rest.get("rooms").toPromise()) as Room[];
@@ -70,10 +70,11 @@ export class RoomService {
     name: string,
     text: string,
     replyto?: number,
+    tmp_id?: string,
     mentions?: User["username"][]
   ) {
     return (await this.rest
-      .put("room-message", { slug, name, text, replyto, mentions })
+      .put("room-message", { slug, name, text, replyto, tmp_id, mentions })
       .toPromise()) as Chat;
   }
 
@@ -82,6 +83,7 @@ export class RoomService {
     name: string,
     image: Blob,
     text: string,
+    tmp_id?: string,
     mentions?: User["username"][]
   ) {
     const formData: FormData = new FormData();
@@ -89,6 +91,7 @@ export class RoomService {
     formData.set("slug", "" + slug);
     formData.set("name", "" + name);
     formData.set("text", text);
+    formData.set("tmp_id", tmp_id);
     formData.set("mentions", JSON.stringify(mentions));
     return (await this.uploadSvc.upload("room-upload", formData)) as Chat;
   }

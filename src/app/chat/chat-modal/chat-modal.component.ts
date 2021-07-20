@@ -245,6 +245,7 @@ export class ChatModalComponent implements OnInit {
           m.deleted = message.deleted;
           m.sending = false;
           m.event = message.event;
+          m.reply_to = message.reply_to;
         }
       });
       // this.messageChange.emit(message);

@@ -223,19 +223,13 @@ export class RoomPage implements OnInit {
           }
         }
       });
-
-      messages.forEach(message => {
-        if (this.messages.some(m => m.id === message.id)) {
-          this.messages.map(m => {
-            if (m.id === message.id && m.text !== message.text) {
-              m.text = message.text;
-              m.edited = message.edited;
-            }
-          });
-        } else {
-          this.messages = [...this.messages, message];
-        }
-      });
+      if (this.messages.length) {
+        messages.forEach(message => {
+          this.messageReceived(message);
+        });
+      } else {
+        this.messages = messages;
+      }
 
       if (this.messages.length < 15) {
         this.infiniteScroll.disabled = true;
@@ -278,20 +272,22 @@ export class RoomPage implements OnInit {
       });
       this.editing = false;
     } else {
-      this.messages = [
-        ...this.messages,
-        ...[
-          {
-            slug: this.slug,
-            fromuser: this.auth.currentUserValue,
-            text,
-            image,
-            time_creation: new Date(),
-            sending: true,
-            mentions
-          }
-        ]
-      ].filter((m: Chat) => m.text || m.image);
+      const tmpId = this.utils.makeId(6);
+
+      const message = {
+        tmp_id: tmpId,
+        slug: this.slug,
+        fromuser: this.auth.currentUserValue,
+        text,
+        image,
+        time_creation: new Date(),
+        sending: true,
+        mentions
+      };
+
+      this.messages = [...this.messages, ...[message]].filter(
+        (m: Chat) => m.text || m.image || m.audio
+      );
 
       this.scrollDown(1, true);
       let replyToId =
@@ -299,20 +295,34 @@ export class RoomPage implements OnInit {
       this.replying = false;
 
       try {
+        let chat = null;
         if (!image) {
-          message = await this.roomSvc
-            .sendMessage(this.slug, this.room.name, text, replyToId, mentions)
+          chat = await this.roomSvc
+            .sendMessage(
+              this.slug,
+              this.room.name,
+              text,
+              replyToId,
+              tmpId,
+              mentions
+            )
             .then();
         } else if (image) {
           const imageFile = await this.utils.urltoBlob(image);
-          message = await this.roomSvc
-            .sendImage(this.slug, this.room.name, imageFile, text, mentions)
+          chat = await this.roomSvc
+            .sendImage(
+              this.slug,
+              this.room.name,
+              imageFile,
+              text,
+              tmpId,
+              mentions
+            )
             .then();
         }
-        this.messages.map(m => {
-          m.sending = false;
-        });
-        this.room.last_message = message.id;
+        await this.messageReceived(chat);
+
+        this.room.last_message = chat.id;
         this.roomSvc.setLastMessage(this.room);
 
         replyToId = null;
@@ -632,7 +642,6 @@ export class RoomPage implements OnInit {
   }
 
   async messageReceived(message: Chat) {
-    // console.log(message);
     if (message.conversationId === this.slug) {
       if (
         message.writing &&
@@ -646,17 +655,26 @@ export class RoomPage implements OnInit {
         }, 10000);
       } else if (!message.writing) {
         this.toUserWriting = "";
-        // borramos los enviando
-        this.messages = this.messages.filter(m => !m.sending);
-        if (this.messages.some(m => m.id === message.id)) {
+        if (
+          this.messages.some(
+            m =>
+              (m.id === message.id && !!m.id) ||
+              (m.tmp_id === message.tmp_id && !!m.tmp_id)
+          )
+        ) {
           // Si ya existe el mensaje lo actualizamos
           this.messages.map(m => {
-            if (m.id === message.id) {
+            if (
+              (m.id === message.id && !!m.id) ||
+              (m.tmp_id === message.tmp_id && !!m.tmp_id)
+            ) {
+              m.id = message.id;
               m.text = message.text;
               m.time_read = message.time_read;
               m.edited = message.edited;
               m.deleted = message.deleted;
               m.modded = message.modded;
+              m.reply_to = message.reply_to;
             }
           });
         } else {
