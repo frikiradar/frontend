@@ -673,6 +673,7 @@ export class RoomPage implements OnInit {
               m.time_read = message.time_read;
               m.edited = message.edited;
               m.deleted = message.deleted;
+              m.sending = false;
               m.modded = message.modded;
               m.reply_to = message.reply_to;
             }
