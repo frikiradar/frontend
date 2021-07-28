@@ -56,6 +56,8 @@ export class ChatInputComponent {
   public imagePreview: SafeUrl;
   private mediaRecorder: MediaRecorder;
   public recording: boolean = false;
+  public countRecordingString = "0m 0s";
+  private countInterval: any;
   public recorded: boolean = false;
   public audio: string;
   public audioPreview: SafeUrl;
@@ -302,6 +304,8 @@ export class ChatInputComponent {
           });
         });
     }
+
+    this.countRecording();
   }
 
   async stopMic() {
@@ -321,6 +325,8 @@ export class ChatInputComponent {
       this.mediaRecorder.stop();
       // console.log(this.mediaRecorder.state);
     }
+
+    this.stopCountRecording();
   }
 
   removeRecorded() {
@@ -409,5 +415,22 @@ export class ChatInputComponent {
 
   async createEvent() {
     this.onCreateEvent.emit();
+  }
+
+  countRecording() {
+    let time = 0;
+    this.countInterval = setInterval(() => {
+      time++;
+
+      let minutes = Math.floor((time % (60 * 60)) / 60);
+      let seconds = Math.floor(time % 60);
+
+      this.countRecordingString = minutes + "m " + seconds + "s";
+    }, 1000);
+  }
+
+  stopCountRecording() {
+    clearInterval(this.countInterval);
+    this.countRecordingString = "";
   }
 }

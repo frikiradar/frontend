@@ -211,17 +211,17 @@ ion-toast.md {
 }
 
 .ion-page,
-.modal-wrapper {
+ion-modal::part(content) {
   background: var(--ion-color-dark) !important;
 }
 
-.modal-wrapper {
+ion-modal::part(content) {
   @media (min-width: 668px) {
     --border-radius: 20px;
   }
 }
 
-.full-modal .modal-wrapper {
+.full-modal::part(content) {
   @media (min-width: 668px) {
     --height: 95%;
     --width: 50%;
@@ -232,7 +232,7 @@ ion-toast.md {
   border-radius: 25px;
 }
 
-.medium-modal .modal-wrapper {
+.medium-modal::part(content) {
   @media (max-width: 667px) {
     --height: 70%;
     --width: 70%;
