@@ -211,17 +211,20 @@ ion-toast.md {
 }
 
 .ion-page,
+.modal-wrapper /*ionic v5*/,
 ion-modal::part(content) {
   background: var(--ion-color-dark) !important;
 }
 
+.modal-wrapper /*ionic v5*/,
 ion-modal::part(content) {
   @media (min-width: 668px) {
     --border-radius: 20px;
   }
 }
 
-.full-modal::part(content) {
+.full-modal::part(content),
+.full-modal .modal-wrapper /*ionic v5*/ {
   @media (min-width: 668px) {
     --height: 95%;
     --width: 50%;
@@ -232,6 +235,7 @@ ion-modal::part(content) {
   border-radius: 25px;
 }
 
+.medium-modal .modal-wrapper /*ionic v5*/,
 .medium-modal::part(content) {
   @media (max-width: 667px) {
     --height: 70%;
