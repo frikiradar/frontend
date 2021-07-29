@@ -43,7 +43,7 @@ export class CommunityPage {
     slidesPerView: 4.5,
     breakpoints: {
       1024: {
-        slidesPerView: 6.5
+        slidesPerView: 10.5
       }
     },
     grabCursor: true
