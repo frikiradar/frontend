@@ -46,8 +46,10 @@
         <ion-datetime
           formControlName="date"
           displayFormat="DD MMM de YYYY HH:mm"
+          pickerFormat="DD MMM YYYY HH:mm"
           monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
           placeholder="dd mm de yyyy hh:mm"
+          max="2030-12-31"
           cancel-text="Cancelar"
           done-text="Hecho"
         ></ion-datetime>
@@ -76,6 +78,7 @@
             cancel-text="Cancelar"
             done-text="Hecho"
             [min]="eventForm.get('date').value"
+            max="2030-12-31"
           ></ion-datetime>
         </ion-item>
       </ion-item-group>

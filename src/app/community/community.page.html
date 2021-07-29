@@ -17,27 +17,8 @@
 
 <ion-content>
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
-
-  <ion-item lines="none" (click)="showAllStories()" button detail="false">
-    <ion-label color="light">
-      <h2 class="section">
-        <ion-text color="ligth">Historias frikis</ion-text>
-      </h2>
-    </ion-label>
-    <ion-icon
-      md="arrow-forward"
-      ios="chevron-forward"
-      slot="end"
-      color="light"
-    ></ion-icon>
-  </ion-item>
   <section>
-    <ion-slides
-      id="stories"
-      class="ion-padding"
-      [options]="storiesOpts"
-      mode="md"
-    >
+    <ion-slides id="stories" [options]="storiesOpts" mode="md">
       <ion-slide>
         <div>
           <ion-item button lines="none" (click)="newStory()">
@@ -49,7 +30,7 @@
               <ion-badge color="tertiary">+</ion-badge>
             </ion-avatar>
           </ion-item>
-          <ion-label>Añadir historia</ion-label>
+          <ion-label>Añadir</ion-label>
         </div>
       </ion-slide>
       <ion-slide *ngFor="let story of groupedStories; let i = index">
@@ -60,6 +41,19 @@
             </ion-avatar>
           </ion-item>
           <ion-label>{{story.user.username}}</ion-label>
+        </div>
+      </ion-slide>
+      <ion-slide *ngIf="groupedStories?.length">
+        <div>
+          <ion-item button lines="none" (click)="showAllStories()">
+            <ion-avatar>
+              <img
+                [src]="auth.currentUserValue?.thumbnail"
+                alt="auth.currentUserValue?.name"
+              />
+            </ion-avatar>
+          </ion-item>
+          <ion-label>Ver todas</ion-label>
         </div>
       </ion-slide>
     </ion-slides>

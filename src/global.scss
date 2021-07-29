@@ -285,12 +285,12 @@ ul {
 
 #stories {
   ion-avatar {
-    width: 65px;
-    height: 65px;
+    width: 48px;
+    height: 48px;
 
     img {
-      width: 65px;
-      height: 65px;
+      width: 48px;
+      height: 48px;
     }
 
     &.not-view img {
@@ -300,12 +300,12 @@ ul {
 
   ion-badge {
     position: absolute;
-    left: 45px;
+    left: 35px;
+    bottom: 5px;
     border-radius: 15px;
     z-index: 1;
     width: 22px;
     height: 22px;
-    bottom: 7px;
     border: 2px solid var(--ion-color-dark);
     font-size: 14pt;
     line-height: 0.7;
@@ -314,7 +314,7 @@ ul {
   ion-label {
     font-size: 13px;
     color: var(--ion-color-light);
-    width: 90px;
+    width: 80px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
