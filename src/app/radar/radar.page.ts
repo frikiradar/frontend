@@ -4,7 +4,7 @@ import {
   HostListener,
   ChangeDetectorRef
 } from "@angular/core";
-import { Router } from "@angular/router";
+import { NavigationStart, Router, Event } from "@angular/router";
 import {
   IonSlides,
   MenuController,
@@ -189,7 +189,7 @@ export class RadarPage {
     slidesPerView: 4.5,
     breakpoints: {
       1024: {
-        slidesPerView: 10.5
+        slidesPerView: 14.5
       }
     },
     grabCursor: true
@@ -280,6 +280,14 @@ export class RadarPage {
   ) {
     this.notificationSvc.notification.subscribe(notification => {
       this.counters = notification;
+    });
+
+    this.router.events.subscribe(async (event: Event) => {
+      if (event instanceof NavigationStart) {
+        if (event.url === "/tabs/radar") {
+          this.getStories();
+        }
+      }
     });
   }
 
@@ -467,7 +475,6 @@ export class RadarPage {
     if (!deepEqual(this.stories, stories)) {
       this.stories = stories;
       const groupedStories = this.storySvc.groupStories(stories);
-
       this.groupedStories = groupedStories;
     }
   }

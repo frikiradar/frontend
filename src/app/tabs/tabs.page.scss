@@ -16,7 +16,7 @@ ion-tab-bar {
 
   ion-avatar {
     display: initial;
-    bottom: -2px;
+    bottom: -6px;
     position: relative;
 
     img {
@@ -24,4 +24,8 @@ ion-tab-bar {
       height: 32px;
     }
   }
+}
+
+.menu-pane {
+  display: none;
 }

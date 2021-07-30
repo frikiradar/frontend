@@ -22,6 +22,8 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+</ion-header>
+<ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <section>
     <ion-slides id="stories" [options]="storiesOpts" mode="md">
       <ion-slide>
@@ -63,8 +65,6 @@
       </ion-slide>
     </ion-slides>
   </section>
-</ion-header>
-<ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
   <div *ngIf="view === 'cards'" style="height: 100%">
     <ion-slides #slides (ionSlideDidChange)="slide()" [options]="slideOpts">

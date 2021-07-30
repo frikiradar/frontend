@@ -76,15 +76,7 @@ export class CommunityPage {
     private afMessaging: AngularFireMessaging,
     private firebase: FirebaseX,
     private platform: Platform
-  ) {
-    this.router.events.subscribe(async (event: Event) => {
-      if (event instanceof NavigationStart) {
-        if (event.url === "/tabs/community") {
-          this.getStories();
-        }
-      }
-    });
-  }
+  ) {}
 
   async ngAfterViewInit() {
     this.animate.animateSections("section", 600, 500);
@@ -93,31 +85,8 @@ export class CommunityPage {
   }
 
   async ngOnInit() {
-    const id = this.route.snapshot.paramMap.get("id");
-    if (id) {
-      try {
-        const story = await this.storySvc.getStory(+id);
-        this.showStory(story);
-      } catch (e) {
-        console.error("Historia no encontrada");
-        this.getStories();
-      }
-    } else {
-      this.getStories();
-    }
     this.getRooms();
     this.getPages();
-  }
-
-  async getStories() {
-    let stories = await this.storySvc.getAllStories();
-    stories = this.storySvc.orderStories(stories);
-    if (!deepEqual(this.stories, stories)) {
-      this.stories = stories;
-      const groupedStories = this.storySvc.groupStories(stories);
-
-      this.groupedStories = groupedStories;
-    }
   }
 
   async getRooms() {
@@ -169,52 +138,6 @@ export class CommunityPage {
     }
 
     this.loading = false;
-  }
-
-  async newStory() {
-    const modal = await this.modal.create({
-      component: StoryModal,
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal"
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-    await this.getStories();
-  }
-
-  async showStories(id: User["id"]) {
-    let stories = this.stories.reverse().filter(s => s.user.id === id);
-    stories = [
-      ...stories,
-      ...this.stories.reverse().filter(s => s.user.id !== id)
-    ];
-    await this.showStoriesModal(stories);
-    await this.getStories();
-  }
-
-  async showStory(story: Story) {
-    const stories = [story];
-    await this.showStoriesModal(stories);
-    await this.getStories();
-  }
-
-  async showStoriesModal(stories: Story[]) {
-    const modal = await this.modal.create({
-      component: ViewStoriesModal,
-      componentProps: { stories },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal"
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-  }
-
-  async showAllStories() {
-    this.router.navigate(["/story"]);
   }
 
   async showAllRooms() {

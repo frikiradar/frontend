@@ -1,16 +1,5 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-toggle>
-        <ion-avatar>
-          <img
-            [src]="auth.currentUserValue?.thumbnail"
-            [alt]="auth.currentUserValue?.username"
-            default="/assets/img/users/default.jpg"
-          />
-        </ion-avatar>
-      </ion-menu-toggle>
-    </ion-buttons>
     <ion-title>Eventos (beta)</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="showOptions()">

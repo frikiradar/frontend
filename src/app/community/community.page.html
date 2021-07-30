@@ -1,68 +1,15 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-toggle>
-        <ion-avatar>
-          <img
-            [src]="auth.currentUserValue?.thumbnail"
-            [alt]="auth.currentUserValue?.username"
-            default="/assets/img/users/default.jpg"
-          />
-        </ion-avatar>
-      </ion-menu-toggle>
-    </ion-buttons>
     <ion-title>Comunidad</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
-  <section>
-    <ion-slides id="stories" [options]="storiesOpts" mode="md">
-      <ion-slide>
-        <div>
-          <ion-item button lines="none" (click)="newStory()">
-            <ion-avatar>
-              <img
-                [src]="auth.currentUserValue?.thumbnail"
-                alt="auth.currentUserValue?.name"
-              />
-              <ion-badge color="tertiary">+</ion-badge>
-            </ion-avatar>
-          </ion-item>
-          <ion-label>Añadir</ion-label>
-        </div>
-      </ion-slide>
-      <ion-slide *ngFor="let story of groupedStories; let i = index">
-        <div>
-          <ion-item button lines="none" (click)="showStories(story.user.id)">
-            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
-              <img [src]="story.image" [alt]="story.text" />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>{{story.user.username}}</ion-label>
-        </div>
-      </ion-slide>
-      <ion-slide *ngIf="groupedStories?.length">
-        <div>
-          <ion-item button lines="none" (click)="showAllStories()">
-            <ion-avatar>
-              <img
-                [src]="auth.currentUserValue?.thumbnail"
-                alt="auth.currentUserValue?.name"
-              />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>Ver todas</ion-label>
-        </div>
-      </ion-slide>
-    </ion-slides>
-  </section>
-
   <ion-item lines="none" (click)="showAllRooms()" button detail="false">
     <ion-label color="light">
       <h2 class="section">
-        <ion-text color="ligth">Chats</ion-text>
+        <ion-text color="ligth">Salas de chat</ion-text>
       </h2>
       <p class="subtitle">
         <ion-text color="ligth">

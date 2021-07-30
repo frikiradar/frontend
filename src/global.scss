@@ -322,6 +322,23 @@ ul {
     margin-left: auto;
     margin-right: auto;
   }
+
+  @media (min-width: 992px) {
+    ion-avatar,
+    img {
+      width: 65px !important;
+      height: 65px !important;
+    }
+
+    ion-badge {
+      bottom: 7px;
+      left: 45px;
+    }
+
+    ion-label {
+      width: 90px;
+    }
+  }
 }
 
 #usernames {
