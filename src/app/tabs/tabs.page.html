@@ -33,5 +33,17 @@
         >{{ counters.chats }}</ion-badge
       >
     </ion-tab-button>
+
+    <ion-tab-button>
+      <ion-menu-toggle>
+        <ion-avatar>
+          <img
+            [src]="auth.currentUserValue?.thumbnail"
+            [alt]="auth.currentUserValue?.username"
+            default="/assets/img/users/default.jpg"
+          />
+        </ion-avatar>
+      </ion-menu-toggle>
+    </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

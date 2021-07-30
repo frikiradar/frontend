@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { Event, NavigationEnd, Router, RouterEvent } from "@angular/router";
-import { AlertController } from "@ionic/angular";
+import { NavigationEnd, Router, RouterEvent } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 
 import {
@@ -21,8 +20,7 @@ export class TabsPage implements OnInit {
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
     public auth: AuthService,
-    private router: Router,
-    private alert: AlertController
+    private router: Router
   ) {
     this.router.events.subscribe(async (event: RouterEvent) => {
       event.url = event.url === "/" ? "/tabs/radar" : event.url;

@@ -7,7 +7,11 @@
     <ion-icon name="volume-mute" slot="start"></ion-icon>
     <ion-label>Silenciar notificaciones</ion-label>
   </ion-item>-->
-  <ion-item button (click)="copyProfile()" *ngIf="page !== 'chat'">
+  <ion-item
+    button
+    (click)="copyProfile()"
+    *ngIf="page !== 'chat' && platform.is('cordova')"
+  >
     <ion-icon color="light" name="copy" slot="start"></ion-icon>
     <ion-label color="light">Copiar URL del perfil</ion-label>
   </ion-item>

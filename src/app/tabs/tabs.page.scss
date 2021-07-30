@@ -13,4 +13,15 @@ ion-tab-bar {
       border-radius: 20px;
     }
   }
+
+  ion-avatar {
+    display: initial;
+    bottom: -2px;
+    position: relative;
+
+    img {
+      width: 32px;
+      height: 32px;
+    }
+  }
 }
