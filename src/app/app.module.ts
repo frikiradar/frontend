@@ -51,7 +51,6 @@ import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { MenuComponent } from "./menu/menu.component";
 import { SharedModule } from "./shared/shared.module";
 import { OptionsPopover } from "./options-popover/options-popover";
 
@@ -59,8 +58,8 @@ import { OptionsPopover } from "./options-popover/options-popover";
 registerLocaleData(localeEs, "es");
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent, OptionsPopover],
-  entryComponents: [MenuComponent, OptionsPopover],
+  declarations: [AppComponent, OptionsPopover],
+  entryComponents: [OptionsPopover],
   imports: [
     BrowserModule,
     IonicModule.forRoot({ animated: true }),
