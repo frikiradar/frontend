@@ -235,7 +235,7 @@ export class AuthService {
     }
 
     // Desactivamos las notificaciones
-    if (uuid) {
+    if (uuid && this.currentUserValue) {
       try {
         await this.rest.get(`turnoff-device/${uuid}`).toPromise();
       } catch (e) {

@@ -44,23 +44,25 @@ export class BannedAccountPage {
     });
     this.user = this.auth.currentUserValue;
 
-    setInterval(() => {
-      this.countDown();
-    }, 1000);
+    if (this.user.ban_end) {
+      setInterval(() => {
+        this.countDown();
+      }, 1000);
+    } else {
+      this.countDownString = "∞";
+    }
   }
 
   async ngOnInit() {
     const messages = (await this.chatSvc.getMessages(1, true)).reverse();
     const topMessages = [
       {
-        text:
-          "Recapacita lo que has hecho, reflexiona y mejora tu actitud, esto es una advertencia. Estás castigado el tiempo mostrado, muestra respeto tal y como te gustaría recibirlo.",
+        text: "Recapacita lo que has hecho, reflexiona y mejora tu actitud, esto es una advertencia. Estás castigado el tiempo mostrado, muestra respeto tal y como te gustaría recibirlo.",
         touser: { id: this.user.id },
         fromuser: { id: 1 }
       },
       {
-        text:
-          "Una vez hayas recapacitado... si crees que ha sido un error, quieres disculparte o aportar sugerencias para la aplicación escribe a continuación.",
+        text: "Una vez hayas recapacitado... si crees que ha sido un error, quieres disculparte o aportar sugerencias para la aplicación escribe a continuación.",
         touser: { id: this.user.id },
         fromuser: { id: 1 }
       }
