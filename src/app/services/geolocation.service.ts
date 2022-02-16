@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { Geolocation } from "@capacitor/geolocation";
 import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 import { ModalController, Platform, ToastController } from "@ionic/angular";
 
@@ -7,14 +7,13 @@ import { RequestGeolocationModal } from "../radar/request-geolocation-modal/requ
 import { ConfigService } from "./config.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class GeolocationService {
   notifications: any = [];
 
   constructor(
     private modal: ModalController,
-    private geolocation: Geolocation,
     private config: ConfigService,
     private locationAccuracy: LocationAccuracy,
     private platform: Platform,
@@ -24,7 +23,7 @@ export class GeolocationService {
   async requestPermission() {
     const modal = await this.modal.create({
       component: RequestGeolocationModal,
-      backdropDismiss: false
+      backdropDismiss: false,
     });
     await modal.present();
     return await modal.onDidDismiss();
@@ -34,7 +33,7 @@ export class GeolocationService {
     const modal = await this.modal.create({
       component: RequestGeolocationModal,
       componentProps: { view: "force" },
-      backdropDismiss: false
+      backdropDismiss: false,
     });
     await modal.present();
     return await modal.onDidDismiss();
@@ -56,7 +55,7 @@ export class GeolocationService {
         await this.toastController.create({
           message: "Obteniendo tu ubicación",
           position: "middle",
-          color: "secondary"
+          color: "secondary",
         })
       ).present();
 
@@ -66,10 +65,7 @@ export class GeolocationService {
         );
       }
 
-      const coordinates = await this.geolocation.getCurrentPosition({
-        timeout: 15000,
-        maximumAge: 15000
-      });
+      const coordinates = await Geolocation.getCurrentPosition();
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
       this.config.set("geolocation", true);

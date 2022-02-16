@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
-import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { takeWhile } from "rxjs/operators";
@@ -26,7 +25,6 @@ export class PushService {
     private firebasex: FirebaseX,
     private router: Router,
     private notificationSvc: NotificationService,
-    private localNotifications: LocalNotifications,
     private platform: Platform,
     private auth: AuthService,
     private afMessaging: AngularFireMessaging,
@@ -36,20 +34,6 @@ export class PushService {
       if (this.platform.is("cordova")) {
         try {
           await this.firebasex.hasPermission();
-          this.localNotifications.on("click").subscribe((notification) => {
-            console.log("click", notification);
-            const data = notification.data;
-            this.router.navigate([data.url]);
-          });
-
-          this.localNotifications.on("trigger").subscribe((notification) => {
-            console.log("trigger", notification);
-            const data = notification.data;
-          });
-
-          this.localNotifications.on("reply").subscribe((notification) => {
-            console.log("onreply", notification);
-          });
         } catch (e) {
           console.error(e);
         }
@@ -245,18 +229,6 @@ export class PushService {
         !this.router.url.includes("chat") &&
         notification?.notify === "true"
       ) {
-        this.localNotifications.schedule({
-          title: notification?.title,
-          text: notification?.body,
-          sound: "file://assets/audio/bipbip.mp3",
-          smallIcon: "res://notification_icon",
-          color: "#e91e63",
-          icon: notification?.icon,
-          // attachments: notification?.attachments,
-          channel: notification?.topic,
-          data: notification,
-          // actions
-        });
       }
     } else {
       if (

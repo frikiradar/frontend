@@ -1,0 +1,2544 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[6].rules[1].use[0]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[6].rules[1].use[1]!./src/theme/variables.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/** Ionic CSS Variables **/
+:root {
+  /** primary **/
+  --ion-color-primary: #e91e63;
+  --ion-color-primary-rgb: 56, 128, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #c2185b;
+  --ion-color-primary-tint: #f06292;
+  /** secondary **/
+  --ion-color-secondary: #c4d83b;
+  --ion-color-secondary-rgb: 12, 209, 232;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #859900;
+  --ion-color-secondary-tint: #cad96c;
+  /** tertiary **/
+  --ion-color-tertiary: #7044ff;
+  --ion-color-tertiary-rgb: 112, 68, 255;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #633ce0;
+  --ion-color-tertiary-tint: #7e57ff;
+  /** success **/
+  --ion-color-success: #10dc60;
+  --ion-color-success-rgb: 16, 220, 96;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #0ec254;
+  --ion-color-success-tint: #28e070;
+  /** warning **/
+  --ion-color-warning: #ffce00;
+  --ion-color-warning-rgb: 255, 206, 0;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #e0b500;
+  --ion-color-warning-tint: #ffd31a;
+  /** danger **/
+  --ion-color-danger: #f04141;
+  --ion-color-danger-rgb: 245, 61, 61;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #d33939;
+  --ion-color-danger-tint: #f25454;
+  /** medium **/
+  --ion-color-medium: #989aa2;
+  --ion-color-medium-rgb: 152, 154, 162;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #86888f;
+  --ion-color-medium-tint: #a2a4ab;
+  /** patreon **/
+  --ion-color-patreon: #f66854;
+  --ion-color-patreon-rgb: 246, 104, 84;
+  --ion-color-patreon-contrast: #000000;
+  --ion-color-patreon-contrast-rgb: 0, 0, 0;
+  --ion-color-patreon-shade: #d85c4a;
+  --ion-color-patreon-tint: #f77765;
+}
+:root body.dark {
+  /** dark **/
+  --ion-color-dark: #1f1f1f;
+  --ion-color-dark-rgb: 31, 31, 31;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #1b1b1b;
+  --ion-color-dark-tint: #353535;
+  /** medium-dark **/
+  --ion-color-medium-dark: #292929;
+  --ion-color-medium-dark-rgb: 41, 41, 41;
+  --ion-color-medium-dark-contrast: #ffffff;
+  --ion-color-medium-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-dark-shade: #242424;
+  --ion-color-medium-dark-tint: #3e3e3e;
+  /** light **/
+  --ion-color-light: #fafafa;
+  --ion-color-light-rgb: 250, 250, 250;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #dcdcdc;
+  --ion-color-light-tint: #fbfbfb;
+}
+:root body.dark .ion-color-dark {
+  --ion-color-base: var(--ion-color-dark);
+  --ion-color-base-rgb: var(--ion-color-dark-rgb);
+  --ion-color-contrast: var(--ion-color-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-dark-shade);
+  --ion-color-tint: var(--ion-color-dark-tint);
+}
+:root body.dark .ion-color-medium-dark {
+  --ion-color-base: var(--ion-color-medium-dark);
+  --ion-color-base-rgb: var(--ion-color-medium-dark-rgb);
+  --ion-color-contrast: var(--ion-color-medium-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-medium-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-medium-dark-shade);
+  --ion-color-tint: var(--ion-color-medium-dark-tint);
+}
+:root body.dark .ion-color-light {
+  --ion-color-base: var(--ion-color-light);
+  --ion-color-base-rgb: var(--ion-color-light-rgb);
+  --ion-color-contrast: var(--ion-color-light-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-light-contrast-rgb);
+  --ion-color-shade: var(--ion-color-light-shade);
+  --ion-color-tint: var(--ion-color-light-tint);
+}
+:root body.light {
+  /** dark **/
+  --ion-color-dark: #fafafa;
+  --ion-color-dark-rgb: 250, 250, 250;
+  --ion-color-dark-contrast: #000000;
+  --ion-color-dark-contrast-rgb: 0, 0, 0;
+  --ion-color-dark-shade: #dcdcdc;
+  --ion-color-dark-tint: #fbfbfb;
+  /** light **/
+  --ion-color-light: #1f1f1f;
+  --ion-color-light-rgb: 31, 31, 31;
+  --ion-color-light-contrast: #ffffff;
+  --ion-color-light-contrast-rgb: 255, 255, 255;
+  --ion-color-light-shade: #1b1b1b;
+  --ion-color-light-tint: #353535;
+  /** medium-dark **/
+  --ion-color-medium-dark: #e9e9e9;
+  --ion-color-medium-dark-rgb: 233, 233, 233;
+  --ion-color-medium-dark-contrast: #000000;
+  --ion-color-medium-dark-contrast-rgb: 0, 0, 0;
+  --ion-color-medium-dark-shade: #cdcdcd;
+  --ion-color-medium-dark-tint: #ebebeb;
+}
+:root body.light .ion-color-dark {
+  --ion-color-base: var(--ion-color-dark);
+  --ion-color-base-rgb: var(--ion-color-dark-rgb);
+  --ion-color-contrast: var(--ion-color-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-dark-shade);
+  --ion-color-tint: var(--ion-color-dark-tint);
+}
+:root body.light .ion-color-light {
+  --ion-color-base: var(--ion-color-light);
+  --ion-color-base-rgb: var(--ion-color-light-rgb);
+  --ion-color-contrast: var(--ion-color-light-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-light-contrast-rgb);
+  --ion-color-shade: var(--ion-color-light-shade);
+  --ion-color-tint: var(--ion-color-light-tint);
+}
+:root body.light .ion-color-medium-dark {
+  --ion-color-base: var(--ion-color-medium-dark);
+  --ion-color-base-rgb: var(--ion-color-medium-dark-rgb);
+  --ion-color-contrast: var(--ion-color-medium-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-medium-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-medium-dark-shade);
+  --ion-color-tint: var(--ion-color-medium-dark-tint);
+}
+:root body.cyberpunk {
+  /** dark **/
+  --ion-color-dark: #0c1340;
+  --ion-color-dark-rgb: 12, 19, 64;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #0b1138;
+  --ion-color-dark-tint: #242b53;
+  /** medium-dark **/
+  --ion-color-medium-dark: #360575;
+  --ion-color-medium-dark-rgb: 54, 5, 117;
+  --ion-color-medium-dark-contrast: #ffffff;
+  --ion-color-medium-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-dark-shade: #300467;
+  --ion-color-medium-dark-tint: #4a1e83;
+  /** light **/
+  --ion-color-light: #fafafa;
+  --ion-color-light-rgb: 250, 250, 250;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #dcdcdc;
+  --ion-color-light-tint: #fbfbfb;
+  /** primary **/
+  --ion-color-primary: #d902e9;
+  --ion-color-primary-rgb: 217, 2, 233;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #bf02cd;
+  --ion-color-primary-tint: #dd1beb;
+}
+:root body.cyberpunk .ion-color-dark {
+  --ion-color-base: var(--ion-color-dark);
+  --ion-color-base-rgb: var(--ion-color-dark-rgb);
+  --ion-color-contrast: var(--ion-color-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-dark-shade);
+  --ion-color-tint: var(--ion-color-dark-tint);
+}
+:root body.cyberpunk .ion-color-medium-dark {
+  --ion-color-base: var(--ion-color-medium-dark);
+  --ion-color-base-rgb: var(--ion-color-medium-dark-rgb);
+  --ion-color-contrast: var(--ion-color-medium-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-medium-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-medium-dark-shade);
+  --ion-color-tint: var(--ion-color-medium-dark-tint);
+}
+:root body.cyberpunk .ion-color-light {
+  --ion-color-base: var(--ion-color-light);
+  --ion-color-base-rgb: var(--ion-color-light-rgb);
+  --ion-color-contrast: var(--ion-color-light-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-light-contrast-rgb);
+  --ion-color-shade: var(--ion-color-light-shade);
+  --ion-color-tint: var(--ion-color-light-tint);
+}
+:root body.cyberpunk .ion-color-primary {
+  --ion-color-base: var(--ion-color-primary);
+  --ion-color-base-rgb: var(--ion-color-primary-rgb);
+  --ion-color-contrast: var(--ion-color-primary-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
+  --ion-color-shade: var(--ion-color-primary-shade);
+  --ion-color-tint: var(--ion-color-primary-tint);
+}
+:root body.black {
+  /** dark **/
+  --ion-color-dark: #000000;
+  --ion-color-dark-rgb: 0, 0, 0;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #000000;
+  --ion-color-dark-tint: #1a1a1a;
+  /** medium-dark **/
+  --ion-color-medium-dark: #000000;
+  --ion-color-medium-dark-rgb: 0, 0, 0;
+  --ion-color-medium-dark-contrast: #ffffff;
+  --ion-color-medium-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-dark-shade: #000000;
+  --ion-color-medium-dark-tint: #1a1a1a;
+  /** light **/
+  --ion-color-light: #ffffff;
+  --ion-color-light-rgb: 255, 255, 255;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #e0e0e0;
+  --ion-color-light-tint: #ffffff;
+}
+:root body.black .ion-color-dark {
+  --ion-color-base: var(--ion-color-dark);
+  --ion-color-base-rgb: var(--ion-color-dark-rgb);
+  --ion-color-contrast: var(--ion-color-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-dark-shade);
+  --ion-color-tint: var(--ion-color-dark-tint);
+}
+:root body.black .ion-color-medium-dark {
+  --ion-color-base: var(--ion-color-medium-dark);
+  --ion-color-base-rgb: var(--ion-color-medium-dark-rgb);
+  --ion-color-contrast: var(--ion-color-medium-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-medium-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-medium-dark-shade);
+  --ion-color-tint: var(--ion-color-medium-dark-tint);
+}
+:root body.black .ion-color-light {
+  --ion-color-base: var(--ion-color-light);
+  --ion-color-base-rgb: var(--ion-color-light-rgb);
+  --ion-color-contrast: var(--ion-color-light-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-light-contrast-rgb);
+  --ion-color-shade: var(--ion-color-light-shade);
+  --ion-color-tint: var(--ion-color-light-tint);
+}
+:root body.fire {
+  /** dark **/
+  --ion-color-dark: #000000;
+  --ion-color-dark-rgb: 0, 0, 0;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #000000;
+  --ion-color-dark-tint: #1a1a1a;
+  /** medium-dark **/
+  --ion-color-medium-dark: #860909;
+  --ion-color-medium-dark-rgb: 134, 9, 9;
+  --ion-color-medium-dark-contrast: #ffffff;
+  --ion-color-medium-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-dark-shade: #760808;
+  --ion-color-medium-dark-tint: #922222;
+  /** light **/
+  --ion-color-light: #fafafa;
+  --ion-color-light-rgb: 250, 250, 250;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #dcdcdc;
+  --ion-color-light-tint: #fbfbfb;
+  /** primary **/
+  --ion-color-primary: #fa2929;
+  --ion-color-primary-rgb: 250, 41, 41;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #dc2424;
+  --ion-color-primary-tint: #fb3e3e;
+}
+:root body.fire .ion-color-dark {
+  --ion-color-base: var(--ion-color-dark);
+  --ion-color-base-rgb: var(--ion-color-dark-rgb);
+  --ion-color-contrast: var(--ion-color-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-dark-shade);
+  --ion-color-tint: var(--ion-color-dark-tint);
+}
+:root body.fire .ion-color-medium-dark {
+  --ion-color-base: var(--ion-color-medium-dark);
+  --ion-color-base-rgb: var(--ion-color-medium-dark-rgb);
+  --ion-color-contrast: var(--ion-color-medium-dark-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-medium-dark-contrast-rgb);
+  --ion-color-shade: var(--ion-color-medium-dark-shade);
+  --ion-color-tint: var(--ion-color-medium-dark-tint);
+}
+:root body.fire .ion-color-light {
+  --ion-color-base: var(--ion-color-light);
+  --ion-color-base-rgb: var(--ion-color-light-rgb);
+  --ion-color-contrast: var(--ion-color-light-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-light-contrast-rgb);
+  --ion-color-shade: var(--ion-color-light-shade);
+  --ion-color-tint: var(--ion-color-light-tint);
+}
+:root body.fire .ion-color-primary {
+  --ion-color-base: var(--ion-color-primary);
+  --ion-color-base-rgb: var(--ion-color-primary-rgb);
+  --ion-color-contrast: var(--ion-color-primary-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
+  --ion-color-shade: var(--ion-color-primary-shade);
+  --ion-color-tint: var(--ion-color-primary-tint);
+}
+.ion-color-patreon {
+  --ion-color-base: var(--ion-color-patreon);
+  --ion-color-base-rgb: var(--ion-color-patreon-rgb);
+  --ion-color-contrast: var(--ion-color-patreon-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-patreon-contrast-rgb);
+  --ion-color-shade: var(--ion-color-patreon-shade);
+  --ion-color-tint: var(--ion-color-patreon-tint);
+}
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[6].rules[1].use[0]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[6].rules[1].use[1]!./src/global.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+html.ios {
+  --ion-default-font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
+}
+
+html.md {
+  --ion-default-font: "Roboto", "Helvetica Neue", sans-serif;
+}
+
+html {
+  --ion-font-family: var(--ion-default-font);
+}
+
+body {
+  background: var(--ion-background-color);
+}
+
+body.backdrop-no-scroll {
+  overflow: hidden;
+}
+
+/**
+ * Card style modal needs additional padding on the
+ * top of the header. We accomplish this by targeting
+ * the first toolbar in the header.
+ * Footer also needs this. We do not adjust the bottom
+ * padding though because of the safe area.
+ */
+
+html.ios ion-modal.modal-card ion-header ion-toolbar:first-of-type,
+html.ios ion-modal.modal-sheet ion-header ion-toolbar:first-of-type,
+html.ios ion-modal ion-footer ion-toolbar:first-of-type {
+  padding-top: 6px;
+}
+
+/**
+* Card style modal needs additional padding on the
+* bottom of the header. We accomplish this by targeting
+* the last toolbar in the header.
+*/
+
+html.ios ion-modal.modal-card ion-header ion-toolbar:last-of-type,
+html.ios ion-modal.modal-sheet ion-header ion-toolbar:last-of-type {
+  padding-bottom: 6px;
+}
+
+/**
+* Add padding on the left and right
+* of toolbars while accounting for
+* safe area values when in landscape.
+*/
+
+html.ios ion-modal ion-toolbar {
+  padding-right: calc(var(--ion-safe-area-right) + 8px);
+  padding-left: calc(var(--ion-safe-area-left) + 8px);
+}
+
+/**
+ * Card style modal on iPadOS
+ * should only have backdrop on first instance.
+ */
+
+@media screen and (min-width: 768px) {
+  html.ios ion-modal.modal-card:first-of-type {
+    --backdrop-opacity: 0.18;
+  }
+}
+
+/**
+ * Subsequent modals should not have a backdrop/box shadow
+ * as it will cause the screen to appear to get progressively
+ * darker. With Ionic 6, declarative modals made it
+ * possible to have multiple non-presented modals in the DOM,
+ * so we could no longer rely on ion-modal:first-of-type.
+ * Here we disable the opacity/box-shadow for every modal
+ * that comes after the first presented modal.
+ *
+ * Note: ion-modal:not(.overlay-hidden):first-of-type
+ * does not match the first modal to not have
+ * the .overlay-hidden class, it will match the
+ * first modal in general only if it does not
+ * have the .overlay-hidden class.
+ * The :nth-child() pseudo-class has support
+ * for selectors which would help us here. At the
+ * time of writing it does not have great cross browser
+ * support.
+ *
+ * Note 2: This should only apply to non-card and
+ * non-sheet modals. Card and sheet modals have their
+ * own criteria for displaying backdrops/box shadows.
+ */
+
+ion-modal.modal-default:not(.overlay-hidden) ~ ion-modal.modal-default {
+  --backdrop-opacity: 0;
+  --box-shadow: none;
+}
+
+/**
+ * This works around a bug in WebKit where the
+ * content will overflow outside of the bottom border
+ * radius when re-painting. As long as a single
+ * border radius value is set on .ion-page, this
+ * issue does not happen. We set the top left radius
+ * here because the top left corner will always have a
+ * radius no matter the platform.
+ * This behavior only applies to card modals.
+ */
+
+html.ios ion-modal.modal-card .ion-page {
+  border-top-left-radius: var(--border-radius);
+}
+
+.ion-color-primary {
+  --ion-color-base: var(--ion-color-primary, #3880ff) !important;
+  --ion-color-base-rgb: var(--ion-color-primary-rgb, 56, 128, 255) !important;
+  --ion-color-contrast: var(--ion-color-primary-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-primary-shade, #3171e0) !important;
+  --ion-color-tint: var(--ion-color-primary-tint, #4c8dff) !important;
+}
+
+.ion-color-secondary {
+  --ion-color-base: var(--ion-color-secondary, #3dc2ff) !important;
+  --ion-color-base-rgb: var(--ion-color-secondary-rgb, 61, 194, 255) !important;
+  --ion-color-contrast: var(--ion-color-secondary-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-secondary-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-secondary-shade, #36abe0) !important;
+  --ion-color-tint: var(--ion-color-secondary-tint, #50c8ff) !important;
+}
+
+.ion-color-tertiary {
+  --ion-color-base: var(--ion-color-tertiary, #5260ff) !important;
+  --ion-color-base-rgb: var(--ion-color-tertiary-rgb, 82, 96, 255) !important;
+  --ion-color-contrast: var(--ion-color-tertiary-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-tertiary-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-tertiary-shade, #4854e0) !important;
+  --ion-color-tint: var(--ion-color-tertiary-tint, #6370ff) !important;
+}
+
+.ion-color-success {
+  --ion-color-base: var(--ion-color-success, #2dd36f) !important;
+  --ion-color-base-rgb: var(--ion-color-success-rgb, 45, 211, 111) !important;
+  --ion-color-contrast: var(--ion-color-success-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-success-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-success-shade, #28ba62) !important;
+  --ion-color-tint: var(--ion-color-success-tint, #42d77d) !important;
+}
+
+.ion-color-warning {
+  --ion-color-base: var(--ion-color-warning, #ffc409) !important;
+  --ion-color-base-rgb: var(--ion-color-warning-rgb, 255, 196, 9) !important;
+  --ion-color-contrast: var(--ion-color-warning-contrast, #000) !important;
+  --ion-color-contrast-rgb: var(--ion-color-warning-contrast-rgb, 0, 0, 0) !important;
+  --ion-color-shade: var(--ion-color-warning-shade, #e0ac08) !important;
+  --ion-color-tint: var(--ion-color-warning-tint, #ffca22) !important;
+}
+
+.ion-color-danger {
+  --ion-color-base: var(--ion-color-danger, #eb445a) !important;
+  --ion-color-base-rgb: var(--ion-color-danger-rgb, 235, 68, 90) !important;
+  --ion-color-contrast: var(--ion-color-danger-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-danger-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-danger-shade, #cf3c4f) !important;
+  --ion-color-tint: var(--ion-color-danger-tint, #ed576b) !important;
+}
+
+.ion-color-light {
+  --ion-color-base: var(--ion-color-light, #f4f5f8) !important;
+  --ion-color-base-rgb: var(--ion-color-light-rgb, 244, 245, 248) !important;
+  --ion-color-contrast: var(--ion-color-light-contrast, #000) !important;
+  --ion-color-contrast-rgb: var(--ion-color-light-contrast-rgb, 0, 0, 0) !important;
+  --ion-color-shade: var(--ion-color-light-shade, #d7d8da) !important;
+  --ion-color-tint: var(--ion-color-light-tint, #f5f6f9) !important;
+}
+
+.ion-color-medium {
+  --ion-color-base: var(--ion-color-medium, #92949c) !important;
+  --ion-color-base-rgb: var(--ion-color-medium-rgb, 146, 148, 156) !important;
+  --ion-color-contrast: var(--ion-color-medium-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-medium-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-medium-shade, #808289) !important;
+  --ion-color-tint: var(--ion-color-medium-tint, #9d9fa6) !important;
+}
+
+.ion-color-dark {
+  --ion-color-base: var(--ion-color-dark, #222428) !important;
+  --ion-color-base-rgb: var(--ion-color-dark-rgb, 34, 36, 40) !important;
+  --ion-color-contrast: var(--ion-color-dark-contrast, #fff) !important;
+  --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb, 255, 255, 255) !important;
+  --ion-color-shade: var(--ion-color-dark-shade, #1e2023) !important;
+  --ion-color-tint: var(--ion-color-dark-tint, #383a3e) !important;
+}
+
+.ion-page {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  justify-content: space-between;
+  contain: layout size style;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.split-pane-visible > .ion-page.split-pane-main {
+  position: relative;
+}
+
+ion-route,
+ion-route-redirect,
+ion-router,
+ion-select-option,
+ion-nav-controller,
+ion-menu-controller,
+ion-action-sheet-controller,
+ion-alert-controller,
+ion-loading-controller,
+ion-modal-controller,
+ion-picker-controller,
+ion-popover-controller,
+ion-toast-controller,
+.ion-page-hidden,
+[hidden] {
+  /* stylelint-disable-next-line declaration-no-important */
+  display: none !important;
+}
+
+.ion-page-invisible {
+  opacity: 0;
+}
+
+.can-go-back > ion-header ion-back-button {
+  display: block;
+}
+
+html.plt-ios.plt-hybrid, html.plt-ios.plt-pwa {
+  --ion-statusbar-padding: 20px;
+}
+
+@supports (padding-top: 20px) {
+  html {
+    --ion-safe-area-top: var(--ion-statusbar-padding);
+  }
+}
+
+@supports (padding-top: constant(safe-area-inset-top)) {
+  html {
+    --ion-safe-area-top: constant(safe-area-inset-top);
+    --ion-safe-area-bottom: constant(safe-area-inset-bottom);
+    --ion-safe-area-left: constant(safe-area-inset-left);
+    --ion-safe-area-right: constant(safe-area-inset-right);
+  }
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  html {
+    --ion-safe-area-top: env(safe-area-inset-top);
+    --ion-safe-area-bottom: env(safe-area-inset-bottom);
+    --ion-safe-area-left: env(safe-area-inset-left);
+    --ion-safe-area-right: env(safe-area-inset-right);
+  }
+}
+
+ion-card.ion-color .ion-inherit-color,
+ion-card-header.ion-color .ion-inherit-color {
+  color: inherit;
+}
+
+.menu-content {
+  transform: translate3d(0,  0,  0);
+}
+
+.menu-content-open {
+  cursor: pointer;
+  touch-action: manipulation;
+  pointer-events: none;
+}
+
+.ios .menu-content-reveal {
+  box-shadow: -8px 0 42px rgba(0, 0, 0, 0.08);
+}
+
+[dir=rtl].ios .menu-content-reveal {
+  box-shadow: 8px 0 42px rgba(0, 0, 0, 0.08);
+}
+
+.md .menu-content-reveal {
+  box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.18);
+}
+
+.md .menu-content-push {
+  box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.18);
+}
+
+ion-accordion-group.accordion-group-expand-inset > ion-accordion:first-of-type {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+ion-accordion-group.accordion-group-expand-inset > ion-accordion:last-of-type {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+ion-accordion-group > ion-accordion:last-of-type ion-item[slot=header] {
+  --border-width: 0px;
+}
+
+ion-accordion.accordion-animated > [slot=header] .ion-accordion-toggle-icon {
+  transition: 300ms transform cubic-bezier(0.25, 0.8, 0.5, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ion-accordion .ion-accordion-toggle-icon {
+    /* stylelint-disable declaration-no-important */
+    transition: none !important;
+  }
+}
+
+/**
+ * The > [slot="header"] selector ensures that we do
+ * not modify toggle icons for any nested accordions. The state
+ * of one accordion should not affect any accordions inside
+ * of a nested accordion group.
+ */
+
+ion-accordion.accordion-expanding > [slot=header] .ion-accordion-toggle-icon,
+ion-accordion.accordion-expanded > [slot=header] .ion-accordion-toggle-icon {
+  transform: rotate(180deg);
+}
+
+ion-accordion-group.accordion-group-expand-inset.md > ion-accordion.accordion-previous ion-item[slot=header] {
+  --border-width: 0px;
+  --inner-border-width: 0px;
+}
+
+ion-accordion-group.accordion-group-expand-inset.md > ion-accordion.accordion-expanding:first-of-type,
+ion-accordion-group.accordion-group-expand-inset.md > ion-accordion.accordion-expanded:first-of-type {
+  margin-top: 0;
+}
+
+ion-input input::-webkit-date-and-time-value {
+  text-align: start;
+}
+
+audio,
+canvas,
+progress,
+video {
+  vertical-align: baseline;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+img {
+  max-width: 100%;
+  border: 0;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+figure {
+  margin: 1em 40px;
+}
+
+hr {
+  height: 1px;
+  border-width: 0;
+  box-sizing: content-box;
+}
+
+pre {
+  overflow: auto;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+label,
+input,
+select,
+textarea {
+  font-family: inherit;
+  line-height: normal;
+}
+
+textarea {
+  overflow: auto;
+  height: auto;
+  font: inherit;
+  color: inherit;
+}
+
+textarea::-moz-placeholder {
+  padding-left: 2px;
+}
+
+textarea::placeholder {
+  padding-left: 2px;
+}
+
+form,
+input,
+optgroup,
+select {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+html input[type=button],
+input[type=reset],
+input[type=submit] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+
+a,
+a div,
+a span,
+a ion-icon,
+a ion-label,
+button,
+button div,
+button span,
+button ion-icon,
+button ion-label,
+.ion-tappable,
+[tappable],
+[tappable] div,
+[tappable] span,
+[tappable] ion-icon,
+[tappable] ion-label,
+input,
+textarea {
+  touch-action: manipulation;
+}
+
+a ion-label,
+button ion-label {
+  pointer-events: none;
+}
+
+button {
+  border: 0;
+  border-radius: 0;
+  font-family: inherit;
+  font-style: inherit;
+  font-feature-settings: inherit;
+  font-variant: inherit;
+  line-height: 1;
+  text-transform: none;
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+
+[tappable] {
+  cursor: pointer;
+}
+
+a[disabled],
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+input[type=search]::-webkit-search-cancel-button,
+input[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+}
+
+html:not(.hydrated) body {
+  display: none;
+}
+
+html.ion-ce body {
+  display: block;
+}
+
+html.plt-pwa {
+  height: 100vh;
+}
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  position: fixed;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-user-drag: none;
+  -ms-content-zooming: none;
+  word-wrap: break-word;
+  overscroll-behavior-y: none;
+  -webkit-text-size-adjust: none;
+     -moz-text-size-adjust: none;
+          text-size-adjust: none;
+}
+
+html {
+  font-family: var(--ion-default-font);
+  font-family: var(--ion-font-family);
+}
+
+a {
+  background-color: transparent;
+  color: #3880ff;
+  color: var(--ion-color-primary, #3880ff);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 16px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+h1 {
+  margin-top: 20px;
+  font-size: 26px;
+}
+
+h2 {
+  margin-top: 18px;
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 18px;
+}
+
+h6 {
+  font-size: 16px;
+}
+
+small {
+  font-size: 75%;
+}
+
+sub,
+sup {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+.ion-no-padding {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.ion-padding {
+  --padding-start: var(--ion-padding, 16px);
+  --padding-end: var(--ion-padding, 16px);
+  --padding-top: var(--ion-padding, 16px);
+  --padding-bottom: var(--ion-padding, 16px);
+  padding-left: 16px;
+  padding-left: var(--ion-padding, 16px);
+  padding-right: 16px;
+  padding-right: var(--ion-padding, 16px);
+  padding-top: 16px;
+  padding-top: var(--ion-padding, 16px);
+  padding-bottom: 16px;
+  padding-bottom: var(--ion-padding, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-padding {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 16px;
+    -webkit-padding-start: var(--ion-padding, 16px);
+    padding-inline-start: 16px;
+    padding-inline-start: var(--ion-padding, 16px);
+    -webkit-padding-end: 16px;
+    -webkit-padding-end: var(--ion-padding, 16px);
+    padding-inline-end: 16px;
+    padding-inline-end: var(--ion-padding, 16px);
+  }
+}
+
+.ion-padding-top {
+  --padding-top: var(--ion-padding, 16px);
+  padding-top: 16px;
+  padding-top: var(--ion-padding, 16px);
+}
+
+.ion-padding-start {
+  --padding-start: var(--ion-padding, 16px);
+  padding-left: 16px;
+  padding-left: var(--ion-padding, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-padding-start {
+    padding-left: unset;
+    -webkit-padding-start: 16px;
+    -webkit-padding-start: var(--ion-padding, 16px);
+    padding-inline-start: 16px;
+    padding-inline-start: var(--ion-padding, 16px);
+  }
+}
+
+.ion-padding-end {
+  --padding-end: var(--ion-padding, 16px);
+  padding-right: 16px;
+  padding-right: var(--ion-padding, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-padding-end {
+    padding-right: unset;
+    -webkit-padding-end: 16px;
+    -webkit-padding-end: var(--ion-padding, 16px);
+    padding-inline-end: 16px;
+    padding-inline-end: var(--ion-padding, 16px);
+  }
+}
+
+.ion-padding-bottom {
+  --padding-bottom: var(--ion-padding, 16px);
+  padding-bottom: 16px;
+  padding-bottom: var(--ion-padding, 16px);
+}
+
+.ion-padding-vertical {
+  --padding-top: var(--ion-padding, 16px);
+  --padding-bottom: var(--ion-padding, 16px);
+  padding-top: 16px;
+  padding-top: var(--ion-padding, 16px);
+  padding-bottom: 16px;
+  padding-bottom: var(--ion-padding, 16px);
+}
+
+.ion-padding-horizontal {
+  --padding-start: var(--ion-padding, 16px);
+  --padding-end: var(--ion-padding, 16px);
+  padding-left: 16px;
+  padding-left: var(--ion-padding, 16px);
+  padding-right: 16px;
+  padding-right: var(--ion-padding, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-padding-horizontal {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 16px;
+    -webkit-padding-start: var(--ion-padding, 16px);
+    padding-inline-start: 16px;
+    padding-inline-start: var(--ion-padding, 16px);
+    -webkit-padding-end: 16px;
+    -webkit-padding-end: var(--ion-padding, 16px);
+    padding-inline-end: 16px;
+    padding-inline-end: var(--ion-padding, 16px);
+  }
+}
+
+.ion-no-margin {
+  --margin-start: 0;
+  --margin-end: 0;
+  --margin-top: 0;
+  --margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ion-margin {
+  --margin-start: var(--ion-margin, 16px);
+  --margin-end: var(--ion-margin, 16px);
+  --margin-top: var(--ion-margin, 16px);
+  --margin-bottom: var(--ion-margin, 16px);
+  margin-left: 16px;
+  margin-left: var(--ion-margin, 16px);
+  margin-right: 16px;
+  margin-right: var(--ion-margin, 16px);
+  margin-top: 16px;
+  margin-top: var(--ion-margin, 16px);
+  margin-bottom: 16px;
+  margin-bottom: var(--ion-margin, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-margin {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 16px;
+    -webkit-margin-start: var(--ion-margin, 16px);
+    margin-inline-start: 16px;
+    margin-inline-start: var(--ion-margin, 16px);
+    -webkit-margin-end: 16px;
+    -webkit-margin-end: var(--ion-margin, 16px);
+    margin-inline-end: 16px;
+    margin-inline-end: var(--ion-margin, 16px);
+  }
+}
+
+.ion-margin-top {
+  --margin-top: var(--ion-margin, 16px);
+  margin-top: 16px;
+  margin-top: var(--ion-margin, 16px);
+}
+
+.ion-margin-start {
+  --margin-start: var(--ion-margin, 16px);
+  margin-left: 16px;
+  margin-left: var(--ion-margin, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-margin-start {
+    margin-left: unset;
+    -webkit-margin-start: 16px;
+    -webkit-margin-start: var(--ion-margin, 16px);
+    margin-inline-start: 16px;
+    margin-inline-start: var(--ion-margin, 16px);
+  }
+}
+
+.ion-margin-end {
+  --margin-end: var(--ion-margin, 16px);
+  margin-right: 16px;
+  margin-right: var(--ion-margin, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-margin-end {
+    margin-right: unset;
+    -webkit-margin-end: 16px;
+    -webkit-margin-end: var(--ion-margin, 16px);
+    margin-inline-end: 16px;
+    margin-inline-end: var(--ion-margin, 16px);
+  }
+}
+
+.ion-margin-bottom {
+  --margin-bottom: var(--ion-margin, 16px);
+  margin-bottom: 16px;
+  margin-bottom: var(--ion-margin, 16px);
+}
+
+.ion-margin-vertical {
+  --margin-top: var(--ion-margin, 16px);
+  --margin-bottom: var(--ion-margin, 16px);
+  margin-top: 16px;
+  margin-top: var(--ion-margin, 16px);
+  margin-bottom: 16px;
+  margin-bottom: var(--ion-margin, 16px);
+}
+
+.ion-margin-horizontal {
+  --margin-start: var(--ion-margin, 16px);
+  --margin-end: var(--ion-margin, 16px);
+  margin-left: 16px;
+  margin-left: var(--ion-margin, 16px);
+  margin-right: 16px;
+  margin-right: var(--ion-margin, 16px);
+}
+
+@supports ((-webkit-margin-start: 0) or (margin-inline-start: 0)) or (-webkit-margin-start: 0) {
+  .ion-margin-horizontal {
+    margin-left: unset;
+    margin-right: unset;
+    -webkit-margin-start: 16px;
+    -webkit-margin-start: var(--ion-margin, 16px);
+    margin-inline-start: 16px;
+    margin-inline-start: var(--ion-margin, 16px);
+    -webkit-margin-end: 16px;
+    -webkit-margin-end: var(--ion-margin, 16px);
+    margin-inline-end: 16px;
+    margin-inline-end: var(--ion-margin, 16px);
+  }
+}
+
+.ion-float-left {
+  float: left !important;
+}
+
+.ion-float-right {
+  float: right !important;
+}
+
+.ion-float-start {
+  float: left !important;
+}
+
+[dir=rtl] .ion-float-start, :host-context([dir=rtl]) .ion-float-start {
+  float: right !important;
+}
+
+.ion-float-end {
+  float: right !important;
+}
+
+[dir=rtl] .ion-float-end, :host-context([dir=rtl]) .ion-float-end {
+  float: left !important;
+}
+
+@media (min-width: 576px) {
+  .ion-float-sm-left {
+    float: left !important;
+  }
+
+  .ion-float-sm-right {
+    float: right !important;
+  }
+
+  .ion-float-sm-start {
+    float: left !important;
+  }
+  [dir=rtl] .ion-float-sm-start, :host-context([dir=rtl]) .ion-float-sm-start {
+    float: right !important;
+  }
+
+  .ion-float-sm-end {
+    float: right !important;
+  }
+  [dir=rtl] .ion-float-sm-end, :host-context([dir=rtl]) .ion-float-sm-end {
+    float: left !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .ion-float-md-left {
+    float: left !important;
+  }
+
+  .ion-float-md-right {
+    float: right !important;
+  }
+
+  .ion-float-md-start {
+    float: left !important;
+  }
+  [dir=rtl] .ion-float-md-start, :host-context([dir=rtl]) .ion-float-md-start {
+    float: right !important;
+  }
+
+  .ion-float-md-end {
+    float: right !important;
+  }
+  [dir=rtl] .ion-float-md-end, :host-context([dir=rtl]) .ion-float-md-end {
+    float: left !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .ion-float-lg-left {
+    float: left !important;
+  }
+
+  .ion-float-lg-right {
+    float: right !important;
+  }
+
+  .ion-float-lg-start {
+    float: left !important;
+  }
+  [dir=rtl] .ion-float-lg-start, :host-context([dir=rtl]) .ion-float-lg-start {
+    float: right !important;
+  }
+
+  .ion-float-lg-end {
+    float: right !important;
+  }
+  [dir=rtl] .ion-float-lg-end, :host-context([dir=rtl]) .ion-float-lg-end {
+    float: left !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ion-float-xl-left {
+    float: left !important;
+  }
+
+  .ion-float-xl-right {
+    float: right !important;
+  }
+
+  .ion-float-xl-start {
+    float: left !important;
+  }
+  [dir=rtl] .ion-float-xl-start, :host-context([dir=rtl]) .ion-float-xl-start {
+    float: right !important;
+  }
+
+  .ion-float-xl-end {
+    float: right !important;
+  }
+  [dir=rtl] .ion-float-xl-end, :host-context([dir=rtl]) .ion-float-xl-end {
+    float: left !important;
+  }
+}
+
+.ion-text-center {
+  text-align: center !important;
+}
+
+.ion-text-justify {
+  text-align: justify !important;
+}
+
+.ion-text-start {
+  text-align: start !important;
+}
+
+.ion-text-end {
+  text-align: end !important;
+}
+
+.ion-text-left {
+  text-align: left !important;
+}
+
+.ion-text-right {
+  text-align: right !important;
+}
+
+.ion-text-nowrap {
+  white-space: nowrap !important;
+}
+
+.ion-text-wrap {
+  white-space: normal !important;
+}
+
+@media (min-width: 576px) {
+  .ion-text-sm-center {
+    text-align: center !important;
+  }
+
+  .ion-text-sm-justify {
+    text-align: justify !important;
+  }
+
+  .ion-text-sm-start {
+    text-align: start !important;
+  }
+
+  .ion-text-sm-end {
+    text-align: end !important;
+  }
+
+  .ion-text-sm-left {
+    text-align: left !important;
+  }
+
+  .ion-text-sm-right {
+    text-align: right !important;
+  }
+
+  .ion-text-sm-nowrap {
+    white-space: nowrap !important;
+  }
+
+  .ion-text-sm-wrap {
+    white-space: normal !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .ion-text-md-center {
+    text-align: center !important;
+  }
+
+  .ion-text-md-justify {
+    text-align: justify !important;
+  }
+
+  .ion-text-md-start {
+    text-align: start !important;
+  }
+
+  .ion-text-md-end {
+    text-align: end !important;
+  }
+
+  .ion-text-md-left {
+    text-align: left !important;
+  }
+
+  .ion-text-md-right {
+    text-align: right !important;
+  }
+
+  .ion-text-md-nowrap {
+    white-space: nowrap !important;
+  }
+
+  .ion-text-md-wrap {
+    white-space: normal !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .ion-text-lg-center {
+    text-align: center !important;
+  }
+
+  .ion-text-lg-justify {
+    text-align: justify !important;
+  }
+
+  .ion-text-lg-start {
+    text-align: start !important;
+  }
+
+  .ion-text-lg-end {
+    text-align: end !important;
+  }
+
+  .ion-text-lg-left {
+    text-align: left !important;
+  }
+
+  .ion-text-lg-right {
+    text-align: right !important;
+  }
+
+  .ion-text-lg-nowrap {
+    white-space: nowrap !important;
+  }
+
+  .ion-text-lg-wrap {
+    white-space: normal !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ion-text-xl-center {
+    text-align: center !important;
+  }
+
+  .ion-text-xl-justify {
+    text-align: justify !important;
+  }
+
+  .ion-text-xl-start {
+    text-align: start !important;
+  }
+
+  .ion-text-xl-end {
+    text-align: end !important;
+  }
+
+  .ion-text-xl-left {
+    text-align: left !important;
+  }
+
+  .ion-text-xl-right {
+    text-align: right !important;
+  }
+
+  .ion-text-xl-nowrap {
+    white-space: nowrap !important;
+  }
+
+  .ion-text-xl-wrap {
+    white-space: normal !important;
+  }
+}
+
+.ion-text-uppercase {
+  /* stylelint-disable-next-line declaration-no-important */
+  text-transform: uppercase !important;
+}
+
+.ion-text-lowercase {
+  /* stylelint-disable-next-line declaration-no-important */
+  text-transform: lowercase !important;
+}
+
+.ion-text-capitalize {
+  /* stylelint-disable-next-line declaration-no-important */
+  text-transform: capitalize !important;
+}
+
+@media (min-width: 576px) {
+  .ion-text-sm-uppercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: uppercase !important;
+  }
+
+  .ion-text-sm-lowercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: lowercase !important;
+  }
+
+  .ion-text-sm-capitalize {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: capitalize !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .ion-text-md-uppercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: uppercase !important;
+  }
+
+  .ion-text-md-lowercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: lowercase !important;
+  }
+
+  .ion-text-md-capitalize {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: capitalize !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .ion-text-lg-uppercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: uppercase !important;
+  }
+
+  .ion-text-lg-lowercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: lowercase !important;
+  }
+
+  .ion-text-lg-capitalize {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: capitalize !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ion-text-xl-uppercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: uppercase !important;
+  }
+
+  .ion-text-xl-lowercase {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: lowercase !important;
+  }
+
+  .ion-text-xl-capitalize {
+    /* stylelint-disable-next-line declaration-no-important */
+    text-transform: capitalize !important;
+  }
+}
+
+.ion-align-self-start {
+  align-self: flex-start !important;
+}
+
+.ion-align-self-end {
+  align-self: flex-end !important;
+}
+
+.ion-align-self-center {
+  align-self: center !important;
+}
+
+.ion-align-self-stretch {
+  align-self: stretch !important;
+}
+
+.ion-align-self-baseline {
+  align-self: baseline !important;
+}
+
+.ion-align-self-auto {
+  align-self: auto !important;
+}
+
+.ion-wrap {
+  flex-wrap: wrap !important;
+}
+
+.ion-nowrap {
+  flex-wrap: nowrap !important;
+}
+
+.ion-wrap-reverse {
+  flex-wrap: wrap-reverse !important;
+}
+
+.ion-justify-content-start {
+  justify-content: flex-start !important;
+}
+
+.ion-justify-content-center {
+  justify-content: center !important;
+}
+
+.ion-justify-content-end {
+  justify-content: flex-end !important;
+}
+
+.ion-justify-content-around {
+  justify-content: space-around !important;
+}
+
+.ion-justify-content-between {
+  justify-content: space-between !important;
+}
+
+.ion-justify-content-evenly {
+  justify-content: space-evenly !important;
+}
+
+.ion-align-items-start {
+  align-items: flex-start !important;
+}
+
+.ion-align-items-center {
+  align-items: center !important;
+}
+
+.ion-align-items-end {
+  align-items: flex-end !important;
+}
+
+.ion-align-items-stretch {
+  align-items: stretch !important;
+}
+
+.ion-align-items-baseline {
+  align-items: baseline !important;
+}
+
+.emoji-mart,
+.emoji-mart * {
+  box-sizing: border-box;
+  line-height: 1.15;
+}
+
+.emoji-mart {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  display: inline-block;
+  color: #222427;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.emoji-mart .emoji-mart-emoji {
+  padding: 6px;
+}
+
+.emoji-mart-bar {
+  border: 0 solid #d9d9d9;
+}
+
+.emoji-mart-bar:first-child {
+  border-bottom-width: 1px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.emoji-mart-bar:last-child {
+  border-top-width: 1px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.emoji-mart-anchors {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 6px;
+  line-height: 0;
+}
+
+.emoji-mart-anchor {
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  color: #858585;
+  text-align: center;
+  padding: 12px 4px;
+  overflow: hidden;
+  transition: color 0.1s ease-out;
+  margin: 0;
+  box-shadow: none;
+  background: none;
+  border: none;
+}
+
+.emoji-mart-anchor:focus {
+  outline: 0;
+}
+
+.emoji-mart-anchor:hover,
+.emoji-mart-anchor:focus,
+.emoji-mart-anchor-selected {
+  color: #464646;
+}
+
+.emoji-mart-anchor-selected .emoji-mart-anchor-bar {
+  bottom: 0;
+}
+
+.emoji-mart-anchor-bar {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #464646;
+}
+
+.emoji-mart-anchors i {
+  display: inline-block;
+  width: 100%;
+  max-width: 22px;
+}
+
+.emoji-mart-anchors svg,
+.emoji-mart-anchors img {
+  fill: currentColor;
+  height: 18px;
+}
+
+.emoji-mart-scroll {
+  overflow-y: scroll;
+  height: 270px;
+  padding: 0 6px 6px 6px;
+  will-change: transform;
+  /* avoids "repaints on scroll" in mobile Chrome */
+}
+
+.emoji-mart-search {
+  margin-top: 6px;
+  padding: 0 6px;
+  position: relative;
+}
+
+.emoji-mart-search input {
+  font-size: 16px;
+  display: block;
+  width: 100%;
+  padding: 5px 25px 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+  outline: 0;
+}
+
+.emoji-mart-search input,
+.emoji-mart-search input::-webkit-search-decoration,
+.emoji-mart-search input::-webkit-search-cancel-button,
+.emoji-mart-search input::-webkit-search-results-button,
+.emoji-mart-search input::-webkit-search-results-decoration {
+  /* remove webkit/blink styles for <input type="search">
+   * via https://stackoverflow.com/a/9422689 */
+  -webkit-appearance: none;
+}
+
+.emoji-mart-search-icon {
+  position: absolute;
+  top: 3px;
+  right: 11px;
+  z-index: 2;
+  padding: 2px 5px 1px;
+  border: none;
+  background: none;
+}
+
+.emoji-mart-category .emoji-mart-emoji span {
+  z-index: 1;
+  position: relative;
+  text-align: center;
+  cursor: default;
+}
+
+.emoji-mart-category .emoji-mart-emoji:hover:before {
+  z-index: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f4f4f4;
+  border-radius: 100%;
+}
+
+.emoji-mart-category-label {
+  z-index: 2;
+  position: relative;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+.emoji-mart-category-label span {
+  display: block;
+  width: 100%;
+  font-weight: 500;
+  padding: 5px 6px;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.emoji-mart-category-list {
+  margin: 0;
+  padding: 0;
+}
+
+.emoji-mart-category-list li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.emoji-mart-emoji {
+  position: relative;
+  display: inline-block;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+
+.emoji-mart-emoji-native {
+  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji";
+}
+
+.emoji-mart-no-results {
+  font-size: 14px;
+  text-align: center;
+  padding-top: 70px;
+  color: #858585;
+}
+
+.emoji-mart-no-results .emoji-mart-category-label {
+  display: none;
+}
+
+.emoji-mart-no-results .emoji-mart-no-results-label {
+  margin-top: 0.2em;
+}
+
+.emoji-mart-no-results .emoji-mart-emoji:hover:before {
+  content: none;
+}
+
+.emoji-mart-preview {
+  position: relative;
+  height: 70px;
+}
+
+.emoji-mart-preview-emoji,
+.emoji-mart-preview-data,
+.emoji-mart-preview-skins {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.emoji-mart-preview-emoji {
+  left: 12px;
+}
+
+.emoji-mart-preview-data {
+  left: 68px;
+  right: 12px;
+  word-break: break-all;
+}
+
+.emoji-mart-preview-skins {
+  right: 30px;
+  text-align: right;
+}
+
+.emoji-mart-preview-skins.custom {
+  right: 10px;
+  text-align: right;
+}
+
+.emoji-mart-preview-name {
+  font-size: 14px;
+}
+
+.emoji-mart-preview-shortname {
+  font-size: 12px;
+  color: #888;
+}
+
+.emoji-mart-preview-shortname + .emoji-mart-preview-shortname,
+.emoji-mart-preview-shortname + .emoji-mart-preview-emoticon,
+.emoji-mart-preview-emoticon + .emoji-mart-preview-emoticon {
+  margin-left: 0.5em;
+}
+
+.emoji-mart-preview-emoticon {
+  font-size: 11px;
+  color: #bbb;
+}
+
+.emoji-mart-title span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.emoji-mart-title .emoji-mart-emoji {
+  padding: 0;
+}
+
+.emoji-mart-title-label {
+  color: #999A9C;
+  font-size: 26px;
+  font-weight: 300;
+}
+
+.emoji-mart-skin-swatches {
+  font-size: 0;
+  padding: 2px 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.emoji-mart-skin-swatches.custom {
+  font-size: 0;
+  border: none;
+  background-color: #fff;
+}
+
+.emoji-mart-skin-swatches.opened .emoji-mart-skin-swatch {
+  width: 16px;
+  padding: 0 2px;
+}
+
+.emoji-mart-skin-swatches.opened .emoji-mart-skin-swatch.selected:after {
+  opacity: 0.75;
+}
+
+.emoji-mart-skin-swatch {
+  display: inline-block;
+  width: 0;
+  vertical-align: middle;
+  transition-property: width, padding;
+  transition-duration: 0.125s;
+  transition-timing-function: ease-out;
+}
+
+.emoji-mart-skin-swatch:nth-child(1) {
+  transition-delay: 0s;
+}
+
+.emoji-mart-skin-swatch:nth-child(2) {
+  transition-delay: 0.03s;
+}
+
+.emoji-mart-skin-swatch:nth-child(3) {
+  transition-delay: 0.06s;
+}
+
+.emoji-mart-skin-swatch:nth-child(4) {
+  transition-delay: 0.09s;
+}
+
+.emoji-mart-skin-swatch:nth-child(5) {
+  transition-delay: 0.12s;
+}
+
+.emoji-mart-skin-swatch:nth-child(6) {
+  transition-delay: 0.15s;
+}
+
+.emoji-mart-skin-swatch.selected {
+  position: relative;
+  width: 16px;
+  padding: 0 2px;
+}
+
+.emoji-mart-skin-swatch.selected:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  background-color: #fff;
+  border-radius: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.emoji-mart-skin-swatch.custom {
+  display: inline-block;
+  width: 0;
+  height: 38px;
+  overflow: hidden;
+  vertical-align: middle;
+  transition-property: width, height;
+  transition-duration: 0.125s;
+  transition-timing-function: ease-out;
+  cursor: default;
+}
+
+.emoji-mart-skin-swatch.custom.selected {
+  position: relative;
+  width: 36px;
+  height: 38px;
+  padding: 0 2px 0 0;
+}
+
+.emoji-mart-skin-swatch.custom.selected:after {
+  content: "";
+  width: 0;
+  height: 0;
+}
+
+.emoji-mart-skin-swatches.custom .emoji-mart-skin-swatch.custom:hover {
+  background-color: #f4f4f4;
+  border-radius: 10%;
+}
+
+.emoji-mart-skin-swatches.custom.opened .emoji-mart-skin-swatch.custom {
+  width: 36px;
+  height: 38px;
+  padding: 0 2px 0 0;
+}
+
+.emoji-mart-skin-swatches.custom.opened .emoji-mart-skin-swatch.custom.selected:after {
+  opacity: 0.75;
+}
+
+.emoji-mart-skin-text.opened {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
+  color: #888;
+  font-size: 11px;
+  padding: 5px 2px;
+  width: 95px;
+  height: 40px;
+  border-radius: 10%;
+  background-color: #fff;
+}
+
+.emoji-mart-skin {
+  display: inline-block;
+  width: 100%;
+  padding-top: 100%;
+  max-width: 12px;
+  border-radius: 100%;
+}
+
+.emoji-mart-skin-tone-1 {
+  background-color: #ffc93a;
+}
+
+.emoji-mart-skin-tone-2 {
+  background-color: #fadcbc;
+}
+
+.emoji-mart-skin-tone-3 {
+  background-color: #e0bb95;
+}
+
+.emoji-mart-skin-tone-4 {
+  background-color: #bf8f68;
+}
+
+.emoji-mart-skin-tone-5 {
+  background-color: #9b643d;
+}
+
+.emoji-mart-skin-tone-6 {
+  background-color: #594539;
+}
+
+/* For screenreaders only, via https://stackoverflow.com/a/19758620 */
+
+.emoji-mart-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/*
+ * Dark mode styles
+ */
+
+.emoji-mart-dark {
+  color: #fff;
+  border-color: #555453;
+  background-color: #222;
+}
+
+.emoji-mart-dark .emoji-mart-bar {
+  border-color: #555453;
+}
+
+.emoji-mart-dark .emoji-mart-search input {
+  color: #fff;
+  border-color: #555453;
+  background-color: #2f2f2f;
+}
+
+.emoji-mart-dark .emoji-mart-search-icon svg {
+  fill: #fff;
+}
+
+.emoji-mart-dark .emoji-mart-category .emoji-mart-emoji:hover:before {
+  background-color: #444;
+}
+
+.emoji-mart-dark .emoji-mart-category-label span {
+  background-color: #222;
+  color: #fff;
+}
+
+.emoji-mart-dark .emoji-mart-skin-swatches {
+  border-color: #555453;
+  background-color: #222;
+}
+
+.emoji-mart-dark .emoji-mart-anchor:hover,
+.emoji-mart-dark .emoji-mart-anchor:focus,
+.emoji-mart-dark .emoji-mart-anchor-selected {
+  color: #bfbfbf;
+}
+
+body {
+  background-color: var(--ion-color-dark);
+}
+
+ion-content,
+ion-toolbar,
+ion-tab-bar,
+ion-list,
+ion-header {
+  --background: var(--ion-color-dark);
+  color: var(--ion-color-light);
+}
+
+ion-content a,
+ion-toolbar a,
+ion-tab-bar a,
+ion-list a,
+ion-header a {
+  text-decoration: none;
+}
+
+ion-content a.linkified, ion-content a.mention, ion-content a.hashtag,
+ion-toolbar a.linkified,
+ion-toolbar a.mention,
+ion-toolbar a.hashtag,
+ion-tab-bar a.linkified,
+ion-tab-bar a.mention,
+ion-tab-bar a.hashtag,
+ion-list a.linkified,
+ion-list a.mention,
+ion-list a.hashtag,
+ion-header a.linkified,
+ion-header a.mention,
+ion-header a.hashtag {
+  color: #c4d83b !important;
+}
+
+ion-list {
+  background: var(--ion-color-dark) !important;
+  padding: 0 !important;
+}
+
+.no-scroll {
+  --offset-bottom: auto !important;
+  --overflow: hidden;
+  overflow: auto;
+}
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  color: var(--ion-color-light);
+  font-weight: normal;
+}
+
+ion-icon {
+  color: var(--ion-color-light);
+}
+
+ion-chip {
+  background: var(--ion-color-primary);
+}
+
+ion-chip ion-label,
+ion-chip ion-icon {
+  color: white !important;
+}
+
+ion-label,
+.item.sc-ion-label-md-h,
+.item .sc-ion-label-md-h {
+  color: var(--ion-color-light);
+}
+
+ion-label p,
+.item.sc-ion-label-md-h p,
+.item .sc-ion-label-md-h p {
+  color: var(--ion-color-light-shade) !important;
+}
+
+ion-segment-button.segment-button-checked ion-label {
+  color: var(--ion-color-primary);
+}
+
+h2.section {
+  font-size: 14pt;
+}
+
+.show-more {
+  font-size: 12px;
+}
+
+.show-more ion-label {
+  color: var(--ion-color-light) !important;
+}
+
+ion-item {
+  --background: transparent;
+  --border-color: #171717;
+}
+
+.button-native {
+  text-transform: lowercase;
+}
+
+@media (min-width: 992px) {
+  ion-menu {
+    max-width: 350px;
+  }
+}
+
+ion-header ion-avatar {
+  width: 32px;
+  height: 32px;
+}
+
+ion-header ion-menu-toggle {
+  margin-left: 10px;
+}
+
+[padding] {
+  --background: var(--ion-color-dark);
+  --padding-start: var(--ion-padding, 32px);
+  --padding-end: var(--ion-padding, 32px);
+  --padding-top: var(--ion-padding, 32px);
+  --padding-bottom: var(--ion-padding, 32px);
+}
+
+ion-input,
+ion-textarea,
+ion-select,
+ion-datetime {
+  --placeholder-color: #9c2c51 !important;
+  --color: #e91e63 !important;
+  color: #e91e63 !important;
+  --placeholder-opacity: 1 !important;
+  --padding-start: 0;
+}
+
+ion-button {
+  text-transform: unset;
+}
+
+form {
+  background-color: var(--ion-color-dark);
+}
+
+form ion-item {
+  --padding-start: 0px !important;
+  --highlight-color-invalid: #e91e63;
+  --background-focused: transparent;
+}
+
+form ion-label {
+  --color: var(--ion-color-light) !important;
+}
+
+form ion-button[type=submit] {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+form .error-message {
+  color: #e91e63;
+  font-size: 12px;
+  display: inline-flex;
+}
+
+.full-center {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.full-center p {
+  margin: 0;
+}
+
+.full-center ion-icon {
+  color: var(--ion-color-light);
+  font-size: 48px;
+}
+
+ion-segment-button {
+  --background: var(--ion-color-dark);
+  --background-checked: var(--ion-color-dark);
+  --color: white;
+  --indicator-color: #e91e63;
+  text-transform: none;
+}
+
+.sc-ion-back-button-md {
+  display: none;
+}
+
+ion-toast.md {
+  --border-radius: 25px;
+  --background: #ffffffee;
+  --width: fit-content;
+  --color: #353535;
+}
+
+.ion-page,
+.modal-wrapper,
+ion-modal::part(content) {
+  background: var(--ion-color-dark) !important;
+}
+
+@media (min-width: 668px) {
+  .modal-wrapper,
+ion-modal::part(content) {
+    --border-radius: 20px;
+  }
+}
+
+@media (min-width: 668px) {
+  .full-modal::part(content),
+.full-modal .modal-wrapper {
+    --height: 95%;
+    --width: 50%;
+  }
+}
+
+.round-alert .alert-wrapper {
+  border-radius: 25px;
+}
+
+@media (max-width: 667px) {
+  .medium-modal .modal-wrapper,
+.medium-modal::part(content) {
+    --height: 70%;
+    --width: 70%;
+    --border-radius: 8px;
+    box-shadow: 1px 1px 100px 1px;
+  }
+}
+
+ul li {
+  color: var(--ion-color-light);
+}
+
+.alert-center h2,
+.alert-center .alert-message {
+  text-align: center;
+}
+
+.alert-center button {
+  border: 2px solid #e91e63 !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 20px !important;
+  padding: 10px 30px !important;
+  border-radius: 50px !important;
+}
+
+.ion-img-viewer .swiper-slide img {
+  z-index: 1;
+}
+
+.pane {
+  --cupertino-pane-background: var(--ion-color-dark) !important;
+  padding: 15px;
+}
+
+.pane ion-label {
+  color: var(--ion-color-light) !important;
+}
+
+#stories ion-avatar {
+  width: 48px;
+  height: 48px;
+}
+
+#stories ion-avatar img {
+  width: 48px;
+  height: 48px;
+}
+
+#stories ion-avatar.not-view img {
+  border: 2px solid #e91e63 !important;
+}
+
+#stories ion-badge {
+  position: absolute;
+  left: 35px;
+  bottom: 5px;
+  border-radius: 15px;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--ion-color-dark);
+  font-size: 14pt;
+  line-height: 0.7;
+}
+
+#stories ion-label {
+  font-size: 13px;
+  color: var(--ion-color-light);
+  width: 80px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 992px) {
+  #stories ion-avatar,
+#stories img {
+    width: 65px !important;
+    height: 65px !important;
+  }
+  #stories ion-badge {
+    bottom: 7px;
+    left: 45px;
+  }
+  #stories ion-label {
+    width: 90px;
+  }
+}
+
+#usernames {
+  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+}
+
+#usernames ion-avatar {
+  margin-right: 10px;
+}
+
+#usernames ion-label {
+  color: white;
+}
+
+ion-item {
+  --detail-icon-color: var(--ion-color-dark);
+}
+
+@media (min-width: 992px) {
+  .hide-landscape {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .hide-portrait {
+    display: none;
+  }
+}
+
+ion-button.patreon {
+  --background: #ff424d;
+}
+
+.picker-wrapper {
+  background: var(--ion-color-dark) !important;
+  border-radius: 20px 20px 0 0 !important;
+  color: white;
+}
+
+/*# sourceMappingURL=styles.css.map*/

@@ -1,8 +1,5 @@
 import { Injectable } from "@angular/core";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
-import { Router } from "@angular/router";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
-import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { AlertController, Platform } from "@ionic/angular";
 
 import { Chat } from "../models/chat";

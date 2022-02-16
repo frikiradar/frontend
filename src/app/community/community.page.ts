@@ -6,7 +6,6 @@ import {
   Router,
 } from "@angular/router";
 import { MenuController, ModalController, Platform } from "@ionic/angular";
-import { Vibration } from "@ionic-native/vibration/ngx";
 import * as deepEqual from "deep-equal";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
@@ -68,7 +67,6 @@ export class CommunityPage {
     private roomSvc: RoomService,
     private storySvc: StoryService,
     private config: ConfigService,
-    public vibration: Vibration,
     private modal: ModalController,
     private route: ActivatedRoute,
     private pageSvc: PageService,

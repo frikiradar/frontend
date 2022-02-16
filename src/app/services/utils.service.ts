@@ -7,9 +7,9 @@ import {
   AlertController,
   ModalController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { StatusBar, Style } from "@capacitor/status-bar";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
@@ -17,7 +17,7 @@ import { AuthService } from "./auth.service";
 import { Config } from "./config.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class UtilsService {
   constructor(
@@ -29,7 +29,6 @@ export class UtilsService {
     private webview: WebView,
     private camera: Camera,
     private modal: ModalController,
-    private statusBar: StatusBar, // private navigationBar: NavigationBarColor
     private toast: ToastController
   ) {}
 
@@ -50,7 +49,7 @@ export class UtilsService {
           : this.camera.PictureSourceType.PHOTOLIBRARY,
       mediaType: this.camera.MediaType.PICTURE,
       cameraDirection: 1,
-      correctOrientation: true
+      correctOrientation: true,
     });
 
     let src = this.webview.convertFileSrc(fileUri);
@@ -87,9 +86,9 @@ export class UtilsService {
         event,
         src,
         square,
-        aspectRatio
+        aspectRatio,
       },
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
     await modal.present();
 
@@ -111,7 +110,7 @@ export class UtilsService {
   ): Promise<Blob | boolean> {
     const modal = await this.modal.create({
       component: WebcamModal,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
     await modal.present();
 
@@ -163,12 +162,12 @@ export class UtilsService {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
+      reader.onerror = (error) => reject(error);
     });
   }
 
   getBase64Image(imgUrl: string): Promise<string> {
-    return new Promise<string>(resolve => {
+    return new Promise<string>((resolve) => {
       const img = new Image();
       img.src = imgUrl;
       img.setAttribute("crossOrigin", "anonymous");
@@ -195,7 +194,7 @@ export class UtilsService {
       header: "Función aún no disponible",
       message: "Esta acción se encuentra aún en desarrollo.",
       buttons: ["Gracias por avisar"],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();
@@ -222,7 +221,7 @@ export class UtilsService {
         message, // not supported on some apps (Facebook, Instagram)
         subject: "FrikiRadar, conoce a personas frikis como tú", // fi. for email
         url: `${url}?referrer=${referrer}`,
-        chooserTitle: "Elige una app y ayúdanos a seguir creciendo" // Android only, you can override the default share sheet title,
+        chooserTitle: "Elige una app y ayúdanos a seguir creciendo", // Android only, you can override the default share sheet title,
       };
 
       this.socialSharing.shareWithOptions(options);
@@ -230,7 +229,7 @@ export class UtilsService {
       window.navigator["share"]({
         title: "FrikiRadar, conoce a personas frikis como tú",
         text: message,
-        url: `${url}?referrer=${referrer}`
+        url: `${url}?referrer=${referrer}`,
       })
         .then(() => {
           console.log("Thanks for sharing!");
@@ -246,7 +245,7 @@ export class UtilsService {
           await this.toast.create({
             message: "Link copiado al portapapeles",
             duration: 2000,
-            position: "middle"
+            position: "middle",
           })
         ).present();
       } catch (e) {
@@ -254,7 +253,7 @@ export class UtilsService {
           await this.toast.create({
             message: "Error al copiar el link",
             duration: 2000,
-            position: "middle"
+            position: "middle",
           })
         ).present();
       }
@@ -291,7 +290,7 @@ export class UtilsService {
   }
 
   delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   toggleTheme(theme: Config["theme"], oldTheme?: Config["theme"]) {
@@ -302,32 +301,32 @@ export class UtilsService {
     if (this.platform.is("cordova")) {
       switch (theme) {
         case "dark":
-          this.statusBar.backgroundColorByHexString("#1f1f1f");
-          this.statusBar.styleBlackTranslucent();
+          StatusBar.setBackgroundColor({ color: "#1f1f1f" });
+          StatusBar.setOverlaysWebView({ overlay: true });
           // this.navigationBar.backgroundColorByHexString("#1f1f1f");
           break;
         case "light":
-          this.statusBar.backgroundColorByHexString("#fafafa");
-          this.statusBar.styleDefault();
+          StatusBar.setBackgroundColor({ color: "#fafafa" });
+          StatusBar.setStyle({ style: Style.Default });
           // this.navigationBar.backgroundColorByHexString("#fafafa");
           break;
         case "cyberpunk":
-          this.statusBar.backgroundColorByHexString("#0c1340");
-          this.statusBar.styleBlackTranslucent();
+          StatusBar.setBackgroundColor({ color: "#0c1340" });
+          StatusBar.setOverlaysWebView({ overlay: true });
           // this.navigationBar.backgroundColorByHexString("#0c1340");
           break;
         case "black":
-          this.statusBar.backgroundColorByHexString("#000000");
-          this.statusBar.styleBlackTranslucent();
+          StatusBar.setBackgroundColor({ color: "#000000" });
+          StatusBar.setOverlaysWebView({ overlay: true });
           break;
         case "fire":
-          this.statusBar.backgroundColorByHexString("#000000");
-          this.statusBar.styleBlackTranslucent();
+          StatusBar.setBackgroundColor({ color: "#000000" });
+          StatusBar.setOverlaysWebView({ overlay: true });
           // this.navigationBar.backgroundColorByHexString("#0c1340");
           break;
         default:
-          this.statusBar.backgroundColorByHexString("#1f1f1f");
-          this.statusBar.styleBlackTranslucent();
+          StatusBar.setBackgroundColor({ color: "#1f1f1f" });
+          StatusBar.setOverlaysWebView({ overlay: true });
         // this.navigationBar.backgroundColorByHexString("#1f1f1f");
       }
     }
@@ -539,7 +538,7 @@ export class UtilsService {
       "Yemen",
       "Yibuti",
       "Zambia",
-      "Zimbabue"
+      "Zimbabue",
     ];
   }
 

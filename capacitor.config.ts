@@ -1,0 +1,41 @@
+import { CapacitorConfig } from "@capacitor/cli";
+
+const config: CapacitorConfig = {
+  appId: "io.ionic.starter",
+  appName: "frontend",
+  webDir: "www",
+  bundledWebRuntime: false,
+  cordova: {
+    preferences: {
+      Hostname: "frikiradar",
+      ScrollEnabled: "false",
+      "android-minSdkVersion": "24",
+      "android-targetSdkVersion": "29",
+      BackupWebStorage: "none",
+      SplashMaintainAspectRatio: "true",
+      FadeSplashScreenDuration: "300",
+      SplashShowOnlyFirstTime: "false",
+      SplashScreen: "screen",
+      ShowSplashScreenSpinner: "false",
+      NavigationBarBackgroundColor: "#1f1f1f",
+      SplashScreenDelay: "30000",
+      AutoHideSplashScreen: "false",
+      KeyboardStyle: "dark",
+      WKWebViewOnly: "true",
+      AndroidXEnabled: "true",
+      GradlePluginKotlinEnabled: "true",
+      GradlePluginKotlinCodeStyle: "official",
+      GradlePluginKotlinVersion: "1.3.50",
+      "cordova.plugins.diagnostic.modules": "LOCATION",
+    },
+  },
+  plugins: {
+    LocalNotifications: {
+      smallIcon: "notification_icon",
+      iconColor: "#e91e63",
+      sound: "bipbip.mp3",
+    },
+  },
+};
+
+export default config;

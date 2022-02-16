@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>FrikiRadar, conoce a personas frikis como tú</title>
+
+    <base href="/"/>
+
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="description" content="Conoce a personas con tus mismos gustos y aficiones muy cerca de ti. Otakus, gamers, geeks, cinéfilos... Gente friki, gente diferente"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="facebook-domain-verification" content="vpq8qgqgiqxv9xp2gm0wkmhhg2u0xc"/>
+
+    <link rel="icon" type="image/png" href="assets/icon/favicon.png"/>
+
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png"/>
+    <link rel="manifest" href="manifest.webmanifest"/>
+    <meta name="theme-color" content="#1f1f1f"/>
+  <link rel="stylesheet" href="styles.css"></head>
+
+  <body>
+    <app-root></app-root>
+    <noscript>Please enable JavaScript to continue using this application.</noscript>
+    <script type="text/javascript">
+      // links catch-all/handler
+      document.onclick = function(e) {
+        e = e || window.event;
+        var element = e.target || e.srcElement;
+        // making sure there's an URL
+        if (element.tagName == "A" && element.href) {
+          // opening in a new window
+          window.open(element.href, "_blank", "location=yes");
+          return false;
+        }
+      };
+    </script>
+  <script src="runtime.js" type="module"></script><script src="polyfills.js" type="module"></script><script src="vendor.js" type="module"></script><script src="main.js" type="module"></script></body>
+</html>

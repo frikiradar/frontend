@@ -2,13 +2,13 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Vibration } from "@ionic-native/vibration/ngx";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import {
   AlertController,
   ModalController,
   NavController,
   PopoverController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { pulse } from "ng-animate";
@@ -32,7 +32,7 @@ import { AuthService } from "./../services/auth.service";
   selector: "app-profile",
   templateUrl: "./profile.page.html",
   styleUrls: ["./profile.page.scss"],
-  animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])]
+  animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])],
 })
 export class ProfilePage {
   public user: User;
@@ -40,7 +40,7 @@ export class ProfilePage {
   public story: Story;
   public likes: { delivered: Like[]; received: Like[] } = {
     delivered: undefined,
-    received: undefined
+    received: undefined,
   };
   public loading = true;
   public pulse: any;
@@ -55,7 +55,7 @@ export class ProfilePage {
     initialBreak: "middle",
     onBackdropTap: () => {
       this.pane.destroy({ animate: true });
-    }
+    },
   };
 
   constructor(
@@ -65,7 +65,6 @@ export class ProfilePage {
     public router: Router,
     public utils: UtilsService,
     private toast: ToastController,
-    private vibration: Vibration,
     private alert: AlertController,
     public auth: AuthService,
     private storiesSvc: StoryService,
@@ -83,7 +82,7 @@ export class ProfilePage {
     let id = undefined;
     if (!param) {
       id = this.auth.currentUserValue.id;
-      this.auth.currentUser.subscribe(async authUser => {
+      this.auth.currentUser.subscribe(async (authUser) => {
         this.user = { ...this.user, ...authUser };
       });
     } else {
@@ -105,17 +104,17 @@ export class ProfilePage {
       this.meta.addTags([
         {
           name: "keywords",
-          content: "frikiradar, friki, red social, " + this.user?.name
+          content: "frikiradar, friki, red social, " + this.user?.name,
         },
         { name: "robots", content: "index, follow" },
         { name: "author", content: "FrikiRadar" },
-        { charset: "UTF-8" }
+        { charset: "UTF-8" },
       ]);
 
       this.title.setTitle("Perfil de " + this.user?.name + " en FrikiRadar");
       this.meta.updateTag({
         name: "description",
-        content: this.user?.description
+        content: this.user?.description,
       });
 
       if (typeof this.user.connection === "string") {
@@ -143,14 +142,14 @@ export class ProfilePage {
 
   getTagsCategory(category: string) {
     if (this.user && this.user.tags) {
-      return this.user.tags.filter(t => t.category.name === category);
+      return this.user.tags.filter((t) => t.category.name === category);
     }
   }
 
   async showChat() {
     if (!this.auth.currentUserValue) {
       this.nav.navigateRoot(["/login"], {
-        queryParams: { returnUrl: this.router.url }
+        queryParams: { returnUrl: this.router.url },
       });
       return;
     }
@@ -169,7 +168,7 @@ export class ProfilePage {
           header: "No puedes iniciar un chat con esta persona",
           message: `Para poder iniciar una conversación es necesario tener temas de conversación en común o haber recibido su kokoro ❤️.`,
           buttons: ["Entendido, gracias!"],
-          cssClass: "round-alert"
+          cssClass: "round-alert",
         });
 
         await alert.present();
@@ -180,14 +179,14 @@ export class ProfilePage {
   async switchLike() {
     if (!this.auth.currentUserValue) {
       this.nav.navigateRoot(["/login"], {
-        queryParams: { returnUrl: this.router.url }
+        queryParams: { returnUrl: this.router.url },
       });
       return;
     }
 
     try {
       if (!this.user.like) {
-        this.vibration.vibrate(5);
+        await Haptics.impact({ style: ImpactStyle.Medium });
         this.userSvc.like(this.user.id);
         this.user.like = true;
         if (
@@ -205,7 +204,7 @@ export class ProfilePage {
             await this.toast.create({
               message,
               duration: 5000,
-              position: "middle"
+              position: "middle",
             })
           ).present();
         } else {
@@ -213,7 +212,7 @@ export class ProfilePage {
             await this.toast.create({
               message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
               duration: 5000,
-              position: "middle"
+              position: "middle",
             })
           ).present();
         }
@@ -224,7 +223,7 @@ export class ProfilePage {
           await this.toast.create({
             message: `Le has retirado tu kokoro a ${this.user.name}`,
             duration: 5000,
-            position: "middle"
+            position: "middle",
           })
         ).present();
       }
@@ -234,7 +233,7 @@ export class ProfilePage {
           message: `Error al entregar o retirar el kokoro`,
           duration: 5000,
           position: "middle",
-          color: "danger"
+          color: "danger",
         })
       ).present();
     }
@@ -252,9 +251,9 @@ export class ProfilePage {
           text: "Deshacer",
           handler: () => {
             this.router.navigate(["/profile/" + this.user.id]);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     toast.present();
 
@@ -272,8 +271,8 @@ export class ProfilePage {
       translucent: true,
       componentProps: {
         user: this.user,
-        page: "profile"
-      }
+        page: "profile",
+      },
     });
     return await popover.present();
   }
@@ -287,12 +286,12 @@ export class ProfilePage {
           (
             await this.toast.create({
               message: "Creando página...",
-              position: "middle"
+              position: "middle",
             })
           ).present();
           const page = await this.pageSvc.setPage(tag.id);
           this.toast.dismiss();
-          this.user.tags.map(t => {
+          this.user.tags.map((t) => {
             if (t.id === tag.id) {
               t.slug = page.slug;
             }
@@ -312,14 +311,14 @@ export class ProfilePage {
   }
 
   async showStories(id: User["id"]) {
-    let stories = this.stories.filter(s => s.user.id === id);
-    stories = [...stories, ...this.stories.filter(s => s.user.id !== id)];
+    let stories = this.stories.filter((s) => s.user.id === id);
+    stories = [...stories, ...this.stories.filter((s) => s.user.id !== id)];
     const modal = await this.modal.create({
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
     await modal.present();
     await modal.onDidDismiss();
@@ -341,7 +340,7 @@ export class ProfilePage {
       this.param === "received" &&
       this.user.id === this.auth.currentUserValue.id
     ) {
-      if (!this.likes[this.param].find(l => l.user.id === id).time_read) {
+      if (!this.likes[this.param].find((l) => l.user.id === id).time_read) {
         await this.likeSvc.readLike(id);
       }
     }

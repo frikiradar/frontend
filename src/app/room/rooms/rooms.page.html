@@ -51,7 +51,10 @@
           </h2>
           <p class="room-description">{{room?.description}}</p>
         </ion-label>
-        <ion-reorder slot="end" (click)="vibration.vibrate(5)">
+        <ion-reorder
+          slot="end"
+          (click)="Haptics.impact({ style: ImpactStyle.Medium })"
+        >
           <ion-icon color="light" name="reorder-two"></ion-icon>
         </ion-reorder>
       </ion-item>

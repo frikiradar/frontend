@@ -21,7 +21,7 @@ import {
   PopoverController,
   ToastController,
 } from "@ionic/angular";
-import { Vibration } from "@ionic-native/vibration/ngx";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 import { Chat } from "../../models/chat";
 import { User } from "../../models/user";
@@ -82,7 +82,6 @@ export class ChatModalComponent implements OnInit {
     public utils: UtilsService,
     public modalController: ModalController,
     private popover: PopoverController,
-    private vibration: Vibration,
     private nav: NavService,
     private dc: ChangeDetectorRef,
     private afMessaging: AngularFireMessaging,
@@ -417,9 +416,9 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  selectMessage(event: any, message: Chat) {
+  async selectMessage(event: any, message: Chat) {
     event.preventDefault();
-    this.vibration.vibrate(5);
+    await Haptics.impact({ style: ImpactStyle.Medium });
     this.selectedMessage = message;
     this.pressOptions = true;
   }

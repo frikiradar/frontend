@@ -15,17 +15,13 @@ import { AppVersion } from "@ionic-native/app-version/ngx";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Diagnostic } from "@ionic-native/diagnostic/ngx";
-import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@ionic-native/launch-review/ngx";
-import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 import { Network } from "@ionic-native/network/ngx";
 import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { Vibration } from "@ionic-native/vibration/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
@@ -81,7 +77,6 @@ registerLocaleData(localeEs, "es");
     WebcamModule,
   ],
   providers: [
-    StatusBar,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
@@ -93,13 +88,10 @@ registerLocaleData(localeEs, "es");
     },
     Device,
     Network,
-    Vibration,
-    Geolocation,
     SplashScreen,
     Clipboard,
     LaunchReview,
     Keyboard,
-    LocalNotifications,
     AndroidPermissions,
     SocialSharing,
     AppVersion,
