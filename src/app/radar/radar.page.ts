@@ -1,5 +1,10 @@
-import { Component, ViewChild, HostListener } from "@angular/core";
-import { Router } from "@angular/router";
+import {
+  Component,
+  ViewChild,
+  HostListener,
+  ChangeDetectorRef
+} from "@angular/core";
+import { NavigationStart, Router, Event } from "@angular/router";
 import {
   IonSlides,
   MenuController,
@@ -7,12 +12,14 @@ import {
   AlertController,
   IonRange,
   IonContent,
-  ToastController
+  ToastController,
+  ModalController
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { takeWhile } from "rxjs/operators";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
+import * as deepEqual from "deep-equal";
 
 import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
@@ -22,6 +29,14 @@ import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
 import { Config, ConfigService } from "../services/config.service";
 import { PushService } from "../services/push.service";
+import {
+  NotificationService,
+  NotificationCounters
+} from "../services/notification.service";
+import { StoryService } from "../services/story.service";
+import { Story } from "../models/story";
+import { StoryModal } from "../story/story-modal/story.modal";
+import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 
 @Component({
   selector: "app-radar",
@@ -35,6 +50,8 @@ export class RadarPage {
   range: IonRange;
   @ViewChild("radarlist", { static: true })
   radarlist: IonContent;
+
+  public counters: NotificationCounters;
 
   public slideOpts = {
     slidesPerView: 1,
@@ -122,14 +139,16 @@ export class RadarPage {
               : $slideEl.find(".swiper-slide-shadow-bottom");
             if ($shadowBeforeEl.length === 0) {
               $shadowBeforeEl = swiper.$(
-                `<div class="swiper-slide-shadow-${isHorizontal ? "left" : "top"
+                `<div class="swiper-slide-shadow-${
+                  isHorizontal ? "left" : "top"
                 }"></div>`
               );
               $slideEl.append($shadowBeforeEl);
             }
             if ($shadowAfterEl.length === 0) {
               $shadowAfterEl = swiper.$(
-                `<div class="swiper-slide-shadow-${isHorizontal ? "right" : "bottom"
+                `<div class="swiper-slide-shadow-${
+                  isHorizontal ? "right" : "bottom"
                 }"></div>`
               );
               $slideEl.append($shadowAfterEl);
@@ -163,6 +182,20 @@ export class RadarPage {
       }
     }
   };
+
+  public storiesOpts = {
+    preloadImages: false,
+    lazy: true,
+    slidesPerView: 4.5,
+    breakpoints: {
+      1024: {
+        slidesPerView: 14.5
+      }
+    },
+    grabCursor: true
+  };
+  public stories: Story[];
+  public groupedStories: Story[] = [];
 
   public hide = false;
   page = 0;
@@ -239,8 +272,24 @@ export class RadarPage {
     private toast: ToastController,
     private config: ConfigService,
     private firebase: FirebaseX,
-    private push: PushService
-  ) { }
+    private push: PushService,
+    private notificationSvc: NotificationService,
+    public detectorRef: ChangeDetectorRef,
+    private storySvc: StoryService,
+    private modal: ModalController
+  ) {
+    this.notificationSvc.notification.subscribe(notification => {
+      this.counters = notification;
+    });
+
+    this.router.events.subscribe(async (event: Event) => {
+      if (event instanceof NavigationStart) {
+        if (event.url === "/tabs/radar") {
+          this.getStories();
+        }
+      }
+    });
+  }
 
   async ngAfterViewInit() {
     this.users = (await this.config.get("radar")) as Config["radar"];
@@ -265,9 +314,9 @@ export class RadarPage {
           oldCoordinates === undefined ||
           oldCoordinates.latitude === undefined ||
           this.coordinates.latitude.toFixed(3) !==
-          oldCoordinates?.latitude.toFixed(3) ||
+            oldCoordinates?.latitude.toFixed(3) ||
           this.coordinates.longitude.toFixed(3) !==
-          oldCoordinates?.longitude.toFixed(3)
+            oldCoordinates?.longitude.toFixed(3)
         ) {
           const coordinates = await this.userSvc.setCoordinates(
             this.coordinates.longitude,
@@ -326,6 +375,7 @@ export class RadarPage {
       await this.slides?.slideTo(0);
     }
     this.getRadarUsers();
+    this.getStories();
   }
 
   async ionViewWillEnter() {
@@ -419,12 +469,72 @@ export class RadarPage {
     }
   }
 
+  async getStories() {
+    let stories = await this.storySvc.getAllStories();
+    stories = this.storySvc.orderStories(stories);
+    if (!deepEqual(this.stories, stories)) {
+      this.stories = stories;
+      const groupedStories = this.storySvc.groupStories(stories);
+      this.groupedStories = groupedStories;
+    }
+  }
+
+  async newStory() {
+    const modal = await this.modal.create({
+      component: StoryModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal"
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+    await this.getStories();
+  }
+
+  async showStories(id: User["id"]) {
+    let stories = this.stories.reverse().filter(s => s.user.id === id);
+    stories = [
+      ...stories,
+      ...this.stories.reverse().filter(s => s.user.id !== id)
+    ];
+    await this.showStoriesModal(stories);
+    await this.getStories();
+  }
+
+  async showStory(story: Story) {
+    const stories = [story];
+    await this.showStoriesModal(stories);
+    await this.getStories();
+  }
+
+  async showStoriesModal(stories: Story[]) {
+    const modal = await this.modal.create({
+      component: ViewStoriesModal,
+      componentProps: { stories },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal"
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+  async showAllStories() {
+    this.router.navigate(["/story"]);
+  }
+
   async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
   }
 
   search() {
     this.router.navigate(["/search"]);
+  }
+
+  notifications() {
+    this.router.navigate(["/notification"]);
   }
 
   async changeView() {

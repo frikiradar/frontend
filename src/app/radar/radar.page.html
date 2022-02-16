@@ -1,17 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-toggle (click)="menu.open()">
-        <ion-avatar>
-          <img
-            [src]="authUser?.thumbnail"
-            [alt]="authUser?.username"
-            default="/assets/img/users/default.jpg"
-          />
-        </ion-avatar>
-      </ion-menu-toggle>
-    </ion-buttons>
-    <ion-title>Radar</ion-title>
+    <ion-title>frikiradar</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="changeView()" *ngIf="users">
         <ion-icon
@@ -25,10 +14,57 @@
       <ion-button (click)="search()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
+      <ion-button (click)="notifications()">
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+        <ion-badge slot="end" color="primary" *ngIf="counters?.notifications"
+          >{{ counters.notifications }}</ion-badge
+        >
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <section>
+    <ion-slides id="stories" [options]="storiesOpts" mode="md">
+      <ion-slide>
+        <div>
+          <ion-item button lines="none" (click)="newStory()">
+            <ion-avatar>
+              <img
+                [src]="auth.currentUserValue?.thumbnail"
+                alt="auth.currentUserValue?.name"
+              />
+              <ion-badge color="tertiary">+</ion-badge>
+            </ion-avatar>
+          </ion-item>
+          <ion-label>Añadir</ion-label>
+        </div>
+      </ion-slide>
+      <ion-slide *ngFor="let story of groupedStories; let i = index">
+        <div>
+          <ion-item button lines="none" (click)="showStories(story.user.id)">
+            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
+              <img [src]="story.image" [alt]="story.text" />
+            </ion-avatar>
+          </ion-item>
+          <ion-label>{{story.user.username}}</ion-label>
+        </div>
+      </ion-slide>
+      <ion-slide *ngIf="groupedStories?.length">
+        <div>
+          <ion-item button lines="none" (click)="showAllStories()">
+            <ion-avatar>
+              <img
+                [src]="auth.currentUserValue?.thumbnail"
+                alt="auth.currentUserValue?.name"
+              />
+            </ion-avatar>
+          </ion-item>
+          <ion-label>Ver todas</ion-label>
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </section>
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
   <div *ngIf="view === 'cards'" style="height: 100%">
     <ion-slides #slides (ionSlideDidChange)="slide()" [options]="slideOpts">

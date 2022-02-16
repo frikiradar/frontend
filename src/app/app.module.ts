@@ -35,7 +35,7 @@ import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { ImageCropperModule } from "ngx-image-cropper";
 import { AngularFireModule } from "@angular/fire/compat";
-import { AngularFireMessagingModule } from "@angular/fire/compat/messaging";
+import { AngularFireMessagingModule } from "@angular/fire/compat/messaging/";
 import { WebcamModule } from "ngx-webcam";
 import {
   ServiceWorkerModule,
@@ -51,7 +51,6 @@ import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { MenuComponent } from "./menu/menu.component";
 import { SharedModule } from "./shared/shared.module";
 import { OptionsPopover } from "./options-popover/options-popover";
 
@@ -59,7 +58,7 @@ import { OptionsPopover } from "./options-popover/options-popover";
 registerLocaleData(localeEs, "es");
 
 @NgModule({
-  declarations: [AppComponent, MenuComponent, OptionsPopover],
+  declarations: [AppComponent, OptionsPopover],
   imports: [
     BrowserModule,
     IonicModule.forRoot({ animated: true }),
