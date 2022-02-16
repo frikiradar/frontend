@@ -4,7 +4,7 @@ import {
   ElementRef,
   HostListener,
   OnInit,
-  ViewChild
+  ViewChild,
 } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -18,11 +18,11 @@ import {
   ModalController,
   Platform,
   PopoverController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 
 import { Chat } from "../models/chat";
@@ -45,7 +45,7 @@ import { EventModal } from "../events/event-modal/event.modal";
 @Component({
   selector: "app-room",
   templateUrl: "./room.page.html",
-  styleUrls: ["./room.page.scss"]
+  styleUrls: ["./room.page.scss"],
 })
 export class RoomPage implements OnInit {
   @ViewChild("chatlist", { static: false })
@@ -86,7 +86,7 @@ export class RoomPage implements OnInit {
       this.pane.destroy({ animate: true });
       this.selectedMessage = undefined;
       this.pressOptions = false;
-    }
+    },
   };
 
   constructor(
@@ -133,16 +133,16 @@ export class RoomPage implements OnInit {
       backdropDismiss: false,
       buttons: [
         {
-          text: "Intentar reconectar"
+          text: "Intentar reconectar",
         },
         {
           text: "Ok, seré paciente",
           handler: () => {
             this.back();
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     if (!config.chat && !this.auth.isAdmin()) {
@@ -156,10 +156,10 @@ export class RoomPage implements OnInit {
       const rooms_config = await this.roomSvc.getRoomsConfig();
       if (
         this.room.last_message >
-        rooms_config.find(r => r.slug === this.room.slug)?.last_message
+        rooms_config.find((r) => r.slug === this.room.slug)?.last_message
       ) {
         this.oldLastMessage = rooms_config?.find(
-          r => r.slug === this.room.slug
+          (r) => r.slug === this.room.slug
         )?.last_message;
       }
       this.roomPage = this.room.page;
@@ -179,7 +179,7 @@ export class RoomPage implements OnInit {
       const modal = await this.modalController.create({
         component: RulesPage,
         cssClass: "full-modal",
-        backdropDismiss: false
+        backdropDismiss: false,
       });
       return await modal.present();
     }
@@ -198,7 +198,7 @@ export class RoomPage implements OnInit {
   async getLastMessages() {
     try {
       let messages = (await this.roomSvc.getMessages(this.slug, 1))
-        .filter(m => m.text || m.image || m.audio)
+        .filter((m) => m.text || m.image || m.audio)
         .reverse();
 
       if (messages.length && (this.room?.visible || this.roomPage)) {
@@ -206,17 +206,17 @@ export class RoomPage implements OnInit {
         this.roomSvc.setLastMessage(this.room);
       }
 
-      messages = messages.filter(m => {
-        if (!this.messages.some(me => me.id === m.id)) {
+      messages = messages.filter((m) => {
+        if (!this.messages.some((me) => me.id === m.id)) {
           return m;
         }
       });
 
-      messages.map(m => {
+      messages.map((m) => {
         if (m.event) {
           if (
             m.event.participants.some(
-              p => p.id === this.auth.currentUserValue.id
+              (p) => p.id === this.auth.currentUserValue.id
             )
           ) {
             m.event.participate = true;
@@ -224,7 +224,7 @@ export class RoomPage implements OnInit {
         }
       });
       if (this.messages.length) {
-        messages.forEach(message => {
+        messages.forEach((message) => {
           this.messageReceived(message);
         });
       } else {
@@ -239,11 +239,11 @@ export class RoomPage implements OnInit {
 
       this.connectSSE();
 
-      window.addEventListener("keyboardDidShow", event => {
+      window.addEventListener("keyboardDidShow", (event) => {
         this.scrollDown();
       });
 
-      window.addEventListener("keyboardDidHide", event => {
+      window.addEventListener("keyboardDidHide", (event) => {
         this.scrollDown();
       });
 
@@ -265,7 +265,7 @@ export class RoomPage implements OnInit {
       const chat = await this.chatSvc
         .updateMessage(this.selectedMessage.id, text)
         .then();
-      this.messages.map(m => {
+      this.messages.map((m) => {
         if (m.id === this.selectedMessage.id) {
           m.text = text;
         }
@@ -282,7 +282,7 @@ export class RoomPage implements OnInit {
         image,
         time_creation: new Date(),
         sending: true,
-        mentions
+        mentions,
       };
 
       this.messages = [...this.messages, ...[message]].filter(
@@ -327,7 +327,7 @@ export class RoomPage implements OnInit {
 
         replyToId = null;
       } catch (e) {
-        this.messages = this.messages.filter(m => m.sending !== true);
+        this.messages = this.messages.filter((m) => m.sending !== true);
         console.error(e);
       }
     }
@@ -358,14 +358,16 @@ export class RoomPage implements OnInit {
     }
     this.page++;
     const messages = (await this.roomSvc.getMessages(this.slug, this.page))
-      .filter(m => m.text || m.image || m.audio)
+      .filter((m) => m.text || m.image || m.audio)
       .reverse();
     this.messages = [...messages, ...this.messages];
 
-    this.messages.map(m => {
+    this.messages.map((m) => {
       if (m.event) {
         if (
-          m.event.participants.some(p => p.id === this.auth.currentUserValue.id)
+          m.event.participants.some(
+            (p) => p.id === this.auth.currentUserValue.id
+          )
         ) {
           m.event.participate = true;
         }
@@ -405,7 +407,7 @@ export class RoomPage implements OnInit {
         await this.toast.create({
           message: "Mensaje copiado",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     } catch (e) {
@@ -413,7 +415,7 @@ export class RoomPage implements OnInit {
         await this.toast.create({
           message: "Error al copiar el mensaje",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     }
@@ -437,7 +439,7 @@ export class RoomPage implements OnInit {
       await this.chatSvc.deleteMessage(this.selectedMessage.id);
       if (this.selectedMessage.fromuser.id === this.auth.currentUserValue.id) {
         this.messages = this.messages.filter(
-          m => m.id !== this.selectedMessage.id
+          (m) => m.id !== this.selectedMessage.id
         );
       }
     } catch (e) {
@@ -445,7 +447,7 @@ export class RoomPage implements OnInit {
         await this.toast.create({
           message: "Error al eliminar el mensaje",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
 
@@ -462,26 +464,26 @@ export class RoomPage implements OnInit {
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del reporte (opcional)"
-        }
+          placeholder: "Motivo del reporte (opcional)",
+        },
       ],
       buttons: [
         {
           text: "Cancelar",
           role: "cancel",
-          cssClass: "secondary"
+          cssClass: "secondary",
         },
         {
           text: "Reportar",
           role: "block",
-          handler: async data => {
+          handler: async (data) => {
             try {
               await this.chatSvc.report(this.selectedMessage, data.note);
               (
                 await this.toast.create({
                   message: "Mensaje reportado correctamente",
                   duration: 2000,
-                  position: "bottom"
+                  position: "bottom",
                 })
               ).present();
             } catch (e) {
@@ -490,15 +492,15 @@ export class RoomPage implements OnInit {
                   message: `Error al reportar el mensaje ${e}`,
                   duration: 2000,
                   position: "bottom",
-                  color: "danger"
+                  color: "danger",
                 })
               ).present();
               alert.present();
             }
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();
@@ -525,7 +527,7 @@ export class RoomPage implements OnInit {
     if (this.platform.is("android") && this.platform.is("cordova")) {
       await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
-        this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
+        this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
       ]);
     }
 
@@ -543,7 +545,7 @@ export class RoomPage implements OnInit {
                 true
               )) as string;
               this.addPicture(image);
-            }
+            },
           },
           {
             text: "Desde la galería",
@@ -556,9 +558,9 @@ export class RoomPage implements OnInit {
                 true
               )) as string;
               this.addPicture(image);
-            }
-          }
-        ]
+            },
+          },
+        ],
       });
       await actionSheet.present();
     } else {
@@ -580,13 +582,13 @@ export class RoomPage implements OnInit {
         src,
         title,
         text,
-        scheme
+        scheme,
       };
     } else {
       componentProps = {
         src,
         title,
-        scheme
+        scheme,
       };
     }
     const modal = await this.modalController.create({
@@ -594,7 +596,7 @@ export class RoomPage implements OnInit {
       componentProps,
       cssClass: "ion-img-viewer",
       keyboardClose: true,
-      showBackdrop: true
+      showBackdrop: true,
     });
 
     return await modal.present();
@@ -624,7 +626,7 @@ export class RoomPage implements OnInit {
 
   async connectSSE() {
     if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe(notification => {
+      this.firebase.onMessageReceived().subscribe((notification) => {
         if (notification?.message) {
           const message = JSON.parse(notification.message) as Chat;
           // console.log(message);
@@ -657,13 +659,13 @@ export class RoomPage implements OnInit {
         this.toUserWriting = "";
         if (
           this.messages.some(
-            m =>
+            (m) =>
               (m.id === message.id && !!m.id) ||
               (m.tmp_id === message.tmp_id && !!m.tmp_id)
           )
         ) {
           // Si ya existe el mensaje lo actualizamos
-          this.messages.map(m => {
+          this.messages.map((m) => {
             if (
               (m.id === message.id && !!m.id) ||
               (m.tmp_id === message.tmp_id && !!m.tmp_id)
@@ -683,7 +685,7 @@ export class RoomPage implements OnInit {
         }
 
         // Borramos los deleted
-        this.messages = this.messages.filter(m => !m.deleted);
+        this.messages = this.messages.filter((m) => !m.deleted);
         this.cd.detectChanges();
         this.scrollDown();
       }
@@ -709,7 +711,7 @@ export class RoomPage implements OnInit {
       keyboardClose: true,
       showBackdrop: true,
       cssClass: "full-modal",
-      componentProps: { page: this.roomPage }
+      componentProps: { page: this.roomPage },
     });
 
     await modal.present();

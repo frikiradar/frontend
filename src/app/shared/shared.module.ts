@@ -29,63 +29,49 @@ import { EventModal } from "../events/event-modal/event.modal";
 import { RulesPage } from "../rules/rules.page";
 
 @NgModule({
-  declarations: [
-    ImagePreloadDirective,
-    NiceDatePipe,
-    ChatDatePipe,
-    MentionsPipe,
-    HashtagPipe,
-    CreditsModal,
-    RequestGeolocationModal,
-    CropperModal,
-    WebcamModal,
-    ChatInputComponent,
-    AudioPlayerComponent,
-    ChatListComponent,
-    ChatModalComponent,
-    StoryModal,
-    EventModal,
-    ViewStoriesModal,
-    CommentLikesModal,
-    RulesPage
-  ],
-  entryComponents: [
-    CreditsModal,
-    RequestGeolocationModal,
-    CropperModal,
-    WebcamModal,
-    ChatInputComponent,
-    AudioPlayerComponent,
-    ChatListComponent,
-    ChatModalComponent,
-    StoryModal,
-    EventModal,
-    ViewStoriesModal,
-    CommentLikesModal
-  ],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    CommonModule,
-    NgxIonicImageViewerModule,
-    ImageCropperModule,
-    WebcamModule,
-    PickerModule,
-    LinkyModule
-  ],
-  exports: [
-    ImagePreloadDirective,
-    NiceDatePipe,
-    ChatDatePipe,
-    MentionsPipe,
-    HashtagPipe,
-    ChatInputComponent,
-    ChatListComponent,
-    ChatModalComponent,
-    LinkyModule,
-    AudioPlayerComponent
-  ],
-  providers: [Camera]
+    declarations: [
+        ImagePreloadDirective,
+        NiceDatePipe,
+        ChatDatePipe,
+        MentionsPipe,
+        HashtagPipe,
+        CreditsModal,
+        RequestGeolocationModal,
+        CropperModal,
+        WebcamModal,
+        ChatInputComponent,
+        AudioPlayerComponent,
+        ChatListComponent,
+        ChatModalComponent,
+        StoryModal,
+        EventModal,
+        ViewStoriesModal,
+        CommentLikesModal,
+        RulesPage
+    ],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        CommonModule,
+        NgxIonicImageViewerModule,
+        ImageCropperModule,
+        WebcamModule,
+        PickerModule,
+        LinkyModule
+    ],
+    exports: [
+        ImagePreloadDirective,
+        NiceDatePipe,
+        ChatDatePipe,
+        MentionsPipe,
+        HashtagPipe,
+        ChatInputComponent,
+        ChatListComponent,
+        ChatModalComponent,
+        LinkyModule,
+        AudioPlayerComponent
+    ],
+    providers: [Camera]
 })
 export class SharedModule {}

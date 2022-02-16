@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { Platform } from "@ionic/angular";
@@ -16,7 +16,7 @@ import { RoomService } from "src/app/services/room.service";
 @Component({
   selector: "app-rooms",
   templateUrl: "./rooms.page.html",
-  styleUrls: ["./rooms.page.scss"]
+  styleUrls: ["./rooms.page.scss"],
 })
 export class RoomsPage implements OnInit {
   public rooms: Room[];
@@ -31,7 +31,7 @@ export class RoomsPage implements OnInit {
     private afMessaging: AngularFireMessaging,
     private firebase: FirebaseX,
     private platform: Platform
-  ) { }
+  ) {}
 
   async ngAfterViewInit() {
     this.rooms = (await this.config.get("rooms")) as Config["rooms"];
@@ -45,8 +45,8 @@ export class RoomsPage implements OnInit {
   async getRooms() {
     let rooms = await this.roomSvc.getRooms();
     const rooms_config = await this.roomSvc.getRoomsConfig();
-    rooms.map(r => {
-      let configRoom = rooms_config?.find(room => room.slug === r.slug);
+    rooms.map((r) => {
+      let configRoom = rooms_config?.find((room) => room.slug === r.slug);
       if (
         configRoom?.last_message < r?.last_message ||
         (!configRoom?.last_message && r?.last_message)
@@ -55,7 +55,7 @@ export class RoomsPage implements OnInit {
       }
     });
 
-    rooms = rooms.filter(r => {
+    rooms = rooms.filter((r) => {
       if (this.auth.currentUserValue?.roles?.includes(r.permissions[0])) {
         return r;
       }
@@ -77,7 +77,7 @@ export class RoomsPage implements OnInit {
 
   async showRoom(slug: Room["slug"]) {
     this.router.navigate(["/room", slug]);
-    this.rooms.map(r => {
+    this.rooms.map((r) => {
       if (r.slug === slug) {
         r.unread = false;
       }
@@ -93,19 +93,18 @@ export class RoomsPage implements OnInit {
 
   async connectSSE() {
     if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe(
-        notification => {
-          if (notification?.message) {
-            const message = JSON.parse(notification.message) as Chat;
-            // console.log(message);
-            this.messageReceived(message);
-          }
-        });
+      this.firebase.onMessageReceived().subscribe((notification) => {
+        if (notification?.message) {
+          const message = JSON.parse(notification.message) as Chat;
+          // console.log(message);
+          this.messageReceived(message);
+        }
+      });
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {
           const message = JSON.parse(payload.data.message) as Chat;
-          this.messageReceived(message)
+          this.messageReceived(message);
         }
       });
     }
@@ -113,7 +112,7 @@ export class RoomsPage implements OnInit {
 
   async messageReceived(message: Chat) {
     // console.log(message);
-    this.rooms.map(m => {
+    this.rooms.map((m) => {
       if (m.slug === message.conversationId) {
         if (message.fromuser.id !== this.auth.currentUserValue.id) {
           m.unread = true;

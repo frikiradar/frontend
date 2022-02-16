@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {
   BrowserModule,
   HAMMER_GESTURE_CONFIG,
-  HammerModule
+  HammerModule,
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
@@ -34,12 +34,12 @@ import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { ImageCropperModule } from "ngx-image-cropper";
-import { AngularFireModule } from "@angular/fire";
-import { AngularFireMessagingModule } from "@angular/fire/messaging";
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireMessagingModule } from "@angular/fire/compat/messaging";
 import { WebcamModule } from "ngx-webcam";
 import {
   ServiceWorkerModule,
-  SwRegistrationOptions
+  SwRegistrationOptions,
 } from "@angular/service-worker";
 import { Media } from "@ionic-native/media/ngx";
 import { File as NativeFile } from "@ionic-native/file/ngx";
@@ -60,7 +60,6 @@ registerLocaleData(localeEs, "es");
 
 @NgModule({
   declarations: [AppComponent, MenuComponent, OptionsPopover],
-  entryComponents: [MenuComponent, OptionsPopover],
   imports: [
     BrowserModule,
     IonicModule.forRoot({ animated: true }),
@@ -76,11 +75,11 @@ registerLocaleData(localeEs, "es");
     NgxIonicImageViewerModule,
     ImageCropperModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: true
+      enabled: true,
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
-    WebcamModule
+    WebcamModule,
   ],
   providers: [
     StatusBar,
@@ -91,7 +90,7 @@ registerLocaleData(localeEs, "es");
     { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
     {
       provide: SwRegistrationOptions,
-      useFactory: () => ({ enabled: environment.production })
+      useFactory: () => ({ enabled: environment.production }),
     },
     Device,
     Network,
@@ -113,8 +112,8 @@ registerLocaleData(localeEs, "es");
     FirebaseX,
     Media,
     NativeFile,
-    CodePush
+    CodePush,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

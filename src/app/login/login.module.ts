@@ -34,25 +34,24 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-    SharedModule,
-    LinkyModule
-  ],
-  declarations: [
-    LoginPage,
-    ForgotPasswordModal,
-    ActivateAccountPage,
-    BannedAccountPage,
-    TwoStepPage,
-    RegisterComponent,
-    LoginInfoComponent
-  ],
-  entryComponents: [ForgotPasswordModal],
-  exports: [RegisterComponent, LoginInfoComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        SharedModule,
+        LinkyModule
+    ],
+    declarations: [
+        LoginPage,
+        ForgotPasswordModal,
+        ActivateAccountPage,
+        BannedAccountPage,
+        TwoStepPage,
+        RegisterComponent,
+        LoginInfoComponent
+    ],
+    exports: [RegisterComponent, LoginInfoComponent]
 })
 export class LoginPageModule {}

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
 import { Platform } from "@ionic/angular";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 
 import { User } from "../models/user";
@@ -14,7 +14,7 @@ import { NavService } from "../services/navigation.service";
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.page.html",
-  styleUrls: ["./chat.page.scss"]
+  styleUrls: ["./chat.page.scss"],
 })
 export class ChatPage implements OnInit {
   userId: User["id"];
@@ -58,7 +58,7 @@ export class ChatPage implements OnInit {
   async firebaseListener() {
     if (this.platform.is("cordova")) {
       this.firebase.onMessageReceived().subscribe(
-        notification => {
+        (notification) => {
           if (notification?.message && notification?.topic === "chat") {
             const message = JSON.parse(notification.message) as Chat;
             // console.log(message);
@@ -78,13 +78,13 @@ export class ChatPage implements OnInit {
                 icon: notification?.icon,
                 // attachments: notification?.attachments,
                 channel: notification?.topic,
-                data: notification
+                data: notification,
                 // actions
               });
             }
           }
         },
-        error => {
+        (error) => {
           console.error("Error in notification", error);
         }
       );
