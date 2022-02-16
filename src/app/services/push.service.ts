@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
 import { Platform } from "@ionic/angular";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { takeWhile } from "rxjs/operators";
 import { SwPush } from "@angular/service-worker";
 
@@ -11,11 +11,11 @@ import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
 import {
   NotificationCounters,
-  NotificationService
+  NotificationService,
 } from "./notification.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class PushService {
   notifications: any = [];
@@ -36,18 +36,18 @@ export class PushService {
       if (this.platform.is("cordova")) {
         try {
           await this.firebasex.hasPermission();
-          this.localNotifications.on("click").subscribe(notification => {
+          this.localNotifications.on("click").subscribe((notification) => {
             console.log("click", notification);
             const data = notification.data;
             this.router.navigate([data.url]);
           });
 
-          this.localNotifications.on("trigger").subscribe(notification => {
+          this.localNotifications.on("trigger").subscribe((notification) => {
             console.log("trigger", notification);
             const data = notification.data;
           });
 
-          this.localNotifications.on("reply").subscribe(notification => {
+          this.localNotifications.on("reply").subscribe((notification) => {
             console.log("onreply", notification);
           });
         } catch (e) {
@@ -55,14 +55,14 @@ export class PushService {
         }
       } else {
         if (!navigator.serviceWorker) {
-          return console.error("Service Worker not supported")
+          return console.error("Service Worker not supported");
         }
 
         /*this.afMessaging.onBackgroundMessage(p => {
           console.log(p)
         })*/
 
-        this.swPush.notificationClicks.subscribe(payload => {
+        this.swPush.notificationClicks.subscribe((payload) => {
           this.router.navigate([payload.notification.data.url]);
         });
       }
@@ -73,7 +73,7 @@ export class PushService {
     if (this.platform.is("cordova")) {
       this.setChannels();
 
-      this.firebasex.getToken().then(async token => {
+      this.firebasex.getToken().then(async (token) => {
         // console.log("Notification token:", token);
         await this.device.setDevice(token);
       });
@@ -85,26 +85,26 @@ export class PushService {
 
       this.firebasex
         .subscribe("frikiradar")
-        .then(response =>
+        .then((response) =>
           console.log("Successfully subscribed to topic:", response)
         )
-        .catch(error => {
+        .catch((error) => {
           console.log("Error subscribing to topic:", error);
         });
 
       if (this.auth.isAdmin() || this.auth.isMaster()) {
         this.firebasex
           .subscribe("test")
-          .then(response =>
+          .then((response) =>
             console.log("Successfully subscribed to topic:", response)
           )
-          .catch(error => {
+          .catch((error) => {
             console.log("Error subscribing to topic:", error);
           });
       }
 
       this.firebasex.onMessageReceived().subscribe(
-        payload => {
+        (payload) => {
           // console.log("payload", payload);
           if (payload.tap) {
             this.router.navigate([payload.url]);
@@ -121,7 +121,7 @@ export class PushService {
             // console.log("Received in foreground");
           }
         },
-        error => {
+        (error) => {
           console.error("Error in notification", error);
         }
       );
@@ -153,37 +153,37 @@ export class PushService {
       {
         id: "chat",
         name: "Notificaciones de Chat",
-        description: "Recibe notificaciones de chat cuando alguien te escribe."
+        description: "Recibe notificaciones de chat cuando alguien te escribe.",
       },
       {
         id: "radar",
         name: "Notificaciones de Radar",
         description:
-          "Recibe notificaciones cuando hay un usuario interesante cerca de ti."
+          "Recibe notificaciones cuando hay un usuario interesante cerca de ti.",
       },
       {
         id: "like",
         name: "Notificaciones de Kokoros",
         description:
-          "Recibe notificaciones cuando un usuario te entregue su kokoro."
+          "Recibe notificaciones cuando un usuario te entregue su kokoro.",
       },
       {
         id: "rooms",
         name: "Notificaciones de salas de chat",
         description:
-          "Recibe notificaciones de nuevos mensajes en salas de chat."
+          "Recibe notificaciones de nuevos mensajes en salas de chat.",
       },
       {
         id: "frikiradar",
         name: "Notificaciones de FrikiRadar",
         description:
-          "Canal de información sobre FrikiRadar, novedades y actualizaciones."
+          "Canal de información sobre FrikiRadar, novedades y actualizaciones.",
       },
       {
         id: "test",
         name: "Notificaciones de testeo",
-        description: "Canal de testeo, exclusivo para masters."
-      }
+        description: "Canal de testeo, exclusivo para masters.",
+      },
     ];
 
     for (let channel of channels) {
@@ -199,22 +199,22 @@ export class PushService {
           id: channel.id,
           name: channel.name,
           sound: "bipbip",
-          description: channel.description
+          description: channel.description,
         })
-        .then(response => {
+        .then((response) => {
           // console.log("Notification Channel created", channel, response);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Create notification channel error: " + error);
         });
     }
 
     this.firebasex
       .deleteChannel("fcm_default_channel")
-      .then(response => {
+      .then((response) => {
         // console.log(response);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error deleting channel", error);
       });
 
@@ -254,7 +254,7 @@ export class PushService {
           icon: notification?.icon,
           // attachments: notification?.attachments,
           channel: notification?.topic,
-          data: notification
+          data: notification,
           // actions
         });
       }
@@ -273,7 +273,7 @@ export class PushService {
             image: notification?.data?.attachments
               ? notification?.data.attachments[0]
               : null,
-            badge: notification?.data?.badge
+            badge: notification?.data?.badge,
           };
           await registration.showNotification(
             notificationTitle,
@@ -290,14 +290,14 @@ export class PushService {
     await this.afMessaging.requestPermission.toPromise();
 
     this.afMessaging.tokenChanges
-      .pipe(takeWhile(token => this.token !== token))
+      .pipe(takeWhile((token) => this.token !== token))
       .subscribe(
-        async token => {
+        async (token) => {
           this.token = token;
           // console.log("Notification token:", token);
           await this.device.setDevice(token);
         },
-        error => {
+        (error) => {
           console.error(error);
         }
       );

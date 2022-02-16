@@ -21,29 +21,22 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-    SharedModule,
-    LinkyModule
-  ],
-  declarations: [
-    AdminPage,
-    BannedUsersModal,
-    GlobalNotificationsModal,
-    CreateRoomModal,
-    EditRoomsModal,
-    BannedMessagesModal
-  ],
-  entryComponents: [
-    BannedUsersModal,
-    BannedMessagesModal,
-    GlobalNotificationsModal,
-    CreateRoomModal,
-    EditRoomsModal
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        SharedModule,
+        LinkyModule
+    ],
+    declarations: [
+        AdminPage,
+        BannedUsersModal,
+        GlobalNotificationsModal,
+        CreateRoomModal,
+        EditRoomsModal,
+        BannedMessagesModal
+    ]
 })
 export class AdminPageModule {}

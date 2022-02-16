@@ -3,13 +3,13 @@ import {
   ActivatedRoute,
   Event,
   NavigationStart,
-  Router
+  Router,
 } from "@angular/router";
 import { MenuController, ModalController, Platform } from "@ionic/angular";
 import { Vibration } from "@ionic-native/vibration/ngx";
 import * as deepEqual from "deep-equal";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 
 import { Room } from "../models/room";
 import { Config, ConfigService } from "../services/config.service";
@@ -28,7 +28,7 @@ import { AnimateService } from "../services/animate.service";
 @Component({
   selector: "app-community",
   templateUrl: "./community.page.html",
-  styleUrls: ["./community.page.scss"]
+  styleUrls: ["./community.page.scss"],
 })
 export class CommunityPage {
   public rooms: Room[];
@@ -43,10 +43,10 @@ export class CommunityPage {
     slidesPerView: 4.5,
     breakpoints: {
       1024: {
-        slidesPerView: 10.5
-      }
+        slidesPerView: 10.5,
+      },
     },
-    grabCursor: true
+    grabCursor: true,
   };
 
   public pagesOpts = {
@@ -55,10 +55,10 @@ export class CommunityPage {
     slidesPerView: 3.5,
     breakpoints: {
       1024: {
-        slidesPerView: 8.5
-      }
+        slidesPerView: 8.5,
+      },
     },
-    grabCursor: true
+    grabCursor: true,
   };
 
   constructor(
@@ -94,8 +94,8 @@ export class CommunityPage {
     let rooms = await this.roomSvc.getRooms();
 
     const rooms_config = await this.roomSvc.getRoomsConfig();
-    rooms.map(r => {
-      let configRoom = rooms_config?.find(room => room.slug === r.slug);
+    rooms.map((r) => {
+      let configRoom = rooms_config?.find((room) => room.slug === r.slug);
       if (
         configRoom?.last_message < r?.last_message ||
         (!configRoom?.last_message && r?.last_message)
@@ -104,7 +104,7 @@ export class CommunityPage {
       }
     });
 
-    rooms = rooms.filter(r => {
+    rooms = rooms.filter((r) => {
       if (this.auth.currentUserValue?.roles?.includes(r.permissions[0])) {
         return r;
       }
@@ -146,7 +146,7 @@ export class CommunityPage {
 
   async showRoom(slug: Room["slug"]) {
     this.router.navigate(["/room", slug]);
-    this.rooms.map(r => {
+    this.rooms.map((r) => {
       if (r.slug === slug) {
         r.unread = false;
       }
@@ -163,7 +163,7 @@ export class CommunityPage {
 
   async connectSSE() {
     if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe(notification => {
+      this.firebase.onMessageReceived().subscribe((notification) => {
         if (notification?.message) {
           const message = JSON.parse(notification.message) as Chat;
           // console.log(message);
@@ -182,7 +182,7 @@ export class CommunityPage {
   }
 
   async messageReceived(message: Chat) {
-    this.rooms.map(m => {
+    this.rooms.map((m) => {
       if (m.slug === message.conversationId) {
         if (message.fromuser.id !== this.auth.currentUserValue.id) {
           m.unread = true;

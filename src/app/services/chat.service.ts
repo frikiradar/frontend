@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { Router } from "@angular/router";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { LocalNotifications } from "@ionic-native/local-notifications/ngx";
@@ -13,7 +13,7 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ChatService {
   public source: EventSource;
@@ -99,8 +99,8 @@ export class ChatService {
     let chats_config = await this.getChatsConfig();
 
     if (chats_config) {
-      if (chats_config?.some(c => c.conversationId === chat.conversationId)) {
-        chats_config.map(c => {
+      if (chats_config?.some((c) => c.conversationId === chat.conversationId)) {
+        chats_config.map((c) => {
           if (c.conversationId === chat.conversationId) {
             c.archived = true;
           }
@@ -110,16 +110,16 @@ export class ChatService {
           ...chats_config,
           {
             conversationId: chat.conversationId,
-            archived: true
-          }
+            archived: true,
+          },
         ];
       }
     } else {
       chats_config = [
         {
           conversationId: chat.conversationId,
-          archived: true
-        }
+          archived: true,
+        },
       ];
     }
 
@@ -130,8 +130,8 @@ export class ChatService {
     let chats_config = await this.getChatsConfig();
 
     if (chats_config) {
-      if (chats_config?.some(c => c.conversationId === chat.conversationId)) {
-        chats_config.map(c => {
+      if (chats_config?.some((c) => c.conversationId === chat.conversationId)) {
+        chats_config.map((c) => {
           if (c.conversationId === chat.conversationId) {
             c.archived = false;
           }
@@ -141,16 +141,16 @@ export class ChatService {
           ...chats_config,
           {
             conversationId: chat.conversationId,
-            archived: false
-          }
+            archived: false,
+          },
         ];
       }
     } else {
       chats_config = [
         {
           conversationId: chat.conversationId,
-          archived: false
-        }
+          archived: false,
+        },
       ];
     }
 
@@ -184,10 +184,10 @@ export class ChatService {
             text: "Entendido!",
             handler: async () => {
               await this.afMessaging.requestPermission.toPromise();
-            }
-          }
+            },
+          },
         ],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       })
     ).present();
   }

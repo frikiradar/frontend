@@ -7,7 +7,7 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { Clipboard } from "@ionic-native/clipboard/ngx";
@@ -19,7 +19,7 @@ import {
   ModalController,
   Platform,
   PopoverController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { Vibration } from "@ionic-native/vibration/ngx";
 
@@ -34,14 +34,14 @@ import { UtilsService } from "../../services/utils.service";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { OptionsPopover } from "../../options-popover/options-popover";
 import { NavService } from "src/app/services/navigation.service";
-import { AngularFireMessaging } from "@angular/fire/messaging";
+import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { EventModal } from "src/app/events/event-modal/event.modal";
 import { Event } from "src/app/models/event";
 
 @Component({
   selector: "app-chat-modal",
   templateUrl: "./chat-modal.component.html",
-  styleUrls: ["./chat-modal.component.scss"]
+  styleUrls: ["./chat-modal.component.scss"],
 })
 export class ChatModalComponent implements OnInit {
   @Input() userId: User["id"];
@@ -116,23 +116,23 @@ export class ChatModalComponent implements OnInit {
       backdropDismiss: false,
       buttons: [
         {
-          text: "Intentar reconectar"
+          text: "Intentar reconectar",
         },
         {
           text: "Ok, seré paciente",
           handler: () => {
             this.nav.back();
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     if (!config.chat && !this.auth.isAdmin()) {
       this.alertError.present();
     }
 
-    this.messageEvent.subscribe(async message => {
+    this.messageEvent.subscribe(async (message) => {
       if (!message) {
         return;
       }
@@ -163,23 +163,23 @@ export class ChatModalComponent implements OnInit {
 
     try {
       let messages = (await this.chatSvc.getMessages(this.userId, true, 1))
-        .filter(m => m.text || m.image || m.audio)
+        .filter((m) => m.text || m.image || m.audio)
         .reverse();
 
-      messages = messages.filter(m => {
-        if (!this.messages.some(me => me.id === m.id)) {
+      messages = messages.filter((m) => {
+        if (!this.messages.some((me) => me.id === m.id)) {
           return m;
         }
       });
 
-      messages.map(m => {
+      messages.map((m) => {
         if (new Date(m?.event?.date) < new Date()) {
           m.event.past = true;
         }
       });
 
       if (this.messages.length) {
-        messages.forEach(async message => {
+        messages.forEach(async (message) => {
           await this.newMessage(message);
         });
       } else {
@@ -208,11 +208,11 @@ export class ChatModalComponent implements OnInit {
         }
       }
 
-      window.addEventListener("keyboardDidShow", event => {
+      window.addEventListener("keyboardDidShow", (event) => {
         this.scrollDown();
       });
 
-      window.addEventListener("keyboardDidHide", event => {
+      window.addEventListener("keyboardDidHide", (event) => {
         this.scrollDown();
       });
 
@@ -227,13 +227,13 @@ export class ChatModalComponent implements OnInit {
     console.log(message);
     if (
       this.messages.some(
-        m =>
+        (m) =>
           (m.id === message.id && !!m.id) ||
           (m.tmp_id === message.tmp_id && !!m.tmp_id)
       )
     ) {
       // Si ya existe el mensaje lo actualizamos
-      this.messages.map(m => {
+      this.messages.map((m) => {
         if (
           (m.id === message.id && !!m.id) ||
           (m.tmp_id === message.tmp_id && !!m.tmp_id)
@@ -281,13 +281,13 @@ export class ChatModalComponent implements OnInit {
     }
 
     // Borramos los deleted
-    this.messages = this.messages.filter(m => {
+    this.messages = this.messages.filter((m) => {
       if (!m.deleted) {
         return m;
       }
     });
 
-    this.messages.map(m => {
+    this.messages.map((m) => {
       if (new Date(m?.event?.date) < new Date()) {
         m.event.past = true;
       }
@@ -306,7 +306,7 @@ export class ChatModalComponent implements OnInit {
       const chat = await this.chatSvc
         .updateMessage(this.selectedMessage.id, text)
         .then();
-      this.messages.map(m => {
+      this.messages.map((m) => {
         if (m.id === this.selectedMessage.id) {
           m.text = text;
         }
@@ -323,7 +323,7 @@ export class ChatModalComponent implements OnInit {
         image,
         audio,
         time_creation: new Date(),
-        sending: true
+        sending: true,
       } as Chat;
 
       this.messages = [...this.messages, ...[message]].filter(
@@ -359,7 +359,7 @@ export class ChatModalComponent implements OnInit {
 
         replyToId = null;
       } catch (e) {
-        this.messages = this.messages.filter(m => m.sending !== true);
+        this.messages = this.messages.filter((m) => m.sending !== true);
         console.error(e);
       }
     }
@@ -391,11 +391,11 @@ export class ChatModalComponent implements OnInit {
     const messages = (
       await this.chatSvc.getMessages(this.userId, false, this.page)
     )
-      .filter(m => m.text || m.image || m.audio)
+      .filter((m) => m.text || m.image || m.audio)
       .reverse();
     this.messages = [...messages, ...this.messages];
 
-    this.messages.map(m => {
+    this.messages.map((m) => {
       if (new Date(m?.event?.date) < new Date()) {
         m.event.past = true;
       }
@@ -437,7 +437,7 @@ export class ChatModalComponent implements OnInit {
         await this.toast.create({
           message: "Mensaje copiado",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     } catch (e) {
@@ -445,7 +445,7 @@ export class ChatModalComponent implements OnInit {
         await this.toast.create({
           message: "Error al copiar el mensaje",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     }
@@ -466,14 +466,14 @@ export class ChatModalComponent implements OnInit {
     try {
       await this.chatSvc.deleteMessage(this.selectedMessage.id);
       this.messages = this.messages.filter(
-        m => m.id !== this.selectedMessage.id
+        (m) => m.id !== this.selectedMessage.id
       );
     } catch (e) {
       (
         await this.toast.create({
           message: "Error al eliminar el mensaje",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
 
@@ -501,13 +501,13 @@ export class ChatModalComponent implements OnInit {
         src,
         title,
         text,
-        scheme
+        scheme,
       };
     } else {
       componentProps = {
         src,
         title,
-        scheme
+        scheme,
       };
     }
     const modal = await this.modalController.create({
@@ -515,7 +515,7 @@ export class ChatModalComponent implements OnInit {
       componentProps,
       cssClass: "ion-img-viewer",
       keyboardClose: true,
-      showBackdrop: true
+      showBackdrop: true,
     });
 
     return await modal.present();
@@ -529,8 +529,8 @@ export class ChatModalComponent implements OnInit {
       translucent: true,
       componentProps: {
         user: this.user,
-        page: "chat"
-      }
+        page: "chat",
+      },
     });
     return await popover.present();
   }
@@ -572,7 +572,7 @@ export class ChatModalComponent implements OnInit {
       keyboardClose: true,
       showBackdrop: true,
       cssClass: "full-modal",
-      componentProps: { user: this.user }
+      componentProps: { user: this.user },
     });
 
     await modal.present();

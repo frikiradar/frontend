@@ -23,34 +23,24 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-    SharedModule
-  ],
-  declarations: [
-    SettingsPage,
-    ChangePasswordModal,
-    ChangeEmailModal,
-    ChangeUsernameModal,
-    DisableAccountModal,
-    DevicesSettingsModal,
-    BlockUsersModal,
-    HideUsersModal,
-    VerificationModal
-  ],
-  entryComponents: [
-    ChangePasswordModal,
-    ChangeEmailModal,
-    ChangeUsernameModal,
-    DisableAccountModal,
-    DevicesSettingsModal,
-    BlockUsersModal,
-    HideUsersModal,
-    VerificationModal
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        SharedModule
+    ],
+    declarations: [
+        SettingsPage,
+        ChangePasswordModal,
+        ChangeEmailModal,
+        ChangeUsernameModal,
+        DisableAccountModal,
+        DevicesSettingsModal,
+        BlockUsersModal,
+        HideUsersModal,
+        VerificationModal
+    ]
 })
 export class SettingsPageModule {}
