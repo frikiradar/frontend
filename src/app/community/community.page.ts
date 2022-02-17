@@ -7,8 +7,8 @@ import {
 } from "@angular/router";
 import { MenuController, ModalController, Platform } from "@ionic/angular";
 import * as deepEqual from "deep-equal";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
+import { PushNotifications } from "@capacitor/push-notifications";
 
 import { Room } from "../models/room";
 import { Config, ConfigService } from "../services/config.service";
@@ -72,7 +72,6 @@ export class CommunityPage {
     private pageSvc: PageService,
     private animate: AnimateService,
     private afMessaging: AngularFireMessaging,
-    private firebase: FirebaseX,
     private platform: Platform
   ) {}
 
@@ -160,14 +159,18 @@ export class CommunityPage {
   }
 
   async connectSSE() {
-    if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe((notification) => {
-        if (notification?.message) {
-          const message = JSON.parse(notification.message) as Chat;
-          // console.log(message);
-          this.messageReceived(message);
+    if (this.platform.is("capacitor")) {
+      PushNotifications.addListener(
+        "pushNotificationReceived",
+        (notification) => {
+          console.log(notification);
+          if (notification?.data.message) {
+            const message = JSON.parse(notification.data.message) as Chat;
+            // console.log(message);
+            this.messageReceived(message);
+          }
         }
-      });
+      );
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {

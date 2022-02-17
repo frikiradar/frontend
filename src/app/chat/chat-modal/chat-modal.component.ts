@@ -11,7 +11,7 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { Clipboard } from "@capacitor/clipboard";
-import { Keyboard } from "@ionic-native/keyboard/ngx";
+import { Keyboard } from "@capacitor/keyboard";
 import {
   AlertController,
   IonContent,
@@ -74,7 +74,6 @@ export class ChatModalComponent implements OnInit {
     public chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
-    public keyboard: Keyboard,
     public platform: Platform,
     private config: ConfigService,
     private urlSvc: UrlService,
@@ -205,14 +204,15 @@ export class ChatModalComponent implements OnInit {
           console.error(e);
         }
       }
+      if (this.platform.is("capacitor")) {
+        Keyboard.addListener("keyboardDidShow", () => {
+          this.scrollDown();
+        });
 
-      window.addEventListener("keyboardDidShow", (event) => {
-        this.scrollDown();
-      });
-
-      window.addEventListener("keyboardDidHide", (event) => {
-        this.scrollDown();
-      });
+        Keyboard.addListener("keyboardDidHide", () => {
+          this.scrollDown();
+        });
+      }
 
       this.scrollDown(200);
     } catch (e) {

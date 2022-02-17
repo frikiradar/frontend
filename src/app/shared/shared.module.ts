@@ -1,7 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
-import { Camera } from "@ionic-native/camera/ngx";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ImageCropperModule } from "ngx-image-cropper";
@@ -29,49 +28,48 @@ import { EventModal } from "../events/event-modal/event.modal";
 import { RulesPage } from "../rules/rules.page";
 
 @NgModule({
-    declarations: [
-        ImagePreloadDirective,
-        NiceDatePipe,
-        ChatDatePipe,
-        MentionsPipe,
-        HashtagPipe,
-        CreditsModal,
-        RequestGeolocationModal,
-        CropperModal,
-        WebcamModal,
-        ChatInputComponent,
-        AudioPlayerComponent,
-        ChatListComponent,
-        ChatModalComponent,
-        StoryModal,
-        EventModal,
-        ViewStoriesModal,
-        CommentLikesModal,
-        RulesPage
-    ],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        IonicModule,
-        CommonModule,
-        NgxIonicImageViewerModule,
-        ImageCropperModule,
-        WebcamModule,
-        PickerModule,
-        LinkyModule
-    ],
-    exports: [
-        ImagePreloadDirective,
-        NiceDatePipe,
-        ChatDatePipe,
-        MentionsPipe,
-        HashtagPipe,
-        ChatInputComponent,
-        ChatListComponent,
-        ChatModalComponent,
-        LinkyModule,
-        AudioPlayerComponent
-    ],
-    providers: [Camera]
+  declarations: [
+    ImagePreloadDirective,
+    NiceDatePipe,
+    ChatDatePipe,
+    MentionsPipe,
+    HashtagPipe,
+    CreditsModal,
+    RequestGeolocationModal,
+    CropperModal,
+    WebcamModal,
+    ChatInputComponent,
+    AudioPlayerComponent,
+    ChatListComponent,
+    ChatModalComponent,
+    StoryModal,
+    EventModal,
+    ViewStoriesModal,
+    CommentLikesModal,
+    RulesPage,
+  ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule,
+    CommonModule,
+    NgxIonicImageViewerModule,
+    ImageCropperModule,
+    WebcamModule,
+    PickerModule,
+    LinkyModule,
+  ],
+  exports: [
+    ImagePreloadDirective,
+    NiceDatePipe,
+    ChatDatePipe,
+    MentionsPipe,
+    HashtagPipe,
+    ChatInputComponent,
+    ChatListComponent,
+    ChatModalComponent,
+    LinkyModule,
+    AudioPlayerComponent,
+  ],
 })
 export class SharedModule {}

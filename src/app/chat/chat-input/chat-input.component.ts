@@ -15,12 +15,11 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { Keyboard } from "@ionic-native/keyboard/ngx";
+import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Media, MediaObject } from "@ionic-native/media/ngx";
 import { File as NativeFile, FileEntry } from "@ionic-native/file/ngx";
-import { WebView } from "@ionic-native/ionic-webview/ngx";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -81,14 +80,12 @@ export class ChatInputComponent {
   constructor(
     public formBuilder: FormBuilder,
     public auth: AuthService,
-    public keyboard: Keyboard,
     public platform: Platform,
     public sheet: ActionSheetController,
     public utils: UtilsService,
     private userSvc: UserService,
     private sanitizer: DomSanitizer,
     private file: NativeFile,
-    private webview: WebView,
     private media: Media
   ) {
     this.chatForm = formBuilder.group({
@@ -136,13 +133,11 @@ export class ChatInputComponent {
   }
 
   openEmojis() {
-    this.keyboard.setKeyboardStyle;
+    Keyboard.setStyle({ style: KeyboardStyle.Dark });
     this.emojis = !this.emojis;
 
-    if (this.emojis) {
-      if (this.platform.is("cordova")) {
-        this.keyboard.hide();
-      }
+    if (this.emojis && this.platform.is("capacitor")) {
+      Keyboard.hide();
     } else {
       this.focusTextArea();
     }
@@ -314,8 +309,9 @@ export class ChatInputComponent {
         this.recorded = true;
         await this.utils.delay(200);
         // this.audioMedia.play();
-        this.audio = this.webview.convertFileSrc(this.audioFile.nativeURL);
-        this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
+
+        // this.audio = this.webview.convertFileSrc(this.audioFile.nativeURL);
+        // this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
       } catch (e) {
         console.error(e);
       }
@@ -406,8 +402,8 @@ export class ChatInputComponent {
 
   async focusTextArea() {
     this.textarea?.setFocus();
-    if (this.platform.is("cordova")) {
-      this.keyboard.show();
+    if (this.platform.is("capacitor")) {
+      Keyboard.show();
     }
   }
 

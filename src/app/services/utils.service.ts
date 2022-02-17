@@ -1,7 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Camera } from "@ionic-native/camera/ngx";
-import { WebView } from "@ionic-native/ionic-webview/ngx";
 import {
   AlertController,
   ModalController,
@@ -11,6 +9,12 @@ import {
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Share } from "@capacitor/share";
 import { Clipboard } from "@capacitor/clipboard";
+import {
+  Camera,
+  CameraDirection,
+  CameraResultType,
+  CameraSource,
+} from "@capacitor/camera";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
@@ -26,8 +30,6 @@ export class UtilsService {
     private alert: AlertController,
     private auth: AuthService,
     private platform: Platform,
-    private webview: WebView,
-    private camera: Camera,
     private modal: ModalController,
     private toast: ToastController
   ) {}
@@ -39,20 +41,16 @@ export class UtilsService {
     returnsrc = false,
     square = true
   ): Promise<Blob | string> {
-    const fileUri = await this.camera.getPicture({
-      quality: 70,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      sourceType:
-        mode === "camera"
-          ? this.camera.PictureSourceType.CAMERA
-          : this.camera.PictureSourceType.PHOTOLIBRARY,
-      mediaType: this.camera.MediaType.PICTURE,
-      cameraDirection: 1,
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      source: mode === "camera" ? CameraSource.Camera : CameraSource.Photos,
       correctOrientation: true,
+      direction: CameraDirection.Front,
     });
 
-    let src = this.webview.convertFileSrc(fileUri);
+    let src = image.webPath;
 
     try {
       if (crop) {

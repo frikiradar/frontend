@@ -2,7 +2,7 @@ import {
   Component,
   ViewChild,
   HostListener,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from "@angular/core";
 import { NavigationStart, Router, Event } from "@angular/router";
 import {
@@ -13,10 +13,9 @@ import {
   IonRange,
   IonContent,
   ToastController,
-  ModalController
+  ModalController,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { takeWhile } from "rxjs/operators";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import * as deepEqual from "deep-equal";
@@ -31,7 +30,7 @@ import { Config, ConfigService } from "../services/config.service";
 import { PushService } from "../services/push.service";
 import {
   NotificationService,
-  NotificationCounters
+  NotificationCounters,
 } from "../services/notification.service";
 import { StoryService } from "../services/story.service";
 import { Story } from "../models/story";
@@ -41,7 +40,7 @@ import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 @Component({
   selector: "app-radar",
   templateUrl: "./radar.page.html",
-  styleUrls: ["./radar.page.scss"]
+  styleUrls: ["./radar.page.scss"],
 })
 export class RadarPage {
   @ViewChild("slides", { static: false })
@@ -58,8 +57,8 @@ export class RadarPage {
     breakpoints: {
       1024: {
         slidesPerView: 3,
-        centeredSlides: true
-      }
+        centeredSlides: true,
+      },
     },
     grabCursor: true,
     lazy: true,
@@ -68,7 +67,7 @@ export class RadarPage {
       stretch: 0,
       depth: 100,
       modifier: 1,
-      slideShadows: false
+      slideShadows: false,
     },
     on: {
       beforeInit() {
@@ -90,7 +89,7 @@ export class RadarPage {
           slides,
           $wrapperEl,
           slidesSizesGrid,
-          $
+          $,
         } = swiper;
         const params = swiper.params.coverflowEffect;
         const isHorizontal = swiper.isHorizontal();
@@ -179,8 +178,8 @@ export class RadarPage {
             ".swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left"
           )
           .transition(duration);
-      }
-    }
+      },
+    },
   };
 
   public storiesOpts = {
@@ -189,10 +188,10 @@ export class RadarPage {
     slidesPerView: 4.5,
     breakpoints: {
       1024: {
-        slidesPerView: 14.5
-      }
+        slidesPerView: 14.5,
+      },
     },
-    grabCursor: true
+    grabCursor: true,
   };
   public stories: Story[];
   public groupedStories: Story[] = [];
@@ -214,7 +213,7 @@ export class RadarPage {
   public searchOptions = {
     identity: true,
     range: false,
-    connection: false
+    connection: false,
   };
   private searchOptionsChanged = false;
 
@@ -225,7 +224,7 @@ export class RadarPage {
     handleKeyboard: false,
     breaks: {
       middle: { enabled: true, height: 500, bounce: true },
-      bottom: { enabled: true, height: 300, bounce: true }
+      bottom: { enabled: true, height: 300, bounce: true },
     },
     initialBreak: "middle",
 
@@ -239,7 +238,7 @@ export class RadarPage {
         this.radarlist?.scrollToTop(0);
         this.getRadarUsers();
       }
-    }
+    },
   };
 
   @HostListener("document:keydown", ["$event"])
@@ -271,14 +270,13 @@ export class RadarPage {
     private utils: UtilsService,
     private toast: ToastController,
     private config: ConfigService,
-    private firebase: FirebaseX,
     private push: PushService,
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
     private storySvc: StoryService,
     private modal: ModalController
   ) {
-    this.notificationSvc.notification.subscribe(notification => {
+    this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
     });
 
@@ -334,7 +332,7 @@ export class RadarPage {
     }
 
     if (this.platform.is("cordova")) {
-      this.firebase
+      /*this.firebase
         .setUserId("" + this.authUser.id)
         .then(() => console.log("User id successfully set"))
         .catch(err => console.log("Error setting user id:", err));
@@ -347,7 +345,7 @@ export class RadarPage {
       this.firebase
         .setScreenName("radar")
         .then(() => console.log("View successfully tracked"))
-        .catch(err => console.log("Error tracking view:", err));
+        .catch(err => console.log("Error tracking view:", err));*/
     }
 
     const radar_config = (await this.config.get(
@@ -382,8 +380,8 @@ export class RadarPage {
     if (!this.users?.length) {
       if (this.authUser && this.authUser.id) {
         this.auth.currentUser
-          .pipe(takeWhile(u => !!u?.id))
-          .subscribe(async authUser => {
+          .pipe(takeWhile((u) => !!u?.id))
+          .subscribe(async (authUser) => {
             if (this.users?.length) {
               this.authUser = authUser;
               this.page = 0;
@@ -484,7 +482,7 @@ export class RadarPage {
       component: StoryModal,
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
 
     await modal.present();
@@ -493,10 +491,10 @@ export class RadarPage {
   }
 
   async showStories(id: User["id"]) {
-    let stories = this.stories.reverse().filter(s => s.user.id === id);
+    let stories = this.stories.reverse().filter((s) => s.user.id === id);
     stories = [
       ...stories,
-      ...this.stories.reverse().filter(s => s.user.id !== id)
+      ...this.stories.reverse().filter((s) => s.user.id !== id),
     ];
     await this.showStoriesModal(stories);
     await this.getStories();
@@ -514,7 +512,7 @@ export class RadarPage {
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
 
     await modal.present();
@@ -589,7 +587,7 @@ export class RadarPage {
               ? "Buscando personas a " + this.ratio + "km"
               : "Buscando personas mundialmente",
           position: "middle",
-          color: "secondary"
+          color: "secondary",
         })
       ).present();
 
@@ -601,10 +599,10 @@ export class RadarPage {
   }
 
   async hideProfile(id: User["id"]) {
-    const nextIndex = this.users.findIndex(u => u.id === id) + 1;
+    const nextIndex = this.users.findIndex((u) => u.id === id) + 1;
     this.user = this.users[nextIndex];
     const users = this.users;
-    this.users = this.users.filter(u => u.id !== id);
+    this.users = this.users.filter((u) => u.id !== id);
 
     const toast = await this.toast.create({
       message: "Has ocultado el usuario",
@@ -615,9 +613,9 @@ export class RadarPage {
           text: "Deshacer",
           handler: () => {
             this.users = users;
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     toast.present();
 
@@ -637,7 +635,7 @@ export class RadarPage {
   }
 
   async slide() {
-    this.slides.getActiveIndex().then(index => {
+    this.slides.getActiveIndex().then((index) => {
       this.user = this.users[index];
       if (this.user?.id) {
         this.userSvc.view(this.user?.id);
@@ -694,10 +692,10 @@ export class RadarPage {
             text: "¡Compartir!",
             handler: () => {
               this.utils.share();
-            }
-          }
+            },
+          },
         ],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
       this.config.set("radarAdv", true);
       await alert.present();

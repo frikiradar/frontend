@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "frontend",
+	"appId": "app.frikiradar.com",
+	"appName": "frikiradar",
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"cordova": {
@@ -32,6 +32,20 @@
 			"smallIcon": "notification_icon",
 			"iconColor": "#e91e63",
 			"sound": "bipbip.mp3"
+		},
+		"CodePush": {
+			"IOS_DEPLOY_KEY": "FdlQxj1MHcOlgOU1nk1I93uR_32hoXJV9KZeX",
+			"IOS_PUBLIC_KEY": "0191421c-52a7-40b8-a611-8f4ace7a3a87",
+			"ANDROID_DEPLOY_KEY": "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP",
+			"ANDROID_PUBLIC_KEY": "d9bb3cf5-7779-41b4-b2fa-cad0f2d8835c",
+			"SERVER_URL": "https://codepush.appcenter.ms/"
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
 		}
 	}
 }

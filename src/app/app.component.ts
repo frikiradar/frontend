@@ -3,13 +3,11 @@ import { Router } from "@angular/router";
 import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
 import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
 import { Network } from "@capacitor/network";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { SplashScreen } from "@capacitor/splash-screen";
 import { AlertController, Platform, ToastController } from "@ionic/angular";
-import {
-  CodePush,
-  InstallMode,
-  SyncOptions,
-} from "@ionic-native/code-push/ngx";
+import { codePush } from "capacitor-codepush";
+import { SyncOptions } from "capacitor-codepush/dist/esm/syncOptions";
+import { InstallMode } from "capacitor-codepush/dist/esm/installMode";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
@@ -32,14 +30,12 @@ export class AppComponent {
     private auth: AuthService,
     private alert: AlertController,
     private router: Router,
-    private splashScreen: SplashScreen,
     private platform: Platform,
     private utils: UtilsService,
     private config: ConfigService,
     private launchReview: LaunchReview,
     private appVersion: AppVersion,
     private push: PushService,
-    private codePush: CodePush,
     private nav: NavService,
     private sw: SwService,
     private toast: ToastController,
@@ -52,7 +48,7 @@ export class AppComponent {
     this.platform.ready().then(async () => {
       if (this.platform.is("cordova")) {
         this.push.init();
-        this.splashScreen.hide();
+        SplashScreen.hide();
         this.checkCodePush();
       } else {
         if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
@@ -136,14 +132,7 @@ export class AppComponent {
       };
     }
 
-    this.codePush.sync(syncOptions).subscribe(
-      async (data) => {
-        console.log("CODE PUSH SUCCESSFUL: " + data);
-      },
-      (err) => {
-        console.log("CODE PUSH ERROR: " + err);
-      }
-    );
+    codePush.sync(syncOptions);
   }
 
   async countOpenTimes() {

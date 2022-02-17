@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { Router } from "@angular/router";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { Platform } from "@ionic/angular";
 import { ItemReorderEventDetail } from "@ionic/core";
 import * as deepEqual from "deep-equal";
+import { PushNotifications } from "@capacitor/push-notifications";
 
 import { Chat } from "src/app/models/chat";
 import { Room } from "src/app/models/room";
@@ -29,7 +29,6 @@ export class RoomsPage implements OnInit {
     private nav: NavService,
     private config: ConfigService,
     private afMessaging: AngularFireMessaging,
-    private firebase: FirebaseX,
     private platform: Platform
   ) {}
 
@@ -92,14 +91,18 @@ export class RoomsPage implements OnInit {
   }
 
   async connectSSE() {
-    if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe((notification) => {
-        if (notification?.message) {
-          const message = JSON.parse(notification.message) as Chat;
-          // console.log(message);
-          this.messageReceived(message);
+    if (this.platform.is("capacitor")) {
+      PushNotifications.addListener(
+        "pushNotificationReceived",
+        (notification) => {
+          console.log(notification);
+          if (notification?.data.message) {
+            const message = JSON.parse(notification.data.message) as Chat;
+            // console.log(message);
+            this.messageReceived(message);
+          }
         }
-      });
+      );
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {

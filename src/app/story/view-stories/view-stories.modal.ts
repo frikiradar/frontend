@@ -3,17 +3,17 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Keyboard } from "@ionic-native/keyboard/ngx";
+import { Keyboard } from "@capacitor/keyboard";
 import {
   ActionSheetController,
   IonSlides,
   IonTextarea,
   ModalController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 
@@ -29,7 +29,7 @@ import { StoryModal } from "../story-modal/story.modal";
 @Component({
   selector: "view-stories-modal",
   templateUrl: "./view-stories.modal.html",
-  styleUrls: ["./view-stories.modal.scss"]
+  styleUrls: ["./view-stories.modal.scss"],
 })
 export class ViewStoriesModal implements OnInit {
   @Input() stories: Story[];
@@ -61,20 +61,20 @@ export class ViewStoriesModal implements OnInit {
     onBackdropTap: () => {
       this.pane.destroy({ animate: true });
       this.slides.startAutoplay();
-    }
+    },
   };
 
   slideOpts = {
     speed: 500,
     autoplay: {
-      delay: this.delay
+      delay: this.delay,
     },
     grabCursor: true,
     lazy: true,
     pagination: {
       el: ".swiper-pagination",
-      type: "progressbar"
-    }
+      type: "progressbar",
+    },
   };
 
   constructor(
@@ -88,12 +88,11 @@ export class ViewStoriesModal implements OnInit {
     private toast: ToastController,
     private sheet: ActionSheetController,
     private router: Router,
-    public keyboard: Keyboard,
     public auth: AuthService,
     private urlSvc: UrlService
   ) {
     this.commentForm = formBuilder.group({
-      comment: new FormControl("", [Validators.required])
+      comment: new FormControl("", [Validators.required]),
     });
   }
 
@@ -112,7 +111,7 @@ export class ViewStoriesModal implements OnInit {
 
   async slide() {
     this.comment.setValue("");
-    this.slides.getActiveIndex().then(index => {
+    this.slides.getActiveIndex().then((index) => {
       this.story = this.stories[index];
       this.setLikeStory();
       this.viewStory(this.stories[index]);
@@ -132,25 +131,25 @@ export class ViewStoriesModal implements OnInit {
     this.viewComments();
     setTimeout(() => {
       this.textarea.setFocus();
-      if (this.platform.is("cordova")) {
-        this.keyboard.show();
+      if (this.platform.is("capacitor")) {
+        Keyboard.show();
       }
     }, 500);
   }
 
   setLikeStory() {
     this.story.viewStories.map(
-      v =>
+      (v) =>
         (v.user.like = this.story.likeStories.some(
-          l => l.user.id === v.user.id
+          (l) => l.user.id === v.user.id
         ))
     );
     this.story.like = !!this.story.likeStories.some(
-      l => l.user.id === this.auth.currentUserValue.id
+      (l) => l.user.id === this.auth.currentUserValue.id
     );
 
-    this.story.comments.map(c => {
-      if (c.likes.some(l => l.id === this.auth.currentUserValue.id)) {
+    this.story.comments.map((c) => {
+      if (c.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
         c.like = true;
       }
     });
@@ -160,7 +159,7 @@ export class ViewStoriesModal implements OnInit {
     this.slides.stopAutoplay();
     if (
       this.story.likeStories.some(
-        l => l.user.id === this.auth.currentUserValue.id
+        (l) => l.user.id === this.auth.currentUserValue.id
       )
     ) {
       this.story.like = false;
@@ -174,15 +173,15 @@ export class ViewStoriesModal implements OnInit {
 
   async switchLikeComment(comment: Story["comments"][0]) {
     this.slides.stopAutoplay();
-    if (comment.likes.some(l => l.id === this.auth.currentUserValue.id)) {
-      this.story.comments.map(c => {
+    if (comment.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
+      this.story.comments.map((c) => {
         if (c.id === comment.id) {
           c.like = false;
         }
       });
       this.story = await this.storySvc.unlikeComment(comment.id);
     } else {
-      this.story.comments.map(c => {
+      this.story.comments.map((c) => {
         if (c.id === comment.id) {
           c.like = true;
         }
@@ -195,7 +194,9 @@ export class ViewStoriesModal implements OnInit {
   async viewStory(story: Story) {
     if (
       this.auth.currentUserValue.id !== story.user.id &&
-      !story.viewStories.some(v => v.user.id === this.auth.currentUserValue.id)
+      !story.viewStories.some(
+        (v) => v.user.id === this.auth.currentUserValue.id
+      )
     ) {
       this.storySvc.viewStory(story.id);
     }
@@ -240,12 +241,12 @@ export class ViewStoriesModal implements OnInit {
               component: StoryModal,
               keyboardClose: true,
               showBackdrop: true,
-              cssClass: "full-modal"
+              cssClass: "full-modal",
             });
 
             await modal.present();
             await modal.onDidDismiss();
-          }
+          },
         },
         {
           text: "Eliminar historia",
@@ -257,7 +258,7 @@ export class ViewStoriesModal implements OnInit {
                 await this.toast.create({
                   message: "Historia eliminada correctamente",
                   position: "middle",
-                  duration: 2000
+                  duration: 2000,
                 })
               ).present();
               this.close();
@@ -267,13 +268,13 @@ export class ViewStoriesModal implements OnInit {
                   message: "Error al eliminar la historia",
                   duration: 2000,
                   position: "middle",
-                  color: "danger"
+                  color: "danger",
                 })
               ).present();
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     await actionSheet.present();
     await actionSheet.onDidDismiss();
@@ -286,7 +287,7 @@ export class ViewStoriesModal implements OnInit {
       keyboardClose: true,
       showBackdrop: true,
       componentProps: { likes },
-      cssClass: "medium-modal"
+      cssClass: "medium-modal",
     });
 
     await modal.present();
@@ -302,8 +303,8 @@ export class ViewStoriesModal implements OnInit {
       this.setMention(comment.user.username);
     }
     this.textarea.setFocus();
-    if (this.platform.is("cordova")) {
-      this.keyboard.show();
+    if (this.platform.is("capacitor")) {
+      Keyboard.show();
     }
   }
 
@@ -315,8 +316,8 @@ export class ViewStoriesModal implements OnInit {
     );
     this.userMentions = [...this.userMentions, username];
     this.textarea.setFocus();
-    if (this.platform.is("cordova")) {
-      this.keyboard.show();
+    if (this.platform.is("capacitor")) {
+      Keyboard.show();
     }
   }
 
@@ -360,7 +361,7 @@ export class ViewStoriesModal implements OnInit {
       await this.toast.create({
         message: "Eliminando comentario...",
         position: "middle",
-        duration: 2000
+        duration: 2000,
       })
     ).present();
     try {
@@ -370,7 +371,7 @@ export class ViewStoriesModal implements OnInit {
         await this.toast.create({
           message: "Comentario eliminado correctamente",
           position: "middle",
-          duration: 2000
+          duration: 2000,
         })
       ).present();
     } catch (e) {
@@ -379,7 +380,7 @@ export class ViewStoriesModal implements OnInit {
           message: "Error al eliminar el comentario",
           duration: 2000,
           position: "middle",
-          color: "danger"
+          color: "danger",
         })
       ).present();
     }

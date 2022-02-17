@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
 import { Platform } from "@ionic/angular";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { PushNotifications } from "@capacitor/push-notifications";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 
 import { User } from "../models/user";
@@ -26,7 +26,6 @@ export class ChatPage implements OnInit {
     private router: Router,
     public auth: AuthService,
     private afMessaging: AngularFireMessaging,
-    private firebase: FirebaseX,
     private platform: Platform,
     private nav: NavService
   ) {}
@@ -54,10 +53,15 @@ export class ChatPage implements OnInit {
   }
 
   async firebaseListener() {
-    if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe(
+    if (this.platform.is("capacitor")) {
+      /*PushNotifications.addListener(
+        "pushNotificationReceived",
         (notification) => {
-          if (notification?.message && notification?.topic === "chat") {
+          console.log(notification);
+          if (
+            notification?.data.message &&
+            notification?.data.topic === "chat"
+          ) {
             const message = JSON.parse(notification.message) as Chat;
             // console.log(message);
             this.messageEvent.emit(message);
@@ -66,7 +70,7 @@ export class ChatPage implements OnInit {
         (error) => {
           console.error("Error in notification", error);
         }
-      );
+      );*/
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         // console.log(payload);

@@ -13,15 +13,11 @@ import { RouteReuseStrategy } from "@angular/router";
 import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Diagnostic } from "@ionic-native/diagnostic/ngx";
-import { WebView } from "@ionic-native/ionic-webview/ngx";
-import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
 import { ImageCropperModule } from "ngx-image-cropper";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireMessagingModule } from "@angular/fire/compat/messaging/";
@@ -32,7 +28,6 @@ import {
 } from "@angular/service-worker";
 import { Media } from "@ionic-native/media/ngx";
 import { File as NativeFile } from "@ionic-native/file/ngx";
-import { CodePush } from "@ionic-native/code-push/ngx";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
@@ -80,16 +75,11 @@ registerLocaleData(localeEs, "es");
       useFactory: () => ({ enabled: environment.production }),
     },
     Device,
-    SplashScreen,
     LaunchReview,
-    Keyboard,
     AppVersion,
-    WebView,
     Diagnostic,
-    FirebaseX,
     Media,
     NativeFile,
-    CodePush,
   ],
   bootstrap: [AppComponent],
 })

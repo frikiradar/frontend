@@ -9,7 +9,7 @@ import {
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@capacitor/clipboard";
-import { Keyboard } from "@ionic-native/keyboard/ngx";
+import { Keyboard } from "@capacitor/keyboard";
 import {
   ActionSheetController,
   AlertController,
@@ -22,7 +22,7 @@ import {
 } from "@ionic/angular";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { PushNotifications } from "@capacitor/push-notifications";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
@@ -97,7 +97,6 @@ export class RoomPage implements OnInit {
     public chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
-    public keyboard: Keyboard,
     public platform: Platform,
     private config: ConfigService,
     private urlSvc: UrlService,
@@ -107,7 +106,6 @@ export class RoomPage implements OnInit {
     public popover: PopoverController,
     public userSvc: UserService,
     private afMessaging: AngularFireMessaging,
-    private firebase: FirebaseX,
     private cd: ChangeDetectorRef
   ) {}
 
@@ -236,13 +234,15 @@ export class RoomPage implements OnInit {
 
       this.connectSSE();
 
-      window.addEventListener("keyboardDidShow", (event) => {
-        this.scrollDown();
-      });
+      if (this.platform.is("capacitor")) {
+        Keyboard.addListener("keyboardDidShow", () => {
+          this.scrollDown();
+        });
 
-      window.addEventListener("keyboardDidHide", (event) => {
-        this.scrollDown();
-      });
+        Keyboard.addListener("keyboardDidHide", () => {
+          this.scrollDown();
+        });
+      }
 
       this.platform.backButton.subscribe(() => {
         this.source?.close();
@@ -618,14 +618,18 @@ export class RoomPage implements OnInit {
   }
 
   async connectSSE() {
-    if (this.platform.is("cordova")) {
-      this.firebase.onMessageReceived().subscribe((notification) => {
-        if (notification?.message) {
-          const message = JSON.parse(notification.message) as Chat;
-          // console.log(message);
-          this.messageReceived(message);
+    if (this.platform.is("capacitor")) {
+      PushNotifications.addListener(
+        "pushNotificationReceived",
+        (notification) => {
+          console.log(notification);
+          if (notification?.data.message) {
+            const message = JSON.parse(notification.data.message) as Chat;
+            // console.log(message);
+            this.messageReceived(message);
+          }
         }
-      });
+      );
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         if (payload?.data?.message) {

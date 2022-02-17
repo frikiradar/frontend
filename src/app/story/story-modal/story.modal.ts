@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { Keyboard } from "@ionic-native/keyboard/ngx";
+import { Keyboard } from "@capacitor/keyboard";
 import {
   IonTextarea,
   ModalController,
@@ -48,7 +48,6 @@ export class StoryModal implements OnInit {
     private sanitizer: DomSanitizer,
     private storySvc: StoryService,
     private toast: ToastController,
-    public keyboard: Keyboard,
     private userSvc: UserService
   ) {
     this.storyForm = formBuilder.group({
@@ -174,8 +173,8 @@ export class StoryModal implements OnInit {
     this.text.setValue(this.text.value.replace(this.mention, `@${username} `));
     this.userMentions = [...this.userMentions, username];
     this.textarea.setFocus();
-    if (this.platform.is("cordova")) {
-      this.keyboard.show();
+    if (this.platform.is("capacitor")) {
+      Keyboard.show();
     }
   }
 

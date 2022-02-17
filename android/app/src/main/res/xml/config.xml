@@ -6,33 +6,8 @@
     <param name="android-package" value="uk.co.workingedge.phonegap.plugin.LaunchReview"/>
   </feature>
 
-  <feature name="Permissions">
-    <param name="android-package" value="com.android.plugins.Permissions"/>
-  </feature>
-
   <feature name="AppVersion">
     <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion"/>
-  </feature>
-
-  <feature name="CodePush">
-    <param name="android-package" value="com.microsoft.cordova.CodePush"/>
-    <param name="onload" value="true"/>
-  </feature>
-
-  <feature name="Clipboard">
-    <param name="android-package" value="com.verso.cordova.clipboard.Clipboard"/>
-  </feature>
-
-  <feature name="CordovaHttpPlugin">
-    <param name="android-package" value="com.silkimen.cordovahttp.CordovaHttpPlugin"/>
-  </feature>
-
-  <feature name="BrowserTab">
-    <param name="android-package" value="com.google.cordova.plugin.browsertab.BrowserTab"/>
-  </feature>
-
-  <feature name="Camera">
-    <param name="android-package" value="org.apache.cordova.camera.CameraLauncher"/>
   </feature>
 
   <feature name="Device">
@@ -46,15 +21,6 @@
   <feature name="File">
     <param name="android-package" value="org.apache.cordova.file.FileUtils"/>
     <param name="onload" value="true"/>
-  </feature>
-
-  <feature name="FirebasePlugin">
-    <param name="android-package" value="org.apache.cordova.firebase.FirebasePlugin"/>
-    <param name="onload" value="true"/>
-  </feature>
-
-  <feature name="InAppBrowser">
-    <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
   </feature>
 
   <feature name="IonicCordovaCommon">

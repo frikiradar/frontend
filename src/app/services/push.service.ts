@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { FirebaseX } from "@ionic-native/firebase-x/ngx";
+import { FCM } from "@capacitor-community/fcm";
+import { PushNotifications } from "@capacitor/push-notifications";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { takeWhile } from "rxjs/operators";
-import { SwPush } from "@angular/service-worker";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
@@ -12,6 +12,7 @@ import {
   NotificationCounters,
   NotificationService,
 } from "./notification.service";
+import { SwPush } from "@angular/service-worker";
 
 @Injectable({
   providedIn: "root",
@@ -22,7 +23,6 @@ export class PushService {
 
   constructor(
     private device: DeviceService,
-    private firebasex: FirebaseX,
     private router: Router,
     private notificationSvc: NotificationService,
     private platform: Platform,
@@ -31,9 +31,18 @@ export class PushService {
     private swPush: SwPush
   ) {
     this.platform.ready().then(async () => {
-      if (this.platform.is("cordova")) {
+      if (this.platform.is("capacitor")) {
         try {
-          await this.firebasex.hasPermission();
+          let permStatus = await PushNotifications.checkPermissions();
+          if (permStatus.receive === "prompt") {
+            permStatus = await PushNotifications.requestPermissions();
+          }
+
+          if (permStatus.receive === "granted") {
+            throw new Error("User denied permissions!");
+          }
+
+          await PushNotifications.register();
         } catch (e) {
           console.error(e);
         }
@@ -41,10 +50,6 @@ export class PushService {
         if (!navigator.serviceWorker) {
           return console.error("Service Worker not supported");
         }
-
-        /*this.afMessaging.onBackgroundMessage(p => {
-          console.log(p)
-        })*/
 
         this.swPush.notificationClicks.subscribe((payload) => {
           this.router.navigate([payload.notification.data.url]);
@@ -54,21 +59,22 @@ export class PushService {
   }
 
   async init() {
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("capacitor")) {
       this.setChannels();
 
-      this.firebasex.getToken().then(async (token) => {
-        // console.log("Notification token:", token);
-        await this.device.setDevice(token);
-      });
+      await PushNotifications.addListener(
+        "registration",
+        async (token: any) => {
+          await this.device.setDevice(token);
+        }
+      );
 
-      /*this.firebase.onTokenRefresh().subscribe(async token => {
-        // console.log("Notification token refreshed:", token);
-        await this.device.setDevice(token);
-      });*/
+      // Get FCM token instead the APN one returned by Capacitor
+      /*FCM.getToken()
+      .then((r) => alert(`Token ${r.token}`))
+      .catch((err) => console.log(err));*/
 
-      this.firebasex
-        .subscribe("frikiradar")
+      FCM.subscribeTo({ topic: "frikiradar" })
         .then((response) =>
           console.log("Successfully subscribed to topic:", response)
         )
@@ -77,8 +83,7 @@ export class PushService {
         });
 
       if (this.auth.isAdmin() || this.auth.isMaster()) {
-        this.firebasex
-          .subscribe("test")
+        FCM.subscribeTo({ topic: "test" })
           .then((response) =>
             console.log("Successfully subscribed to topic:", response)
           )
@@ -87,13 +92,14 @@ export class PushService {
           });
       }
 
-      this.firebasex.onMessageReceived().subscribe(
-        (payload) => {
-          // console.log("payload", payload);
-          if (payload.tap) {
-            this.router.navigate([payload.url]);
+      PushNotifications.addListener(
+        "pushNotificationReceived",
+        (notification) => {
+          console.log(notification);
+          if (notification.click_action) {
+            this.router.navigate([notification.data.url]);
           } else {
-            this.localNotification(payload);
+            this.localNotification(notification);
 
             if (!this.router.url.includes("chat")) {
               this.notificationSvc
@@ -104,9 +110,6 @@ export class PushService {
             }
             // console.log("Received in foreground");
           }
-        },
-        (error) => {
-          console.error("Error in notification", error);
         }
       );
     } else {
@@ -178,13 +181,13 @@ export class PushService {
         continue;
       }
 
-      this.firebasex
-        .createChannel({
-          id: channel.id,
-          name: channel.name,
-          sound: "bipbip",
-          description: channel.description,
-        })
+      PushNotifications.createChannel({
+        id: channel.id,
+        name: channel.name,
+        sound: "bipbip",
+        description: channel.description,
+        importance: 1,
+      })
         .then((response) => {
           // console.log("Notification Channel created", channel, response);
         })
@@ -193,16 +196,16 @@ export class PushService {
         });
     }
 
-    this.firebasex
+    /*PushNotifications
       .deleteChannel("fcm_default_channel")
       .then((response) => {
         // console.log(response);
       })
       .catch((error) => {
         console.error("Error deleting channel", error);
-      });
+      });*/
 
-    /*this.firebase
+    /*PushNotifications
       .listChannels()
       .then(response => {
         console.log(response);
