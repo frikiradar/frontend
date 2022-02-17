@@ -12,7 +12,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
 import { Device } from "@ionic-native/device/ngx";
-import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { LinkyModule } from "ngx-linky";
@@ -77,7 +76,6 @@ registerLocaleData(localeEs, "es");
     Device,
     LaunchReview,
     AppVersion,
-    Diagnostic,
     Media,
     NativeFile,
   ],

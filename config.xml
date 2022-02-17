@@ -36,7 +36,6 @@
     <preference name="GradlePluginKotlinEnabled" value="true" />
     <preference name="GradlePluginKotlinCodeStyle" value="official" />
     <preference name="GradlePluginKotlinVersion" value="1.3.50" />
-    <preference name="cordova.plugins.diagnostic.modules" value="LOCATION" />
     <platform name="android">
         <preference name="CodePushDeploymentKey" value="bSJAOBiMfPgiYbYBdhSqf7ixnwGMN2zVzTwk2" />
         <preference name="Scheme" value="https" />

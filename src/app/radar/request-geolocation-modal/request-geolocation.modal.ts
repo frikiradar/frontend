@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { ModalController, Platform } from "@ionic/angular";
 
 @Component({
@@ -10,11 +9,7 @@ import { ModalController, Platform } from "@ionic/angular";
 export class RequestGeolocationModal {
   public view: "request" | "force" = "request";
 
-  constructor(
-    private modal: ModalController,
-    public platform: Platform,
-    private diagnostic: Diagnostic
-  ) {}
+  constructor(private modal: ModalController, public platform: Platform) {}
 
   async changeSettings() {
     /*if (this.platform.is("android")) {

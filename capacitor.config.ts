@@ -2,12 +2,12 @@ import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "app.frikiradar.com",
-  appName: "frikiradar",
+  appName: "FrikiRadar",
   webDir: "www",
   bundledWebRuntime: false,
   cordova: {
     preferences: {
-      Hostname: "frikiradar",
+      Hostname: "frikiradar.app",
       ScrollEnabled: "false",
       "android-minSdkVersion": "24",
       "android-targetSdkVersion": "29",
@@ -26,7 +26,6 @@ const config: CapacitorConfig = {
       GradlePluginKotlinEnabled: "true",
       GradlePluginKotlinCodeStyle: "official",
       GradlePluginKotlinVersion: "1.3.50",
-      "cordova.plugins.diagnostic.modules": "LOCATION",
     },
   },
   plugins: {
