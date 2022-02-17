@@ -1,17 +1,15 @@
 import { Injectable } from "@angular/core";
-import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { Platform } from "@ionic/angular";
-import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { Router } from "@angular/router";
+import { Browser } from "@capacitor/browser";
+
 import { RoomService } from "./room.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class UrlService {
   constructor(
-    private browserTab: BrowserTab,
-    private iab: InAppBrowser,
     private platform: Platform,
     private router: Router,
     private roomSvc: RoomService
@@ -36,19 +34,7 @@ export class UrlService {
       if (url.charAt(0) == "/") {
         this.router.navigate([url]);
       } else {
-        if (this.platform.is("cordova")) {
-          this.browserTab.isAvailable().then(isAvailable => {
-            if (isAvailable) {
-              this.browserTab.openUrl(url);
-            } else {
-              const browser = this.iab.create(url);
-              browser.show();
-            }
-          });
-        } else {
-          const browser = this.iab.create(url);
-          browser.show();
-        }
+        Browser.open({ url });
         return;
       }
     }

@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Clipboard } from "@ionic-native/clipboard/ngx";
+import { Clipboard } from "@capacitor/clipboard";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import {
   ActionSheetController,
@@ -20,7 +20,6 @@ import {
   PopoverController,
   ToastController,
 } from "@ionic/angular";
-import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { FirebaseX } from "@ionic-native/firebase-x/ngx";
@@ -98,12 +97,10 @@ export class RoomPage implements OnInit {
     public chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
-    private clipboard: Clipboard,
     public keyboard: Keyboard,
     public platform: Platform,
     private config: ConfigService,
     private urlSvc: UrlService,
-    private androidPermissions: AndroidPermissions,
     public sheet: ActionSheetController,
     public utils: UtilsService,
     public modalController: ModalController,
@@ -397,11 +394,7 @@ export class RoomPage implements OnInit {
   async copy() {
     this.pressOptions = false;
     try {
-      if (this.platform.is("cordova")) {
-        await this.clipboard.copy(this.selectedMessage.text);
-      } else {
-        await navigator.clipboard.writeText(this.selectedMessage.text);
-      }
+      await Clipboard.write({ string: this.selectedMessage.text });
 
       (
         await this.toast.create({
@@ -524,12 +517,12 @@ export class RoomPage implements OnInit {
   }
 
   async openPictureSheet() {
-    if (this.platform.is("android") && this.platform.is("cordova")) {
+    /*if (this.platform.is("android") && this.platform.is("cordova")) {
       await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
       ]);
-    }
+    }*/
 
     if (this.platform.is("cordova")) {
       const actionSheet = await this.sheet.create({

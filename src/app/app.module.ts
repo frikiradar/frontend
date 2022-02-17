@@ -10,21 +10,14 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
-import { AppVersion } from "@ionic-native/app-version/ngx";
-import { Clipboard } from "@ionic-native/clipboard/ngx";
+import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
 import { Device } from "@ionic-native/device/ngx";
 import { Diagnostic } from "@ionic-native/diagnostic/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
-import { LaunchReview } from "@ionic-native/launch-review/ngx";
-import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
-import { Network } from "@ionic-native/network/ngx";
-import { SocialSharing } from "@ionic-native/social-sharing/ngx";
+import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
-import { BrowserTab } from "@ionic-native/browser-tab/ngx";
-import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
@@ -87,19 +80,12 @@ registerLocaleData(localeEs, "es");
       useFactory: () => ({ enabled: environment.production }),
     },
     Device,
-    Network,
     SplashScreen,
-    Clipboard,
     LaunchReview,
     Keyboard,
-    AndroidPermissions,
-    SocialSharing,
     AppVersion,
     WebView,
     Diagnostic,
-    LocationAccuracy,
-    BrowserTab,
-    InAppBrowser,
     FirebaseX,
     Media,
     NativeFile,

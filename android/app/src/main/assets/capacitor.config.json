@@ -26,5 +26,12 @@
 			"GradlePluginKotlinVersion": "1.3.50",
 			"cordova.plugins.diagnostic.modules": "LOCATION"
 		}
+	},
+	"plugins": {
+		"LocalNotifications": {
+			"smallIcon": "notification_icon",
+			"iconColor": "#e91e63",
+			"sound": "bipbip.mp3"
+		}
 	}
 }

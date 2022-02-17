@@ -34,14 +34,6 @@
         ]
         },
       {
-          "id": "cordova-plugin-network-information.Connection",
-          "file": "plugins/cordova-plugin-network-information/www/Connection.js",
-          "pluginId": "cordova-plugin-network-information",
-        "clobbers": [
-          "Connection"
-        ]
-        },
-      {
           "id": "cordova-plugin-app-version.AppVersionPlugin",
           "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
           "pluginId": "cordova-plugin-app-version",
@@ -87,30 +79,6 @@
           "pluginId": "cordova.plugins.diagnostic",
         "clobbers": [
           "cordova.plugins.diagnostic"
-        ]
-        },
-      {
-          "id": "cordova-plugin-request-location-accuracy.RequestLocationAccuracy",
-          "file": "plugins/cordova-plugin-request-location-accuracy/www/android/RequestLocationAccuracy.js",
-          "pluginId": "cordova-plugin-request-location-accuracy",
-        "clobbers": [
-          "cordova.plugins.locationAccuracy"
-        ]
-        },
-      {
-          "id": "cordova-plugin-badge.Badge",
-          "file": "plugins/cordova-plugin-badge/www/badge.js",
-          "pluginId": "cordova-plugin-badge",
-        "clobbers": [
-          "cordova.plugins.notification.badge"
-        ]
-        },
-      {
-          "id": "cordova-plugin-local-notification.LocalNotification",
-          "file": "plugins/cordova-plugin-local-notification/www/local-notification.js",
-          "pluginId": "cordova-plugin-local-notification",
-        "clobbers": [
-          "cordova.plugins.notification.local"
         ]
         },
       {
@@ -175,22 +143,6 @@
           "pluginId": "cordova-plugin-camera",
         "clobbers": [
           "navigator.camera"
-        ]
-        },
-      {
-          "id": "cordova-plugin-network-information.network",
-          "file": "plugins/cordova-plugin-network-information/www/network.js",
-          "pluginId": "cordova-plugin-network-information",
-        "clobbers": [
-          "navigator.connection"
-        ]
-        },
-      {
-          "id": "cordova-plugin-geolocation.geolocation",
-          "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
-          "pluginId": "cordova-plugin-geolocation",
-        "clobbers": [
-          "navigator.geolocation"
         ]
         },
       {
@@ -341,22 +293,6 @@
         ]
         },
       {
-          "id": "cordova-plugin-navigationbar-color.navigationbar",
-          "file": "plugins/cordova-plugin-navigationbar-color/www/navigationbar.js",
-          "pluginId": "cordova-plugin-navigationbar-color",
-        "clobbers": [
-          "window.NavigationBar"
-        ]
-        },
-      {
-          "id": "cordova-plugin-x-socialsharing.SocialSharing",
-          "file": "plugins/cordova-plugin-x-socialsharing/www/SocialSharing.js",
-          "pluginId": "cordova-plugin-x-socialsharing",
-        "clobbers": [
-          "window.plugins.socialsharing"
-        ]
-        },
-      {
           "id": "cordova-plugin-file.ProgressEvent",
           "file": "plugins/cordova-plugin-file/www/ProgressEvent.js",
           "pluginId": "cordova-plugin-file",
@@ -370,14 +306,6 @@
           "pluginId": "cordova-plugin-file",
         "clobbers": [
           "window.requestFileSystem"
-        ]
-        },
-      {
-          "id": "cordova-plugin-statusbar.statusbar",
-          "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-          "pluginId": "cordova-plugin-statusbar",
-        "clobbers": [
-          "window.StatusBar"
         ]
         },
       {
@@ -423,23 +351,6 @@
           "file": "plugins/cordova-plugin-code-push/bin/www/sdk.js",
           "pluginId": "cordova-plugin-code-push",
         "runs": true
-        },
-      {
-          "id": "cordova-plugin-geolocation.PositionError",
-          "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
-          "pluginId": "cordova-plugin-geolocation",
-        "runs": true
-        },
-      {
-          "id": "cordova-promise-polyfill.Promise",
-          "file": "plugins/cordova-promise-polyfill/www/Promise.js",
-          "pluginId": "cordova-promise-polyfill",
-        "runs": true
-        },
-      {
-          "id": "cordova-promise-polyfill.promise.min",
-          "file": "plugins/cordova-promise-polyfill/www/promise.min.js",
-          "pluginId": "cordova-promise-polyfill"
         },
       {
           "id": "es6-promise-plugin.Promise",
@@ -591,16 +502,7 @@
       "cordova-launch-review": "4.0.1",
       "cordova-plugin-android-permissions": "1.1.3",
       "cordova-plugin-app-version": "0.1.12",
-      "cordova-plugin-badge": "0.8.8",
       "cordova-plugin-code-push": "2.0.0",
-      "cordova-plugin-geolocation": "4.1.0",
-      "cordova-plugin-local-notification": "0.9.0-beta.3",
-      "cordova-plugin-navigationbar-color": "0.0.8",
-      "cordova-plugin-network-information": "3.0.0",
-      "cordova-plugin-request-location-accuracy": "2.3.0",
-      "cordova-plugin-vibration": "3.1.1",
-      "cordova-plugin-x-socialsharing": "6.0.3",
-      "cordova-promise-polyfill": "0.0.2",
       "es6-promise-plugin": "4.2.2",
       "code-push": "3.1.5",
       "cordova-clipboard": "1.3.0",
@@ -615,7 +517,6 @@
       "cordova-plugin-inappbrowser": "4.1.0",
       "cordova-plugin-ionic": "5.5.1",
       "cordova-plugin-media": "5.0.4",
-      "cordova-plugin-statusbar": "2.4.3",
       "cordova-plugin-whitelist": "1.3.5",
       "cordova-plugin-zip": "3.1.0",
       "cordova.plugins.diagnostic": "3.9.2"

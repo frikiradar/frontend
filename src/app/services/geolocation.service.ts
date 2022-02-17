@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Geolocation } from "@capacitor/geolocation";
-import { LocationAccuracy } from "@ionic-native/location-accuracy/ngx";
 import { ModalController, Platform, ToastController } from "@ionic/angular";
 
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
@@ -15,7 +14,6 @@ export class GeolocationService {
   constructor(
     private modal: ModalController,
     private config: ConfigService,
-    private locationAccuracy: LocationAccuracy,
     private platform: Platform,
     private toastController: ToastController
   ) {}
@@ -58,12 +56,6 @@ export class GeolocationService {
           color: "secondary",
         })
       ).present();
-
-      if (this.platform.is("cordova")) {
-        await this.locationAccuracy.request(
-          this.locationAccuracy.REQUEST_PRIORITY_LOW_POWER
-        );
-      }
 
       const coordinates = await Geolocation.getCurrentPosition();
       const longitude = coordinates.coords.longitude;

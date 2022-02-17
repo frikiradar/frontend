@@ -1,13 +1,12 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import {
   IonTextarea,
   ModalController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { User } from "../../models/user";
@@ -18,7 +17,7 @@ import { UtilsService } from "../../services/utils.service";
 @Component({
   selector: "story-modal",
   templateUrl: "./story.modal.html",
-  styleUrls: ["./story.modal.scss"]
+  styleUrls: ["./story.modal.scss"],
 })
 export class StoryModal implements OnInit {
   @Input() hash: string;
@@ -45,7 +44,6 @@ export class StoryModal implements OnInit {
     public modal: ModalController,
     public formBuilder: FormBuilder,
     public platform: Platform,
-    private androidPermissions: AndroidPermissions,
     private utils: UtilsService,
     private sanitizer: DomSanitizer,
     private storySvc: StoryService,
@@ -54,7 +52,7 @@ export class StoryModal implements OnInit {
     private userSvc: UserService
   ) {
     this.storyForm = formBuilder.group({
-      text: new FormControl()
+      text: new FormControl(),
     });
   }
 
@@ -66,10 +64,10 @@ export class StoryModal implements OnInit {
 
   async selectPicture(type: "camera" | "gallery") {
     if (this.platform.is("android") && this.platform.is("cordova")) {
-      await this.androidPermissions.requestPermissions([
+      /*await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
-      ]);
+      ]);*/
     }
 
     if (type == "camera") {
@@ -138,7 +136,7 @@ export class StoryModal implements OnInit {
       (
         await this.toast.create({
           message: "Publicando...",
-          position: "middle"
+          position: "middle",
         })
       ).present();
       let text = "";
@@ -151,7 +149,7 @@ export class StoryModal implements OnInit {
         await this.toast.create({
           message: "Historia publicada correctamente",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
       this.showBackdrop = false;
@@ -164,7 +162,7 @@ export class StoryModal implements OnInit {
           message: "Error al publicar tu historia",
           duration: 2000,
           position: "middle",
-          color: "danger"
+          color: "danger",
         })
       ).present();
     }

@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import {
   ActionSheetController,
   IonInput,
@@ -8,7 +7,7 @@ import {
   IonSlides,
   PickerController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { Tag } from "../models/tags";
@@ -22,7 +21,7 @@ import { UtilsService } from "./../services/utils.service";
 @Component({
   selector: "app-edit-profile",
   templateUrl: "./edit-profile.page.html",
-  styleUrls: ["./edit-profile.page.scss"]
+  styleUrls: ["./edit-profile.page.scss"],
 })
 export class EditProfilePage {
   get minage() {
@@ -69,7 +68,6 @@ export class EditProfilePage {
     private utils: UtilsService,
     private toast: ToastController,
     private platform: Platform,
-    private androidPermissions: AndroidPermissions,
     private nav: NavService
   ) {
     this.profileForm = this.fb.group({
@@ -86,7 +84,7 @@ export class EditProfilePage {
       minage: [""],
       maxage: new FormControl({ value: "", disabled: true }),
       connection: [""],
-      tags: [""]
+      tags: [""],
     });
   }
 
@@ -106,7 +104,7 @@ export class EditProfilePage {
       lovegender: this.user.lovegender,
       minage: this.user.minage,
       maxage: this.user.maxage,
-      connection: this.user.connection
+      connection: this.user.connection,
     });
 
     this.tags = this.user.tags ? this.user.tags : [];
@@ -120,7 +118,7 @@ export class EditProfilePage {
     this.user = {
       ...this.user,
       ...this.profileForm.getRawValue(),
-      ...{ tags: this.tags }
+      ...{ tags: this.tags },
     } as User;
 
     // this.user.birthday = this.user.birthday.split("T")[0];
@@ -133,7 +131,7 @@ export class EditProfilePage {
         await this.toast.create({
           message: "Cambios guardados correctamente.",
           duration: 5000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     } catch (e) {
@@ -142,7 +140,7 @@ export class EditProfilePage {
           message: `Error al guardar los cambios ${e}.`,
           duration: 5000,
           color: "danger",
-          position: "middle"
+          position: "middle",
         })
       ).present();
     }
@@ -175,15 +173,15 @@ export class EditProfilePage {
               }
             }
             this.profileForm.get(typeage).setValue(data.age.value);
-          }
-        }
+          },
+        },
       ],
       columns: [
         {
           name: "age",
-          options: ages
-        }
-      ]
+          options: ages,
+        },
+      ],
     });
 
     await picker.present();
@@ -200,21 +198,21 @@ export class EditProfilePage {
 
       if (this.list.length) {
         let buttons = [];
-        this.list.forEach(op => {
+        this.list.forEach((op) => {
           buttons = [
             ...buttons,
             {
               text: `${op.name} (${op.total})`,
               handler: () => {
                 this.addTag(op.name, category);
-              }
-            }
+              },
+            },
           ];
         });
 
         const actionSheet = await this.sheet.create({
           keyboardClose: false,
-          buttons
+          buttons,
         });
         await actionSheet.present();
       }
@@ -224,12 +222,12 @@ export class EditProfilePage {
   async addTag(name: string, catName: string) {
     if (
       name &&
-      !this.tags.some(t => t.name === name && t.category.name === catName)
+      !this.tags.some((t) => t.name === name && t.category.name === catName)
     ) {
       const tags = name.split(",").map((t: string) => {
         return { name: t.trim(), category: { name: catName } };
       });
-      tags.forEach(async t => {
+      tags.forEach(async (t) => {
         try {
           const tag = await this.tagSvc.addTag(t.name, t.category.name);
           this.tags = [...[tag], ...this.tags];
@@ -241,20 +239,24 @@ export class EditProfilePage {
               message: `Error al añadir la etiqueta ${t.name}.`,
               color: "danger",
               duration: 5000,
-              position: "middle"
+              position: "middle",
             })
           ).present();
           console.error(e);
         }
       });
     }
-    this.role.value = this.music.value = this.games.value = this.films.value = this.books.value =
-      "";
+    this.role.value =
+      this.music.value =
+      this.games.value =
+      this.films.value =
+      this.books.value =
+        "";
   }
 
   async removeTag(id: number) {
     this.tags.splice(
-      this.tags.findIndex(t => t.id === id),
+      this.tags.findIndex((t) => t.id === id),
       1
     );
     try {
@@ -265,7 +267,7 @@ export class EditProfilePage {
           message: `Error al eliminar la etiqueta.`,
           color: "danger",
           duration: 5000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
       console.error(e);
@@ -276,15 +278,15 @@ export class EditProfilePage {
     if (!this.tags) {
       return;
     }
-    return this.tags.filter(t => t.category.name === category);
+    return this.tags.filter((t) => t.category.name === category);
   }
 
   async openPictureSheet() {
     if (this.platform.is("android") && this.platform.is("cordova")) {
-      await this.androidPermissions.requestPermissions([
+      /*await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
-      ]);
+      ]);*/
     }
 
     const actionSheet = await this.sheet.create({
@@ -311,7 +313,7 @@ export class EditProfilePage {
               }
               this.uploadPicture(avatar);
             }
-          }
+          },
         },
         {
           text: "Desde la galería",
@@ -334,9 +336,9 @@ export class EditProfilePage {
                 new MouseEvent("click")
               );
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     await actionSheet.present();
   }
@@ -363,7 +365,7 @@ export class EditProfilePage {
         await this.toast.create({
           message: `Imagen actualizada correctamente.`,
           duration: 5000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     } catch (e) {
@@ -371,7 +373,7 @@ export class EditProfilePage {
         await this.toast.create({
           message: `Error al actualizar la imagen.`,
           duration: 5000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
       console.error(e);
@@ -401,7 +403,7 @@ export class EditProfilePage {
   }
 
   setActiveImage(i: Promise<number>) {
-    i.then(index => {
+    i.then((index) => {
       this.activeImage = index;
     });
   }

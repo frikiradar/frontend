@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Camera } from "@ionic-native/camera/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
-import { SocialSharing } from "@ionic-native/social-sharing/ngx";
 import {
   AlertController,
   ModalController,
@@ -10,6 +9,8 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { StatusBar, Style } from "@capacitor/status-bar";
+import { Share } from "@capacitor/share";
+import { Clipboard } from "@capacitor/clipboard";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
@@ -24,7 +25,6 @@ export class UtilsService {
     public http: HttpClient,
     private alert: AlertController,
     private auth: AuthService,
-    private socialSharing: SocialSharing,
     private platform: Platform,
     private webview: WebView,
     private camera: Camera,
@@ -218,13 +218,13 @@ export class UtilsService {
 
     if (this.platform.is("hybrid")) {
       const options = {
-        message, // not supported on some apps (Facebook, Instagram)
-        subject: "FrikiRadar, conoce a personas frikis como tú", // fi. for email
+        title: "Compartir",
+        text: message, // not supported on some apps (Facebook, Instagram)
         url: `${url}?referrer=${referrer}`,
-        chooserTitle: "Elige una app y ayúdanos a seguir creciendo", // Android only, you can override the default share sheet title,
+        dialogTitle: "Elige una app y ayúdanos a seguir creciendo", // Android only, you can override the default share sheet title,
       };
 
-      this.socialSharing.shareWithOptions(options);
+      await Share.share(options);
     } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
         title: "FrikiRadar, conoce a personas frikis como tú",
@@ -238,9 +238,9 @@ export class UtilsService {
     } else {
       // fallback
       try {
-        await navigator.clipboard.writeText(
-          `${message} ${url}?referrer=${referrer}`
-        );
+        await Clipboard.write({
+          string: `${message} ${url}?referrer=${referrer}`,
+        });
         (
           await this.toast.create({
             message: "Link copiado al portapapeles",

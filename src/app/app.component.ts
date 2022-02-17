@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { AppVersion } from "@ionic-native/app-version/ngx";
-import { LaunchReview } from "@ionic-native/launch-review/ngx";
-import { Network } from "@ionic-native/network/ngx";
+import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
+import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
+import { Network } from "@capacitor/network";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { AlertController, Platform, ToastController } from "@ionic/angular";
 import {
   CodePush,
   InstallMode,
-  SyncOptions
+  SyncOptions,
 } from "@ionic-native/code-push/ngx";
 
 import { User } from "./models/user";
@@ -21,7 +21,7 @@ import { SwService } from "./services/sw.service";
 
 @Component({
   selector: "app-root",
-  templateUrl: "app.component.html"
+  templateUrl: "app.component.html",
 })
 export class AppComponent {
   currentUser: User;
@@ -32,7 +32,6 @@ export class AppComponent {
     private auth: AuthService,
     private alert: AlertController,
     private router: Router,
-    private network: Network,
     private splashScreen: SplashScreen,
     private platform: Platform,
     private utils: UtilsService,
@@ -85,30 +84,30 @@ export class AppComponent {
   }
 
   async networkStatus() {
-    this.network.onConnect().subscribe(async () => {
-      if (!this.internet) {
+    Network.addListener("networkStatusChange", async (status) => {
+      if (status.connected) {
+        if (!this.internet) {
+          (
+            await this.toast.create({
+              message: "¡Conexión a internet restablecida!",
+              duration: 2000,
+              position: "bottom",
+              color: "success",
+            })
+          ).present();
+        }
+        this.internet = true;
+      } else {
         (
           await this.toast.create({
-            message: "¡Conexión a internet restablecida!",
-            duration: 2000,
+            message: "¡Te has quedado sin internet!",
+            duration: 5000,
             position: "bottom",
-            color: "success"
+            color: "danger",
           })
         ).present();
-        this.internet = true;
+        this.internet = false;
       }
-    });
-
-    this.network.onDisconnect().subscribe(async () => {
-      (
-        await this.toast.create({
-          message: "¡Te has quedado sin internet!",
-          duration: 5000,
-          position: "bottom",
-          color: "danger"
-        })
-      ).present();
-      this.internet = false;
     });
   }
 
@@ -126,22 +125,22 @@ export class AppComponent {
           mandatoryContinueButtonLabel: "Instalar",
           optionalIgnoreButtonLabel: "Más tarde",
           optionalInstallButtonLabel: "Instalar",
-          appendReleaseDescription: false
+          appendReleaseDescription: false,
         },
-        installMode: InstallMode.IMMEDIATE
+        installMode: InstallMode.IMMEDIATE,
       };
     } else {
       syncOptions = {
         updateDialog: false,
-        installMode: InstallMode.ON_NEXT_RESTART
+        installMode: InstallMode.ON_NEXT_RESTART,
       };
     }
 
     this.codePush.sync(syncOptions).subscribe(
-      async data => {
+      async (data) => {
         console.log("CODE PUSH SUCCESSFUL: " + data);
       },
-      err => {
+      (err) => {
         console.log("CODE PUSH ERROR: " + err);
       }
     );
@@ -168,10 +167,10 @@ export class AppComponent {
             text: "¡Quiero informarme!",
             handler: async () => {
               this.router.navigate(["/ambassador"]);
-            }
-          }
+            },
+          },
         ],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       await alert.present();
@@ -196,20 +195,20 @@ export class AppComponent {
               } else {
                 this.launchReview.launch();
               }
-            }
+            },
           },
           {
-            text: "La próxima vez mejor 🙏"
+            text: "La próxima vez mejor 🙏",
           },
           {
             text: "Mmm, mejor no 🙈",
             handler: () => {
               config.review = true;
               this.config.setConfig(config);
-            }
-          }
+            },
+          },
         ],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       await alert.present();
@@ -226,10 +225,10 @@ export class AppComponent {
           text: "¡Compartir!",
           handler: () => {
             this.utils.share();
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();
@@ -251,10 +250,10 @@ export class AppComponent {
               window.open("", "_parent", "");
               window.close();
             }
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     try {
@@ -278,10 +277,10 @@ export class AppComponent {
                 text: "ACTUALIZAR",
                 handler: () => {
                   this.launchReview.launch().then();
-                }
-              }
+                },
+              },
             ],
-            cssClass: "round-alert"
+            cssClass: "round-alert",
           });
 
           versionAlert.present();

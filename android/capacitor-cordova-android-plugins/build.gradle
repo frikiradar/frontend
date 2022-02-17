@@ -47,9 +47,6 @@ dependencies {
     implementation "org.apache.cordova:framework:$cordovaAndroidVersion"
     // SUB-PROJECT DEPENDENCIES START
     implementation "com.google.android.play:core:1.8.0"
-    implementation "com.android.support:support-v4:26.+"
-    implementation "com.google.android.gms:play-services-location:16.+"
-    implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "com.android.support:customtabs:23.3.0"
     implementation "com.android.support:support-v4:27.+"
     implementation "com.google.android.gms:play-services-tagmanager:18.0.1"
@@ -76,9 +73,7 @@ dependencies {
 
 // PLUGIN GRADLE EXTENSIONS START
 apply from: "cordova.variables.gradle"
-apply from: "../../node_modules/cordova-plugin-badge/src/android/badge.gradle"
 apply from: "../../node_modules/cordova-plugin-code-push/src/android/build-extras.gradle"
-apply from: "../../node_modules/cordova-plugin-local-notification/src/android/build/localnotification.gradle"
 apply from: "../../node_modules/cordova-plugin-browsertab/src/android/BrowserTab.gradle"
 apply from: "../../node_modules/cordova-plugin-firebasex/src/android/build.gradle"
 apply from: "../../node_modules/cordova-plugin-ionic/src/android/cordovapluginionic.gradle"

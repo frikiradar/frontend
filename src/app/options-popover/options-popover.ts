@@ -4,9 +4,9 @@ import {
   AlertController,
   Platform,
   PopoverController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
-import { Clipboard } from "@ionic-native/clipboard/ngx";
+import { Clipboard } from "@capacitor/clipboard";
 
 import { User } from "src/app/models/user";
 import { AdminService } from "../services/admin.service";
@@ -17,7 +17,7 @@ import { UtilsService } from "../services/utils.service";
 @Component({
   selector: "options-popover",
   templateUrl: "./options-popover.html",
-  styleUrls: ["./options-popover.scss"]
+  styleUrls: ["./options-popover.scss"],
 })
 export class OptionsPopover {
   public user: User;
@@ -32,8 +32,7 @@ export class OptionsPopover {
     private toast: ToastController,
     private admin: AdminService,
     private utils: UtilsService,
-    public platform: Platform,
-    private clipboard: Clipboard
+    public platform: Platform
   ) {}
 
   close() {
@@ -57,19 +56,19 @@ export class OptionsPopover {
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del reporte"
-        }
+          placeholder: "Motivo del reporte",
+        },
       ],
       buttons: [
         {
           text: "Cancelar",
           role: "cancel",
-          cssClass: "secondary"
+          cssClass: "secondary",
         },
         {
           text: "Reportar",
           role: "block",
-          handler: async data => {
+          handler: async (data) => {
             if (data.note.trim().length) {
               try {
                 await this.userSvc.report(user.id, data.note);
@@ -77,7 +76,7 @@ export class OptionsPopover {
                   await this.toast.create({
                     message: "Usuario reportado correctamente",
                     duration: 2000,
-                    position: "bottom"
+                    position: "bottom",
                   })
                 ).present();
               } catch (e) {
@@ -86,7 +85,7 @@ export class OptionsPopover {
                     message: `Error al reportar al usuario ${e}`,
                     duration: 2000,
                     position: "bottom",
-                    color: "danger"
+                    color: "danger",
                   })
                 ).present();
                 alert.present();
@@ -97,16 +96,16 @@ export class OptionsPopover {
                   message: `El mensaje de reporte no puede estar en blanco`,
                   duration: 2000,
                   position: "middle",
-                  color: "danger"
+                  color: "danger",
                 })
               ).present();
 
               this.report(this.user);
             }
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();
@@ -122,26 +121,26 @@ export class OptionsPopover {
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del bloqueo (opcional)"
-        }
+          placeholder: "Motivo del bloqueo (opcional)",
+        },
       ],
       buttons: [
         {
           text: "Cancelar",
           role: "cancel",
-          cssClass: "secondary"
+          cssClass: "secondary",
         },
         {
           text: "Bloquear",
           role: "block",
-          handler: async data => {
+          handler: async (data) => {
             try {
               await this.userSvc.block(user.id, data.note);
               (
                 await this.toast.create({
                   message: "Usuario bloqueado correctamente",
                   duration: 2000,
-                  position: "bottom"
+                  position: "bottom",
                 })
               ).present();
               this.router.navigate(["/"]);
@@ -150,15 +149,15 @@ export class OptionsPopover {
                 await this.toast.create({
                   message: `Error al bloquear al usuario ${e}`,
                   duration: 2000,
-                  position: "bottom"
+                  position: "bottom",
                 })
               ).present();
               alert.present();
             }
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();
@@ -174,17 +173,13 @@ export class OptionsPopover {
       "+"
     )}?referrer=${referrer}`;
     try {
-      if (this.platform.is("cordova")) {
-        await this.clipboard.copy(url);
-      } else {
-        await navigator.clipboard.writeText(url);
-      }
+      await Clipboard.write({ string: url });
 
       (
         await this.toast.create({
           message: "URL copiada correctamente",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     } catch (e) {
@@ -192,7 +187,7 @@ export class OptionsPopover {
         await this.toast.create({
           message: "Error al copiar la URL",
           duration: 2000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     }
@@ -217,26 +212,26 @@ export class OptionsPopover {
         {
           name: "note",
           type: "text",
-          placeholder: "Mensaje del moderador"
-        }
+          placeholder: "Mensaje del moderador",
+        },
       ],
       buttons: [
         {
           text: "Cancelar",
           role: "cancel",
-          cssClass: "secondary"
+          cssClass: "secondary",
         },
         {
           text: "Enviar advertencia",
           role: "warn",
-          handler: async data => {
+          handler: async (data) => {
             try {
               await this.admin.warn(user.id, data.note);
               (
                 await this.toast.create({
                   message: "Usuario avisado correctamente",
                   duration: 2000,
-                  position: "middle"
+                  position: "middle",
                 })
               ).present();
             } catch (e) {
@@ -244,15 +239,15 @@ export class OptionsPopover {
                 await this.toast.create({
                   message: `Error al avisar al usuario ${e}`,
                   duration: 2000,
-                  position: "middle"
+                  position: "middle",
                 })
               ).present();
               alert.present();
             }
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();
@@ -268,40 +263,40 @@ export class OptionsPopover {
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del baneo"
+          placeholder: "Motivo del baneo",
         },
         {
           name: "hours",
           type: "number",
           attributes: {
             min: 0,
-            max: 24
+            max: 24,
           },
-          placeholder: "Horas"
+          placeholder: "Horas",
         },
         {
           name: "days",
           type: "number",
-          placeholder: "Dias"
-        }
+          placeholder: "Dias",
+        },
       ],
       buttons: [
         {
           text: "Cancelar",
           role: "cancel",
-          cssClass: "secondary"
+          cssClass: "secondary",
         },
         {
           text: "Banear al usuario",
           role: "ban",
-          handler: async data => {
+          handler: async (data) => {
             try {
               await this.admin.ban(user.id, data.note, data.days, data.hours);
               (
                 await this.toast.create({
                   message: "Usuario baneado correctamente",
                   duration: 2000,
-                  position: "middle"
+                  position: "middle",
                 })
               ).present();
             } catch (e) {
@@ -309,15 +304,15 @@ export class OptionsPopover {
                 await this.toast.create({
                   message: `Error al banear al usuario ${e}`,
                   duration: 2000,
-                  position: "middle"
+                  position: "middle",
                 })
               ).present();
               alert.present();
             }
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();

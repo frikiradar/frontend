@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { Clipboard } from "@ionic-native/clipboard/ngx";
+import { Clipboard } from "@capacitor/clipboard";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import {
   AlertController,
@@ -74,7 +74,6 @@ export class ChatModalComponent implements OnInit {
     public chatSvc: ChatService,
     private toast: ToastController,
     private alert: AlertController,
-    private clipboard: Clipboard,
     public keyboard: Keyboard,
     public platform: Platform,
     private config: ConfigService,
@@ -426,11 +425,7 @@ export class ChatModalComponent implements OnInit {
   async copy() {
     this.pressOptions = false;
     try {
-      if (this.platform.is("cordova")) {
-        await this.clipboard.copy(this.selectedMessage.text);
-      } else {
-        await navigator.clipboard.writeText(this.selectedMessage.text);
-      }
+      await Clipboard.write({ string: this.selectedMessage.text });
 
       (
         await this.toast.create({

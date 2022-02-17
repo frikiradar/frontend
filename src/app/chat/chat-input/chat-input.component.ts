@@ -7,17 +7,16 @@ import {
   EventEmitter,
   Input,
   SimpleChanges,
-  ElementRef
+  ElementRef,
 } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { Keyboard } from "@ionic-native/keyboard/ngx";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
-import { AndroidPermissions } from "@ionic-native/android-permissions/ngx";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Media, MediaObject } from "@ionic-native/media/ngx";
 import { File as NativeFile, FileEntry } from "@ionic-native/file/ngx";
@@ -32,7 +31,7 @@ import { User } from "src/app/models/user";
 @Component({
   selector: "app-chat-input",
   templateUrl: "./chat-input.component.html",
-  styleUrls: ["./chat-input.component.scss"]
+  styleUrls: ["./chat-input.component.scss"],
 })
 export class ChatInputComponent {
   @Output() onWriting: EventEmitter<boolean> = new EventEmitter();
@@ -84,7 +83,6 @@ export class ChatInputComponent {
     public auth: AuthService,
     public keyboard: Keyboard,
     public platform: Platform,
-    private androidPermissions: AndroidPermissions,
     public sheet: ActionSheetController,
     public utils: UtilsService,
     private userSvc: UserService,
@@ -94,7 +92,7 @@ export class ChatInputComponent {
     private media: Media
   ) {
     this.chatForm = formBuilder.group({
-      message: new FormControl("", [Validators.required])
+      message: new FormControl("", [Validators.required]),
     });
   }
 
@@ -175,7 +173,7 @@ export class ChatInputComponent {
       text: this.message.value ? this.message.value.trim() : "",
       image: this.image,
       audio: this.audio,
-      mentions: this.userMentions
+      mentions: this.userMentions,
     };
 
     this.onSubmit.emit(message);
@@ -188,10 +186,10 @@ export class ChatInputComponent {
 
   async openPictureSheet() {
     if (this.platform.is("android") && this.platform.is("cordova")) {
-      await this.androidPermissions.requestPermissions([
+      /*await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
-      ]);
+      ]);*/
     }
 
     const actionSheet = await this.sheet.create({
@@ -218,7 +216,7 @@ export class ChatInputComponent {
               }
               this.addPicture(image);
             }
-          }
+          },
         },
         {
           text: "Desde la galería",
@@ -237,22 +235,22 @@ export class ChatInputComponent {
                 new MouseEvent("click")
               );
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     await actionSheet.present();
   }
 
   async openMic() {
     if (this.platform.is("cordova")) {
-      if (this.platform.is("android")) {
+      /*if (this.platform.is("android")) {
         await this.androidPermissions.requestPermissions([
           this.androidPermissions.PERMISSION.RECORD_AUDIO,
           this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
           this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
         ]);
-      }
+      }*/
 
       try {
         let path = this.file.dataDirectory;
@@ -277,17 +275,17 @@ export class ChatInputComponent {
       let chunks = [];
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: false })
-        .then(stream => {
+        .then((stream) => {
           const tracks = stream.getTracks();
           this.mediaRecorder = new MediaRecorder(stream);
           this.mediaRecorder.start();
           this.recording = true;
 
-          this.mediaRecorder.addEventListener("stop", async error => {
+          this.mediaRecorder.addEventListener("stop", async (error) => {
             this.recording = false;
             this.recorded = true;
 
-            tracks.forEach(track => {
+            tracks.forEach((track) => {
               track.stop();
             });
 
@@ -299,7 +297,7 @@ export class ChatInputComponent {
             );
           });
 
-          this.mediaRecorder.addEventListener("dataavailable", async e => {
+          this.mediaRecorder.addEventListener("dataavailable", async (e) => {
             chunks.push(e.data);
           });
         });
