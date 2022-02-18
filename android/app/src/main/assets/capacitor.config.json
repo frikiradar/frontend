@@ -1,5 +1,5 @@
 {
-	"appId": "app.frikiradar.com",
+	"appId": "com.frikiradar.app",
 	"appName": "FrikiRadar",
 	"webDir": "www",
 	"bundledWebRuntime": false,
@@ -28,8 +28,8 @@
 	},
 	"plugins": {
 		"SplashScreen": {
-			"launchAutoHide": false,
-			"launchShowDuration": 300,
+			"launchAutoHide": true,
+			"launchShowDuration": 500,
 			"backgroundColor": "#1f1f1f",
 			"androidScaleType": "CENTER_CROP",
 			"splashFullScreen": true,

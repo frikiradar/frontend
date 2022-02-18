@@ -46,7 +46,7 @@ export class AppComponent {
 
   async initializeApp() {
     this.platform.ready().then(async () => {
-      if (this.platform.is("cordova")) {
+      if (this.platform.is("capacitor")) {
         this.push.init();
         SplashScreen.hide();
         this.checkCodePush();

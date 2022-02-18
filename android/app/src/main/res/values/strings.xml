@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">frikiradar</string>
-    <string name="title_activity_main">frikiradar</string>
-    <string name="package_name">app.frikiradar.com</string>
-    <string name="custom_url_scheme">app.frikiradar.com</string>
+    <string name="app_name">FrikiRadar</string>
+    <string name="title_activity_main">FrikiRadar</string>
+    <string name="package_name">com.frikiradar.app</string>
+    <string name="custom_url_scheme">com.frikiradar.app</string>
 </resources>

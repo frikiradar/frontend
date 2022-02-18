@@ -1,9 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/NOTICE', 'META-INF/LICENSE', 'META-INF/NOTICE', 'META-INF/LICENSE']
+        }
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "app.frikiradar.com"
+        applicationId "com.frikiradar.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

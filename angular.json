@@ -20,7 +20,8 @@
               "platform",
               "howler",
               "deep-equal",
-              "patreon"
+              "patreon",
+              "code-push"
             ],
             "aot": false,
             "outputPath": "www",
@@ -113,8 +114,7 @@
             "production": {
               "browserTarget": "app:build:production"
             },
-            "ci": {
-            }
+            "ci": {}
           }
         },
         "extract-i18n": {

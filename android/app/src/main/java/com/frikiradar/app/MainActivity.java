@@ -1,4 +1,4 @@
-package app.frikiradar.com;
+package com.frikiradar.app;
 
 import com.getcapacitor.BridgeActivity;
 

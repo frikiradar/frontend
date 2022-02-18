@@ -1,7 +1,7 @@
 import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "app.frikiradar.com",
+  appId: "com.frikiradar.app",
   appName: "FrikiRadar",
   webDir: "www",
   bundledWebRuntime: false,
@@ -30,8 +30,8 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchAutoHide: false,
-      launchShowDuration: 300,
+      launchAutoHide: true,
+      launchShowDuration: 500,
       backgroundColor: "#1f1f1f",
       androidScaleType: "CENTER_CROP",
       splashFullScreen: true,
