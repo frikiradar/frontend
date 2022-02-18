@@ -41,7 +41,7 @@
   </feature>
 
   
-  <preference name="Hostname" value="frikiradar" />
+  <preference name="Hostname" value="frikiradar.app" />
   <preference name="ScrollEnabled" value="false" />
   <preference name="android-minSdkVersion" value="24" />
   <preference name="android-targetSdkVersion" value="29" />

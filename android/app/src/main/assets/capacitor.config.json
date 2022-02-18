@@ -1,11 +1,11 @@
 {
 	"appId": "app.frikiradar.com",
-	"appName": "frikiradar",
+	"appName": "FrikiRadar",
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"cordova": {
 		"preferences": {
-			"Hostname": "frikiradar",
+			"Hostname": "frikiradar.app",
 			"ScrollEnabled": "false",
 			"android-minSdkVersion": "24",
 			"android-targetSdkVersion": "29",
@@ -27,6 +27,14 @@
 		}
 	},
 	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": false,
+			"launchShowDuration": 300,
+			"backgroundColor": "#1f1f1f",
+			"androidScaleType": "CENTER_CROP",
+			"splashFullScreen": true,
+			"splashImmersive": false
+		},
 		"LocalNotifications": {
 			"smallIcon": "notification_icon",
 			"iconColor": "#e91e63",
