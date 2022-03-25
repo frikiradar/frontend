@@ -144,7 +144,7 @@ export class ChatModalComponent implements OnInit {
       }
     });
 
-    if (!this.platform.is("cordova")) {
+    if (!this.platform.is("capacitor")) {
       try {
         await this.afMessaging.requestPermission.toPromise();
       } catch (e) {

@@ -3,7 +3,7 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { ModalController, ToastController } from "@ionic/angular";
@@ -18,7 +18,7 @@ import { UtilsService } from "src/app/services/utils.service";
 @Component({
   selector: "event-modal",
   templateUrl: "./event.modal.html",
-  styleUrls: ["./event.modal.scss"]
+  styleUrls: ["./event.modal.scss"],
 })
 export class EventModal {
   @Input() event: Event;
@@ -61,7 +61,7 @@ export class EventModal {
       contact_email: new FormControl(),
       minage: new FormControl(0),
       image: new FormControl(),
-      official: new FormControl()
+      official: new FormControl(),
     });
   }
 
@@ -76,6 +76,7 @@ export class EventModal {
       this.eventForm.get("title").setValue(this.event.title);
       this.eventForm.get("description").setValue(this.event.description);
       this.eventForm.get("date").setValue(this.event.date);
+      this.eventForm.get("endDate").setValue(this.event.date_end);
       this.eventForm.get("url").setValue(this.event.url);
       this.eventForm.get("country").setValue(this.event.country);
       this.eventForm.get("city").setValue(this.event.city);
@@ -160,7 +161,7 @@ export class EventModal {
             await this.toast.create({
               message: `Evento editado correctamente.`,
               duration: 5000,
-              position: "middle"
+              position: "middle",
             })
           ).present();
           this.close();
@@ -169,7 +170,7 @@ export class EventModal {
             await this.toast.create({
               message: `Error al editar el evento.`,
               duration: 5000,
-              position: "middle"
+              position: "middle",
             })
           ).present();
           console.error(e);
@@ -201,7 +202,7 @@ export class EventModal {
             await this.toast.create({
               message: `Evento publicado correctamente.`,
               duration: 5000,
-              position: "middle"
+              position: "middle",
             })
           ).present();
           this.close();
@@ -210,7 +211,7 @@ export class EventModal {
             await this.toast.create({
               message: `Error al publicar el evento.`,
               duration: 5000,
-              position: "middle"
+              position: "middle",
             })
           ).present();
           console.error(e);

@@ -6,6 +6,7 @@
     </p>
 
     <ion-item>
+      <ion-icon name="person-outline" slot="start"></ion-icon>
       <ion-label position="floating">Nombre de usuario</ion-label>
       <ion-input
         required
@@ -44,6 +45,7 @@
       guiones (-_) y puntos(.).
     </div>
     <ion-item>
+      <ion-icon name="mail-outline" slot="start"></ion-icon>
       <ion-label position="floating">Correo electrónico</ion-label>
       <ion-input
         required
@@ -65,6 +67,7 @@
       dirección de correo electrónico válida.
     </div>
     <ion-item>
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
       <ion-label position="floating">Contraseña</ion-label>
       <ion-input
         required
@@ -92,21 +95,30 @@
       <ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo
       de 8 caracteres.
     </div>
-    <ion-item>
-      <ion-label>Fecha de nacimiento</ion-label>
-      <ion-datetime
-        min="1900-01"
-        max="{{ (today | date: 'y') - 14 }}-{{ today | date: 'MM' }}-{{
-          today | date: 'dd'
-        }}"
-        cancel-text="Cancelar"
-        done-text="Hecho"
-        pickerFormat="YYYY DD MMM"
-        displayFormat="DD MMM de YYYY"
-        monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-        formControlName="birthday"
-        (ionChange)="changeAge($event)"
-      ></ion-datetime>
+    <ion-item button id="open-calendar" lines="full">
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      <ion-label
+        >Fecha de nacimiento
+        <ion-text color="primary">{{
+          registerForm.get("birthday").value | niceDate
+        }}</ion-text></ion-label
+      >
+      <ion-popover trigger="open-calendar" show-backdrop="false">
+        <ng-template>
+          <ion-datetime
+            formControlName="birthday"
+            presentation="date"
+            locale="es-ES"
+            first-day-of-week="1"
+            min="1900-01-01"
+            max="{{ (today | date: 'y') - 14 }}-{{ today | date: 'MM' }}-{{
+              today | date: 'dd'
+            }}"
+            (ionChange)="changeAge($event)"
+          >
+          </ion-datetime>
+        </ng-template>
+      </ion-popover>
     </ion-item>
     <ion-item *ngIf="adult">
       <ion-label

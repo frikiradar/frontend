@@ -16,10 +16,10 @@ import {
   Validators,
 } from "@angular/forms";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
+import { Directory, Filesystem } from "@capacitor/filesystem";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { Media, MediaObject } from "@ionic-native/media/ngx";
-import { File as NativeFile, FileEntry } from "@ionic-native/file/ngx";
+import { VoiceRecorder } from "capacitor-voice-recorder";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -54,13 +54,12 @@ export class ChatInputComponent {
   public imagePreview: SafeUrl;
   private mediaRecorder: MediaRecorder;
   public recording: boolean = false;
+  public storedFileNames = [];
   public countRecordingString = "0m 0s";
   private countInterval: any;
   public recorded: boolean = false;
   public audio: string;
   public audioPreview: SafeUrl;
-  private audioMedia: MediaObject;
-  private audioFile: FileEntry;
 
   @Input() replying: boolean = false;
   @Input() editing = false;
@@ -84,9 +83,7 @@ export class ChatInputComponent {
     public sheet: ActionSheetController,
     public utils: UtilsService,
     private userSvc: UserService,
-    private sanitizer: DomSanitizer,
-    private file: NativeFile,
-    private media: Media
+    private sanitizer: DomSanitizer
   ) {
     this.chatForm = formBuilder.group({
       message: new FormControl("", [Validators.required]),
@@ -133,7 +130,9 @@ export class ChatInputComponent {
   }
 
   openEmojis() {
-    Keyboard.setStyle({ style: KeyboardStyle.Dark });
+    if (this.platform.is("capacitor")) {
+      Keyboard.setStyle({ style: KeyboardStyle.Dark });
+    }
     this.emojis = !this.emojis;
 
     if (this.emojis && this.platform.is("capacitor")) {
@@ -173,14 +172,13 @@ export class ChatInputComponent {
 
     this.onSubmit.emit(message);
     this.message.setValue("");
-    this.audioMedia?.release();
     this.image = "";
     this.audio = "";
     this.focusTextArea();
   }
 
   async openPictureSheet() {
-    if (this.platform.is("android") && this.platform.is("cordova")) {
+    if (this.platform.is("android") && this.platform.is("capacitor")) {
       /*await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
@@ -195,7 +193,7 @@ export class ChatInputComponent {
           text: "Desde la cámara",
           icon: "camera",
           handler: async () => {
-            if (this.platform.is("cordova")) {
+            if (this.platform.is("capacitor")) {
               const image = (await this.utils.takePicture(
                 "camera",
                 false,
@@ -217,7 +215,7 @@ export class ChatInputComponent {
           text: "Desde la galería",
           icon: "images",
           handler: async () => {
-            if (this.platform.is("cordova")) {
+            if (this.platform.is("capacitor")) {
               const image = (await this.utils.takePicture(
                 "gallery",
                 false,
@@ -238,30 +236,21 @@ export class ChatInputComponent {
   }
 
   async openMic() {
-    if (this.platform.is("cordova")) {
-      /*if (this.platform.is("android")) {
-        await this.androidPermissions.requestPermissions([
-          this.androidPermissions.PERMISSION.RECORD_AUDIO,
-          this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
-          this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
-        ]);
-      }*/
-
+    if (this.recording) {
+      return;
+    }
+    if (this.platform.is("capacitor")) {
       try {
-        let path = this.file.dataDirectory;
-        let extension = "";
-        if (this.platform.is("ios")) {
-          // path = this.file.dataDirectory;
-          extension = ".m4a";
-        } else {
-          // path = this.file.dataDirectory;
-          extension = ".mp3";
-        }
-        const name = `record_${new Date().getTime() + extension}`;
-        this.audioFile = await this.file.createFile(path, name, true);
-        // const audioMediaSrc = this.audioFile.nativeURL.replace(/^file:[\/]+/, "");
-        this.audioMedia = this.media.create(this.audioFile.toInternalURL());
-        this.audioMedia.startRecord();
+        Filesystem.readdir({
+          path: "",
+          directory: Directory.Data,
+        }).then((result) => {
+          console.log(result);
+          this.storedFileNames = result.files;
+        });
+
+        VoiceRecorder.requestAudioRecordingPermission();
+        VoiceRecorder.startRecording();
         this.recording = true;
       } catch (error) {
         console.log(error);
@@ -302,16 +291,39 @@ export class ChatInputComponent {
   }
 
   async stopMic() {
-    if (this.platform.is("cordova") && this.audioFile) {
+    if (!this.recording) {
+      return;
+    }
+
+    if (this.platform.is("capacitor")) {
       try {
-        this.audioMedia.stopRecord();
+        const data = await VoiceRecorder.stopRecording();
         this.recording = false;
         this.recorded = true;
         await this.utils.delay(200);
-        // this.audioMedia.play();
+        if (data.value && data.value.recordDataBase64) {
+          const recordData = data.value.recordDataBase64;
+          let extension = "";
+          if (this.platform.is("ios")) {
+            extension = ".m4a";
+          } else {
+            extension = ".mp3";
+          }
 
-        // this.audio = this.webview.convertFileSrc(this.audioFile.nativeURL);
-        // this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
+          const fileName = new Date().getTime() + extension;
+          await Filesystem.writeFile({
+            path: fileName,
+            directory: Directory.Data,
+            data: recordData,
+          });
+          this.audio = (
+            await Filesystem.getUri({
+              path: fileName,
+              directory: Directory.Data,
+            })
+          ).uri;
+          this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
+        }
       } catch (e) {
         console.error(e);
       }
@@ -325,8 +337,9 @@ export class ChatInputComponent {
 
   removeRecorded() {
     this.recorded = false;
-    if (this.platform.is("cordova")) {
-      this.audioMedia?.release();
+    if (this.platform.is("capacitor")) {
+      this.audio = "";
+      this.audioPreview = "";
     }
   }
 

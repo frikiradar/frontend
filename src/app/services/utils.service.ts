@@ -210,7 +210,7 @@ export class UtilsService {
 
     const referrer = this.auth.currentUserValue
       ? this.auth.currentUserValue.username
-      : this.platform.is("cordova")
+      : this.platform.is("capacitor")
       ? "app"
       : "web";
 
@@ -296,35 +296,35 @@ export class UtilsService {
       document.body.classList.toggle(oldTheme, false);
     }
     document.body.classList.toggle(theme, true);
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("capacitor")) {
       switch (theme) {
         case "dark":
           StatusBar.setBackgroundColor({ color: "#1f1f1f" });
-          StatusBar.setOverlaysWebView({ overlay: true });
+          StatusBar.setStyle({ style: Style.Dark });
           // this.navigationBar.backgroundColorByHexString("#1f1f1f");
           break;
         case "light":
           StatusBar.setBackgroundColor({ color: "#fafafa" });
-          StatusBar.setStyle({ style: Style.Default });
+          StatusBar.setStyle({ style: Style.Light });
           // this.navigationBar.backgroundColorByHexString("#fafafa");
           break;
         case "cyberpunk":
           StatusBar.setBackgroundColor({ color: "#0c1340" });
-          StatusBar.setOverlaysWebView({ overlay: true });
+          StatusBar.setStyle({ style: Style.Dark });
           // this.navigationBar.backgroundColorByHexString("#0c1340");
           break;
         case "black":
           StatusBar.setBackgroundColor({ color: "#000000" });
-          StatusBar.setOverlaysWebView({ overlay: true });
+          StatusBar.setStyle({ style: Style.Dark });
           break;
         case "fire":
           StatusBar.setBackgroundColor({ color: "#000000" });
-          StatusBar.setOverlaysWebView({ overlay: true });
+          StatusBar.setStyle({ style: Style.Dark });
           // this.navigationBar.backgroundColorByHexString("#0c1340");
           break;
         default:
           StatusBar.setBackgroundColor({ color: "#1f1f1f" });
-          StatusBar.setOverlaysWebView({ overlay: true });
+          StatusBar.setStyle({ style: Style.Dark });
         // this.navigationBar.backgroundColorByHexString("#1f1f1f");
       }
     }

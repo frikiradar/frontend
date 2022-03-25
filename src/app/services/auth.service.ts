@@ -13,7 +13,7 @@ import { RestService } from "./rest.service";
 import { UserService } from "./user.service";
 
 const httpOptions = {
-  headers: new HttpHeaders({ "Content-Type": "application/json" })
+  headers: new HttpHeaders({ "Content-Type": "application/json" }),
 };
 
 @Injectable({ providedIn: "root" })
@@ -60,7 +60,7 @@ export class AuthService {
             gender,
             lovegender,
             meet,
-            referral
+            referral,
           },
           httpOptions
         )
@@ -170,7 +170,7 @@ export class AuthService {
         {
           username,
           password,
-          verification_code
+          verification_code,
         },
         httpOptions
       )
@@ -226,7 +226,7 @@ export class AuthService {
 
   async logout() {
     let uuid = null;
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("capacitor")) {
       uuid = this.device.uuid;
     } else {
       const fp = await FingerprintJS.load();

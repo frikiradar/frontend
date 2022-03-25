@@ -282,7 +282,7 @@ export class EditProfilePage {
   }
 
   async openPictureSheet() {
-    if (this.platform.is("android") && this.platform.is("cordova")) {
+    if (this.platform.is("android") && this.platform.is("capacitor")) {
       /*await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
@@ -297,7 +297,7 @@ export class EditProfilePage {
           text: "Desde la cámara",
           icon: "camera",
           handler: async () => {
-            if (this.platform.is("cordova")) {
+            if (this.platform.is("capacitor")) {
               const avatar = (await this.utils.takePicture(
                 "camera",
                 true,
@@ -319,7 +319,7 @@ export class EditProfilePage {
           text: "Desde la galería",
           icon: "images",
           handler: async () => {
-            if (this.platform.is("cordova")) {
+            if (this.platform.is("capacitor")) {
               const avatar = await this.utils.takePicture(
                 "gallery",
                 true,

@@ -331,7 +331,7 @@ export class RadarPage {
       this.authUser = this.auth.currentUserValue;
     }
 
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("capacitor")) {
       /*this.firebase
         .setUserId("" + this.authUser.id)
         .then(() => console.log("User id successfully set"))

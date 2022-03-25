@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { FCM } from "@capacitor-community/fcm";
-import { PushNotifications } from "@capacitor/push-notifications";
+import { PushNotifications, Token } from "@capacitor/push-notifications";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { takeWhile } from "rxjs/operators";
@@ -62,21 +62,37 @@ export class PushService {
     if (this.platform.is("capacitor")) {
       this.setChannels();
 
+      // Get FCM token instead the APN one returned by Capacitor
+      await FCM.getToken()
+        .then(async (payload) => {
+          console.log("Push registration success", payload.token);
+          await this.device.setDevice(payload.token);
+        })
+        .catch((error) => {
+          console.error("Error getting token", error);
+        });
+
       await PushNotifications.addListener(
-        "registration",
-        async (token: any) => {
-          await this.device.setDevice(token);
+        "pushNotificationReceived",
+        (notification) => {
+          console.log("Push notification received: ", notification);
         }
       );
 
-      // Get FCM token instead the APN one returned by Capacitor
-      /*FCM.getToken()
-      .then((r) => alert(`Token ${r.token}`))
-      .catch((err) => console.log(err));*/
+      await PushNotifications.addListener(
+        "pushNotificationActionPerformed",
+        (notification) => {
+          console.log(
+            "Push notification action performed",
+            notification.actionId,
+            notification.inputValue
+          );
+        }
+      );
 
       FCM.subscribeTo({ topic: "frikiradar" })
         .then((response) =>
-          console.log("Successfully subscribed to topic:", response)
+          console.log("Successfully subscribed to topic:", response.message)
         )
         .catch((error) => {
           console.log("Error subscribing to topic:", error);
@@ -85,7 +101,7 @@ export class PushService {
       if (this.auth.isAdmin() || this.auth.isMaster()) {
         FCM.subscribeTo({ topic: "test" })
           .then((response) =>
-            console.log("Successfully subscribed to topic:", response)
+            console.log("Successfully subscribed to topic:", response.message)
           )
           .catch((error) => {
             console.log("Error subscribing to topic:", error);
@@ -227,7 +243,7 @@ export class PushService {
         }
       ] as any[];
     }*/
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("capacitor")) {
       if (
         !this.router.url.includes("chat") &&
         notification?.notify === "true"

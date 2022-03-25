@@ -20,13 +20,11 @@ import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { ImageCropperModule } from "ngx-image-cropper";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireMessagingModule } from "@angular/fire/compat/messaging/";
-import { WebcamModule } from "ngx-webcam";
+import { WebcamImage, WebcamModule } from "ngx-webcam";
 import {
   ServiceWorkerModule,
   SwRegistrationOptions,
 } from "@angular/service-worker";
-import { Media } from "@ionic-native/media/ngx";
-import { File as NativeFile } from "@ionic-native/file/ngx";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
@@ -76,8 +74,7 @@ registerLocaleData(localeEs, "es");
     Device,
     LaunchReview,
     AppVersion,
-    Media,
-    NativeFile,
+    { provide: WebcamImage, useValue: WebcamImage },
   ],
   bootstrap: [AppComponent],
 })

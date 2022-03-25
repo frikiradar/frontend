@@ -22,6 +22,7 @@ dependencies {
     implementation project(':capacitor-share')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
+    implementation project(':capacitor-voice-recorder')
     implementation project(':capacitor-community-http')
     implementation project(':capacitor-device')
     implementation project(':capacitor-dialog')

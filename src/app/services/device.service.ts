@@ -10,7 +10,7 @@ import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class DeviceService {
   constructor(
@@ -37,7 +37,7 @@ export class DeviceService {
       const device = await this.getCurrentDevice(token);
       // console.log("device", device);
       let uuid = null;
-      if (this.platform.is("cordova")) {
+      if (this.platform.is("capacitor")) {
         uuid = this.device.uuid;
       } else {
         const fp = await FingerprintJS.load();
@@ -49,7 +49,7 @@ export class DeviceService {
         if (
           devices.length &&
           !devices.some(
-            d => d.device_id === device.device_id || d.token === device.token
+            (d) => d.device_id === device.device_id || d.token === device.token
           )
         ) {
           // log("devices", devices);
@@ -58,15 +58,15 @@ export class DeviceService {
           await this.unknownDevice(device).toPromise();
         }
 
-        let platform = '' as Device['platform']
-        if (this.platform.is("cordova")) {
+        let platform = "" as Device["platform"];
+        if (this.platform.is("capacitor")) {
           if (this.platform.is("android")) {
-            platform = 'android';
+            platform = "android";
           } else if (this.platform.is("ios")) {
-            platform = 'ios';
+            platform = "ios";
           }
         } else {
-          platform = 'web';
+          platform = "web";
         }
 
         const user = (await this.rest
@@ -74,7 +74,7 @@ export class DeviceService {
             id: uuid,
             name: device.device_name,
             token,
-            platform
+            platform,
           })
           .toPromise()) as User;
 
@@ -86,15 +86,15 @@ export class DeviceService {
   async getCurrentDevice(token?: string): Promise<Device> {
     let uuid = null;
     let device: Device;
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("capacitor")) {
       uuid = this.device.uuid;
       device = {
         device_id: uuid,
-        device_name: `${this.device.manufacturer} ${
-          this.device.model
-        } (${this.device?.platform?.charAt(0).toUpperCase() +
-          this.device?.platform?.slice(1)} ${this.device?.version})`,
-        token
+        device_name: `${this.device.manufacturer} ${this.device.model} (${
+          this.device?.platform?.charAt(0).toUpperCase() +
+          this.device?.platform?.slice(1)
+        } ${this.device?.version})`,
+        token,
       };
     } else {
       const fp = await FingerprintJS.load();
@@ -102,21 +102,21 @@ export class DeviceService {
       device = {
         device_id: fingerprint.visitorId,
         device_name: platform.description,
-        token
+        token,
       };
     }
 
     const devices = await this.getDevices();
     if (
       devices.some(
-        d =>
+        (d) =>
           d.device_id === device.device_id ||
           d.token === device.token ||
           d.device_name === device.device_name
       )
     ) {
       return devices.find(
-        d =>
+        (d) =>
           d.device_id === device.device_id ||
           d.token === device.token ||
           d.device_name === device.device_name
@@ -135,8 +135,8 @@ export class DeviceService {
   }
 
   switchDevice(device: Device) {
-    return this.rest.get(`switch-device/${device.id}`).toPromise() as Promise<
-      User
-    >;
+    return this.rest
+      .get(`switch-device/${device.id}`)
+      .toPromise() as Promise<User>;
   }
 }

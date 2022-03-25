@@ -41,18 +41,25 @@
       <ion-item lines="none" class="show-more" *ngIf="!user">
         <ion-label>Fecha y hora de inicio</ion-label>
       </ion-item>
-      <ion-item lines="none">
-        <ion-label>Fecha/hora de inicio</ion-label>
-        <ion-datetime
-          formControlName="date"
-          displayFormat="DD MMM de YYYY HH:mm"
-          pickerFormat="DD MMM YYYY HH:mm"
-          monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-          placeholder="dd mm de yyyy hh:mm"
-          max="2030-12-31"
-          cancel-text="Cancelar"
-          done-text="Hecho"
-        ></ion-datetime>
+      <ion-item button lines="none" id="open-date">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap"
+          >Fecha/hora de inicio:
+          <ion-text color="primary"
+            >{{eventForm.get("date").value | date:'E d MMM y, HH:mm'}}</ion-text
+          ></ion-label
+        >
+        <ion-popover trigger="open-date" show-backdrop="false">
+          <ng-template>
+            <ion-datetime
+              presentation="date-time"
+              formControlName="date"
+              locale="es-ES"
+              first-day-of-week="1"
+              max="2030-12-31"
+            ></ion-datetime>
+          </ng-template>
+        </ion-popover>
       </ion-item>
       <ion-item-group *ngIf="!user">
         <ion-item
@@ -68,18 +75,27 @@
             size="small"
           ></ion-icon>
         </ion-item>
-        <ion-item *ngIf="endDate" lines="none">
-          <ion-label>Fecha de fin</ion-label>
-          <ion-datetime
-            formControlName="endDate"
-            displayFormat="DD MMM de YYYY HH:mm"
-            monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-            placeholder="dd mm de yyyy hh:mm"
-            cancel-text="Cancelar"
-            done-text="Hecho"
-            [min]="eventForm.get('date').value"
-            max="2030-12-31"
-          ></ion-datetime>
+        <ion-item button *ngIf="endDate" lines="none" id="open-end-date">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap"
+            >Fecha/hora de fin:
+            <ion-text color="primary"
+              >{{eventForm.get("endDate").value | date:'E d MMM y,
+              HH:mm'}}</ion-text
+            ></ion-label
+          >
+          <ion-popover trigger="open-end-date" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                presentation="date-time"
+                formControlName="endDate"
+                locale="es-ES"
+                first-day-of-week="1"
+                [min]="eventForm.get('date').value"
+                max="2030-12-31"
+              ></ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-item-group>
       <ion-segment

@@ -43,7 +43,7 @@
     type="file"
     accept="image/*"
     #imageInput
-    style="display: none;"
+    style="display: none"
     name="avatar"
     (change)="cropImagebyEvent($event)"
   />
@@ -83,19 +83,11 @@
         </ion-item>
         <ion-item>
           <ion-icon name="calendar-outline" slot="start"></ion-icon>
-          <ion-label>Fecha de nacimiento</ion-label>
-          <ion-datetime
-            min="1900-01"
-            max="{{ (today | date: 'y') - 14 }}-{{ today | date: 'MM' }}-{{
-                  today | date: 'dd'
-                }}"
-            cancel-text="Cancelar"
-            done-text="Hecho"
-            displayFormat="DD MMM de YYYY"
-            monthShortNames="ene, feb, mar, abr, may, jun, jul, ago, sep, oct, nov, dic"
-            formControlName="birthday"
+          <ion-label
+            >Fecha de nacimiento: {{profileForm.get('birthday').value | niceDate
+            }}</ion-label
           >
-          </ion-datetime>
+          <!--<ion-input formControlName="birthday"></ion-input>-->
         </ion-item>
       </ion-item-group>
       <ion-item-group *ngIf="auth.isAdult()">

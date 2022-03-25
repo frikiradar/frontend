@@ -3,16 +3,16 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import {
   AlertController,
   NavController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
-import { UrlService } from "src/app/services/url.service";
 
+import { UrlService } from "src/app/services/url.service";
 import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
@@ -20,7 +20,7 @@ import { UserService } from "../../services/user.service";
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"]
+  styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent {
   public registerForm: FormGroup;
@@ -28,6 +28,7 @@ export class RegisterComponent {
   public clearPassword = false;
   public usernameSuggestion = "";
   public adult = false;
+  public birthdayValue = "";
 
   constructor(
     private alert: AlertController,
@@ -45,38 +46,50 @@ export class RegisterComponent {
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(20),
-        Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+")
+        Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+"),
       ]),
       email: new FormControl("", [
         Validators.required,
         Validators.pattern(
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        )
+        ),
       ]),
       password: new FormControl("", [
         Validators.required,
-        Validators.minLength(8)
+        Validators.minLength(8),
       ]),
-      birthday: new FormControl("", Validators.required),
+      birthday: new FormControl(
+        new Date(
+          new Date().getFullYear() -
+            14 +
+            "-" +
+            (new Date().getMonth() + 1) +
+            "-" +
+            new Date().getDate()
+        ).toISOString(),
+        Validators.required
+      ),
       gender: [""],
       lovegender: [""],
       meet: [""],
       referral: [""],
       acceptos: new FormControl(false, Validators.requiredTrue),
-      age: new FormControl(false, Validators.requiredTrue)
+      age: new FormControl(false, Validators.requiredTrue),
     });
 
-    this.registerForm.get("username").valueChanges.subscribe(async username => {
-      if (username.trim() !== "") {
-        const u = await this.auth.checkUsername(username);
-        if (u !== true) {
-          this.registerForm.get("username").setErrors({ incorrect: true });
-          this.usernameSuggestion = u as string;
-        } else {
-          this.usernameSuggestion = "";
+    this.registerForm
+      .get("username")
+      .valueChanges.subscribe(async (username) => {
+        if (username.trim() !== "") {
+          const u = await this.auth.checkUsername(username);
+          if (u !== true) {
+            this.registerForm.get("username").setErrors({ incorrect: true });
+            this.usernameSuggestion = u as string;
+          } else {
+            this.usernameSuggestion = "";
+          }
         }
-      }
-    });
+      });
   }
 
   changeAge(event: CustomEvent) {
@@ -98,7 +111,7 @@ export class RegisterComponent {
           {
             text: "Ups, me confundí",
             role: "cancel",
-            cssClass: "secondary"
+            cssClass: "secondary",
           },
           {
             text: "¡Es correcta!",
@@ -106,10 +119,7 @@ export class RegisterComponent {
               try {
                 await this.auth.register(
                   this.registerForm.get("username").value.trim(),
-                  this.registerForm
-                    .get("email")
-                    .value.trim()
-                    .toLowerCase(),
+                  this.registerForm.get("email").value.trim().toLowerCase(),
                   this.registerForm.get("password").value.trim(),
                   this.registerForm.get("birthday").value.split("T")[0],
                   this.registerForm.get("gender").value.trim(),
@@ -126,10 +136,10 @@ export class RegisterComponent {
               } catch (error) {
                 this.registerError(error);
               }
-            }
-          }
+            },
+          },
         ],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       await alert.present();
@@ -138,7 +148,7 @@ export class RegisterComponent {
         header: "Revisa la información",
         message: "Es necesario rellenar todos los campos.",
         buttons: ["Ok, Tendré más cuidado"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       await alert.present();
@@ -151,7 +161,7 @@ export class RegisterComponent {
       await this.toast.create({
         message: "Registro realizado correctamente",
         duration: 2000,
-        position: "bottom"
+        position: "bottom",
       })
     ).present();
 
@@ -163,7 +173,7 @@ export class RegisterComponent {
       header: "Error de registro",
       message: error,
       buttons: ["Ok"],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();

@@ -45,38 +45,36 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    this.platform.ready().then(async () => {
-      if (this.platform.is("capacitor")) {
-        this.push.init();
-        SplashScreen.hide();
-        this.checkCodePush();
-      } else {
-        if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
-          this.push.init();
-        }
-        this.sw.init();
-      }
-
-      this.loadConfig();
-      this.networkStatus();
-      this.nav.backButtonStatus();
-
-      // Obtenemos tema en configuración local. Si no hay le mandamos el dark
-      let theme = (await this.config.get("theme")) as Config["theme"];
-      if (!theme) {
-        theme = "dark";
-      }
-      this.utils.toggleTheme(theme);
-
+    if (this.platform.is("capacitor")) {
+      this.push.init();
+      SplashScreen.hide();
+      this.checkCodePush();
+    } else {
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
-        const user = await this.auth.getAuthUser();
-        this.auth.setAuthUser(user);
-        // Contar veces abierto
-        this.countOpenTimes();
-      } else {
-        // this.betaAdvertisement();
+        this.push.init();
       }
-    });
+      this.sw.init();
+    }
+
+    this.loadConfig();
+    this.networkStatus();
+    this.nav.backButtonStatus();
+
+    // Obtenemos tema en configuración local. Si no hay le mandamos el dark
+    let theme = (await this.config.get("theme")) as Config["theme"];
+    if (!theme) {
+      theme = "dark";
+    }
+    this.utils.toggleTheme(theme);
+
+    if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
+      const user = await this.auth.getAuthUser();
+      this.auth.setAuthUser(user);
+      // Contar veces abierto
+      this.countOpenTimes();
+    } else {
+      // this.betaAdvertisement();
+    }
   }
 
   async networkStatus() {
@@ -166,7 +164,7 @@ export class AppComponent {
     } else if (
       openTimes >= 3 &&
       !config.review &&
-      this.platform.is("cordova")
+      this.platform.is("capacitor")
     ) {
       const alert = await this.alert.create({
         header: "¡Únete a la batalla!",
@@ -233,7 +231,7 @@ export class AppComponent {
         {
           text: "Oki doki",
           handler: () => {
-            if (this.platform.is("cordova")) {
+            if (this.platform.is("capacitor")) {
               navigator["app"].exitApp();
             } else {
               window.open("", "_parent", "");
@@ -247,7 +245,7 @@ export class AppComponent {
 
     try {
       const config = await this.config.getConfig(true);
-      if (this.platform.is("cordova")) {
+      if (this.platform.is("capacitor")) {
         let version = +(await this.appVersion.getVersionNumber()).replace(
           ".",
           ""

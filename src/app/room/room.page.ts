@@ -181,7 +181,7 @@ export class RoomPage implements OnInit {
 
     this.getLastMessages();
 
-    if (!this.platform.is("cordova")) {
+    if (!this.platform.is("capacitor")) {
       try {
         await this.afMessaging.requestPermission.toPromise();
       } catch (e) {
@@ -517,14 +517,14 @@ export class RoomPage implements OnInit {
   }
 
   async openPictureSheet() {
-    /*if (this.platform.is("android") && this.platform.is("cordova")) {
+    /*if (this.platform.is("android") && this.platform.is("capacitor")) {
       await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
       ]);
     }*/
 
-    if (this.platform.is("cordova")) {
+    if (this.platform.is("capacitor")) {
       const actionSheet = await this.sheet.create({
         buttons: [
           {
