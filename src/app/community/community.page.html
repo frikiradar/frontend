@@ -79,20 +79,21 @@
       <h2 class="section">
         <ion-text color="ligth"> Páginas </ion-text>
       </h2>
-      <p class="subtitle">
+      <p class="subtitle" *ngIf="pages?.length">
         <ion-text color="ligth">
           Habla y comparte tus aficiones con todo el mundo
         </ion-text>
       </p>
     </ion-label>
     <ion-icon
+      *ngIf="pages?.length"
       md="arrow-forward"
       ios="chevron-forward"
       slot="end"
       color="light"
     ></ion-icon>
   </ion-item>
-  <section id="pages">
+  <section id="pages" *ngIf="pages?.length">
     <ion-slides [options]="pagesOpts" mode="md">
       <ion-slide *ngFor="let page of pages">
         <div>
@@ -105,5 +106,16 @@
         </div>
       </ion-slide>
     </ion-slides>
+  </section>
+  <section *ngIf="!pages?.length" class="ion-padding">
+    <div class="ion-text-center register">
+      <p>Añade gustos a tu perfil para que aparezcan aquí tus páginas.</p>
+      <ion-button
+        color="primary"
+        (click)="router.navigate(['/edit-profile'])"
+        shape="round"
+        >Editar perfil</ion-button
+      >
+    </div>
   </section>
 </ion-content>

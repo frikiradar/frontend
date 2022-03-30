@@ -57,7 +57,11 @@ export class GeolocationService {
         })
       ).present();
 
-      const coordinates = await Geolocation.getCurrentPosition();
+      const coordinates = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 15000,
+      });
       const longitude = coordinates.coords.longitude;
       const latitude = coordinates.coords.latitude;
       this.config.set("geolocation", true);
