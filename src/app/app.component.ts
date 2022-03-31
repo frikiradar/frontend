@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
 import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
 import { Network } from "@capacitor/network";
-import { SplashScreen } from "@capacitor/splash-screen";
 import { AlertController, Platform, ToastController } from "@ionic/angular";
 import { codePush } from "capacitor-codepush";
 import { SyncOptions } from "capacitor-codepush/dist/esm/syncOptions";
@@ -38,8 +37,7 @@ export class AppComponent {
     private push: PushService,
     private nav: NavService,
     private sw: SwService,
-    private toast: ToastController,
-    private toastUpdate: ToastController
+    private toast: ToastController
   ) {
     this.initializeApp();
   }
@@ -47,7 +45,6 @@ export class AppComponent {
   async initializeApp() {
     if (this.platform.is("capacitor")) {
       this.push.init();
-      SplashScreen.hide();
       this.checkCodePush();
     } else {
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {

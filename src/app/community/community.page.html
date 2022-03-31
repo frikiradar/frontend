@@ -107,7 +107,7 @@
       </ion-slide>
     </ion-slides>
   </section>
-  <section *ngIf="!pages?.length" class="ion-padding">
+  <section *ngIf="!pages || !pages?.length" class="ion-padding">
     <div class="ion-text-center register">
       <p>Añade gustos a tu perfil para que aparezcan aquí tus páginas.</p>
       <ion-button

@@ -75,9 +75,9 @@ export class StoryModal implements OnInit {
           "camera",
           true,
           "default",
-          false,
+          true,
           false
-        )) as File;
+        )) as string;
         this.addPicture(image);
       } else {
         const image = await this.utils.webcamImage("avatar", true, false);
@@ -88,16 +88,13 @@ export class StoryModal implements OnInit {
       }
     } else if (type == "gallery") {
       if (this.platform.is("capacitor")) {
-        const image = await this.utils.takePicture(
+        const image = (await this.utils.takePicture(
           "gallery",
           true,
           "default",
-          false,
+          true,
           false
-        );
-        if (!image || typeof image == "string") {
-          return false;
-        }
+        )) as string;
         this.addPicture(image);
       } else {
         this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
@@ -109,12 +106,12 @@ export class StoryModal implements OnInit {
     this.image = "";
   }
 
-  async addPicture(blob: Blob) {
-    if (typeof blob !== "string") {
-      const image = await this.utils.fileToBase64(blob);
-      this.image = this.sanitizer.bypassSecurityTrustUrl(image);
+  async addPicture(image: string | Blob) {
+    if (typeof image !== "string") {
+      image = await this.utils.fileToBase64(image);
     }
-    this.imageFile = blob;
+    this.image = this.sanitizer.bypassSecurityTrustUrl(image);
+    this.imageFile = await this.utils.urltoBlob(image);
   }
 
   async cropImagebyEvent(event: any) {

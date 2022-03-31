@@ -7,14 +7,14 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class StoryService {
   constructor(
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService
-  ) { }
+  ) {}
 
   async getStory(id: Story["id"]) {
     return (await this.rest.get(`story/${id}`).toPromise()) as Story;
@@ -24,9 +24,11 @@ export class StoryService {
     const stories = (await this.rest
       .get(`user-stories/${id}`)
       .toPromise()) as Story[];
-    stories.map(s => {
+    stories.map((s) => {
       if (
-        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.viewStories.some(
+          (v) => v.user.id === this.auth.currentUserValue.id
+        ) ||
         s.user.id === this.auth.currentUserValue.id
       ) {
         s.viewed = true;
@@ -38,9 +40,11 @@ export class StoryService {
 
   async getStories() {
     const stories = (await this.rest.get("stories").toPromise()) as Story[];
-    stories.map(s => {
+    stories.map((s) => {
       if (
-        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.viewStories.some(
+          (v) => v.user.id === this.auth.currentUserValue.id
+        ) ||
         s.user.id === this.auth.currentUserValue.id
       ) {
         s.viewed = true;
@@ -54,9 +58,11 @@ export class StoryService {
     const stories = (await this.rest
       .get(`stories-slug/${slug}`)
       .toPromise()) as Story[];
-    stories.map(s => {
+    stories.map((s) => {
       if (
-        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.viewStories.some(
+          (v) => v.user.id === this.auth.currentUserValue.id
+        ) ||
         s.user.id === this.auth.currentUserValue.id
       ) {
         s.viewed = true;
@@ -68,9 +74,11 @@ export class StoryService {
 
   async getAllStories() {
     const stories = (await this.rest.get("all-stories").toPromise()) as Story[];
-    stories.map(s => {
+    stories.map((s) => {
       if (
-        s.viewStories.some(v => v.user.id === this.auth.currentUserValue.id) ||
+        s.viewStories.some(
+          (v) => v.user.id === this.auth.currentUserValue.id
+        ) ||
         s.user.id === this.auth.currentUserValue.id
       ) {
         s.viewed = true;
@@ -93,18 +101,20 @@ export class StoryService {
   groupStories(stories: Story[]) {
     const groupedStories = [];
     stories = stories.reverse();
-    stories.forEach(s => {
-      if (!groupedStories.some(g => g.user.id === s.user.id)) {
-        const filterStories = stories.filter(sf => sf.user.id === s.user.id);
+    stories.forEach((s) => {
+      if (!groupedStories.some((g) => g.user.id === s.user.id)) {
+        const filterStories = stories.filter((sf) => sf.user.id === s.user.id);
         groupedStories.push(filterStories[0]);
       }
     });
 
     return [
       ...groupedStories.filter(
-        s => s.user.id === this.auth.currentUserValue.id
+        (s) => s.user.id === this.auth.currentUserValue.id
       ),
-      ...groupedStories.filter(s => s.user.id !== this.auth.currentUserValue.id)
+      ...groupedStories.filter(
+        (s) => s.user.id !== this.auth.currentUserValue.id
+      ),
     ];
   }
 
@@ -125,9 +135,9 @@ export class StoryService {
   }
 
   like(id: Story["id"]) {
-    return this.rest.put("like-story", { story: id }).toPromise() as Promise<
-      Story
-    >;
+    return this.rest
+      .put("like-story", { story: id })
+      .toPromise() as Promise<Story>;
   }
 
   unlike(id: Story["id"]) {

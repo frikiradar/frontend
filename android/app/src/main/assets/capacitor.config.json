@@ -7,37 +7,16 @@
 		"hostname": "frikiradar",
 		"androidScheme": "https"
 	},
-	"cordova": {
-		"preferences": {
-			"Hostname": "frikiradar.app",
-			"ScrollEnabled": "false",
-			"android-minSdkVersion": "24",
-			"android-targetSdkVersion": "29",
-			"BackupWebStorage": "none",
-			"SplashMaintainAspectRatio": "true",
-			"FadeSplashScreenDuration": "1000",
-			"SplashShowOnlyFirstTime": "false",
-			"SplashScreen": "screen",
-			"ShowSplashScreenSpinner": "false",
-			"NavigationBarBackgroundColor": "#1f1f1f",
-			"SplashScreenDelay": "30000",
-			"AutoHideSplashScreen": "false",
-			"KeyboardStyle": "dark",
-			"WKWebViewOnly": "true",
-			"AndroidXEnabled": "true",
-			"GradlePluginKotlinEnabled": "true",
-			"GradlePluginKotlinCodeStyle": "official",
-			"GradlePluginKotlinVersion": "1.3.50"
-		}
-	},
 	"plugins": {
 		"SplashScreen": {
 			"launchAutoHide": true,
-			"launchShowDuration": 500,
+			"launchShowDuration": 1000,
 			"backgroundColor": "#1f1f1f",
 			"androidScaleType": "CENTER_CROP",
-			"splashFullScreen": true,
-			"splashImmersive": false
+			"splashFullScreen": false,
+			"splashImmersive": false,
+			"showSpinner": true,
+			"spinnerColor": "#ffffff"
 		},
 		"LocalNotifications": {
 			"smallIcon": "ic_stat_notification",
