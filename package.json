@@ -23,6 +23,7 @@
     "@angular/router": "~13.2.2",
     "@angular/service-worker": "~13.2.2",
     "@awesome-cordova-plugins/app-version": "^5.40.0",
+    "@awesome-cordova-plugins/core": "^5.40.0",
     "@awesome-cordova-plugins/launch-review": "^5.40.0",
     "@capacitor-community/fcm": "^2.0.2",
     "@capacitor/android": "^3.4.3",
