@@ -107,7 +107,19 @@ export class AppComponent {
 
   checkCodePush() {
     let syncOptions: SyncOptions;
-    if (this.auth.isAdmin()) {
+    if (this.auth.isAdmin() || this.auth.isPatreon()) {
+      let deploymentKey = "";
+      if (this.platform.is("android")) {
+        // Admin trabaja con canal Staging y Patreon con canal Beta
+        deploymentKey = this.auth.isAdmin()
+          ? "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP"
+          : "ca2DLDgXrXj0zBDVv8Hehxe-vOcJZtjBRsYsH";
+      } else if (this.platform.is("ios")) {
+        deploymentKey = this.auth.isAdmin()
+          ? "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP"
+          : "qVXwTWOnTmOJJz5zj6s9G5GQPyJ9T_zqCfB1i";
+      }
+
       syncOptions = {
         updateDialog: {
           updateTitle: "¡Nueva actualización!",
@@ -121,6 +133,9 @@ export class AppComponent {
           optionalInstallButtonLabel: "Instalar",
           appendReleaseDescription: false,
         },
+        deploymentKey: this.platform.is("android")
+          ? "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP"
+          : "FdlQxj1MHcOlgOU1nk1I93uR_32hoXJV9KZeX",
         installMode: InstallMode.IMMEDIATE,
       };
     } else {

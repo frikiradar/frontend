@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { FCM } from "@capacitor-community/fcm";
 import { PushNotifications, Token } from "@capacitor/push-notifications";
+import { LocalNotifications } from "@capacitor/local-notifications";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { takeWhile } from "rxjs/operators";
@@ -13,6 +14,7 @@ import {
   NotificationService,
 } from "./notification.service";
 import { SwPush } from "@angular/service-worker";
+import { Local } from "protractor/built/driverProviders";
 
 @Injectable({
   providedIn: "root",
@@ -29,66 +31,58 @@ export class PushService {
     private auth: AuthService,
     private afMessaging: AngularFireMessaging,
     private swPush: SwPush
-  ) {
-    this.platform.ready().then(async () => {
-      if (this.platform.is("capacitor")) {
-        try {
-          let permStatus = await PushNotifications.checkPermissions();
-          if (permStatus.receive === "prompt") {
-            permStatus = await PushNotifications.requestPermissions();
-          }
+  ) {}
 
-          if (permStatus.receive === "granted") {
-            throw new Error("User denied permissions!");
-          }
-
-          await PushNotifications.register();
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
-        if (!navigator.serviceWorker) {
-          return console.error("Service Worker not supported");
-        }
-
-        this.swPush.notificationClicks.subscribe((payload) => {
-          this.router.navigate([payload.notification.data.url]);
-        });
+  async ngOnInit() {
+    if (this.platform.is("capacitor")) {
+    } else {
+      if (!navigator.serviceWorker) {
+        return console.error("Service Worker not supported");
       }
-    });
+
+      this.swPush.notificationClicks.subscribe((payload) => {
+        this.router.navigate([payload.notification.data.url]);
+      });
+    }
   }
 
   async init() {
     if (this.platform.is("capacitor")) {
-      this.setChannels();
+      PushNotifications.requestPermissions().then(async (result) => {
+        if (result.receive === "granted") {
+          await PushNotifications.register();
+        } else {
+          throw new Error("User denied permissions!");
+        }
+      });
 
-      // Get FCM token instead the APN one returned by Capacitor
-      await FCM.getToken()
-        .then(async (payload) => {
-          console.log("Push registration success", payload.token);
-          await this.device.setDevice(payload.token);
-        })
-        .catch((error) => {
-          console.error("Error getting token", error);
-        });
+      // Request permission to use push notifications
+      // iOS will prompt user and return if they granted permission or not
+      // Android will just grant without prompting
+      PushNotifications.requestPermissions().then((result) => {
+        if (result.receive === "granted") {
+          // Register with Apple / Google to receive push via APNS/FCM
+          PushNotifications.register();
+        } else {
+          console.error("User denied permissions!");
+        }
+      });
 
-      await PushNotifications.addListener(
+      // On success, we should be able to receive notifications
+      PushNotifications.addListener("registration", async (token: Token) => {
+        console.log("Push registration success, token", token.value);
+        await this.device.setDevice(token.value);
+      });
+
+      /*await PushNotifications.addListener(
         "pushNotificationReceived",
         (notification) => {
+          this.localNotification(notification.data);
           console.log("Push notification received: ", notification);
         }
-      );
+      );*/
 
-      await PushNotifications.addListener(
-        "pushNotificationActionPerformed",
-        (notification) => {
-          console.log(
-            "Push notification action performed",
-            notification.actionId,
-            notification.inputValue
-          );
-        }
-      );
+      this.setChannels();
 
       FCM.subscribeTo({ topic: "frikiradar" })
         .then((response) =>
@@ -108,14 +102,28 @@ export class PushService {
           });
       }
 
-      PushNotifications.addListener(
-        "pushNotificationReceived",
+      LocalNotifications.addListener(
+        "localNotificationReceived",
         (notification) => {
-          console.log(notification);
-          if (notification.click_action) {
-            this.router.navigate([notification.data.url]);
+          console.log("Local notification received: ", notification);
+        }
+      );
+
+      LocalNotifications.addListener(
+        "localNotificationActionPerformed",
+        (actionPerformed) => {
+          console.log("Local notification action performed: ", actionPerformed);
+        }
+      );
+
+      PushNotifications.addListener(
+        "pushNotificationActionPerformed",
+        (actionPerformed) => {
+          console.log(actionPerformed);
+          if (actionPerformed.actionId === "tap") {
+            this.router.navigate([actionPerformed.notification.data.url]);
           } else {
-            this.localNotification(notification);
+            this.localNotification(actionPerformed.notification);
 
             if (!this.router.url.includes("chat")) {
               this.notificationSvc
@@ -248,6 +256,7 @@ export class PushService {
         !this.router.url.includes("chat") &&
         notification?.notify === "true"
       ) {
+        console.log("Lanzamos notificación local");
       }
     } else {
       if (

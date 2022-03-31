@@ -16,10 +16,8 @@ import {
   Validators,
 } from "@angular/forms";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
-import { Directory, Filesystem } from "@capacitor/filesystem";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { VoiceRecorder } from "capacitor-voice-recorder";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -236,26 +234,7 @@ export class ChatInputComponent {
   }
 
   async openMic() {
-    if (this.recording) {
-      return;
-    }
-    if (this.platform.is("capacitor")) {
-      try {
-        Filesystem.readdir({
-          path: "",
-          directory: Directory.Data,
-        }).then((result) => {
-          console.log(result);
-          this.storedFileNames = result.files;
-        });
-
-        VoiceRecorder.requestAudioRecordingPermission();
-        VoiceRecorder.startRecording();
-        this.recording = true;
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (navigator.mediaDevices) {
+    if (navigator.mediaDevices) {
       let chunks = [];
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: false })
@@ -291,46 +270,8 @@ export class ChatInputComponent {
   }
 
   async stopMic() {
-    if (!this.recording) {
-      return;
-    }
-
-    if (this.platform.is("capacitor")) {
-      try {
-        const data = await VoiceRecorder.stopRecording();
-        this.recording = false;
-        this.recorded = true;
-        await this.utils.delay(200);
-        if (data.value && data.value.recordDataBase64) {
-          const recordData = data.value.recordDataBase64;
-          let extension = "";
-          if (this.platform.is("ios")) {
-            extension = ".m4a";
-          } else {
-            extension = ".mp3";
-          }
-
-          const fileName = new Date().getTime() + extension;
-          await Filesystem.writeFile({
-            path: fileName,
-            directory: Directory.Data,
-            data: recordData,
-          });
-          this.audio = (
-            await Filesystem.getUri({
-              path: fileName,
-              directory: Directory.Data,
-            })
-          ).uri;
-          this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      this.mediaRecorder.stop();
-      // console.log(this.mediaRecorder.state);
-    }
+    this.mediaRecorder.stop();
+    // console.log(this.mediaRecorder.state);
 
     this.stopCountRecording();
   }

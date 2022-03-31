@@ -26,6 +26,9 @@ project(':capacitor-haptics').projectDir = new File('../node_modules/@capacitor/
 include ':capacitor-keyboard'
 project(':capacitor-keyboard').projectDir = new File('../node_modules/@capacitor/keyboard/android')
 
+include ':capacitor-local-notifications'
+project(':capacitor-local-notifications').projectDir = new File('../node_modules/@capacitor/local-notifications/android')
+
 include ':capacitor-network'
 project(':capacitor-network').projectDir = new File('../node_modules/@capacitor/network/android')
 
@@ -41,8 +44,8 @@ project(':capacitor-splash-screen').projectDir = new File('../node_modules/@capa
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/@capacitor/status-bar/android')
 
-include ':capacitor-voice-recorder'
-project(':capacitor-voice-recorder').projectDir = new File('../node_modules/capacitor-voice-recorder/android')
+include ':hugotomazi-capacitor-navigation-bar'
+project(':hugotomazi-capacitor-navigation-bar').projectDir = new File('../node_modules/@hugotomazi/capacitor-navigation-bar/android')
 
 include ':capacitor-community-http'
 project(':capacitor-community-http').projectDir = new File('../node_modules/@capacitor-community/http/android')

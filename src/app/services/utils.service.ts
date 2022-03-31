@@ -20,6 +20,7 @@ import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { AuthService } from "./auth.service";
 import { Config } from "./config.service";
+import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 
 @Injectable({
   providedIn: "root",
@@ -301,31 +302,32 @@ export class UtilsService {
         case "dark":
           StatusBar.setBackgroundColor({ color: "#1f1f1f" });
           StatusBar.setStyle({ style: Style.Dark });
-          // this.navigationBar.backgroundColorByHexString("#1f1f1f");
+          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
           break;
         case "light":
           StatusBar.setBackgroundColor({ color: "#fafafa" });
           StatusBar.setStyle({ style: Style.Light });
-          // this.navigationBar.backgroundColorByHexString("#fafafa");
+          NavigationBar.setColor({ color: "#fafafa", darkButtons: true });
           break;
         case "cyberpunk":
           StatusBar.setBackgroundColor({ color: "#0c1340" });
           StatusBar.setStyle({ style: Style.Dark });
-          // this.navigationBar.backgroundColorByHexString("#0c1340");
+          NavigationBar.setColor({ color: "#0c1340", darkButtons: false });
           break;
         case "black":
           StatusBar.setBackgroundColor({ color: "#000000" });
           StatusBar.setStyle({ style: Style.Dark });
+          NavigationBar.setColor({ color: "#000000", darkButtons: false });
           break;
         case "fire":
           StatusBar.setBackgroundColor({ color: "#000000" });
           StatusBar.setStyle({ style: Style.Dark });
-          // this.navigationBar.backgroundColorByHexString("#0c1340");
+          NavigationBar.setColor({ color: "#000000", darkButtons: false });
           break;
         default:
           StatusBar.setBackgroundColor({ color: "#1f1f1f" });
           StatusBar.setStyle({ style: Style.Dark });
-        // this.navigationBar.backgroundColorByHexString("#1f1f1f");
+          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
       }
     }
   }

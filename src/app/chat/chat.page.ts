@@ -2,7 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
 import { Platform } from "@ionic/angular";
-import { PushNotifications } from "@capacitor/push-notifications";
+import {
+  PushNotifications,
+  PushNotificationSchema,
+} from "@capacitor/push-notifications";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 
 import { User } from "../models/user";
@@ -54,23 +57,20 @@ export class ChatPage implements OnInit {
 
   async firebaseListener() {
     if (this.platform.is("capacitor")) {
-      /*PushNotifications.addListener(
+      await PushNotifications.addListener(
         "pushNotificationReceived",
-        (notification) => {
+        (notification: PushNotificationSchema) => {
           console.log(notification);
           if (
             notification?.data.message &&
             notification?.data.topic === "chat"
           ) {
-            const message = JSON.parse(notification.message) as Chat;
+            const message = JSON.parse(notification.data.message) as Chat;
             // console.log(message);
             this.messageEvent.emit(message);
           }
-        },
-        (error) => {
-          console.error("Error in notification", error);
         }
-      );*/
+      );
     } else {
       this.afMessaging.messages.subscribe((payload: any) => {
         // console.log(payload);

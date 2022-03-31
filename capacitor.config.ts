@@ -5,6 +5,10 @@ const config: CapacitorConfig = {
   appName: "FrikiRadar",
   webDir: "www",
   bundledWebRuntime: false,
+  server: {
+    hostname: "frikiradar",
+    androidScheme: "https",
+  },
   cordova: {
     preferences: {
       Hostname: "frikiradar.app",
@@ -13,7 +17,7 @@ const config: CapacitorConfig = {
       "android-targetSdkVersion": "29",
       BackupWebStorage: "none",
       SplashMaintainAspectRatio: "true",
-      FadeSplashScreenDuration: "300",
+      FadeSplashScreenDuration: "1000",
       SplashShowOnlyFirstTime: "false",
       SplashScreen: "screen",
       ShowSplashScreenSpinner: "false",
@@ -38,15 +42,13 @@ const config: CapacitorConfig = {
       splashImmersive: false,
     },
     LocalNotifications: {
-      smallIcon: "notification_icon",
+      smallIcon: "ic_stat_notification",
       iconColor: "#e91e63",
       sound: "bipbip.mp3",
     },
     CodePush: {
       IOS_DEPLOY_KEY: "FdlQxj1MHcOlgOU1nk1I93uR_32hoXJV9KZeX",
-      IOS_PUBLIC_KEY: "0191421c-52a7-40b8-a611-8f4ace7a3a87",
-      ANDROID_DEPLOY_KEY: "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP",
-      ANDROID_PUBLIC_KEY: "d9bb3cf5-7779-41b4-b2fa-cad0f2d8835c",
+      ANDROID_DEPLOY_KEY: "GrBUobh6JMEckfvM22iN2XxNe3l7l10TDpmIz",
       SERVER_URL: "https://codepush.appcenter.ms/",
     },
     PushNotifications: {
