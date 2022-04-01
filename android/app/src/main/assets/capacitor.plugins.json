@@ -60,6 +60,10 @@
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
 	},
 	{
+		"pkg": "capacitor-rate-app",
+		"classpath": "com.capacitor.rateapp.CapacitorRateAppPlugin"
+	},
+	{
 		"pkg": "@capacitor-community/http",
 		"classpath": "com.getcapacitor.plugin.http.Http"
 	},

@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
-import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
 import { Network } from "@capacitor/network";
 import { AlertController, Platform, ToastController } from "@ionic/angular";
 import { codePush } from "capacitor-codepush";
 import { SyncOptions } from "capacitor-codepush/dist/esm/syncOptions";
 import { InstallMode } from "capacitor-codepush/dist/esm/installMode";
+import { App } from "@capacitor/app";
+import { RateApp } from "capacitor-rate-app";
+import { UrlService } from "src/app/services/url.service";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
@@ -32,12 +33,11 @@ export class AppComponent {
     private platform: Platform,
     private utils: UtilsService,
     private config: ConfigService,
-    private launchReview: LaunchReview,
-    private appVersion: AppVersion,
     private push: PushService,
     private nav: NavService,
     private sw: SwService,
-    private toast: ToastController
+    private toast: ToastController,
+    private urlSvc: UrlService
   ) {
     this.initializeApp();
   }
@@ -189,11 +189,7 @@ export class AppComponent {
             handler: () => {
               config.review = true;
               this.config.setConfig(config);
-              if (this.launchReview.isRatingSupported()) {
-                this.launchReview.rating().toPromise().then();
-              } else {
-                this.launchReview.launch();
-              }
+              RateApp.requestReview();
             },
           },
           {
@@ -258,10 +254,8 @@ export class AppComponent {
     try {
       const config = await this.config.getConfig(true);
       if (this.platform.is("capacitor")) {
-        let version = +(await this.appVersion.getVersionNumber()).replace(
-          ".",
-          ""
-        );
+        const info = await App.getInfo();
+        let version = +info.version.replace(".", "");
         // Debe tener 3 digitos, por eso mayor o igual a 100
         version = version >= 100 ? version : version * 10;
 
@@ -275,7 +269,19 @@ export class AppComponent {
               {
                 text: "ACTUALIZAR",
                 handler: () => {
-                  this.launchReview.launch().then();
+                  if (this.platform.is("android")) {
+                    /*this.urlSvc.openUrl(
+                      "https://play.google.com/store/apps/details?id=com.frikiradar.app"
+                    );*/
+                    this.urlSvc.openUrl(
+                      "market://details?id=com.frikiradar.app"
+                    );
+                  }
+                  if (this.platform.is("ios")) {
+                    this.urlSvc.openUrl(
+                      "https://apps.apple.com/es/app/frikiradar/id1477838835"
+                    );
+                  }
                 },
               },
             ],

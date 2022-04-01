@@ -10,9 +10,7 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-import { AppVersion } from "@awesome-cordova-plugins/app-version/ngx";
 import { Device } from "@ionic-native/device/ngx";
-import { LaunchReview } from "@awesome-cordova-plugins/launch-review/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
@@ -72,8 +70,6 @@ registerLocaleData(localeEs, "es");
       useFactory: () => ({ enabled: environment.production }),
     },
     Device,
-    LaunchReview,
-    AppVersion,
     { provide: WebcamImage, useValue: WebcamImage },
   ],
   bootstrap: [AppComponent],

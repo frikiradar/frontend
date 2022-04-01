@@ -2,43 +2,5 @@
 <widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <access origin="*" />
   
-  <feature name="LaunchReview">
-    <param name="android-package" value="uk.co.workingedge.phonegap.plugin.LaunchReview"/>
-  </feature>
-
-  <feature name="AppVersion">
-    <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion"/>
-  </feature>
-
-  <feature name="Device">
-    <param name="android-package" value="org.apache.cordova.device.Device"/>
-  </feature>
-
-  <feature name="Notification">
-    <param name="android-package" value="org.apache.cordova.dialogs.Notification"/>
-  </feature>
-
-  <feature name="File">
-    <param name="android-package" value="org.apache.cordova.file.FileUtils"/>
-    <param name="onload" value="true"/>
-  </feature>
-
-  <feature name="IonicCordovaCommon">
-    <param name="android-package" value="com.ionicframework.common.IonicCordovaCommon" onload="true"/>
-  </feature>
-
-  <feature name="Media">
-    <param name="android-package" value="org.apache.cordova.media.AudioHandler"/>
-  </feature>
-
-  <feature name="Whitelist">
-    <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin"/>
-    <param name="onload" value="true"/>
-  </feature>
-
-  <feature name="Zip">
-    <param name="android-package" value="org.apache.cordova.Zip"/>
-  </feature>
-
   
 </widget>
