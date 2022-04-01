@@ -48,9 +48,6 @@
     "@ionic-native/device": "~5.36.0",
     "@ionic/angular": "^6.0.14",
     "@ionic/lab": "^3.2.11",
-    "appcenter": "4.4.3",
-    "appcenter-analytics": "4.4.3",
-    "appcenter-crashes": "4.4.3",
     "autolinker": "^3.15.0",
     "cordova-launch-review": "^4.0.1",
     "cordova-plugin-app-version": "^0.1.13",
@@ -96,8 +93,7 @@
     "@types/platform": "^1.3.3",
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
-    "capacitor-codepush": "1.0.3",
-    "code-push": "^4.0.5",
+    "capacitor-codepush": "github:mapiacompany/capacitor-codepush",
     "codelyzer": "^6.0.2",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
@@ -122,23 +118,5 @@
     "ts-node": "~10.5.0",
     "typescript": "~4.5.5"
   },
-  "description": "FrikiRadar, conoce a personas frikis como tú.",
-  "cordova": {
-    "plugins": {
-      "cordova-plugin-whitelist": {},
-      "cordova-plugin-device": {},
-      "cordova-launch-review": {
-        "ANDROID_PLAY_SERVICES_CORE_VERSION": "1.8.0"
-      },
-      "cordova-plugin-app-version": {},
-      "cordova-plugin-media": {
-        "KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE": "NO"
-      },
-      "cordova-plugin-file": {}
-    },
-    "platforms": [
-      "android",
-      "ios"
-    ]
-  }
+  "description": "FrikiRadar, conoce a personas frikis como tú."
 }
