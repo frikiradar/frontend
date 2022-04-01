@@ -60,6 +60,10 @@
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
 	},
 	{
+		"pkg": "@robingenz/capacitor-app-update",
+		"classpath": "dev.robingenz.capacitor.appupdate.AppUpdatePlugin"
+	},
+	{
 		"pkg": "capacitor-rate-app",
 		"classpath": "com.capacitor.rateapp.CapacitorRateAppPlugin"
 	},

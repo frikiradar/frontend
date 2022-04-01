@@ -7,8 +7,9 @@ import { SyncOptions } from "capacitor-codepush/dist/esm/syncOptions";
 import { InstallMode } from "capacitor-codepush/dist/esm/installMode";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
-import { UrlService } from "src/app/services/url.service";
+import { AppUpdate } from "@robingenz/capacitor-app-update";
 
+import { UrlService } from "src/app/services/url.service";
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
 import { Config, ConfigService } from "./services/config.service";
@@ -268,19 +269,18 @@ export class AppComponent {
             buttons: [
               {
                 text: "ACTUALIZAR",
-                handler: () => {
+                handler: async () => {
                   if (this.platform.is("android")) {
                     /*this.urlSvc.openUrl(
-                      "https://play.google.com/store/apps/details?id=com.frikiradar.app"
-                    );*/
-                    this.urlSvc.openUrl(
                       "market://details?id=com.frikiradar.app"
-                    );
+                    );*/
+                    await AppUpdate.performImmediateUpdate();
                   }
                   if (this.platform.is("ios")) {
-                    this.urlSvc.openUrl(
+                    /*this.urlSvc.openUrl(
                       "https://apps.apple.com/es/app/frikiradar/id1477838835"
-                    );
+                    );*/
+                    await AppUpdate.openAppStore();
                   }
                 },
               },
