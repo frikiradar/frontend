@@ -231,18 +231,17 @@
         </div>
       </ion-item-group>
       <ion-item *ngIf="!user">
-        <ion-thumbnail *ngIf="src || event?.image">
+        <ion-thumbnail slot="start" *ngIf="src || event?.image">
           <img [src]="src ? src : event?.image" />
         </ion-thumbnail>
-        <ion-input
-          type="file"
-          accept="image/*"
-          formControlName="image"
-          placeholder="Elige una imagen"
-          clearInput="true"
-          (change)="cropImagebyEvent($event)"
-          (ionChange)="removeImage($event)"
-        ></ion-input>
+        <ion-button
+          (click)="selectPicture()"
+          color="primary"
+          shape="round"
+          expand="full"
+        >
+          Seleccionar imagen
+        </ion-button>
       </ion-item>
       <ion-item lines="none" *ngIf="auth.isAdmin() && !user && !event?.id">
         <ion-label>Evento oficial</ion-label>
@@ -259,4 +258,12 @@
       >
     </form>
   </ion-list>
+  <input
+    type="file"
+    accept="image/*"
+    #imageInput
+    name="image"
+    style="display: none"
+    (change)="cropImagebyEvent($event)"
+  />
 </ion-content>

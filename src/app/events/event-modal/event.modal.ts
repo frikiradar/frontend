@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -6,7 +6,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { ModalController, ToastController } from "@ionic/angular";
+import { ModalController, Platform, ToastController } from "@ionic/angular";
 
 import { Event } from "src/app/models/event";
 import { Page } from "src/app/models/page";
@@ -25,10 +25,13 @@ export class EventModal {
   @Input() user: User;
   @Input() page: Page;
 
+  @ViewChild("imageInput", { static: false })
+  imageInput: ElementRef;
+
   public eventForm: FormGroup;
   private imageFile: Blob;
   public editing = false;
-  public src: string = "";
+  public src: SafeUrl = "";
   public slug: string = "";
   public endDate = false;
   public showMore = false;
@@ -43,7 +46,8 @@ export class EventModal {
     public utils: UtilsService,
     private sanitizer: DomSanitizer,
     private eventSvc: EventService,
-    public auth: AuthService
+    public auth: AuthService,
+    private platform: Platform
   ) {
     this.eventForm = formBuilder.group({
       title: new FormControl("", [Validators.required]),
@@ -60,7 +64,6 @@ export class EventModal {
       contact_phone: new FormControl(),
       contact_email: new FormControl(),
       minage: new FormControl(0),
-      image: new FormControl(),
       official: new FormControl(),
     });
   }
@@ -220,13 +223,35 @@ export class EventModal {
     }
   }
 
+  async selectPicture() {
+    if (this.platform.is("capacitor")) {
+      const image = (await this.utils.takePicture(
+        "gallery",
+        true,
+        "default",
+        true,
+        false
+      )) as string;
+      this.addPicture(image);
+    } else {
+      this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
+    }
+  }
+
+  async addPicture(image: string | Blob) {
+    if (typeof image !== "string") {
+      image = await this.utils.fileToBase64(image);
+    }
+    this.src = this.sanitizer.bypassSecurityTrustUrl(image);
+    this.imageFile = await this.utils.urltoBlob(image);
+  }
+
   async cropImagebyEvent(event: any) {
     try {
-      const src = await this.utils.cropImage(event, "", true, 16 / 9);
-
+      const src = await this.utils.cropImage(event, null, false);
       if (typeof src == "string") {
-        this.src = src;
-        this.imageFile = await this.utils.urltoBlob(src);
+        const blob = await this.utils.urltoBlob(src);
+        this.addPicture(blob);
       }
     } catch (e) {
       console.error(e);

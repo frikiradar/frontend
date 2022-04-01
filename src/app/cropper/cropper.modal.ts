@@ -5,7 +5,7 @@ import { ImageCroppedEvent, ImageTransform } from "ngx-image-cropper";
 @Component({
   selector: "cropper-modal",
   templateUrl: "./cropper.modal.html",
-  styleUrls: ["./cropper.modal.scss"]
+  styleUrls: ["./cropper.modal.scss"],
 })
 export class CropperModal implements OnInit {
   @Input() src: string;
@@ -42,35 +42,35 @@ export class CropperModal implements OnInit {
   rotateRight() {
     this.transform = {
       ...this.transform,
-      rotate: this.transform.rotate ? this.transform.rotate + 90 : 90
+      rotate: this.transform.rotate ? this.transform.rotate + 90 : 90,
     };
   }
 
   flipH() {
     this.transform = {
       ...this.transform,
-      flipH: !this.transform.flipH
+      flipH: !this.transform.flipH,
     };
   }
 
   flipV() {
     this.transform = {
       ...this.transform,
-      flipV: !this.transform.flipV
+      flipV: !this.transform.flipV,
     };
   }
 
   zoomIn() {
     this.transform = {
       ...this.transform,
-      scale: this.transform.scale ? this.transform.scale + 0.1 : 1.1
+      scale: this.transform.scale ? this.transform.scale + 0.1 : 1.1,
     };
   }
 
   zoomOut() {
     this.transform = {
       ...this.transform,
-      scale: this.transform.scale ? this.transform.scale - 0.1 : 0.99
+      scale: this.transform.scale ? this.transform.scale - 0.1 : 0.99,
     };
   }
 
