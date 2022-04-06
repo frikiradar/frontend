@@ -1,3 +1,4 @@
+import { environment } from "src/environments/environment";
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Network } from "@capacitor/network";
@@ -6,10 +7,14 @@ import { codePush } from "capacitor-codepush";
 import { SyncOptions } from "capacitor-codepush/dist/esm/syncOptions";
 import { InstallMode } from "capacitor-codepush/dist/esm/installMode";
 import { App } from "@capacitor/app";
+import { Device } from "@capacitor/device";
 import { RateApp } from "capacitor-rate-app";
-import { AppUpdate } from "@robingenz/capacitor-app-update";
+import {
+  AppUpdate,
+  AppUpdateAvailability,
+} from "@robingenz/capacitor-app-update";
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
 
-import { UrlService } from "src/app/services/url.service";
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
 import { Config, ConfigService } from "./services/config.service";
@@ -37,8 +42,7 @@ export class AppComponent {
     private push: PushService,
     private nav: NavService,
     private sw: SwService,
-    private toast: ToastController,
-    private urlSvc: UrlService
+    private toast: ToastController
   ) {
     this.initializeApp();
   }
@@ -73,6 +77,16 @@ export class AppComponent {
     } else {
       // this.betaAdvertisement();
     }
+
+    // Firebase Analytics
+    const deviceInfo = Device.getInfo();
+    if ((await deviceInfo).platform === "web") {
+      FirebaseAnalytics.initializeFirebase(environment.firebase);
+    }
+    FirebaseAnalytics.setUserId({
+      userId: this.auth.currentUserValue.username,
+    });
+    FirebaseAnalytics.setUserProperty({ name: "theme", value: theme });
   }
 
   async networkStatus() {
@@ -261,34 +275,41 @@ export class AppComponent {
         version = version >= 100 ? version : version * 10;
 
         if (version < +config.min_version) {
-          const versionAlert = await this.alert.create({
-            header: "Versión obsoleta",
-            message:
-              "La versión de FrikiRadar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
-            backdropDismiss: false,
-            buttons: [
-              {
-                text: "ACTUALIZAR",
-                handler: async () => {
-                  if (this.platform.is("android")) {
-                    /*this.urlSvc.openUrl(
-                      "market://details?id=com.frikiradar.app"
-                    );*/
-                    await AppUpdate.performImmediateUpdate();
-                  }
-                  if (this.platform.is("ios")) {
-                    /*this.urlSvc.openUrl(
-                      "https://apps.apple.com/es/app/frikiradar/id1477838835"
-                    );*/
-                    await AppUpdate.openAppStore();
-                  }
+          const result = await AppUpdate.getAppUpdateInfo();
+          if (
+            result.updateAvailability === AppUpdateAvailability.UPDATE_AVAILABLE
+          ) {
+            const versionAlert = await this.alert.create({
+              header: "Versión obsoleta",
+              message:
+                "La versión de FrikiRadar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
+              backdropDismiss: false,
+              buttons: [
+                {
+                  text: "ACTUALIZAR",
+                  handler: async () => {
+                    if (this.platform.is("android")) {
+                      /*this.urlSvc.openUrl(
+                        "market://details?id=com.frikiradar.app"
+                      );*/
+                      if (result.immediateUpdateAllowed) {
+                        await AppUpdate.performImmediateUpdate();
+                      }
+                    }
+                    if (this.platform.is("ios")) {
+                      /*this.urlSvc.openUrl(
+                        "https://apps.apple.com/es/app/frikiradar/id1477838835"
+                      );*/
+                      await AppUpdate.openAppStore();
+                    }
+                  },
                 },
-              },
-            ],
-            cssClass: "round-alert",
-          });
+              ],
+              cssClass: "round-alert",
+            });
 
-          versionAlert.present();
+            versionAlert.present();
+          }
         } else {
           const oldVersion = await this.config.get("version");
           if (+version > (!Number.isNaN(oldVersion) ? +oldVersion : 0)) {

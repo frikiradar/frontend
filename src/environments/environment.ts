@@ -10,7 +10,8 @@ export const environment = {
     storageBucket: "frikiradar-1551914200548.appspot.com",
     messagingSenderId: "431880368798",
     appId: "1:431880368798:web:021fb57b75ed33d8",
+    measurementId: "G-T3FWW8KZ84",
     vapidKey:
-      "BCo47gHUNeFYajnd_WuaN85FWxZVkIhX00Xa2XZ9BGcXKkS6ourI99ZuFixCM03vhmGLxpLBzgFwRwtQCHe-Pjc"
-  }
+      "BCo47gHUNeFYajnd_WuaN85FWxZVkIhX00Xa2XZ9BGcXKkS6ourI99ZuFixCM03vhmGLxpLBzgFwRwtQCHe-Pjc",
+  },
 };
