@@ -1,16 +1,15 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Device as deviceInfo } from "@ionic-native/device/ngx";
 import { NavController } from "@ionic/angular";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { Platform } from "@ionic/angular";
+import { Device as DevicePlugin } from "@capacitor/device";
 
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
 import { RestService } from "./rest.service";
-import { UserService } from "./user.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -25,7 +24,6 @@ export class AuthService {
     private http: HttpClient,
     private rest: RestService,
     private nav: NavController,
-    private device: deviceInfo,
     private platform: Platform
   ) {
     this.currentUserSubject = new BehaviorSubject<User>(
@@ -227,7 +225,7 @@ export class AuthService {
   async logout() {
     let uuid = null;
     if (this.platform.is("capacitor")) {
-      uuid = this.device.uuid;
+      uuid = (await DevicePlugin.getId()).uuid;
     } else {
       const fp = await FingerprintJS.load();
       const fingerprint = await fp.get();

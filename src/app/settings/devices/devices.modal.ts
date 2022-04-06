@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import {
   AlertController,
   ModalController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { User } from "src/app/models/user";
@@ -14,7 +14,7 @@ import { DeviceService } from "./../../services/device.service";
 @Component({
   selector: "devices-modal",
   templateUrl: "./devices.modal.html",
-  styleUrls: ["./devices.modal.scss"]
+  styleUrls: ["./devices.modal.scss"],
 })
 export class DevicesSettingsModal implements OnInit {
   public devices: Device[];
@@ -35,7 +35,7 @@ export class DevicesSettingsModal implements OnInit {
     const currentDevice = await this.devicesSvc.getCurrentDevice();
 
     if (currentDevice) {
-      this.devices.map(device => {
+      this.devices.map((device) => {
         device.current =
           device.device_id === currentDevice.device_id ||
           device.token === currentDevice.token;
@@ -45,7 +45,7 @@ export class DevicesSettingsModal implements OnInit {
 
   async removeDevice(device: Device) {
     if (!device.current) {
-      this.devices = this.devices.filter(d => d.id !== device.id);
+      this.devices = this.devices.filter((d) => d.id !== device.id);
 
       const user = await this.devicesSvc.removeDevice(device);
       this.auth.setAuthUser(user);
@@ -54,7 +54,7 @@ export class DevicesSettingsModal implements OnInit {
         await this.toast.create({
           message: "¡Dispositivo eliminado!",
           duration: 2000,
-          position: "bottom"
+          position: "bottom",
         })
       ).present();
     } else {
@@ -62,14 +62,14 @@ export class DevicesSettingsModal implements OnInit {
         await this.alert.create({
           message: "¡No puedes eliminar tu dispositivo actual!",
           buttons: ["Entendido"],
-          cssClass: "round-alert"
+          cssClass: "round-alert",
         })
       ).present();
     }
   }
 
   async switchNotifications(device: Device) {
-    this.devices.map(d => {
+    this.devices.map((d) => {
       if (device.id === d.id) {
         d.active = !device.active;
       }
@@ -83,7 +83,7 @@ export class DevicesSettingsModal implements OnInit {
         await this.toast.create({
           message: "¡Notificaciones silenciadas!",
           duration: 2000,
-          position: "bottom"
+          position: "bottom",
         })
       ).present();
     } else {
@@ -91,7 +91,7 @@ export class DevicesSettingsModal implements OnInit {
         await this.toast.create({
           message: "¡Notificaciones activadas!",
           duration: 2000,
-          position: "bottom"
+          position: "bottom",
         })
       ).present();
     }

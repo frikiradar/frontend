@@ -20,11 +20,6 @@ const config: CapacitorConfig = {
       showSpinner: true,
       spinnerColor: "#ffffff",
     },
-    LocalNotifications: {
-      smallIcon: "ic_stat_notification",
-      iconColor: "#e91e63",
-      sound: "bipbip.mp3",
-    },
     CodePush: {
       IOS_DEPLOY_KEY: "FdlQxj1MHcOlgOU1nk1I93uR_32hoXJV9KZeX",
       ANDROID_DEPLOY_KEY: "GrBUobh6JMEckfvM22iN2XxNe3l7l10TDpmIz",

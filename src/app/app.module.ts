@@ -10,7 +10,6 @@ import {
 } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
-import { Device } from "@ionic-native/device/ngx";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
@@ -69,7 +68,6 @@ registerLocaleData(localeEs, "es");
       provide: SwRegistrationOptions,
       useFactory: () => ({ enabled: environment.production }),
     },
-    Device,
     { provide: WebcamImage, useValue: WebcamImage },
   ],
   bootstrap: [AppComponent],

@@ -14,7 +14,6 @@ import {
   NotificationService,
 } from "./notification.service";
 import { SwPush } from "@angular/service-worker";
-import { Local } from "protractor/built/driverProviders";
 
 @Injectable({
   providedIn: "root",
@@ -56,63 +55,56 @@ export class PushService {
         }
       });
 
-      // Request permission to use push notifications
-      // iOS will prompt user and return if they granted permission or not
-      // Android will just grant without prompting
-      PushNotifications.requestPermissions().then((result) => {
-        if (result.receive === "granted") {
-          // Register with Apple / Google to receive push via APNS/FCM
-          PushNotifications.register();
-        } else {
-          console.error("User denied permissions!");
-        }
-      });
-
       // On success, we should be able to receive notifications
       PushNotifications.addListener("registration", async (token: Token) => {
-        console.log("Push registration success, token", token.value);
+        // console.log("Push registration success, token", token);
         await this.device.setDevice(token.value);
       });
 
-      /*await PushNotifications.addListener(
+      await PushNotifications.addListener(
         "pushNotificationReceived",
         (notification) => {
-          this.localNotification(notification.data);
-          console.log("Push notification received: ", notification);
+          // console.log("Push notification received", notification);
+          if (notification?.data.notify === "true") {
+            this.localNotification(notification);
+          }
         }
-      );*/
+      );
 
       this.setChannels();
 
       FCM.subscribeTo({ topic: "frikiradar" })
-        .then((response) =>
-          console.log("Successfully subscribed to topic:", response.message)
-        )
+        .then((response) => {
+          // console.log("Successfully subscribed to topic:", response.message)
+        })
         .catch((error) => {
           console.log("Error subscribing to topic:", error);
         });
 
       if (this.auth.isAdmin() || this.auth.isMaster()) {
         FCM.subscribeTo({ topic: "test" })
-          .then((response) =>
-            console.log("Successfully subscribed to topic:", response.message)
-          )
+          .then((response) => {
+            // console.log("Successfully subscribed to topic:", response.message);
+          })
           .catch((error) => {
             console.log("Error subscribing to topic:", error);
           });
       }
 
-      LocalNotifications.addListener(
+      /*LocalNotifications.addListener(
         "localNotificationReceived",
         (notification) => {
           console.log("Local notification received: ", notification);
         }
-      );
+      );*/
 
       LocalNotifications.addListener(
         "localNotificationActionPerformed",
         (actionPerformed) => {
-          console.log("Local notification action performed: ", actionPerformed);
+          console.log(actionPerformed);
+          if (actionPerformed.actionId === "tap") {
+            this.router.navigate([actionPerformed.notification.extra.url]);
+          }
         }
       );
 
@@ -122,17 +114,6 @@ export class PushService {
           console.log(actionPerformed);
           if (actionPerformed.actionId === "tap") {
             this.router.navigate([actionPerformed.notification.data.url]);
-          } else {
-            this.localNotification(actionPerformed.notification);
-
-            if (!this.router.url.includes("chat")) {
-              this.notificationSvc
-                .getUnread()
-                .then((notification: NotificationCounters) => {
-                  this.notificationSvc.setNotification(notification);
-                });
-            }
-            // console.log("Received in foreground");
           }
         }
       );
@@ -140,9 +121,11 @@ export class PushService {
       try {
         await this.requestPermission();
         this.afMessaging.messages.subscribe((payload: any) => {
-          console.log("new message received. ", payload);
+          // console.log("new message received. ", payload);
           if (payload?.notification) {
-            this.localNotification(payload);
+            if (payload?.data.notify === "true") {
+              this.localNotification(payload);
+            }
 
             if (!this.router.url.includes("chat")) {
               this.notificationSvc
@@ -252,17 +235,27 @@ export class PushService {
       ] as any[];
     }*/
     if (this.platform.is("capacitor")) {
-      if (
-        !this.router.url.includes("chat") &&
-        notification?.notify === "true"
-      ) {
-        console.log("Lanzamos notificación local");
+      if (this.router.url !== notification.data.url) {
+        LocalNotifications.schedule({
+          notifications: [
+            {
+              id: Math.random() * (1000000 - 1) + 1,
+              title: notification?.title,
+              body: notification?.body,
+              sound: "bipbip.mp3",
+              smallIcon: "ic_stat_notification",
+              iconColor: "#e91e63",
+              largeIcon: notification?.data.icon,
+              // attachments: notification?.attachments,
+              channelId: notification?.data.topic,
+              extra: notification?.data,
+              // actions
+            },
+          ],
+        });
       }
     } else {
-      if (
-        !this.router.url.includes("chat") &&
-        notification?.data?.notify === "true"
-      ) {
+      if (this.router.url !== notification.data.url) {
         try {
           const registration = await navigator.serviceWorker.ready;
           // Customize notification here
