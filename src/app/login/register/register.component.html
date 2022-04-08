@@ -111,16 +111,15 @@
             locale="es-ES"
             first-day-of-week="1"
             min="1900-01-01"
-            max="{{ (today | date: 'y') - 14 }}-{{ today | date: 'MM' }}-{{
+            max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
               today | date: 'dd'
             }}"
-            (ionChange)="changeAge($event)"
           >
           </ion-datetime>
         </ng-template>
       </ion-popover>
     </ion-item>
-    <ion-item *ngIf="adult">
+    <ion-item>
       <ion-label
         >Mi identidad de género
         {{ platform.is("ios") ? "(opcional)" : "" }}</ion-label
@@ -148,7 +147,7 @@
       <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
       una opción
     </div>
-    <ion-item *ngIf="adult">
+    <ion-item>
       <ion-label>Estoy buscando (opcional)</ion-label>
       <ion-select
         cancel-text="Cancelar"

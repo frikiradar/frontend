@@ -22,12 +22,18 @@ ion-label {
   }
 }
 
+swiper {
+  height: 70vh;
+}
+
 ion-card {
   box-shadow: none;
   background: transparent;
 
   img {
-    max-height: 50vh;
+    max-height: 70vh;
+    pointer-events: none; // for Android
+    -webkit-touch-callout: none; // for iOS
   }
   ion-thumbnail {
     width: auto;

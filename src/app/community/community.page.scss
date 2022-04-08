@@ -41,14 +41,16 @@ ion-thumbnail {
   border-radius: 25px 0 0 25px;
   padding: 15px 0 15px 0px;
 
-  .swiper-slide img {
-    height: 130px;
-    width: auto;
-  }
-
-  @media (min-width: 1920px) {
+  ::ng-deep {
     .swiper-slide img {
-      height: 170px;
+      height: 130px;
+      width: auto;
+    }
+
+    @media (min-width: 1920px) {
+      .swiper-slide img {
+        height: 170px;
+      }
     }
   }
 

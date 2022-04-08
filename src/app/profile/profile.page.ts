@@ -6,12 +6,12 @@ import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import {
   AlertController,
   ModalController,
-  NavController,
   PopoverController,
   ToastController,
 } from "@ionic/angular";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { pulse } from "ng-animate";
+import SwiperCore, { SwiperOptions, Pagination, Keyboard } from "swiper";
 
 import { Like } from "../models/like";
 import { Story } from "../models/story";
@@ -27,6 +27,8 @@ import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { AuthService } from "./../services/auth.service";
+
+SwiperCore.use([Pagination, Keyboard]);
 
 @Component({
   selector: "app-profile",
@@ -46,6 +48,13 @@ export class ProfilePage {
   public pulse: any;
   public pane: CupertinoPane;
   public param: "received" | "delivered";
+
+  public sliderOpts: SwiperOptions = {
+    keyboard: true,
+    preloadImages: false,
+    lazy: true,
+    grabCursor: true,
+  };
 
   private paneSettings: CupertinoSettings = {
     backdrop: true,

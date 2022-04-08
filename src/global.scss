@@ -12,6 +12,14 @@
 
 @import "~@ctrl/ngx-emoji-mart/picker";
 
+// Swipper
+@import "~swiper/scss";
+@import "~swiper/scss/pagination";
+@import "~swiper/scss/autoplay";
+@import "~swiper/scss/keyboard";
+@import "~swiper/scss/zoom";
+@import "~@ionic/angular/css/ionic-swiper";
+
 body {
   background-color: var(--ion-color-dark);
 }

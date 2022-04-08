@@ -11,17 +11,17 @@ ion-toolbar {
   }
 }
 
-ion-slides {
+swiper#radar-slide {
   display: flex;
   height: 100%;
-}
 
-ion-slide {
-  display: block;
-
-  &.swiper-slide-prev,
-  &.swiper-slide-next {
-    opacity: 0.4;
+  ::ng-deep {
+    .swiper-slide {
+      &.swiper-slide-prev,
+      &.swiper-slide-next {
+        opacity: 0.4;
+      }
+    }
   }
 }
 

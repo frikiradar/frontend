@@ -6,8 +6,6 @@ import {
 } from "@angular/core";
 import { NavigationStart, Router, Event } from "@angular/router";
 import {
-  IonSlides,
-  MenuController,
   Platform,
   AlertController,
   IonRange,
@@ -19,6 +17,9 @@ import { ScrollDetail } from "@ionic/core";
 import { takeWhile } from "rxjs/operators";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import * as deepEqual from "deep-equal";
+import SwiperCore, { Keyboard, SwiperOptions, EffectCoverflow } from "swiper";
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
+import { Device } from "@capacitor/device";
 
 import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
@@ -36,6 +37,9 @@ import { StoryService } from "../services/story.service";
 import { Story } from "../models/story";
 import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { environment } from "src/environments/environment";
+
+SwiperCore.use([Keyboard, EffectCoverflow]);
 
 @Component({
   selector: "app-radar",
@@ -43,16 +47,16 @@ import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
   styleUrls: ["./radar.page.scss"],
 })
 export class RadarPage {
-  @ViewChild("slides", { static: false })
-  slides: IonSlides;
   @ViewChild("range", { static: false })
   range: IonRange;
   @ViewChild("radarlist", { static: true })
   radarlist: IonContent;
 
   public counters: NotificationCounters;
+  private slides: SwiperCore;
 
-  public slideOpts = {
+  public slideOpts: SwiperOptions = {
+    keyboard: true,
     slidesPerView: 1,
     breakpoints: {
       1024: {
@@ -62,127 +66,10 @@ export class RadarPage {
     },
     grabCursor: true,
     lazy: true,
-    coverflowEffect: {
-      rotate: 50,
-      stretch: 0,
-      depth: 100,
-      modifier: 1,
-      slideShadows: false,
-    },
-    on: {
-      beforeInit() {
-        const swiper = this;
-
-        swiper.classNames.push(
-          `${swiper.params.containerModifierClass}coverflow`
-        );
-        swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
-
-        swiper.params.watchSlidesProgress = true;
-        swiper.originalParams.watchSlidesProgress = true;
-      },
-      setTranslate() {
-        const swiper = this;
-        const {
-          width: swiperWidth,
-          height: swiperHeight,
-          slides,
-          $wrapperEl,
-          slidesSizesGrid,
-          $,
-        } = swiper;
-        const params = swiper.params.coverflowEffect;
-        const isHorizontal = swiper.isHorizontal();
-        const transform$$1 = swiper.translate;
-        const center = isHorizontal
-          ? -transform$$1 + swiperWidth / 2
-          : -transform$$1 + swiperHeight / 2;
-        const rotate = isHorizontal ? params.rotate : -params.rotate;
-        const translate = params.depth;
-        // Each slide offset from center
-        for (let i = 0, length = slides.length; i < length; i += 1) {
-          const $slideEl = slides.eq(i);
-          const slideSize = slidesSizesGrid[i];
-          const slideOffset = $slideEl[0].swiperSlideOffset;
-          const offsetMultiplier =
-            ((center - slideOffset - slideSize / 2) / slideSize) *
-            params.modifier;
-
-          let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
-          let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
-          // var rotateZ = 0
-          let translateZ = -translate * Math.abs(offsetMultiplier);
-
-          let translateY = isHorizontal ? 0 : params.stretch * offsetMultiplier;
-          let translateX = isHorizontal ? params.stretch * offsetMultiplier : 0;
-
-          // Fix for ultra small values
-          if (Math.abs(translateX) < 0.001) translateX = 0;
-          if (Math.abs(translateY) < 0.001) translateY = 0;
-          if (Math.abs(translateZ) < 0.001) translateZ = 0;
-          if (Math.abs(rotateY) < 0.001) rotateY = 0;
-          if (Math.abs(rotateX) < 0.001) rotateX = 0;
-
-          const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
-          $slideEl.transform(slideTransform);
-          $slideEl[0].style.zIndex =
-            -Math.abs(Math.round(offsetMultiplier)) + 1;
-          if (params.slideShadows) {
-            // Set shadows
-            let $shadowBeforeEl = isHorizontal
-              ? $slideEl.find(".swiper-slide-shadow-left")
-              : $slideEl.find(".swiper-slide-shadow-top");
-            let $shadowAfterEl = isHorizontal
-              ? $slideEl.find(".swiper-slide-shadow-right")
-              : $slideEl.find(".swiper-slide-shadow-bottom");
-            if ($shadowBeforeEl.length === 0) {
-              $shadowBeforeEl = swiper.$(
-                `<div class="swiper-slide-shadow-${
-                  isHorizontal ? "left" : "top"
-                }"></div>`
-              );
-              $slideEl.append($shadowBeforeEl);
-            }
-            if ($shadowAfterEl.length === 0) {
-              $shadowAfterEl = swiper.$(
-                `<div class="swiper-slide-shadow-${
-                  isHorizontal ? "right" : "bottom"
-                }"></div>`
-              );
-              $slideEl.append($shadowAfterEl);
-            }
-            if ($shadowBeforeEl.length)
-              $shadowBeforeEl[0].style.opacity =
-                offsetMultiplier > 0 ? offsetMultiplier : 0;
-            if ($shadowAfterEl.length)
-              $shadowAfterEl[0].style.opacity =
-                -offsetMultiplier > 0 ? -offsetMultiplier : 0;
-          }
-        }
-
-        // Set correct perspective for IE10
-        if (
-          swiper.support.pointerEvents ||
-          swiper.support.prefixedPointerEvents
-        ) {
-          const ws = $wrapperEl[0].style;
-          ws.perspectiveOrigin = `${center}px 50%`;
-        }
-      },
-      setTransition(duration) {
-        const swiper = this;
-        swiper.slides
-          .transition(duration)
-          .find(
-            ".swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left"
-          )
-          .transition(duration);
-      },
-    },
+    effect: "coverflow",
   };
 
-  public storiesOpts = {
+  public storiesOpts: SwiperOptions = {
     preloadImages: false,
     lazy: true,
     slidesPerView: 4.5,
@@ -243,29 +130,21 @@ export class RadarPage {
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (this.users?.length && this.router.url === "/tabs/radar") {
-      switch (event.key) {
-        case "ArrowRight":
-          this.slides.slideNext();
-          break;
-        case "ArrowLeft":
-          this.slides.slidePrev();
-          break;
-        case "Enter":
-          this.showProfile(this.user.id);
-          break;
-      }
+    if (
+      this.users?.length &&
+      this.router.url === "/tabs/radar" &&
+      event.key === "Enter"
+    ) {
+      this.showProfile(this.user.id);
     }
   }
 
   constructor(
     public userSvc: UserService,
-    public menu: MenuController,
     public auth: AuthService,
     public router: Router,
     private geolocationSvc: GeolocationService,
     private deviceSvc: DeviceService,
-    private platform: Platform,
     private alert: AlertController,
     private utils: UtilsService,
     private toast: ToastController,
@@ -287,6 +166,10 @@ export class RadarPage {
         }
       }
     });
+  }
+
+  setSwiperInstance(swiper: any) {
+    this.slides = swiper;
   }
 
   async ngAfterViewInit() {
@@ -331,22 +214,27 @@ export class RadarPage {
       this.authUser = this.auth.currentUserValue;
     }
 
-    if (this.platform.is("capacitor")) {
-      /*this.firebase
-        .setUserId("" + this.authUser.id)
-        .then(() => console.log("User id successfully set"))
-        .catch(err => console.log("Error setting user id:", err));
-
-      this.firebase
-        .setUserProperty("username", this.authUser.username)
-        .then(() => console.log("Username successfully set"))
-        .catch(err => console.log("Error setting username:", err));
-
-      this.firebase
-        .setScreenName("radar")
-        .then(() => console.log("View successfully tracked"))
-        .catch(err => console.log("Error tracking view:", err));*/
+    // Firebase Analytics
+    const deviceInfo = Device.getInfo();
+    if ((await deviceInfo).platform === "web") {
+      await FirebaseAnalytics.initializeFirebase(environment.firebase);
     }
+
+    FirebaseAnalytics.setUserId({
+      userId: "" + this.authUser.id,
+    });
+
+    FirebaseAnalytics.setUserProperty({
+      name: "username",
+      value: this.authUser.username,
+    });
+
+    let theme = (await this.config.get("theme")) as Config["theme"];
+    FirebaseAnalytics.setUserProperty({
+      name: "theme",
+      value: theme ? theme : "dark",
+    });
+    // --------------------------------------------------
 
     const radar_config = (await this.config.get(
       "radar_config"
@@ -635,22 +523,17 @@ export class RadarPage {
   }
 
   async slide() {
-    this.slides.getActiveIndex().then((index) => {
-      this.user = this.users[index];
-      if (this.user?.id) {
-        this.userSvc.view(this.user?.id);
-      }
-      if (index >= this.users?.length - 10) {
-        this.getRadarUsers();
-      }
-      if (
-        this.view === "cards" &&
-        this.page === 0 &&
-        this.user.distance >= 100
-      ) {
-        this.radarAdv();
-      }
-    });
+    const index = this.slides.activeIndex;
+    this.user = this.users[index];
+    if (this.user?.id) {
+      this.userSvc.view(this.user?.id);
+    }
+    if (index >= this.users?.length - 10) {
+      this.getRadarUsers();
+    }
+    if (this.view === "cards" && this.page === 0 && this.user.distance >= 100) {
+      this.radarAdv();
+    }
   }
 
   async dragItem(event: any, id: number) {

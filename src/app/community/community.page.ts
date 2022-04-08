@@ -1,11 +1,6 @@
 import { Component } from "@angular/core";
-import {
-  ActivatedRoute,
-  Event,
-  NavigationStart,
-  Router,
-} from "@angular/router";
-import { MenuController, ModalController, Platform } from "@ionic/angular";
+import { Router } from "@angular/router";
+import { Platform } from "@ionic/angular";
 import * as deepEqual from "deep-equal";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { PushNotifications } from "@capacitor/push-notifications";
@@ -14,11 +9,7 @@ import { Room } from "../models/room";
 import { Config, ConfigService } from "../services/config.service";
 import { RoomService } from "../services/room.service";
 import { AuthService } from "./../services/auth.service";
-import { StoryService } from "../services/story.service";
 import { Story } from "../models/story";
-import { StoryModal } from "../story/story-modal/story.modal";
-import { User } from "../models/user";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { Page } from "../models/page";
 import { PageService } from "../services/page.service";
 import { Chat } from "../models/chat";
@@ -63,12 +54,8 @@ export class CommunityPage {
   constructor(
     private router: Router,
     public auth: AuthService,
-    public menu: MenuController,
     private roomSvc: RoomService,
-    private storySvc: StoryService,
     private config: ConfigService,
-    private modal: ModalController,
-    private route: ActivatedRoute,
     private pageSvc: PageService,
     private animate: AnimateService,
     private afMessaging: AngularFireMessaging,

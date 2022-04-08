@@ -242,7 +242,7 @@ export class PushService {
               id: Math.random() * (1000000 - 1) + 1,
               title: notification?.title,
               body: notification?.body,
-              sound: "bipbip.mp3",
+              // sound: "bipbip.mp3",
               smallIcon: "ic_stat_notification",
               iconColor: "#e91e63",
               largeIcon: notification?.data.icon,

@@ -133,16 +133,25 @@ export class UtilsService {
     return false;
   }
 
-  base64toBlob(dataURI: string) {
-    const bytes: string = atob(dataURI.split(",")[1]);
-    // .replace(/^data:image\/(png|jpg|jpeg|\*);charset=utf-8;base64,/, "")
-    const byteNumbers = new Array(bytes.length);
-    for (let i = 0; i < bytes.length; i++) {
-      byteNumbers[i] = bytes.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
+  base64toBlob(b64Data: string, contentType = "", sliceSize = 512) {
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
 
-    return new Blob([byteArray], { type: "image/png" });
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+    return blob;
   }
 
   async urltoBlob(url: string): Promise<Blob> {

@@ -8,7 +8,6 @@ import { User } from "../models/user";
 import { Device } from "./../models/device";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
-import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -68,14 +67,14 @@ export class DeviceService {
           platform = "web";
         }
 
-        const user = (await firstValueFrom(
-          this.rest.put("device", {
+        const user = (await this.rest
+          .put("device", {
             id: uuid,
             name: device.device_name,
             token,
             platform,
           })
-        )) as User;
+          .toPromise()) as User;
 
         // this.auth.setAuthUser(user);
       }
@@ -129,15 +128,13 @@ export class DeviceService {
     return this.rest.put("unknown-device", { device });
   }
 
-  async removeDevice(device: Device) {
-    return (await firstValueFrom(
-      this.rest.delete(`device/${device.id}`)
-    )) as Promise<User>;
+  removeDevice(device: Device) {
+    return this.rest.delete(`device/${device.id}`).toPromise() as Promise<User>;
   }
 
-  async switchDevice(device: Device) {
-    return (await firstValueFrom(
-      this.rest.get(`switch-device/${device.id}`)
-    )) as User;
+  switchDevice(device: Device) {
+    return this.rest
+      .get(`switch-device/${device.id}`)
+      .toPromise() as Promise<User>;
   }
 }

@@ -4,11 +4,11 @@ import {
   ActionSheetController,
   IonInput,
   IonSegment,
-  IonSlides,
   PickerController,
   Platform,
   ToastController,
 } from "@ionic/angular";
+import SwiperCore, { SwiperOptions, Pagination, Keyboard } from "swiper";
 
 import { Tag } from "../models/tags";
 import { User } from "../models/user";
@@ -17,6 +17,8 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { TagService } from "./../services/tag.service";
 import { UtilsService } from "./../services/utils.service";
+
+SwiperCore.use([Pagination, Keyboard]);
 
 @Component({
   selector: "app-edit-profile",
@@ -32,8 +34,6 @@ export class EditProfilePage {
     return this.profileForm.get("maxage");
   }
 
-  @ViewChild("imageSlider", { static: true })
-  imageSlider: IonSlides;
   @ViewChild("segment", { static: true })
   segment: IonSegment;
   @ViewChild("games", { static: true })
@@ -48,6 +48,15 @@ export class EditProfilePage {
   role: IonInput;
   @ViewChild("imageInput", { static: true })
   imageInput: ElementRef;
+
+  private slider: SwiperCore;
+  public sliderOpts: SwiperOptions = {
+    keyboard: true,
+    preloadImages: false,
+    lazy: true,
+    pagination: { clickable: true },
+    grabCursor: true,
+  };
 
   public showToolbar = false;
   public profileForm: FormGroup;
@@ -112,6 +121,10 @@ export class EditProfilePage {
     if (this.minage.value) {
       this.profileForm.get("maxage").enable();
     }
+  }
+
+  setSwiperInstance(swiper: any) {
+    this.slider = swiper;
   }
 
   async submitProfile() {
@@ -385,7 +398,7 @@ export class EditProfilePage {
     const user = await this.userSvc.setAvatar(image);
     this.auth.setAuthUser(user);
     this.user = this.auth.currentUserValue;
-    this.imageSlider.slideTo(0);
+    this.slider.slideTo(0);
   }
 
   async deleteImage() {
@@ -398,14 +411,12 @@ export class EditProfilePage {
     const user = await this.userSvc.deleteAvatar(image);
     this.auth.setAuthUser(user);
     this.user = this.auth.currentUserValue;
-    await this.imageSlider.update();
-    this.imageSlider.slideTo(0);
+    this.slider.update();
+    this.slider.slideTo(0);
   }
 
-  setActiveImage(i: Promise<number>) {
-    i.then((index) => {
-      this.activeImage = index;
-    });
+  setActiveImage() {
+    this.activeImage = this.slider.activeIndex;
   }
 
   back() {

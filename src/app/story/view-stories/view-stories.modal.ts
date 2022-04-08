@@ -9,13 +9,18 @@ import { Router } from "@angular/router";
 import { Keyboard } from "@capacitor/keyboard";
 import {
   ActionSheetController,
-  IonSlides,
   IonTextarea,
   ModalController,
   Platform,
   ToastController,
 } from "@ionic/angular";
 import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
+import SwiperCore, {
+  Keyboard as SwiperKeyboard,
+  SwiperOptions,
+  Pagination,
+  Autoplay,
+} from "swiper";
 
 import { Story } from "src/app/models/story";
 import { User } from "src/app/models/user";
@@ -26,6 +31,8 @@ import { StoryService } from "../../services/story.service";
 import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
 import { StoryModal } from "../story-modal/story.modal";
 
+SwiperCore.use([SwiperKeyboard, Pagination, Autoplay]);
+
 @Component({
   selector: "view-stories-modal",
   templateUrl: "./view-stories.modal.html",
@@ -33,10 +40,9 @@ import { StoryModal } from "../story-modal/story.modal";
 })
 export class ViewStoriesModal implements OnInit {
   @Input() stories: Story[];
-  @ViewChild("slides", { static: true })
-  public slides: IonSlides;
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
+  private slides: SwiperCore;
 
   public commentForm: FormGroup;
   get comment() {
@@ -60,19 +66,19 @@ export class ViewStoriesModal implements OnInit {
     initialBreak: "top",
     onBackdropTap: () => {
       this.pane.destroy({ animate: true });
-      this.slides.startAutoplay();
+      this.slides.autoplay.start();
     },
   };
 
-  slideOpts = {
+  public slideOpts: SwiperOptions = {
     speed: 500,
     autoplay: {
       delay: this.delay,
     },
     grabCursor: true,
     lazy: true,
+    keyboard: true,
     pagination: {
-      el: ".swiper-pagination",
       type: "progressbar",
     },
   };
@@ -102,6 +108,11 @@ export class ViewStoriesModal implements OnInit {
     this.viewStory(this.stories[0]);
   }
 
+  setSwiperInstance(swiper: any) {
+    this.slides = swiper;
+    this.slides.update();
+  }
+
   async showProfile(id: User["id"]) {
     if (id !== 1) {
       this.close();
@@ -111,23 +122,32 @@ export class ViewStoriesModal implements OnInit {
 
   async slide() {
     this.comment.setValue("");
-    this.slides.getActiveIndex().then((index) => {
-      this.story = this.stories[index];
-      this.setLikeStory();
-      this.viewStory(this.stories[index]);
-    });
+    const index = this.slides.activeIndex;
+    this.story = this.stories[index];
+    this.setLikeStory();
+    this.viewStory(this.stories[index]);
   }
 
-  async tap(event: PointerEvent) {
-    if (event.pageX > screen.width / 2) {
-      this.slides.slideNext();
-    } else {
-      this.slides.slidePrev();
+  touchStart(event: TouchEvent) {
+    this.slides.autoplay.stop();
+  }
+  touchEnd(event: TouchEvent) {
+    this.slides.autoplay.start();
+  }
+
+  tap(event: any) {
+    if (event instanceof PointerEvent) {
+      if (event.pageX > screen.width / 2) {
+        this.slides.slideNext();
+      } else {
+        this.slides.slidePrev();
+      }
     }
+    this.slides.autoplay.start();
   }
 
   commentFocus() {
-    this.slides.stopAutoplay();
+    this.slides.autoplay.stop();
     this.viewComments();
     setTimeout(() => {
       this.textarea.setFocus();
@@ -156,7 +176,7 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async switchLikeStory() {
-    this.slides.stopAutoplay();
+    this.slides.autoplay.stop();
     if (
       this.story.likeStories.some(
         (l) => l.user.id === this.auth.currentUserValue.id
@@ -168,11 +188,11 @@ export class ViewStoriesModal implements OnInit {
       this.story.like = true;
       await this.storySvc.like(this.story.id);
     }
-    this.slides.startAutoplay();
+    this.slides.autoplay.start();
   }
 
   async switchLikeComment(comment: Story["comments"][0]) {
-    this.slides.stopAutoplay();
+    this.slides.autoplay.stop();
     if (comment.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
       this.story.comments.map((c) => {
         if (c.id === comment.id) {
@@ -206,7 +226,7 @@ export class ViewStoriesModal implements OnInit {
     if (event) {
       event.preventDefault();
     }
-    this.slides.stopAutoplay();
+    this.slides.autoplay.stop();
     const text = this.comment.value.trim();
     this.comment.setValue("");
     this.story = await this.storySvc.commentStory(
@@ -218,19 +238,19 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async viewViews() {
-    this.slides.stopAutoplay();
+    this.slides.autoplay.stop();
     this.pane = new CupertinoPane(".views-pane", this.paneSettings);
     this.pane.present({ animate: true });
   }
 
   async viewComments() {
-    this.slides.stopAutoplay();
+    this.slides.autoplay.stop();
     this.pane = new CupertinoPane(".comments-pane", this.paneSettings);
     this.pane.present({ animate: true });
   }
 
   async showOptions(story: Story) {
-    this.slides.stopAutoplay();
+    this.slides.autoplay.stop();
     const actionSheet = await this.sheet.create({
       buttons: [
         {
@@ -278,7 +298,7 @@ export class ViewStoriesModal implements OnInit {
     });
     await actionSheet.present();
     await actionSheet.onDidDismiss();
-    this.slides.startAutoplay();
+    this.slides.autoplay.start();
   }
 
   async viewCommentLikes(likes: Story["comments"][0]["likes"]) {

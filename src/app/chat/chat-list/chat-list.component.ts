@@ -5,9 +5,9 @@ import {
   HostListener,
   Input,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from "@angular/core";
-import { MenuController, ToastController } from "@ionic/angular";
+import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { Config, ConfigService } from "src/app/services/config.service";
 
@@ -19,7 +19,7 @@ import { ChatService } from "./../../services/chat.service";
 @Component({
   selector: "app-chat-list",
   templateUrl: "./chat-list.component.html",
-  styleUrls: ["./chat-list.component.scss"]
+  styleUrls: ["./chat-list.component.scss"],
 })
 export class ChatListComponent {
   @Output() userChange: EventEmitter<User["id"]> = new EventEmitter();
@@ -38,7 +38,6 @@ export class ChatListComponent {
   constructor(
     private chatSvc: ChatService,
     public auth: AuthService,
-    public menu: MenuController,
     private toast: ToastController,
     private config: ConfigService,
     private cd: ChangeDetectorRef,
@@ -57,12 +56,14 @@ export class ChatListComponent {
   }
 
   async ngOnInit() {
-    this.messageEvent.subscribe(message => {
+    this.messageEvent.subscribe((message) => {
       if (!message) {
         return;
       }
-      if (this.chats?.some(m => m.conversationId === message?.conversationId)) {
-        this.chats.map(m => {
+      if (
+        this.chats?.some((m) => m.conversationId === message?.conversationId)
+      ) {
+        this.chats.map((m) => {
           if (m.conversationId === message.conversationId) {
             if (m.writing && !message.writing) {
               m.writing = false;
@@ -127,9 +128,9 @@ export class ChatListComponent {
   async setChats() {
     this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
-    let chats = this.allChats?.filter(c => {
+    let chats = this.allChats?.filter((c) => {
       return !config?.some(
-        cc => cc.conversationId === c.conversationId && cc.archived
+        (cc) => cc.conversationId === c.conversationId && cc.archived
       );
     });
     if (this.chats) {
@@ -145,15 +146,15 @@ export class ChatListComponent {
       this.chats = chats;
     }
 
-    this.archivedChats = config?.filter(cc => cc.archived);
-    this.selectedChat = this.chats?.find(c => +c.user?.id === this.selected);
+    this.archivedChats = config?.filter((cc) => cc.archived);
+    this.selectedChat = this.chats?.find((c) => +c.user?.id === this.selected);
     this.cd.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes?.selected?.currentValue) {
       this.selectedChat = this.chats?.find(
-        c => +c.user.id === +changes?.selected?.currentValue
+        (c) => +c.user.id === +changes?.selected?.currentValue
       );
     }
   }
@@ -167,7 +168,7 @@ export class ChatListComponent {
     this.selectedChat = undefined;
     this.showOptions = false;
     const chats = this.chats;
-    this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
+    this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
     const toast = await this.toast.create({
       message: "Has eliminado el chat con " + chat.user.name,
       duration: 3000,
@@ -177,9 +178,9 @@ export class ChatListComponent {
           text: "Deshacer",
           handler: () => {
             this.chats = chats;
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     toast.present();
 
@@ -197,12 +198,12 @@ export class ChatListComponent {
     try {
       await this.chatSvc.archiveChat(chat);
       const config = await this.chatSvc.getChatsConfig();
-      this.archivedChats = config.filter(cc => cc.archived);
-      this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
+      this.archivedChats = config.filter((cc) => cc.archived);
+      this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
       const toast = await this.toast.create({
         message: "Has archivado el chat con " + chat.user.name,
         duration: 3000,
-        position: "bottom"
+        position: "bottom",
       });
       toast.present();
     } catch (e) {
@@ -219,12 +220,12 @@ export class ChatListComponent {
     try {
       await this.chatSvc.unarchiveChat(chat);
       const config = await this.chatSvc.getChatsConfig();
-      this.archivedChats = config.filter(cc => cc.archived);
-      this.chats = this.chats.filter(c => c.user.id !== chat.user.id);
+      this.archivedChats = config.filter((cc) => cc.archived);
+      this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
       const toast = await this.toast.create({
         message: "Has desarchivado el chat con " + chat.user.name,
         duration: 3000,
-        position: "bottom"
+        position: "bottom",
       });
       toast.present();
     } catch (e) {
@@ -261,9 +262,9 @@ export class ChatListComponent {
   async showArchivedChats() {
     this.showingArchived = true;
     const config = await this.chatSvc.getChatsConfig();
-    this.chats = this.allChats.filter(c => {
+    this.chats = this.allChats.filter((c) => {
       return config?.some(
-        cc => cc.conversationId === c.conversationId && cc.archived
+        (cc) => cc.conversationId === c.conversationId && cc.archived
       );
     });
   }
@@ -271,9 +272,9 @@ export class ChatListComponent {
   async showUnarchivedChats() {
     this.showingArchived = false;
     const config = await this.chatSvc.getChatsConfig();
-    this.chats = this.allChats.filter(c => {
+    this.chats = this.allChats.filter((c) => {
       return !config?.some(
-        cc => cc.conversationId === c.conversationId && cc.archived
+        (cc) => cc.conversationId === c.conversationId && cc.archived
       );
     });
   }

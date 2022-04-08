@@ -18,6 +18,13 @@ import {
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import {
+  VoiceRecorder,
+  VoiceRecorderPlugin,
+  RecordingData,
+  GenericResponse,
+  CurrentRecordingStatus,
+} from "capacitor-voice-recorder";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -234,7 +241,18 @@ export class ChatInputComponent {
   }
 
   async openMic() {
-    if (navigator.mediaDevices) {
+    if (await this.requestAudioPermissions()) {
+      try {
+        const result = await VoiceRecorder.startRecording();
+        if (result) {
+          this.recording = true;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    /*if (navigator.mediaDevices) {
       let chunks = [];
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: false })
@@ -264,16 +282,38 @@ export class ChatInputComponent {
             chunks.push(e.data);
           });
         });
-    }
+    }*/
 
     this.countRecording();
   }
 
   async stopMic() {
-    this.mediaRecorder.stop();
-    // console.log(this.mediaRecorder.state);
+    try {
+      const result = await VoiceRecorder.stopRecording();
+      this.recording = false;
+      this.recorded = true;
+
+      const base64Sound = result.value.recordDataBase64;
+      const mimeType = result.value.mimeType;
+      const blob = this.utils.base64toBlob(base64Sound, mimeType);
+      this.audio = URL.createObjectURL(blob);
+      this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
+    } catch (e) {
+      console.error(e);
+    }
 
     this.stopCountRecording();
+  }
+
+  async requestAudioPermissions() {
+    if (await VoiceRecorder.canDeviceVoiceRecord()) {
+      const granted = await VoiceRecorder.requestAudioRecordingPermission();
+      if (granted) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   removeRecorded() {

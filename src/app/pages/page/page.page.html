@@ -77,8 +77,8 @@
 
   <div id="stories" *ngIf="auth.currentUserValue">
     <div *ngIf="!stories">
-      <ion-slides [options]="storiesOpts" mode="md">
-        <ion-slide *ngFor="let i of [].constructor(8)">
+      <swiper [config]="storiesOpts" mode="md">
+        <ng-template swiperSlide *ngFor="let i of [].constructor(8)">
           <div>
             <ion-avatar>
               <ion-skeleton-text
@@ -90,11 +90,11 @@
               <ion-skeleton-text animated></ion-skeleton-text>
             </ion-label>
           </div>
-        </ion-slide>
-      </ion-slides>
+        </ng-template>
+      </swiper>
     </div>
-    <ion-slides [options]="storiesOpts" mode="md" *ngIf="stories">
-      <ion-slide>
+    <swiper [config]="storiesOpts" mode="md" *ngIf="stories">
+      <ng-template swiperSlide>
         <div>
           <ion-item button lines="none" (click)="newStory()">
             <ion-avatar>
@@ -107,8 +107,11 @@
           </ion-item>
           <ion-label>Añadir</ion-label>
         </div>
-      </ion-slide>
-      <ion-slide *ngFor="let story of groupedStories; let i = index">
+      </ng-template>
+      <ng-template
+        swiperSlide
+        *ngFor="let story of groupedStories; let i = index"
+      >
         <div>
           <ion-item button lines="none" (click)="showStories(story.user.id)">
             <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
@@ -117,8 +120,8 @@
           </ion-item>
           <ion-label>{{story.user.username}}</ion-label>
         </div>
-      </ion-slide>
-    </ion-slides>
+      </ng-template>
+    </swiper>
   </div>
 
   <ion-item class="room" button lines="none" (click)="showRoom(page.slug)">

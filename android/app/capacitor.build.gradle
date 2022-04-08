@@ -27,6 +27,7 @@ dependencies {
     implementation project(':hugotomazi-capacitor-navigation-bar')
     implementation project(':robingenz-capacitor-app-update')
     implementation project(':capacitor-rate-app')
+    implementation project(':capacitor-voice-recorder')
     implementation project(':capacitor-community-http')
     implementation project(':capacitor-device')
     implementation project(':capacitor-dialog')

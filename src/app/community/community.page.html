@@ -94,8 +94,8 @@
     ></ion-icon>
   </ion-item>
   <section id="pages" *ngIf="pages?.length">
-    <ion-slides [options]="pagesOpts" mode="md">
-      <ion-slide *ngFor="let page of pages">
+    <swiper [config]="pagesOpts" mode="md">
+      <ng-template swiperSlide *ngFor="let page of pages">
         <div>
           <ion-item button lines="none" (click)="showPage(page.slug)">
             <ion-thumbnail>
@@ -104,8 +104,8 @@
           </ion-item>
           <ion-label>{{page.name}}</ion-label>
         </div>
-      </ion-slide>
-    </ion-slides>
+      </ng-template>
+    </swiper>
   </section>
   <section *ngIf="!pages || !pages?.length" class="ion-padding">
     <div class="ion-text-center register">

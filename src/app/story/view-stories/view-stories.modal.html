@@ -37,15 +37,15 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-slides
-    #slides
-    (ionSlideDidChange)="slide()"
-    (ionSlidesDidLoad)="$event.target.update()"
+  <swiper
+    (slideChangeTransitionEnd)="slide()"
+    (swiper)="setSwiperInstance($event)"
     (click)="tap($event)"
-    [options]="slideOpts"
-    pager="true"
+    (touchStart)="touchStart($event)"
+    (touchEnd)="touchEnd($event)"
+    [config]="slideOpts"
   >
-    <ion-slide *ngFor="let story of stories">
+    <ng-template swiperSlide *ngFor="let story of stories">
       <ion-card>
         <ion-thumbnail>
           <img [src]="story?.image" [alt]="story?.user.username" />
@@ -57,8 +57,8 @@
           ></p>
         </ion-card-content>
       </ion-card>
-    </ion-slide>
-  </ion-slides>
+    </ng-template>
+  </swiper>
   <ion-item lines="none" id="text-input">
     <ion-buttons
       ion-activatable

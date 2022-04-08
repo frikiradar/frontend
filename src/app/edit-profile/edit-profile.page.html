@@ -26,18 +26,19 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-slides
-    #imageSlider
-    [pager]="true"
-    (ionSlideDidChange)="setActiveImage(imageSlider.getActiveIndex())"
+  <swiper
+    #slider
+    [config]="sliderOpts"
+    (swiper)="setSwiperInstance($event)"
+    (slideChangeTransitionEnd)="setActiveImage()"
   >
-    <ion-slide>
+    <ng-template swiperSlide>
       <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
-    </ion-slide>
-    <ion-slide *ngFor="let image of user?.images">
+    </ng-template>
+    <ng-template swiperSlide *ngFor="let image of user?.images">
       <img [src]="image" default="/assets/img/users/default.jpg" />
-    </ion-slide>
-  </ion-slides>
+    </ng-template>
+  </swiper>
 
   <input
     type="file"
@@ -90,7 +91,7 @@
           <!--<ion-input formControlName="birthday"></ion-input>-->
         </ion-item>
       </ion-item-group>
-      <ion-item-group *ngIf="auth.isAdult()">
+      <ion-item-group>
         <ion-item-divider color="primary">
           <ion-icon name="location" slot="start"></ion-icon>
           <ion-label>
@@ -188,7 +189,7 @@
           </ion-select>
         </ion-item>
       </ion-item-group>
-      <ion-item-group *ngIf="auth.isAdult()">
+      <ion-item-group>
         <ion-item-divider color="primary">
           <ion-icon name="search" slot="start"></ion-icon>
           <ion-label>

@@ -27,7 +27,6 @@ export class RegisterComponent {
   public today: number = Date.now();
   public clearPassword = false;
   public usernameSuggestion = "";
-  public adult = false;
   public birthdayValue = "";
 
   constructor(
@@ -61,7 +60,7 @@ export class RegisterComponent {
       birthday: new FormControl(
         new Date(
           new Date().getFullYear() -
-            14 +
+            18 +
             "-" +
             (new Date().getMonth() + 1) +
             "-" +
@@ -90,14 +89,6 @@ export class RegisterComponent {
           }
         }
       });
-  }
-
-  changeAge(event: CustomEvent) {
-    if (this.auth.isAdult(event.detail.value)) {
-      this.adult = true;
-    } else {
-      this.adult = false;
-    }
   }
 
   async submitRegister() {

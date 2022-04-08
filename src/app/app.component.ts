@@ -77,16 +77,6 @@ export class AppComponent {
     } else {
       // this.betaAdvertisement();
     }
-
-    // Firebase Analytics
-    const deviceInfo = Device.getInfo();
-    if ((await deviceInfo).platform === "web") {
-      FirebaseAnalytics.initializeFirebase(environment.firebase);
-    }
-    FirebaseAnalytics.setUserId({
-      userId: this.auth.currentUserValue.username,
-    });
-    FirebaseAnalytics.setUserProperty({ name: "theme", value: theme });
   }
 
   async networkStatus() {

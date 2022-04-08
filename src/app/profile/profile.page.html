@@ -58,18 +58,18 @@
       </ion-item>
     </ion-list>
     <ng-template #profile>
-      <ion-slides [pager]="user?.images?.length">
-        <ion-slide>
+      <swiper [pagination]="user?.images?.length" [config]="sliderOpts">
+        <ng-template swiperSlide>
           <img
             [src]="user?.avatar"
             [alt]="user?.username"
             default="/assets/img/users/default.jpg"
           />
-        </ion-slide>
-        <ion-slide *ngFor="let image of user?.images">
+        </ng-template>
+        <ng-template swiperSlide *ngFor="let image of user?.images">
           <img [src]="image" default="/assets/img/users/default.jpg" />
-        </ion-slide>
-      </ion-slides>
+        </ng-template>
+      </swiper>
       <div *ngIf="story" id="stories">
         <ion-avatar
           [ngClass]="story.viewed ? '' : 'not-view'"

@@ -3,137 +3,141 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { AdminGuard } from "./guards/admin.guard";
 import { AuthGuard } from "./guards/auth.guard";
-import { TabGuard } from "./guards/tab.guard";
 
 const routes: Routes = [
   {
     path: "",
     loadChildren: () =>
-      import("./tabs/tabs.module").then(m => m.TabsPageModule),
-    canActivate: [AuthGuard, TabGuard]
+      import("./tabs/tabs.module").then((m) => m.TabsPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "login",
     loadChildren: () =>
-      import("./login/login.module").then(m => m.LoginPageModule)
+      import("./login/login.module").then((m) => m.LoginPageModule),
   },
   {
     path: "edit-profile",
     loadChildren: () =>
       import("./edit-profile/edit-profile.module").then(
-        m => m.EditProfilePageModule
-      )
+        (m) => m.EditProfilePageModule
+      ),
   },
   {
     path: "profile",
     loadChildren: () =>
-      import("./profile/profile.module").then(m => m.ProfilePageModule)
+      import("./profile/profile.module").then((m) => m.ProfilePageModule),
   },
   {
     path: "profile/:id",
     loadChildren: () =>
-      import("./profile/profile.module").then(m => m.ProfilePageModule)
+      import("./profile/profile.module").then((m) => m.ProfilePageModule),
   },
   {
     path: "notification",
     loadChildren: () =>
       import("./notification/notification.module").then(
-        m => m.NotificationPageModule
-      )
+        (m) => m.NotificationPageModule
+      ),
   },
   {
     path: "chat",
-    loadChildren: () => import("./chat/chat.module").then(m => m.ChatPageModule)
+    loadChildren: () =>
+      import("./chat/chat.module").then((m) => m.ChatPageModule),
   },
   {
     path: "chat/:id",
-    loadChildren: () => import("./chat/chat.module").then(m => m.ChatPageModule)
+    loadChildren: () =>
+      import("./chat/chat.module").then((m) => m.ChatPageModule),
   },
   {
     path: "rooms",
     loadChildren: () =>
-      import("./room/rooms/rooms.module").then(m => m.RoomsPageModule)
+      import("./room/rooms/rooms.module").then((m) => m.RoomsPageModule),
   },
   {
     path: "room/:slug",
-    loadChildren: () => import("./room/room.module").then(m => m.RoomPageModule)
+    loadChildren: () =>
+      import("./room/room.module").then((m) => m.RoomPageModule),
   },
   {
     path: "search",
     loadChildren: () =>
-      import("./search/search.module").then(m => m.SearchPageModule)
+      import("./search/search.module").then((m) => m.SearchPageModule),
   },
   {
     path: "search/:query",
     loadChildren: () =>
-      import("./search/search.module").then(m => m.SearchPageModule)
+      import("./search/search.module").then((m) => m.SearchPageModule),
   },
   {
     path: "settings",
     loadChildren: () =>
-      import("./settings/settings.module").then(m => m.SettingsPageModule)
+      import("./settings/settings.module").then((m) => m.SettingsPageModule),
   },
   {
     path: "admin",
     loadChildren: () =>
-      import("./admin/admin.module").then(m => m.AdminPageModule),
-    canActivate: [AdminGuard]
+      import("./admin/admin.module").then((m) => m.AdminPageModule),
+    canActivate: [AdminGuard],
   },
   {
     path: "story",
     loadChildren: () =>
-      import("./story/story.module").then(m => m.StoryPageModule)
+      import("./story/story.module").then((m) => m.StoryPageModule),
   },
   {
     path: "page/:slug",
     loadChildren: () =>
-      import("./pages/page/page.module").then(m => m.PagePageModule)
+      import("./pages/page/page.module").then((m) => m.PagePageModule),
   },
   {
     path: "pages",
     loadChildren: () =>
-      import("./pages/pages.module").then(m => m.PagesPageModule)
+      import("./pages/pages.module").then((m) => m.PagesPageModule),
   },
   {
     path: "ambassador",
     loadChildren: () =>
-      import("./ambassador/ambassador.module").then(m => m.AmbassadorPageModule)
+      import("./ambassador/ambassador.module").then(
+        (m) => m.AmbassadorPageModule
+      ),
   },
   {
     path: "patreon",
     loadChildren: () =>
-      import("./patreon/patreon.module").then(m => m.PatreonPageModule),
-    canActivate: [AuthGuard]
+      import("./patreon/patreon.module").then((m) => m.PatreonPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "patreon/",
     loadChildren: () =>
-      import("./patreon/patreon.module").then(m => m.PatreonPageModule),
-    canActivate: [AuthGuard]
+      import("./patreon/patreon.module").then((m) => m.PatreonPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "rules",
     loadChildren: () =>
-      import("./rules/rules.module").then(m => m.RulesPageModule)
+      import("./rules/rules.module").then((m) => m.RulesPageModule),
   },
   {
     path: "event/:id",
     loadChildren: () =>
-      import("./events/event/event.module").then(m => m.EventPageModule)
+      import("./events/event/event.module").then((m) => m.EventPageModule),
   },
   {
     path: ":id",
     loadChildren: () =>
-      import("./profile/profile.module").then(m => m.ProfilePageModule)
-  }
+      import("./profile/profile.module").then((m) => m.ProfilePageModule),
+  },
 ];
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
       relativeLinkResolution: "legacy",
-      useHash: false
-    })
+      useHash: false,
+    }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
