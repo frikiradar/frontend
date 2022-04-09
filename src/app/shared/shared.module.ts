@@ -1,3 +1,4 @@
+import { NotificationOptionsModal } from "./../notification/notification-options-modal/notification-options.modal";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
@@ -19,6 +20,7 @@ import { ChatInputComponent } from "../chat/chat-input/chat-input.component";
 import { MentionsPipe } from "../mentions.pipe";
 import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { MenuModal } from "./../menu/menu.modal";
 import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 import { HashtagPipe } from "../hashtag.pipe";
 import { ChatListComponent } from "../chat/chat-list/chat-list.component";
@@ -27,6 +29,8 @@ import { AudioPlayerComponent } from "../audio-player/audio-player.component";
 import { ChatDatePipe } from "../chat-date.pipe";
 import { EventModal } from "../events/event-modal/event.modal";
 import { RulesPage } from "../rules/rules.page";
+import { RoomOptionsModal } from "../room/room-options-modal/room-options.modal";
+import { LikesModal } from "./../profile/likes-modal/likes.modal";
 
 @NgModule({
   declarations: [
@@ -46,6 +50,10 @@ import { RulesPage } from "../rules/rules.page";
     StoryModal,
     EventModal,
     ViewStoriesModal,
+    MenuModal,
+    LikesModal,
+    NotificationOptionsModal,
+    RoomOptionsModal,
     CommentLikesModal,
     RulesPage,
   ],

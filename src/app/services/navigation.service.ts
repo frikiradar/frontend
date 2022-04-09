@@ -4,7 +4,7 @@ import {
   ModalController,
   NavController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 import { NavigationOptions } from "@ionic/angular/providers/nav-controller";
 
@@ -20,7 +20,7 @@ export class NavService {
     private toast: ToastController,
     private modal: ModalController
   ) {
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.history.push(event.urlAfterRedirects);
         this.backButtonCount = 0;
@@ -43,12 +43,7 @@ export class NavService {
 
   async backButtonStatus() {
     this.platform.backButton.subscribeWithPriority(1, async () => {
-      if (!!document.querySelector(".cupertino-pane-wrapper")) {
-        this.backButtonCount = 0;
-      } else if (
-        this.router.url.includes("chat") &&
-        (await this.modal.getTop())
-      ) {
+      if (this.router.url.includes("chat") && (await this.modal.getTop())) {
         this.modal.dismiss();
       } else if (
         this.router.url.includes("/tabs/") ||
@@ -61,7 +56,7 @@ export class NavService {
             await this.toast.create({
               message: "Pulsa de nuevo para salir de la aplicación",
               duration: 2000,
-              position: "bottom"
+              position: "bottom",
             })
           ).present();
         } else if (this.backButtonCount >= 2) {

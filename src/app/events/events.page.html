@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Eventos (beta)</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="showOptions()">
+      <ion-button id="show-options">
         <ion-icon slot="icon-only" name="location-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -129,44 +129,56 @@
   </div>
 </ion-content>
 
-<!-- panes -->
+<!-- modals -->
 
-<div class="events-pane">
-  <ion-item lines="full">
-    <ion-label class="ion-text-center">
-      <h2>Configuración de eventos cercanos</h2>
-      <p class="ion-text-wrap">
-        Selecciona tu país y municipio para poder recomendarte eventos
-        presenciales en tu zona.
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-list>
-    <ion-item>
-      <ion-icon name="earth" slot="start"></ion-icon>
-      <ion-label>Tu país</ion-label>
-      <ion-select
-        interface="action-sheet"
-        cancel-text="Cancelar"
-        placeholder="Selecciona uno"
-        [value]="user?.country"
-        debounce="2000"
-        (ionChange)="changePreferences('country', $event.detail.value)"
-      >
-        <ion-select-option
-          *ngFor="let country of utils.getCountries()"
-          [value]="country"
-          >{{ country }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="location-outline" slot="start"></ion-icon>
-      <ion-label>Municipio</ion-label>
-      <ion-input
-        (ionChange)="changePreferences('city', $event.detail.value)"
-        [value]="user?.city"
-      ></ion-input>
-    </ion-item>
-  </ion-list>
-</div>
+<ion-modal
+  [breakpoints]="[0, 0.3, 0.5]"
+  [initialBreakpoint]="0.3"
+  trigger="show-options"
+  cssClass="sheet-modal"
+  (didDismiss)="saveOptions()"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-header>
+        <ion-item lines="full">
+          <ion-label class="ion-text-center">
+            <h2>Configuración de eventos cercanos</h2>
+            <p class="ion-text-wrap">
+              Selecciona tu país y municipio para poder recomendarte eventos
+              presenciales en tu zona.
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-header>
+      <ion-list>
+        <ion-item>
+          <ion-icon name="earth" slot="start"></ion-icon>
+          <ion-label>Tu país</ion-label>
+          <ion-select
+            interface="action-sheet"
+            cancel-text="Cancelar"
+            placeholder="Selecciona uno"
+            [value]="user?.country"
+            debounce="2000"
+            (ionChange)="changePreferences('country', $event.detail.value)"
+          >
+            <ion-select-option
+              *ngFor="let country of utils.getCountries()"
+              [value]="country"
+              >{{ country }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="location-outline" slot="start"></ion-icon>
+          <ion-label>Municipio</ion-label>
+          <ion-input
+            (ionChange)="changePreferences('city', $event.detail.value)"
+            [value]="user?.city"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

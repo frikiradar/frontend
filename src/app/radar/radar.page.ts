@@ -6,16 +6,15 @@ import {
 } from "@angular/core";
 import { NavigationStart, Router, Event } from "@angular/router";
 import {
-  Platform,
   AlertController,
   IonRange,
   IonContent,
   ToastController,
   ModalController,
+  IonRouterOutlet,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { takeWhile } from "rxjs/operators";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import * as deepEqual from "deep-equal";
 import SwiperCore, { Keyboard, SwiperOptions, EffectCoverflow } from "swiper";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
@@ -95,7 +94,6 @@ export class RadarPage {
   coordinates: User["coordinates"];
   public showBackdrop = false;
   public loading = true;
-  public pane: CupertinoPane;
   public extended = true;
   public searchOptions = {
     identity: true,
@@ -103,30 +101,6 @@ export class RadarPage {
     connection: false,
   };
   private searchOptionsChanged = false;
-
-  private paneSettings: CupertinoSettings = {
-    backdrop: true,
-    bottomClose: true,
-    buttonDestroy: false,
-    handleKeyboard: false,
-    breaks: {
-      middle: { enabled: true, height: 500, bounce: true },
-      bottom: { enabled: true, height: 300, bounce: true },
-    },
-    initialBreak: "middle",
-
-    onBackdropTap: () => {
-      this.pane.destroy({ animate: true });
-      if (this.searchOptionsChanged) {
-        this.searchOptionsChanged = false;
-        this.loading = true;
-        this.page = 0;
-        this.users = undefined;
-        this.radarlist?.scrollToTop(0);
-        this.getRadarUsers();
-      }
-    },
-  };
 
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -153,7 +127,8 @@ export class RadarPage {
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
     private storySvc: StoryService,
-    private modal: ModalController
+    private modal: ModalController,
+    public routerOutlet: IonRouterOutlet
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
@@ -401,6 +376,8 @@ export class RadarPage {
       keyboardClose: true,
       showBackdrop: true,
       cssClass: "full-modal",
+      presentingElement: this.routerOutlet.nativeEl,
+      swipeToClose: true,
     });
 
     await modal.present();
@@ -585,29 +562,6 @@ export class RadarPage {
     }
   }
 
-  async filter() {
-    this.pane = new CupertinoPane(".radar-pane", this.paneSettings);
-    const radar_config = (await this.config.get(
-      "radar_config"
-    )) as Config["radar_config"];
-    if (radar_config) {
-      if (radar_config?.options) {
-        this.searchOptions = radar_config.options;
-      }
-      if (radar_config?.extended) {
-        this.extended = radar_config.extended;
-      }
-    }
-
-    if (this.extended) {
-      this.pane.present({ animate: true });
-    } else {
-      this.pane.present({ animate: true });
-      await this.utils.delay(100);
-      this.pane.moveToBreak("bottom");
-    }
-  }
-
   async radarSearchChange(extended: boolean) {
     this.searchOptionsChanged = true;
     this.extended = extended;
@@ -621,11 +575,6 @@ export class RadarPage {
     }
 
     this.config.set("radar_config", radar_config);
-    if (extended) {
-      this.pane.moveToBreak("middle");
-    } else {
-      this.pane.moveToBreak("bottom");
-    }
   }
 
   async radarSearchOptions(
@@ -646,5 +595,16 @@ export class RadarPage {
     radar_config.options[property] = value;
     this.config.set("radar_config", radar_config);
     this.searchOptions = radar_config.options;
+  }
+
+  dismissFilterOptions() {
+    if (this.searchOptionsChanged) {
+      this.searchOptionsChanged = false;
+      this.loading = true;
+      this.page = 0;
+      this.users = undefined;
+      this.radarlist?.scrollToTop(0);
+      this.getRadarUsers();
+    }
   }
 }

@@ -239,6 +239,11 @@ ion-modal::part(content) {
   }
 }
 
+.sheet-modal {
+  --border-radius: 20px;
+  padding: 15px;
+}
+
 .round-alert .alert-wrapper {
   border-radius: 25px;
 }
@@ -279,15 +284,6 @@ ul {
 .ion-img-viewer {
   .swiper-slide img {
     z-index: 1;
-  }
-}
-
-.pane {
-  --cupertino-pane-background: var(--ion-color-dark) !important;
-  padding: 15px;
-
-  ion-label {
-    color: var(--ion-color-light) !important;
   }
 }
 

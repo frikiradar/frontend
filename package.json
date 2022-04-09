@@ -51,7 +51,6 @@
     "capacitor-rate-app": "^2.0.0",
     "capacitor-voice-recorder": "^2.2.0",
     "core-js": "^3.9.1",
-    "cupertino-pane": "^1.2.82",
     "deep-equal": "^2.0.5",
     "event-source-polyfill": "^1.0.25",
     "firebase": "^9.6.10",

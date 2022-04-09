@@ -216,10 +216,6 @@ ion-chip {
   clear: both;
 }
 
-.options-pane {
-  display: none;
-
-  ion-label p {
-    white-space: initial;
-  }
+ion-modal ion-label p {
+  white-space: initial;
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -14,7 +14,6 @@ import {
   Platform,
   ToastController,
 } from "@ionic/angular";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import SwiperCore, {
   Keyboard as SwiperKeyboard,
   SwiperOptions,
@@ -42,7 +41,7 @@ export class ViewStoriesModal implements OnInit {
   @Input() stories: Story[];
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
-  private slides: SwiperCore;
+  public slides: SwiperCore;
 
   public commentForm: FormGroup;
   get comment() {
@@ -51,24 +50,11 @@ export class ViewStoriesModal implements OnInit {
 
   public story: Story;
   private delay = 5000;
-  public pane: CupertinoPane;
   private inputAt = false;
   private mention: string;
   public userMentions: User["username"][] = [];
   public usernames: User[];
   private writing = false;
-
-  paneSettings: CupertinoSettings = {
-    backdrop: true,
-    bottomClose: true,
-    buttonDestroy: false,
-    handleKeyboard: false,
-    initialBreak: "top",
-    onBackdropTap: () => {
-      this.pane.destroy({ animate: true });
-      this.slides.autoplay.start();
-    },
-  };
 
   public slideOpts: SwiperOptions = {
     speed: 500,
@@ -146,9 +132,12 @@ export class ViewStoriesModal implements OnInit {
     this.slides.autoplay.start();
   }
 
-  commentFocus() {
-    this.slides.autoplay.stop();
-    this.viewComments();
+  commentFocus(event?: CustomEvent) {
+    if (event) {
+      const textarea = event.target as unknown as IonTextarea;
+      textarea.setBlur();
+    }
+    document.getElementById("view-comments").click();
     setTimeout(() => {
       this.textarea.setFocus();
       if (this.platform.is("capacitor")) {
@@ -237,18 +226,6 @@ export class ViewStoriesModal implements OnInit {
     this.setLikeStory();
   }
 
-  async viewViews() {
-    this.slides.autoplay.stop();
-    this.pane = new CupertinoPane(".views-pane", this.paneSettings);
-    this.pane.present({ animate: true });
-  }
-
-  async viewComments() {
-    this.slides.autoplay.stop();
-    this.pane = new CupertinoPane(".comments-pane", this.paneSettings);
-    this.pane.present({ animate: true });
-  }
-
   async showOptions(story: Story) {
     this.slides.autoplay.stop();
     const actionSheet = await this.sheet.create({
@@ -301,6 +278,10 @@ export class ViewStoriesModal implements OnInit {
     this.slides.autoplay.start();
   }
 
+  viewComments() {
+    document.getElementById("view-comments").click();
+  }
+
   async viewCommentLikes(likes: Story["comments"][0]["likes"]) {
     const modal = await this.likeModal.create({
       component: CommentLikesModal,
@@ -322,7 +303,7 @@ export class ViewStoriesModal implements OnInit {
       this.comment.setValue(`@${comment.user.username} `);
       this.setMention(comment.user.username);
     }
-    this.textarea.setFocus();
+    this.commentFocus();
     if (this.platform.is("capacitor")) {
       Keyboard.show();
     }
@@ -335,7 +316,7 @@ export class ViewStoriesModal implements OnInit {
       this.comment.value.replace(this.mention, `@${username} `)
     );
     this.userMentions = [...this.userMentions, username];
-    this.textarea.setFocus();
+    this.commentFocus();
     if (this.platform.is("capacitor")) {
       Keyboard.show();
     }

@@ -11,30 +11,17 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Event } from "src/app/models/event";
 import { EventModal } from "../event-modal/event.modal";
 import { Page } from "src/app/models/page";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { User } from "src/app/models/user";
 
 @Component({
   selector: "app-event",
   templateUrl: "./event.page.html",
-  styleUrls: ["./event.page.scss"]
+  styleUrls: ["./event.page.scss"],
 })
 export class EventPage implements OnInit {
   public event: Event;
   public mapSrc: SafeUrl = "";
   public participant = false;
-  public pane: CupertinoPane;
-
-  paneSettings: CupertinoSettings = {
-    backdrop: true,
-    bottomClose: true,
-    buttonDestroy: false,
-    handleKeyboard: false,
-    initialBreak: "middle",
-    onBackdropTap: () => {
-      this.pane.destroy({ animate: true });
-    }
-  };
 
   constructor(
     private route: ActivatedRoute,
@@ -70,7 +57,7 @@ export class EventPage implements OnInit {
     }
 
     this.participant = this.event.participants.some(
-      p => p.id === this.auth.currentUserValue.id
+      (p) => p.id === this.auth.currentUserValue.id
     );
   }
 
@@ -96,7 +83,7 @@ export class EventPage implements OnInit {
             : "Tienes que iniciar sesión o registrarte para apuntarte al evento",
           duration: 2000,
           position: "bottom",
-          color: "danger"
+          color: "danger",
         })
       ).present();
     }
@@ -112,7 +99,7 @@ export class EventPage implements OnInit {
           message: e,
           duration: 2000,
           position: "bottom",
-          color: "danger"
+          color: "danger",
         })
       ).present();
     }
@@ -125,7 +112,7 @@ export class EventPage implements OnInit {
       this.router.navigate(["/room", slug]);
     } else {
       this.nav.navigateRoot(["/login"], {
-        queryParams: { returnUrl: this.router.url }
+        queryParams: { returnUrl: this.router.url },
       });
     }
   }
@@ -134,14 +121,10 @@ export class EventPage implements OnInit {
     this.router.navigate(["/page", slug]);
   }
 
-  showParticipants() {
-    this.pane = new CupertinoPane(".participants-pane", this.paneSettings);
-    this.pane.present({ animate: true });
-  }
-
   async showProfile(id: User["id"]) {
     if (id !== 1) {
       this.router.navigate(["/profile", id]);
+      this.modal.dismiss();
     }
   }
 
@@ -172,7 +155,7 @@ export class EventPage implements OnInit {
           message: "Error al eliminar el evento",
           duration: 2000,
           position: "bottom",
-          color: "danger"
+          color: "danger",
         })
       ).present();
     }
@@ -184,7 +167,7 @@ export class EventPage implements OnInit {
       keyboardClose: true,
       showBackdrop: true,
       cssClass: "full-modal",
-      componentProps: { event: this.event, user: this.event?.user }
+      componentProps: { event: this.event, user: this.event?.user },
     });
 
     await modal.present();

@@ -23,7 +23,7 @@ ion-label {
 }
 
 swiper {
-  height: 70vh;
+  height: 60vh;
 }
 
 ion-card {
@@ -89,19 +89,11 @@ ion-footer {
   }
 }
 
-.views-pane {
-  display: none;
-
-  ion-avatar {
-    margin-right: 10px;
-  }
+ion-modal ion-avatar {
+  margin-right: 10px;
 }
 
-.comments-pane {
-  display: none;
-}
-
-.comments-pane,
+.comments-modal,
 .comments {
   .text {
     a {
@@ -131,7 +123,7 @@ ion-footer {
 
   ion-footer {
     position: absolute;
-    bottom: 0;
+    bottom: 90px;
   }
 }
 

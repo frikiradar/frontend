@@ -9,7 +9,6 @@ import {
   PopoverController,
   ToastController,
 } from "@ionic/angular";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { pulse } from "ng-animate";
 import SwiperCore, { SwiperOptions, Pagination, Keyboard } from "swiper";
 
@@ -27,6 +26,7 @@ import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { AuthService } from "./../services/auth.service";
+import { LikesModal } from "./likes-modal/likes.modal";
 
 SwiperCore.use([Pagination, Keyboard]);
 
@@ -46,7 +46,6 @@ export class ProfilePage {
   };
   public loading = true;
   public pulse: any;
-  public pane: CupertinoPane;
   public param: "received" | "delivered";
 
   public sliderOpts: SwiperOptions = {
@@ -54,17 +53,6 @@ export class ProfilePage {
     preloadImages: false,
     lazy: true,
     grabCursor: true,
-  };
-
-  private paneSettings: CupertinoSettings = {
-    backdrop: true,
-    bottomClose: true,
-    buttonDestroy: false,
-    handleKeyboard: false,
-    initialBreak: "middle",
-    onBackdropTap: () => {
-      this.pane.destroy({ animate: true });
-    },
   };
 
   constructor(
@@ -336,24 +324,18 @@ export class ProfilePage {
 
   async showLikes(param: "received" | "delivered") {
     this.param = param;
-    this.pane = new CupertinoPane(".likes-pane", this.paneSettings);
-    this.pane.present({ animate: true });
     if (!this.likes[param]?.length) {
       this.likes[param] = await this.likeSvc.getLikes(param, 1, this.user.id);
     }
-  }
-
-  async viewProfile(id: number) {
-    this.pane.destroy({ animate: true });
-    if (
-      this.param === "received" &&
-      this.user.id === this.auth.currentUserValue.id
-    ) {
-      if (!this.likes[this.param].find((l) => l.user.id === id).time_read) {
-        await this.likeSvc.readLike(id);
-      }
-    }
-    this.nav.navigateRoot(["/profile/", id]);
+    const modal = await this.modal.create({
+      component: LikesModal,
+      componentProps: { likes: this.likes, param: this.param, user: this.user },
+      initialBreakpoint: 0.7,
+      breakpoints: [0, 0.7, 0.95],
+      cssClass: "sheet-modal",
+      showBackdrop: true,
+    });
+    return await modal.present();
   }
 
   back() {

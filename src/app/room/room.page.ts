@@ -1,3 +1,4 @@
+import { RoomOptionsModal } from "./room-options-modal/room-options.modal";
 import {
   ChangeDetectorRef,
   Component,
@@ -20,7 +21,6 @@ import {
   PopoverController,
   ToastController,
 } from "@ionic/angular";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { PushNotifications } from "@capacitor/push-notifications";
 
@@ -72,21 +72,7 @@ export class RoomPage implements OnInit {
   public editing = false;
   public writing = false;
   public toUserWriting = "";
-  public pane: CupertinoPane;
   public realtimeChat = true;
-
-  private paneSettings: CupertinoSettings = {
-    backdrop: true,
-    bottomClose: true,
-    buttonDestroy: false,
-    handleKeyboard: false,
-    initialBreak: "middle",
-    onBackdropTap: () => {
-      this.pane.destroy({ animate: true });
-      this.selectedMessage = undefined;
-      this.pressOptions = false;
-    },
-  };
 
   constructor(
     public auth: AuthService,
@@ -426,80 +412,6 @@ export class RoomPage implements OnInit {
     this.scrollDown();
   }
 
-  async deleteMessage() {
-    this.pane.destroy({ animate: true });
-    try {
-      await this.chatSvc.deleteMessage(this.selectedMessage.id);
-      if (this.selectedMessage.fromuser.id === this.auth.currentUserValue.id) {
-        this.messages = this.messages.filter(
-          (m) => m.id !== this.selectedMessage.id
-        );
-      }
-    } catch (e) {
-      (
-        await this.toast.create({
-          message: "Error al eliminar el mensaje",
-          duration: 2000,
-          position: "middle",
-        })
-      ).present();
-
-      console.error(e);
-    }
-  }
-
-  async reportMessage() {
-    const alert = await this.alert.create({
-      header: `¿Quieres reportar a el mensaje de ${this.selectedMessage?.fromuser?.username}?`,
-      message:
-        "Nos llegará un aviso para que revisemos el caso y actuemos en consecuencia.",
-      inputs: [
-        {
-          name: "note",
-          type: "text",
-          placeholder: "Motivo del reporte (opcional)",
-        },
-      ],
-      buttons: [
-        {
-          text: "Cancelar",
-          role: "cancel",
-          cssClass: "secondary",
-        },
-        {
-          text: "Reportar",
-          role: "block",
-          handler: async (data) => {
-            try {
-              await this.chatSvc.report(this.selectedMessage, data.note);
-              (
-                await this.toast.create({
-                  message: "Mensaje reportado correctamente",
-                  duration: 2000,
-                  position: "bottom",
-                })
-              ).present();
-            } catch (e) {
-              (
-                await this.toast.create({
-                  message: `Error al reportar el mensaje ${e}`,
-                  duration: 2000,
-                  position: "bottom",
-                  color: "danger",
-                })
-              ).present();
-              alert.present();
-            }
-          },
-        },
-      ],
-      cssClass: "round-alert",
-    });
-
-    await alert.present();
-    this.pane.destroy({ animate: true });
-  }
-
   async dragItem(event: any, message: Chat) {
     this.selectedMessage = message;
     if (event.detail.ratio < -0.9) {
@@ -596,8 +508,39 @@ export class RoomPage implements OnInit {
   }
 
   async showOptions() {
-    this.pane = new CupertinoPane(".options-pane", this.paneSettings);
-    this.pane.present({ animate: true });
+    const modal = await this.modalController.create({
+      component: RoomOptionsModal,
+      componentProps: {
+        message: this.selectedMessage,
+      },
+      initialBreakpoint: 0.3,
+      breakpoints: [0, 0.3, 0.5],
+      cssClass: "sheet-modal",
+    });
+    await modal.present();
+
+    const data = await modal.onDidDismiss();
+    if (data?.data?.deleted) {
+      const message = data.data.deleted;
+      if (
+        this.auth.isMaster() &&
+        this.auth.currentUserValue.id !== message.fromuser.id
+      ) {
+        this.messages.map((m) => {
+          if (m.id === message.id) {
+            m.text = "<em>Mensaje eliminado por un moderador</em>";
+          }
+          return m;
+        });
+      } else {
+        this.messages = this.messages.filter((m) => m.id !== message.id);
+      }
+    }
+  }
+
+  dismissOptions() {
+    this.selectedMessage = undefined;
+    this.pressOptions = false;
   }
 
   async setWriting() {

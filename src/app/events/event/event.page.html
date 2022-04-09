@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true" *ngIf="event">
+<ion-content [fullscreen]="true">
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <ion-buttons slot="start">
@@ -18,7 +18,12 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-img id="artwork" [src]="event?.image" [alt]="event?.title"></ion-img>
+  <ion-img
+    *ngIf="event?.image"
+    id="artwork"
+    [src]="event?.image"
+    [alt]="event?.title"
+  ></ion-img>
   <ion-item
     *ngIf="event?.status === 'cancelled'"
     lines="none"
@@ -27,19 +32,14 @@
     <ion-icon name="timer-outline" slot="start"></ion-icon>
     <ion-label>Evento cancelado</ion-label>
   </ion-item>
-  <ion-item
-    lines="none"
-    *ngIf="!event.user && event?.participants"
-    button
-    (click)="showParticipants()"
-  >
+  <ion-item lines="none" button id="show-participants">
     <ion-icon name="people" slot="start"></ion-icon>
     <ion-label class="ion-text-wrap"
       >{{event?.participants?.length}} personas han confirmado
       asistencia</ion-label
     >
   </ion-item>
-  <ion-item lines="none">
+  <ion-item lines="none" *ngIf="event?.date || event?.date_end">
     <ion-icon
       [name]="event?.past ? 'timer-outline' : 'calendar'"
       slot="start"
@@ -83,7 +83,7 @@
         ></p>
       </ion-label>
     </ion-item>
-    <ion-item lines="none" *ngIf="event.contact_email">
+    <ion-item lines="none" *ngIf="event?.contact_email">
       <ion-icon name="mail" slot="start"></ion-icon>
       <ion-label>
         <h2>Email de contacto</h2>
@@ -93,7 +93,7 @@
       </ion-label>
     </ion-item>
   </ion-item-group>
-  <ion-item lines="none" *ngIf="event.url">
+  <ion-item lines="none" *ngIf="event?.url">
     <ion-icon name="link" slot="start"></ion-icon>
     <ion-label>
       <h2 *ngIf="event.type === 'offline'">
@@ -106,7 +106,7 @@
       ></p>
     </ion-label>
   </ion-item>
-  <ion-item lines="none" *ngIf="event.price">
+  <ion-item lines="none" *ngIf="event?.price">
     <ion-icon name="price-tag" slot="start"></ion-icon>
     <ion-label>
       <h2>Precio en moneda local</h2>
@@ -258,24 +258,31 @@
   </ion-buttons>
 </ion-footer>
 
-<!-- panes -->
-
-<div class="participants-pane">
-  <p>Asistentes</p>
-  <ion-list *ngIf="event?.participants?.length > 0">
-    <ion-item
-      *ngFor="let participant of event?.participants"
-      button
-      detail="false"
-      (click)="showProfile(participant.id)"
-    >
-      <ion-avatar slot="start">
-        <img [src]="participant?.thumbnail" />
-      </ion-avatar>
-      <ion-label>{{participant?.username}}</ion-label>
-    </ion-item>
-  </ion-list>
-  <ion-item *ngIf="event?.participants?.length == 0">
-    <p>No hay asistentes</p>
-  </ion-item>
-</div>
+<!-- modals -->
+<ion-modal
+  [breakpoints]="[0, 0.3, 0.95]"
+  [initialBreakpoint]="0.3"
+  trigger="show-participants"
+  cssClass="sheet-modal"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-list *ngIf="event?.participants?.length > 0">
+        <ion-item
+          *ngFor="let participant of event?.participants"
+          button
+          detail="false"
+          (click)="showProfile(participant.id)"
+        >
+          <ion-avatar slot="start">
+            <img [src]="participant?.thumbnail" />
+          </ion-avatar>
+          <ion-label>{{participant?.username}}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-item *ngIf="event?.participants?.length == 0">
+        <p>No hay asistentes</p>
+      </ion-item>
+    </ion-content>
+  </ng-template>
+</ion-modal>

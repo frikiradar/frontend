@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ModalController } from "@ionic/angular";
-import { CupertinoPane, CupertinoSettings } from "cupertino-pane";
 
 import { Event } from "../models/event";
 import { User } from "../models/user";
@@ -15,34 +14,14 @@ import { EventModal } from "./event-modal/event.modal";
 @Component({
   selector: "app-events",
   templateUrl: "./events.page.html",
-  styleUrls: ["./events.page.scss"]
+  styleUrls: ["./events.page.scss"],
 })
 export class EventsPage implements OnInit {
   public type: "suggested" | "online" | "near" | "my" = "suggested";
   public events: Event[];
-  public pane: CupertinoPane;
   public user: User;
   public loading = true;
   public my = false;
-
-  private paneSettings: CupertinoSettings = {
-    backdrop: true,
-    bottomClose: true,
-    buttonDestroy: false,
-    handleKeyboard: false,
-    breaks: {
-      middle: { enabled: true, height: 500, bounce: true },
-      bottom: { enabled: true, height: 300, bounce: true }
-    },
-    initialBreak: "bottom",
-    onBackdropTap: () => {
-      this.pane.destroy({ animate: true });
-    },
-    onDidDismiss: () => {
-      // Guardamos cambios
-      this.userSvc.updateUser(this.user);
-    }
-  };
 
   constructor(
     public auth: AuthService,
@@ -65,7 +44,7 @@ export class EventsPage implements OnInit {
       component: EventModal,
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
 
     await modal.present();
@@ -82,7 +61,7 @@ export class EventsPage implements OnInit {
     const events = await this.eventSvc.getMyEvents();
     const now = new Date();
 
-    events.map(e => {
+    events.map((e) => {
       if (new Date(e.date) < now) {
         e.past = true;
       }
@@ -104,9 +83,8 @@ export class EventsPage implements OnInit {
     this.changeTab("suggested");
   }
 
-  showOptions() {
-    this.pane = new CupertinoPane(".events-pane", this.paneSettings);
-    this.pane.present({ animate: true });
+  saveOptions() {
+    this.userSvc.updateUser(this.user);
   }
 
   async changeTab(type: "suggested" | "online" | "near") {
@@ -141,8 +119,8 @@ export class EventsPage implements OnInit {
   }
 
   setEvents(events: Event[]) {
-    events.map(e => {
-      if (e.participants.some(p => p.id === this.auth.currentUserValue.id)) {
+    events.map((e) => {
+      if (e.participants.some((p) => p.id === this.auth.currentUserValue.id)) {
         e.participate = true;
       }
     });

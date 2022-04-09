@@ -1,0 +1,50 @@
+<ion-content class="ion-padding">
+  <ion-item *ngIf="notification" lines="full">
+    <ion-avatar slot="start">
+      <img
+        [src]="notification.fromuser.thumbnail"
+        default="/assets/img/users/default.jpg"
+      />
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ notification.title }}</h2>
+      <p>{{notification.body}}</p>
+      <ion-note>{{notification.date | niceDate}}</ion-note>
+    </ion-label>
+  </ion-item>
+  <ion-list *ngIf="notification">
+    <ion-item
+      button
+      detail="false"
+      (click)="removeNotification(notification)"
+      lines="none"
+    >
+      <ion-icon slot="start" name="close-outline" color="light"></ion-icon>
+      <ion-label>Eliminar la notificación</ion-label>
+    </ion-item>
+    <ion-item
+      button
+      detail="false"
+      (click)="readNotification(notification)"
+      lines="none"
+      *ngIf="!notification?.time_read"
+    >
+      <ion-icon slot="start" name="mail-open-outline" color="light"></ion-icon>
+      <ion-label>Marcar como leída</ion-label>
+    </ion-item>
+    <ion-item
+      button
+      detail="false"
+      (click)="unreadNotification(notification)"
+      lines="none"
+      *ngIf="notification?.time_read"
+    >
+      <ion-icon
+        slot="start"
+        name="mail-unread-outline"
+        color="light"
+      ></ion-icon>
+      <ion-label>Marcar como no leída</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -13,7 +13,6 @@ import {
   AppUpdate,
   AppUpdateAvailability,
 } from "@robingenz/capacitor-app-update";
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
