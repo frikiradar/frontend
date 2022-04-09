@@ -56,8 +56,8 @@ export class TabsPage implements OnInit {
   async menu() {
     const modal = await this.modal.create({
       component: MenuModal,
-      initialBreakpoint: 0.7,
-      breakpoints: [0, 0.7, 0.95],
+      initialBreakpoint: 0.8,
+      breakpoints: [0, 0.8, 0.95],
       cssClass: "sheet-modal",
       showBackdrop: true,
     });
