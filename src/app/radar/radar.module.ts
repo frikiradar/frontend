@@ -10,8 +10,12 @@ import { RadarPage } from "./radar.page";
 const routes: Routes = [
   {
     path: "",
-    component: RadarPage
-  }
+    component: RadarPage,
+  },
+  {
+    path: "story/:id",
+    component: RadarPage,
+  },
 ];
 
 @NgModule({
@@ -21,8 +25,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
   ],
-  declarations: [RadarPage]
+  declarations: [RadarPage],
 })
 export class RadarPageModule {}

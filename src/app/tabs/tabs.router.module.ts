@@ -14,9 +14,14 @@ const routes: Routes = [
           {
             path: "",
             loadChildren: () =>
-              import("../radar/radar.module").then(m => m.RadarPageModule)
-          }
-        ]
+              import("../radar/radar.module").then((m) => m.RadarPageModule),
+          },
+          {
+            path: "story/:id",
+            loadChildren: () =>
+              import("../radar/radar.module").then((m) => m.RadarPageModule),
+          },
+        ],
       },
       {
         path: "events",
@@ -24,9 +29,9 @@ const routes: Routes = [
           {
             path: "",
             loadChildren: () =>
-              import("../events/events.module").then(m => m.EventsPageModule)
-          }
-        ]
+              import("../events/events.module").then((m) => m.EventsPageModule),
+          },
+        ],
       },
       {
         path: "community",
@@ -35,34 +40,27 @@ const routes: Routes = [
             path: "",
             loadChildren: () =>
               import("../community/community.module").then(
-                m => m.CommunityPageModule
-              )
+                (m) => m.CommunityPageModule
+              ),
           },
-          {
-            path: "story/:id",
-            loadChildren: () =>
-              import("../community/community.module").then(
-                m => m.CommunityPageModule
-              )
-          }
-        ]
+        ],
       },
       {
         path: "",
         redirectTo: "/tabs/radar",
-        pathMatch: "full"
-      }
-    ]
+        pathMatch: "full",
+      },
+    ],
   },
   {
     path: "",
     redirectTo: "/tabs/radar",
-    pathMatch: "full"
-  }
+    pathMatch: "full",
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class TabsPageRoutingModule { }
+export class TabsPageRoutingModule {}

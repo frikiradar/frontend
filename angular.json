@@ -21,7 +21,8 @@
               "howler",
               "deep-equal",
               "patreon",
-              "code-push"
+              "code-push",
+              "get-blob-duration"
             ],
             "aot": false,
             "outputPath": "www",

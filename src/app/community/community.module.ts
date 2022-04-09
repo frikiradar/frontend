@@ -10,12 +10,8 @@ import { CommunityPage } from "./community.page";
 const routes: Routes = [
   {
     path: "",
-    component: CommunityPage
+    component: CommunityPage,
   },
-  {
-    path: "story/:id",
-    component: CommunityPage
-  }
 ];
 
 @NgModule({
@@ -24,8 +20,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
   ],
-  declarations: [CommunityPage]
+  declarations: [CommunityPage],
 })
 export class CommunityPageModule {}

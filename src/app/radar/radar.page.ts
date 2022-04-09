@@ -4,7 +4,12 @@ import {
   HostListener,
   ChangeDetectorRef,
 } from "@angular/core";
-import { NavigationStart, Router, Event } from "@angular/router";
+import {
+  NavigationStart,
+  Router,
+  Event,
+  ActivatedRoute,
+} from "@angular/router";
 import {
   AlertController,
   IonRange,
@@ -128,7 +133,8 @@ export class RadarPage {
     public detectorRef: ChangeDetectorRef,
     private storySvc: StoryService,
     private modal: ModalController,
-    public routerOutlet: IonRouterOutlet
+    public routerOutlet: IonRouterOutlet,
+    private route: ActivatedRoute
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
@@ -152,6 +158,16 @@ export class RadarPage {
   }
 
   async ngOnInit() {
+    const id = this.route.snapshot.paramMap.get("id");
+    if (id) {
+      try {
+        const story = await this.storySvc.getStory(+id);
+        this.showStory(story);
+      } catch (e) {
+        console.error("Historia no encontrada");
+      }
+    }
+
     this.authUser = this.auth.currentUserValue;
 
     // Una vez logueado iniciamos notificaciones si no están
