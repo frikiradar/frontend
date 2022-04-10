@@ -28,10 +28,10 @@
       <ion-icon name="fish" slot="start" color="tertiary"></ion-icon>
       <ion-label>
         <p>
-          <strong>NO DESNUDOS O IMÁGENES EXPLÍCITAS.</strong> No publiques en
-          las salas de chat públicas fotos de desnudo parcial o completo ni
-          imágenes explícitas de ningún tipo. Recuerda que hay menores en la
-          aplicación.
+          <strong>DESNUDOS O IMÁGENES EXPLÍCITAS CON CONTEXTO.</strong> La
+          publicación de imágenes explícitas o desnudos está permitida siempre y
+          cuando sean propias y estén dentro de contexto tanto en salas de chat
+          grupales como en historias. No están permitidas en fotos de perfil.
         </p>
       </ion-label>
     </ion-item>
@@ -50,8 +50,9 @@
   <p class="ion-text-center">
     En caso de dudas con alguna norma consulta con un moderador/administrador.
   </p>
-  <div *ngIf=!accepted>
-    <ion-button (click)="accept()" shape="round" expand="block" class="primary">He leído y acepto las normas
+  <div *ngIf="!accepted">
+    <ion-button (click)="accept()" shape="round" expand="block" class="primary"
+      >He leído y acepto las normas
     </ion-button>
     <p class="ion-text-center" id="forgot-password">
       <a (click)="deny()">No estoy de acuerdo</a>

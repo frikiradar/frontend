@@ -83,6 +83,10 @@ export class EventsPage implements OnInit {
     this.changeTab("suggested");
   }
 
+  showOptions() {
+    document.getElementById("show-options").click();
+  }
+
   saveOptions() {
     this.userSvc.updateUser(this.user);
   }
