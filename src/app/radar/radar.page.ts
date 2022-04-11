@@ -21,7 +21,12 @@ import {
 import { ScrollDetail } from "@ionic/core";
 import { takeWhile } from "rxjs/operators";
 import * as deepEqual from "deep-equal";
-import SwiperCore, { Keyboard, SwiperOptions, EffectCoverflow } from "swiper";
+import SwiperCore, {
+  Keyboard,
+  SwiperOptions,
+  EffectCoverflow,
+  Mousewheel,
+} from "swiper";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
 import { Device } from "@capacitor/device";
 
@@ -43,7 +48,7 @@ import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { environment } from "src/environments/environment";
 
-SwiperCore.use([Keyboard, EffectCoverflow]);
+SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel]);
 
 @Component({
   selector: "app-radar",
@@ -71,6 +76,7 @@ export class RadarPage {
     grabCursor: true,
     lazy: true,
     effect: "coverflow",
+    mousewheel: true,
   };
 
   public storiesOpts: SwiperOptions = {
@@ -386,6 +392,7 @@ export class RadarPage {
   }
 
   async showStoriesModal(stories: Story[]) {
+    this.slides.disable();
     const modal = await this.modal.create({
       component: ViewStoriesModal,
       componentProps: { stories },
@@ -398,6 +405,7 @@ export class RadarPage {
 
     await modal.present();
     await modal.onDidDismiss();
+    this.slides.enable();
   }
 
   async showAllStories() {

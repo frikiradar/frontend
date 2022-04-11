@@ -8,7 +8,6 @@ import {
 import { Router } from "@angular/router";
 import { Keyboard } from "@capacitor/keyboard";
 import {
-  ActionSheetController,
   IonTextarea,
   ModalController,
   Platform,
@@ -19,6 +18,7 @@ import SwiperCore, {
   SwiperOptions,
   Pagination,
   Autoplay,
+  Mousewheel,
 } from "swiper";
 
 import { Story } from "src/app/models/story";
@@ -30,7 +30,7 @@ import { StoryService } from "../../services/story.service";
 import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
 import { StoryModal } from "../story-modal/story.modal";
 
-SwiperCore.use([SwiperKeyboard, Pagination, Autoplay]);
+SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
 @Component({
   selector: "view-stories-modal",
@@ -67,6 +67,7 @@ export class ViewStoriesModal implements OnInit {
     pagination: {
       type: "progressbar",
     },
+    mousewheel: true,
   };
 
   constructor(
@@ -78,7 +79,6 @@ export class ViewStoriesModal implements OnInit {
     private storySvc: StoryService,
     public userSvc: UserService,
     private toast: ToastController,
-    private sheet: ActionSheetController,
     private router: Router,
     public auth: AuthService,
     private urlSvc: UrlService
@@ -259,6 +259,7 @@ export class ViewStoriesModal implements OnInit {
         })
       ).present();
     }
+    this.modalCreate.dismiss();
   }
 
   viewComments() {
