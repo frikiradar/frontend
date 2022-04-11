@@ -25,10 +25,13 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button
+        id="show-options"
         *ngIf="story.user.id === auth.currentUserValue.id || auth.isMaster()"
-        (click)="showOptions(story)"
       >
         <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+      </ion-button>
+      <ion-button (click)="addStory()">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="close()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -36,7 +39,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content [fullscreen]="true">
   <swiper
     (slideChangeTransitionStart)="slide()"
     (swiper)="setSwiperInstance($event)"
@@ -46,6 +49,11 @@
     [config]="slideOpts"
   >
     <ng-template swiperSlide *ngFor="let story of stories">
+      <img
+        class="background-image"
+        [src]="story?.image"
+        [alt]="story?.user.username"
+      />
       <ion-card>
         <ion-thumbnail>
           <img [src]="story?.image" [alt]="story?.user.username" />
@@ -56,9 +64,86 @@
             [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions} | hashtag"
           ></p>
         </ion-card-content>
+        <div class="comments">
+          <ion-list *ngIf="story?.comments.length > 0">
+            <ion-item
+              *ngFor="let comment of story.comments.slice(-1)"
+              button
+              detail="false"
+              lines="none"
+            >
+              <ion-avatar (click)="showProfile(comment.user.id)">
+                <img [src]="comment.user.thumbnail" />
+              </ion-avatar>
+              <ion-label>
+                <p class="text">
+                  <a (click)="showProfile(comment.user.id)"
+                    >{{comment.user.username}}</a
+                  >
+                  &nbsp;
+                  <span
+                    [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions} | hashtag"
+                    (click)="$event.stopImmediatePropagation(); openUrl($event);"
+                  ></span>
+                </p>
+
+                <ion-note class="note-date">
+                  <span>{{ comment.time_creation | date: "shortTime" }}</span>
+                  &nbsp;&nbsp;&nbsp;
+                  <span
+                    *ngIf="comment?.likes.length"
+                    button
+                    (click)="viewCommentLikes(comment.likes)"
+                    >{{ comment.likes.length }} kokoros</span
+                  >
+                  &nbsp;&nbsp;&nbsp;
+                  <span
+                    *ngIf="auth.currentUserValue.id !== comment.user.id"
+                    button
+                    (click)="reply(comment)"
+                    >Responder</span
+                  >
+                  &nbsp;&nbsp;&nbsp;
+                  <span
+                    *ngIf="auth.currentUserValue.id === comment.user.id || auth.isMaster()"
+                    button
+                    (click)="deleteComment(comment)"
+                    >Eliminar</span
+                  >
+                </ion-note>
+              </ion-label>
+
+              <ion-note>
+                <ion-buttons>
+                  <ion-button (click)="switchLikeComment(comment)">
+                    <ion-icon
+                      slot="icon-only"
+                      size="small"
+                      [color]="comment.like ? 'primary' : 'medium'"
+                      [name]="comment.like ? 'heart' : 'heart-outline'"
+                    ></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-note>
+            </ion-item>
+            <ion-item
+              button
+              lines="none"
+              class="show-more"
+              (click)="viewComments()"
+              *ngIf="story?.comments?.length > 1"
+            >
+              <ion-label
+                >Ver los {{story?.comments.length}} comentarios</ion-label
+              >
+            </ion-item>
+          </ion-list>
+        </div>
       </ion-card>
     </ng-template>
   </swiper>
+</ion-content>
+<ion-footer class="ion-no-border">
   <ion-item lines="none" id="text-input">
     <ion-buttons
       ion-activatable
@@ -89,81 +174,6 @@
       </ion-button>
     </ion-buttons>
   </ion-item>
-  <div class="comments">
-    <ion-list *ngIf="story?.comments.length > 0">
-      <ion-item
-        *ngFor="let comment of story.comments.slice(-1)"
-        button
-        detail="false"
-        lines="none"
-      >
-        <ion-avatar (click)="showProfile(comment.user.id)">
-          <img [src]="comment.user.thumbnail" />
-        </ion-avatar>
-        <ion-label>
-          <p class="text">
-            <a (click)="showProfile(comment.user.id)"
-              >{{comment.user.username}}</a
-            >
-            &nbsp;
-            <span
-              [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions} | hashtag"
-              (click)="$event.stopImmediatePropagation(); openUrl($event);"
-            ></span>
-          </p>
-
-          <ion-note class="note-date">
-            <span>{{ comment.time_creation | date: "shortTime" }}</span>
-            &nbsp;&nbsp;&nbsp;
-            <span
-              *ngIf="comment?.likes.length"
-              button
-              (click)="viewCommentLikes(comment.likes)"
-              >{{ comment.likes.length }} kokoros</span
-            >
-            &nbsp;&nbsp;&nbsp;
-            <span
-              *ngIf="auth.currentUserValue.id !== comment.user.id"
-              button
-              (click)="reply(comment)"
-              >Responder</span
-            >
-            &nbsp;&nbsp;&nbsp;
-            <span
-              *ngIf="auth.currentUserValue.id === comment.user.id"
-              button
-              (click)="deleteComment(comment)"
-              >Eliminar</span
-            >
-          </ion-note>
-        </ion-label>
-
-        <ion-note>
-          <ion-buttons>
-            <ion-button (click)="switchLikeComment(comment)">
-              <ion-icon
-                slot="icon-only"
-                size="small"
-                [color]="comment.like ? 'primary' : 'medium'"
-                [name]="comment.like ? 'heart' : 'heart-outline'"
-              ></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-note>
-      </ion-item>
-      <ion-item
-        button
-        lines="none"
-        class="show-more"
-        (click)="viewComments()"
-        *ngIf="story?.comments?.length > 1"
-      >
-        <ion-label>Ver los {{story?.comments.length}} comentarios</ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
-</ion-content>
-<ion-footer class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button id="view-views" shape="round">
@@ -284,7 +294,7 @@
               >
               &nbsp;&nbsp;&nbsp;
               <span
-                *ngIf="auth.currentUserValue.id === comment.user.id"
+                *ngIf="auth.currentUserValue.id === comment.user.id || auth.isMaster()"
                 button
                 (click)="deleteComment(comment)"
                 >Eliminar</span
@@ -338,6 +348,31 @@
           </ion-buttons>
         </ion-item>
       </ion-footer>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  [breakpoints]="[0, 0.1, 0.3]"
+  [initialBreakpoint]="0.1"
+  trigger="show-options"
+  cssClass="sheet-modal"
+  (didPresent)="slides.autoplay.stop()"
+  (didDismiss)="slides.autoplay.start()"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-list>
+        <ion-item
+          button
+          detail="false"
+          (click)="removeStory(notification)"
+          lines="none"
+        >
+          <ion-icon slot="start" name="trash-outline" color="light"></ion-icon>
+          <ion-label>Eliminar la historia</ion-label>
+        </ion-item>
+      </ion-list>
     </ion-content>
   </ng-template>
 </ion-modal>

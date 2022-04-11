@@ -1,3 +1,18 @@
+ion-header ion-toolbar {
+  position: absolute;
+  --background: transparent !important;
+}
+
+ion-footer {
+  --background: transparent !important;
+  position: absolute;
+  bottom: 0;
+}
+
+ion-footer ion-toolbar {
+  --background: transparent !important;
+}
+
 ion-label {
   p,
   h2 {
@@ -23,7 +38,16 @@ ion-label {
 }
 
 swiper {
-  height: 60vh;
+  height: 100%;
+}
+
+.background-image {
+  height: 100% !important;
+  width: 100% !important;
+  opacity: 0.8;
+  position: absolute;
+  filter: blur(20px);
+  object-fit: cover !important;
 }
 
 ion-card {
@@ -50,6 +74,7 @@ ion-card {
 
   form {
     width: 100%;
+    background: transparent;
   }
 
   ion-item {
@@ -95,6 +120,10 @@ ion-modal ion-avatar {
 
 .comments-modal,
 .comments {
+  ion-list {
+    background: transparent !important;
+  }
+
   .text {
     a {
       color: #c4d83b !important;

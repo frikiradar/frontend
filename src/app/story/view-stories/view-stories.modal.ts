@@ -226,56 +226,39 @@ export class ViewStoriesModal implements OnInit {
     this.setLikeStory();
   }
 
-  async showOptions(story: Story) {
-    this.slides.autoplay.stop();
-    const actionSheet = await this.sheet.create({
-      buttons: [
-        {
-          text: "Añadir nueva historia",
-          icon: "add",
-          handler: async () => {
-            const modal = await this.modalCreate.create({
-              component: StoryModal,
-              keyboardClose: true,
-              showBackdrop: true,
-              cssClass: "full-modal",
-            });
-
-            await modal.present();
-            await modal.onDidDismiss();
-          },
-        },
-        {
-          text: "Eliminar historia",
-          icon: "trash-outline",
-          handler: async () => {
-            try {
-              await this.storySvc.deleteStory(story.id);
-              (
-                await this.toast.create({
-                  message: "Historia eliminada correctamente",
-                  position: "middle",
-                  duration: 2000,
-                })
-              ).present();
-              this.close();
-            } catch (e) {
-              (
-                await this.toast.create({
-                  message: "Error al eliminar la historia",
-                  duration: 2000,
-                  position: "middle",
-                  color: "danger",
-                })
-              ).present();
-            }
-          },
-        },
-      ],
+  async addStory() {
+    const modal = await this.modalCreate.create({
+      component: StoryModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal",
     });
-    await actionSheet.present();
-    await actionSheet.onDidDismiss();
-    this.slides.autoplay.start();
+
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+  async removeStory() {
+    try {
+      await this.storySvc.deleteStory(this.story.id);
+      (
+        await this.toast.create({
+          message: "Historia eliminada correctamente",
+          position: "middle",
+          duration: 2000,
+        })
+      ).present();
+      this.close();
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: "Error al eliminar la historia",
+          duration: 2000,
+          position: "middle",
+          color: "danger",
+        })
+      ).present();
+    }
   }
 
   viewComments() {
