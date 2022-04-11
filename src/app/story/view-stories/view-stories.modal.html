@@ -38,7 +38,7 @@
 </ion-header>
 <ion-content>
   <swiper
-    (slideChangeTransitionEnd)="slide()"
+    (slideChangeTransitionStart)="slide()"
     (swiper)="setSwiperInstance($event)"
     (click)="tap($event)"
     (touchStart)="touchStart($event)"
