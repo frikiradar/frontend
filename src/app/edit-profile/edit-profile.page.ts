@@ -49,7 +49,7 @@ export class EditProfilePage {
   @ViewChild("imageInput", { static: true })
   imageInput: ElementRef;
 
-  private slider: SwiperCore;
+  public slider: SwiperCore;
   public sliderOpts: SwiperOptions = {
     keyboard: true,
     preloadImages: false,

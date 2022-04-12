@@ -30,7 +30,7 @@
     #slider
     [config]="sliderOpts"
     (swiper)="setSwiperInstance($event)"
-    (slideChangeTransitionEnd)="setActiveImage()"
+    (slideChangeTransitionStart)="setActiveImage()"
   >
     <ng-template swiperSlide>
       <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
