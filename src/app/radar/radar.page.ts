@@ -155,7 +155,7 @@ export class RadarPage {
     });
   }
 
-  setSwiperInstance(swiper: any) {
+  setSwiperInstance(swiper: SwiperCore) {
     this.slides = swiper;
   }
 

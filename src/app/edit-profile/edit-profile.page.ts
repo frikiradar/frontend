@@ -49,7 +49,7 @@ export class EditProfilePage {
   @ViewChild("imageInput", { static: true })
   imageInput: ElementRef;
 
-  public slider: SwiperCore;
+  public slides: SwiperCore;
   public sliderOpts: SwiperOptions = {
     keyboard: true,
     preloadImages: false,
@@ -65,7 +65,6 @@ export class EditProfilePage {
   public tags: Tag[] = [];
   public tagsInput: string;
   public list: { name: string; total: number }[];
-  public activeImage = 0;
 
   constructor(
     public fb: FormBuilder,
@@ -123,8 +122,8 @@ export class EditProfilePage {
     }
   }
 
-  setSwiperInstance(swiper: any) {
-    this.slider = swiper;
+  setSwiperInstance(swiper: SwiperCore) {
+    this.slides = swiper;
   }
 
   async submitProfile() {
@@ -394,29 +393,27 @@ export class EditProfilePage {
   }
 
   async setAvatar() {
-    const image = this.user.images[this.activeImage - 1];
-    const user = await this.userSvc.setAvatar(image);
-    this.auth.setAuthUser(user);
-    this.user = this.auth.currentUserValue;
-    this.slider.slideTo(0);
+    if (this.slides.activeIndex > 0) {
+      const image = this.user.images[this.slides.activeIndex - 1];
+      const user = await this.userSvc.setAvatar(image);
+      this.auth.setAuthUser(user);
+      this.user = this.auth.currentUserValue;
+      this.slides.slideTo(0);
+    }
   }
 
   async deleteImage() {
     let image = undefined;
-    if (this.activeImage === 0) {
+    if (this.slides.activeIndex === 0) {
       image = this.user.avatar;
     } else {
-      image = this.user.images[this.activeImage - 1];
+      image = this.user.images[this.slides.activeIndex - 1];
     }
     const user = await this.userSvc.deleteAvatar(image);
     this.auth.setAuthUser(user);
     this.user = this.auth.currentUserValue;
-    this.slider.update();
-    this.slider.slideTo(0);
-  }
-
-  setActiveImage() {
-    this.activeImage = this.slider.activeIndex;
+    this.slides.update();
+    this.slides.slideTo(0);
   }
 
   back() {

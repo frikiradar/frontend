@@ -20,18 +20,13 @@
         <ion-button (click)="deleteImage()">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
-        <ion-button (click)="setAvatar()" *ngIf="activeImage > 0">
+        <ion-button (click)="setAvatar()">
           <ion-icon slot="icon-only" name="star-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <swiper
-    #slider
-    [config]="sliderOpts"
-    (swiper)="setSwiperInstance($event)"
-    (slideChangeTransitionStart)="setActiveImage()"
-  >
+  <swiper [config]="sliderOpts" (swiper)="setSwiperInstance($event)">
     <ng-template swiperSlide>
       <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
     </ng-template>
