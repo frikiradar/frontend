@@ -404,7 +404,10 @@
                 color="light"
                 class="message-text"
                 [innerHTML]="
-                  message.text | linky: { className: 'linkified' } | hashtag
+                  message.text
+                    | linky: { className: 'linkified' }
+                    | hashtag
+                    | mentions
                 "
                 (click)="$event.stopImmediatePropagation(); openUrl($event)"
               ></ion-text>
