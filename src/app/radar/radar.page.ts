@@ -400,7 +400,6 @@ export class RadarPage {
       showBackdrop: true,
       cssClass: "full-modal",
       presentingElement: this.routerOutlet.nativeEl,
-      swipeToClose: true,
     });
 
     await modal.present();

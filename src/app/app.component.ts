@@ -1,4 +1,3 @@
-import { environment } from "src/environments/environment";
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Network } from "@capacitor/network";
@@ -7,7 +6,6 @@ import { codePush } from "capacitor-codepush";
 import { SyncOptions } from "capacitor-codepush/dist/esm/syncOptions";
 import { InstallMode } from "capacitor-codepush/dist/esm/installMode";
 import { App } from "@capacitor/app";
-import { Device } from "@capacitor/device";
 import { RateApp } from "capacitor-rate-app";
 import {
   AppUpdate,
@@ -79,6 +77,19 @@ export class AppComponent {
   }
 
   async networkStatus() {
+    const network = await Network.getStatus();
+    if (!network.connected) {
+      (
+        await this.toast.create({
+          message: "No tienes conexión a internet",
+          duration: 5000,
+          position: "bottom",
+          color: "danger",
+        })
+      ).present();
+      this.internet = false;
+    }
+
     Network.addListener("networkStatusChange", async (status) => {
       if (status.connected) {
         if (!this.internet) {
