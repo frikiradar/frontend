@@ -45,12 +45,12 @@
         *ngFor="let story of groupedStories; let i = index"
       >
         <div>
-          <ion-item button lines="none" (click)="showStories(story.user.id)">
+          <ion-item button lines="none" (click)="showStories(story?.user?.id)">
             <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
-              <img [src]="story.image" [alt]="story.text" />
+              <img [src]="story?.image" [alt]="story?.text" />
             </ion-avatar>
           </ion-item>
-          <ion-label>{{story.user.username}}</ion-label>
+          <ion-label>{{story?.user?.username}}</ion-label>
         </div>
       </ng-template>
       <ng-template swiperSlide *ngIf="groupedStories?.length">

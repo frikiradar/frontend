@@ -97,28 +97,28 @@
     </div>
     <ion-item button id="open-calendar" lines="full">
       <ion-icon name="calendar-outline" slot="start"></ion-icon>
-      <ion-label
+      <ion-label class="ion-text-wrap"
         >Fecha de nacimiento
         <ion-text color="primary">{{
           registerForm.get("birthday").value | niceDate
         }}</ion-text></ion-label
       >
-      <ion-popover trigger="open-calendar" show-backdrop="false">
-        <ng-template>
-          <ion-datetime
-            formControlName="birthday"
-            presentation="date"
-            locale="es-ES"
-            first-day-of-week="1"
-            min="1900-01-01"
-            max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
-              today | date: 'dd'
-            }}"
-          >
-          </ion-datetime>
-        </ng-template>
-      </ion-popover>
     </ion-item>
+    <ion-modal trigger="open-calendar" cssClass="date-modal">
+      <ng-template>
+        <ion-datetime
+          formControlName="birthday"
+          presentation="date"
+          locale="es-ES"
+          first-day-of-week="1"
+          min="1900-01-01"
+          max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
+            today | date: 'dd'
+          }}"
+        >
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
     <ion-item>
       <ion-label
         >Mi identidad de género

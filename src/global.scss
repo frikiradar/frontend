@@ -221,12 +221,12 @@ ion-toast.md {
 }
 
 .ion-page,
-.modal-wrapper /*ionic v5*/,
+.modal-wrapper,
 ion-modal::part(content) {
   background: var(--ion-color-dark) !important;
 }
 
-.modal-wrapper /*ionic v5*/,
+.modal-wrapper,
 ion-modal::part(content) {
   @media (min-width: 668px) {
     --border-radius: 20px;
@@ -234,7 +234,7 @@ ion-modal::part(content) {
 }
 
 .full-modal::part(content),
-.full-modal .modal-wrapper /*ionic v5*/ {
+.full-modal .modal-wrapper {
   @media (min-width: 668px) {
     --height: 95%;
     --width: 50%;
@@ -250,7 +250,7 @@ ion-modal::part(content) {
   border-radius: 25px;
 }
 
-.medium-modal .modal-wrapper /*ionic v5*/,
+.medium-modal .modal-wrapper,
 .medium-modal::part(content) {
   @media (max-width: 667px) {
     --height: 70%;
@@ -258,6 +258,24 @@ ion-modal::part(content) {
     --border-radius: 8px;
     box-shadow: 1px 1px 100px 1px;
   }
+}
+
+.date-modal {
+  --width: 290px;
+  --height: 382px;
+  --border-radius: 8px;
+
+  .ion-page {
+    background: var(--ion-color-light) !important;
+  }
+
+  ion-datetime {
+    height: 100%;
+  }
+}
+
+.date-modal::part(content) {
+  background: var(--ion-color-light) !important;
 }
 
 ul {

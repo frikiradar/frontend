@@ -82,7 +82,7 @@ export class EditProfilePage {
       name: [""],
       description: [""],
       location: [""],
-      birthday: new FormControl({ value: "", disabled: true }),
+      birthday: [""],
       gender: [""],
       orientation: [""],
       pronoun: [""],
@@ -133,7 +133,7 @@ export class EditProfilePage {
       ...{ tags: this.tags },
     } as User;
 
-    // this.user.birthday = this.user.birthday.split("T")[0];
+    this.user.birthday = this.user.birthday.split("T")[0];
 
     try {
       this.user = await this.userSvc.updateUser(this.user);

@@ -49,7 +49,7 @@
             >{{eventForm.get("date").value | date:'E d MMM y, HH:mm'}}</ion-text
           ></ion-label
         >
-        <ion-popover trigger="open-date" show-backdrop="false">
+        <ion-modal trigger="open-date" cssClass="date-modal">
           <ng-template>
             <ion-datetime
               presentation="date-time"
@@ -59,7 +59,7 @@
               max="2030-12-31"
             ></ion-datetime>
           </ng-template>
-        </ion-popover>
+        </ion-modal>
       </ion-item>
       <ion-item-group *ngIf="!user">
         <ion-item
@@ -84,7 +84,7 @@
               HH:mm'}}</ion-text
             ></ion-label
           >
-          <ion-popover trigger="open-end-date" show-backdrop="false">
+          <ion-modal trigger="open-end-date" cssClass="date-modal">
             <ng-template>
               <ion-datetime
                 presentation="date-time"
@@ -95,7 +95,7 @@
                 max="2030-12-31"
               ></ion-datetime>
             </ng-template>
-          </ion-popover>
+          </ion-modal>
         </ion-item>
       </ion-item-group>
       <ion-segment
