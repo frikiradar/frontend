@@ -280,6 +280,6 @@ export class ChatListComponent {
   }
 
   back() {
-    this.router.navigateByUrl("/tabs/community");
+    this.router.navigateByUrl("/");
   }
 }

@@ -211,12 +211,6 @@ export class RadarPage {
       this.authUser = this.auth.currentUserValue;
     }
 
-    // Firebase Analytics
-    const deviceInfo = Device.getInfo();
-    if ((await deviceInfo).platform === "web") {
-      await FirebaseAnalytics.initializeFirebase(environment.firebase);
-    }
-
     FirebaseAnalytics.setUserId({
       userId: "" + this.authUser.id,
     });
@@ -226,11 +220,6 @@ export class RadarPage {
       value: this.authUser.username,
     });
 
-    let theme = (await this.config.get("theme")) as Config["theme"];
-    FirebaseAnalytics.setUserProperty({
-      name: "theme",
-      value: theme ? theme : "dark",
-    });
     // --------------------------------------------------
 
     const radar_config = (await this.config.get(

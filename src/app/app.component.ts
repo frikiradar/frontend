@@ -11,6 +11,7 @@ import {
   AppUpdate,
   AppUpdateAvailability,
 } from "@robingenz/capacitor-app-update";
+import { environment } from "src/environments/environment";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
@@ -19,6 +20,8 @@ import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
 import { NavService } from "./services/navigation.service";
 import { SwService } from "./services/sw.service";
+import { Device } from "@capacitor/device";
+import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
 
 @Component({
   selector: "app-root",
@@ -65,6 +68,17 @@ export class AppComponent {
       theme = "dark";
     }
     this.utils.toggleTheme(theme);
+
+    // Firebase Analytics
+    const deviceInfo = Device.getInfo();
+    if ((await deviceInfo).platform === "web") {
+      await FirebaseAnalytics.initializeFirebase(environment.firebase);
+    }
+
+    FirebaseAnalytics.setUserProperty({
+      name: "theme",
+      value: theme,
+    });
 
     if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
       const user = await this.auth.getAuthUser();
