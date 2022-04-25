@@ -16,7 +16,6 @@ import {
   IonContent,
   ToastController,
   ModalController,
-  IonRouterOutlet,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { takeWhile } from "rxjs/operators";
@@ -139,7 +138,6 @@ export class RadarPage {
     public detectorRef: ChangeDetectorRef,
     private storySvc: StoryService,
     private modal: ModalController,
-    public routerOutlet: IonRouterOutlet,
     private route: ActivatedRoute
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
@@ -388,7 +386,6 @@ export class RadarPage {
       keyboardClose: true,
       showBackdrop: true,
       cssClass: "full-modal",
-      presentingElement: this.routerOutlet.nativeEl,
     });
 
     await modal.present();
