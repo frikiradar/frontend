@@ -130,7 +130,7 @@
               button
               lines="none"
               class="show-more"
-              (click)="viewComments()"
+              (click)="$event.stopImmediatePropagation(); viewComments()"
               *ngIf="story?.comments?.length > 1"
             >
               <ion-label
@@ -227,16 +227,16 @@
 </ion-modal>
 
 <ion-modal
-  [breakpoints]="[0, 0.5, 0.9]"
-  [initialBreakpoint]="0.9"
+  [breakpoints]="[0, 0.5, 1]"
+  [initialBreakpoint]="1"
   trigger="view-comments"
   cssClass="sheet-modal"
   (didPresent)="slides.autoplay.stop()"
   (didDismiss)="slides.autoplay.start()"
 >
   <ng-template>
-    <ion-content class="ion-padding comments-modal">
-      <p>Comentarios</p>
+    <ion-content class="comments-modal">
+      <p class="ion-padding">Comentarios</p>
       <ion-list
         id="usernames"
         *ngIf="usernames?.length && comment?.value?.length > 3"
@@ -319,36 +319,36 @@
       <ion-item *ngIf="story?.comments.length == 0">
         <p>No hay comentarios</p>
       </ion-item>
-      <ion-footer>
-        <ion-item id="comment-input" lines="none">
-          <ion-avatar>
-            <img
-              [src]="auth.currentUserValue.thumbnail"
-              [alt]="auth.currentUserValue.username"
-            />
-          </ion-avatar>
-          <form [formGroup]="commentForm" autocomplete="off">
-            <ion-item lines="none">
-              <ion-textarea
-                placeholder="Comenta la historia"
-                autocapitalize="on"
-                (keydown.enter)="sendComment($event)"
-                (ionChange)="setWriting($event.detail.value)"
-                formControlName="comment"
-                #textarea
-                rows="1"
-              >
-              </ion-textarea>
-            </ion-item>
-          </form>
-          <ion-buttons ion-activatable>
-            <ion-button [disabled]="!comment.value" (click)="sendComment()">
-              <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-      </ion-footer>
     </ion-content>
+    <ion-footer>
+      <ion-item id="comment-input" lines="none">
+        <ion-avatar>
+          <img
+            [src]="auth.currentUserValue.thumbnail"
+            [alt]="auth.currentUserValue.username"
+          />
+        </ion-avatar>
+        <form [formGroup]="commentForm" autocomplete="off">
+          <ion-item lines="none">
+            <ion-textarea
+              placeholder="Comenta la historia"
+              autocapitalize="on"
+              (keydown.enter)="sendComment($event)"
+              (ionChange)="setWriting($event.detail.value)"
+              formControlName="comment"
+              #textarea
+              rows="1"
+            >
+            </ion-textarea>
+          </ion-item>
+        </form>
+        <ion-buttons ion-activatable>
+          <ion-button [disabled]="!comment.value" (click)="sendComment()">
+            <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-footer>
   </ng-template>
 </ion-modal>
 
