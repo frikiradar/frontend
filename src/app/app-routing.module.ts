@@ -130,6 +130,13 @@ const routes: Routes = [
     loadChildren: () =>
       import("./profile/profile.module").then((m) => m.ProfilePageModule),
   },
+  {
+    path: "unsubscribe/:code",
+    loadChildren: () =>
+      import("./unsubscribe/unsubscribe.module").then(
+        (m) => m.UnsubscribePageModule
+      ),
+  },
 ];
 @NgModule({
   imports: [

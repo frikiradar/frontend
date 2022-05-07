@@ -10,7 +10,7 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
 const httpOptions = {
-  headers: new HttpHeaders({ "Content-Type": "application/json" })
+  headers: new HttpHeaders({ "Content-Type": "application/json" }),
 };
 
 @Injectable({ providedIn: "root" })
@@ -125,7 +125,7 @@ export class UserService {
     return this.rest
       .put("disable", {
         password,
-        note
+        note,
       })
       .toPromise() as Promise<User>;
   }
@@ -134,7 +134,7 @@ export class UserService {
     return this.rest
       .put("remove-account", {
         password,
-        note
+        note,
       })
       .toPromise() as Promise<User>;
   }
@@ -143,7 +143,7 @@ export class UserService {
     return this.rest
       .put("password", {
         old_password,
-        new_password
+        new_password,
       })
       .toPromise() as Promise<User>;
   }
@@ -152,7 +152,7 @@ export class UserService {
     return this.rest
       .put("email", {
         old_email,
-        new_email
+        new_email,
       })
       .toPromise() as Promise<User>;
   }
@@ -160,7 +160,7 @@ export class UserService {
   changeUsername(new_username: string) {
     return this.rest
       .put("username", {
-        new_username
+        new_username,
       })
       .toPromise() as Promise<User>;
   }
@@ -228,7 +228,7 @@ export class UserService {
         message,
         duration: 1500,
         position: "middle",
-        color: this.getRoleColor(user)
+        color: this.getRoleColor(user),
       })
     ).present();
   }
@@ -276,6 +276,17 @@ export class UserService {
     await this.rest.put("link-patreon", { oauth_code: code }).toPromise();
   }
 
+  async unsubscribe(code: string) {
+    try {
+      console.log("pepe");
+      return this.http
+        .get(`${environment.root}api/unsubscribe/${code}`, httpOptions)
+        .toPromise();
+    } catch (e) {
+      throw new Error("Error al desuscribirse");
+    }
+  }
+
   getOrientations() {
     return [
       "Heterosexual",
@@ -285,7 +296,7 @@ export class UserService {
       "Queer",
       "Demisexual",
       "Sapiosexual",
-      "Asexual"
+      "Asexual",
     ];
   }
 
@@ -315,7 +326,7 @@ export class UserService {
       "No conforme",
       "Pangénero",
       "Poligénero",
-      "Intergénero"
+      "Intergénero",
     ];
   }
 
@@ -324,7 +335,7 @@ export class UserService {
       "Amistad",
       "Sexo ocasional",
       "Amistad con derechos",
-      "Pareja formal"
+      "Pareja formal",
     ];
   }
 }
