@@ -137,6 +137,10 @@ const routes: Routes = [
         (m) => m.UnsubscribePageModule
       ),
   },
+  {
+    path: 'download',
+    loadChildren: () => import('./download/download.module').then( m => m.DownloadPageModule)
+  },
 ];
 @NgModule({
   imports: [

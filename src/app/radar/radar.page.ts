@@ -27,7 +27,6 @@ import SwiperCore, {
   Mousewheel,
 } from "swiper";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
-import { Device } from "@capacitor/device";
 
 import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
@@ -45,7 +44,6 @@ import { StoryService } from "../services/story.service";
 import { Story } from "../models/story";
 import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
-import { environment } from "src/environments/environment";
 
 SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel]);
 
@@ -379,7 +377,9 @@ export class RadarPage {
   }
 
   async showStoriesModal(stories: Story[]) {
-    this.slides.disable();
+    if (this.view === "cards") {
+      this.slides.disable();
+    }
     const modal = await this.modal.create({
       component: ViewStoriesModal,
       componentProps: { stories },
@@ -390,7 +390,9 @@ export class RadarPage {
 
     await modal.present();
     await modal.onDidDismiss();
-    this.slides.enable();
+    if (this.view === "cards") {
+      this.slides.enable();
+    }
   }
 
   async showAllStories() {
