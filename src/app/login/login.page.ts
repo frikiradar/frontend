@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -25,7 +25,7 @@ import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
   styleUrls: ["./login.page.scss"]
 })
 export class LoginPage {
-  public loginForm: FormGroup;
+  public loginForm: UntypedFormGroup;
   get username() {
     return this.loginForm.get("username");
   }
@@ -43,7 +43,7 @@ export class LoginPage {
     private alert: AlertController,
     private modal: ModalController,
     private toast: ToastController,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private nav: NavService,
     public platform: Platform,
     private config: ConfigService
@@ -53,11 +53,11 @@ export class LoginPage {
     }
 
     this.loginForm = fb.group({
-      username: new FormControl("", [
+      username: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(3)
       ]),
-      password: new FormControl("", [
+      password: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(8)
       ])

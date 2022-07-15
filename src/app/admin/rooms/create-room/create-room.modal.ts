@@ -1,8 +1,8 @@
 import { Component, Input } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import { ModalController, ToastController } from "@ionic/angular";
@@ -17,25 +17,25 @@ import { UtilsService } from "src/app/services/utils.service";
 })
 export class CreateRoomModal {
   @Input() room: Room;
-  public roomForm: FormGroup;
+  public roomForm: UntypedFormGroup;
   private imageFile: Blob;
   public editing = false;
   public src: string = "";
   public slug: string = "";
 
   constructor(
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     private admin: AdminService,
     private toast: ToastController,
     private modal: ModalController,
     private utils: UtilsService
   ) {
     this.roomForm = formBuilder.group({
-      name: new FormControl("", [Validators.required]),
-      description: new FormControl(),
-      permissions: new FormControl("", [Validators.required]),
-      visible: new FormControl(),
-      image: new FormControl()
+      name: new UntypedFormControl("", [Validators.required]),
+      description: new UntypedFormControl(),
+      permissions: new UntypedFormControl("", [Validators.required]),
+      visible: new UntypedFormControl(),
+      image: new UntypedFormControl()
     });
   }
 

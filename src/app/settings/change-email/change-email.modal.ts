@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import {
@@ -21,13 +21,13 @@ import { UserService } from "./../../services/user.service";
   styleUrls: ["./change-email.modal.scss"]
 })
 export class ChangeEmailModal {
-  public emailForm: FormGroup;
+  public emailForm: UntypedFormGroup;
   public clearOldPassword = false;
   public clearPassword = false;
   public user: User;
 
   constructor(
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private modal: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
@@ -37,7 +37,7 @@ export class ChangeEmailModal {
     this.user = this.auth.currentUserValue;
 
     this.emailForm = fb.group({
-      email: new FormControl("", [
+      email: new UntypedFormControl("", [
         Validators.required,
         Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$")
       ])

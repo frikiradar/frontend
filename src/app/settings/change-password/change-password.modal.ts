@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import {
@@ -20,12 +20,12 @@ import { UserService } from "./../../services/user.service";
   styleUrls: ["./change-password.modal.scss"]
 })
 export class ChangePasswordModal {
-  public passForm: FormGroup;
+  public passForm: UntypedFormGroup;
   public clearOldPassword = false;
   public clearPassword = false;
 
   constructor(
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private modal: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
@@ -33,11 +33,11 @@ export class ChangePasswordModal {
     private toast: ToastController
   ) {
     this.passForm = fb.group({
-      oldPassword: new FormControl("", [
+      oldPassword: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(8)
       ]),
-      password: new FormControl("", [
+      password: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(8)
       ])

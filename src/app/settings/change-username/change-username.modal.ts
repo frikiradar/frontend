@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import {
@@ -21,13 +21,13 @@ import { UserService } from "./../../services/user.service";
   styleUrls: ["./change-username.modal.scss"]
 })
 export class ChangeUsernameModal {
-  public usernameForm: FormGroup;
+  public usernameForm: UntypedFormGroup;
   public clearOldPassword = false;
   public clearPassword = false;
   public user: User;
 
   constructor(
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private modal: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
@@ -37,7 +37,7 @@ export class ChangeUsernameModal {
     this.user = this.auth.currentUserValue;
 
     this.usernameForm = fb.group({
-      username: new FormControl("", [
+      username: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(20),

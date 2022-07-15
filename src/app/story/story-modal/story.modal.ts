@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Keyboard } from "@capacitor/keyboard";
 import {
@@ -27,7 +27,7 @@ export class StoryModal implements OnInit {
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
 
-  public storyForm: FormGroup;
+  public storyForm: UntypedFormGroup;
   get text() {
     return this.storyForm.get("text");
   }
@@ -42,7 +42,7 @@ export class StoryModal implements OnInit {
 
   constructor(
     public modal: ModalController,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public platform: Platform,
     private utils: UtilsService,
     private sanitizer: DomSanitizer,
@@ -51,7 +51,7 @@ export class StoryModal implements OnInit {
     private userSvc: UserService
   ) {
     this.storyForm = formBuilder.group({
-      text: new FormControl(),
+      text: new UntypedFormControl(),
     });
   }
 

@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import {
@@ -20,13 +20,13 @@ import { UserService } from "./../../services/user.service";
   styleUrls: ["./disable-account.modal.scss"]
 })
 export class DisableAccountModal {
-  public disableForm: FormGroup;
+  public disableForm: UntypedFormGroup;
   public clearPassword = false;
   public type: "disable" | "remove" = "disable";
   public showBackdrop = false;
 
   constructor(
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private modal: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
@@ -34,11 +34,11 @@ export class DisableAccountModal {
     private toast: ToastController
   ) {
     this.disableForm = fb.group({
-      password: new FormControl("", [
+      password: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(8)
       ]),
-      note: new FormControl()
+      note: new UntypedFormControl()
     });
   }
 

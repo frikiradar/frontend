@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import { AlertController, ToastController } from "@ionic/angular";
@@ -19,13 +19,13 @@ import { UserService } from "../../services/user.service";
   styleUrls: ["./activate-account.page.scss"]
 })
 export class ActivateAccountPage {
-  public codeForm: FormGroup;
-  public emailForm: FormGroup;
+  public codeForm: UntypedFormGroup;
+  public emailForm: UntypedFormGroup;
   public user: User;
   public changingEmail = false;
 
   constructor(
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
@@ -36,7 +36,7 @@ export class ActivateAccountPage {
     this.user = this.auth.currentUserValue;
 
     this.codeForm = fb.group({
-      code: new FormControl("", [
+      code: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(6)
@@ -44,7 +44,7 @@ export class ActivateAccountPage {
     });
 
     this.emailForm = fb.group({
-      email: new FormControl("", [
+      email: new UntypedFormControl("", [
         Validators.required,
         Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$")
       ])

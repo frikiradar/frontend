@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
@@ -28,7 +28,7 @@ export class EventModal {
   @ViewChild("imageInput", { static: false })
   imageInput: ElementRef;
 
-  public eventForm: FormGroup;
+  public eventForm: UntypedFormGroup;
   private imageFile: Blob;
   public editing = false;
   public src: SafeUrl = "";
@@ -40,7 +40,7 @@ export class EventModal {
   public country: Event["country"];
 
   constructor(
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     private toast: ToastController,
     private modal: ModalController,
     public utils: UtilsService,
@@ -50,21 +50,21 @@ export class EventModal {
     private platform: Platform
   ) {
     this.eventForm = formBuilder.group({
-      title: new FormControl("", [Validators.required]),
-      description: new FormControl(""),
-      date: new FormControl("", [Validators.required]),
-      endDate: new FormControl(),
+      title: new UntypedFormControl("", [Validators.required]),
+      description: new UntypedFormControl(""),
+      date: new UntypedFormControl("", [Validators.required]),
+      endDate: new UntypedFormControl(),
       // repeat: new FormControl(),
-      url: new FormControl("", [Validators.required]),
-      price: new FormControl(0),
-      country: new FormControl(),
-      city: new FormControl(),
-      address: new FormControl(),
-      postal_code: new FormControl(),
-      contact_phone: new FormControl(),
-      contact_email: new FormControl(),
-      minage: new FormControl(0),
-      official: new FormControl(),
+      url: new UntypedFormControl("", [Validators.required]),
+      price: new UntypedFormControl(0),
+      country: new UntypedFormControl(),
+      city: new UntypedFormControl(),
+      address: new UntypedFormControl(),
+      postal_code: new UntypedFormControl(),
+      contact_phone: new UntypedFormControl(),
+      contact_email: new UntypedFormControl(),
+      minage: new UntypedFormControl(0),
+      official: new UntypedFormControl(),
     });
   }
 

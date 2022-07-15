@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -43,7 +43,7 @@ export class ViewStoriesModal implements OnInit {
   textarea: IonTextarea;
   public slides: SwiperCore;
 
-  public commentForm: FormGroup;
+  public commentForm: UntypedFormGroup;
   get comment() {
     return this.commentForm.get("comment");
   }
@@ -74,7 +74,7 @@ export class ViewStoriesModal implements OnInit {
     public modal: ModalController,
     private modalCreate: ModalController,
     private likeModal: ModalController,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public platform: Platform,
     private storySvc: StoryService,
     public userSvc: UserService,
@@ -84,7 +84,7 @@ export class ViewStoriesModal implements OnInit {
     private urlSvc: UrlService
   ) {
     this.commentForm = formBuilder.group({
-      comment: new FormControl("", [Validators.required]),
+      comment: new UntypedFormControl("", [Validators.required]),
     });
   }
 

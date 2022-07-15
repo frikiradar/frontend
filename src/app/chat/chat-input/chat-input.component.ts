@@ -10,9 +10,9 @@ import {
   ElementRef,
 } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from "@angular/forms";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
@@ -44,7 +44,7 @@ export class ChatInputComponent {
   @Output() replyingChange: EventEmitter<boolean> = new EventEmitter(true);
   @Output() onCreateEvent: EventEmitter<void> = new EventEmitter();
 
-  public chatForm: FormGroup;
+  public chatForm: UntypedFormGroup;
   get message() {
     return this.chatForm.get("message");
   }
@@ -82,7 +82,7 @@ export class ChatInputComponent {
   private writing = false;
 
   constructor(
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public auth: AuthService,
     public platform: Platform,
     public sheet: ActionSheetController,
@@ -91,7 +91,7 @@ export class ChatInputComponent {
     private sanitizer: DomSanitizer
   ) {
     this.chatForm = formBuilder.group({
-      message: new FormControl("", [Validators.required]),
+      message: new UntypedFormControl("", [Validators.required]),
     });
   }
 

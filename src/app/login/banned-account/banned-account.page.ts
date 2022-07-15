@@ -1,8 +1,8 @@
 import { Component, ViewChild } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import { IonContent, IonTextarea } from "@ionic/angular";
@@ -19,7 +19,7 @@ import { AuthService } from "../../services/auth.service";
   styleUrls: ["./banned-account.page.scss"]
 })
 export class BannedAccountPage {
-  public chatForm: FormGroup;
+  public chatForm: UntypedFormGroup;
   get message() {
     return this.chatForm.get("message");
   }
@@ -36,11 +36,11 @@ export class BannedAccountPage {
   constructor(
     private auth: AuthService,
     private chatSvc: ChatService,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     private urlSvc: UrlService
   ) {
     this.chatForm = formBuilder.group({
-      message: new FormControl("", [Validators.required])
+      message: new UntypedFormControl("", [Validators.required])
     });
     this.user = this.auth.currentUserValue;
 

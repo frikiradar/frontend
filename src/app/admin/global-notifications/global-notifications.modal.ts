@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import { ModalController, ToastController } from "@ionic/angular";
@@ -17,7 +17,7 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class GlobalNotificationsModal implements OnInit {
   public user: User;
-  public messageForm: FormGroup;
+  public messageForm: UntypedFormGroup;
   get message() {
     return this.messageForm.get("message");
   }
@@ -28,15 +28,15 @@ export class GlobalNotificationsModal implements OnInit {
 
   constructor(
     private auth: AuthService,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     private admin: AdminService,
     private toast: ToastController,
     private modal: ModalController
   ) {
     this.messageForm = formBuilder.group({
-      title: new FormControl(),
-      message: new FormControl("", [Validators.required]),
-      test: new FormControl()
+      title: new UntypedFormControl(),
+      message: new UntypedFormControl("", [Validators.required]),
+      test: new UntypedFormControl()
     });
   }
 

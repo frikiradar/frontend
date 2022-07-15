@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from "@angular/forms";
 import { IonContent, IonTextarea, ModalController } from "@ionic/angular";
@@ -21,7 +21,7 @@ import { UserService } from "src/app/services/user.service";
 })
 export class BannedMessagesModal implements OnInit {
   @Input() id: User["id"];
-  public chatForm: FormGroup;
+  public chatForm: UntypedFormGroup;
   get message() {
     return this.chatForm.get("message");
   }
@@ -38,12 +38,12 @@ export class BannedMessagesModal implements OnInit {
   constructor(
     private modal: ModalController,
     private admin: AdminService,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     private urlSvc: UrlService,
     private userSvc: UserService
   ) {
     this.chatForm = formBuilder.group({
-      message: new FormControl("", [Validators.required])
+      message: new UntypedFormControl("", [Validators.required])
     });
   }
 

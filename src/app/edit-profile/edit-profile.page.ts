@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import {
   ActionSheetController,
   IonInput,
@@ -59,7 +59,7 @@ export class EditProfilePage {
   };
 
   public showToolbar = false;
-  public profileForm: FormGroup;
+  public profileForm: UntypedFormGroup;
   public today: number = Date.now();
   public user: User;
   public tags: Tag[] = [];
@@ -67,7 +67,7 @@ export class EditProfilePage {
   public list: { name: string; total: number }[];
 
   constructor(
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public userSvc: UserService,
     private tagSvc: TagService,
     public auth: AuthService,
@@ -90,7 +90,7 @@ export class EditProfilePage {
       status: [""],
       lovegender: [""],
       minage: [""],
-      maxage: new FormControl({ value: "", disabled: true }),
+      maxage: new UntypedFormControl({ value: "", disabled: true }),
       connection: [""],
       tags: [""],
     });
