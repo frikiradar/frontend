@@ -32,7 +32,7 @@
     button
     (click)="block(user)"
     lines="full"
-    *ngIf="auth?.currentUserValue?.id !== user?.id"
+    *ngIf="auth?.currentUserValue?.id !== user?.id && !user?.roles.includes('ROLE_MASTER')"
   >
     <ion-icon color="light" name="ban" slot="start"></ion-icon>
     <ion-label color="light">Bloquear</ion-label>

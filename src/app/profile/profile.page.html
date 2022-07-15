@@ -106,7 +106,7 @@
           <ion-item
             lines="none"
             id="kokoro"
-            *ngIf="auth.currentUserValue && user?.likes && auth.isAdult()"
+            *ngIf="auth.currentUserValue && user?.likes"
           >
             <ion-icon name="heart" slot="start" color="primary"></ion-icon>
             <ion-label>
@@ -122,7 +122,7 @@
           <ion-item
             lines="none"
             class="location"
-            *ngIf="auth.isAdult() && (user?.distance !== undefined || user?.ip)"
+            *ngIf="user?.distance !== undefined || user?.ip"
           >
             <ion-icon
               name="location-sharp"
@@ -145,6 +145,12 @@
               (click)="$event.stopImmediatePropagation(); openUrl($event)"
             ></ion-label>
           </ion-item>
+          <ion-item lines="none" *ngIf="user?.block">
+            <ion-label>
+              <h1><strong>Usuario bloqueado</strong></h1>
+              <p>No puedes interactuar con esta persona.</p>
+            </ion-label>
+          </ion-item>
           <ion-item lines="none" *ngIf="user?.last_login">
             <ion-icon name="time"></ion-icon>
             <ion-label
@@ -163,7 +169,7 @@
             <ion-label>{{ user.location }}</ion-label>
           </ion-item>
           <ion-item
-            *ngIf="auth.isAdult() && (user?.gender || user?.pronoun || user?.orientation || user?.relationship)"
+            *ngIf="user?.gender || user?.pronoun || user?.orientation || user?.relationship"
             lines="none"
           >
             <ion-icon name="body"></ion-icon>
@@ -175,7 +181,7 @@
               user.relationship : ''}}
             </ion-label>
           </ion-item>
-          <ion-item *ngIf="auth.isAdult() && user?.connection?.length">
+          <ion-item *ngIf="user?.connection?.length">
             <ion-icon name="search-outline"></ion-icon>
             <ion-label>Buscando: {{ user?.connection?.join(", ") }}</ion-label>
           </ion-item>
@@ -261,7 +267,7 @@
         <ion-row class="ion-align-items-center">
           <ion-col
             class="ion-text-center"
-            *ngIf="auth.currentUserValue && auth.isAdult() && user?.age >= 18"
+            *ngIf="auth.currentUserValue && user?.age >= 18"
           >
             <ion-button (click)="hideProfile()">
               <ion-icon
@@ -279,10 +285,7 @@
               <ion-icon slot="icon-only" name="chatbubbles-outline"></ion-icon>
             </ion-button>
           </ion-col>
-          <ion-col
-            class="ion-text-center"
-            *ngIf="!auth.currentUserValue || (auth.isAdult() && user?.age >= 18)"
-          >
+          <ion-col class="ion-text-center" *ngIf="!auth.currentUserValue">
             <ion-button (click)="switchLike()">
               <ion-icon
                 [@pulse]="user.like"
