@@ -2,9 +2,6 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Network } from "@capacitor/network";
 import { AlertController, Platform, ToastController } from "@ionic/angular";
-import { codePush } from "capacitor-codepush";
-import { SyncOptions } from "capacitor-codepush/dist/esm/syncOptions";
-import { InstallMode } from "capacitor-codepush/dist/esm/installMode";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
 import {
@@ -50,7 +47,6 @@ export class AppComponent {
   async initializeApp() {
     if (this.platform.is("capacitor")) {
       this.push.init();
-      this.checkCodePush();
     } else {
       if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
         this.push.init();
@@ -129,49 +125,6 @@ export class AppComponent {
         this.internet = false;
       }
     });
-  }
-
-  checkCodePush() {
-    let syncOptions: SyncOptions;
-    if (this.auth.isAdmin() || this.auth.isPatreon()) {
-      let deploymentKey = "";
-      if (this.platform.is("android")) {
-        // Admin trabaja con canal Staging y Patreon con canal Beta
-        deploymentKey = this.auth.isAdmin()
-          ? "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP"
-          : "ca2DLDgXrXj0zBDVv8Hehxe-vOcJZtjBRsYsH";
-      } else if (this.platform.is("ios")) {
-        deploymentKey = this.auth.isAdmin()
-          ? "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP"
-          : "qVXwTWOnTmOJJz5zj6s9G5GQPyJ9T_zqCfB1i";
-      }
-
-      syncOptions = {
-        updateDialog: {
-          updateTitle: "¡Nueva actualización!",
-          optionalUpdateMessage:
-            "Hay una actualización disponible. ¿Quieres actualizar?",
-          mandatoryUpdateMessage:
-            "Hay una actualización obligatoria disponible",
-          descriptionPrefix: "",
-          mandatoryContinueButtonLabel: "Instalar",
-          optionalIgnoreButtonLabel: "Más tarde",
-          optionalInstallButtonLabel: "Instalar",
-          appendReleaseDescription: false,
-        },
-        deploymentKey: this.platform.is("android")
-          ? "uwJhlLNJrqSaFkFEX7sKXEwgQBfigjlFa4lDP"
-          : "FdlQxj1MHcOlgOU1nk1I93uR_32hoXJV9KZeX",
-        installMode: InstallMode.IMMEDIATE,
-      };
-    } else {
-      syncOptions = {
-        updateDialog: false,
-        installMode: InstallMode.ON_NEXT_RESTART,
-      };
-    }
-
-    codePush.sync(syncOptions);
   }
 
   async countOpenTimes() {

@@ -138,14 +138,14 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'download',
-    loadChildren: () => import('./download/download.module').then( m => m.DownloadPageModule)
+    path: "download",
+    loadChildren: () =>
+      import("./download/download.module").then((m) => m.DownloadPageModule),
   },
 ];
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      relativeLinkResolution: "legacy",
       useHash: false,
     }),
   ],
