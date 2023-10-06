@@ -2,7 +2,6 @@ import { NotificationOptionsModal } from "./../notification/notification-options
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
-import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ImageCropperModule } from "ngx-image-cropper";
 import { WebcamModal } from "../webcam/webcam.modal";
@@ -60,7 +59,6 @@ import { LikesModal } from "./../profile/likes-modal/likes.modal";
     ReactiveFormsModule,
     IonicModule,
     CommonModule,
-    NgxIonicImageViewerModule,
     ImageCropperModule,
     WebcamModule,
     PickerModule,

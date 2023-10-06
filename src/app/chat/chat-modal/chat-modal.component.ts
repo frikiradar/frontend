@@ -22,6 +22,7 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import ImageViewer from "awesome-image-viewer";
 
 import { Chat } from "../../models/chat";
 import { User } from "../../models/user";
@@ -31,7 +32,6 @@ import { UrlService } from "../../services/url.service";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import { UtilsService } from "../../services/utils.service";
-import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { OptionsPopover } from "../../options-popover/options-popover";
 import { NavService } from "src/app/services/navigation.service";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
@@ -489,30 +489,16 @@ export class ChatModalComponent implements OnInit {
   }
 
   async openViewer(src: string, title: string, text: string, scheme = "dark") {
-    let componentProps = {};
-    if (text) {
-      componentProps = {
-        src,
-        title,
-        text,
-        scheme,
-      };
-    } else {
-      componentProps = {
-        src,
-        title,
-        scheme,
-      };
-    }
-    const modal = await this.modalController.create({
-      component: ViewerModalComponent,
-      componentProps,
-      cssClass: "ion-img-viewer",
-      keyboardClose: true,
-      showBackdrop: true,
+    new ImageViewer({
+      images: [
+        {
+          mainUrl: src,
+          description: text ?? title,
+        },
+      ],
+      stretchImages: true,
+      isZoomable: false,
     });
-
-    return await modal.present();
   }
 
   async showOptions(event: any) {

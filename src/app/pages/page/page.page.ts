@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalController, ToastController } from "@ionic/angular";
-import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { Meta, Title } from "@angular/platform-browser";
+import ImageViewer from "awesome-image-viewer";
 
 import { Page } from "../../models/page";
 import { Story } from "../../models/story";
@@ -128,23 +128,17 @@ export class PagePage {
     await this.getStories();
   }
 
-  async openViewer(src: string, title: string, scheme = "dark") {
-    let componentProps = {};
-
-    componentProps = {
-      src,
-      title,
-      scheme,
-    };
-    const modal = await this.modal.create({
-      component: ViewerModalComponent,
-      componentProps,
-      cssClass: "ion-img-viewer",
-      keyboardClose: true,
-      showBackdrop: true,
+  async openViewer(src: string, title: string) {
+    new ImageViewer({
+      images: [
+        {
+          mainUrl: src,
+          description: title,
+        },
+      ],
+      stretchImages: true,
+      isZoomable: false,
     });
-
-    return await modal.present();
   }
 
   async addTag() {

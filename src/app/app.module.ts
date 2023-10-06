@@ -13,7 +13,6 @@ import { RouteReuseStrategy } from "@angular/router";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
-import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import { ImageCropperModule } from "ngx-image-cropper";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireMessagingModule } from "@angular/fire/compat/messaging/";
@@ -49,7 +48,6 @@ registerLocaleData(localeEs, "es");
     BrowserAnimationsModule,
     LinkyModule,
     HammerModule,
-    NgxIonicImageViewerModule,
     ImageCropperModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: true,

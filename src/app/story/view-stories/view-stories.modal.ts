@@ -133,10 +133,6 @@ export class ViewStoriesModal implements OnInit {
   }
 
   commentFocus(event?: CustomEvent) {
-    if (event) {
-      const textarea = event.target as unknown as IonTextarea;
-      textarea.setBlur();
-    }
     document.getElementById("view-comments").click();
     setTimeout(() => {
       this.textarea.setFocus();
