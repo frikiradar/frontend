@@ -105,18 +105,6 @@ export class EventPage implements OnInit {
     }
   }
 
-  async showRoom() {
-    let slug = "event-" + this.event.id;
-
-    if (this.auth.currentUserValue) {
-      this.router.navigate(["/room", slug]);
-    } else {
-      this.nav.navigateRoot(["/login"], {
-        queryParams: { returnUrl: this.router.url },
-      });
-    }
-  }
-
   async showPage(slug: Page["slug"]) {
     this.router.navigate(["/page", slug]);
   }

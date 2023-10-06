@@ -4,7 +4,6 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { Chat } from "../models/chat";
 import { Page } from "../models/page";
-import { Room } from "../models/room";
 import { Story } from "../models/story";
 import { User } from "../models/user";
 
@@ -29,7 +28,6 @@ export interface Config {
   push_url?: string;
   geolocation?: boolean;
   patreon?: string;
-  rooms?: Room[];
   chats?: Chat[];
   radar?: User[];
   pages?: Page[];
@@ -38,7 +36,7 @@ export interface Config {
   rules?: boolean;
 }
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ConfigService {
   private root = environment.root;

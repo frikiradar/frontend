@@ -1,19 +1,12 @@
 import { Injectable } from "@angular/core";
-import { Platform } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { Browser } from "@capacitor/browser";
-
-import { RoomService } from "./room.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class UrlService {
-  constructor(
-    private platform: Platform,
-    private router: Router,
-    private roomSvc: RoomService
-  ) {}
+  constructor(private router: Router) {}
 
   async openUrl(event: string | any) {
     let url = "";
@@ -49,13 +42,8 @@ export class UrlService {
 
     if (event.srcElement?.href && event.target.className.includes("hashtag")) {
       let slug = event.target.innerHTML.replace("#", "");
-      slug = slug === "frikiradar" ? "frikiradar-room" : slug;
-      const room = await this.roomSvc.getRoom(slug);
-      if (room.page) {
-        this.router.navigate(["/page", slug]);
-      } else {
-        this.router.navigate(["/room", slug]);
-      }
+
+      this.router.navigate(["/page", slug]);
       return;
     }
   }

@@ -176,12 +176,6 @@ export class PushService {
           "Recibe notificaciones cuando un usuario te entregue su kokoro.",
       },
       {
-        id: "rooms",
-        name: "Notificaciones de salas de chat",
-        description:
-          "Recibe notificaciones de nuevos mensajes en salas de chat.",
-      },
-      {
         id: "frikiradar",
         name: "Notificaciones de FrikiRadar",
         description:

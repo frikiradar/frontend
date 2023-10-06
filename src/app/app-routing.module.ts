@@ -51,16 +51,6 @@ const routes: Routes = [
       import("./chat/chat.module").then((m) => m.ChatPageModule),
   },
   {
-    path: "rooms",
-    loadChildren: () =>
-      import("./room/rooms/rooms.module").then((m) => m.RoomsPageModule),
-  },
-  {
-    path: "room/:slug",
-    loadChildren: () =>
-      import("./room/room.module").then((m) => m.RoomPageModule),
-  },
-  {
     path: "search",
     loadChildren: () =>
       import("./search/search.module").then((m) => m.SearchPageModule),

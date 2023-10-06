@@ -1,21 +1,16 @@
 import { Injectable } from "@angular/core";
 
 import { Chat } from "../models/chat";
-import { Room } from "../models/room";
 import { User } from "../models/user";
 import { ConfigService } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class AdminService {
-  constructor(
-    private rest: RestService,
-    private config: ConfigService,
-    private uploadSvc: UploadService
-  ) {}
+  constructor(private rest: RestService) {}
 
   async warn(id: User["id"], message: string) {
     return this.rest.put("warn", { touser: id, message }).toPromise();
@@ -49,47 +44,5 @@ export class AdminService {
     return (await this.rest
       .put("banned-message", { touser: id, text })
       .toPromise()) as Chat;
-  }
-
-  async createRoom(
-    name: string,
-    description: string,
-    permissions: string,
-    visible: boolean,
-    image: Blob
-  ) {
-    const formData: FormData = new FormData();
-    formData.set("name", name);
-    formData.set("description", description);
-    formData.set("permissions", permissions);
-    formData.set("visible", visible ? "true" : "false");
-    formData.set("image", image);
-    return (await this.uploadSvc.upload("room", formData)) as Room;
-  }
-
-  async editRoom(
-    id: number,
-    name: string,
-    description: string,
-    permissions: string,
-    visible: boolean,
-    image: Blob
-  ) {
-    const formData: FormData = new FormData();
-    formData.set("id", "" + id);
-    formData.set("name", name);
-    formData.set("description", description);
-    formData.set("permissions", permissions);
-    formData.set("visible", visible ? "true" : "false");
-    formData.set("image", image);
-    return (await this.uploadSvc.upload("edit-room", formData)) as Room;
-  }
-
-  async getRooms() {
-    return (await this.rest.get("admin-rooms").toPromise()) as Room[];
-  }
-
-  async removeRoom(id: Room["id"]) {
-    return this.rest.delete(`delete-room/${id}`).toPromise() as Promise<Room[]>;
   }
 }

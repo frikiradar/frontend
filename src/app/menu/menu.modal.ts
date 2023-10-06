@@ -60,11 +60,6 @@ export class MenuModal implements OnInit {
     return await modal.present();
   }
 
-  bugs() {
-    this.router.navigate(["/room/frikiradar-bugs"]);
-    this.modal.dismiss();
-  }
-
   logout() {
     this.auth.logout();
     this.modal.dismiss();

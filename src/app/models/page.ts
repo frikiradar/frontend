@@ -1,5 +1,3 @@
-import { Room } from "./room";
-
 export interface Page {
   id?: number;
   name: string;
@@ -14,5 +12,4 @@ export interface Page {
   game_mode?: "offline" | "online";
   slug: string;
   category: string;
-  room?: Room;
 }

@@ -6,12 +6,11 @@ import { NavService } from "../services/navigation.service";
 import { AuthService } from "./../services/auth.service";
 import { BannedUsersModal } from "./banned-users/banned-users.modal";
 import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
-import { EditRoomsModal } from "./rooms/edit-rooms/edit-rooms.modal";
 
 @Component({
   selector: "app-admin",
   templateUrl: "./admin.page.html",
-  styleUrls: ["./admin.page.scss"]
+  styleUrls: ["./admin.page.scss"],
 })
 export class AdminPage implements OnInit {
   public user: User;
@@ -28,21 +27,14 @@ export class AdminPage implements OnInit {
 
   async bannedUsersModal() {
     const modal = await this.modal.create({
-      component: BannedUsersModal
+      component: BannedUsersModal,
     });
     return await modal.present();
   }
 
   async globalNotificationsModal() {
     const modal = await this.modal.create({
-      component: GlobalNotificationsModal
-    });
-    return await modal.present();
-  }
-
-  async editRoomsModal() {
-    const modal = await this.modal.create({
-      component: EditRoomsModal
+      component: GlobalNotificationsModal,
     });
     return await modal.present();
   }

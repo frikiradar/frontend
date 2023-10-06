@@ -29,7 +29,6 @@ import { AudioPlayerComponent } from "../audio-player/audio-player.component";
 import { ChatDatePipe } from "../chat-date.pipe";
 import { EventModal } from "../events/event-modal/event.modal";
 import { RulesPage } from "../rules/rules.page";
-import { RoomOptionsModal } from "../room/room-options-modal/room-options.modal";
 import { LikesModal } from "./../profile/likes-modal/likes.modal";
 
 @NgModule({
@@ -53,7 +52,6 @@ import { LikesModal } from "./../profile/likes-modal/likes.modal";
     MenuModal,
     LikesModal,
     NotificationOptionsModal,
-    RoomOptionsModal,
     CommentLikesModal,
     RulesPage,
   ],
