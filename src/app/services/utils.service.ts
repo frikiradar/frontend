@@ -20,7 +20,7 @@ import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { AuthService } from "./auth.service";
 import { Config } from "./config.service";
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
+import { NavigationBar } from "@capgo/capacitor-navigation-bar";
 
 @Injectable({
   providedIn: "root",
@@ -294,7 +294,8 @@ export class UtilsService {
   }
 
   format_two_digits(n: string | number) {
-    return n < 10 ? "0" + n : n;
+    const number = +n;
+    return number < 10 ? "0" + n : n;
   }
 
   delay(ms: number) {
@@ -311,32 +312,32 @@ export class UtilsService {
         case "dark":
           StatusBar.setBackgroundColor({ color: "#1f1f1f" });
           StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
+          NavigationBar.setNavigationBarColor({ color: "#1f1f1f" });
           break;
         case "light":
           StatusBar.setBackgroundColor({ color: "#fafafa" });
           StatusBar.setStyle({ style: Style.Light });
-          NavigationBar.setColor({ color: "#fafafa", darkButtons: true });
+          NavigationBar.setNavigationBarColor({ color: "#fafafa" });
           break;
         case "cyberpunk":
           StatusBar.setBackgroundColor({ color: "#0c1340" });
           StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#0c1340", darkButtons: false });
+          NavigationBar.setNavigationBarColor({ color: "#0c1340" });
           break;
         case "black":
           StatusBar.setBackgroundColor({ color: "#000000" });
           StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#000000", darkButtons: false });
+          NavigationBar.setNavigationBarColor({ color: "#000000" });
           break;
         case "fire":
           StatusBar.setBackgroundColor({ color: "#000000" });
           StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#000000", darkButtons: false });
+          NavigationBar.setNavigationBarColor({ color: "#000000" });
           break;
         default:
           StatusBar.setBackgroundColor({ color: "#1f1f1f" });
           StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
+          NavigationBar.setNavigationBarColor({ color: "#1f1f1f" });
       }
     }
   }

@@ -225,7 +225,7 @@ export class AuthService {
   async logout() {
     let uuid = null;
     if (this.platform.is("capacitor")) {
-      uuid = (await DevicePlugin.getId()).uuid;
+      uuid = (await DevicePlugin.getId()).identifier;
     } else {
       const fp = await FingerprintJS.load();
       const fingerprint = await fp.get();

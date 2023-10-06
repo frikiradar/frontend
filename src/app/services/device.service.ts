@@ -37,7 +37,7 @@ export class DeviceService {
       // console.log("device", device);
       let uuid: string = null;
       if (this.platform.is("capacitor")) {
-        uuid = (await DevicePlugin.getId()).uuid;
+        uuid = (await DevicePlugin.getId()).identifier;
       } else {
         const fp = await FingerprintJS.load();
         const fingerprint = await fp.get();
@@ -85,7 +85,7 @@ export class DeviceService {
     let uuid: string = null;
     let device: Device;
     if (this.platform.is("capacitor")) {
-      uuid = (await DevicePlugin.getId()).uuid;
+      uuid = (await DevicePlugin.getId()).identifier;
       const info = await DevicePlugin.getInfo();
       device = {
         device_id: uuid,
