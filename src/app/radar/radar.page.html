@@ -51,8 +51,8 @@
                   color="secondary"
                   >&nbsp;</ion-badge
                 >
-                <ion-text class="name" color="light">{{ user.name }}</ion-text>
-                <ion-text class="age" color="light">, {{ user.age }}</ion-text>
+                <ion-text class="name">{{ user.name }}</ion-text>
+                <ion-text class="age">, {{ user.age }}</ion-text>
               </ion-card-title>
             </ion-card-header>
             <ion-card-content>
@@ -69,16 +69,12 @@
                   class="ion-margin-end"
                 ></ion-icon>
                 <ion-label>
-                  <ion-text color="light"
-                    >A {{ user.distance }}km de distancia</ion-text
-                  >
+                  <ion-text>A {{ user.distance }}km de distancia</ion-text>
                 </ion-label>
               </ion-item>
-              <ion-text class="description" color="light"
-                >{{user.description}}</ion-text
-              >
+              <ion-text class="description">{{user.description}}</ion-text>
               <div class="tags" *ngIf="user?.common_tags?.length">
-                <p><ion-text color="light">Gustos en común:</ion-text></p>
+                <p><ion-text>Gustos en común:</ion-text></p>
                 <ion-chip
                   *ngFor="let tag of user.common_tags"
                   color="secondary"

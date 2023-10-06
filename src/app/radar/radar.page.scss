@@ -91,10 +91,12 @@ ion-card-header {
     }
 
     .name {
+      color: white;
       font-size: 24px;
     }
 
     .age {
+      color: white;
       font-size: 16px;
     }
   }
@@ -108,6 +110,7 @@ ion-card-content {
   overflow-y: auto;
 
   .description {
+    color: white;
     max-height: 37px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -119,6 +122,9 @@ ion-card-content {
   }
 
   .tags {
+    ion-text {
+      color: white;
+    }
     margin-top: 10px;
     ion-chip {
       margin-left: 0;
@@ -140,6 +146,10 @@ ion-card-content {
   right: 15px;
   bottom: 5px;
   top: 5px;
+}
+
+.info-distance ion-text {
+  color: white;
 }
 
 ion-content {

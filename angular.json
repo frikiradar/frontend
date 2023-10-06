@@ -21,7 +21,8 @@
               "deep-equal",
               "patreon",
               "code-push",
-              "get-blob-duration"
+              "get-blob-duration",
+              "awesome-image-viewer"
             ],
             "aot": false,
             "outputPath": "www",
@@ -201,9 +202,7 @@
   },
   "cli": {
     "analytics": "46f06440-4fbc-44d6-a1c1-36cefb88ea39",
-    "schematicCollections": [
-      "@ionic/angular-toolkit"
-    ]
+    "schematicCollections": ["@ionic/angular-toolkit"]
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
