@@ -112,47 +112,72 @@ ion-thumbnail#cover {
   }
 }
 
-.room {
-  margin: 10px;
-  background: var(--ion-color-medium-dark);
-  border-radius: 25px;
+#search {
+  ion-list {
+    ion-item {
+      --background: #1f1f1f;
+      --border-color: #e91e63;
 
-  ion-thumbnail {
-    --border-radius: 8px;
-    margin-right: 10px;
-  }
+      ion-avatar {
+        &.md {
+          width: 64px;
+          height: 64px;
+        }
 
-  .room-description {
-    white-space: initial;
-    color: rgb(172, 172, 172);
-  }
+        &.ios {
+          width: 48px;
+          height: 48px;
+        }
 
-  ion-badge {
-    position: relative;
-    left: 45px;
-    border-radius: 15px;
-    z-index: 1;
-    width: 20px;
-    height: 20px;
-    bottom: 12px;
-    border: 2px solid #1f1f1f;
-  }
-}
+        ion-badge {
+          position: absolute;
+          left: 70px;
+          border-radius: 15px;
+          z-index: 1;
+          width: 15px;
+          height: 15px;
+          box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.75);
+        }
+      }
 
-#events {
-  ion-card {
-    border-radius: 20px;
-    --color: var(--ion-color-light) !important;
-    --background: var(--ion-color-medium-dark) !important;
+      ion-label {
+        width: 150px;
+        .name {
+          font-size: 24px;
+        }
 
-    ion-img {
-      height: 220px;
-      object-fit: cover;
-      object-position: center;
-    }
+        &.ios .description {
+          max-height: 30px;
+        }
 
-    ion-card-title {
-      --color: var(--ion-color-light) !important;
+        &.md .description {
+          max-height: 36px;
+        }
+
+        .description {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          font-size: 13px;
+          color: #bbbbbb;
+          white-space: initial;
+        }
+      }
+
+      .match {
+        color: white;
+        font-size: 12px;
+        border: 2px solid white;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-left: 10px;
+        background-color: #e91e63;
+      }
     }
   }
 }

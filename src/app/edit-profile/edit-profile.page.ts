@@ -1,9 +1,14 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from "@angular/forms";
 import {
   ActionSheetController,
   IonInput,
   IonSegment,
+  ModalController,
   PickerController,
   Platform,
   ToastController,
@@ -17,6 +22,8 @@ import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
 import { TagService } from "./../services/tag.service";
 import { UtilsService } from "./../services/utils.service";
+import { RulesPage } from "../rules/rules.page";
+import { ConfigService } from "../services/config.service";
 
 SwiperCore.use([Pagination, Keyboard]);
 
@@ -76,7 +83,9 @@ export class EditProfilePage {
     private utils: UtilsService,
     private toast: ToastController,
     private platform: Platform,
-    private nav: NavService
+    private nav: NavService,
+    private modal: ModalController,
+    private config: ConfigService
   ) {
     this.profileForm = this.fb.group({
       name: [""],
@@ -119,6 +128,16 @@ export class EditProfilePage {
 
     if (this.minage.value) {
       this.profileForm.get("maxage").enable();
+    }
+
+    const rules = await this.config.get("rules");
+    if (!rules) {
+      const modal = await this.modal.create({
+        component: RulesPage,
+        cssClass: "full-modal",
+        backdropDismiss: false,
+      });
+      return await modal.present();
     }
   }
 

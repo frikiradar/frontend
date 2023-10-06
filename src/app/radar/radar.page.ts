@@ -4,12 +4,7 @@ import {
   HostListener,
   ChangeDetectorRef,
 } from "@angular/core";
-import {
-  NavigationStart,
-  Router,
-  Event,
-  ActivatedRoute,
-} from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import {
   AlertController,
   IonRange,
@@ -19,7 +14,6 @@ import {
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { takeWhile } from "rxjs/operators";
-import * as deepEqual from "deep-equal";
 import SwiperCore, {
   Keyboard,
   SwiperOptions,
@@ -40,10 +34,6 @@ import {
   NotificationService,
   NotificationCounters,
 } from "../services/notification.service";
-import { StoryService } from "../services/story.service";
-import { Story } from "../models/story";
-import { StoryModal } from "../story/story-modal/story.modal";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 
 SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel]);
 
@@ -75,20 +65,6 @@ export class RadarPage {
     effect: "coverflow",
     mousewheel: true,
   };
-
-  public storiesOpts: SwiperOptions = {
-    preloadImages: false,
-    lazy: true,
-    slidesPerView: 4.5,
-    breakpoints: {
-      1024: {
-        slidesPerView: 14.5,
-      },
-    },
-    grabCursor: true,
-  };
-  public stories: Story[];
-  public groupedStories: Story[] = [];
 
   public hide = false;
   page = 0;
@@ -134,20 +110,11 @@ export class RadarPage {
     private push: PushService,
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
-    private storySvc: StoryService,
     private modal: ModalController,
     private route: ActivatedRoute
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
-    });
-
-    this.router.events.subscribe(async (event: Event) => {
-      if (event instanceof NavigationStart) {
-        if (event.url === "/tabs/radar") {
-          this.getStories();
-        }
-      }
     });
   }
 
@@ -160,16 +127,6 @@ export class RadarPage {
   }
 
   async ngOnInit() {
-    const id = this.route.snapshot.paramMap.get("id");
-    if (id) {
-      try {
-        const story = await this.storySvc.getStory(+id);
-        this.showStory(story);
-      } catch (e) {
-        console.error("Historia no encontrada");
-      }
-    }
-
     this.authUser = this.auth.currentUserValue;
 
     // Una vez logueado iniciamos notificaciones si no están
@@ -243,7 +200,6 @@ export class RadarPage {
       await this.slides?.slideTo(0);
     }
     this.getRadarUsers();
-    this.getStories();
   }
 
   async ionViewWillEnter() {
@@ -320,8 +276,8 @@ export class RadarPage {
           }
         }
       } else if (
-        this.range.value > -1 &&
-        this.range.value < 5 &&
+        (this.range.value as number) > -1 &&
+        (this.range.value as number) < 5 &&
         this.automatic
       ) {
         let value = this.range.value as number;
@@ -337,74 +293,8 @@ export class RadarPage {
     }
   }
 
-  async getStories() {
-    let stories = await this.storySvc.getAllStories();
-    stories = this.storySvc.orderStories(stories);
-    if (!deepEqual(this.stories, stories)) {
-      this.stories = stories;
-      const groupedStories = this.storySvc.groupStories(stories);
-      this.groupedStories = groupedStories;
-    }
-  }
-
-  async newStory() {
-    const modal = await this.modal.create({
-      component: StoryModal,
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal",
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-    await this.getStories();
-  }
-
-  async showStories(id: User["id"]) {
-    let stories = this.stories.reverse().filter((s) => s.user.id === id);
-    stories = [
-      ...stories,
-      ...this.stories.reverse().filter((s) => s.user.id !== id),
-    ];
-    await this.showStoriesModal(stories);
-    await this.getStories();
-  }
-
-  async showStory(story: Story) {
-    const stories = [story];
-    await this.showStoriesModal(stories);
-    await this.getStories();
-  }
-
-  async showStoriesModal(stories: Story[]) {
-    if (this.view === "cards") {
-      this.slides.disable();
-    }
-    const modal = await this.modal.create({
-      component: ViewStoriesModal,
-      componentProps: { stories },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal",
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-    if (this.view === "cards") {
-      this.slides.enable();
-    }
-  }
-
-  async showAllStories() {
-    this.router.navigate(["/story"]);
-  }
-
   async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
-  }
-
-  search() {
-    this.router.navigate(["/search"]);
   }
 
   notifications() {

@@ -1,12 +1,9 @@
-import { EventService } from "src/app/services/event.service";
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalController, ToastController } from "@ionic/angular";
 import { ViewerModalComponent } from "ngx-ionic-image-viewer";
 import { Meta, Title } from "@angular/platform-browser";
 
-import { Room } from "src/app/models/room";
-import { RoomService } from "src/app/services/room.service";
 import { Page } from "../../models/page";
 import { Story } from "../../models/story";
 import { Tag } from "../../models/tags";
@@ -18,36 +15,36 @@ import { TagService } from "../../services/tag.service";
 import { StoryModal } from "../../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../../story/view-stories/view-stories.modal";
 import { NavService } from "src/app/services/navigation.service";
-import { Event } from "src/app/models/event";
-import { EventModal } from "src/app/events/event-modal/event.modal";
+import { UserService } from "src/app/services/user.service";
 
 @Component({
   selector: "app-page",
   templateUrl: "./page.page.html",
-  styleUrls: ["./page.page.scss"]
+  styleUrls: ["./page.page.scss"],
 })
 export class PagePage {
   public page: Page;
   public tag: Tag;
   public stories: Story[];
-  public room: Partial<Room> = {};
   public groupedStories: Story[];
   public showDescription = false;
   public events: Event[];
+  public scrollPage = 1;
+  public showSkeleton = false;
+  public users: User[];
 
   public storiesOpts = {
     slidesPerView: 6.5,
     breakpoints: {
       1024: {
-        slidesPerView: 10.5
-      }
-    }
+        slidesPerView: 10.5,
+      },
+    },
   };
 
   constructor(
     private route: ActivatedRoute,
     private pageSvc: PageService,
-    private roomSvc: RoomService,
     private storySvc: StoryService,
     public auth: AuthService,
     private tagSvc: TagService,
@@ -57,28 +54,19 @@ export class PagePage {
     private nav: NavService,
     private meta: Meta,
     private title: Title,
-    private eventSvc: EventService
+    public userSvc: UserService
   ) {}
 
   async ngAfterViewInit() {
     const slug = this.route.snapshot.paramMap.get("slug");
     if (this.auth.currentUserValue) {
       this.page = await this.pageSvc.getPage(slug);
-      this.tag = this.auth.currentUserValue.tags.find(t => t.slug === slug);
+      this.tag = this.auth.currentUserValue.tags.find((t) => t.slug === slug);
       this.getStories();
-      this.getEvents();
     } else {
       this.page = await this.pageSvc.getPublicPage(slug);
     }
-
-    const rooms_config = await this.roomSvc.getRoomsConfig();
-    let configRoom = rooms_config?.find(room => room.slug === this.page.slug);
-    if (
-      configRoom?.last_message < this.page?.room.last_message ||
-      (!configRoom?.last_message && this.page?.room.last_message)
-    ) {
-      this.room.unread = true;
-    }
+    this.searchProfiles();
 
     this.meta.addTags([
       {
@@ -87,17 +75,17 @@ export class PagePage {
           "frikiradar, friki, red social, " +
           this.page?.name +
           ", " +
-          this.page?.category
+          this.page?.category,
       },
       { name: "robots", content: "index, follow" },
       { name: "author", content: "FrikiRadar" },
-      { charset: "UTF-8" }
+      { charset: "UTF-8" },
     ]);
 
     this.title.setTitle("Página de " + this.page?.name + " en FrikiRadar");
     this.meta.updateTag({
       name: "description",
-      content: this.page?.description
+      content: this.page?.description,
     });
   }
 
@@ -107,39 +95,13 @@ export class PagePage {
     this.groupedStories = this.storySvc.groupStories(this.stories);
   }
 
-  async getEvents() {
-    this.events = await this.eventSvc.getEventsSlug(this.page.slug);
-    this.events.map(e => {
-      if (e.participants.some(p => p.id === this.auth.currentUserValue.id)) {
-        e.participate = true;
-      }
-    });
-  }
-
-  async newEvent() {
-    const modal = await this.modal.create({
-      component: EventModal,
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "full-modal",
-      componentProps: { page: this.page }
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-  }
-
-  showEvent(event: Event) {
-    this.router.navigate(["/event", event.id]);
-  }
-
   async newStory() {
     const modal = await this.modal.create({
       component: StoryModal,
       componentProps: { hash: `#${this.page.slug}` },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
 
     await modal.present();
@@ -148,17 +110,17 @@ export class PagePage {
   }
 
   async showStories(id: User["id"]) {
-    let stories = this.stories.reverse().filter(s => s.user.id === id);
+    let stories = this.stories.reverse().filter((s) => s.user.id === id);
     stories = [
       ...stories,
-      ...this.stories.reverse().filter(s => s.user.id !== id)
+      ...this.stories.reverse().filter((s) => s.user.id !== id),
     ];
     const modal = await this.modal.create({
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
 
     await modal.present();
@@ -172,14 +134,14 @@ export class PagePage {
     componentProps = {
       src,
       title,
-      scheme
+      scheme,
     };
     const modal = await this.modal.create({
       component: ViewerModalComponent,
       componentProps,
       cssClass: "ion-img-viewer",
       keyboardClose: true,
-      showBackdrop: true
+      showBackdrop: true,
     });
 
     return await modal.present();
@@ -195,9 +157,9 @@ export class PagePage {
           buttons: [
             {
               text: "Deshacer",
-              handler: () => {}
-            }
-          ]
+              handler: () => {},
+            },
+          ],
         });
         toast.present();
 
@@ -212,7 +174,7 @@ export class PagePage {
             await this.toast.create({
               message: `Etiqueta añadida ${this.page.name}.`,
               duration: 5000,
-              position: "bottom"
+              position: "bottom",
             })
           ).present();
         }
@@ -226,30 +188,52 @@ export class PagePage {
             message: `Error al añadir la etiqueta ${this.page.name}.`,
             color: "danger",
             duration: 5000,
-            position: "middle"
+            position: "middle",
           })
         ).present();
         console.error(e);
       }
     } else {
       this.nav.navigateRoot(["/login"], {
-        queryParams: { returnUrl: this.router.url }
-      });
-    }
-  }
-
-  async showRoom(slug: Page["slug"]) {
-    if (this.auth.currentUserValue) {
-      this.router.navigate(["/room", slug]);
-    } else {
-      this.nav.navigateRoot(["/login"], {
-        queryParams: { returnUrl: this.router.url }
+        queryParams: { returnUrl: this.router.url },
       });
     }
   }
 
   search() {
     this.router.navigate(["/search", this.page.name]);
+  }
+
+  async searchProfiles(event?: any, addpage = false) {
+    if (addpage) {
+      this.scrollPage++;
+    }
+    if (this.scrollPage === 1) {
+      this.showSkeleton = true;
+    }
+    let users = await this.userSvc.searchUsers(
+      this.page.name,
+      "distance",
+      this.scrollPage
+    );
+
+    users = users.filter((u) => !u.hide);
+
+    this.showSkeleton = false;
+    this.users =
+      this.scrollPage === 1 ? (this.users = users) : [...this.users, ...users];
+
+    if (event) {
+      event.target.complete();
+
+      if (users.length < 15) {
+        event.target.disabled = true;
+      }
+    }
+  }
+
+  async showProfile(id: User["id"]) {
+    this.router.navigate(["/profile", id]);
   }
 
   back() {

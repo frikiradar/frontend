@@ -262,6 +262,30 @@ export class ViewStoriesModal implements OnInit {
     this.modalCreate.dismiss();
   }
 
+  async reportStory() {
+    /*try {
+      await this.storySvc.deleteStory(this.story.id);
+      (
+        await this.toast.create({
+          message: "Historia eliminada correctamente",
+          position: "middle",
+          duration: 2000,
+        })
+      ).present();
+      this.close();
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: "Error al eliminar la historia",
+          duration: 2000,
+          position: "middle",
+          color: "danger",
+        })
+      ).present();
+    }*/
+    this.modalCreate.dismiss();
+  }
+
   viewComments() {
     document.getElementById("view-comments").click();
   }

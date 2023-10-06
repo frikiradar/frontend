@@ -10,19 +10,19 @@
       >
     </ion-tab-button>
 
-    <ion-tab-button tab="community">
+    <ion-tab-button tab="explore">
       <ion-icon
-        [color]="selected === 'community' ? 'primary' : 'light'"
-        [name]="'people' + (selected === 'community' ? '' : '-outline')"
+        [color]="selected === 'explore' ? 'primary' : 'light'"
+        [name]="'compass' + (selected === 'explore' ? '' : '-outline')"
       ></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="events">
+    <!--<ion-tab-button tab="events">
       <ion-icon
         [color]="selected === 'events' ? 'primary' : 'light'"
         [name]="'calendar' + (selected === 'events' ? '' : '-outline')"
       ></ion-icon>
-    </ion-tab-button>
+    </ion-tab-button>-->
 
     <ion-tab-button (click)="openChat()">
       <ion-icon

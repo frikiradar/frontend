@@ -4,10 +4,6 @@ import { Network } from "@capacitor/network";
 import { AlertController, Platform, ToastController } from "@ionic/angular";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
-import {
-  AppUpdate,
-  AppUpdateAvailability,
-} from "@robingenz/capacitor-app-update";
 import { environment } from "src/environments/environment";
 
 import { User } from "./models/user";
@@ -19,6 +15,10 @@ import { NavService } from "./services/navigation.service";
 import { SwService } from "./services/sw.service";
 import { Device } from "@capacitor/device";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
+import {
+  AppUpdate,
+  AppUpdateAvailability,
+} from "@capawesome/capacitor-app-update";
 
 @Component({
   selector: "app-root",

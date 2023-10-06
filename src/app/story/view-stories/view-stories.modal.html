@@ -24,10 +24,7 @@
       ></ion-icon>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button
-        id="show-options"
-        *ngIf="story.user.id === auth.currentUserValue.id || auth.isMaster()"
-      >
+      <ion-button id="show-options">
         <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
       </ion-button>
       <ion-button (click)="addStory()">
@@ -353,8 +350,8 @@
 </ion-modal>
 
 <ion-modal
-  [breakpoints]="[0, 0.1, 0.3]"
-  [initialBreakpoint]="0.1"
+  [breakpoints]="[0, 0.2, 0.4]"
+  [initialBreakpoint]="0.2"
   trigger="show-options"
   cssClass="sheet-modal"
   (didPresent)="slides.autoplay.stop()"
@@ -368,9 +365,23 @@
           detail="false"
           (click)="removeStory(notification)"
           lines="none"
+          *ngIf="story.user.id === auth.currentUserValue.id || auth.isMaster()"
         >
           <ion-icon slot="start" name="trash-outline" color="light"></ion-icon>
           <ion-label>Eliminar la historia</ion-label>
+        </ion-item>
+        <ion-item
+          lines="none"
+          button
+          detail="false"
+          (click)="reportStory(notification)"
+        >
+          <ion-icon
+            slot="start"
+            name="warning-outline"
+            color="light"
+          ></ion-icon>
+          <ion-label>Reportar la historia</ion-label>
         </ion-item>
       </ion-list>
     </ion-content>

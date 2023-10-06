@@ -34,13 +34,13 @@ const routes: Routes = [
         ],
       },
       {
-        path: "community",
+        path: "explore",
         children: [
           {
             path: "",
             loadChildren: () =>
-              import("../community/community.module").then(
-                (m) => m.CommunityPageModule
+              import("../explore/explore.module").then(
+                (m) => m.ExplorePageModule
               ),
           },
         ],

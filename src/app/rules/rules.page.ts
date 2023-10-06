@@ -7,7 +7,7 @@ import { NavService } from "../services/navigation.service";
 @Component({
   selector: "app-rules",
   templateUrl: "./rules.page.html",
-  styleUrls: ["./rules.page.scss"]
+  styleUrls: ["./rules.page.scss"],
 })
 export class RulesPage implements OnInit {
   public accepted = false;
@@ -19,7 +19,7 @@ export class RulesPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.accepted = await this.config.get("rules") as Config['rules'];
+    this.accepted = (await this.config.get("rules")) as Config["rules"];
   }
 
   deny() {
@@ -30,7 +30,7 @@ export class RulesPage implements OnInit {
   async accept() {
     await this.config.set("rules", true);
     this.close();
-    location.reload()
+    // location.reload();
   }
 
   async close() {

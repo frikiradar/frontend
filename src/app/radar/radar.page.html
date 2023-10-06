@@ -1,6 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title mode="md">frikiradar</ion-title>
+    <ion-title mode="md">
+      <ion-icon src="/assets/icon/icon.svg"></ion-icon>
+      <ion-label>FrikiRadar</ion-label>
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="changeView()" *ngIf="users">
         <ion-icon
@@ -10,9 +13,6 @@
       </ion-button>
       <ion-button id="filter-options">
         <ion-icon slot="icon-only" name="filter"></ion-icon>
-      </ion-button>
-      <ion-button (click)="search()">
-        <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
       <ion-button (click)="notifications()">
         <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
@@ -24,50 +24,6 @@
   </ion-toolbar>
 </ion-header>
 <ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <section>
-    <swiper id="stories" [config]="storiesOpts" mode="md">
-      <ng-template swiperSlide>
-        <div>
-          <ion-item button lines="none" (click)="newStory()">
-            <ion-avatar>
-              <img
-                [src]="auth.currentUserValue?.thumbnail"
-                alt="auth.currentUserValue?.name"
-              />
-              <ion-badge color="tertiary">+</ion-badge>
-            </ion-avatar>
-          </ion-item>
-          <ion-label>Añadir</ion-label>
-        </div>
-      </ng-template>
-      <ng-template
-        swiperSlide
-        *ngFor="let story of groupedStories; let i = index"
-      >
-        <div>
-          <ion-item button lines="none" (click)="showStories(story?.user?.id)">
-            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
-              <img [src]="story?.image" [alt]="story?.text" />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>{{story?.user?.username}}</ion-label>
-        </div>
-      </ng-template>
-      <ng-template swiperSlide *ngIf="groupedStories?.length">
-        <div>
-          <ion-item button lines="none" (click)="showAllStories()">
-            <ion-avatar>
-              <img
-                [src]="auth.currentUserValue?.thumbnail"
-                alt="auth.currentUserValue?.name"
-              />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>Ver todas</ion-label>
-        </div>
-      </ng-template>
-    </swiper>
-  </section>
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
   <div *ngIf="view === 'cards'" style="height: 100%">
     <swiper
@@ -79,45 +35,38 @@
     >
       <ng-template swiperSlide *ngFor="let user of users;">
         <ion-card (click)="showProfile(user.id)" class="no-scroll" button>
-          <img
-            [src]="user?.avatar"
-            [alt]="users?.username"
-            default="/assets/img/users/default.jpg"
-          />
-          <div class="match full-center">{{ user.match }}%</div>
-          <ion-card-header>
-            <ion-card-title>
-              <ion-badge
-                *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
-                color="secondary"
-                >&nbsp;</ion-badge
+          <div class="background-image">
+            <img
+              [src]="user?.avatar"
+              [alt]="users?.username"
+              default="/assets/img/users/default.jpg"
+            />
+          </div>
+          <div class="info">
+            <ion-card-header>
+              <div class="match full-center">{{ user.match }}%</div>
+              <ion-card-title>
+                <ion-badge
+                  *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+                  color="secondary"
+                  >&nbsp;</ion-badge
+                >
+                <ion-text class="name" color="light">{{ user.name }}</ion-text>
+                <ion-text class="age" color="light">, {{ user.age }}</ion-text>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item
+                class="info-distance ion-no-padding"
+                *ngIf="user.distance !==
+                undefined"
+                lines="none"
               >
-              <ion-text class="name" color="light">{{ user.name }}</ion-text>
-              <ion-text class="age" color="light">, {{ user.age }}</ion-text>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="description">
-              <ion-text color="light">{{user.description}}</ion-text>
-            </p>
-            <div class="tags" *ngIf="user?.common_tags?.length">
-              <p><ion-text color="light">Gustos en común:</ion-text></p>
-              <ion-chip *ngFor="let tag of user.common_tags" color="secondary">
-                <ion-label>{{ tag }}</ion-label>
-              </ion-chip>
-            </div>
-            <!--<div>
-              <h2>Buscando:</h2>
-              <p>{{user?.connection}}</p>
-            </div>-->
-          </ion-card-content>
-          <ion-row class="card-footer">
-            <ion-col>
-              <ion-item *ngIf="user.distance !== undefined" lines="none">
                 <ion-icon
                   name="location-sharp"
                   slot="start"
                   color="secondary"
+                  class="ion-margin-end"
                 ></ion-icon>
                 <ion-label>
                   <ion-text color="light"
@@ -125,8 +74,20 @@
                   >
                 </ion-label>
               </ion-item>
-            </ion-col>
-          </ion-row>
+              <ion-text class="description" color="light"
+                >{{user.description}}</ion-text
+              >
+              <div class="tags" *ngIf="user?.common_tags?.length">
+                <p><ion-text color="light">Gustos en común:</ion-text></p>
+                <ion-chip
+                  *ngFor="let tag of user.common_tags"
+                  color="secondary"
+                >
+                  <ion-label>{{ tag }}</ion-label>
+                </ion-chip>
+              </div>
+            </ion-card-content>
+          </div>
         </ion-card>
       </ng-template>
       <ng-template swiperSlide *ngIf="!loading">

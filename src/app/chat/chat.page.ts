@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
-import { Platform } from "@ionic/angular";
+import { ModalController, Platform } from "@ionic/angular";
 import {
   PushNotifications,
   PushNotificationSchema,
@@ -12,6 +12,8 @@ import { User } from "../models/user";
 import { Chat } from "./../models/chat";
 import { AuthService } from "./../services/auth.service";
 import { NavService } from "../services/navigation.service";
+import { RulesPage } from "../rules/rules.page";
+import { ConfigService } from "../services/config.service";
 
 @Component({
   selector: "app-chat",
@@ -26,11 +28,12 @@ export class ChatPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     public auth: AuthService,
     private afMessaging: AngularFireMessaging,
     private platform: Platform,
-    private nav: NavService
+    private nav: NavService,
+    private modal: ModalController,
+    private config: ConfigService
   ) {}
 
   async ngOnInit() {
@@ -45,6 +48,16 @@ export class ChatPage implements OnInit {
       this.desktop = window.innerWidth > 991;
     };
     this.firebaseListener();
+
+    const rules = await this.config.get("rules");
+    if (!rules) {
+      const modal = await this.modal.create({
+        component: RulesPage,
+        cssClass: "full-modal",
+        backdropDismiss: false,
+      });
+      return await modal.present();
+    }
   }
 
   async showChat(id: User["id"]) {

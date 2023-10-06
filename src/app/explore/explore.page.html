@@ -1,0 +1,87 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>
+      <ion-icon name="compass"></ion-icon>
+      <ion-label>Explorar</ion-label>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="search()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <section>
+    <swiper id="stories" [config]="storiesOpts" mode="md">
+      <ng-template swiperSlide>
+        <div>
+          <ion-item button lines="none" (click)="newStory()">
+            <ion-avatar>
+              <img
+                [src]="auth.currentUserValue?.thumbnail"
+                alt="auth.currentUserValue?.name"
+              />
+              <ion-badge color="tertiary">+</ion-badge>
+            </ion-avatar>
+          </ion-item>
+          <ion-label>Añadir</ion-label>
+        </div>
+      </ng-template>
+      <ng-template
+        swiperSlide
+        *ngFor="let story of groupedStories; let i = index"
+      >
+        <div>
+          <ion-item button lines="none" (click)="showStories(story?.user?.id)">
+            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
+              <img [src]="story?.image" [alt]="story?.text" />
+            </ion-avatar>
+          </ion-item>
+          <ion-label>{{story?.user?.username}}</ion-label>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide *ngIf="groupedStories?.length">
+        <div>
+          <ion-item button lines="none" (click)="showAllStories()">
+            <ion-avatar>
+              <img
+                [src]="auth.currentUserValue?.thumbnail"
+                alt="auth.currentUserValue?.name"
+              />
+            </ion-avatar>
+          </ion-item>
+          <ion-label>Ver todas</ion-label>
+        </div>
+      </ng-template>
+    </swiper>
+  </section>
+
+  <section id="pages" *ngIf="pages?.length">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-md="4" size-lg="2" *ngFor="let page of pages">
+          <ion-card (click)="showPage(page.slug)">
+            <ion-img [src]="page.cover" [alt]="page.name"></ion-img>
+            <ion-card-header>
+              <ion-card-title>{{page.name}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+  <section *ngIf="!pages || !pages?.length" class="ion-padding">
+    <div class="ion-text-center register">
+      <p>Añade gustos a tu perfil para que aparezcan aquí tus páginas.</p>
+      <ion-button
+        color="primary"
+        (click)="router.navigate(['/edit-profile'])"
+        shape="round"
+        >Editar perfil</ion-button
+      >
+    </div>
+  </section>
+</ion-content>
