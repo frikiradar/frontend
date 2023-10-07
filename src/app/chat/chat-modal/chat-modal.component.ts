@@ -22,7 +22,6 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import ImageViewer from "awesome-image-viewer";
 import { firstValueFrom } from "rxjs";
 
 import { Chat } from "../../models/chat";
@@ -38,6 +37,7 @@ import { NavService } from "src/app/services/navigation.service";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { EventModal } from "src/app/events/event-modal/event.modal";
 import { Event } from "src/app/models/event";
+import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 
 @Component({
   selector: "app-chat-modal",
@@ -489,17 +489,23 @@ export class ChatModalComponent implements OnInit {
     return false;
   }
 
-  async openViewer(src: string, title: string, text: string, scheme = "dark") {
-    new ImageViewer({
-      images: [
-        {
-          mainUrl: src,
-          description: text ?? title,
+  async openViewer(message: Chat) {
+    const modal = await this.modalController.create({
+      component: ImageViewerModal,
+      componentProps: {
+        params: {
+          src: message.image,
+          title: message.fromuser.username,
+          description: message.text,
+          date: this.utils.niceDate(message?.time_creation),
         },
-      ],
-      stretchImages: true,
-      isZoomable: false,
+      },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal",
     });
+
+    await modal.present();
   }
 
   async showOptions(event: any) {

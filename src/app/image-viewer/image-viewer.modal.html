@@ -1,0 +1,29 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="back()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-label>
+        <h2>{{params?.title}}</h2>
+        <p>{{params?.date}}</p>
+      </ion-label>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <swiper [config]="slideOpts">
+    <swiper-slide>
+      <swiper-zoom-container>
+        <img [src]="params.src" />
+      </swiper-zoom-container>
+    </swiper-slide>
+  </swiper>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <p class="ion-padding">{{params?.description}}</p>
+  </ion-toolbar>
+</ion-footer>

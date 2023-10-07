@@ -97,7 +97,7 @@ export class ViewStoriesModal implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.slides.autoplay.start();
-    }, this.delay);
+    }, 100);
   }
 
   setSwiperInstance(swiper: any) {

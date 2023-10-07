@@ -268,7 +268,7 @@ export class UtilsService {
     }
   }
 
-  niceDate(time: string) {
+  niceDate(time: string | Date) {
     const date = new Date(time);
     const hours = this.format_two_digits(date.getHours());
     const minutes = this.format_two_digits(date.getMinutes());

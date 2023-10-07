@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalController, ToastController } from "@ionic/angular";
 import { Meta, Title } from "@angular/platform-browser";
-import ImageViewer from "awesome-image-viewer";
 
 import { Page } from "../../models/page";
 import { Story } from "../../models/story";
@@ -16,6 +15,7 @@ import { StoryModal } from "../../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../../story/view-stories/view-stories.modal";
 import { NavService } from "src/app/services/navigation.service";
 import { UserService } from "src/app/services/user.service";
+import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 
 @Component({
   selector: "app-page",
@@ -128,17 +128,22 @@ export class PagePage {
     await this.getStories();
   }
 
-  async openViewer(src: string, title: string) {
-    new ImageViewer({
-      images: [
-        {
-          mainUrl: src,
-          description: title,
+  async openViewer() {
+    const modal = await this.modalController.create({
+      component: ImageViewerModal,
+      componentProps: {
+        params: {
+          src: this.page.cover,
+          title: this.page.name,
+          description: this.page.description,
         },
-      ],
-      stretchImages: true,
-      isZoomable: false,
+      },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "full-modal",
     });
+
+    await modal.present();
   }
 
   async addTag() {

@@ -98,8 +98,8 @@
     [ngClass]="
       message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
       message?.reply_to ||
-      (message?.time_creation | date: 'shortDate') !==
-        (messages[i - 1]?.time_creation | date: 'shortDate')
+      (message?.time_creation | date : 'shortDate') !==
+        (messages[i - 1]?.time_creation | date : 'shortDate')
         ? ''
         : 'same-user'
     "
@@ -109,12 +109,12 @@
       color="primary"
       class="center"
       *ngIf="
-        (message?.time_creation | date: 'shortDate') !==
-        (messages[i - 1]?.time_creation | date: 'shortDate')
+        (message?.time_creation | date : 'shortDate') !==
+        (messages[i - 1]?.time_creation | date : 'shortDate')
       "
     >
       <ion-label color="secondary">{{
-        message.time_creation | date: "fullDate"
+        message.time_creation | date : "fullDate"
       }}</ion-label>
     </ion-chip>
 
@@ -161,8 +161,8 @@
           *ngIf="
             message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
             message?.reply_to ||
-            (message?.time_creation | date: 'shortDate') !==
-              (messages[i - 1]?.time_creation | date: 'shortDate') ||
+            (message?.time_creation | date : 'shortDate') !==
+              (messages[i - 1]?.time_creation | date : 'shortDate') ||
             message?.event
           "
         >
@@ -175,8 +175,8 @@
           *ngIf="
             message?.fromuser?.id === messages[i - 1]?.fromuser?.id &&
             !message?.reply_to &&
-            (message?.time_creation | date: 'shortDate') ===
-              (messages[i - 1]?.time_creation | date: 'shortDate') &&
+            (message?.time_creation | date : 'shortDate') ===
+              (messages[i - 1]?.time_creation | date : 'shortDate') &&
             !message?.event
           "
         ></div>
@@ -187,12 +187,11 @@
         >
           <ion-card-header>
             <ion-card-subtitle
-              >{{ message.event?.date | date: "E d MMM y, HH:mm" }}
+              >{{ message.event?.date | date : "E d MMM y, HH:mm" }}
               {{
                 message.event?.date_end
                   ? " -
-              " +
-                    (message.event?.date_end | date: "E d MMM y, HH:mm")
+              " + (message.event?.date_end | date : "E d MMM y, HH:mm")
                   : ""
               }}</ion-card-subtitle
             >
@@ -316,18 +315,7 @@
 
         <ion-card *ngIf="!message?.event">
           <div *ngIf="message.image">
-            <img
-              (click)="
-                openViewer(
-                  message.image,
-                  message.fromuser.name +
-                    ', ' +
-                    utils.niceDate(message.time_creation),
-                  message.text
-                )
-              "
-              [src]="message.image"
-            />
+            <img (click)="openViewer(message)" [src]="message.image" />
             <ion-note class="note-image" *ngIf="!message?.text">
               <span *ngIf="message?.edited">Editado</span>
               {{ message.time_creation | chatDate }}
@@ -349,7 +337,7 @@
             <ion-item lines="none">
               <audio-player [src]="message.audio"></audio-player>
               <ion-note class="note-text note-audio" slot="end">
-                {{ message.time_creation | date: "shortTime" }}
+                {{ message.time_creation | date : "shortTime" }}
                 <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                   <ion-icon *ngIf="message.sending" name="time"></ion-icon>
                   <ion-icon
@@ -377,8 +365,8 @@
               *ngIf="
                 message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
                 message?.reply_to ||
-                (message?.time_creation | date: 'shortDate') !==
-                  (messages[i - 1]?.time_creation | date: 'shortDate')
+                (message?.time_creation | date : 'shortDate') !==
+                  (messages[i - 1]?.time_creation | date : 'shortDate')
               "
             >
               <a (click)="showProfile(message.fromuser.id)">
@@ -405,7 +393,7 @@
                 class="message-text"
                 [innerHTML]="
                   message.text
-                    | linky: { className: 'linkified' }
+                    | linky : { className: 'linkified' }
                     | hashtag
                     | mentions
                 "
@@ -425,7 +413,7 @@
                 ></ion-icon>
               </span>
               <span class="text-note-time">
-                · {{ message.time_creation | date: "shortTime" }}
+                · {{ message.time_creation | date : "shortTime" }}
               </span>
             </ion-text>
           </ion-card-content>
