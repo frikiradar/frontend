@@ -118,8 +118,8 @@ export class UserService {
     ) as Promise<User>;
   }
 
-  resendActivationEmail() {
-    return this.rest.get("activation");
+  async resendActivationEmail() {
+    return await firstValueFrom(this.rest.get("activation"));
   }
 
   disableUser(password: string, note: string) {

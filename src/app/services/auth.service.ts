@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NavController } from "@ionic/angular";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, firstValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { Platform } from "@ionic/angular";
@@ -47,8 +47,8 @@ export class AuthService {
     referral: string
   ) {
     try {
-      return await this.http
-        .post(
+      return await firstValueFrom(
+        this.http.post(
           `${environment.root}api/register`,
           {
             username,
@@ -62,7 +62,7 @@ export class AuthService {
           },
           httpOptions
         )
-        .toPromise();
+      );
     } catch (e) {
       throw new Error(
         "Ya hay un usuario registrado con este nombre de usuario o email."
@@ -72,18 +72,19 @@ export class AuthService {
 
   async login(username: string, password: string) {
     try {
-      const token = await this.http
-        .post(
-          `${environment.root}api/login`,
-          { username, password },
-          httpOptions
-        )
-        .pipe(
-          map((data: { token: string }) => {
-            return data.token;
-          })
-        )
-        .toPromise();
+      const token = await firstValueFrom(
+        this.http
+          .post(
+            `${environment.root}api/login`,
+            { username, password },
+            httpOptions
+          )
+          .pipe(
+            map((data: { token: string }) => {
+              return data.token;
+            })
+          )
+      );
       localStorage.setItem("currentUser", JSON.stringify({ token }));
       this.currentUserSubject.next({ token } as User);
       return await this.getAuthUser();
@@ -96,9 +97,9 @@ export class AuthService {
     username: User["username"]
   ): Promise<User["username"] | boolean> {
     try {
-      const u = (await this.http
-        .get(`${environment.root}api/username/${username}`)
-        .toPromise()) as User["username"];
+      const u = (await firstValueFrom(
+        this.http.get(`${environment.root}api/username/${username}`)
+      )) as User["username"];
       if (u === username) {
         return true;
       } else {
@@ -109,16 +110,15 @@ export class AuthService {
     }
   }
 
-  getAuthUser() {
+  async getAuthUser() {
     if (!this.currentUserValue) {
       return;
     }
 
     const token = this.currentUserValue.token;
 
-    return this.rest
-      .get("user")
-      .pipe(
+    return await firstValueFrom(
+      this.rest.get("user").pipe(
         map((user: User) => {
           localStorage.setItem(
             "currentUser",
@@ -127,7 +127,7 @@ export class AuthService {
           return user;
         })
       )
-      .toPromise();
+    );
   }
 
   setAuthUser(user: User) {
@@ -141,29 +141,33 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  twoStepCode() {
-    return this.rest.get("two-step");
+  async twoStepCode() {
+    return await firstValueFrom(this.rest.get("two-step"));
   }
 
-  verifyLogin(verification_code: string) {
-    return this.rest
-      .put("two-step", { verification_code })
-      .toPromise() as Promise<User>;
+  async verifyLogin(verification_code: string) {
+    return (await firstValueFrom(
+      this.rest.put("two-step", { verification_code })
+    )) as Promise<User>;
   }
 
-  requestPassword(username: string) {
-    return this.http
-      .post(`${environment.root}api/recover`, { username }, httpOptions)
-      .toPromise();
+  async requestPassword(username: string) {
+    return await firstValueFrom(
+      this.http.post(
+        `${environment.root}api/recover`,
+        { username },
+        httpOptions
+      )
+    );
   }
 
-  recoverPassword(
+  async recoverPassword(
     username: string,
     password: string,
     verification_code: string
   ) {
-    return this.http
-      .put(
+    return await firstValueFrom(
+      this.http.put(
         `${environment.root}api/recover`,
         {
           username,
@@ -172,7 +176,7 @@ export class AuthService {
         },
         httpOptions
       )
-      .toPromise();
+    );
   }
 
   isAdmin(user?: User) {
@@ -235,7 +239,7 @@ export class AuthService {
     // Desactivamos las notificaciones
     if (uuid && this.currentUserValue) {
       try {
-        await this.rest.get(`turnoff-device/${uuid}`).toPromise();
+        await firstValueFrom(this.rest.get(`turnoff-device/${uuid}`));
       } catch (e) {
         console.error(e);
       }
