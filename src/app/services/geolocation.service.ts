@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Geolocation } from "@capacitor/geolocation";
-import { ModalController, Platform, ToastController } from "@ionic/angular";
+import { ModalController, ToastController } from "@ionic/angular";
 
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ConfigService } from "./config.service";
@@ -12,14 +12,13 @@ export class GeolocationService {
   notifications: any = [];
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     private config: ConfigService,
-    private platform: Platform,
     private toastController: ToastController
   ) {}
 
   async requestPermission() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: RequestGeolocationModal,
       backdropDismiss: false,
     });
@@ -28,7 +27,7 @@ export class GeolocationService {
   }
 
   async forcePermission() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: RequestGeolocationModal,
       componentProps: { view: "force" },
       backdropDismiss: false,

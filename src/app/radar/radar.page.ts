@@ -110,7 +110,7 @@ export class RadarPage {
     private push: PushService,
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
-    private modal: ModalController,
+    private modalController: ModalController,
     private route: ActivatedRoute
   ) {
     this.notificationSvc.notification.subscribe((notification) => {

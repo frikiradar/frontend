@@ -150,11 +150,10 @@ ion-header {
 
 ion-input,
 ion-textarea,
-ion-select,
-ion-datetime {
+ion-select {
   --placeholder-color: #9c2c51 !important;
-  --color: #e91e63 !important;
-  color: #e91e63 !important;
+  --color: white !important;
+  color: white !important;
   --placeholder-opacity: 1 !important;
   --padding-start: 0;
 }

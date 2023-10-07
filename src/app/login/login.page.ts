@@ -3,14 +3,14 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   AlertController,
   ModalController,
   Platform,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { User } from "../models/user";
@@ -22,7 +22,7 @@ import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 @Component({
   selector: "app-login",
   templateUrl: "./login.page.html",
-  styleUrls: ["./login.page.scss"]
+  styleUrls: ["./login.page.scss"],
 })
 export class LoginPage {
   public loginForm: UntypedFormGroup;
@@ -41,7 +41,7 @@ export class LoginPage {
     private route: ActivatedRoute,
     private auth: AuthService,
     private alert: AlertController,
-    private modal: ModalController,
+    private modalController: ModalController,
     private toast: ToastController,
     public fb: UntypedFormBuilder,
     private nav: NavService,
@@ -55,12 +55,12 @@ export class LoginPage {
     this.loginForm = fb.group({
       username: new UntypedFormControl("", [
         Validators.required,
-        Validators.minLength(3)
+        Validators.minLength(3),
       ]),
       password: new UntypedFormControl("", [
         Validators.required,
-        Validators.minLength(8)
-      ])
+        Validators.minLength(8),
+      ]),
     });
   }
 
@@ -93,7 +93,7 @@ export class LoginPage {
           header: "¿Te has dado cuenta?",
           message: "Para dos cosas que te pedimos y las pones mal... 🤭",
           buttons: ["Tendré más cuidado"],
-          cssClass: "round-alert"
+          cssClass: "round-alert",
         });
 
         await alert.present();
@@ -105,7 +105,7 @@ export class LoginPage {
     this.config.getConfig(true);
     if (user && user.two_step) {
       this.nav.navigateRoot(["/login/two-step"], {
-        queryParams: { returnUrl: this.returnUrl }
+        queryParams: { returnUrl: this.returnUrl },
       });
     } else {
       this.auth.setAuthUser(user);
@@ -113,7 +113,7 @@ export class LoginPage {
         await this.toast.create({
           message: "¡Acceso concedido!",
           duration: 2000,
-          position: "bottom"
+          position: "bottom",
         })
       ).present();
       this.nav.navigateRoot(this.returnUrl);
@@ -152,16 +152,16 @@ export class LoginPage {
       header,
       message,
       buttons: ["Oki doki"],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     await alert.present();
   }
 
   async forgotPassword() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: ForgotPasswordModal,
-      componentProps: { username: this.username }
+      componentProps: { username: this.username },
     });
     return await modal.present();
   }

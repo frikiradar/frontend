@@ -3,12 +3,12 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import {
   AlertController,
   ModalController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { AuthService } from "./../../services/auth.service";
@@ -17,7 +17,7 @@ import { UserService } from "./../../services/user.service";
 @Component({
   selector: "disable-account-modal",
   templateUrl: "./disable-account.modal.html",
-  styleUrls: ["./disable-account.modal.scss"]
+  styleUrls: ["./disable-account.modal.scss"],
 })
 export class DisableAccountModal {
   public disableForm: UntypedFormGroup;
@@ -27,7 +27,7 @@ export class DisableAccountModal {
 
   constructor(
     public fb: UntypedFormBuilder,
-    private modal: ModalController,
+    private modalController: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
@@ -36,9 +36,9 @@ export class DisableAccountModal {
     this.disableForm = fb.group({
       password: new UntypedFormControl("", [
         Validators.required,
-        Validators.minLength(8)
+        Validators.minLength(8),
       ]),
-      note: new UntypedFormControl()
+      note: new UntypedFormControl(),
     });
   }
 
@@ -50,7 +50,7 @@ export class DisableAccountModal {
           await this.toast.create({
             message: "Desactivando cuenta...",
             duration: 5000,
-            position: "bottom"
+            position: "bottom",
           })
         ).present();
         const user = await this.userSvc.disableUser(
@@ -64,7 +64,7 @@ export class DisableAccountModal {
           await this.toast.create({
             message: "¡Cuenta desactivada correctamente!",
             duration: 5000,
-            position: "bottom"
+            position: "bottom",
           })
         ).present();
       } else if (this.type === "remove") {
@@ -73,7 +73,7 @@ export class DisableAccountModal {
           await this.toast.create({
             message: "Eliminando cuenta...",
             duration: 5000,
-            position: "bottom"
+            position: "bottom",
           })
         ).present();
         const user = await this.userSvc.removeAccount(
@@ -87,12 +87,12 @@ export class DisableAccountModal {
           await this.toast.create({
             message: "¡Cuenta eliminada correctamente!",
             duration: 5000,
-            position: "bottom"
+            position: "bottom",
           })
         ).present();
       }
 
-      this.modal.dismiss();
+      this.modalController.dismiss();
       this.auth.logout();
     } catch (e) {
       this.showBackdrop = false;
@@ -100,7 +100,7 @@ export class DisableAccountModal {
         header: "La contraseña introducida no es válida",
         message: "Revísala y vuelve a intentarlo.",
         buttons: ["¡Vale!"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -112,6 +112,6 @@ export class DisableAccountModal {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

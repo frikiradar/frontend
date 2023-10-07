@@ -19,7 +19,7 @@ export class NotificationPage implements OnInit {
     private notificationSvc: NotificationService,
     private url: UrlService,
     private nav: NavService,
-    private modal: ModalController
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
@@ -34,7 +34,7 @@ export class NotificationPage implements OnInit {
   async showOptions(event: Event, notification: Notification) {
     event.stopPropagation();
 
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: NotificationOptionsModal,
       componentProps: {
         notification: notification,

@@ -48,8 +48,9 @@
 
     <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
       <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
         <ion-input
+          labelPlacement="floating"
+          label="Contraseña"
           required
           autocomplete="off"
           [type]="clearPassword ? 'text' : 'password'"
@@ -128,8 +129,9 @@
 
     <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
       <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
         <ion-input
+          labelPlacement="floating"
+          label="Contraseña"
           required
           autocomplete="off"
           [type]="clearPassword ? 'text' : 'password'"

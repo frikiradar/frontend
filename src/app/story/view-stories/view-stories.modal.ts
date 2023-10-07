@@ -71,7 +71,7 @@ export class ViewStoriesModal implements OnInit {
   };
 
   constructor(
-    public modal: ModalController,
+    public thisModal: ModalController,
     private modalCreate: ModalController,
     private likeModal: ModalController,
     public formBuilder: UntypedFormBuilder,
@@ -411,6 +411,6 @@ export class ViewStoriesModal implements OnInit {
   }
 
   close() {
-    this.modal.dismiss();
+    this.thisModal.dismiss();
   }
 }

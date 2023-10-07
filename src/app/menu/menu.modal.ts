@@ -16,7 +16,7 @@ export class MenuModal implements OnInit {
   constructor(
     private router: Router,
     public auth: AuthService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private subModal: ModalController,
     public userSvc: UserService,
     public platform: Platform
@@ -26,22 +26,22 @@ export class MenuModal implements OnInit {
 
   viewProfile() {
     this.router.navigate(["/profile"]);
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 
   settings() {
     this.router.navigate(["/settings"]);
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 
   admin() {
     this.router.navigate(["/admin"]);
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 
   async showAmbassador() {
     this.router.navigate(["/ambassador"]);
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 
   async credits() {
@@ -62,6 +62,6 @@ export class MenuModal implements OnInit {
 
   logout() {
     this.auth.logout();
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

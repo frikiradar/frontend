@@ -49,7 +49,7 @@ export class PagePage {
     public auth: AuthService,
     private tagSvc: TagService,
     private toast: ToastController,
-    private modal: ModalController,
+    private modalController: ModalController,
     private router: Router,
     private nav: NavService,
     private meta: Meta,
@@ -96,7 +96,7 @@ export class PagePage {
   }
 
   async newStory() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: StoryModal,
       componentProps: { hash: `#${this.page.slug}` },
       keyboardClose: true,
@@ -115,7 +115,7 @@ export class PagePage {
       ...stories,
       ...this.stories.reverse().filter((s) => s.user.id !== id),
     ];
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,

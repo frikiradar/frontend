@@ -3,12 +3,12 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import {
   AlertController,
   ModalController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { AuthService } from "./../../services/auth.service";
@@ -17,7 +17,7 @@ import { UserService } from "./../../services/user.service";
 @Component({
   selector: "change-password-modal",
   templateUrl: "./change-password.modal.html",
-  styleUrls: ["./change-password.modal.scss"]
+  styleUrls: ["./change-password.modal.scss"],
 })
 export class ChangePasswordModal {
   public passForm: UntypedFormGroup;
@@ -26,7 +26,7 @@ export class ChangePasswordModal {
 
   constructor(
     public fb: UntypedFormBuilder,
-    private modal: ModalController,
+    private modalController: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
@@ -35,12 +35,12 @@ export class ChangePasswordModal {
     this.passForm = fb.group({
       oldPassword: new UntypedFormControl("", [
         Validators.required,
-        Validators.minLength(8)
+        Validators.minLength(8),
       ]),
       password: new UntypedFormControl("", [
         Validators.required,
-        Validators.minLength(8)
-      ])
+        Validators.minLength(8),
+      ]),
     });
   }
 
@@ -57,17 +57,17 @@ export class ChangePasswordModal {
         await this.toast.create({
           message: "¡Contraseña cambiada correctamente!",
           duration: 2000,
-          position: "bottom"
+          position: "bottom",
         })
       ).present();
 
-      this.modal.dismiss();
+      this.modalController.dismiss();
     } catch (e) {
       const alert = await this.alert.create({
         header: "La contraseña actual introducida no es válida",
         message: "Revísala y vuelve a intentarlo.",
         buttons: ["¡Vale!"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -75,6 +75,6 @@ export class ChangePasswordModal {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

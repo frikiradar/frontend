@@ -31,7 +31,7 @@ export class UtilsService {
     private alert: AlertController,
     private auth: AuthService,
     private platform: Platform,
-    private modal: ModalController,
+    private modalController: ModalController,
     private toast: ToastController
   ) {}
 
@@ -79,7 +79,7 @@ export class UtilsService {
     square = true,
     aspectRatio = 1 / 1
   ): Promise<string | boolean> {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: CropperModal,
       componentProps: {
         event,
@@ -107,7 +107,7 @@ export class UtilsService {
     crop?: boolean,
     square = true
   ): Promise<Blob | boolean> {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: WebcamModal,
       cssClass: "full-modal",
     });
@@ -307,38 +307,41 @@ export class UtilsService {
       document.body.classList.toggle(oldTheme, false);
     }
     document.body.classList.toggle(theme, true);
+
     if (this.platform.is("capacitor")) {
-      switch (theme) {
-        case "dark":
-          StatusBar.setBackgroundColor({ color: "#1f1f1f" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
-          break;
-        case "light":
-          StatusBar.setBackgroundColor({ color: "#fafafa" });
-          StatusBar.setStyle({ style: Style.Light });
-          NavigationBar.setColor({ color: "#fafafa", darkButtons: true });
-          break;
-        case "cyberpunk":
-          StatusBar.setBackgroundColor({ color: "#0c1340" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#0c1340", darkButtons: false });
-          break;
-        case "black":
-          StatusBar.setBackgroundColor({ color: "#000000" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#000000", darkButtons: false });
-          break;
-        case "fire":
-          StatusBar.setBackgroundColor({ color: "#000000" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#000000", darkButtons: false });
-          break;
-        default:
-          StatusBar.setBackgroundColor({ color: "#1f1f1f" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
-      }
+      setTimeout(() => {
+        switch (theme) {
+          case "dark":
+            StatusBar.setBackgroundColor({ color: "#1f1f1f" });
+            StatusBar.setStyle({ style: Style.Dark });
+            NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
+            break;
+          case "light":
+            StatusBar.setBackgroundColor({ color: "#fafafa" });
+            StatusBar.setStyle({ style: Style.Light });
+            NavigationBar.setColor({ color: "#fafafa", darkButtons: true });
+            break;
+          case "cyberpunk":
+            StatusBar.setBackgroundColor({ color: "#0c1340" });
+            StatusBar.setStyle({ style: Style.Dark });
+            NavigationBar.setColor({ color: "#0c1340", darkButtons: false });
+            break;
+          case "black":
+            StatusBar.setBackgroundColor({ color: "#000000" });
+            StatusBar.setStyle({ style: Style.Dark });
+            NavigationBar.setColor({ color: "#000000", darkButtons: false });
+            break;
+          case "fire":
+            StatusBar.setBackgroundColor({ color: "#000000" });
+            StatusBar.setStyle({ style: Style.Dark });
+            NavigationBar.setColor({ color: "#000000", darkButtons: false });
+            break;
+          default:
+            StatusBar.setBackgroundColor({ color: "#1f1f1f" });
+            StatusBar.setStyle({ style: Style.Dark });
+            NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
+        }
+      }, 1000);
     }
   }
 

@@ -154,8 +154,8 @@
       <ion-list>
         <ion-item>
           <ion-icon name="earth" slot="start"></ion-icon>
-          <ion-label>Tu país</ion-label>
           <ion-select
+            label="Tu país"
             interface="action-sheet"
             cancel-text="Cancelar"
             placeholder="Selecciona uno"
@@ -172,8 +172,8 @@
         </ion-item>
         <ion-item>
           <ion-icon name="location-outline" slot="start"></ion-icon>
-          <ion-label>Municipio</ion-label>
           <ion-input
+            label="Municipio"
             (ionChange)="changePreferences('city', $event.detail.value)"
             [value]="user?.city"
           ></ion-input>

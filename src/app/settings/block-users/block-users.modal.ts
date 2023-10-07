@@ -6,13 +6,13 @@ import { UserService } from "../../services/user.service";
 @Component({
   selector: "block-users-modal",
   templateUrl: "./block-users.modal.html",
-  styleUrls: ["./block-users.modal.scss"]
+  styleUrls: ["./block-users.modal.scss"],
 })
 export class BlockUsersModal implements OnInit {
   public users: User[];
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     private userSvc: UserService,
     private toast: ToastController
   ) {}
@@ -23,14 +23,16 @@ export class BlockUsersModal implements OnInit {
 
   async unblock(user: User) {
     this.users = await this.userSvc.unblock(user.id);
-    (await this.toast.create({
-      message: "Usuario desbloqueado correctamente",
-      duration: 2000,
-      position: "bottom"
-    })).present();
+    (
+      await this.toast.create({
+        message: "Usuario desbloqueado correctamente",
+        duration: 2000,
+        position: "bottom",
+      })
+    ).present();
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

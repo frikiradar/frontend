@@ -8,13 +8,13 @@ import { BannedMessagesModal } from "./banned-messages/banned-messages.modal";
 @Component({
   selector: "banned-users-modal",
   templateUrl: "./banned-users.modal.html",
-  styleUrls: ["./banned-users.modal.scss"]
+  styleUrls: ["./banned-users.modal.scss"],
 })
 export class BannedUsersModal implements OnInit {
   public users: User[];
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     private modalMessages: ModalController,
     private admin: AdminService,
     private toast: ToastController
@@ -27,7 +27,7 @@ export class BannedUsersModal implements OnInit {
   async viewMessages(id: User["id"]) {
     const modal = await this.modalMessages.create({
       component: BannedMessagesModal,
-      componentProps: { id }
+      componentProps: { id },
     });
     return await modal.present();
   }
@@ -38,12 +38,12 @@ export class BannedUsersModal implements OnInit {
       await this.toast.create({
         message: "Baneo eliminado correctamente",
         duration: 2000,
-        position: "bottom"
+        position: "bottom",
       })
     ).present();
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

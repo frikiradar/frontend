@@ -6,7 +6,7 @@ import { Observable, Subject } from "rxjs";
 @Component({
   selector: "webcam-modal",
   templateUrl: "./webcam.modal.html",
-  styleUrls: ["./webcam.modal.scss"]
+  styleUrls: ["./webcam.modal.scss"],
 })
 export class WebcamModal {
   @Input() src: string;
@@ -22,7 +22,10 @@ export class WebcamModal {
     return this.switchCamera.asObservable();
   }
 
-  constructor(public modal: ModalController, public webcam: WebcamImage) {}
+  constructor(
+    public modalController: ModalController,
+    public webcam: WebcamImage
+  ) {}
 
   handleImage(webcamImage: WebcamImage): void {
     this.webcamImage = webcamImage.imageAsDataUrl;
@@ -37,7 +40,7 @@ export class WebcamModal {
   }
 
   ok() {
-    this.modal.dismiss(this.webcamImage);
+    this.modalController.dismiss(this.webcamImage);
   }
 
   retry() {
@@ -45,6 +48,6 @@ export class WebcamModal {
   }
 
   cancel() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

@@ -56,8 +56,9 @@
       *ngIf="changingEmail"
     >
       <ion-item>
-        <ion-label position="floating">Correo electrónico</ion-label>
         <ion-input
+          labelPlacement="floating"
+          label="Correo electrónico"
           required
           type="email"
           autocomplete="email"

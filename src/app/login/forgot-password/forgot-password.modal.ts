@@ -3,14 +3,14 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
   AlertController,
   ModalController,
   NavParams,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { User } from "../../models/user";
@@ -19,7 +19,7 @@ import { AuthService } from "./../../services/auth.service";
 @Component({
   selector: "forgot-password-modal",
   templateUrl: "./forgot-password.modal.html",
-  styleUrls: ["./forgot-password.modal.scss"]
+  styleUrls: ["./forgot-password.modal.scss"],
 })
 export class ForgotPasswordModal {
   public requestForm: UntypedFormGroup;
@@ -31,7 +31,7 @@ export class ForgotPasswordModal {
   constructor(
     navParams: NavParams,
     public fb: UntypedFormBuilder,
-    private modal: ModalController,
+    private modalController: ModalController,
     private alert: AlertController,
     private auth: AuthService,
     private router: Router,
@@ -40,20 +40,20 @@ export class ForgotPasswordModal {
     this.requestForm = fb.group({
       username: new UntypedFormControl("", [
         Validators.required,
-        Validators.minLength(3)
-      ])
+        Validators.minLength(3),
+      ]),
     });
 
     this.passwordForm = fb.group({
       code: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(6)
+        Validators.maxLength(6),
       ]),
       password: new UntypedFormControl("", [
         Validators.required,
-        Validators.minLength(8)
-      ])
+        Validators.minLength(8),
+      ]),
     });
 
     if (navParams && navParams.get("username")) {
@@ -72,7 +72,7 @@ export class ForgotPasswordModal {
         header: "Nombre de usuario o email no válido",
         message: "No existe ninguna cuenta asociada a esta información.",
         buttons: ["Ok, gracias"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -99,7 +99,7 @@ export class ForgotPasswordModal {
         header: "Código de seguridad no válido",
         message: "Revisa el código introducido y vuelve a intentarlo.",
         buttons: ["Ok, gracias"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -112,7 +112,7 @@ export class ForgotPasswordModal {
       await this.toast.create({
         message: "Acceso concedido",
         duration: 2000,
-        position: "bottom"
+        position: "bottom",
       })
     ).present();
     this.router.navigate(["/"]);
@@ -120,6 +120,6 @@ export class ForgotPasswordModal {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

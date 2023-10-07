@@ -42,7 +42,7 @@ export class EventModal {
   constructor(
     public formBuilder: UntypedFormBuilder,
     private toast: ToastController,
-    private modal: ModalController,
+    private modalController: ModalController,
     public utils: UtilsService,
     private sanitizer: DomSanitizer,
     private eventSvc: EventService,
@@ -291,6 +291,6 @@ export class EventModal {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

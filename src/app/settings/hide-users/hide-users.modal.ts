@@ -6,13 +6,13 @@ import { UserService } from "../../services/user.service";
 @Component({
   selector: "hide-users-modal",
   templateUrl: "./hide-users.modal.html",
-  styleUrls: ["./hide-users.modal.scss"]
+  styleUrls: ["./hide-users.modal.scss"],
 })
 export class HideUsersModal implements OnInit {
   public users: User[];
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     private userSvc: UserService,
     private toast: ToastController
   ) {}
@@ -27,12 +27,12 @@ export class HideUsersModal implements OnInit {
       await this.toast.create({
         message: "Usuario desocultado correctamente",
         duration: 2000,
-        position: "bottom"
+        position: "bottom",
       })
     ).present();
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

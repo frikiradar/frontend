@@ -32,7 +32,7 @@ export class ChatPage implements OnInit {
     private afMessaging: AngularFireMessaging,
     private platform: Platform,
     private nav: NavService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private config: ConfigService
   ) {}
 
@@ -51,7 +51,7 @@ export class ChatPage implements OnInit {
 
     const rules = await this.config.get("rules");
     if (!rules) {
-      const modal = await this.modal.create({
+      const modal = await this.modalController.create({
         component: RulesPage,
         cssClass: "full-modal",
         backdropDismiss: false,

@@ -21,7 +21,7 @@ export class DevicesSettingsModal implements OnInit {
   public user: User;
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     private alert: AlertController,
     private devicesSvc: DeviceService,
     private auth: AuthService,
@@ -103,6 +103,6 @@ export class DevicesSettingsModal implements OnInit {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

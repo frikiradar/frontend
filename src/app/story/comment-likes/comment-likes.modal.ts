@@ -7,11 +7,14 @@ import { User } from "src/app/models/user";
 @Component({
   selector: "comment-likes-modal",
   templateUrl: "./comment-likes.modal.html",
-  styleUrls: ["./comment-likes.modal.scss"]
+  styleUrls: ["./comment-likes.modal.scss"],
 })
 export class CommentLikesModal {
   @Input() likes: Story["comments"][0]["likes"];
-  constructor(private modal: ModalController, private router: Router) {}
+  constructor(
+    private modalController: ModalController,
+    private router: Router
+  ) {}
 
   async showProfile(id: User["id"]) {
     if (id !== 1) {
@@ -21,6 +24,6 @@ export class CommentLikesModal {
   }
 
   close(param?: any) {
-    this.modal.dismiss(param);
+    this.modalController.dismiss(param);
   }
 }

@@ -1,5 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Keyboard } from "@capacitor/keyboard";
 import {
@@ -41,7 +45,7 @@ export class StoryModal implements OnInit {
   public showBackdrop = false;
 
   constructor(
-    public modal: ModalController,
+    public modalController: ModalController,
     public formBuilder: UntypedFormBuilder,
     public platform: Platform,
     private utils: UtilsService,
@@ -149,7 +153,7 @@ export class StoryModal implements OnInit {
         })
       ).present();
       this.showBackdrop = false;
-      this.modal.dismiss();
+      this.modalController.dismiss();
     } catch (e) {
       this.showBackdrop = false;
       this.toast.dismiss();
@@ -211,6 +215,6 @@ export class StoryModal implements OnInit {
   }
 
   cancel() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

@@ -7,18 +7,21 @@ import { AuthService } from "../../services/auth.service";
 @Component({
   selector: "verification-modal",
   templateUrl: "./verification.modal.html",
-  styleUrls: ["./verification.modal.scss"]
+  styleUrls: ["./verification.modal.scss"],
 })
 export class VerificationModal implements OnInit {
   public user: User;
 
-  constructor(private modal: ModalController, private auth: AuthService) {}
+  constructor(
+    private modalController: ModalController,
+    private auth: AuthService
+  ) {}
 
   async ngOnInit() {
     this.user = this.auth.currentUserValue;
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

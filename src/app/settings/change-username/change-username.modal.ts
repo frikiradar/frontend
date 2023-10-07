@@ -3,12 +3,12 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import {
   AlertController,
   ModalController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { User } from "src/app/models/user";
@@ -18,7 +18,7 @@ import { UserService } from "./../../services/user.service";
 @Component({
   selector: "change-username-modal",
   templateUrl: "./change-username.modal.html",
-  styleUrls: ["./change-username.modal.scss"]
+  styleUrls: ["./change-username.modal.scss"],
 })
 export class ChangeUsernameModal {
   public usernameForm: UntypedFormGroup;
@@ -28,7 +28,7 @@ export class ChangeUsernameModal {
 
   constructor(
     public fb: UntypedFormBuilder,
-    private modal: ModalController,
+    private modalController: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
@@ -41,8 +41,8 @@ export class ChangeUsernameModal {
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(20),
-        Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+")
-      ])
+        Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+"),
+      ]),
     });
   }
 
@@ -59,18 +59,18 @@ export class ChangeUsernameModal {
           message:
             "¡Nombre de usuario cambiado correctamente! Vuelve a iniciar sesión.",
           duration: 2000,
-          position: "bottom"
+          position: "bottom",
         })
       ).present();
 
-      this.modal.dismiss();
+      this.modalController.dismiss();
       this.auth.logout();
     } catch (e) {
       const alert = await this.alert.create({
         header: "Ha habido un error",
         message: "Ya hay alguien utilizando este nombre de usuario.",
         buttons: ["¡Ok, probaré otro!"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -78,6 +78,6 @@ export class ChangeUsernameModal {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

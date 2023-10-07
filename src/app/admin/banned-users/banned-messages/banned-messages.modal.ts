@@ -3,7 +3,7 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { IonContent, IonTextarea, ModalController } from "@ionic/angular";
 import { Chat } from "src/app/models/chat";
@@ -17,7 +17,7 @@ import { UserService } from "src/app/services/user.service";
 @Component({
   selector: "app-banned-messages",
   templateUrl: "./banned-messages.modal.html",
-  styleUrls: ["./banned-messages.modal.scss"]
+  styleUrls: ["./banned-messages.modal.scss"],
 })
 export class BannedMessagesModal implements OnInit {
   @Input() id: User["id"];
@@ -36,14 +36,14 @@ export class BannedMessagesModal implements OnInit {
   public countDownString = "";
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     private admin: AdminService,
     public formBuilder: UntypedFormBuilder,
     private urlSvc: UrlService,
     private userSvc: UserService
   ) {
     this.chatForm = formBuilder.group({
-      message: new UntypedFormControl("", [Validators.required])
+      message: new UntypedFormControl("", [Validators.required]),
     });
   }
 
@@ -74,16 +74,16 @@ export class BannedMessagesModal implements OnInit {
             touser: { id: 1 },
             fromuser: { id: this.user.id },
             text,
-            time_creation: new Date()
-          }
-        ]
+            time_creation: new Date(),
+          },
+        ],
       ].filter((m: Chat) => m.text || m.image);
 
       this.scrollDown();
       try {
         await this.admin.sendMessage(this.user.id, text).then();
       } catch (e) {
-        this.messages = this.messages.filter(m => m.sending !== true);
+        this.messages = this.messages.filter((m) => m.sending !== true);
         console.error(e);
       }
     }
@@ -123,6 +123,6 @@ export class BannedMessagesModal implements OnInit {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

@@ -74,16 +74,6 @@ ion-toolbar#text-input {
     --placeholder-color: #555555 !important;
     color: var(--ion-color-dark) !important;
     font-size: 12pt;
-    min-height: 45px !important;
-    margin: 0;
-    padding: 2px;
-
-    ::ng-deep {
-      textarea {
-        min-height: 45px !important;
-        margin: 0;
-      }
-    }
   }
 
   ion-label {

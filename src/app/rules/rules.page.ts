@@ -14,7 +14,7 @@ export class RulesPage implements OnInit {
 
   constructor(
     private nav: NavService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private config: ConfigService
   ) {}
 
@@ -34,6 +34,6 @@ export class RulesPage implements OnInit {
   }
 
   async close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

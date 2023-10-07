@@ -14,7 +14,7 @@ import { ViewStoriesModal } from "./view-stories/view-stories.modal";
 @Component({
   selector: "app-story",
   templateUrl: "./story.page.html",
-  styleUrls: ["./story.page.scss"]
+  styleUrls: ["./story.page.scss"],
 })
 export class StoryPage implements OnInit {
   public stories: Story[];
@@ -23,7 +23,7 @@ export class StoryPage implements OnInit {
 
   constructor(
     private storySvc: StoryService,
-    private modal: ModalController,
+    private modalController: ModalController,
     public auth: AuthService,
     private nav: NavService,
     private config: ConfigService
@@ -57,18 +57,18 @@ export class StoryPage implements OnInit {
   }
 
   async showStories(id: User["id"]) {
-    let stories = this.stories.reverse().filter(s => s.user.id === id);
+    let stories = this.stories.reverse().filter((s) => s.user.id === id);
     stories = [
       ...stories,
-      ...this.stories.reverse().filter(s => s.user.id !== id)
+      ...this.stories.reverse().filter((s) => s.user.id !== id),
     ];
 
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
 
     await modal.present();
@@ -77,11 +77,11 @@ export class StoryPage implements OnInit {
   }
 
   async newStory() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: StoryModal,
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
 
     await modal.present();

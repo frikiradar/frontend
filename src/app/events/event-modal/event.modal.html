@@ -119,8 +119,8 @@
       </ion-item>
       <div *ngIf="type === 'offline'">
         <ion-item>
-          <ion-label>País</ion-label>
           <ion-select
+            label="País"
             interface="action-sheet"
             cancel-text="Cancelar"
             placeholder="Selecciona uno"
@@ -186,8 +186,8 @@
         </ion-item>
         <div *ngIf="showMore">
           <ion-item lines="none">
-            <ion-label slot="start">Edad mínima</ion-label>
             <ion-input
+              label="Edad mínima"
               formControlName="minage"
               slot="start"
               type="number"
@@ -201,8 +201,8 @@
             <ion-label>años</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label slot="start">Precio</ion-label>
             <ion-input
+              label="Precio"
               formControlName="price"
               placeholder="Precio"
               value="0"

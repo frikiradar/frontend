@@ -11,17 +11,17 @@ import { Notification } from "src/app/models/notification";
 export class NotificationOptionsModal {
   @Input() notification: Notification;
 
-  constructor(private modal: ModalController) {}
+  constructor(private modalController: ModalController) {}
 
   removeNotification(notification: Notification) {
-    this.modal.dismiss({ remove: notification });
+    this.modalController.dismiss({ remove: notification });
   }
 
   readNotification(notification: Notification) {
-    this.modal.dismiss({ read: notification });
+    this.modalController.dismiss({ read: notification });
   }
 
   unreadNotification(notification: Notification) {
-    this.modal.dismiss({ unread: notification });
+    this.modalController.dismiss({ unread: notification });
   }
 }

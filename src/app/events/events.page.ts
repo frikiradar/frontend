@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
 import { ModalController } from "@ionic/angular";
 
 import { Event } from "../models/event";
@@ -25,9 +24,8 @@ export class EventsPage implements OnInit {
 
   constructor(
     public auth: AuthService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private eventSvc: EventService,
-    private router: Router,
     public utils: UtilsService,
     private userSvc: UserService,
     private nav: NavService
@@ -40,7 +38,7 @@ export class EventsPage implements OnInit {
   }
 
   async newEvent() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: EventModal,
       keyboardClose: true,
       showBackdrop: true,

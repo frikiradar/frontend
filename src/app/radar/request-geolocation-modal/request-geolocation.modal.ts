@@ -9,7 +9,10 @@ import { ModalController, Platform } from "@ionic/angular";
 export class RequestGeolocationModal {
   public view: "request" | "force" = "request";
 
-  constructor(private modal: ModalController, public platform: Platform) {}
+  constructor(
+    private modalController: ModalController,
+    public platform: Platform
+  ) {}
 
   async changeSettings() {
     /*if (this.platform.is("android")) {
@@ -26,6 +29,6 @@ export class RequestGeolocationModal {
   }
 
   close(data: boolean) {
-    this.modal.dismiss(data);
+    this.modalController.dismiss(data);
   }
 }

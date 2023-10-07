@@ -20,7 +20,7 @@ import { ConfigService, Config } from "../services/config.service";
 @Component({
   selector: "app-settings",
   templateUrl: "./settings.page.html",
-  styleUrls: ["./settings.page.scss"]
+  styleUrls: ["./settings.page.scss"],
 })
 export class SettingsPage implements OnInit {
   public user: User;
@@ -29,14 +29,14 @@ export class SettingsPage implements OnInit {
     slidesPerView: 3.5,
     breakpoints: {
       1024: {
-        slidesPerView: 8.5
-      }
+        slidesPerView: 8.5,
+      },
     },
-    grabCursor: true
+    grabCursor: true,
   };
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     public auth: AuthService,
     private userSvc: UserService,
     private alert: AlertController,
@@ -51,37 +51,37 @@ export class SettingsPage implements OnInit {
   }
 
   async passwordModal() {
-    const modal = await this.modal.create({
-      component: ChangePasswordModal
+    const modal = await this.modalController.create({
+      component: ChangePasswordModal,
     });
     return await modal.present();
   }
 
   async devicesSettingsModal() {
-    const modal = await this.modal.create({
-      component: DevicesSettingsModal
+    const modal = await this.modalController.create({
+      component: DevicesSettingsModal,
     });
     return await modal.present();
   }
 
   async blockUsersModal() {
-    const modal = await this.modal.create({
-      component: BlockUsersModal
+    const modal = await this.modalController.create({
+      component: BlockUsersModal,
     });
     return await modal.present();
   }
 
   async hideUsersModal() {
-    const modal = await this.modal.create({
-      component: HideUsersModal
+    const modal = await this.modalController.create({
+      component: HideUsersModal,
     });
     return await modal.present();
   }
 
   async clearLocalStorage() {
     localStorage.removeItem("config");
-    await caches.keys().then(keyList => {
-      keyList.forEach(cache => {
+    await caches.keys().then((keyList) => {
+      keyList.forEach((cache) => {
         caches.delete(cache);
       });
     });
@@ -94,40 +94,40 @@ export class SettingsPage implements OnInit {
           text: "¡Ok!",
           handler: () => {
             window.location.reload();
-          }
-        }
+          },
+        },
       ],
-      cssClass: "round-alert"
+      cssClass: "round-alert",
     });
 
     alert.present();
   }
 
   async usernameModal() {
-    const modal = await this.modal.create({
-      component: ChangeUsernameModal
+    const modal = await this.modalController.create({
+      component: ChangeUsernameModal,
     });
     return await modal.present();
   }
 
   async emailModal() {
-    const modal = await this.modal.create({
-      component: ChangeEmailModal
+    const modal = await this.modalController.create({
+      component: ChangeEmailModal,
     });
     return await modal.present();
   }
 
   async disableAccountModal() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: DisableAccountModal,
-      cssClass: "full-modal"
+      cssClass: "full-modal",
     });
     return await modal.present();
   }
 
   async verificationModal() {
-    const modal = await this.modal.create({
-      component: VerificationModal
+    const modal = await this.modalController.create({
+      component: VerificationModal,
     });
     return await modal.present();
   }
@@ -142,7 +142,7 @@ export class SettingsPage implements OnInit {
         header: "Error al guardar los cambios",
         message: "Vuelve a intentarlo transcurridos unos minutos.",
         buttons: ["¡Ok!"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -168,10 +168,10 @@ export class SettingsPage implements OnInit {
             text: "¡Quiero informarme!",
             handler: () => {
               this.patreon();
-            }
-          }
+            },
+          },
         ],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();

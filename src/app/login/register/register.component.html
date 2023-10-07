@@ -7,8 +7,9 @@
 
     <ion-item>
       <ion-icon name="person-outline" slot="start"></ion-icon>
-      <ion-label position="floating">Nombre de usuario</ion-label>
       <ion-input
+        label="Nombre de usuario"
+        labelPlacement="floating"
         required
         type="text"
         autocapitalize="words"
@@ -46,8 +47,9 @@
     </div>
     <ion-item>
       <ion-icon name="mail-outline" slot="start"></ion-icon>
-      <ion-label position="floating">Correo electrónico</ion-label>
       <ion-input
+        label="Correo electrónico"
+        labelPlacement="floating"
         required
         type="email"
         autocomplete="email"
@@ -68,8 +70,9 @@
     </div>
     <ion-item>
       <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-      <ion-label position="floating">Contraseña</ion-label>
       <ion-input
+        label="Contraseña"
+        labelPlacement="floating"
         required
         [type]="clearPassword ? 'text' : 'password'"
         formControlName="password"
@@ -112,19 +115,17 @@
           locale="es-ES"
           first-day-of-week="1"
           min="1900-01-01"
-          max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
-            today | date: 'dd'
+          max="{{ (today | date : 'y') - 18 }}-{{ today | date : 'MM' }}-{{
+            today | date : 'dd'
           }}"
         >
         </ion-datetime>
       </ng-template>
     </ion-modal>
     <ion-item>
-      <ion-label
-        >Mi identidad de género
-        {{ platform.is("ios") ? "(opcional)" : "" }}</ion-label
-      >
       <ion-select
+        labelPlacement="floating"
+        label="Mi identidad de género (opcional)"
         interface="action-sheet"
         cancel-text="Cancelar"
         placeholder="Selecciona uno"
@@ -148,8 +149,9 @@
       una opción
     </div>
     <ion-item>
-      <ion-label>Estoy buscando (opcional)</ion-label>
       <ion-select
+        label="Estoy buscando (opcional)"
+        labelPlacement="floating"
         cancel-text="Cancelar"
         placeholder="Selecciona"
         formControlName="lovegender"
@@ -163,8 +165,9 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>¿Cómo nos has conocido?</ion-label>
       <ion-select
+        label="¿Cómo nos has conocido?"
+        labelPlacement="floating"
         interface="action-sheet"
         cancel-text="Cancelar"
         placeholder="Selecciona uno"
@@ -234,6 +237,7 @@
         }}
       </ion-label>
       <ion-input
+        aria-label="Nombre de usuario"
         type="text"
         autocapitalize="words"
         formControlName="referral"
@@ -269,11 +273,19 @@
           de FrikiRadar.
         </p></ion-label
       >
-      <ion-checkbox slot="start" formControlName="acceptos"></ion-checkbox>
+      <ion-checkbox
+        aria-label
+        slot="start"
+        formControlName="acceptos"
+      ></ion-checkbox>
     </ion-item>
     <ion-item lines="none">
       <ion-label><p>La fecha de nacimiento indicada es correcta.</p></ion-label>
-      <ion-checkbox slot="start" formControlName="age"></ion-checkbox>
+      <ion-checkbox
+        aria-label
+        slot="start"
+        formControlName="age"
+      ></ion-checkbox>
     </ion-item>
     <ion-button color="primary" type="submit" expand="block" shape="round"
       >Registrarme</ion-button

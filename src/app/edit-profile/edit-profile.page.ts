@@ -84,7 +84,7 @@ export class EditProfilePage {
     private toast: ToastController,
     private platform: Platform,
     private nav: NavService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private config: ConfigService
   ) {
     this.profileForm = this.fb.group({
@@ -132,7 +132,7 @@ export class EditProfilePage {
 
     const rules = await this.config.get("rules");
     if (!rules) {
-      const modal = await this.modal.create({
+      const modal = await this.modalController.create({
         component: RulesPage,
         cssClass: "full-modal",
         backdropDismiss: false,

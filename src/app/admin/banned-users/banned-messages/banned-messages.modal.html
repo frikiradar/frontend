@@ -68,7 +68,8 @@
     <form [formGroup]="chatForm" autocomplete="off">
       <ion-item lines="none">
         <ion-textarea
-          placeholder="書く！"
+          aria-label
+          placeholder="Escribe un mensaje..."
           autocapitalize="on"
           (keydown.enter)="sendMessage($event)"
           formControlName="message"

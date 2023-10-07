@@ -20,10 +20,9 @@
             >
               <ion-item>
                 <ion-icon name="person-outline" slot="start"></ion-icon>
-                <ion-label position="floating"
-                  >Nombre de usuario o correo electrónico</ion-label
-                >
                 <ion-input
+                  label="Nombre de usuario o correo electrónico"
+                  labelPlacement="floating"
                   outline
                   required
                   type="text"
@@ -35,8 +34,9 @@
               </ion-item>
               <ion-item>
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-                <ion-label position="floating">Contraseña</ion-label>
                 <ion-input
+                  label="Contraseña"
+                  labelPlacement="floating"
                   required
                   [type]="clearPassword ? 'text' : 'password'"
                   formControlName="password"

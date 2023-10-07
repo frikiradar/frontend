@@ -13,12 +13,11 @@
     ¡Te hemos enviado un código de seguridad al email! Revisa tu carpeta de
     spam/no deseado si no lo encuentras.
   </h4>
-  <p>
-    Introduce el código de seguridad para verificar tu inicio de sesión.
-  </p>
+  <p>Introduce el código de seguridad para verificar tu inicio de sesión.</p>
   <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
     <ion-item id="code">
       <ion-input
+        aria-label
         autocapitalize="characters"
         autocomplete="off"
         formControlName="code"

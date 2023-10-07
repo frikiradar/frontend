@@ -24,7 +24,7 @@ export class TabsPage implements OnInit {
     public auth: AuthService,
     private router: Router,
     public platform: Platform,
-    private modal: ModalController
+    private modalController: ModalController
   ) {
     this.router.events.subscribe(async (event: RouterEvent) => {
       event.url = event.url === "/" ? "/tabs/radar" : event.url;
@@ -54,7 +54,7 @@ export class TabsPage implements OnInit {
   }
 
   async menu() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: MenuModal,
       initialBreakpoint: 0.8,
       breakpoints: [0, 0.8, 0.95],

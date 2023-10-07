@@ -16,7 +16,7 @@ export class AdminPage implements OnInit {
   public user: User;
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     private auth: AuthService,
     private nav: NavService
   ) {}
@@ -26,14 +26,14 @@ export class AdminPage implements OnInit {
   }
 
   async bannedUsersModal() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: BannedUsersModal,
     });
     return await modal.present();
   }
 
   async globalNotificationsModal() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: GlobalNotificationsModal,
     });
     return await modal.present();

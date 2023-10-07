@@ -45,7 +45,7 @@ export class ExplorePage {
     private config: ConfigService,
     private animate: AnimateService,
     private storySvc: StoryService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private pageSvc: PageService
   ) {}
 
@@ -55,7 +55,7 @@ export class ExplorePage {
 
     const rules = await this.config.get("rules");
     if (!rules) {
-      const modal = await this.modal.create({
+      const modal = await this.modalController.create({
         component: RulesPage,
         cssClass: "full-modal",
         backdropDismiss: false,
@@ -80,7 +80,7 @@ export class ExplorePage {
   }
 
   async newStory() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: StoryModal,
       keyboardClose: true,
       showBackdrop: true,
@@ -109,7 +109,7 @@ export class ExplorePage {
   }
 
   async showStoriesModal(stories: Story[]) {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,

@@ -18,14 +18,14 @@ export class LikesModal {
   @Input() user: User;
 
   constructor(
-    private modal: ModalController,
+    private modalController: ModalController,
     public auth: AuthService,
     private likeSvc: LikeService,
     private nav: NavService
   ) {}
 
   async viewProfile(id: number) {
-    this.modal.dismiss();
+    this.modalController.dismiss();
     if (
       this.param === "received" &&
       this.user.id === this.auth.currentUserValue.id

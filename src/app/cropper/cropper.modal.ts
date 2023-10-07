@@ -17,7 +17,7 @@ export class CropperModal implements OnInit {
   public transform: ImageTransform = {};
   public maintainAspectRatio: any = true;
 
-  constructor(public modal: ModalController) {}
+  constructor(public modalController: ModalController) {}
 
   async ngOnInit() {
     this.imageChangedEvent = this.event;
@@ -79,10 +79,10 @@ export class CropperModal implements OnInit {
   }
 
   ok() {
-    this.modal.dismiss(this.croppedImage);
+    this.modalController.dismiss(this.croppedImage);
   }
 
   cancel() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

@@ -17,8 +17,9 @@
 
   <form (submit)="submitForm()" [formGroup]="usernameForm" autocomplete="off">
     <ion-item>
-      <ion-label position="floating">Nombre de usuario</ion-label>
       <ion-input
+        label="Nombre de usuario"
+        labelPlacement="floating"
         required
         type="text"
         autocapitalize="words"

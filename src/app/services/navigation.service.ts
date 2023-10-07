@@ -18,7 +18,7 @@ export class NavService {
     private nav: NavController,
     private platform: Platform,
     private toast: ToastController,
-    private modal: ModalController
+    private modalController: ModalController
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -43,8 +43,11 @@ export class NavService {
 
   async backButtonStatus() {
     this.platform.backButton.subscribeWithPriority(1, async () => {
-      if (this.router.url.includes("chat") && (await this.modal.getTop())) {
-        this.modal.dismiss();
+      if (
+        this.router.url.includes("chat") &&
+        (await this.modalController.getTop())
+      ) {
+        this.modalController.dismiss();
       } else if (
         this.router.url.includes("/tabs/") ||
         this.router.url === "/"

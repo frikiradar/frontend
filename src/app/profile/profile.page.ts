@@ -65,7 +65,7 @@ export class ProfilePage {
     private alert: AlertController,
     public auth: AuthService,
     private storiesSvc: StoryService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private pageSvc: PageService,
     private likeSvc: LikeService,
     private urlSvc: UrlService,
@@ -310,7 +310,7 @@ export class ProfilePage {
   async showStories(id: User["id"]) {
     let stories = this.stories.filter((s) => s.user.id === id);
     stories = [...stories, ...this.stories.filter((s) => s.user.id !== id)];
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: ViewStoriesModal,
       componentProps: { stories },
       keyboardClose: true,
@@ -327,11 +327,11 @@ export class ProfilePage {
     if (!this.likes[param]?.length) {
       this.likes[param] = await this.likeSvc.getLikes(param, 1, this.user.id);
     }
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: LikesModal,
       componentProps: { likes: this.likes, param: this.param, user: this.user },
-      initialBreakpoint: 1,
-      breakpoints: [0, 0.7, 1],
+      initialBreakpoint: 0.8,
+      breakpoints: [0, 0.5, 0.8],
       cssClass: "sheet-modal",
       showBackdrop: true,
     });

@@ -3,7 +3,7 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { ModalController, ToastController } from "@ionic/angular";
 import { User } from "src/app/models/user";
@@ -13,7 +13,7 @@ import { AuthService } from "src/app/services/auth.service";
 @Component({
   selector: "global-notifications",
   templateUrl: "./global-notifications.modal.html",
-  styleUrls: ["./global-notifications.modal.scss"]
+  styleUrls: ["./global-notifications.modal.scss"],
 })
 export class GlobalNotificationsModal implements OnInit {
   public user: User;
@@ -31,12 +31,12 @@ export class GlobalNotificationsModal implements OnInit {
     public formBuilder: UntypedFormBuilder,
     private admin: AdminService,
     private toast: ToastController,
-    private modal: ModalController
+    private modalController: ModalController
   ) {
     this.messageForm = formBuilder.group({
       title: new UntypedFormControl(),
       message: new UntypedFormControl("", [Validators.required]),
-      test: new UntypedFormControl()
+      test: new UntypedFormControl(),
     });
   }
 
@@ -61,7 +61,7 @@ export class GlobalNotificationsModal implements OnInit {
         await this.toast.create({
           message: "Mensaje enviado correctamente.",
           duration: 5000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     } catch (e) {
@@ -69,13 +69,13 @@ export class GlobalNotificationsModal implements OnInit {
         await this.toast.create({
           message: "Error al enviar el mensaje.",
           duration: 5000,
-          position: "middle"
+          position: "middle",
         })
       ).present();
     }
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }

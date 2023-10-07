@@ -32,7 +32,7 @@ export class EventPage implements OnInit {
     private utils: UtilsService,
     public auth: AuthService,
     private urlSvc: UrlService,
-    private modal: ModalController,
+    private modalController: ModalController,
     private toast: ToastController
   ) {}
 
@@ -112,7 +112,7 @@ export class EventPage implements OnInit {
   async showProfile(id: User["id"]) {
     if (id !== 1) {
       this.router.navigate(["/profile", id]);
-      this.modal.dismiss();
+      this.modalController.dismiss();
     }
   }
 
@@ -150,7 +150,7 @@ export class EventPage implements OnInit {
   }
 
   async edit() {
-    const modal = await this.modal.create({
+    const modal = await this.modalController.create({
       component: EventModal,
       keyboardClose: true,
       showBackdrop: true,

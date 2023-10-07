@@ -3,12 +3,12 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import {
   AlertController,
   ModalController,
-  ToastController
+  ToastController,
 } from "@ionic/angular";
 
 import { User } from "src/app/models/user";
@@ -18,7 +18,7 @@ import { UserService } from "./../../services/user.service";
 @Component({
   selector: "change-email-modal",
   templateUrl: "./change-email.modal.html",
-  styleUrls: ["./change-email.modal.scss"]
+  styleUrls: ["./change-email.modal.scss"],
 })
 export class ChangeEmailModal {
   public emailForm: UntypedFormGroup;
@@ -28,7 +28,7 @@ export class ChangeEmailModal {
 
   constructor(
     public fb: UntypedFormBuilder,
-    private modal: ModalController,
+    private modalController: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
@@ -39,8 +39,8 @@ export class ChangeEmailModal {
     this.emailForm = fb.group({
       email: new UntypedFormControl("", [
         Validators.required,
-        Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$")
-      ])
+        Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$"),
+      ]),
     });
   }
 
@@ -57,18 +57,18 @@ export class ChangeEmailModal {
         await this.toast.create({
           message: "¡Cuenta de correo cambiada correctamente!",
           duration: 2000,
-          position: "bottom"
+          position: "bottom",
         })
       ).present();
 
-      this.modal.dismiss();
+      this.modalController.dismiss();
     } catch (e) {
       const alert = await this.alert.create({
         header: "Ha habido un error",
         message:
           "¿Es posible que este correo ya esté en uso? Vuelve a intentarlo transcurridos unos minutos.",
         buttons: ["¡De acuerdo!"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -76,6 +76,6 @@ export class ChangeEmailModal {
   }
 
   close() {
-    this.modal.dismiss();
+    this.modalController.dismiss();
   }
 }
