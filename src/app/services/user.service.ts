@@ -8,6 +8,7 @@ import { User } from "./../models/user";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
+import { firstValueFrom } from "rxjs";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -25,7 +26,7 @@ export class UserService {
 
   async getUser(id: User["id"] | User["username"]): Promise<User> {
     try {
-      return (await this.rest.get(`user/${id}`).toPromise()) as User;
+      return (await firstValueFrom(this.rest.get(`user/${id}`))) as User;
     } catch (e) {
       throw new Error("No se puede obtener el usuario");
     }
@@ -33,9 +34,9 @@ export class UserService {
 
   async getPublicUser(id: User["id"] | User["username"]): Promise<User> {
     try {
-      return (await this.http
-        .get(`${environment.root}api/public-user/${id}`, httpOptions)
-        .toPromise()) as User;
+      return (await firstValueFrom(
+        this.http.get(`${environment.root}api/public-user/${id}`, httpOptions)
+      )) as User;
     } catch (e) {
       throw new Error("No se puede obtener el usuario");
     }
@@ -61,9 +62,9 @@ export class UserService {
 
   async setAvatar(src: SafeResourceUrl) {
     try {
-      const user = (await this.rest
-        .put("avatar", { avatar: src })
-        .toPromise()) as User;
+      const user = (await firstValueFrom(
+        this.rest.put("avatar", { avatar: src })
+      )) as User;
       this.auth.setAuthUser(user);
       return user;
     } catch (e) {
@@ -73,9 +74,9 @@ export class UserService {
 
   async deleteAvatar(src: SafeResourceUrl) {
     try {
-      const user = (await this.rest
-        .put("delete-avatar", { avatar: src })
-        .toPromise()) as User;
+      const user = (await firstValueFrom(
+        this.rest.put("delete-avatar", { avatar: src })
+      )) as User;
       this.auth.setAuthUser(user);
       return user;
     } catch (e) {
@@ -84,9 +85,9 @@ export class UserService {
   }
 
   async setCoordinates(longitude, latitude) {
-    return (await this.rest
-      .put("coordinates", { longitude, latitude })
-      .toPromise()) as Promise<User["coordinates"]>;
+    return (await firstValueFrom(
+      this.rest.put("coordinates", { longitude, latitude })
+    )) as Promise<User["coordinates"]>;
   }
 
   getRadarUsers(
@@ -94,27 +95,27 @@ export class UserService {
     ratio = -1,
     options?: { identity: boolean; range: boolean; connection: boolean }
   ) {
-    return this.rest
-      .put("radar", { page, ratio, options })
-      .toPromise() as Promise<User[]>;
+    return firstValueFrom(
+      this.rest.put("radar", { page, ratio, options })
+    ) as Promise<User[]>;
   }
 
   searchUsers(query: string, order: "distance" | "match", page: number) {
-    return this.rest
-      .post(`search?page=${page}`, { query, order })
-      .toPromise() as Promise<User[]>;
+    return firstValueFrom(
+      this.rest.post(`search?page=${page}`, { query, order })
+    ) as Promise<User[]>;
   }
 
   searchUsernames(query: string) {
-    return this.rest.get(`search-usernames/${query}`).toPromise() as Promise<
-      User[]
-    >;
+    return firstValueFrom(
+      this.rest.get(`search-usernames/${query}`)
+    ) as Promise<User[]>;
   }
 
   activateUser(verification_code: string) {
-    return this.rest
-      .put("activation", { verification_code })
-      .toPromise() as Promise<User>;
+    return firstValueFrom(
+      this.rest.put("activation", { verification_code })
+    ) as Promise<User>;
   }
 
   resendActivationEmail() {
@@ -122,91 +123,91 @@ export class UserService {
   }
 
   disableUser(password: string, note: string) {
-    return this.rest
-      .put("disable", {
+    return firstValueFrom(
+      this.rest.put("disable", {
         password,
         note,
       })
-      .toPromise() as Promise<User>;
+    ) as Promise<User>;
   }
 
   removeAccount(password: string, note: string) {
-    return this.rest
-      .put("remove-account", {
+    return firstValueFrom(
+      this.rest.put("remove-account", {
         password,
         note,
       })
-      .toPromise() as Promise<User>;
+    ) as Promise<User>;
   }
 
   changePassword(old_password: string, new_password: string) {
-    return this.rest
-      .put("password", {
+    return firstValueFrom(
+      this.rest.put("password", {
         old_password,
         new_password,
       })
-      .toPromise() as Promise<User>;
+    ) as Promise<User>;
   }
 
   changeEmail(old_email: string, new_email: string) {
-    return this.rest
-      .put("email", {
+    return firstValueFrom(
+      this.rest.put("email", {
         old_email,
         new_email,
       })
-      .toPromise() as Promise<User>;
+    ) as Promise<User>;
   }
 
   changeUsername(new_username: string) {
-    return this.rest
-      .put("username", {
+    return firstValueFrom(
+      this.rest.put("username", {
         new_username,
       })
-      .toPromise() as Promise<User>;
+    ) as Promise<User>;
   }
 
   getLikes() {
-    return this.rest.get("likes").toPromise() as Promise<User[]>;
+    return firstValueFrom(this.rest.get("likes")) as Promise<User[]>;
   }
 
   like(id: User["id"]) {
-    return this.rest.put("like", { user: id }).toPromise() as Promise<User>;
+    return firstValueFrom(this.rest.put("like", { user: id })) as Promise<User>;
   }
 
   unlike(id: User["id"]) {
-    return this.rest.delete(`like/${id}`).toPromise() as Promise<User>;
+    return firstValueFrom(this.rest.delete(`like/${id}`)) as Promise<User>;
   }
 
   getBlocks() {
-    return this.rest.get("blocks").toPromise() as Promise<User[]>;
+    return firstValueFrom(this.rest.get("blocks")) as Promise<User[]>;
   }
 
   block(id: User["id"], note?: string) {
-    return this.rest.put("block", { user: id, note }).toPromise();
+    return firstValueFrom(this.rest.put("block", { user: id, note }));
   }
 
   unblock(id: User["id"]) {
-    return this.rest.delete(`block/${id}`).toPromise() as Promise<User[]>;
+    return firstValueFrom(this.rest.delete(`block/${id}`)) as Promise<User[]>;
   }
 
   report(id: User["id"], note?: string) {
-    return this.rest.put("report", { user: id, note }).toPromise();
+    return firstValueFrom(this.rest.put("report", { user: id, note }));
   }
 
   getHides() {
-    return this.rest.get("hides").toPromise() as Promise<User[]>;
+    return firstValueFrom(this.rest.get("hides")) as Promise<User[]>;
   }
 
   hide(id: User["id"]) {
-    return this.rest.put("hide", { user: id }).toPromise();
+    return firstValueFrom(this.rest.put("hide", { user: id }));
   }
 
   view(id: User["id"]) {
-    this.rest.put("view", { user: id }).toPromise();
+    firstValueFrom(this.rest.put("view", { user: id }));
   }
 
   unhide(id: User["id"]) {
-    return this.rest.delete(`hide/${id}`).toPromise() as Promise<User[]>;
+    return firstValueFrom(this.rest.delete(`hide/${id}`)) as Promise<User[]>;
   }
 
   async showRole(user: User) {
@@ -273,15 +274,14 @@ export class UserService {
   }
 
   async linkToPatreon(code: string) {
-    await this.rest.put("link-patreon", { oauth_code: code }).toPromise();
+    await firstValueFrom(this.rest.put("link-patreon", { oauth_code: code }));
   }
 
   async unsubscribe(code: string) {
     try {
-      console.log("pepe");
-      return this.http
-        .get(`${environment.root}api/unsubscribe/${code}`, httpOptions)
-        .toPromise();
+      return firstValueFrom(
+        this.http.get(`${environment.root}api/unsubscribe/${code}`, httpOptions)
+      );
     } catch (e) {
       throw new Error("Error al desuscribirse");
     }

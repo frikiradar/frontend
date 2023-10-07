@@ -4,11 +4,11 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
 
 const httpOptions = {
-  headers: new HttpHeaders({ "Content-Type": "application/json" })
+  headers: new HttpHeaders({ "Content-Type": "application/json" }),
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class RestService {
   private apiUrl = environment.apiUrl;

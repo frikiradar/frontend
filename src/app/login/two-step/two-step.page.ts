@@ -3,7 +3,7 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { AlertController, NavController } from "@ionic/angular";
 
@@ -12,7 +12,7 @@ import { AuthService } from "../../services/auth.service";
 @Component({
   selector: "two-step-app",
   templateUrl: "./two-step.page.html",
-  styleUrls: ["./two-step.page.scss"]
+  styleUrls: ["./two-step.page.scss"],
 })
 export class TwoStepPage implements OnInit {
   public codeForm: UntypedFormGroup;
@@ -27,13 +27,13 @@ export class TwoStepPage implements OnInit {
       code: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(6)
-      ])
+        Validators.maxLength(6),
+      ]),
     });
   }
 
   async ngOnInit() {
-    await this.auth.twoStepCode().toPromise();
+    this.auth.twoStepCode();
   }
 
   async submitCode() {
@@ -51,7 +51,7 @@ export class TwoStepPage implements OnInit {
         header: "Código de seguridad no válido",
         message: "Revisa el código introducido y vuelve a intentarlo.",
         buttons: ["Ok, gracias"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();

@@ -3,7 +3,7 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { AlertController, ToastController } from "@ionic/angular";
 
@@ -16,7 +16,7 @@ import { UserService } from "../../services/user.service";
 @Component({
   selector: "activate-account-app",
   templateUrl: "./activate-account.page.html",
-  styleUrls: ["./activate-account.page.scss"]
+  styleUrls: ["./activate-account.page.scss"],
 })
 export class ActivateAccountPage {
   public codeForm: UntypedFormGroup;
@@ -39,15 +39,15 @@ export class ActivateAccountPage {
       code: new UntypedFormControl("", [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(6)
-      ])
+        Validators.maxLength(6),
+      ]),
     });
 
     this.emailForm = fb.group({
       email: new UntypedFormControl("", [
         Validators.required,
-        Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$")
-      ])
+        Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$"),
+      ]),
     });
   }
 
@@ -68,16 +68,16 @@ export class ActivateAccountPage {
             text: "¡Comenzar!",
             handler: () => {
               this.nav.navigateRoot(["/"]);
-            }
+            },
           },
           {
             text: "Configurar mi perfil",
             handler: () => {
               this.nav.navigateRoot(["/edit-profile"]);
-            }
-          }
+            },
+          },
         ],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -88,7 +88,7 @@ export class ActivateAccountPage {
         header: "Código de seguridad no válido",
         message: "Revisa el código introducido y vuelve a intentarlo.",
         buttons: ["Ok, gracias"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();
@@ -96,12 +96,12 @@ export class ActivateAccountPage {
   }
 
   async resendCode() {
-    await this.userSvc.resendActivationEmail().toPromise();
+    await this.userSvc.resendActivationEmail();
     (
       await this.toast.create({
         message: "Te hemos enviado un nuevo código de verificación al email",
         duration: 2000,
-        position: "bottom"
+        position: "bottom",
       })
     ).present();
   }
@@ -120,7 +120,7 @@ export class ActivateAccountPage {
         header: "Error al cambiar el email",
         message: "Revisa el email introducido y vuelve a intentarlo.",
         buttons: ["Ok, gracias"],
-        cssClass: "round-alert"
+        cssClass: "round-alert",
       });
 
       alert.present();

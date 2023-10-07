@@ -23,6 +23,7 @@ import {
 } from "@ionic/angular";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import ImageViewer from "awesome-image-viewer";
+import { firstValueFrom } from "rxjs";
 
 import { Chat } from "../../models/chat";
 import { User } from "../../models/user";
@@ -146,7 +147,7 @@ export class ChatModalComponent implements OnInit {
 
     if (!this.platform.is("capacitor")) {
       try {
-        await this.afMessaging.requestPermission.toPromise();
+        await firstValueFrom(this.afMessaging.requestPermission);
       } catch (e) {
         this.realtimeChat = false;
       }
