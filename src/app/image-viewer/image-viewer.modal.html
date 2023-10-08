@@ -15,11 +15,9 @@
 </ion-header>
 <ion-content class="ion-padding">
   <swiper [config]="slideOpts">
-    <swiper-slide>
-      <swiper-zoom-container>
-        <img [src]="params.src" />
-      </swiper-zoom-container>
-    </swiper-slide>
+    <ng-template swiperSlide>
+      <img [src]="params.src" />
+    </ng-template>
   </swiper>
 </ion-content>
 <ion-footer>

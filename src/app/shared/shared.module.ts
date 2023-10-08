@@ -29,6 +29,7 @@ import { ChatDatePipe } from "../chat-date.pipe";
 import { EventModal } from "../events/event-modal/event.modal";
 import { RulesPage } from "../rules/rules.page";
 import { LikesModal } from "./../profile/likes-modal/likes.modal";
+import { ImageViewerModal } from "../image-viewer/image-viewer.modal";
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { LikesModal } from "./../profile/likes-modal/likes.modal";
     NotificationOptionsModal,
     CommentLikesModal,
     RulesPage,
+    ImageViewerModal,
   ],
   imports: [
     FormsModule,
