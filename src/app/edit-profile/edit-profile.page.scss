@@ -44,6 +44,10 @@ ion-chip {
   }
 }
 
+ion-item ion-label p {
+  white-space: normal;
+}
+
 form {
   width: 100%;
   ion-icon {

@@ -317,6 +317,11 @@
                       "
           spellcheck="false"
         ></ion-input>
+        <ion-icon
+          name="add-circle"
+          slot="end"
+          (click)="addTag(games.value, 'games')"
+        ></ion-icon>
       </ion-item>
       <ion-item lines="none">
         <ion-label class="ion-text-wrap">
@@ -349,6 +354,11 @@
                         addTag($event.target.value, 'films'); films.value = ''
                       "
         ></ion-input>
+        <ion-icon
+          name="add-circle"
+          slot="end"
+          (click)="addTag(films.value, 'films')"
+        ></ion-icon>
       </ion-item>
       <ion-item lines="none">
         <ion-label class="ion-text-wrap">
@@ -381,6 +391,11 @@
                         addTag($event.target.value, 'books'); books.value = ''
                       "
         ></ion-input>
+        <ion-icon
+          name="add-circle"
+          slot="end"
+          (click)="addTag(books.value, 'books')"
+        ></ion-icon>
       </ion-item>
       <ion-item lines="none">
         <ion-label class="ion-text-wrap">
@@ -413,6 +428,11 @@
                         addTag($event.target.value, 'role'); role.value = ''
                       "
         ></ion-input>
+        <ion-icon
+          name="add-circle"
+          slot="end"
+          (click)="addTag(role.value, 'role')"
+        ></ion-icon>
       </ion-item>
       <ion-item lines="none">
         <ion-label class="ion-text-wrap">
@@ -445,6 +465,11 @@
                         addTag($event.target.value, 'music'); music.value = ''
                       "
         ></ion-input>
+        <ion-icon
+          name="add-circle"
+          slot="end"
+          (click)="addTag(music.value, 'music')"
+        ></ion-icon>
       </ion-item>
       <ion-item lines="none">
         <ion-label class="ion-text-wrap">
