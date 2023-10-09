@@ -224,8 +224,8 @@
 </ion-modal>
 
 <ion-modal
-  [breakpoints]="[0, 0.5, 0.8]"
-  [initialBreakpoint]="0.8"
+  [breakpoints]="[0, 0.5, 1]"
+  [initialBreakpoint]="1"
   trigger="view-comments"
   cssClass="sheet-modal"
   (didPresent)="slides.autoplay.stop()"
@@ -331,7 +331,8 @@
               placeholder="Comenta la historia"
               autocapitalize="on"
               (keydown.enter)="sendComment($event)"
-              (ionChange)="setWriting($event.detail.value)"
+              (ionInput)="setWriting($event.detail.value)"
+              [debounce]="500"
               formControlName="comment"
               #textarea
               rows="1"

@@ -310,7 +310,7 @@
           placeholder="Videojuegos favoritos"
           clearInput="true"
           autocapitalize="words"
-          (ionChange)="searchTag($event.detail.value, 'games')"
+          (ionInput)="searchTag($event.detail.value, 'games')"
           [debounce]="500"
           (keyup.enter)="
                         addTag($event.target.value, 'games'); games.value = ''
@@ -348,7 +348,7 @@
           placeholder="Películas, series o animes favoritos"
           clearInput="true"
           autocapitalize="words"
-          (ionChange)="searchTag($event.detail.value, 'films')"
+          (ionInput)="searchTag($event.detail.value, 'films')"
           [debounce]="500"
           (keyup.enter)="
                         addTag($event.target.value, 'films'); films.value = ''
@@ -385,7 +385,7 @@
           placeholder="Cómics, mangas o libros"
           clearInput="true"
           autocapitalize="words"
-          (ionChange)="searchTag($event.detail.value, 'books')"
+          (ionInput)="searchTag($event.detail.value, 'books')"
           [debounce]="500"
           (keyup.enter)="
                         addTag($event.target.value, 'books'); books.value = ''
@@ -422,7 +422,7 @@
           placeholder="Juegos de mesa, rol y cartas frikis"
           clearInput="true"
           autocapitalize="words"
-          (ionChange)="searchTag($event.detail.value, 'role')"
+          (ionInput)="searchTag($event.detail.value, 'role')"
           [debounce]="500"
           (keyup.enter)="
                         addTag($event.target.value, 'role'); role.value = ''
@@ -459,7 +459,7 @@
           placeholder="Música, artistas o canciones favoritas"
           clearInput="true"
           autocapitalize="words"
-          (ionChange)="searchTag($event.detail.value, 'music')"
+          (ionInput)="searchTag($event.detail.value, 'music')"
           [debounce]="500"
           (keyup.enter)="
                         addTag($event.target.value, 'music'); music.value = ''

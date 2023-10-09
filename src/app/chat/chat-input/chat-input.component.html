@@ -91,7 +91,8 @@
         autoGrow
         rows="1"
         (ionFocus)="emojis = false"
-        (ionChange)="setWriting($event.detail.value)"
+        (ionInput)="setWriting($event.detail.value)"
+        [debounce]="500"
         (paste)="onPaste($event)"
       >
       </ion-textarea>
