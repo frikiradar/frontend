@@ -215,7 +215,7 @@ export class UtilsService {
 
     if (!message) {
       message =
-        "Conoce a personas con tus mismos gustos con FrikiRadar, la red social para frikis";
+        "Conoce a personas con tus mismos gustos con FrikiRadar, la app de citas para frikis";
     }
 
     const referrer = this.auth.currentUserValue

@@ -240,6 +240,8 @@ export class AppComponent {
         let version = +info.version.replace(".", "");
         // Debe tener 3 digitos, por eso mayor o igual a 100
         version = version >= 100 ? version : version * 10;
+        console.info("Version: ", version);
+        console.info("Min version: ", +config.min_version);
 
         if (version < +config.min_version) {
           const result = await AppUpdate.getAppUpdateInfo();

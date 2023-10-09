@@ -101,7 +101,7 @@ export class ProfilePage {
       this.meta.addTags([
         {
           name: "keywords",
-          content: "frikiradar, friki, red social, " + this.user?.name,
+          content: "frikiradar, friki, red social, citas, " + this.user?.name,
         },
         { name: "robots", content: "index, follow" },
         { name: "author", content: "FrikiRadar" },

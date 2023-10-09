@@ -72,7 +72,7 @@ export class PagePage {
       {
         name: "keywords",
         content:
-          "frikiradar, friki, red social, " +
+          "frikiradar, friki, red social, citas, " +
           this.page?.name +
           ", " +
           this.page?.category,
