@@ -211,7 +211,7 @@ export class PagePage {
       this.showSkeleton = true;
     }
     let users = await this.userSvc.searchUsers(
-      this.page.name,
+      this.page.slug,
       "distance",
       this.scrollPage
     );
