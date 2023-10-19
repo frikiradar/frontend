@@ -106,6 +106,12 @@ export class UserService {
     ) as Promise<User[]>;
   }
 
+  searchUsersBySlug(slug: string, order: "distance" | "match", page: number) {
+    return firstValueFrom(
+      this.rest.post(`search-by-slug?page=${page}`, { slug, order })
+    ) as Promise<User[]>;
+  }
+
   searchUsernames(query: string) {
     return firstValueFrom(
       this.rest.get(`search-usernames/${query}`)

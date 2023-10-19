@@ -210,7 +210,7 @@ export class PagePage {
     if (this.scrollPage === 1) {
       this.showSkeleton = true;
     }
-    let users = await this.userSvc.searchUsers(
+    let users = await this.userSvc.searchUsersBySlug(
       this.page.slug,
       "distance",
       this.scrollPage
