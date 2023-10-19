@@ -26,7 +26,7 @@
   </ion-thumbnail>
   <div id="add-tag" *ngIf="!tag" (click)="addTag()">
     <ion-chip color="secondary">
-      <ion-label>Me gusta</ion-label>
+      <ion-label>{{page?.likes}} me gusta</ion-label>
       <ion-icon name="heart-outline"></ion-icon>
     </ion-chip>
   </div>
