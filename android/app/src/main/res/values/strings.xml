@@ -4,4 +4,5 @@
     <string name="title_activity_main">FrikiRadar</string>
     <string name="package_name">com.frikiradar.app</string>
     <string name="custom_url_scheme">com.frikiradar.app</string>
+    <string name="admob_app_id">ca-app-pub-3470820326017899~6746780328</string>
 </resources>
