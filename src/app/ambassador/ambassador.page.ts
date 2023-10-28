@@ -8,7 +8,7 @@ import { UrlService } from "../services/url.service";
 @Component({
   selector: "ambassador-modal",
   templateUrl: "./ambassador.page.html",
-  styleUrls: ["./ambassador.page.scss"]
+  styleUrls: ["./ambassador.page.scss"],
 })
 export class AmbassadorPage implements OnInit {
   public user: User;
@@ -22,10 +22,7 @@ export class AmbassadorPage implements OnInit {
     this.user = this.auth.currentUserValue;
   }
 
-  public goToPatreon() {
-    const url = "https://patreon.com/frikiradar";
-    this.urlSvc.openUrl(url);
-  }
+  public goToPatreon() {}
 
   close() {
     this.nav.back();

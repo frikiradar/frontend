@@ -138,28 +138,7 @@ export class AppComponent {
     }
     this.config.set("openTimes", openTimes);
 
-    if (openTimes === 7) {
-      const alert = await this.alert.create({
-        header: "¡Conviértete en embajador 🐲!",
-        message:
-          "Únete al Patreon de embajadores de FrikiRadar y conseguirás ventajas exclusivas. ¡Infórmate!",
-        buttons: [
-          {
-            text: "¡Quiero informarme!",
-            handler: async () => {
-              this.router.navigate(["/ambassador"]);
-            },
-          },
-        ],
-        cssClass: "round-alert",
-      });
-
-      await alert.present();
-    } else if (
-      openTimes >= 3 &&
-      !config.review &&
-      this.platform.is("capacitor")
-    ) {
+    if (openTimes >= 3 && !config.review && this.platform.is("capacitor")) {
       const alert = await this.alert.create({
         header: "¡Únete a la batalla!",
         message:

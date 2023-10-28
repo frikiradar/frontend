@@ -11,11 +11,19 @@
 <ion-content class="ion-padding">
   <div *ngIf="!auth.currentUserValue?.patreon">
     <p class="ion-text-center">
-      Vincula tu cuenta de FrikiRadar con Patreon para tener acceso a todas las
-      ventajas exclusivas.
+      La campaña de Embajador de FrikiRadar a través de Patreon ha llegado a su
+      fin.
     </p>
-    <ion-button (click)="link()" shape="round" expand="block" class="patreon"
-      >Vincular con Patreon</ion-button
+    <p class="ion-text-center">
+      ¡Muchas gracias a todos los que habéis participado y apoyado el proyecto!
+    </p>
+    <ion-button
+      (click)="link()"
+      shape="round"
+      expand="block"
+      disabled
+      class="patreon"
+      ><s>Vincular con Patreon</s></ion-button
     >
   </div>
   <div *ngIf="auth.currentUserValue?.patreon">

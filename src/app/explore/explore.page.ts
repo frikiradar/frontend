@@ -128,6 +128,7 @@ export class ExplorePage {
   async getPages() {
     const pages = await this.pageSvc.getPages(12);
     if (this.pages) {
+      this.pages = this.pages.slice(0, 12);
       if (!deepEqual(this.pages, pages)) {
         this.pages = pages;
         this.config.set("pages", pages);
