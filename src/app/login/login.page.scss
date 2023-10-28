@@ -33,8 +33,6 @@ ion-button {
 }
 
 .login {
-  width: 50%;
-  max-width: 500px;
   form {
     ion-label {
       --color: #9c2c51 !important;
@@ -68,6 +66,18 @@ ion-button {
   height: 100vh;
   margin: 0;
   padding: 0;
+}
+
+@media (max-width: 667px) {
+  .info {
+    display: none;
+  }
+}
+
+@media (min-width: 668px) {
+  .login {
+    max-width: 500px;
+  }
 }
 
 .register {
