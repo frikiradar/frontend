@@ -14,6 +14,26 @@
 
 <ion-content>
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-item
+    lines="none"
+    (click)="showAllStories()"
+    button
+    detail="false"
+    class="section-header"
+  >
+    <ion-label color="light">
+      <h2 class="section">
+        <ion-text color="ligth">Historias frikis</ion-text>
+      </h2>
+    </ion-label>
+    <ion-icon
+      md="arrow-forward"
+      ios="chevron-forward"
+      slot="end"
+      color="light"
+    ></ion-icon>
+  </ion-item>
+
   <section>
     <swiper id="stories" [config]="storiesOpts" mode="md">
       <ng-template swiperSlide>
@@ -43,7 +63,7 @@
           <ion-label>{{story?.user?.username}}</ion-label>
         </div>
       </ng-template>
-      <ng-template swiperSlide *ngIf="groupedStories?.length">
+      <ng-template swiperSlide *ngIf="groupedStories?.length > 10">
         <div>
           <ion-item button lines="none" (click)="showAllStories()">
             <ion-avatar>
@@ -58,6 +78,33 @@
       </ng-template>
     </swiper>
   </section>
+
+  <ion-item
+    lines="none"
+    (click)="showPages()"
+    button
+    detail="false"
+    *ngIf="pages"
+    class="section-header"
+  >
+    <ion-label color="light">
+      <h2 class="section">
+        <ion-text color="ligth"> Páginas </ion-text>
+      </h2>
+      <p class="subtitle" *ngIf="pages?.length">
+        <ion-text color="ligth">
+          Encuentra personas con las que compartes gustos
+        </ion-text>
+      </p>
+    </ion-label>
+    <ion-icon
+      *ngIf="pages?.length"
+      md="arrow-forward"
+      ios="chevron-forward"
+      slot="end"
+      color="light"
+    ></ion-icon>
+  </ion-item>
 
   <section id="pages" *ngIf="pages?.length">
     <ion-grid>

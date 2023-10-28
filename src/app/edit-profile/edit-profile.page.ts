@@ -72,6 +72,7 @@ export class EditProfilePage {
   public tags: Tag[] = [];
   public tagsInput: string;
   public list: { name: string; total: number }[];
+  private writing = false;
 
   constructor(
     public fb: UntypedFormBuilder,
@@ -222,6 +223,10 @@ export class EditProfilePage {
     this.sheet.dismiss();
 
     if (query) {
+      if (this.writing) {
+        return;
+      }
+      this.writing = true;
       this.list = (await this.tagSvc.searchTag(query, category)) as {
         name: string;
         total: number;
@@ -247,6 +252,10 @@ export class EditProfilePage {
         });
         await actionSheet.present();
       }
+
+      setTimeout(async () => {
+        this.writing = false;
+      }, 500);
     }
   }
 

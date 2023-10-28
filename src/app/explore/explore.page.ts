@@ -126,7 +126,7 @@ export class ExplorePage {
   }
 
   async getPages() {
-    const pages = await this.pageSvc.getPages();
+    const pages = await this.pageSvc.getPages(12);
     if (this.pages) {
       if (!deepEqual(this.pages, pages)) {
         this.pages = pages;
@@ -142,6 +142,10 @@ export class ExplorePage {
 
   async showPage(slug: Page["slug"]) {
     this.router.navigate(["/page", slug]);
+  }
+
+  showPages() {
+    this.router.navigate(["/pages"]);
   }
 
   search() {

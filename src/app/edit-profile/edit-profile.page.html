@@ -311,7 +311,6 @@
           clearInput="true"
           autocapitalize="words"
           (ionInput)="searchTag($event.detail.value, 'games')"
-          [debounce]="500"
           (keyup.enter)="
                         addTag($event.target.value, 'games'); games.value = ''
                       "

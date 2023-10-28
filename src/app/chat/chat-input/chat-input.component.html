@@ -92,7 +92,6 @@
         rows="1"
         (ionFocus)="emojis = false"
         (ionInput)="setWriting($event.detail.value)"
-        [debounce]="500"
         (paste)="onPaste($event)"
       >
       </ion-textarea>

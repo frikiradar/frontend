@@ -332,7 +332,6 @@
               autocapitalize="on"
               (keydown.enter)="sendComment($event)"
               (ionInput)="setWriting($event.detail.value)"
-              [debounce]="500"
               formControlName="comment"
               #textarea
               rows="1"
