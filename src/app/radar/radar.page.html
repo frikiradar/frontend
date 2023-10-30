@@ -248,12 +248,13 @@
       </ion-item>
       <ion-list>
         <ion-item lines="none">
-          <ion-label *ngIf="!extended">Búsqueda estricta</ion-label>
-          <ion-label *ngIf="extended">Búsqueda ampliada</ion-label>
           <ion-toggle
             [ngModel]="extended"
             (ngModelChange)="radarSearchChange($event)"
-          ></ion-toggle>
+          >
+            <p *ngIf="extended">Búsqueda ampliada</p>
+            <p *ngIf="!extended">Búsqueda estricta</p>
+          </ion-toggle>
         </ion-item>
         <ion-item>
           <ion-label class="ion-text-wrap" *ngIf="!extended">
@@ -271,43 +272,41 @@
         </ion-item>
         <ion-item-group *ngIf="extended">
           <ion-item lines="none" *ngIf="auth.currentUserValue?.lovegender">
-            <ion-label>
-              <h2>Identidad de género</h2>
-              <p>{{auth.currentUserValue?.lovegender}}</p>
-            </ion-label>
             <ion-toggle
               [ngModel]="searchOptions?.identity"
               (ngModelChange)="radarSearchOptions('identity', $event)"
-            ></ion-toggle>
+            >
+              <h2>Identidad de género</h2>
+              <p>{{auth.currentUserValue?.lovegender}}</p>
+            </ion-toggle>
           </ion-item>
           <ion-item
             lines="none"
             *ngIf="auth.currentUserValue?.minage && auth.currentUserValue?.maxage"
           >
-            <ion-label>
+            <ion-toggle
+              [ngModel]="searchOptions?.range"
+              (ngModelChange)="radarSearchOptions('range', $event)"
+            >
               <h2>Rango de edad</h2>
               <p>
                 {{auth.currentUserValue?.minage}} -
                 {{auth.currentUserValue?.maxage}}
               </p>
-            </ion-label>
-            <ion-toggle
-              [ngModel]="searchOptions?.range"
-              (ngModelChange)="radarSearchOptions('range', $event)"
-            ></ion-toggle>
+            </ion-toggle>
           </ion-item>
           <ion-item
             lines="none"
             *ngIf="auth.currentUserValue?.connection?.length"
           >
-            <ion-label>
-              <h2>Tipo de conexión</h2>
-              <p>{{auth.currentUserValue?.connection}}</p>
-            </ion-label>
             <ion-toggle
               [ngModel]="searchOptions?.connection"
               (ngModelChange)="radarSearchOptions('connection', $event)"
-            ></ion-toggle>
+              aria-label="Tipo de conexión"
+            >
+              <h2>Tipo de conexión</h2>
+              <p>{{auth.currentUserValue?.connection}}</p>
+            </ion-toggle>
           </ion-item>
         </ion-item-group>
       </ion-list>

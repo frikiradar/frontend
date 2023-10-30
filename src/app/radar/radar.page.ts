@@ -12,7 +12,6 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
-import { takeWhile } from "rxjs/operators";
 import SwiperCore, {
   Keyboard,
   SwiperOptions,
@@ -25,10 +24,8 @@ import { User } from "../models/user";
 import { GeolocationService } from "../services/geolocation.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "./../services/auth.service";
-import { DeviceService } from "../services/device.service";
 import { UtilsService } from "../services/utils.service";
 import { Config, ConfigService } from "../services/config.service";
-import { PushService } from "../services/push.service";
 import {
   NotificationService,
   NotificationCounters,
@@ -102,12 +99,10 @@ export class RadarPage {
     public auth: AuthService,
     public router: Router,
     private geolocationSvc: GeolocationService,
-    private deviceSvc: DeviceService,
     private alert: AlertController,
     private utils: UtilsService,
     private toast: ToastController,
     private config: ConfigService,
-    private push: PushService,
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
     private nav: NavService
@@ -128,13 +123,8 @@ export class RadarPage {
   async ngOnInit() {
     this.authUser = this.auth.currentUserValue;
 
-    // Una vez logueado iniciamos notificaciones si no están
-    const device = await this.deviceSvc.getCurrentDevice();
-    if (!device?.token) {
-      this.push.init();
-    }
     // Y despues iniciamos la geolocalización
-    if (!this.authUser.roles?.includes("ROLE_DEMO")) {
+    if (!this.auth.isDemo()) {
       try {
         this.showBackdrop = true;
         this.coordinates = await this.geolocationSvc.getGeolocation();
@@ -199,38 +189,6 @@ export class RadarPage {
       await this.slides?.slideTo(0);
     }
     this.getRadarUsers();
-  }
-
-  async ionViewWillEnter() {
-    if (!this.users?.length) {
-      if (this.authUser && this.authUser.id) {
-        this.auth.currentUser
-          .pipe(takeWhile((u) => !!u?.id))
-          .subscribe(async (authUser) => {
-            if (this.users?.length) {
-              this.authUser = authUser;
-              this.page = 0;
-
-              const radar_config = (await this.config.get(
-                "radar_config"
-              )) as Config["radar_config"];
-
-              if (radar_config?.view === "list") {
-                this.view = "list";
-                const range = radar_config?.range;
-                if (range) {
-                  this.range.value = range;
-                } else {
-                  this.ratio = 50;
-                }
-              } else {
-                await this.slides?.slideTo(0);
-              }
-              this.getRadarUsers();
-            }
-          });
-      }
-    }
   }
 
   async getRadarUsers(event?: any) {

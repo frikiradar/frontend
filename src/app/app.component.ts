@@ -19,6 +19,8 @@ import {
   AppUpdate,
   AppUpdateAvailability,
 } from "@capawesome/capacitor-app-update";
+import { first } from "rxjs";
+import { AdMob, AdmobConsentStatus } from "@capacitor-community/admob";
 
 @Component({
   selector: "app-root",
@@ -45,15 +47,6 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    if (this.platform.is("capacitor")) {
-      this.push.init();
-    } else {
-      if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
-        this.push.init();
-      }
-      this.sw.init();
-    }
-
     this.loadConfig();
     this.networkStatus();
     this.nav.backButtonStatus();
@@ -76,14 +69,23 @@ export class AppComponent {
       value: theme,
     });
 
-    if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
-      const user = await this.auth.getAuthUser();
-      this.auth.setAuthUser(user);
-      // Contar veces abierto
-      this.countOpenTimes();
-    } else {
-      // this.betaAdvertisement();
-    }
+    this.auth.currentUser
+      .pipe(first((u) => !!u?.id))
+      .subscribe(async (authUser) => {
+        if (authUser) {
+          const user = await this.auth.getAuthUser();
+          this.auth.setAuthUser(user);
+
+          // Contar veces abierto
+          this.countOpenTimes();
+
+          // Iniciar notificaciones
+          this.initNotifications();
+
+          // Mostrar publicidad
+          this.initAds();
+        }
+      });
   }
 
   async networkStatus() {
@@ -269,6 +271,52 @@ export class AppComponent {
       }
     } catch (e) {
       maintenanceAlert.present();
+    }
+  }
+
+  async initNotifications() {
+    if (this.platform.is("capacitor")) {
+      this.push.init();
+    } else {
+      if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
+        this.push.init();
+      }
+      this.sw.init();
+    }
+  }
+
+  async initAds() {
+    if (!this.auth.isPremium() && this.platform.is("capacitor")) {
+      await AdMob.initialize();
+
+      const [trackingInfo, consentInfo] = await Promise.all([
+        AdMob.trackingAuthorizationStatus(),
+        AdMob.requestConsentInfo(),
+      ]);
+
+      if (trackingInfo.status === "notDetermined") {
+        /**
+         * If you want to explain TrackingAuthorization before showing the iOS dialog,
+         * you can show the modal here.
+         * ex)
+         * const modal = await this.modalCtrl.create({
+         *   component: RequestTrackingPage,
+         * });
+         * await modal.present();
+         * await modal.onDidDismiss();  // Wait for close modal
+         **/
+
+        await AdMob.requestTrackingAuthorization();
+      }
+
+      const authorizationStatus = await AdMob.trackingAuthorizationStatus();
+      if (
+        authorizationStatus.status === "authorized" &&
+        consentInfo.isConsentFormAvailable &&
+        consentInfo.status === AdmobConsentStatus.REQUIRED
+      ) {
+        await AdMob.showConsentForm();
+      }
     }
   }
 }

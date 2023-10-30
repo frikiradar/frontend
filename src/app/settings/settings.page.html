@@ -45,6 +45,7 @@
         </ion-label>
         <ion-checkbox
           slot="end"
+          aria-label="Autenticación en dos pasos"
           [(ngModel)]="user.two_step"
           (ngModelChange)="onChangeCheck('two_step', !$event)"
         >
@@ -84,6 +85,7 @@
         </ion-label>
         <ion-checkbox
           slot="end"
+          aria-label="Localización exacta"
           [(ngModel)]="!user.hide_location"
           (ngModelChange)="onChangeCheck('hide_location', $event)"
         ></ion-checkbox>
@@ -99,6 +101,7 @@
         </ion-label>
         <ion-checkbox
           slot="end"
+          aria-label="Mensajes directos"
           [(ngModel)]="!user.block_messages"
           (ngModelChange)="onChangeCheck('block_messages', $event)"
         ></ion-checkbox>
@@ -114,6 +117,7 @@
         </ion-label>
         <ion-checkbox
           slot="end"
+          aria-label="Última conexión"
           [(ngModel)]="!user.hide_connection"
           (ngModelChange)="onChangeCheck('hide_connection', $event)"
         ></ion-checkbox>
@@ -129,6 +133,7 @@
         </ion-label>
         <ion-checkbox
           slot="end"
+          aria-label="Ocultar kokoros"
           [(ngModel)]="user.hide_likes"
           (ngModelChange)="onChangeCheck('hide_likes', !$event)"
         >
@@ -145,6 +150,7 @@
         </ion-label>
         <ion-checkbox
           slot="end"
+          aria-label="Perfil público"
           [(ngModel)]="user.public"
           (ngModelChange)="onChangeCheck('public', !$event)"
         >
@@ -293,3 +299,4 @@
     </ion-item-group>
   </ion-list>
 </ion-content>
+<ion-footer id="banner"></ion-footer>

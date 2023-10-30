@@ -6,6 +6,7 @@ import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import {
   AlertController,
   ModalController,
+  Platform,
   PopoverController,
   ToastController,
 } from "@ionic/angular";
@@ -27,6 +28,13 @@ import { UtilsService } from "../services/utils.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { AuthService } from "./../services/auth.service";
 import { LikesModal } from "./likes-modal/likes.modal";
+import {
+  AdMob,
+  AdLoadInfo,
+  AdMobRewardItem,
+  RewardAdOptions,
+  RewardAdPluginEvents,
+} from "@capacitor-community/admob";
 
 SwiperCore.use([Pagination, Keyboard]);
 
@@ -47,6 +55,7 @@ export class ProfilePage {
   public loading = true;
   public pulse: any;
   public param: "received" | "delivered";
+  private reward = false;
 
   public sliderOpts: SwiperOptions = {
     keyboard: true,
@@ -71,7 +80,8 @@ export class ProfilePage {
     private urlSvc: UrlService,
     private meta: Meta,
     private title: Title,
-    private nav: NavService
+    private nav: NavService,
+    private platform: Platform
   ) {}
 
   async ngAfterViewInit() {
@@ -152,6 +162,7 @@ export class ProfilePage {
     }
 
     if (this.user.chat && !this.user.block) {
+      this.rewardVideo();
       this.router.navigate(["/chat", this.user.id]);
     } else {
       if (
@@ -159,6 +170,7 @@ export class ProfilePage {
         this.user.from_like ||
         this.auth?.isVerified()
       ) {
+        this.rewardVideo();
         this.router.navigate(["/chat", this.user.id]);
       } else {
         const alert = await this.alert.create({
@@ -183,6 +195,7 @@ export class ProfilePage {
 
     try {
       if (!this.user.like) {
+        this.rewardVideo();
         await Haptics.impact({ style: ImpactStyle.Medium });
         this.userSvc.like(this.user.id);
         this.user.like = true;
@@ -336,6 +349,35 @@ export class ProfilePage {
       showBackdrop: true,
     });
     return await modal.present();
+  }
+
+  async rewardVideo() {
+    if (!this.auth.isPremium() && this.platform.is("capacitor")) {
+      if (this.reward) {
+        return;
+      }
+      AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+        // Subscribe prepared rewardVideo
+      });
+
+      AdMob.addListener(
+        RewardAdPluginEvents.Rewarded,
+        (rewardItem: AdMobRewardItem) => {
+          // Subscribe user rewarded
+          console.log(rewardItem);
+        }
+      );
+
+      const options: RewardAdOptions = {
+        adId: "ca-app-pub-3470820326017899/7748870803",
+        isTesting: this.auth.isAdmin() ? true : false,
+      };
+      await AdMob.prepareRewardVideoAd(options);
+      const rewardItem = await AdMob.showRewardVideoAd();
+      console.log(rewardItem);
+
+      this.reward = true;
+    }
   }
 
   back() {

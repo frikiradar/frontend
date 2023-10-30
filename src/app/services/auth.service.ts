@@ -193,6 +193,18 @@ export class AuthService {
     return user?.roles?.includes("ROLE_MASTER");
   }
 
+  isPremium(user?: User) {
+    if (!user) {
+      user = this.currentUserValue;
+    }
+    return (
+      user?.roles?.includes("ROLE_PREMIUM") ||
+      user?.roles?.includes("ROLE_PATREON") ||
+      user?.roles?.includes("ROLE_ADMIN") ||
+      user?.roles?.includes("ROLE_MASTER")
+    );
+  }
+
   isPatreon(user?: User) {
     if (!user) {
       user = this.currentUserValue;
