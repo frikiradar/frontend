@@ -199,9 +199,7 @@ export class AuthService {
     }
     return (
       user?.roles?.includes("ROLE_PREMIUM") ||
-      user?.roles?.includes("ROLE_PATREON") ||
-      user?.roles?.includes("ROLE_ADMIN") ||
-      user?.roles?.includes("ROLE_MASTER")
+      user?.roles?.includes("ROLE_PATREON")
     );
   }
 
