@@ -15,6 +15,7 @@ import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { ModalController } from "@ionic/angular";
 import { StoryService } from "../services/story.service";
 import { RulesPage } from "../rules/rules.page";
+import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-explore",
@@ -46,7 +47,8 @@ export class ExplorePage {
     private animate: AnimateService,
     private storySvc: StoryService,
     private modalController: ModalController,
-    private pageSvc: PageService
+    private pageSvc: PageService,
+    private nav: NavService
   ) {}
 
   async ngAfterViewInit() {
@@ -151,5 +153,9 @@ export class ExplorePage {
 
   search() {
     this.router.navigate(["/search"]);
+  }
+
+  editProfile() {
+    this.nav.navigateRoot("/edit-profile");
   }
 }

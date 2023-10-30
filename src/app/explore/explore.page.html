@@ -123,10 +123,7 @@
   <section *ngIf="!pages || !pages?.length" class="ion-padding">
     <div class="ion-text-center register">
       <p>Añade gustos a tu perfil para que aparezcan aquí tus páginas.</p>
-      <ion-button
-        color="primary"
-        (click)="router.navigate(['/edit-profile'])"
-        shape="round"
+      <ion-button color="primary" (click)="editProfile()" shape="round"
         >Editar perfil</ion-button
       >
     </div>

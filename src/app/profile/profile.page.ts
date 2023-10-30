@@ -129,7 +129,7 @@ export class ProfilePage {
   }
 
   editProfile() {
-    this.router.navigate(["/edit-profile"]);
+    this.nav.navigateRoot("/edit-profile");
   }
 
   openUrl(event: any) {

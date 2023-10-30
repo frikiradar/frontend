@@ -4,13 +4,12 @@ import {
   HostListener,
   ChangeDetectorRef,
 } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import {
   AlertController,
   IonRange,
   IonContent,
   ToastController,
-  ModalController,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { takeWhile } from "rxjs/operators";
@@ -34,6 +33,7 @@ import {
   NotificationService,
   NotificationCounters,
 } from "../services/notification.service";
+import { NavService } from "../services/navigation.service";
 
 SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel]);
 
@@ -110,8 +110,7 @@ export class RadarPage {
     private push: PushService,
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
-    private modalController: ModalController,
-    private route: ActivatedRoute
+    private nav: NavService
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
@@ -295,6 +294,10 @@ export class RadarPage {
 
   async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
+  }
+
+  editProfile() {
+    this.nav.navigateRoot("/edit-profile");
   }
 
   notifications() {

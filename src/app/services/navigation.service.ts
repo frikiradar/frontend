@@ -6,7 +6,7 @@ import {
   Platform,
   ToastController,
 } from "@ionic/angular";
-import { NavigationOptions } from "@ionic/angular/providers/nav-controller";
+import { NavigationOptions } from "@ionic/angular/common/providers/nav-controller";
 
 @Injectable({ providedIn: "root" })
 export class NavService {
