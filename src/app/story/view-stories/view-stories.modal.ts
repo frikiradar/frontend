@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -42,13 +48,13 @@ export class ViewStoriesModal implements OnInit {
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
   public slides: SwiperCore;
+  public story: Story;
 
   public commentForm: UntypedFormGroup;
   get comment() {
     return this.commentForm.get("comment");
   }
 
-  public story: Story;
   private delay = 5000;
   private inputAt = false;
   private mention: string;
@@ -81,7 +87,8 @@ export class ViewStoriesModal implements OnInit {
     private toast: ToastController,
     private router: Router,
     public auth: AuthService,
-    private urlSvc: UrlService
+    private urlSvc: UrlService,
+    private cd: ChangeDetectorRef
   ) {
     this.commentForm = formBuilder.group({
       comment: new UntypedFormControl("", [Validators.required]),
@@ -103,6 +110,9 @@ export class ViewStoriesModal implements OnInit {
   setSwiperInstance(swiper: any) {
     this.slides = swiper;
     this.slides.update();
+    this.slides.on("slideChange", (event) => {
+      this.slide(event.activeIndex);
+    });
   }
 
   async showProfile(id: User["id"]) {
@@ -112,10 +122,10 @@ export class ViewStoriesModal implements OnInit {
     }
   }
 
-  async slide() {
+  slide(index: number) {
     this.comment.setValue("");
-    const index = this.slides.activeIndex;
     this.story = this.stories[index];
+    this.cd.detectChanges();
     this.setLikeStory();
     this.viewStory(this.stories[index]);
   }
@@ -127,9 +137,10 @@ export class ViewStoriesModal implements OnInit {
     this.slides.autoplay.start();
   }
 
-  tap(event: any) {
+  async tap(event: any) {
     if (event instanceof PointerEvent) {
-      if (event.pageX > screen.width / 2) {
+      const modal = await this.thisModal.getTop();
+      if (event.pageX > modal.offsetWidth / 2) {
         this.slides.slideNext();
       } else {
         this.slides.slidePrev();

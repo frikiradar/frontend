@@ -369,7 +369,7 @@ export class ProfilePage {
       );
 
       const options: RewardAdOptions = {
-        adId: "ca-app-pub-3470820326017899/7748870803",
+        adId: "ca-app-pub-3470820326017899/5892787677",
         isTesting: this.auth.isAdmin() ? true : false,
       };
       await AdMob.prepareRewardVideoAd(options);

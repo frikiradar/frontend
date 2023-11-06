@@ -38,7 +38,6 @@
 </ion-header>
 <ion-content [fullscreen]="true">
   <swiper
-    (slideChangeTransitionStart)="slide()"
     (swiper)="setSwiperInstance($event)"
     (click)="tap($event)"
     (touchStart)="touchStart($event)"
