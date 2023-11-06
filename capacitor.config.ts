@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: "www",
   bundledWebRuntime: false,
   server: {
-    hostname: "frikiradar.app",
+    hostname: "frikiradar",
     androidScheme: "https",
   },
   plugins: {
