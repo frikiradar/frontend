@@ -56,7 +56,7 @@ export class AppComponent {
     if (!theme) {
       theme = "dark";
     }
-    this.utils.toggleTheme(theme);
+    this.utils.toggleTheme(theme, undefined, 1000);
 
     // Firebase Analytics
     const deviceInfo = Device.getInfo();

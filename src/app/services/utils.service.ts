@@ -302,7 +302,7 @@ export class UtilsService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  toggleTheme(theme: Config["theme"], oldTheme?: Config["theme"]) {
+  toggleTheme(theme: Config["theme"], oldTheme?: Config["theme"], delay = 0) {
     if (oldTheme) {
       document.body.classList.toggle(oldTheme, false);
     }
@@ -341,7 +341,7 @@ export class UtilsService {
             StatusBar.setStyle({ style: Style.Dark });
             NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
         }
-      }, 1000);
+      }, delay);
     }
   }
 
