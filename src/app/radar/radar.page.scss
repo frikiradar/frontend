@@ -245,8 +245,7 @@ ion-content {
 #radar-range {
   color: white;
   background: rgba(var(--ion-color-medium-dark-rgb), 0.98);
-  // background: #292929f8;
-  border-radius: 30px;
+  border-radius: 50px;
   width: 97%;
   margin-left: auto;
   margin-right: auto;
@@ -254,6 +253,13 @@ ion-content {
   bottom: 10px;
   left: 0;
   right: 0;
+  padding: 5px 15px;
+
+  ::part(tick), ::part(tick-active) {
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+  }
 
   ion-label,
   ion-icon,
@@ -264,7 +270,10 @@ ion-content {
   ion-range {
     padding-top: 0;
     padding-bottom: 0;
-    --knob-size: 25px;
+    --knob-size: 20px;
+    --bar-background: white;
+    --bar-background-active: white;
+    --knob-background: var(--ion-color-primary);
   }
 
   #range-distance {
@@ -283,6 +292,7 @@ ion-content {
   max-height: 100px;
   &.hide-background {
     max-height: 0;
+    padding: 0 15px;
   }
 }
 

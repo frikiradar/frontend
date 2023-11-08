@@ -193,6 +193,8 @@ export class RadarPage {
 
   async getRadarUsers(event?: any) {
     try {
+      this.loading = true;
+      this.detectorRef.detectChanges();
       this.page++;
       let resUsers = [];
       if (!this.extended) {
@@ -205,6 +207,7 @@ export class RadarPage {
         );
       }
       this.loading = false;
+      this.detectorRef.detectChanges();
       if (this.page === 1) {
         this.config.set("radar", resUsers);
       }
@@ -298,6 +301,7 @@ export class RadarPage {
         this.radarAdv();
       }
       this.loading = true;
+      this.detectorRef.detectChanges();
       this.ratio = this.getRatio(value);
 
       let radar_config = (await this.config.get(
@@ -389,14 +393,12 @@ export class RadarPage {
       case 0:
         return 10;
       case 1:
-        return 50;
-      case 2:
         return 100;
-      case 3:
+      case 2:
         return 500;
-      case 4:
+      case 3:
         return 1000;
-      case 5:
+      case 4:
         return 25000;
     }
   }
@@ -463,6 +465,7 @@ export class RadarPage {
     if (this.searchOptionsChanged) {
       this.searchOptionsChanged = false;
       this.loading = true;
+      this.detectorRef.detectChanges();
       this.page = 0;
       this.users = undefined;
       this.radarlist?.scrollToTop(0);

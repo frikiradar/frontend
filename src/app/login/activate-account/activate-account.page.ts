@@ -34,6 +34,9 @@ export class ActivateAccountPage {
     private config: ConfigService
   ) {
     this.user = this.auth.currentUserValue;
+    if (this.user.active) {
+      this.nav.navigateRoot(["/"]);
+    }
 
     this.codeForm = fb.group({
       code: new UntypedFormControl("", [
