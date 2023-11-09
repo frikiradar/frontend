@@ -7,7 +7,7 @@ export class SwService {
   constructor(private swUpdate: SwUpdate, private toast: ToastController) {}
 
   async init() {
-    this.swUpdate.available.subscribe(async res => {
+    this.swUpdate.checkForUpdate().then(async () => {
       const toast = await this.toast.create({
         message: "¡Nueva actualización disponible!",
         buttons: [
@@ -15,10 +15,10 @@ export class SwService {
             text: "Instalar",
             handler: () => {
               window.location.reload();
-            }
-          }
+            },
+          },
         ],
-        position: "bottom"
+        position: "bottom",
       });
 
       await toast.present();

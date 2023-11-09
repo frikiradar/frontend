@@ -1,6 +1,6 @@
 import { MenuModal } from "./../menu/menu.modal";
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router, RouterEvent } from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 import { ModalController, Platform } from "@ionic/angular";
 import { AuthService } from "../services/auth.service";
 
@@ -26,7 +26,7 @@ export class TabsPage implements OnInit {
     public platform: Platform,
     private modalController: ModalController
   ) {
-    this.router.events.subscribe(async (event: RouterEvent) => {
+    this.router.events.subscribe((event: any) => {
       event.url = event.url === "/" ? "/tabs/radar" : event.url;
       if (event instanceof NavigationEnd && event.url.includes("/tabs/")) {
         this.selected = event.url.split("/")[2];
