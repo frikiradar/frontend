@@ -49,9 +49,7 @@ registerLocaleData(localeEs, "es");
     LinkyModule,
     HammerModule,
     ImageCropperModule,
-    ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: true,
-    }),
+    ServiceWorkerModule.register("ngsw-worker.js"),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireMessagingModule,
     WebcamModule,
