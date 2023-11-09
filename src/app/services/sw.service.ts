@@ -10,7 +10,7 @@ export class SwService {
     if (!this.swUpdate.isEnabled) {
       return;
     }
-    this.swUpdate.checkForUpdate().then(async () => {
+    this.swUpdate.versionUpdates.subscribe(async () => {
       const toast = await this.toast.create({
         message: "¡Nueva actualización disponible!",
         buttons: [
