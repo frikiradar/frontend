@@ -58,7 +58,11 @@
       </ion-item>
     </ion-list>
     <ng-template #profile>
-      <swiper [pagination]="user?.images?.length" [config]="sliderOpts">
+      <swiper
+        [pagination]="user?.images?.length"
+        [config]="sliderOpts"
+        (swiper)="setSwiperInstance($event)"
+      >
         <ng-template swiperSlide>
           <img
             [src]="user?.avatar"

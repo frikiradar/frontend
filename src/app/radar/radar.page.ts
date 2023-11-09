@@ -311,12 +311,18 @@ export class RadarPage {
       radar_config.range = value;
       this.config.set("radar_config", radar_config);
 
+      let message = "";
+      if (this.ratio === 50) {
+        message = "Buscando personas cercanas";
+      } else if (this.ratio === 25000) {
+        message = "Buscando personas mundialmente";
+      } else {
+        message = "Buscando personas a " + this.ratio + "km";
+      }
+
       (
         await this.toast.create({
-          message:
-            this.ratio < 25000
-              ? "Buscando personas a " + this.ratio + "km"
-              : "Buscando personas mundialmente",
+          message,
           position: "middle",
           color: "secondary",
         })
@@ -391,7 +397,7 @@ export class RadarPage {
   getRatio(value: number) {
     switch (value) {
       case 0:
-        return 10;
+        return 50;
       case 1:
         return 100;
       case 2:

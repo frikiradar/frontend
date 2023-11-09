@@ -56,6 +56,7 @@ export class ProfilePage {
   public pulse: any;
   public param: "received" | "delivered";
   private reward = false;
+  public slides: SwiperCore;
 
   public sliderOpts: SwiperOptions = {
     keyboard: true,
@@ -136,6 +137,14 @@ export class ProfilePage {
     } catch (e) {
       this.loading = false;
     }
+  }
+
+  setSwiperInstance(swiper: any) {
+    this.slides = swiper;
+    this.slides.update();
+    this.slides.on("slideChange", async () => {
+      await Haptics.impact({ style: ImpactStyle.Light });
+    });
   }
 
   editProfile() {
@@ -352,6 +361,12 @@ export class ProfilePage {
   }
 
   async rewardVideo() {
+    // Vamos a mostrar el reward video un 33% de las veces
+    const random = Math.floor(Math.random() * 3);
+    if (random !== 0) {
+      return;
+    }
+
     if (!this.auth.isPremium() && this.platform.is("capacitor")) {
       if (this.reward) {
         return;
