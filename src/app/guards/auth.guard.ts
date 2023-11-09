@@ -1,15 +1,11 @@
 import { Injectable, NgZone } from "@angular/core";
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  RouterStateSnapshot,
-} from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { NavController } from "@ionic/angular";
 
 import { AuthService } from "./../services/auth.service";
 
 @Injectable({ providedIn: "root" })
-export class AuthGuard implements CanActivate {
+export class AuthGuard  {
   constructor(
     private auth: AuthService,
     private nav: NavController,
