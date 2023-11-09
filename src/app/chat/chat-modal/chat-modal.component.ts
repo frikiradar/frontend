@@ -21,7 +21,7 @@ import {
   PopoverController,
   ToastController,
 } from "@ionic/angular";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
 import { firstValueFrom } from "rxjs";
 
 import { Chat } from "../../models/chat";
@@ -418,7 +418,8 @@ export class ChatModalComponent implements OnInit {
 
   async selectMessage(event: any, message: Chat) {
     event.preventDefault();
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    await Haptics.vibrate({ duration: 10 });
+    // await Haptics.notification({ type: NotificationType.Success });
     this.selectedMessage = message;
     this.pressOptions = true;
   }

@@ -24,6 +24,7 @@ import { TagService } from "./../services/tag.service";
 import { UtilsService } from "./../services/utils.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
+import { Haptics } from "@capacitor/haptics";
 
 SwiperCore.use([Pagination, Keyboard]);
 
@@ -144,6 +145,9 @@ export class EditProfilePage {
 
   setSwiperInstance(swiper: SwiperCore) {
     this.slides = swiper;
+    this.slides.on("slideChange", async () => {
+      await Haptics.vibrate({ duration: 10 });
+    });
   }
 
   async submitProfile() {

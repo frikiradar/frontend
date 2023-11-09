@@ -35,6 +35,7 @@ import { UserService } from "src/app/services/user.service";
 import { StoryService } from "../../services/story.service";
 import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
 import { StoryModal } from "../story-modal/story.modal";
+import { Haptics } from "@capacitor/haptics";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -110,8 +111,9 @@ export class ViewStoriesModal implements OnInit {
   setSwiperInstance(swiper: any) {
     this.slides = swiper;
     this.slides.update();
-    this.slides.on("slideChange", (event) => {
+    this.slides.on("slideChange", async (event) => {
       this.slide(event.activeIndex);
+      await Haptics.vibrate({ duration: 10 });
     });
   }
 

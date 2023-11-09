@@ -2,7 +2,7 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
 import {
   AlertController,
   ModalController,
@@ -143,7 +143,7 @@ export class ProfilePage {
     this.slides = swiper;
     this.slides.update();
     this.slides.on("slideChange", async () => {
-      await Haptics.impact({ style: ImpactStyle.Light });
+      await Haptics.vibrate({ duration: 10 });
     });
   }
 
@@ -204,8 +204,8 @@ export class ProfilePage {
 
     try {
       if (!this.user.like) {
+        await Haptics.notification({ type: NotificationType.Success });
         this.rewardVideo();
-        await Haptics.impact({ style: ImpactStyle.Medium });
         this.userSvc.like(this.user.id);
         this.user.like = true;
         if (
@@ -236,6 +236,7 @@ export class ProfilePage {
           ).present();
         }
       } else {
+        await Haptics.notification({ type: NotificationType.Error });
         this.userSvc.unlike(this.user.id);
         this.user.like = false;
         (
