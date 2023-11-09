@@ -33,21 +33,5 @@
 
   <body>
     <app-root></app-root>
-    <noscript
-      >Please enable JavaScript to continue using this application.</noscript
-    >
-    <script type="text/javascript">
-      // links catch-all/handler
-      document.onclick = function (e) {
-        e = e || window.event;
-        var element = e.target || e.srcElement;
-        // making sure there's an URL
-        if (element.tagName == "A" && element.href) {
-          // opening in a new window
-          window.open(element.href, "_blank", "location=yes");
-          return false;
-        }
-      };
-    </script>
   </body>
 </html>

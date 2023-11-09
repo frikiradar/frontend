@@ -7,6 +7,9 @@ export class SwService {
   constructor(private swUpdate: SwUpdate, private toast: ToastController) {}
 
   async init() {
+    if (!this.swUpdate.isEnabled) {
+      return;
+    }
     this.swUpdate.checkForUpdate().then(async () => {
       const toast = await this.toast.create({
         message: "¡Nueva actualización disponible!",
