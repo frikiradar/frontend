@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { FCM } from "@capacitor-community/fcm";
-import { PushNotifications, Token } from "@capacitor/push-notifications";
+import {
+  Channel,
+  PushNotifications,
+  Token,
+  Visibility,
+} from "@capacitor/push-notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Platform } from "@ionic/angular";
 import { AngularFireMessaging } from "@angular/fire/compat/messaging";
@@ -91,20 +96,6 @@ export class PushService {
           });
       }
 
-      if (
-        this.auth.isAdmin() ||
-        this.auth.isMaster() ||
-        this.auth.isPatreon()
-      ) {
-        FCM.subscribeTo({ topic: "patreon" })
-          .then((response) => {
-            // console.log("Successfully subscribed to topic:", response.message);
-          })
-          .catch((error) => {
-            console.log("Error subscribing to topic:", error);
-          });
-      }
-
       /*LocalNotifications.addListener(
         "localNotificationReceived",
         (notification) => {
@@ -162,6 +153,7 @@ export class PushService {
         id: "chat",
         name: "Notificaciones de Chat",
         description: "Recibe notificaciones de chat cuando alguien te escribe.",
+        visibility: 0,
       },
       {
         id: "radar",
@@ -186,12 +178,6 @@ export class PushService {
         name: "Notificaciones de testeo",
         description: "Canal de testeo, exclusivo para masters.",
       },
-      {
-        id: "patreon",
-        name: "Notificaciones de Patreon",
-        description:
-          "Canal de información exclusiva para embajadores de Patreon.",
-      },
     ];
 
     for (let channel of channels) {
@@ -202,19 +188,13 @@ export class PushService {
         continue;
       }
 
-      if (
-        channel.id == "patreon" &&
-        !(this.auth.isPatreon() || this.auth.isAdmin() || this.auth.isMaster())
-      ) {
-        continue;
-      }
-
       PushNotifications.createChannel({
         id: channel.id,
         name: channel.name,
-        // sound: "bipbip",
+        sound: "default",
         description: channel.description,
-        importance: 1,
+        importance: 3,
+        visibility: (channel.visibility ?? 1) as Visibility,
       })
         .then((response) => {
           // console.log("Notification Channel created", channel, response);
@@ -224,14 +204,13 @@ export class PushService {
         });
     }
 
-    /*PushNotifications
-      .deleteChannel("fcm_default_channel")
+    PushNotifications.deleteChannel({ id: "fcm_default_channel" })
       .then((response) => {
         // console.log(response);
       })
       .catch((error) => {
         console.error("Error deleting channel", error);
-      });*/
+      });
 
     /*PushNotifications
       .listChannels()
@@ -263,7 +242,7 @@ export class PushService {
               id: Math.random() * (1000000 - 1) + 1,
               title: notification?.title,
               body: notification?.body,
-              // sound: "bipbip.mp3",
+              sound: "default",
               smallIcon: "ic_stat_notification",
               iconColor: "#e91e63",
               largeIcon: notification?.data.icon,
