@@ -586,7 +586,8 @@
           <ion-thumbnail slot="start" *ngIf="tag.image">
             <img [src]="tag.image" />
           </ion-thumbnail>
-          <ion-label>{{tag.name}} ({{tag.total}})</ion-label>
+          <ion-label class="ion-text-wrap">{{tag.name}}</ion-label>
+          <ion-badge slot="end">{{tag.total}}</ion-badge>
         </ion-item>
       </ion-list>
     </ion-content>
