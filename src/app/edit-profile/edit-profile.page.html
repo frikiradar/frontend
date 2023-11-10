@@ -7,10 +7,7 @@
         </ion-button>
       </ion-buttons>
       <ion-buttons slot="end">
-        <ion-button
-          *ngIf="user?.images?.length < 9"
-          (click)="openPictureSheet()"
-        >
+        <ion-button *ngIf="user?.images?.length < 9" id="open-picture-sheet">
           <ion-icon
             slot="icon-only"
             src="/assets/icon/add_a_photo_white_24dp.svg"
@@ -26,6 +23,15 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
+  <input
+    type="file"
+    accept="image/*"
+    #imageInput
+    style="display: none"
+    name="avatar"
+    (change)="cropImagebyEvent($event)"
+    (click)="imageInput.value = null"
+  />
   <ion-list *ngIf="loading; else profile">
     <ion-item lines="none">
       <ion-label>
@@ -64,15 +70,6 @@
         <img [src]="image" default="/assets/img/users/default.png" />
       </ng-template>
     </swiper>
-
-    <input
-      type="file"
-      accept="image/*"
-      #imageInput
-      style="display: none"
-      name="avatar"
-      (change)="cropImagebyEvent($event)"
-    />
     <form [formGroup]="profileForm">
       <ion-list>
         <ion-item-group>
@@ -529,3 +526,69 @@
     >Guardar y salir
   </ion-button>
 </ion-footer>
+
+<!-- modals -->
+
+<ion-modal
+  [breakpoints]="[0, 0.2]"
+  [initialBreakpoint]="0.2"
+  trigger="open-picture-sheet"
+  cssClass="sheet-modal"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <p>
+        Consejo: Recuerda que subir fotos con contenido explícito puede ser
+        motivo de expulsión.
+      </p>
+      <ion-list>
+        <ion-item
+          button
+          detail="false"
+          (click)="selectPictureFromCamera()"
+          lines="none"
+        >
+          <ion-icon slot="start" name="camera" color="light"></ion-icon>
+          <ion-label>Desde la cámara</ion-label>
+        </ion-item>
+        <ion-item
+          lines="none"
+          button
+          detail="false"
+          (click)="selectPictureFromGallery()"
+        >
+          <ion-icon slot="start" name="images" color="light"></ion-icon>
+          <ion-label>Desde la galería</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  [breakpoints]="[0, 0.6]"
+  [initialBreakpoint]="0.6"
+  cssClass="sheet-modal"
+  id="suggested-tags-sheet"
+  [isOpen]="openSuggestions"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <p>Elige una de las sugerencias o sigue escribiendo...</p>
+      <ion-list>
+        <ion-item
+          button
+          detail="false"
+          (click)="addTag(tag.name, tag.category);"
+          lines="none"
+          *ngFor="let tag of suggestedTags"
+        >
+          <ion-thumbnail slot="start" *ngIf="tag.image">
+            <img [src]="tag.image" />
+          </ion-thumbnail>
+          <ion-label>{{tag.name}} ({{tag.total}})</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

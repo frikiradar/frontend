@@ -10,6 +10,7 @@ import {
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { Config, ConfigService } from "src/app/services/config.service";
+import { Haptics } from "@capacitor/haptics";
 
 import { User } from "../../models/user";
 import { Chat } from "./../../models/chat";
@@ -247,11 +248,12 @@ export class ChatListComponent {
     element.open("end");
   }
 
-  selectChat(chat: Chat) {
+  async selectChat(chat: Chat) {
     if (chat.user.username !== "frikiradar") {
       this.selected = chat.user.id;
       this.selectedChat = chat;
       this.showOptions = true;
+      await Haptics.vibrate({ duration: 1 });
     }
   }
 

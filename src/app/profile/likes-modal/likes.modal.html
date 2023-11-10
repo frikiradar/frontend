@@ -29,11 +29,6 @@
           [alt]="like.user.username"
           default="/assets/img/users/default.png"
         />
-        <ion-badge
-          color="primary"
-          *ngIf="!like?.time_read && param == 'received' && auth.currentUserValue.id === user.id"
-          >&nbsp;</ion-badge
-        >
       </ion-avatar>
       <ion-label>
         <h2>{{ like.user.name }}</h2>

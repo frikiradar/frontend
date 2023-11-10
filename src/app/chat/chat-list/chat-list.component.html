@@ -9,7 +9,7 @@
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="showOptions">
       <ion-button (click)="hideOptions()">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
+        <ion-icon slot="icon-only" slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="start" *ngIf="showingArchived && !showOptions">
@@ -23,13 +23,13 @@
     >
     <ion-buttons slot="end" *ngIf="showOptions">
       <ion-button (click)="deleteChat(selectedChat)">
-        <ion-icon name="trash"></ion-icon>
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-button>
       <ion-button (click)="archiveChat(selectedChat)" *ngIf="!showingArchived">
-        <ion-icon name="archive"></ion-icon>
+        <ion-icon slot="icon-only" name="archive"></ion-icon>
       </ion-button>
       <ion-button (click)="unarchiveChat(selectedChat)" *ngIf="showingArchived">
-        <ion-icon name="file-tray"></ion-icon>
+        <ion-icon slot="icon-only" name="file-tray"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

@@ -102,7 +102,7 @@
         >
           <ion-icon slot="icon-only" name="calendar" color="dark"></ion-icon>
         </ion-button>
-        <ion-button *ngIf="!replying" (click)="openPictureSheet()" slot="end">
+        <ion-button *ngIf="!replying" id="open-picture-sheet" slot="end">
           <ion-icon slot="icon-only" name="camera" color="dark"></ion-icon>
         </ion-button>
         <input
@@ -112,6 +112,7 @@
           style="display: none"
           name="default"
           (change)="addPicture($event.target.files[0])"
+          (click)="imageInput.value = null"
         />
       </ion-buttons>
     </ion-item>
@@ -169,3 +170,41 @@
     }
   }"
 ></emoji-mart>
+
+<!-- modals -->
+
+<ion-modal
+  [breakpoints]="[0, 0.2]"
+  [initialBreakpoint]="0.2"
+  trigger="open-picture-sheet"
+  cssClass="sheet-modal"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <p>
+        Enviar contenido explícito sin el consentimiento del receptor puede ser
+        motivo de expulsión.
+      </p>
+      <ion-list>
+        <ion-item
+          button
+          detail="false"
+          (click)="selectPictureFromCamera()"
+          lines="none"
+        >
+          <ion-icon slot="start" name="camera" color="light"></ion-icon>
+          <ion-label>Desde la cámara</ion-label>
+        </ion-item>
+        <ion-item
+          lines="none"
+          button
+          detail="false"
+          (click)="selectPictureFromGallery()"
+        >
+          <ion-icon slot="start" name="images" color="light"></ion-icon>
+          <ion-label>Desde la galería</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

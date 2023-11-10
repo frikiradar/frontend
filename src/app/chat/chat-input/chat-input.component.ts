@@ -16,7 +16,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
-import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
+import { IonTextarea, ModalController, Platform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { VoiceRecorder } from "capacitor-voice-recorder";
 
@@ -51,7 +51,6 @@ export class ChatInputComponent {
   public emojis: boolean = false;
   public image: string;
   public imagePreview: SafeUrl;
-  private mediaRecorder: MediaRecorder;
   public recording: boolean = false;
   public storedFileNames = [];
   public countRecordingString = "0m 0s";
@@ -79,10 +78,10 @@ export class ChatInputComponent {
     public formBuilder: UntypedFormBuilder,
     public auth: AuthService,
     public platform: Platform,
-    public sheet: ActionSheetController,
     public utils: UtilsService,
     private userSvc: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private modalController: ModalController
   ) {
     this.chatForm = formBuilder.group({
       message: new UntypedFormControl("", [Validators.required]),
@@ -174,55 +173,42 @@ export class ChatInputComponent {
     this.focusTextArea();
   }
 
-  async openPictureSheet() {
-    const actionSheet = await this.sheet.create({
-      header:
-        "Enviar contenido explícito sin el consentimiento del receptor puede ser motivo de expulsión.",
-      buttons: [
-        {
-          text: "Desde la cámara",
-          icon: "camera",
-          handler: async () => {
-            if (this.platform.is("capacitor")) {
-              const image = (await this.utils.takePicture(
-                "camera",
-                false,
-                "default",
-                true
-              )) as string;
-              this.addPicture(image);
-            } else {
-              const image = await this.utils.webcamImage("default");
-              if (!image || typeof image === "boolean") {
-                actionSheet.dismiss();
-                return false;
-              }
-              this.addPicture(image);
-            }
-          },
-        },
-        {
-          text: "Desde la galería",
-          icon: "images",
-          handler: async () => {
-            if (this.platform.is("capacitor")) {
-              const image = (await this.utils.takePicture(
-                "gallery",
-                false,
-                "default",
-                true
-              )) as string;
-              this.addPicture(image);
-            } else {
-              this.imageInput.nativeElement.dispatchEvent(
-                new MouseEvent("click")
-              );
-            }
-          },
-        },
-      ],
-    });
-    await actionSheet.present();
+  async selectPictureFromCamera() {
+    this.closePictureSheet();
+    if (this.platform.is("capacitor")) {
+      const image = (await this.utils.takePicture(
+        "camera",
+        false,
+        "default",
+        true
+      )) as string;
+      this.addPicture(image);
+    } else {
+      const image = await this.utils.webcamImage("default");
+      if (!image || typeof image === "boolean") {
+        return false;
+      }
+      this.addPicture(image);
+    }
+  }
+
+  async selectPictureFromGallery() {
+    this.closePictureSheet();
+    if (this.platform.is("capacitor")) {
+      const image = (await this.utils.takePicture(
+        "gallery",
+        false,
+        "default",
+        true
+      )) as string;
+      this.addPicture(image);
+    } else {
+      this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
+    }
+  }
+
+  closePictureSheet() {
+    this.modalController.dismiss();
   }
 
   async openMic() {

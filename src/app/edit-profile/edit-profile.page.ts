@@ -14,6 +14,8 @@ import {
   ToastController,
 } from "@ionic/angular";
 import SwiperCore, { SwiperOptions, Keyboard, Scrollbar } from "swiper";
+import { Subject } from "rxjs";
+import { debounceTime } from "rxjs/operators";
 
 import { Tag } from "../models/tags";
 import { User } from "../models/user";
@@ -71,9 +73,10 @@ export class EditProfilePage {
   public user: User;
   public tags: Tag[] = [];
   public tagsInput: string;
-  public list: { name: string; total: number }[];
-  private writing = false;
+  public suggestedTags: { name: string; total: number; image?: string }[];
+  public openSuggestions = false;
   public loading = true;
+  private searchSubject = new Subject<{ query: string; category: string }>();
 
   constructor(
     public fb: UntypedFormBuilder,
@@ -105,6 +108,14 @@ export class EditProfilePage {
       connection: [""],
       tags: [""],
     });
+  }
+
+  ngOnInit() {
+    this.searchSubject
+      .pipe(
+        debounceTime(800) // espera 300ms después de la última emisión antes de llamar a performSearch
+      )
+      .subscribe(({ query, category }) => this.performSearch(query, category));
   }
 
   async ionViewWillEnter() {
@@ -236,46 +247,27 @@ export class EditProfilePage {
   }
 
   async searchTag(query: string, category: string) {
-    this.sheet.dismiss();
+    this.searchSubject.next({ query, category });
+  }
 
+  private async performSearch(query: string, category: string) {
+    this.openSuggestions = false;
     if (query) {
-      if (this.writing) {
-        return;
-      }
-      this.writing = true;
-      this.list = (await this.tagSvc.searchTag(query, category)) as {
+      this.suggestedTags = (await this.tagSvc.searchTag(query, category)) as {
         name: string;
         total: number;
+        cover?: string;
+        category?: string;
       }[];
 
-      if (this.list.length) {
-        let buttons = [];
-        this.list.forEach((op) => {
-          buttons = [
-            ...buttons,
-            {
-              text: `${op.name} (${op.total})`,
-              handler: () => {
-                this.addTag(op.name, category);
-              },
-            },
-          ];
-        });
-
-        const actionSheet = await this.sheet.create({
-          keyboardClose: false,
-          buttons,
-        });
-        await actionSheet.present();
+      if (this.suggestedTags.length > 0) {
+        this.openSuggestions = true;
       }
-
-      setTimeout(async () => {
-        this.writing = false;
-      }, 500);
     }
   }
 
   async addTag(name: string, catName: string) {
+    this.openSuggestions = false;
     if (
       name &&
       !this.tags.some((t) => t.name === name && t.category.name === catName)
@@ -337,66 +329,45 @@ export class EditProfilePage {
     return this.tags.filter((t) => t.category.name === category);
   }
 
-  async openPictureSheet() {
-    if (this.platform.is("android") && this.platform.is("capacitor")) {
-      /*await this.androidPermissions.requestPermissions([
-        this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
-        this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
-      ]);*/
+  async selectPictureFromCamera() {
+    this.closePictureSheet();
+    if (this.platform.is("capacitor")) {
+      const avatar = (await this.utils.takePicture(
+        "camera",
+        true,
+        "avatar",
+        false
+      )) as File;
+      this.uploadPicture(avatar);
+    } else {
+      const avatar = await this.utils.webcamImage("avatar", true);
+      if (!avatar || typeof avatar === "boolean") {
+        return false;
+      }
+      this.uploadPicture(avatar);
     }
+  }
 
-    const actionSheet = await this.sheet.create({
-      header:
-        "Consejo: Recuerda que subir fotos con contenido explícito puede ser motivo de expulsión.",
-      buttons: [
-        {
-          text: "Desde la cámara",
-          icon: "camera",
-          handler: async () => {
-            if (this.platform.is("capacitor")) {
-              const avatar = (await this.utils.takePicture(
-                "camera",
-                true,
-                "avatar",
-                false
-              )) as File;
-              this.uploadPicture(avatar);
-            } else {
-              const avatar = await this.utils.webcamImage("avatar", true);
-              if (!avatar || typeof avatar === "boolean") {
-                actionSheet.dismiss();
-                return false;
-              }
-              this.uploadPicture(avatar);
-            }
-          },
-        },
-        {
-          text: "Desde la galería",
-          icon: "images",
-          handler: async () => {
-            if (this.platform.is("capacitor")) {
-              const avatar = await this.utils.takePicture(
-                "gallery",
-                true,
-                "avatar",
-                false
-              );
-              if (!avatar || typeof avatar == "string") {
-                actionSheet.dismiss();
-                return false;
-              }
-              this.uploadPicture(avatar);
-            } else {
-              this.imageInput.nativeElement.dispatchEvent(
-                new MouseEvent("click")
-              );
-            }
-          },
-        },
-      ],
-    });
-    await actionSheet.present();
+  async selectPictureFromGallery() {
+    this.closePictureSheet();
+    if (this.platform.is("capacitor")) {
+      const avatar = await this.utils.takePicture(
+        "gallery",
+        true,
+        "avatar",
+        false
+      );
+      if (!avatar || typeof avatar == "string") {
+        return false;
+      }
+      this.uploadPicture(avatar);
+    } else {
+      this.imageInput.nativeElement.dispatchEvent(new MouseEvent("click"));
+    }
+  }
+
+  closePictureSheet() {
+    this.modalController.dismiss();
   }
 
   async cropImagebyEvent(event: any) {

@@ -35,7 +35,7 @@ import { UserService } from "src/app/services/user.service";
 import { StoryService } from "../../services/story.service";
 import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
 import { StoryModal } from "../story-modal/story.modal";
-import { Haptics } from "@capacitor/haptics";
+import { Haptics, NotificationType } from "@capacitor/haptics";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -191,11 +191,20 @@ export class ViewStoriesModal implements OnInit {
       )
     ) {
       this.story.like = false;
-      await this.storySvc.unlike(this.story.id);
+      this.storySvc.unlike(this.story.id);
+      Haptics.notification({ type: NotificationType.Error });
     } else {
       this.story.like = true;
-      await this.storySvc.like(this.story.id);
+      this.storySvc.like(this.story.id);
+      Haptics.notification({ type: NotificationType.Success });
     }
+
+    this.stories.map((s) => {
+      if (s.id === this.story.id) {
+        s.like = this.story.like;
+      }
+    });
+
     this.slides.autoplay.start();
   }
 
