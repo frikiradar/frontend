@@ -146,7 +146,7 @@ export class ChatListComponent {
       this.chats = chats;
     }
 
-    this.archivedChats = config?.filter((cc) => cc.archived);
+    this.setArchivedChats();
     this.selectedChat = this.chats?.find((c) => +c.user?.id === this.selected);
     this.cd.detectChanges();
   }
@@ -196,9 +196,8 @@ export class ChatListComponent {
     this.showOptions = false;
 
     try {
-      await this.chatSvc.archiveChat(chat);
-      const config = await this.chatSvc.getChatsConfig();
-      this.archivedChats = config.filter((cc) => cc.archived);
+      await this.chatSvc.archiveChat(chat, this.allChats);
+      await this.setArchivedChats();
       this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
       const toast = await this.toast.create({
         message: "Has archivado el chat con " + chat.user.name,
@@ -215,12 +214,10 @@ export class ChatListComponent {
     this.selected = undefined;
     this.selectedChat = undefined;
     this.showOptions = false;
-    const chats = this.chats;
 
     try {
-      await this.chatSvc.unarchiveChat(chat);
-      const config = await this.chatSvc.getChatsConfig();
-      this.archivedChats = config.filter((cc) => cc.archived);
+      await this.chatSvc.unarchiveChat(chat, this.allChats);
+      await this.setArchivedChats();
       this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
       const toast = await this.toast.create({
         message: "Has desarchivado el chat con " + chat.user.name,
@@ -228,6 +225,10 @@ export class ChatListComponent {
         position: "bottom",
       });
       toast.present();
+
+      if (this.archivedChats.length === 0) {
+        this.showUnarchivedChats();
+      }
     } catch (e) {
       console.log(e);
     }
@@ -274,6 +275,16 @@ export class ChatListComponent {
     const config = await this.chatSvc.getChatsConfig();
     this.chats = this.allChats.filter((c) => {
       return !config?.some(
+        (cc) => cc.conversationId === c.conversationId && cc.archived
+      );
+    });
+  }
+
+  async setArchivedChats() {
+    const config = await this.chatSvc.getChatsConfig();
+
+    this.archivedChats = this.allChats?.filter((c) => {
+      return config?.some(
         (cc) => cc.conversationId === c.conversationId && cc.archived
       );
     });

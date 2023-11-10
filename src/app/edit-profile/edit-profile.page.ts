@@ -13,7 +13,7 @@ import {
   Platform,
   ToastController,
 } from "@ionic/angular";
-import SwiperCore, { SwiperOptions, Pagination, Keyboard } from "swiper";
+import SwiperCore, { SwiperOptions, Keyboard, Scrollbar } from "swiper";
 
 import { Tag } from "../models/tags";
 import { User } from "../models/user";
@@ -26,7 +26,7 @@ import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
 import { Haptics } from "@capacitor/haptics";
 
-SwiperCore.use([Pagination, Keyboard]);
+SwiperCore.use([Keyboard, Scrollbar]);
 
 @Component({
   selector: "app-edit-profile",
@@ -60,9 +60,8 @@ export class EditProfilePage {
   public slides: SwiperCore;
   public sliderOpts: SwiperOptions = {
     keyboard: true,
-    preloadImages: false,
+    preloadImages: true,
     lazy: true,
-    pagination: { clickable: true },
     grabCursor: true,
   };
 
@@ -74,6 +73,7 @@ export class EditProfilePage {
   public tagsInput: string;
   public list: { name: string; total: number }[];
   private writing = false;
+  public loading = true;
 
   constructor(
     public fb: UntypedFormBuilder,
@@ -132,6 +132,8 @@ export class EditProfilePage {
       this.profileForm.get("maxage").enable();
     }
 
+    this.loading = false;
+
     const rules = await this.config.get("rules");
     if (!rules) {
       const modal = await this.modalController.create({
@@ -148,6 +150,16 @@ export class EditProfilePage {
     this.slides.on("slideChange", async () => {
       await Haptics.vibrate({ duration: 10 });
     });
+  }
+
+  async tap(event: any) {
+    if (event instanceof PointerEvent) {
+      if (event.pageX > screen.width / 2) {
+        this.slides.slideNext();
+      } else {
+        this.slides.slidePrev();
+      }
+    }
   }
 
   async submitProfile() {

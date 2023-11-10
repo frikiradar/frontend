@@ -39,7 +39,7 @@
             <img
               [src]="user?.avatar"
               [alt]="users?.username"
-              default="/assets/img/users/default.jpg"
+              default="/assets/img/users/default.png"
             />
           </div>
           <div class="info">
@@ -148,7 +148,7 @@
           <ion-avatar slot="start">
             <img
               [src]="user?.thumbnail"
-              default="/assets/img/users/default.jpg"
+              default="/assets/img/users/default.png"
             />
             <ion-badge
               *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"

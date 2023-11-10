@@ -13,7 +13,7 @@
     <ion-list>
       <ion-item lines="full" *ngFor="let user of users">
         <ion-avatar slot="start">
-          <img [src]="user.thumbnail" default="/assets/img/users/default.jpg" />
+          <img [src]="user.thumbnail" default="/assets/img/users/default.png" />
         </ion-avatar>
         <ion-label>
           <h2>{{ user.name }}</h2>
@@ -30,9 +30,7 @@
     <div class="full-center ion-padding">
       <ion-icon name="body"></ion-icon>
       <h2>Sin resultados</h2>
-      <p>
-        No has bloqueado a ningún usuario.
-      </p>
+      <p>No has bloqueado a ningún usuario.</p>
     </div>
   </ng-template>
 </ion-content>

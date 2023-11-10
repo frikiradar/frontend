@@ -18,13 +18,7 @@ import {
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
 import { ActionSheetController, IonTextarea, Platform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import {
-  VoiceRecorder,
-  VoiceRecorderPlugin,
-  RecordingData,
-  GenericResponse,
-  CurrentRecordingStatus,
-} from "capacitor-voice-recorder";
+import { VoiceRecorder } from "capacitor-voice-recorder";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -142,8 +136,6 @@ export class ChatInputComponent {
 
     if (this.emojis && this.platform.is("capacitor")) {
       Keyboard.hide();
-    } else {
-      this.focusTextArea();
     }
   }
 
@@ -183,13 +175,6 @@ export class ChatInputComponent {
   }
 
   async openPictureSheet() {
-    if (this.platform.is("android") && this.platform.is("capacitor")) {
-      /*await this.androidPermissions.requestPermissions([
-        this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
-        this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
-      ]);*/
-    }
-
     const actionSheet = await this.sheet.create({
       header:
         "Enviar contenido explícito sin el consentimiento del receptor puede ser motivo de expulsión.",
@@ -251,38 +236,6 @@ export class ChatInputComponent {
         console.error(e);
       }
     }
-
-    /*if (navigator.mediaDevices) {
-      let chunks = [];
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: false })
-        .then((stream) => {
-          const tracks = stream.getTracks();
-          this.mediaRecorder = new MediaRecorder(stream);
-          this.mediaRecorder.start();
-          this.recording = true;
-
-          this.mediaRecorder.addEventListener("stop", async (error) => {
-            this.recording = false;
-            this.recorded = true;
-
-            tracks.forEach((track) => {
-              track.stop();
-            });
-
-            const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-            chunks = [];
-            this.audio = URL.createObjectURL(blob);
-            this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(
-              this.audio
-            );
-          });
-
-          this.mediaRecorder.addEventListener("dataavailable", async (e) => {
-            chunks.push(e.data);
-          });
-        });
-    }*/
 
     this.countRecording();
   }

@@ -26,263 +26,294 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <swiper [config]="sliderOpts" (swiper)="setSwiperInstance($event)">
-    <ng-template swiperSlide>
-      <img [src]="user?.avatar" default="/assets/img/users/default.jpg" />
-    </ng-template>
-    <ng-template swiperSlide *ngFor="let image of user?.images">
-      <img [src]="image" default="/assets/img/users/default.jpg" />
-    </ng-template>
-  </swiper>
+  <ion-list *ngIf="loading; else profile">
+    <ion-item lines="none">
+      <ion-label>
+        <h1>
+          <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+        </h1>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>
+        <span *ngFor="let i of [].constructor(20)">
+          <p>
+            <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 95%"></ion-skeleton-text>
+          </p>
+        </span>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ng-template #profile>
+    <swiper
+      [config]="sliderOpts"
+      (swiper)="setSwiperInstance($event)"
+      (click)="tap($event)"
+      [scrollbar]="user?.images?.length"
+    >
+      <ng-template swiperSlide>
+        <img [src]="user?.avatar" default="/assets/img/users/default.png" />
+      </ng-template>
+      <ng-template swiperSlide *ngFor="let image of user?.images">
+        <img [src]="image" default="/assets/img/users/default.png" />
+      </ng-template>
+    </swiper>
 
-  <input
-    type="file"
-    accept="image/*"
-    #imageInput
-    style="display: none"
-    name="avatar"
-    (change)="cropImagebyEvent($event)"
-  />
-  <form [formGroup]="profileForm">
-    <ion-list>
-      <ion-item-group>
-        <ion-item-divider color="primary">
-          <ion-icon name="person-circle" slot="start"></ion-icon>
-          <ion-label><h2>Mi información personal</h2></ion-label>
-        </ion-item-divider>
-        <ion-item>
-          <ion-icon name="person-outline" slot="start"></ion-icon>
-          <ion-input
-            label="Nombre"
-            labelPlacement="floating"
-            formControlName="name"
-            autocapitalize="on"
-            autoGrow
-          ></ion-input>
-        </ion-item>
-        <ion-item id="description">
-          <ion-icon name="document-text-outline" slot="start"></ion-icon>
-          <ion-textarea
-            label="Mensaje de presentación"
-            labelPlacement="floating"
-            formControlName="description"
-            autocapitalize="on"
-            autoGrow
-          ></ion-textarea>
-        </ion-item>
-        <ion-item>
-          <ion-icon name="home-outline" slot="start"></ion-icon>
-          <ion-input
-            label="Vivo en"
-            labelPlacement="floating"
-            formControlName="location"
-            autocapitalize="on"
-            autoGrow
-          ></ion-input>
-        </ion-item>
+    <input
+      type="file"
+      accept="image/*"
+      #imageInput
+      style="display: none"
+      name="avatar"
+      (change)="cropImagebyEvent($event)"
+    />
+    <form [formGroup]="profileForm">
+      <ion-list>
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <ion-icon name="person-circle" slot="start"></ion-icon>
+            <ion-label><h2>Mi información personal</h2></ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-input
+              label="Nombre"
+              labelPlacement="floating"
+              formControlName="name"
+              autocapitalize="on"
+              autoGrow
+            ></ion-input>
+          </ion-item>
+          <ion-item id="description">
+            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+            <ion-textarea
+              label="Mensaje de presentación"
+              labelPlacement="floating"
+              formControlName="description"
+              autocapitalize="on"
+              autoGrow
+            ></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="home-outline" slot="start"></ion-icon>
+            <ion-input
+              label="Vivo en"
+              labelPlacement="floating"
+              formControlName="location"
+              autocapitalize="on"
+              autoGrow
+            ></ion-input>
+          </ion-item>
 
-        <ion-item button id="open-calendar" lines="full">
-          <ion-icon name="calendar-outline" slot="start"></ion-icon>
-          <ion-label class="ion-text-wrap"
-            >Fecha de nacimiento
-            <ion-text color="primary"
-              >{{ profileForm.get("birthday").value | niceDate }}</ion-text
-            ></ion-label
-          >
-        </ion-item>
-        <ion-modal trigger="open-calendar" cssClass="date-modal">
-          <ng-template>
-            <ion-datetime
-              formControlName="birthday"
-              presentation="date"
-              locale="es-ES"
-              first-day-of-week="1"
-              min="1900-01-01"
-              max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
+          <ion-item button id="open-calendar" lines="full">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap"
+              >Fecha de nacimiento
+              <ion-text color="primary"
+                >{{ profileForm.get("birthday").value | niceDate }}</ion-text
+              ></ion-label
+            >
+          </ion-item>
+          <ion-modal trigger="open-calendar" cssClass="date-modal">
+            <ng-template>
+              <ion-datetime
+                formControlName="birthday"
+                presentation="date"
+                locale="es-ES"
+                first-day-of-week="1"
+                min="1900-01-01"
+                max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
             today | date: 'dd'
           }}"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item-group>
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <ion-icon name="location" slot="start"></ion-icon>
+            <ion-label>
+              <h2>Información de radar</h2>
+            </ion-label>
+          </ion-item-divider>
+          <ion-item lines="none">
+            <ion-label>
+              <p>
+                Información necesaria para que los usuarios te encuentren usando
+                el radar o la búsqueda.
+              </p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              label="Identidad de género"
+              labelPlacement="floating"
+              interface="action-sheet"
+              cancel-text="Cancelar"
+              placeholder="Selecciona uno"
+              formControlName="gender"
             >
-            </ion-datetime>
-          </ng-template>
-        </ion-modal>
-      </ion-item-group>
-      <ion-item-group>
-        <ion-item-divider color="primary">
-          <ion-icon name="location" slot="start"></ion-icon>
-          <ion-label>
-            <h2>Información de radar</h2>
-          </ion-label>
-        </ion-item-divider>
-        <ion-item lines="none">
-          <ion-label>
-            <p>
-              Información necesaria para que los usuarios te encuentren usando
-              el radar o la búsqueda.
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            label="Identidad de género"
-            labelPlacement="floating"
-            interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
-            formControlName="gender"
-          >
-            <ion-select-option
-              *ngFor="let gender of userSvc.getGenders()"
-              [value]="gender"
-              >{{ gender }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            label="Orientación sexual"
-            labelPlacement="floating"
-            interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
-            formControlName="orientation"
-          >
-            <ion-select-option
-              *ngFor="let orientation of userSvc.getOrientations()"
-              [value]="orientation"
+              <ion-select-option
+                *ngFor="let gender of userSvc.getGenders()"
+                [value]="gender"
+                >{{ gender }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              label="Orientación sexual"
+              labelPlacement="floating"
+              interface="action-sheet"
+              cancel-text="Cancelar"
+              placeholder="Selecciona uno"
+              formControlName="orientation"
             >
-              {{ orientation }}</ion-select-option
+              <ion-select-option
+                *ngFor="let orientation of userSvc.getOrientations()"
+                [value]="orientation"
+              >
+                {{ orientation }}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              label="Pronombre"
+              labelPlacement="floating"
+              interface="action-sheet"
+              cancel-text="Cancelar"
+              placeholder="Selecciona uno"
+              formControlName="pronoun"
+              value=""
             >
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            label="Pronombre"
-            labelPlacement="floating"
-            interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
-            formControlName="pronoun"
-            value=""
-          >
-            <ion-select-option value="">Sin indicar</ion-select-option>
-            <ion-select-option
-              *ngFor="let pronoun of userSvc.getPronouns()"
-              [value]="pronoun"
-              >{{ pronoun }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            label="Tipo de relación"
-            labelPlacement="floating"
-            interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
-            formControlName="relationship"
-            value=""
-          >
-            <ion-select-option value="">Sin indicar</ion-select-option>
-            <ion-select-option
-              *ngFor="let type of userSvc.getRelationships()"
-              [value]="type"
-              >{{ type }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            label="Estado"
-            labelPlacement="floating"
-            interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
-            formControlName="status"
-            value=""
-          >
-            <ion-select-option value="">Sin indicar</ion-select-option>
-            <ion-select-option
-              *ngFor="let status of userSvc.getStatus()"
-              [value]="status"
-              >{{ status }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-item-group>
-      <ion-item-group>
-        <ion-item-divider color="primary">
-          <ion-icon name="search" slot="start"></ion-icon>
-          <ion-label>
-            <h2>Estoy buscando...</h2>
-          </ion-label>
-        </ion-item-divider>
-        <ion-item lines="none">
-          <ion-label>
-            <p>
-              Elige el tipo de persona que estás buscando. Esto afectará a los
-              resultados de búsqueda y filtrado para el radar.
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            labelPlacement="floating"
-            label="Identidad de género"
-            cancel-text="Cancelar"
-            placeholder="Selecciona"
-            formControlName="lovegender"
-            multiple
-          >
-            <ion-select-option
-              *ngFor="let likegender of userSvc.getGenders()"
-              [value]="likegender"
-              >{{ likegender }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item class="ages">
-          <ion-input
-            label="Edad desde "
-            labelPlacement="floating"
-            type="text"
-            formControlName="minage"
-            readonly
-            placeholder="Años"
-            (click)="openPicker('minage')"
-          >
-          </ion-input>
+              <ion-select-option value="">Sin indicar</ion-select-option>
+              <ion-select-option
+                *ngFor="let pronoun of userSvc.getPronouns()"
+                [value]="pronoun"
+                >{{ pronoun }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              label="Tipo de relación"
+              labelPlacement="floating"
+              interface="action-sheet"
+              cancel-text="Cancelar"
+              placeholder="Selecciona uno"
+              formControlName="relationship"
+              value=""
+            >
+              <ion-select-option value="">Sin indicar</ion-select-option>
+              <ion-select-option
+                *ngFor="let type of userSvc.getRelationships()"
+                [value]="type"
+                >{{ type }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              label="Estado"
+              labelPlacement="floating"
+              interface="action-sheet"
+              cancel-text="Cancelar"
+              placeholder="Selecciona uno"
+              formControlName="status"
+              value=""
+            >
+              <ion-select-option value="">Sin indicar</ion-select-option>
+              <ion-select-option
+                *ngFor="let status of userSvc.getStatus()"
+                [value]="status"
+                >{{ status }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-item-group>
+        <ion-item-group>
+          <ion-item-divider color="primary">
+            <ion-icon name="search" slot="start"></ion-icon>
+            <ion-label>
+              <h2>Estoy buscando...</h2>
+            </ion-label>
+          </ion-item-divider>
+          <ion-item lines="none">
+            <ion-label>
+              <p>
+                Elige el tipo de persona que estás buscando. Esto afectará a los
+                resultados de búsqueda y filtrado para el radar.
+              </p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              labelPlacement="floating"
+              label="Identidad de género"
+              cancel-text="Cancelar"
+              placeholder="Selecciona"
+              formControlName="lovegender"
+              multiple
+            >
+              <ion-select-option
+                *ngFor="let likegender of userSvc.getGenders()"
+                [value]="likegender"
+                >{{ likegender }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="ages">
+            <ion-input
+              label="Edad desde "
+              labelPlacement="floating"
+              type="text"
+              formControlName="minage"
+              readonly
+              placeholder="Años"
+              (click)="openPicker('minage')"
+            >
+            </ion-input>
 
-          <ion-input
-            labelPlacement="floating"
-            label="- hasta"
-            type="text"
-            formControlName="maxage"
-            readonly
-            placeholder="Años"
-            (click)="openPicker('maxage')"
-          >
-          </ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-select
-            labelPlacement="floating"
-            label="Tipo de conexión"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
-            formControlName="connection"
-            multiple
-          >
-            <ion-select-option
-              *ngFor="let connection of userSvc.getConnections()"
-              [value]="connection"
+            <ion-input
+              labelPlacement="floating"
+              label="- hasta"
+              type="text"
+              formControlName="maxage"
+              readonly
+              placeholder="Años"
+              (click)="openPicker('maxage')"
             >
-              {{ connection }}</ion-select-option
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              labelPlacement="floating"
+              label="Tipo de conexión"
+              cancel-text="Cancelar"
+              placeholder="Selecciona uno"
+              formControlName="connection"
+              multiple
             >
-          </ion-select>
-        </ion-item>
-      </ion-item-group>
-    </ion-list>
-  </form>
+              <ion-select-option
+                *ngFor="let connection of userSvc.getConnections()"
+                [value]="connection"
+              >
+                {{ connection }}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
+    </form>
+  </ng-template>
   <ion-list>
     <ion-item-group>
       <ion-item-divider color="primary">

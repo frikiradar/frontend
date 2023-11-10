@@ -405,3 +405,7 @@ ion-button.patreon {
 .swiper-pagination-bullet-active, .swiper-pagination-progressbar-fill {
   background: #e91e63 !important;
 }
+
+.swiper-scrollbar-drag {
+  background:  var(--ion-color-primary);
+}

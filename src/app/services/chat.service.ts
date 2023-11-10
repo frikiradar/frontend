@@ -8,6 +8,7 @@ import { AuthService } from "./auth.service";
 import { Config, ConfigService } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -92,72 +93,50 @@ export class ChatService {
     await this.rest.delete(`chat/${touserid}`).toPromise();
   }
 
-  async archiveChat(chat: Chat) {
-    let chats_config = await this.getChatsConfig();
+  async archiveChat(chat: Chat, allChats: Chat[]) {
+    let chats_config = (await this.getChatsConfig()) || [];
 
-    if (chats_config) {
-      if (chats_config?.some((c) => c.conversationId === chat.conversationId)) {
-        chats_config.map((c) => {
-          if (c.conversationId === chat.conversationId) {
-            c.archived = true;
-          }
-        });
-      } else {
-        chats_config = [
-          ...chats_config,
-          {
-            conversationId: chat.conversationId,
-            archived: true,
-          },
-        ];
-      }
+    chats_config = chats_config.filter((c) => {
+      return allChats.some(
+        (ac) => ac.conversationId === c.conversationId && c.archived
+      );
+    });
+
+    const existingChat = chats_config.find(
+      (c) => c.conversationId === chat.conversationId
+    );
+
+    if (existingChat) {
+      existingChat.archived = true;
     } else {
-      chats_config = [
-        {
-          conversationId: chat.conversationId,
-          archived: true,
-        },
-      ];
+      chats_config.push({
+        conversationId: chat.conversationId,
+        archived: true,
+      });
     }
 
     await this.setChatsConfig(chats_config);
   }
 
-  async unarchiveChat(chat: Chat) {
-    let chats_config = await this.getChatsConfig();
+  async unarchiveChat(chat: Chat, allChats: Chat[]) {
+    let chats_config = (await this.getChatsConfig()) || [];
 
-    if (chats_config) {
-      if (chats_config?.some((c) => c.conversationId === chat.conversationId)) {
-        chats_config.map((c) => {
-          if (c.conversationId === chat.conversationId) {
-            c.archived = false;
-          }
-        });
-      } else {
-        chats_config = [
-          ...chats_config,
-          {
-            conversationId: chat.conversationId,
-            archived: false,
-          },
-        ];
-      }
-    } else {
-      chats_config = [
-        {
-          conversationId: chat.conversationId,
-          archived: false,
-        },
-      ];
-    }
+    chats_config = chats_config.filter((c) => {
+      return allChats.some(
+        (ac) =>
+          ac.conversationId === c.conversationId &&
+          c.archived &&
+          ac.id !== chat.id
+      );
+    });
 
     await this.setChatsConfig(chats_config);
   }
 
   async setChatsConfig(chats_config: Config["chats"]) {
-    const user = (await this.rest
-      .put("chats-config", { chats_config })
-      .toPromise()) as User;
+    const user = (await firstValueFrom(
+      this.rest.put("chats-config", { chats_config })
+    )) as User;
     this.auth.setAuthUser(user);
   }
 

@@ -3,11 +3,11 @@ import {
   Directive,
   ElementRef,
   HostListener,
-  Renderer2
+  Renderer2,
 } from "@angular/core";
 
 @Directive({
-  selector: "img[default]"
+  selector: "img[default]",
 })
 export class ImagePreloadDirective {
   constructor(

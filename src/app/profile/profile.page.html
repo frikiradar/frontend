@@ -59,19 +59,20 @@
     </ion-list>
     <ng-template #profile>
       <swiper
-        [pagination]="user?.images?.length"
         [config]="sliderOpts"
         (swiper)="setSwiperInstance($event)"
+        (click)="tap($event)"
+        [scrollbar]="user?.images?.length"
       >
         <ng-template swiperSlide>
           <img
             [src]="user?.avatar"
             [alt]="user?.username"
-            default="/assets/img/users/default.jpg"
+            default="/assets/img/users/default.png"
           />
         </ng-template>
         <ng-template swiperSlide *ngFor="let image of user?.images">
-          <img [src]="image" default="/assets/img/users/default.jpg" />
+          <img [src]="image" default="/assets/img/users/default.png" />
         </ng-template>
       </swiper>
       <div *ngIf="story" id="stories">

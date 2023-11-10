@@ -2,7 +2,7 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { Component } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
+import { Haptics, NotificationType } from "@capacitor/haptics";
 import {
   AlertController,
   ModalController,
@@ -11,7 +11,7 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
-import SwiperCore, { SwiperOptions, Pagination, Keyboard } from "swiper";
+import SwiperCore, { SwiperOptions, Keyboard, Scrollbar } from "swiper";
 
 import { Like } from "../models/like";
 import { Story } from "../models/story";
@@ -36,7 +36,7 @@ import {
   RewardAdPluginEvents,
 } from "@capacitor-community/admob";
 
-SwiperCore.use([Pagination, Keyboard]);
+SwiperCore.use([Keyboard, Scrollbar]);
 
 @Component({
   selector: "app-profile",
@@ -145,6 +145,16 @@ export class ProfilePage {
     this.slides.on("slideChange", async () => {
       await Haptics.vibrate({ duration: 10 });
     });
+  }
+
+  async tap(event: any) {
+    if (event instanceof PointerEvent) {
+      if (event.pageX > screen.width / 2) {
+        this.slides.slideNext();
+      } else {
+        this.slides.slidePrev();
+      }
+    }
   }
 
   editProfile() {
