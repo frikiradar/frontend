@@ -102,7 +102,7 @@
         >
           <ion-icon slot="icon-only" name="calendar" color="dark"></ion-icon>
         </ion-button>
-        <ion-button *ngIf="!replying" id="open-picture-sheet" slot="end">
+        <ion-button id="open-picture-sheet" slot="end">
           <ion-icon slot="icon-only" name="camera" color="dark"></ion-icon>
         </ion-button>
         <input
@@ -174,7 +174,6 @@
 <!-- modals -->
 
 <ion-modal
-  [breakpoints]="[0, 0.3]"
   [initialBreakpoint]="0.3"
   trigger="open-picture-sheet"
   cssClass="sheet-modal"

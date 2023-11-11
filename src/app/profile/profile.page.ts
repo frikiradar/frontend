@@ -363,8 +363,8 @@ export class ProfilePage {
     const modal = await this.modalController.create({
       component: LikesModal,
       componentProps: { likes: this.likes, param: this.param, user: this.user },
-      initialBreakpoint: 0.8,
-      breakpoints: [0, 0.5, 0.8],
+      initialBreakpoint: 1,
+      breakpoints: [0, 0.5, 1],
       cssClass: "sheet-modal",
       showBackdrop: true,
     });
