@@ -1,12 +1,12 @@
 {
   "name": "frikiradar",
   "short_name": "frikiradar",
-  "id": "com.frikiradar.app",
   "theme_color": "#1f1f1f",
   "background_color": "#1f1f1f",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
+  "id": "/",
   "gcm_sender_id": "103953800507",
   "icons": [
     {
