@@ -48,5 +48,21 @@
       "sizes": "512x512",
       "type": "image/png"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/screenshot-wide.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Perfil de usuario"
+    },
+    {
+      "src": "assets/screenshots/screenshot-narrow.png",
+      "sizes": "412x915",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Perfil de usuario"
+    }
   ]
 }
