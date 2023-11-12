@@ -46,7 +46,7 @@
                 "output": "/"
               },
               "src/firebase-messaging-sw.js",
-              "src/manifest.webmanifest"
+              "src/manifest.json"
             ],
             "styles": [
               {
@@ -155,7 +155,7 @@
                 "output": "/assets"
               },
               "src/firebase-messaging-sw.js",
-              "src/manifest.webmanifest"
+              "src/manifest.json"
             ]
           },
           "configurations": {
