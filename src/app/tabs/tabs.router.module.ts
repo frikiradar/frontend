@@ -16,11 +16,6 @@ const routes: Routes = [
             loadChildren: () =>
               import("../radar/radar.module").then((m) => m.RadarPageModule),
           },
-          {
-            path: "story/:id",
-            loadChildren: () =>
-              import("../radar/radar.module").then((m) => m.RadarPageModule),
-          },
         ],
       },
       {
@@ -38,6 +33,13 @@ const routes: Routes = [
         children: [
           {
             path: "",
+            loadChildren: () =>
+              import("../explore/explore.module").then(
+                (m) => m.ExplorePageModule
+              ),
+          },
+          {
+            path: "story/:id",
             loadChildren: () =>
               import("../explore/explore.module").then(
                 (m) => m.ExplorePageModule

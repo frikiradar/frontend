@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import * as deepEqual from "deep-equal";
 
 import { Config, ConfigService } from "../services/config.service";
@@ -42,6 +42,7 @@ export class ExplorePage {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     public auth: AuthService,
     private config: ConfigService,
     private animate: AnimateService,
@@ -69,6 +70,16 @@ export class ExplorePage {
   async ngOnInit() {
     this.getStories();
     this.getPages();
+
+    const id = this.route.snapshot.paramMap.get("id");
+    if (id) {
+      try {
+        const story = await this.storySvc.getStory(+id);
+        this.showStory(story);
+      } catch (e) {
+        console.error("Historia no encontrada");
+      }
+    }
   }
 
   async getStories() {
