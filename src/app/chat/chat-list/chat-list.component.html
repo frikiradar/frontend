@@ -134,18 +134,6 @@
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
-    <ion-item
-      color="dark"
-      button
-      *ngIf="!showingArchived && archivedChats?.length"
-      lines="none"
-      (click)="showArchivedChats()"
-    >
-      <ion-icon slot="start" name="archive-outline" color="light"></ion-icon>
-      <ion-label
-        ><p>Chats archivados ({{ archivedChats?.length }})</p></ion-label
-      >
-    </ion-item>
   </ion-list>
   <div *ngIf="allChats?.length === 0">
     <div class="full-center ion-padding">
@@ -158,3 +146,17 @@
     </div>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-item
+    color="dark"
+    button
+    *ngIf="!showingArchived && archivedChats?.length"
+    lines="none"
+    (click)="showArchivedChats()"
+  >
+    <ion-icon slot="start" name="archive-outline" color="light"></ion-icon>
+    <ion-label
+      ><p>Chats archivados ({{ archivedChats?.length }})</p></ion-label
+    >
+  </ion-item>
+</ion-footer>

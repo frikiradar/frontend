@@ -58,6 +58,7 @@ export class ChatInputComponent {
   public recorded: boolean = false;
   public audio: string;
   public audioPreview: SafeUrl;
+  public isPictureSheetOpen = false;
 
   @Input() replying: boolean = false;
   @Input() editing = false;
@@ -207,8 +208,12 @@ export class ChatInputComponent {
     }
   }
 
+  openPictureSheet() {
+    this.isPictureSheetOpen = true;
+  }
+
   closePictureSheet() {
-    this.modalController.dismiss();
+    this.isPictureSheetOpen = false;
   }
 
   async openMic() {

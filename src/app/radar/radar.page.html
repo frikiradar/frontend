@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title mode="md">
       <ion-icon src="/assets/icon/icon.svg"></ion-icon>
-      <ion-label>FrikiRadar</ion-label>
+      <ion-label>frikiradar</ion-label>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="changeView()" *ngIf="users">
@@ -236,6 +236,7 @@
 
 <ion-modal
   [initialBreakpoint]="0.5"
+  [breakpoints]="[0, 0.5]"
   trigger="filter-options"
   cssClass="sheet-modal"
   (didDismiss)="dismissFilterOptions()"

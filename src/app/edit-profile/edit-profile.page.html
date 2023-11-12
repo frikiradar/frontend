@@ -7,7 +7,10 @@
         </ion-button>
       </ion-buttons>
       <ion-buttons slot="end">
-        <ion-button *ngIf="user?.images?.length < 9" id="open-picture-sheet">
+        <ion-button
+          *ngIf="user?.images?.length < 9"
+          (click)="openPictureSheet()"
+        >
           <ion-icon
             slot="icon-only"
             src="/assets/icon/add_a_photo_white_24dp.svg"
@@ -531,8 +534,10 @@
 
 <ion-modal
   [initialBreakpoint]="0.3"
-  trigger="open-picture-sheet"
+  [breakpoints]="[0, 0.3]"
   cssClass="sheet-modal"
+  [isOpen]="isPictureSheetOpen"
+  (ionModalDidDismiss)="closePictureSheet()"
 >
   <ng-template>
     <ion-content class="ion-padding">

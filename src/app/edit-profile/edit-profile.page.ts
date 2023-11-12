@@ -76,6 +76,7 @@ export class EditProfilePage {
   public suggestedTags: { name: string; total: number; image?: string }[];
   public openSuggestions = false;
   public loading = true;
+  public isPictureSheetOpen = false;
   private searchSubject = new Subject<{ query: string; category: string }>();
 
   constructor(
@@ -366,8 +367,12 @@ export class EditProfilePage {
     }
   }
 
+  openPictureSheet() {
+    this.isPictureSheetOpen = true;
+  }
+
   closePictureSheet() {
-    this.modalController.dismiss();
+    this.isPictureSheetOpen = false;
   }
 
   async cropImagebyEvent(event: any) {

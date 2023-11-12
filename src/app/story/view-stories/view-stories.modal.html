@@ -114,7 +114,7 @@
 
 <!-- modals -->
 <ion-modal
-  [breakpoints]="[0, 0.5, 1]"
+  [breakpoints]="[0, 1]"
   [initialBreakpoint]="1"
   trigger="view-views"
   cssClass="sheet-modal"
@@ -148,7 +148,7 @@
 </ion-modal>
 
 <ion-modal
-  [breakpoints]="[0, 0.5, 1]"
+  [breakpoints]="[0, 1]"
   [initialBreakpoint]="1"
   trigger="view-comments"
   cssClass="sheet-modal"
@@ -275,6 +275,7 @@
 
 <ion-modal
   [initialBreakpoint]="0.3"
+  [breakpoints]="[0, 0.3]"
   trigger="show-options"
   cssClass="sheet-modal"
   (didPresent)="slides.autoplay.stop()"

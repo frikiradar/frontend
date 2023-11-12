@@ -102,7 +102,7 @@
         >
           <ion-icon slot="icon-only" name="calendar" color="dark"></ion-icon>
         </ion-button>
-        <ion-button id="open-picture-sheet" slot="end">
+        <ion-button *ngIf="!replying" (click)="openPictureSheet()" slot="end">
           <ion-icon slot="icon-only" name="camera" color="dark"></ion-icon>
         </ion-button>
         <input
@@ -175,8 +175,10 @@
 
 <ion-modal
   [initialBreakpoint]="0.3"
-  trigger="open-picture-sheet"
+  [breakpoints]="[0, 0.3]"
   cssClass="sheet-modal"
+  [isOpen]="isPictureSheetOpen"
+  (ionModalDidDismiss)="closePictureSheet()"
 >
   <ng-template>
     <ion-content class="ion-padding">

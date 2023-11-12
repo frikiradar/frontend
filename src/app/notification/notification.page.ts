@@ -40,7 +40,7 @@ export class NotificationPage implements OnInit {
         notification: notification,
       },
       initialBreakpoint: 0.3,
-      breakpoints: [0, 0.3, 0.5],
+      breakpoints: [0, 0.3],
       cssClass: "sheet-modal",
     });
     await modal.present();

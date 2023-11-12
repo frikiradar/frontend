@@ -364,7 +364,7 @@ export class ProfilePage {
       component: LikesModal,
       componentProps: { likes: this.likes, param: this.param, user: this.user },
       initialBreakpoint: 1,
-      breakpoints: [0, 0.5, 1],
+      breakpoints: [0, 1],
       cssClass: "sheet-modal",
       showBackdrop: true,
     });
