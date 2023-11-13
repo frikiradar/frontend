@@ -187,7 +187,8 @@ export class ProfilePage {
       if (
         this.user.match > 0 ||
         this.user.from_like ||
-        this.auth?.isVerified()
+        this.auth?.isVerified() ||
+        this.user.roles?.includes("ROLE_MASTER")
       ) {
         this.rewardVideo();
         this.router.navigate(["/chat", this.user.id]);
