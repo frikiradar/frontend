@@ -19,6 +19,7 @@ import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
 import { IonTextarea, ModalController, Platform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { VoiceRecorder } from "capacitor-voice-recorder";
+import runes from "runes";
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -132,17 +133,23 @@ export class ChatInputComponent {
     if (this.platform.is("capacitor")) {
       Keyboard.setStyle({ style: KeyboardStyle.Dark });
     }
-    this.emojis = !this.emojis;
-
     if (this.emojis && this.platform.is("capacitor")) {
       Keyboard.hide();
     }
+
+    this.emojis = !this.emojis;
   }
 
   addEmoji(event: any) {
     this.message.setValue(
       (this.message.value ? this.message.value : "") + event.emoji.native
     );
+  }
+
+  deleteText() {
+    const textRunes = runes(this.message.value);
+    textRunes.pop();
+    this.message.setValue(textRunes.join(""));
   }
 
   closeEdit() {

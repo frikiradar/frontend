@@ -2,11 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
 import { ModalController, Platform } from "@ionic/angular";
-import {
-  PushNotifications,
-  PushNotificationSchema,
-} from "@capacitor/push-notifications";
-import { AngularFireMessaging } from "@angular/fire/compat/messaging";
+import { getMessaging, onMessage } from "firebase/messaging";
+import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 
 import { User } from "../models/user";
 import { Chat } from "./../models/chat";
@@ -29,7 +26,6 @@ export class ChatPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public auth: AuthService,
-    private afMessaging: AngularFireMessaging,
     private platform: Platform,
     private nav: NavService,
     private modalController: ModalController,
@@ -70,26 +66,24 @@ export class ChatPage implements OnInit {
 
   async firebaseListener() {
     if (this.platform.is("capacitor")) {
-      await PushNotifications.addListener(
-        "pushNotificationReceived",
-        (notification: PushNotificationSchema) => {
-          console.log(notification);
-          if (
-            notification?.data.message &&
-            notification?.data.topic === "chat"
-          ) {
-            const message = JSON.parse(notification.data.message) as Chat;
-            // console.log(message);
-            this.messageEvent.emit(message);
-          }
+      FirebaseMessaging.addListener("notificationReceived", (payload) => {
+        const notification = payload.notification;
+        const data = notification.data as {
+          message: string;
+          topic: string;
+        };
+        if (data?.message && data?.topic === "chat") {
+          const message = JSON.parse(data.message) as Chat;
+          console.log("message", message);
+          this.messageEvent.emit(message);
         }
-      );
+      });
     } else {
-      this.afMessaging.messages.subscribe((payload: any) => {
-        // console.log(payload);
+      const messaging = getMessaging();
+      onMessage(messaging, (payload) => {
         if (payload?.data?.message && payload?.data?.topic === "chat") {
           const message = JSON.parse(payload.data.message) as Chat;
-          // console.log(payload.data);
+          console.log("message", message);
           this.messageEvent.emit(message);
         }
       });

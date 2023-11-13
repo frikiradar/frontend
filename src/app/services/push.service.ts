@@ -1,16 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { FCM } from "@capacitor-community/fcm";
-import {
-  Channel,
-  PushNotifications,
-  Token,
-  Visibility,
-} from "@capacitor/push-notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Platform } from "@ionic/angular";
-import { AngularFireMessaging } from "@angular/fire/compat/messaging";
-import { takeWhile } from "rxjs/operators";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
@@ -19,6 +10,11 @@ import {
   NotificationService,
 } from "./notification.service";
 import { SwPush } from "@angular/service-worker";
+import { initializeApp } from "firebase/app";
+import { environment } from "src/environments/environment";
+import { getMessaging } from "firebase/messaging";
+import { getToken, onMessage } from "firebase/messaging";
+import { FirebaseMessaging, Visibility } from "@capacitor-firebase/messaging";
 
 @Injectable({
   providedIn: "root",
@@ -33,7 +29,6 @@ export class PushService {
     private notificationSvc: NotificationService,
     private platform: Platform,
     private auth: AuthService,
-    private afMessaging: AngularFireMessaging,
     private swPush: SwPush
   ) {}
 
@@ -52,6 +47,12 @@ export class PushService {
 
   async init() {
     if (this.platform.is("capacitor")) {
+      await this.initCapacitor();
+    } else {
+      await this.initWeb();
+    }
+
+    /*if (this.platform.is("capacitor")) {
       PushNotifications.requestPermissions().then(async (result) => {
         if (result.receive === "granted") {
           await PushNotifications.register();
@@ -96,13 +97,6 @@ export class PushService {
           });
       }
 
-      /*LocalNotifications.addListener(
-        "localNotificationReceived",
-        (notification) => {
-          console.log("Local notification received: ", notification);
-        }
-      );*/
-
       LocalNotifications.addListener(
         "localNotificationActionPerformed",
         (actionPerformed) => {
@@ -144,7 +138,7 @@ export class PushService {
       } catch (e) {
         // console.log("Notificaciones no permitidas")
       }
-    }
+    }*/
   }
 
   setChannels() {
@@ -188,7 +182,7 @@ export class PushService {
         continue;
       }
 
-      PushNotifications.createChannel({
+      FirebaseMessaging.createChannel({
         id: channel.id,
         name: channel.name,
         sound: "default",
@@ -203,23 +197,6 @@ export class PushService {
           console.log("Create notification channel error: " + error);
         });
     }
-
-    PushNotifications.deleteChannel({ id: "fcm_default_channel" })
-      .then((response) => {
-        // console.log(response);
-      })
-      .catch((error) => {
-        console.error("Error deleting channel", error);
-      });
-
-    /*PushNotifications
-      .listChannels()
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => {
-        console.error(error);
-      });*/
   }
 
   async localNotification(notification: any) {
@@ -279,20 +256,49 @@ export class PushService {
     }
   }
 
-  async requestPermission(): Promise<void> {
-    await this.afMessaging.requestPermission.toPromise();
+  async initWeb() {
+    const firebaseApp = initializeApp(environment.firebase);
+    const messaging = getMessaging(firebaseApp);
+    const token = await getToken(messaging);
+    await this.device.setDevice(token);
 
-    this.afMessaging.tokenChanges
-      .pipe(takeWhile((token) => this.token !== token))
-      .subscribe(
-        async (token) => {
-          this.token = token;
-          // console.log("Notification token:", token);
-          await this.device.setDevice(token);
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
+    onMessage(messaging, (payload) => {
+      if (payload?.data?.notify === "true") {
+        this.localNotification(payload);
+      }
+      if (!this.router.url.includes("chat")) {
+        this.notificationSvc
+          .getUnread()
+          .then((notification: NotificationCounters) => {
+            this.notificationSvc.setNotification(notification);
+          });
+      }
+    });
+  }
+
+  async initCapacitor() {
+    await FirebaseMessaging.requestPermissions();
+    const result = await FirebaseMessaging.getToken();
+    await this.device.setDevice(result.token);
+    this.setChannels();
+
+    FirebaseMessaging.addListener("notificationReceived", (payload) => {
+      const notification = payload.notification;
+      const data = notification.data as {
+        message: string;
+        topic: string;
+        notify: string;
+      };
+      if (data?.notify === "true") {
+        this.localNotification(payload);
+      }
+      if (!this.router.url.includes("chat")) {
+        this.notificationSvc
+          .getUnread()
+          .then((notification: NotificationCounters) => {
+            this.notificationSvc.setNotification(notification);
+          });
+      }
+    });
   }
 }

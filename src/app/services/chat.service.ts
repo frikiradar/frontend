@@ -1,11 +1,10 @@
 import { Injectable } from "@angular/core";
-import { AngularFireMessaging } from "@angular/fire/compat/messaging";
-import { AlertController, Platform } from "@ionic/angular";
+import { AlertController } from "@ionic/angular";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
 import { AuthService } from "./auth.service";
-import { Config, ConfigService } from "./config.service";
+import { Config } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { firstValueFrom } from "rxjs";
@@ -20,20 +19,19 @@ export class ChatService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService,
-    private alert: AlertController,
-    private afMessaging: AngularFireMessaging
+    private alert: AlertController
   ) {}
 
   async getChats() {
-    const chats = (await this.rest.get(`chats`).toPromise()) as Chat[];
+    const chats = (await firstValueFrom(this.rest.get(`chats`))) as Chat[];
 
     return chats;
   }
 
   async getMessages(id: number, read?: boolean, page = 1, lastId = 0) {
-    return (await this.rest
-      .get(`chat/${id}?read=${read}&page=${page}&lastid=${lastId}`)
-      .toPromise()) as Chat[];
+    return (await firstValueFrom(
+      this.rest.get(`chat/${id}?read=${read}&page=${page}&lastid=${lastId}`)
+    )) as Chat[];
   }
 
   async sendMessage(
@@ -42,9 +40,9 @@ export class ChatService {
     replyto?: number,
     tmp_id?: string
   ): Promise<Chat> {
-    return (await this.rest
-      .put("chat", { touser: id, text, replyto, tmp_id })
-      .toPromise()) as Chat;
+    return (await firstValueFrom(
+      this.rest.put("chat", { touser: id, text, replyto, tmp_id })
+    )) as Chat;
   }
 
   async sendImage(
@@ -70,15 +68,15 @@ export class ChatService {
   }
 
   async writing(fromuser: number, touser: number) {
-    return (await this.rest
-      .put("writing-chat", { fromuser, touser })
-      .toPromise()) as Chat;
+    return (await firstValueFrom(
+      this.rest.put("writing-chat", { fromuser, touser })
+    )) as Chat;
   }
 
   async updateMessage(id: Chat["id"], text: Chat["text"]) {
-    return (await this.rest
-      .put("update-message", { id, text })
-      .toPromise()) as Chat;
+    return (await firstValueFrom(
+      this.rest.put("update-message", { id, text })
+    )) as Chat;
   }
 
   async readChat(id: number) {
@@ -159,7 +157,7 @@ export class ChatService {
           {
             text: "Entendido!",
             handler: async () => {
-              await this.afMessaging.requestPermission.toPromise();
+              await Notification.requestPermission();
             },
           },
         ],

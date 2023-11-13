@@ -22,7 +22,6 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { Haptics } from "@capacitor/haptics";
-import { firstValueFrom } from "rxjs";
 
 import { Chat } from "../../models/chat";
 import { User } from "../../models/user";
@@ -34,10 +33,10 @@ import { UserService } from "../../services/user.service";
 import { UtilsService } from "../../services/utils.service";
 import { OptionsPopover } from "../../options-popover/options-popover";
 import { NavService } from "src/app/services/navigation.service";
-import { AngularFireMessaging } from "@angular/fire/compat/messaging";
 import { EventModal } from "src/app/events/event-modal/event.modal";
 import { Event } from "src/app/models/event";
 import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
+import { App } from "@capacitor/app";
 
 @Component({
   selector: "app-chat-modal",
@@ -50,7 +49,7 @@ export class ChatModalComponent implements OnInit {
   @Output() messageChange: EventEmitter<Chat> = new EventEmitter();
   @Output() backToList: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild("chatlist", { static: false })
+  @ViewChild(IonContent)
   chatlist: IonContent;
   @ViewChild(IonInfiniteScroll, { static: false })
   infiniteScroll: IonInfiniteScroll;
@@ -83,7 +82,6 @@ export class ChatModalComponent implements OnInit {
     private popover: PopoverController,
     private nav: NavService,
     private dc: ChangeDetectorRef,
-    private afMessaging: AngularFireMessaging,
     private eventSvc: EventService
   ) {}
 
@@ -99,6 +97,12 @@ export class ChatModalComponent implements OnInit {
       this.conversationId = `${min}_${max}`;
 
       this.getLastMessages();
+
+      App.addListener("appStateChange", ({ isActive }) => {
+        if (isActive) {
+          this.getLastMessages();
+        }
+      });
     }
 
     const config: {
@@ -147,7 +151,10 @@ export class ChatModalComponent implements OnInit {
 
     if (!this.platform.is("capacitor")) {
       try {
-        await firstValueFrom(this.afMessaging.requestPermission);
+        const permission = await Notification.requestPermission();
+        if (permission === "denied") {
+          this.realtimeChat = false;
+        }
       } catch (e) {
         this.realtimeChat = false;
       }
@@ -207,15 +214,15 @@ export class ChatModalComponent implements OnInit {
       }
       if (this.platform.is("capacitor")) {
         Keyboard.addListener("keyboardDidShow", () => {
-          this.scrollDown();
+          this.scrollDown(0, true, false);
         });
 
         Keyboard.addListener("keyboardDidHide", () => {
-          this.scrollDown();
+          this.scrollDown(0, true, false);
         });
       }
 
-      this.scrollDown(200);
+      this.scrollDown(300, true, false);
     } catch (e) {
       console.error(e);
       await this.alertError.present();
@@ -223,7 +230,6 @@ export class ChatModalComponent implements OnInit {
   }
 
   async newMessage(message: Chat) {
-    console.log(message);
     if (
       this.messages.some(
         (m) =>
@@ -329,7 +335,7 @@ export class ChatModalComponent implements OnInit {
         (m: Chat) => m.text || m.image || m.audio
       );
 
-      this.scrollDown(1, true);
+      this.scrollDown(300, true, true);
       let replyToId =
         this.selectedMessage && this.replying ? this.selectedMessage.id : null;
       this.replying = false;
@@ -364,7 +370,7 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  async scrollDown(delay = 1, force = false) {
+  async scrollDown(delay = 0, force = false, smooth = true) {
     const scroll = await this.chatlist.getScrollElement();
     if (
       scroll.scrollTop +
@@ -377,7 +383,7 @@ export class ChatModalComponent implements OnInit {
         return;
       }
       setTimeout(() => {
-        this.chatlist.scrollToBottom(0);
+        this.chatlist.scrollToBottom(smooth ? 300 : 0);
       }, delay);
     }
   }

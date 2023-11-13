@@ -13,6 +13,7 @@ import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
 import { NavService } from "./services/navigation.service";
 import { SwService } from "./services/sw.service";
+
 import { Device } from "@capacitor/device";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
 import {
@@ -49,6 +50,7 @@ export class AppComponent {
   async initializeApp() {
     this.loadConfig();
     this.networkStatus();
+    this.initNotifications();
     this.nav.backButtonStatus();
 
     // Obtenemos tema en configuración local. Si no hay le mandamos el dark
@@ -78,9 +80,6 @@ export class AppComponent {
 
           // Contar veces abierto
           this.countOpenTimes();
-
-          // Iniciar notificaciones
-          this.initNotifications();
 
           // Mostrar publicidad
           this.initAds();

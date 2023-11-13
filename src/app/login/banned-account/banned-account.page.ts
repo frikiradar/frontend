@@ -3,7 +3,7 @@ import {
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { IonContent, IonTextarea } from "@ionic/angular";
 
@@ -16,7 +16,7 @@ import { AuthService } from "../../services/auth.service";
 @Component({
   selector: "banned-account-app",
   templateUrl: "./banned-account.page.html",
-  styleUrls: ["./banned-account.page.scss"]
+  styleUrls: ["./banned-account.page.scss"],
 })
 export class BannedAccountPage {
   public chatForm: UntypedFormGroup;
@@ -40,7 +40,7 @@ export class BannedAccountPage {
     private urlSvc: UrlService
   ) {
     this.chatForm = formBuilder.group({
-      message: new UntypedFormControl("", [Validators.required])
+      message: new UntypedFormControl("", [Validators.required]),
     });
     this.user = this.auth.currentUserValue;
 
@@ -59,19 +59,19 @@ export class BannedAccountPage {
       {
         text: "Recapacita lo que has hecho, reflexiona y mejora tu actitud, esto es una advertencia. Estás castigado el tiempo mostrado, muestra respeto tal y como te gustaría recibirlo.",
         touser: { id: this.user.id },
-        fromuser: { id: 1 }
+        fromuser: { id: 1 },
       },
       {
         text: "Una vez hayas recapacitado... si crees que ha sido un error, quieres disculparte o aportar sugerencias para la aplicación escribe a continuación.",
         touser: { id: this.user.id },
-        fromuser: { id: 1 }
-      }
+        fromuser: { id: 1 },
+      },
     ];
 
     this.messages = [
       messages[0],
       ...topMessages,
-      ...messages.filter(m => m.id !== messages[0].id)
+      ...messages.filter((m) => m.id !== messages[0].id),
     ];
   }
 
@@ -92,22 +92,22 @@ export class BannedAccountPage {
             touser: { id: 1 },
             fromuser: { id: this.user.id },
             text,
-            time_creation: new Date()
-          }
-        ]
+            time_creation: new Date(),
+          },
+        ],
       ].filter((m: Chat) => m.text || m.image);
 
       this.scrollDown();
       try {
         await this.chatSvc.sendMessage(1, text).then();
       } catch (e) {
-        this.messages = this.messages.filter(m => m.sending !== true);
+        this.messages = this.messages.filter((m) => m.sending !== true);
         console.error(e);
       }
     }
   }
 
-  scrollDown(delay = 1) {
+  scrollDown(delay = 0) {
     if (!this.chatlist) {
       return;
     }

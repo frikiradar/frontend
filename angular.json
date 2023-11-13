@@ -22,7 +22,7 @@
               "patreon",
               "code-push",
               "get-blob-duration",
-              "awesome-image-viewer"
+              "runes"
             ],
             "outputPath": "www",
             "index": "src/index.html",

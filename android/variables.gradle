@@ -15,4 +15,5 @@ ext {
     cordovaAndroidVersion = '10.1.1'
     playServicesAdsVersion = '22.0.0'
     androidxCoreKTXVersion = '1.10.0'
+    firebaseMessagingVersion = '23.1.2'
 }

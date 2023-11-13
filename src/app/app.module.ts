@@ -14,8 +14,6 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { LinkyModule } from "ngx-linky";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { ImageCropperModule } from "ngx-image-cropper";
-import { AngularFireModule } from "@angular/fire/compat";
-import { AngularFireMessagingModule } from "@angular/fire/compat/messaging";
 import { WebcamImage, WebcamModule } from "ngx-webcam";
 import {
   ServiceWorkerModule,
@@ -50,8 +48,6 @@ registerLocaleData(localeEs, "es");
     HammerModule,
     ImageCropperModule,
     ServiceWorkerModule.register("ngsw-worker.js"),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireMessagingModule,
     WebcamModule,
   ],
   providers: [

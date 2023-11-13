@@ -96,14 +96,21 @@
       >
       </ion-textarea>
       <ion-buttons slot="end">
-        <ion-button
-          *ngIf="!message.value && !image && events"
+        <!--<ion-button
+          *ngIf="!message.value && !image && events && !emojis"
           (click)="createEvent()"
         >
           <ion-icon slot="icon-only" name="calendar" color="dark"></ion-icon>
-        </ion-button>
-        <ion-button *ngIf="!replying" (click)="openPictureSheet()" slot="end">
+        </ion-button>-->
+        <ion-button
+          *ngIf="!replying && !emojis"
+          (click)="openPictureSheet()"
+          slot="end"
+        >
           <ion-icon slot="icon-only" name="camera" color="dark"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="emojis" (click)="deleteText()">
+          <ion-icon slot="icon-only" name="backspace" color="dark"></ion-icon>
         </ion-button>
         <input
           type="file"
