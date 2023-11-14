@@ -97,9 +97,9 @@ export class PushService {
       FirebaseMessaging.createChannel({
         id: channel.id,
         name: channel.name,
-        sound: "default",
         description: channel.description,
-        importance: 3,
+        vibration: true,
+        importance: 4,
         visibility: (channel.visibility ?? 1) as Visibility,
       })
         .then((response) => {
@@ -131,7 +131,6 @@ export class PushService {
               id: Math.random() * (1000000 - 1) + 1,
               title: notification?.title,
               body: notification?.body,
-              sound: "default",
               smallIcon: "ic_stat_notification",
               iconColor: "#e91e63",
               largeIcon: notification?.data.icon,
@@ -200,9 +199,10 @@ export class PushService {
         message: string;
         topic: string;
         notify: string;
+        url: string;
       };
       if (data?.notify === "true") {
-        this.localNotification(payload);
+        this.localNotification(notification);
       }
       if (!this.router.url.includes("chat")) {
         this.notificationSvc
@@ -212,5 +212,27 @@ export class PushService {
           });
       }
     });
+
+    FirebaseMessaging.addListener("notificationActionPerformed", (payload) => {
+      const notification = payload.notification;
+      const data = notification.data as {
+        message: string;
+        topic: string;
+        notify: string;
+        url: string;
+      };
+      if (payload.actionId == "tap") {
+        this.router.navigate([data.url]);
+      }
+    });
+
+    LocalNotifications.addListener(
+      "localNotificationActionPerformed",
+      (payload) => {
+        if (payload.actionId == "tap") {
+          this.router.navigate([payload.notification.extra.url]);
+        }
+      }
+    );
   }
 }
