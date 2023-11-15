@@ -12,6 +12,7 @@ import {
   Platform,
   ToastController,
 } from "@ionic/angular";
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 import { User } from "../models/user";
 import { ConfigService } from "../services/config.service";
@@ -26,15 +27,22 @@ import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 })
 export class LoginPage {
   public loginForm: UntypedFormGroup;
-  get username() {
+  get usernameInput() {
     return this.loginForm.get("username");
   }
-  get password() {
+  get passwordInput() {
     return this.loginForm.get("password");
   }
+
+  public insertPassword = false;
   public clearPassword = false;
   public activeView: "login" | "register" = "login";
   private returnUrl: string;
+  public username: string;
+  public password: string;
+  public email: string;
+  public provider: "google";
+  public credential: string;
 
   constructor(
     private router: Router,
@@ -58,7 +66,7 @@ export class LoginPage {
         Validators.minLength(3),
       ]),
       password: new UntypedFormControl("", [
-        Validators.required,
+        this.insertPassword ? Validators.required : Validators.nullValidator,
         Validators.minLength(8),
       ]),
     });
@@ -68,12 +76,31 @@ export class LoginPage {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
   }
 
+  async checkLogin() {
+    if (!this.insertPassword && this.usernameInput.valid) {
+      try {
+        await this.auth.checkLogin(this.usernameInput.value);
+        this.insertPassword = true;
+        return;
+      } catch (e) {
+        if (this.usernameInput.value.includes("@")) {
+          this.email = this.usernameInput.value;
+        } else {
+          this.username = this.usernameInput.value;
+        }
+        this.activeView = "register";
+        return;
+      }
+    }
+    this.activeView = "register";
+  }
+
   async submitLogin() {
     if (this.loginForm.valid) {
       try {
         const user = await this.auth.login(
-          this.username.value,
-          this.password.value
+          this.usernameInput.value,
+          this.passwordInput.value
         );
 
         this.loginSuccess(user);
@@ -87,16 +114,31 @@ export class LoginPage {
           this.loginError(e);
         }
       }
-    } else {
-      if (!this.username.value) {
-        const alert = await this.alert.create({
-          header: "¿Te has dado cuenta?",
-          message: "Para dos cosas que te pedimos y las pones mal... 🤭",
-          buttons: ["Tendré más cuidado"],
-          cssClass: "round-alert",
-        });
+    }
+  }
 
-        await alert.present();
+  async loginWithGoogle() {
+    const googleUser = await GoogleAuth.signIn();
+    if (googleUser.authentication.idToken) {
+      this.credential = googleUser.authentication.idToken;
+      this.provider = "google";
+      this.username = googleUser.name;
+      this.email = googleUser.email;
+
+      try {
+        await this.auth.checkLogin(this.email);
+        try {
+          const user = await this.auth.loginWithProvider(
+            this.provider,
+            this.credential
+          );
+          this.loginSuccess(user);
+        } catch (e) {
+          this.insertPassword = true;
+        }
+      } catch (e) {
+        this.activeView = "register";
+        return;
       }
     }
   }
@@ -123,6 +165,7 @@ export class LoginPage {
   async loginError(message: string) {
     let header = "";
     if (message.includes("Invalid credentials.")) {
+      this.activeView = "register";
       header = "Error de autenticación";
       message =
         "El nombre/email o contraseña que has introducido no son correctos.";

@@ -31,6 +31,7 @@ export interface User {
 
   password?: string;
   token?: string;
+  google_token?: string;
   devices: Device[];
 
   tags: Tag[];

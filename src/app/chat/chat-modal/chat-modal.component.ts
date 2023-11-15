@@ -130,10 +130,6 @@ export class ChatModalComponent implements OnInit {
       cssClass: "round-alert",
     });
 
-    if (!config.chat && !this.auth.isAdmin()) {
-      this.alertError.present();
-    }
-
     this.messageEvent.subscribe(async (message) => {
       if (!message) {
         return;

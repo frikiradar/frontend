@@ -10,6 +10,7 @@ import { Device as DevicePlugin } from "@capacitor/device";
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
 import { RestService } from "./rest.service";
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -44,7 +45,9 @@ export class AuthService {
     gender: string,
     lovegender: string[],
     meet: string,
-    referral: string
+    referral: string,
+    provider?: string,
+    credential?: any
   ) {
     try {
       return await firstValueFrom(
@@ -59,14 +62,14 @@ export class AuthService {
             lovegender,
             meet,
             referral,
+            provider,
+            credential,
           },
           httpOptions
         )
       );
     } catch (e) {
-      throw new Error(
-        "Ya hay un usuario registrado con este nombre de usuario o email."
-      );
+      throw new Error(e);
     }
   }
 
@@ -93,6 +96,38 @@ export class AuthService {
     }
   }
 
+  async loginWithProvider(provider: string, credential: string) {
+    try {
+      const token = await firstValueFrom(
+        this.http
+          .post(
+            `${environment.root}api/login/google`,
+            { provider, credential },
+            httpOptions
+          )
+          .pipe(
+            map((data: { token: string }) => {
+              return data.token;
+            })
+          )
+      );
+
+      if (provider === "google") {
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify({ google_id_token: credential, token })
+        );
+        this.currentUserSubject.next({
+          google_token: credential,
+          token,
+        } as User);
+      }
+      return await this.getAuthUser();
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
   async checkUsername(
     username: User["username"]
   ): Promise<User["username"] | boolean> {
@@ -110,19 +145,52 @@ export class AuthService {
     }
   }
 
+  async checkLogin(
+    login: User["username"] | User["email"]
+  ): Promise<User["username"] | User["email"] | boolean> {
+    try {
+      const l = (await firstValueFrom(
+        this.http.get(`${environment.root}api/check-login/${login}`)
+      )) as User["username"] | User["email"];
+      if (l === login) {
+        return true;
+      } else {
+        return l;
+      }
+    } catch (e) {
+      throw new Error("Error al comprobar el login");
+    }
+  }
+
+  checkGoogleLogin() {
+    GoogleAuth.refresh()
+      .then((data) => {
+        if (data.accessToken) {
+          // User is signed in
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.type === "userLoggedOut") {
+          this.logout();
+        }
+      });
+  }
+
   async getAuthUser() {
     if (!this.currentUserValue) {
       return;
     }
 
     const token = this.currentUserValue.token;
+    const google_token = this.currentUserValue.google_token;
 
     return await firstValueFrom(
       this.rest.get("user").pipe(
         map((user: User) => {
           localStorage.setItem(
             "currentUser",
-            JSON.stringify({ ...user, token })
+            JSON.stringify({ ...user, token, google_token })
           );
           return user;
         })
@@ -254,6 +322,9 @@ export class AuthService {
         console.error(e);
       }
     }
+
+    // Cerramos sesión de google
+    await GoogleAuth.signOut();
 
     // Eliminamos la sesión y configuraciones
     localStorage.clear();

@@ -30,6 +30,14 @@ const config: CapacitorConfig = {
     FirebaseMessaging: {
       presentationOptions: ["badge", "sound", "alert"],
     },
+    GoogleAuth: {
+      scopes: ["profile", "email"],
+      serverClientId:
+        "431880368798-e1vd3d27ufvrvduae0ldq79tj5j5vc0h.apps.googleusercontent.com",
+      androidClientId:
+        "431880368798-d88se7qsa9a2hgs8ornj9eojtha3qore.apps.googleusercontent.com",
+      forceCodeForRefreshToken: true,
+    },
   },
 };
 

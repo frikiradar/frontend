@@ -1,4 +1,4 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, Input, NgZone } from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -23,6 +23,13 @@ import { UserService } from "../../services/user.service";
   styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent {
+  @Input() username: string;
+  @Input() email: string;
+  @Input() birthday: string;
+  @Input() gender: string;
+  @Input() provider: "google";
+  @Input() credential: string;
+
   public registerForm: UntypedFormGroup;
   public today: number = Date.now();
   public clearPassword = false;
@@ -48,13 +55,13 @@ export class RegisterComponent {
         Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+"),
       ]),
       email: new UntypedFormControl("", [
-        Validators.required,
+        this.email ? Validators.required : Validators.nullValidator,
         Validators.pattern(
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ),
       ]),
       password: new UntypedFormControl("", [
-        Validators.required,
+        this.credential ? Validators.required : Validators.nullValidator,
         Validators.minLength(8),
       ]),
       birthday: new UntypedFormControl(
@@ -91,6 +98,18 @@ export class RegisterComponent {
       });
   }
 
+  ngOnInit() {
+    this.registerForm.get("username").setValue(this.username);
+    this.registerForm.get("email").setValue(this.email);
+    /* TODO: cuando nos revisen el login de google, descomentar esto
+    if (this.birthday) {
+      this.registerForm.get("birthday").setValue(this.birthday);
+    }
+    if (this.gender) {
+      this.registerForm.get("gender").setValue(this.gender);
+    }*/
+  }
+
   async submitRegister() {
     if (this.registerForm.valid) {
       const alert = await this.alert.create({
@@ -107,22 +126,39 @@ export class RegisterComponent {
           {
             text: "¡Es correcta!",
             handler: async () => {
+              if (this.registerForm.get("email").value.trim()) {
+                this.email = this.registerForm.get("email").value.trim();
+              }
+              if (this.registerForm.get("username").value.trim()) {
+                this.username = this.registerForm.get("username").value.trim();
+              }
+
               try {
                 await this.auth.register(
-                  this.registerForm.get("username").value.trim(),
-                  this.registerForm.get("email").value.trim().toLowerCase(),
-                  this.registerForm.get("password").value.trim(),
+                  this.username,
+                  this.email,
+                  this.registerForm.get("password").value.trim() ?? undefined,
                   this.registerForm.get("birthday").value.split("T")[0],
                   this.registerForm.get("gender").value.trim(),
                   this.registerForm.get("lovegender").value,
                   this.registerForm.get("meet").value,
-                  this.registerForm.get("referral").value
+                  this.registerForm.get("referral").value,
+                  this.provider,
+                  this.credential
                 );
 
-                const user = await this.auth.login(
-                  this.registerForm.get("username").value.trim(),
-                  this.registerForm.get("password").value.trim()
-                );
+                let user: User;
+                if (!this.provider) {
+                  user = await this.auth.login(
+                    this.registerForm.get("username").value.trim(),
+                    this.registerForm.get("password").value.trim()
+                  );
+                } else {
+                  user = await this.auth.loginWithProvider(
+                    this.provider,
+                    this.credential
+                  );
+                }
                 this.registerSuccess(user);
               } catch (error) {
                 this.registerError(error);

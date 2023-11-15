@@ -28,8 +28,9 @@ ion-footer {
 }
 
 ion-button {
-  --color: red;
   text-transform: unset;
+  margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .login {
@@ -96,5 +97,25 @@ ion-button {
   font-size: 14px;
   a {
     cursor: pointer;
+  }
+}
+
+#login-content {
+  margin-top: 30px;
+}
+
+.login-input {
+  --border-color: var(--ion-color-light);
+  margin-bottom: 20px;
+}
+
+.login-button {
+  ion-icon {
+    position: absolute;
+    left: 20px;
+  }
+  ion-label {
+    margin-top: 3px;
+    font-size: 16px;
   }
 }

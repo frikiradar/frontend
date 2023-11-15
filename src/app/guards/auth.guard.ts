@@ -5,7 +5,7 @@ import { NavController } from "@ionic/angular";
 import { AuthService } from "./../services/auth.service";
 
 @Injectable({ providedIn: "root" })
-export class AuthGuard  {
+export class AuthGuard {
   constructor(
     private auth: AuthService,
     private nav: NavController,
@@ -15,6 +15,9 @@ export class AuthGuard  {
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = this.auth.currentUserValue;
     if (currentUser) {
+      if (currentUser.google_token) {
+        this.auth.checkGoogleLogin();
+      }
       // logged in so return true
       if (!currentUser.active) {
         // El usuario no está activo

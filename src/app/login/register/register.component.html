@@ -45,7 +45,7 @@
       <ion-icon name="information-circle-outline"></ion-icon>Letras, números,
       guiones (-_) y puntos(.).
     </div>
-    <ion-item>
+    <ion-item *ngIf="!credential">
       <ion-icon name="mail-outline" slot="start"></ion-icon>
       <ion-input
         label="Correo electrónico"
@@ -68,7 +68,7 @@
       <ion-icon name="information-circle-outline"></ion-icon>Introduce una
       dirección de correo electrónico válida.
     </div>
-    <ion-item>
+    <ion-item *ngIf="!credential">
       <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
       <ion-input
         label="Contraseña"

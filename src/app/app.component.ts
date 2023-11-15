@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Network } from "@capacitor/network";
-import { AlertController, Platform, ToastController } from "@ionic/angular";
+import {
+  AlertController,
+  Platform,
+  ToastController,
+  isPlatform,
+} from "@ionic/angular";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
 import { environment } from "src/environments/environment";
@@ -22,6 +27,11 @@ import {
 } from "@capawesome/capacitor-app-update";
 import { first } from "rxjs";
 import { AdMob, AdmobConsentStatus } from "@capacitor-community/admob";
+import {
+  GoogleAuth,
+  InitOptions,
+} from "@codetrix-studio/capacitor-google-auth";
+import { Capacitor } from "@capacitor/core";
 
 @Component({
   selector: "app-root",
@@ -51,6 +61,7 @@ export class AppComponent {
     this.loadConfig();
     this.networkStatus();
     this.initNotifications();
+    this.initGoogleAuth();
     this.nav.backButtonStatus();
 
     // Obtenemos tema en configuración local. Si no hay le mandamos el dark
@@ -282,6 +293,23 @@ export class AppComponent {
       }
       this.sw.init();
     }
+  }
+
+  initGoogleAuth() {
+    this.platform.ready().then(() => {
+      GoogleAuth.initialize({
+        clientId:
+          "431880368798-e1vd3d27ufvrvduae0ldq79tj5j5vc0h.apps.googleusercontent.com",
+        scopes: [
+          "profile",
+          "email",
+          /*"https://www.googleapis.com/auth/user.gender.read",
+          "https://www.googleapis.com/auth/user.birthday.read"*/
+          ,
+        ],
+        grantOfflineAccess: true,
+      });
+    });
   }
 
   async initAds() {
