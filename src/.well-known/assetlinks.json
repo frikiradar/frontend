@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.frikiradar.app",
+      "sha256_cert_fingerprints": [
+        "27:DD:4A:61:F6:01:A9:EB:F1:73:D9:91:37:17:98:DA:03:A2:7C:1A:7E:5E:00:CF:EA:2D:E6:F5:5B:EB:42:A6"
+      ]
+    }
+  }
+]
