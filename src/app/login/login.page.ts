@@ -147,7 +147,9 @@ export class LoginPage {
         this.auth.logoutGoogle();
       }
     } catch (e) {
-      if (e.error !== "popup_closed_by_user") {
+      this.auth.logoutGoogle();
+      console.log(e);
+      if (!e.error.includes("user")) {
         const alert = await this.alert.create({
           header: "Error de inicio con Google",
           message:

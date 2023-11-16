@@ -99,10 +99,13 @@ export class RegisterComponent {
   }
 
   ngOnInit() {
-    this.registerForm.get("username").setValue(this.username);
-    this.registerForm.get("email").setValue(this.email);
-    /* TODO: cuando nos revisen el login de google, descomentar esto
-    if (this.birthday) {
+    if (this.username) {
+      this.registerForm.get("username").setValue(this.username);
+    }
+    if (this.email) {
+      this.registerForm.get("email").setValue(this.email);
+    }
+    /*if (this.birthday) {
       this.registerForm.get("birthday").setValue(this.birthday);
     }
     if (this.gender) {

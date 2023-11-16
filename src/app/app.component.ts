@@ -1,12 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Network } from "@capacitor/network";
-import {
-  AlertController,
-  Platform,
-  ToastController,
-  isPlatform,
-} from "@ionic/angular";
+import { AlertController, Platform, ToastController } from "@ionic/angular";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
 import { environment } from "src/environments/environment";
@@ -45,7 +40,6 @@ export class AppComponent {
   constructor(
     private auth: AuthService,
     private alert: AlertController,
-    private router: Router,
     private platform: Platform,
     private utils: UtilsService,
     private config: ConfigService,
@@ -60,7 +54,6 @@ export class AppComponent {
   async initializeApp() {
     this.loadConfig();
     this.networkStatus();
-    this.initNotifications();
     this.initGoogleAuth();
     this.nav.backButtonStatus();
 
@@ -88,10 +81,10 @@ export class AppComponent {
         if (authUser) {
           const user = await this.auth.getAuthUser();
           this.auth.setAuthUser(user);
-
+          // Iniciar notificaciones
+          this.initNotifications();
           // Contar veces abierto
           this.countOpenTimes();
-
           // Mostrar publicidad
           this.initAds();
         }
