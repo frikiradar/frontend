@@ -324,7 +324,7 @@ export class AuthService {
     }
 
     // Cerramos sesión de google
-    await GoogleAuth.signOut();
+    await this.logoutGoogle();
 
     // Eliminamos la sesión y configuraciones
     localStorage.clear();
@@ -333,5 +333,9 @@ export class AuthService {
 
     // Regresamos a la página de login
     this.nav.navigateRoot(["/login"]);
+  }
+
+  async logoutGoogle() {
+    await GoogleAuth.signOut();
   }
 }

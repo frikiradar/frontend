@@ -140,6 +140,8 @@ export class LoginPage {
         this.activeView = "register";
         return;
       }
+    } else {
+      this.auth.logoutGoogle();
     }
   }
 
@@ -207,5 +209,10 @@ export class LoginPage {
       componentProps: { username: this.username },
     });
     return await modal.present();
+  }
+
+  backToLogin() {
+    this.auth.logoutGoogle();
+    this.activeView = "login";
   }
 }
