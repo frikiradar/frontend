@@ -32,11 +32,10 @@ const config: CapacitorConfig = {
     },
     GoogleAuth: {
       scopes: ["profile", "email"],
-      serverClientId:
-        "431880368798-e1vd3d27ufvrvduae0ldq79tj5j5vc0h.apps.googleusercontent.com",
+      clientId:
+        "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",
       androidClientId:
-        "431880368798-d88se7qsa9a2hgs8ornj9eojtha3qore.apps.googleusercontent.com",
-      forceCodeForRefreshToken: true,
+        "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",
     },
   },
 };

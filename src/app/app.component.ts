@@ -299,7 +299,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       GoogleAuth.initialize({
         clientId:
-          "431880368798-e1vd3d27ufvrvduae0ldq79tj5j5vc0h.apps.googleusercontent.com",
+          "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",
         scopes: [
           "profile",
           "email",
@@ -307,7 +307,6 @@ export class AppComponent {
           "https://www.googleapis.com/auth/user.birthday.read"*/
           ,
         ],
-        grantOfflineAccess: true,
       });
     });
   }

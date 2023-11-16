@@ -5,4 +5,5 @@
     <string name="package_name">com.frikiradar.app</string>
     <string name="custom_url_scheme">com.frikiradar.app</string>
     <string name="admob_app_id">ca-app-pub-3470820326017899~6746780328</string>
+    <string name="server_client_id">431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com</string>
 </resources>
