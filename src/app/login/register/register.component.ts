@@ -86,7 +86,7 @@ export class RegisterComponent {
     this.registerForm
       .get("username")
       .valueChanges.subscribe(async (username) => {
-        if (username.trim() !== "") {
+        if (username?.trim() !== "") {
           const u = await this.auth.checkUsername(username);
           if (u !== true) {
             this.registerForm.get("username").setErrors({ incorrect: true });
@@ -116,7 +116,7 @@ export class RegisterComponent {
         header: `Aviso`,
         message: `Te llegará un email con un código de confirmación a la dirección ${this.registerForm
           .get("email")
-          .value.trim()} ¿Es correcta?`,
+          .value?.trim()} ¿Es correcta?`,
         buttons: [
           {
             text: "Ups, me confundí",
@@ -126,20 +126,20 @@ export class RegisterComponent {
           {
             text: "¡Es correcta!",
             handler: async () => {
-              if (this.registerForm.get("email").value.trim()) {
-                this.email = this.registerForm.get("email").value.trim();
+              if (this.registerForm.get("email").value?.trim()) {
+                this.email = this.registerForm.get("email").value?.trim();
               }
-              if (this.registerForm.get("username").value.trim()) {
-                this.username = this.registerForm.get("username").value.trim();
+              if (this.registerForm.get("username").value?.trim()) {
+                this.username = this.registerForm.get("username").value?.trim();
               }
 
               try {
                 await this.auth.register(
                   this.username,
                   this.email,
-                  this.registerForm.get("password").value.trim() ?? undefined,
+                  this.registerForm.get("password").value?.trim() ?? undefined,
                   this.registerForm.get("birthday").value.split("T")[0],
-                  this.registerForm.get("gender").value.trim(),
+                  this.registerForm.get("gender").value?.trim(),
                   this.registerForm.get("lovegender").value,
                   this.registerForm.get("meet").value,
                   this.registerForm.get("referral").value,
@@ -150,8 +150,8 @@ export class RegisterComponent {
                 let user: User;
                 if (!this.provider) {
                   user = await this.auth.login(
-                    this.registerForm.get("username").value.trim(),
-                    this.registerForm.get("password").value.trim()
+                    this.registerForm.get("username").value?.trim(),
+                    this.registerForm.get("password").value?.trim()
                   );
                 } else {
                   user = await this.auth.loginWithProvider(

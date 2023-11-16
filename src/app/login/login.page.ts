@@ -118,30 +118,44 @@ export class LoginPage {
   }
 
   async loginWithGoogle() {
-    const googleUser = await GoogleAuth.signIn();
-    if (googleUser.authentication.idToken) {
-      this.credential = googleUser.authentication.idToken;
-      this.provider = "google";
-      this.username = googleUser.name;
-      this.email = googleUser.email;
+    try {
+      const googleUser = await GoogleAuth.signIn();
+      console.log(googleUser);
+      if (googleUser.authentication.idToken) {
+        this.credential = googleUser.authentication.idToken;
+        this.provider = "google";
+        this.username =
+          googleUser.name ?? `${googleUser.givenName} ${googleUser.familyName}`;
+        this.email = googleUser.email;
 
-      try {
-        await this.auth.checkLogin(this.email);
         try {
-          const user = await this.auth.loginWithProvider(
-            this.provider,
-            this.credential
-          );
-          this.loginSuccess(user);
+          await this.auth.checkLogin(this.email);
+          try {
+            const user = await this.auth.loginWithProvider(
+              this.provider,
+              this.credential
+            );
+            this.loginSuccess(user);
+          } catch (e) {
+            this.insertPassword = true;
+          }
         } catch (e) {
-          this.insertPassword = true;
+          this.activeView = "register";
+          return;
         }
-      } catch (e) {
-        this.activeView = "register";
-        return;
+      } else {
+        this.auth.logoutGoogle();
       }
-    } else {
-      this.auth.logoutGoogle();
+    } catch (e) {
+      const alert = await this.alert.create({
+        header: "Error de inicio con Google",
+        message:
+          "El inicio de sesión con Google ha fallado, por favor inicia sesión con email.",
+        buttons: ["Oki doki"],
+        cssClass: "round-alert",
+      });
+
+      await alert.present();
     }
   }
 
