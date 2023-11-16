@@ -147,15 +147,17 @@ export class LoginPage {
         this.auth.logoutGoogle();
       }
     } catch (e) {
-      const alert = await this.alert.create({
-        header: "Error de inicio con Google",
-        message:
-          "El inicio de sesión con Google ha fallado, por favor inicia sesión con email.",
-        buttons: ["Oki doki"],
-        cssClass: "round-alert",
-      });
+      if (e.error !== "popup_closed_by_user") {
+        const alert = await this.alert.create({
+          header: "Error de inicio con Google",
+          message:
+            "El inicio de sesión con Google ha fallado, por favor inicia sesión con email.",
+          buttons: ["Oki doki"],
+          cssClass: "round-alert",
+        });
 
-      await alert.present();
+        await alert.present();
+      }
     }
   }
 
