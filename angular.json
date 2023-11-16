@@ -46,7 +46,12 @@
                 "output": "/"
               },
               "src/firebase-messaging-sw.js",
-              "src/manifest.json"
+              "src/manifest.json",
+              {
+                "glob": "assetlinks.json",
+                "input": "src/",
+                "output": "/.well-known"
+              }
             ],
             "styles": [
               {
@@ -155,7 +160,12 @@
                 "output": "/assets"
               },
               "src/firebase-messaging-sw.js",
-              "src/manifest.json"
+              "src/manifest.json",
+              {
+                "glob": "assetlinks.json",
+                "input": "src/",
+                "output": "/.well-known"
+              }
             ]
           },
           "configurations": {
