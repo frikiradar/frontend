@@ -87,17 +87,19 @@
               labelPlacement="floating"
               formControlName="name"
               autocapitalize="on"
-              autoGrow
+              [autoGrow]="true"
             ></ion-input>
           </ion-item>
-          <ion-item id="description">
+          <ion-item id="description" lines="none">
             <ion-icon name="document-text-outline" slot="start"></ion-icon>
             <ion-textarea
               label="Mensaje de presentación"
               labelPlacement="floating"
               formControlName="description"
               autocapitalize="on"
-              autoGrow
+              [autoGrow]="true"
+              [counter]="true"
+              maxlength="500"
             ></ion-textarea>
           </ion-item>
           <ion-item>
@@ -107,11 +109,11 @@
               labelPlacement="floating"
               formControlName="location"
               autocapitalize="on"
-              autoGrow
+              [autoGrow]="true"
             ></ion-input>
           </ion-item>
 
-          <ion-item button id="open-calendar" lines="full">
+          <ion-item button id="open-calendar">
             <ion-icon name="calendar-outline" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap"
               >Fecha de nacimiento
@@ -518,7 +520,7 @@
     </ion-item-group>
   </ion-list>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="showFooter">
   <ion-button
     (click)="submitProfile()"
     class="ion-padding"

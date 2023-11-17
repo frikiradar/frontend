@@ -25,14 +25,15 @@ export class NavService {
     const currentUrl = this.history[this.history.length - 1];
     if (
       currentUrl.startsWith("/tabs/radar") ||
-      currentUrl.startsWith("/login")
+      currentUrl.startsWith("/login") ||
+      currentUrl == "/"
     ) {
       navigator["app"].exitApp();
     } else if (this.history.length > 1) {
       this.history.pop();
       this.nav.back();
     } else {
-      navigator["app"].exitApp();
+      this.router.navigateByUrl("/");
     }
   }
 

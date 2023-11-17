@@ -11,6 +11,8 @@ import { AuthService } from "./../services/auth.service";
 import { NavService } from "../services/navigation.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
+import { initializeApp } from "firebase/app";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-chat",
@@ -43,7 +45,6 @@ export class ChatPage implements OnInit {
     window.onresize = async () => {
       this.desktop = window.innerWidth > 991;
     };
-    this.firebaseListener();
 
     const rules = await this.config.get("rules");
     if (!rules) {
@@ -54,6 +55,8 @@ export class ChatPage implements OnInit {
       });
       return await modal.present();
     }
+
+    this.firebaseListener();
   }
 
   async showChat(id: User["id"]) {
@@ -79,7 +82,8 @@ export class ChatPage implements OnInit {
         }
       });
     } else {
-      const messaging = getMessaging();
+      const app = initializeApp(environment.firebase);
+      const messaging = getMessaging(app);
       onMessage(messaging, (payload) => {
         if (payload?.data?.message && payload?.data?.topic === "chat") {
           const message = JSON.parse(payload.data.message) as Chat;

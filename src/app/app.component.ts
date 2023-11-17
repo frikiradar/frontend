@@ -289,7 +289,7 @@ export class AppComponent {
   }
 
   initGoogleAuth() {
-    this.platform.ready().then(() => {
+    this.platform.ready().then(async () => {
       GoogleAuth.initialize({
         clientId:
           "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",

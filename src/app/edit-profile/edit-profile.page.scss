@@ -19,10 +19,6 @@ ion-grid {
   --ion-grid-column-padding: 0px;
 }
 
-ion-item {
-  --border-color: var(--ion-color-light);
-}
-
 ion-list {
   background: transparent;
 
@@ -51,7 +47,6 @@ ion-item ion-label p {
 form {
   width: 100%;
   ion-icon {
-    color: white;
     margin-right: 10px;
   }
 }
@@ -80,10 +75,6 @@ form {
   z-index: 1;
 }
 
-#description {
-  --border-color: white;
-}
-
 ion-item-group {
   ion-item-divider {
     margin-top: 20px;
@@ -100,9 +91,24 @@ ion-item-group {
   }
 }
 
+ion-input,
+ion-textarea,
+ion-select {
+  --color: var(--ion-color-light) !important;
+  color: var(--ion-color-light) !important;
+}
+
+#description {
+  ion-icon {
+    align-self: flex-start;
+    margin-top: 18px;
+  }
+  ion-textarea {
+    --border-color: var(--ion-color-light);
+    --padding-top: 18px;
+  }
+}
+
 ion-footer {
   background: var(--ion-color-dark);
-  ion-button {
-    margin-bottom: 30px;
-  }
 }

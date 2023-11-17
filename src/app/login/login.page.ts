@@ -146,10 +146,13 @@ export class LoginPage {
       } else {
         this.auth.logoutGoogle();
       }
-    } catch (e) {
+    } catch (error) {
       this.auth.logoutGoogle();
-      console.log(e);
-      if (!e.error.includes("user")) {
+      console.error(error);
+      if (
+        error.toString().includes("popup_closed_by_user") ||
+        error.toString().includes("12501")
+      ) {
         const alert = await this.alert.create({
           header: "Error de inicio con Google",
           message:

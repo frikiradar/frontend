@@ -1,5 +1,3 @@
-/// <reference types="@types/dom-mediacapture-record" />
-
 import {
   Component,
   Output,
@@ -16,7 +14,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
-import { IonTextarea, ModalController, Platform } from "@ionic/angular";
+import { IonTextarea, isPlatform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { VoiceRecorder } from "capacitor-voice-recorder";
 import runes from "runes";
@@ -79,15 +77,19 @@ export class ChatInputComponent {
   constructor(
     public formBuilder: UntypedFormBuilder,
     public auth: AuthService,
-    public platform: Platform,
     public utils: UtilsService,
     private userSvc: UserService,
-    private sanitizer: DomSanitizer,
-    private modalController: ModalController
+    private sanitizer: DomSanitizer
   ) {
     this.chatForm = formBuilder.group({
       message: new UntypedFormControl("", [Validators.required]),
     });
+
+    if (isPlatform("capacitor")) {
+      Keyboard.addListener("keyboardWillShow", () => {
+        this.emojis = false;
+      });
+    }
   }
 
   onPaste(event: ClipboardEvent) {
@@ -129,12 +131,12 @@ export class ChatInputComponent {
     }
   }
 
-  openEmojis() {
-    if (this.platform.is("capacitor")) {
+  async openEmojis() {
+    if (isPlatform("capacitor")) {
       Keyboard.setStyle({ style: KeyboardStyle.Dark });
     }
-    if (this.emojis && this.platform.is("capacitor")) {
-      Keyboard.hide();
+    if (this.emojis && isPlatform("capacitor")) {
+      await Keyboard.hide();
     }
 
     this.emojis = !this.emojis;
@@ -183,7 +185,7 @@ export class ChatInputComponent {
 
   async selectPictureFromCamera() {
     this.closePictureSheet();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       const image = (await this.utils.takePicture(
         "camera",
         false,
@@ -202,7 +204,7 @@ export class ChatInputComponent {
 
   async selectPictureFromGallery() {
     this.closePictureSheet();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       const image = (await this.utils.takePicture(
         "gallery",
         false,
@@ -269,7 +271,7 @@ export class ChatInputComponent {
 
   removeRecorded() {
     this.recorded = false;
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       this.audio = "";
       this.audioPreview = "";
     }
@@ -339,7 +341,7 @@ export class ChatInputComponent {
   }
 
   keydownEnter(event: Event) {
-    if (!this.platform.is("hybrid")) {
+    if (!isPlatform("hybrid")) {
       event.preventDefault();
       this.sendMessage();
     }
@@ -347,7 +349,7 @@ export class ChatInputComponent {
 
   async focusTextArea() {
     this.textarea?.setFocus();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       Keyboard.show();
     }
   }

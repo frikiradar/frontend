@@ -13,9 +13,14 @@ import {
   Platform,
   ToastController,
 } from "@ionic/angular";
-import SwiperCore, { SwiperOptions, Keyboard, Scrollbar } from "swiper";
+import SwiperCore, {
+  SwiperOptions,
+  Keyboard as SwiperKeyboard,
+  Scrollbar,
+} from "swiper";
 import { Subject } from "rxjs";
 import { debounceTime } from "rxjs/operators";
+import { Keyboard } from "@capacitor/keyboard";
 
 import { Tag } from "../models/tags";
 import { User } from "../models/user";
@@ -28,7 +33,7 @@ import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
 import { Haptics } from "@capacitor/haptics";
 
-SwiperCore.use([Keyboard, Scrollbar]);
+SwiperCore.use([SwiperKeyboard, Scrollbar]);
 
 @Component({
   selector: "app-edit-profile",
@@ -68,6 +73,7 @@ export class EditProfilePage {
   };
 
   public showToolbar = false;
+  public showFooter = true;
   public profileForm: UntypedFormGroup;
   public today: number = Date.now();
   public user: User;
@@ -108,6 +114,14 @@ export class EditProfilePage {
       maxage: new UntypedFormControl({ value: "", disabled: true }),
       connection: [""],
       tags: [""],
+    });
+
+    Keyboard.addListener("keyboardWillShow", () => {
+      this.showFooter = false;
+    });
+
+    Keyboard.addListener("keyboardWillHide", () => {
+      this.showFooter = true;
     });
   }
 

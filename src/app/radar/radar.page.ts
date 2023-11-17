@@ -67,7 +67,7 @@ export class RadarPage {
   page = 0;
   public ratio = -1;
   public automatic = true;
-  public rangeValue = 1;
+  public rangeValue = 0;
   authUser: User;
   users: User[] = undefined;
   public user: User;
@@ -243,6 +243,7 @@ export class RadarPage {
         let value = this.range.value as number;
         value++;
         this.range.value = value;
+        this.changeRatio(value);
       }
 
       if (await this.toast.getTop()) {

@@ -121,6 +121,16 @@ ion-item {
   }
 }
 
+#description {
+  margin: 10px 0;
+  ion-icon {
+    align-self: flex-start;
+  }
+  ion-label {
+    margin: 0;
+  }
+}
+
 #edit-profile {
   background: #2f2f2fb8;
   border-radius: 50px;
