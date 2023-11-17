@@ -91,13 +91,6 @@ ion-item-group {
   }
 }
 
-ion-input,
-ion-textarea,
-ion-select {
-  --color: var(--ion-color-light) !important;
-  color: var(--ion-color-light) !important;
-}
-
 #description {
   ion-icon {
     align-self: flex-start;

@@ -264,16 +264,23 @@ export class UserService {
       user = this.auth.currentUserValue;
     }
 
-    if (user.roles.includes("ROLE_ADMIN")) {
-      return "shield-checkmark";
-    } else if (user.roles.includes("ROLE_MASTER")) {
-      return "shield-checkmark";
-    } else if (user.roles.includes("ROLE_PATREON")) {
-      return "/assets/icon/patreon_coral.svg";
-    } else if (user.roles.includes("ROLE_DEMO")) {
-      return "/assets/icon/smart_toy_white_24dp.svg";
-    } else if (user.verified) {
-      return "checkmark-circle";
+    if (user) {
+      const roleIconMap = {
+        ROLE_ADMIN: "shield-checkmark",
+        ROLE_MASTER: "shield-checkmark",
+        ROLE_PATREON: "/assets/icon/patreon_coral.svg",
+        ROLE_DEMO: "/assets/icon/smart_toy_white_24dp.svg",
+      };
+
+      for (let role in roleIconMap) {
+        if (user.roles.includes(role)) {
+          return roleIconMap[role];
+        }
+      }
+
+      if (user.verified) {
+        return "checkmark-circle";
+      }
     }
 
     return false;

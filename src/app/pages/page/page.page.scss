@@ -56,13 +56,11 @@ ion-thumbnail#cover {
   position: relative;
   left: 150px;
   top: 8px;
-  color: white;
   min-height: 40px;
 }
 
 #description {
   p {
-    color: white;
     text-align: justify;
     font-size: 13px;
   }
@@ -115,8 +113,8 @@ ion-thumbnail#cover {
 #search {
   ion-list {
     ion-item {
-      --background: #1f1f1f;
-      --border-color: #e91e63;
+      --background: var(--ion-color-dark);
+      --border-color: var(--ion-color-primary);
 
       ion-avatar {
         &.md {
@@ -170,13 +168,13 @@ ion-thumbnail#cover {
       .match {
         color: white;
         font-size: 12px;
-        border: 2px solid white;
+        border: 2px solid var(--ion-color-light);
         height: 50px;
         width: 50px;
         border-radius: 50%;
         font-weight: bold;
         margin-left: 10px;
-        background-color: #e91e63;
+        background-color: var(--ion-color-primary);
       }
     }
   }

@@ -88,11 +88,11 @@ export class LoginPage {
         } else {
           this.username = this.usernameInput.value;
         }
-        this.activeView = "register";
+        this.showRegister();
         return;
       }
     }
-    this.activeView = "register";
+    this.showRegister();
   }
 
   async submitLogin() {
@@ -140,7 +140,7 @@ export class LoginPage {
             this.insertPassword = true;
           }
         } catch (e) {
-          this.activeView = "register";
+          this.showRegister();
           return;
         }
       } else {
@@ -188,7 +188,7 @@ export class LoginPage {
   async loginError(message: string) {
     let header = "";
     if (message.includes("Invalid credentials.")) {
-      this.activeView = "register";
+      this.showRegister();
       header = "Error de autenticación";
       message =
         "El nombre/email o contraseña que has introducido no son correctos.";
@@ -235,5 +235,9 @@ export class LoginPage {
   backToLogin() {
     this.auth.logoutGoogle();
     this.activeView = "login";
+  }
+
+  showRegister() {
+    this.activeView = "register";
   }
 }

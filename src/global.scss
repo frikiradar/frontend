@@ -12,8 +12,8 @@
 
 @import "@ctrl/ngx-emoji-mart/picker";
 
-@import 'swiper/swiper.min.css';
-@import 'swiper/swiper-bundle.css';
+@import "swiper/swiper.min.css";
+@import "swiper/swiper-bundle.css";
 
 body {
   background-color: var(--ion-color-dark);
@@ -144,11 +144,10 @@ ion-header {
 ion-input,
 ion-textarea,
 ion-select {
-  --placeholder-color: #9c2c51 !important;
-  --color: white !important;
-  color: white !important;
+  --placeholder-color: var(--ion-color-primary-shade) !important;
+  --color: var(--ion-color-light) !important;
+  color: var(--ion-color-light) !important;
   --placeholder-opacity: 1 !important;
-  --padding-start: 0;
 }
 
 ion-button {
@@ -299,7 +298,6 @@ ul {
   }
 }
 
-
 #stories {
   ion-avatar {
     width: 64px;
@@ -402,22 +400,23 @@ ion-button.patreon {
   align-items: center;
   justify-content: center;
 }
-.swiper-pagination-bullet-active, .swiper-pagination-progressbar-fill {
+.swiper-pagination-bullet-active,
+.swiper-pagination-progressbar-fill {
   background: #e91e63 !important;
 }
 
 .swiper-scrollbar-drag {
-  background:  var(--ion-color-primary);
+  background: var(--ion-color-primary);
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: #ffffff;
-    transition: background-color 5000s ease-in-out 0s;
-    box-shadow: inset 0 0 20px 20px var(--ion-color-dark);
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px var(--ion-color-dark);
 }
 
 .native-wrapper.sc-ion-textarea-md textarea.sc-ion-textarea-md {
