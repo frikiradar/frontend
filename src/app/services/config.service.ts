@@ -32,7 +32,13 @@ export interface Config {
   radar?: User[];
   pages?: Page[];
   stories?: Story[];
-  theme?: "dark" | "light" | "cyberpunk" | "black" | "fire";
+  theme?:
+    | "dark"
+    | "light"
+    | "cyberpunk"
+    | "black"
+    | "fire"
+    | "strawberries-and-cream";
   rules?: boolean;
 }
 @Injectable({

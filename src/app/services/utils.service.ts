@@ -336,6 +336,11 @@ export class UtilsService {
             StatusBar.setStyle({ style: Style.Dark });
             NavigationBar.setColor({ color: "#000000", darkButtons: false });
             break;
+          case "strawberries-and-cream":
+            StatusBar.setBackgroundColor({ color: "#ff61b4" });
+            StatusBar.setStyle({ style: Style.Light });
+            NavigationBar.setColor({ color: "#ff61b4", darkButtons: true });
+            break;
           default:
             StatusBar.setBackgroundColor({ color: "#1f1f1f" });
             StatusBar.setStyle({ style: Style.Dark });
