@@ -254,6 +254,26 @@
                 <ion-label>100% Negro</ion-label>
               </div>
             </ng-template>
+            <ng-template swiperSlide>
+              <div>
+                <ion-icon
+                  [name]="auth.isPatreon() ? 'lock-open' : 'lock-closed'"
+                ></ion-icon>
+                <ion-item
+                  button
+                  lines="none"
+                  (click)="toggleTheme('strawberries-and-cream')"
+                >
+                  <ion-thumbnail>
+                    <img
+                      src="/assets/img/layout/theme-strawberries-and-cream.png"
+                      alt="strawberries-and-cream"
+                    />
+                  </ion-thumbnail>
+                </ion-item>
+                <ion-label>Fresas con crema</ion-label>
+              </div>
+            </ng-template>
           </swiper>
         </ion-label>
       </ion-item>

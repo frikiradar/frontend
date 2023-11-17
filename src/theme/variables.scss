@@ -358,6 +358,59 @@
     }
   }
 
+  body.strawberries-and-cream {
+    /** dark **/
+    --ion-color-dark: #fef5f9; /* rosa pastel */
+    --ion-color-dark-rgb: 255, 193, 227;
+    --ion-color-dark-contrast: #000000; /* negro */
+    --ion-color-dark-contrast-rgb: 0, 0, 0;
+    --ion-color-dark-shade: #fed2e9; /* rosa pastel oscuro */
+    --ion-color-dark-tint: #ffcce5; /* rosa pastel claro */
+
+    .ion-color-dark {
+      --ion-color-base: var(--ion-color-dark);
+      --ion-color-base-rgb: var(--ion-color-dark-rgb);
+      --ion-color-contrast: var(--ion-color-dark-contrast);
+      --ion-color-contrast-rgb: var(--ion-color-dark-contrast-rgb);
+      --ion-color-shade: var(--ion-color-dark-shade);
+      --ion-color-tint: var(--ion-color-dark-tint);
+    }
+
+    /** light **/
+    --ion-color-light: #1f1f1f;
+    --ion-color-light-rgb: 31, 31, 31;
+    --ion-color-light-contrast: #ffffff;
+    --ion-color-light-contrast-rgb: 255, 255, 255;
+    --ion-color-light-shade: #1b1b1b;
+    --ion-color-light-tint: #353535;
+
+    .ion-color-light {
+      --ion-color-base: var(--ion-color-light);
+      --ion-color-base-rgb: var(--ion-color-light-rgb);
+      --ion-color-contrast: var(--ion-color-light-contrast);
+      --ion-color-contrast-rgb: var(--ion-color-light-contrast-rgb);
+      --ion-color-shade: var(--ion-color-light-shade);
+      --ion-color-tint: var(--ion-color-light-tint);
+    }
+
+    /** medium-dark **/
+    --ion-color-medium-dark: #ffc1e3;
+    --ion-color-medium-dark-rgb: 255, 193, 227;
+    --ion-color-medium-dark-contrast: #000000;
+    --ion-color-medium-dark-contrast-rgb: 0, 0, 0;
+    --ion-color-medium-dark-shade: #cdcdcd;
+    --ion-color-medium-dark-tint: #ebebeb;
+
+    .ion-color-medium-dark {
+      --ion-color-base: var(--ion-color-medium-dark);
+      --ion-color-base-rgb: var(--ion-color-medium-dark-rgb);
+      --ion-color-contrast: var(--ion-color-medium-dark-contrast);
+      --ion-color-contrast-rgb: var(--ion-color-medium-dark-contrast-rgb);
+      --ion-color-shade: var(--ion-color-medium-dark-shade);
+      --ion-color-tint: var(--ion-color-medium-dark-tint);
+    }
+  }
+
   /** patreon **/
   --ion-color-patreon: #f66854;
   --ion-color-patreon-rgb: 246, 104, 84;
