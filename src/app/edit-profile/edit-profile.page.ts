@@ -116,7 +116,7 @@ export class EditProfilePage {
       tags: [""],
     });
 
-    Keyboard.addListener("keyboardWillShow", () => {
+    Keyboard.addListener("keyboardDidShow", () => {
       this.showFooter = false;
     });
 

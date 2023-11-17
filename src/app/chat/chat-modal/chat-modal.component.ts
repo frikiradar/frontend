@@ -209,7 +209,7 @@ export class ChatModalComponent implements OnInit {
         }
       }
       if (this.platform.is("capacitor")) {
-        Keyboard.addListener("keyboardDidShow", () => {
+        Keyboard.addListener("keyboardWillShow", () => {
           this.scrollDown(0, true, false);
         });
 

@@ -134,12 +134,18 @@ export class ChatInputComponent {
   async openEmojis() {
     if (isPlatform("capacitor")) {
       Keyboard.setStyle({ style: KeyboardStyle.Dark });
+      if (!this.emojis) {
+        await Keyboard.hide();
+        setTimeout(() => {
+          this.emojis = !this.emojis;
+        }, 0); // Puedes ajustar este valor según sea necesario
+      } else {
+        this.emojis = !this.emojis;
+        Keyboard.show();
+      }
+    } else {
+      this.emojis = !this.emojis;
     }
-    if (this.emojis && isPlatform("capacitor")) {
-      await Keyboard.hide();
-    }
-
-    this.emojis = !this.emojis;
   }
 
   addEmoji(event: any) {
