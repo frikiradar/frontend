@@ -162,6 +162,7 @@
         <ion-textarea formControlName="note" autocapitalize="on"></ion-textarea>
       </ion-item>
       <ion-button
+        *ngIf="!auth.isAdmin()"
         color="primary"
         type="submit"
         expand="block"
