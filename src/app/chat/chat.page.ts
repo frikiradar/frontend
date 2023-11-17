@@ -82,7 +82,7 @@ export class ChatPage implements OnInit {
         }
       });
     } else {
-      const app = initializeApp(environment.firebase);
+      const app = initializeApp(environment.firebase, "chat");
       const messaging = getMessaging(app);
       onMessage(messaging, (payload) => {
         if (payload?.data?.message && payload?.data?.topic === "chat") {

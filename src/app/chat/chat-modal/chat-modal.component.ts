@@ -13,7 +13,6 @@ import { Router } from "@angular/router";
 import { Clipboard } from "@capacitor/clipboard";
 import { Keyboard } from "@capacitor/keyboard";
 import {
-  AlertController,
   IonContent,
   IonInfiniteScroll,
   ModalController,
@@ -59,7 +58,6 @@ export class ChatModalComponent implements OnInit {
   page = 1;
   pressOptions = false;
   selectedMessage: Chat;
-  alertError: any;
   private conversationId: string;
   public replying = false;
   public editing = false;
@@ -73,7 +71,6 @@ export class ChatModalComponent implements OnInit {
     private router: Router,
     public chatSvc: ChatService,
     private toast: ToastController,
-    private alert: AlertController,
     public platform: Platform,
     private config: ConfigService,
     private urlSvc: UrlService,
@@ -110,25 +107,6 @@ export class ChatModalComponent implements OnInit {
       min_version: string;
       chat: boolean;
     } = (await this.config.getConfig()) as any;
-
-    this.alertError = await this.alert.create({
-      header: `Ups, error al conectar`,
-      message:
-        "Es posible que el servicio de chat esté en mantenimiento en estos momentos.",
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: "Intentar reconectar",
-        },
-        {
-          text: "Ok, seré paciente",
-          handler: () => {
-            this.nav.back();
-          },
-        },
-      ],
-      cssClass: "round-alert",
-    });
 
     this.messageEvent.subscribe(async (message) => {
       if (!message) {
@@ -221,74 +199,50 @@ export class ChatModalComponent implements OnInit {
       this.scrollDown(300, true, false);
     } catch (e) {
       console.error(e);
-      await this.alertError.present();
     }
   }
 
   async newMessage(message: Chat) {
-    if (
-      this.messages.some(
-        (m) =>
-          (m.id === message.id && !!m.id) ||
-          (m.tmp_id === message.tmp_id && !!m.tmp_id)
-      )
-    ) {
+    // Verificar si el mensaje ya existe
+    const existingMessage = this.messages.find(
+      (m) =>
+        (m.id === message.id && !!m.id) ||
+        (m.tmp_id === message.tmp_id && !!m.tmp_id)
+    );
+
+    if (existingMessage) {
       // Si ya existe el mensaje lo actualizamos
-      this.messages.map((m) => {
-        if (
-          (m.id === message.id && !!m.id) ||
-          (m.tmp_id === message.tmp_id && !!m.tmp_id)
-        ) {
-          m.id = message.id;
-          m.text = message.text;
-          m.time_read = message.time_read;
-          m.edited = message.edited;
-          m.deleted = message.deleted;
-          m.sending = false;
-          m.event = message.event;
-          m.reply_to = message.reply_to;
-        }
-      });
-      // this.messageChange.emit(message);
+      Object.assign(existingMessage, message);
+      existingMessage.sending = false;
     } else {
+      // Si el mensaje no existe, lo añadimos a la lista
       this.messages = [...this.messages, message];
-      // this.messageChange.emit(message);
-      /* //Opción para ordenar por orden de creación en lugar de recepción
-      this.messages = messages.sort((a, b) => {
-        return (
-          new Date(a.time_creation).getTime() -
-          new Date(b.time_creation).getTime()
-        );
-      });*/
     }
 
+    // Marcamos como leído si el mensaje es del usuario actual y tiene contenido
     if (
       message.fromuser?.id === this.user?.id &&
       (message.text || message.image || message.audio)
     ) {
-      // marcamos como leido
       try {
         if (this.user?.id !== this.auth.currentUserValue.id) {
           message = await this.chatSvc.readChat(message.id);
         }
       } catch (e) {
         console.error(e);
-        await this.alertError.present();
       }
     }
 
+    // Actualizamos el usuario si el mensaje es del usuario actual
     if (message.fromuser?.id === this.user?.id) {
       this.user = message.fromuser;
     }
 
-    // Borramos los deleted
-    this.messages = this.messages.filter((m) => {
-      if (!m.deleted) {
-        return m;
-      }
-    });
+    // Filtramos los mensajes eliminados
+    this.messages = this.messages.filter((m) => !m.deleted);
 
-    this.messages.map((m) => {
+    // Marcamos los mensajes pasados
+    this.messages.forEach((m) => {
       if (new Date(m?.event?.date) < new Date()) {
         m.event.past = true;
       }
@@ -330,6 +284,8 @@ export class ChatModalComponent implements OnInit {
       this.messages = [...this.messages, ...[message]].filter(
         (m: Chat) => m.text || m.image || m.audio
       );
+
+      console.log(this.messages);
 
       this.scrollDown(300, true, true);
       let replyToId =

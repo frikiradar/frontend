@@ -359,13 +359,21 @@
   }
 
   body.strawberries-and-cream {
+    /** primary **/
+    --ion-color-primary: #ff61b4;
+    --ion-color-primary-rgb: 56, 128, 255;
+    --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-contrast-rgb: 255, 255, 255;
+    --ion-color-primary-shade: #c2185b;
+    --ion-color-primary-tint: #f06292;
+
     /** dark **/
-    --ion-color-dark: #fef5f9; /* rosa pastel */
+    --ion-color-dark: #fed2e9; /* rosa pastel */
     --ion-color-dark-rgb: 255, 193, 227;
     --ion-color-dark-contrast: #000000; /* negro */
     --ion-color-dark-contrast-rgb: 0, 0, 0;
-    --ion-color-dark-shade: #fed2e9; /* rosa pastel oscuro */
-    --ion-color-dark-tint: #ffcce5; /* rosa pastel claro */
+    --ion-color-dark-shade: #ffc1e3; /* rosa pastel oscuro */
+    --ion-color-dark-tint: #ffc1e3; /* rosa pastel claro */
 
     .ion-color-dark {
       --ion-color-base: var(--ion-color-dark);

@@ -119,6 +119,11 @@ export class LoginPage {
 
   async loginWithGoogle() {
     try {
+      this.auth.logoutGoogle();
+    } catch (e) {
+      console.error(e);
+    }
+    try {
       const googleUser = await GoogleAuth.signIn();
       console.log(googleUser);
       if (googleUser.authentication.idToken) {
@@ -143,11 +148,8 @@ export class LoginPage {
           this.showRegister();
           return;
         }
-      } else {
-        this.auth.logoutGoogle();
       }
     } catch (error) {
-      this.auth.logoutGoogle();
       console.error(error);
       if (
         error.toString().includes("popup_closed_by_user") ||
@@ -233,7 +235,6 @@ export class LoginPage {
   }
 
   backToLogin() {
-    this.auth.logoutGoogle();
     this.activeView = "login";
   }
 

@@ -78,9 +78,14 @@ ion-content {
 
     &:first-child ion-item {
       --background: var(--ion-color-primary);
+      h2,
+      p {
+        color: white !important;
+      }
 
       .match {
         background-color: white;
+        color: var(--ion-color-primary);
         border: 2px solid var(--ion-color-light);
         height: 60px;
         width: 60px;

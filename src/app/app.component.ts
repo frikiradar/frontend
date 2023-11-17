@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Network } from "@capacitor/network";
-import { AlertController, Platform, ToastController } from "@ionic/angular";
+import {
+  AlertController,
+  Platform,
+  ToastController,
+  isPlatform,
+} from "@ionic/angular";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
 import { environment } from "src/environments/environment";
@@ -278,12 +283,8 @@ export class AppComponent {
   }
 
   async initNotifications() {
-    if (this.platform.is("capacitor")) {
-      this.push.init();
-    } else {
-      if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
-        this.push.init();
-      }
+    await this.push.init();
+    if (!isPlatform("capacitor")) {
       this.sw.init();
     }
   }
