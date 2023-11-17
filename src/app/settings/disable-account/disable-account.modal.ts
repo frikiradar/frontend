@@ -29,7 +29,7 @@ export class DisableAccountModal {
     public fb: UntypedFormBuilder,
     private modalController: ModalController,
     private userSvc: UserService,
-    private auth: AuthService,
+    public auth: AuthService,
     private alert: AlertController,
     private toast: ToastController
   ) {
