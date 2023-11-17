@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd, UrlTree } from "@angular/router";
-import { NavController, Platform } from "@ionic/angular";
+import { NavController, Platform, isPlatform } from "@ionic/angular";
 import { NavigationOptions } from "@ionic/angular/common/providers/nav-controller";
 
 @Injectable({ providedIn: "root" })
@@ -28,7 +28,11 @@ export class NavService {
       currentUrl.startsWith("/login") ||
       currentUrl == "/"
     ) {
-      navigator["app"].exitApp();
+      if (isPlatform("capacitor")) {
+        navigator["app"].exitApp();
+      } else {
+        window.close();
+      }
     } else if (this.history.length > 1) {
       this.history.pop();
       this.nav.back();
