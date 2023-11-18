@@ -12,6 +12,7 @@ import {
   PickerController,
   Platform,
   ToastController,
+  isPlatform,
 } from "@ionic/angular";
 import SwiperCore, {
   SwiperOptions,
@@ -116,13 +117,15 @@ export class EditProfilePage {
       tags: [""],
     });
 
-    Keyboard.addListener("keyboardDidShow", () => {
-      this.showFooter = false;
-    });
+    if (isPlatform("capacitor")) {
+      Keyboard.addListener("keyboardDidShow", () => {
+        this.showFooter = false;
+      });
 
-    Keyboard.addListener("keyboardWillHide", () => {
-      this.showFooter = true;
-    });
+      Keyboard.addListener("keyboardWillHide", () => {
+        this.showFooter = true;
+      });
+    }
   }
 
   ngOnInit() {

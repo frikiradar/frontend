@@ -28,7 +28,7 @@ export class CropperModal implements OnInit {
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
+    this.croppedImage = event.objectUrl;
   }
 
   async imageLoaded() {
