@@ -337,9 +337,9 @@ export class UtilsService {
             NavigationBar.setColor({ color: "#000000", darkButtons: false });
             break;
           case "strawberries-and-cream":
-            StatusBar.setBackgroundColor({ color: "#ff61b4" });
+            StatusBar.setBackgroundColor({ color: "#ffebee" });
             StatusBar.setStyle({ style: Style.Light });
-            NavigationBar.setColor({ color: "#ff61b4", darkButtons: true });
+            NavigationBar.setColor({ color: "#ffebee", darkButtons: true });
             break;
           default:
             StatusBar.setBackgroundColor({ color: "#1f1f1f" });

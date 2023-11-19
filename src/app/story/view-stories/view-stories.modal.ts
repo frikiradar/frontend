@@ -50,6 +50,8 @@ export class ViewStoriesModal implements OnInit {
   textarea: IonTextarea;
   public slides: SwiperCore;
   public story: Story;
+  public showComments = false;
+  public showViews = false;
 
   public commentForm: UntypedFormGroup;
   get comment() {
@@ -151,18 +153,37 @@ export class ViewStoriesModal implements OnInit {
     this.slides.autoplay.start();
   }
 
+  closeCommentsSheet() {
+    this.showComments = false;
+  }
+
   commentFocus(event?: CustomEvent) {
+    event?.stopPropagation();
     if (event) {
       const textarea = event.target as unknown as IonTextarea;
       textarea.getInputElement().then((a) => a.blur());
     }
-    document.getElementById("view-comments").click();
+    this.showComments = true;
     setTimeout(() => {
       this.textarea.setFocus();
       if (this.platform.is("capacitor")) {
         Keyboard.show();
       }
     }, 500);
+  }
+
+  showViewsSheet(event: Event) {
+    event.stopPropagation();
+    this.showViews = true;
+  }
+
+  closeViewsSheet() {
+    this.showViews = false;
+  }
+
+  showCommentsSheet(event: Event) {
+    event.stopPropagation();
+    this.showComments = true;
   }
 
   setLikeStory() {
@@ -183,27 +204,27 @@ export class ViewStoriesModal implements OnInit {
     });
   }
 
-  async switchLikeStory() {
+  async switchLikeStory(event: Event) {
+    event.stopPropagation();
     this.slides.autoplay.stop();
     if (
       this.story.likeStories.some(
         (l) => l.user.id === this.auth.currentUserValue.id
       )
     ) {
-      this.story.like = false;
-      this.storySvc.unlike(this.story.id);
+      this.story = await this.storySvc.unlike(this.story.id);
       Haptics.notification({ type: NotificationType.Error });
+      this.story.like = false;
     } else {
-      this.story.like = true;
-      this.storySvc.like(this.story.id);
+      this.story = await this.storySvc.like(this.story.id);
       Haptics.notification({ type: NotificationType.Success });
+      this.story.like = true;
     }
 
-    this.stories.map((s) => {
-      if (s.id === this.story.id) {
-        s.like = this.story.like;
-      }
-    });
+    this.stories = this.stories.map((story) =>
+      story.id === this.story.id ? this.story : story
+    );
+    this.cd.detectChanges();
 
     this.slides.autoplay.start();
   }

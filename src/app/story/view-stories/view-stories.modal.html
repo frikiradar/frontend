@@ -44,7 +44,7 @@
     (touchEnd)="touchEnd($event)"
     [config]="slideOpts"
   >
-    <ng-template swiperSlide *ngFor="let story of stories">
+    <ng-template swiperSlide *ngFor="let story of stories" class="story-slide">
       <img
         class="background-image"
         [src]="story?.image"
@@ -54,29 +54,53 @@
         <ion-thumbnail>
           <img [src]="story?.image" [alt]="story?.user.username" />
         </ion-thumbnail>
-        <ion-card-content>
+        <ion-card-content class="story-text">
           <p
             (click)="$event.stopImmediatePropagation(); openUrl($event);"
             [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions} | hashtag"
           ></p>
         </ion-card-content>
       </ion-card>
+      <div class="story-actions">
+        <ion-buttons slot="start" ion-activatable>
+          <ion-button
+            color="primary"
+            (click)="switchLikeStory($event)"
+            shape="round"
+          >
+            <ion-icon
+              [color]="story?.like ? 'primary' : 'light'"
+              name="heart"
+            ></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{story?.likeStories.length}}</ion-label>
+        <ion-buttons>
+          <ion-button
+            (click)="showViewsSheet($event)"
+            id="view-views"
+            shape="round"
+          >
+            <ion-icon name="eye"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{story?.viewStories.length}}</ion-label>
+        <ion-buttons slot="end">
+          <ion-button
+            (click)="showCommentsSheet($event)"
+            id="view-comments"
+            shape="round"
+          >
+            <ion-icon name="chatbubble-ellipses"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{story.comments.length}}</ion-label>
+      </div>
     </ng-template>
   </swiper>
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-item lines="none" id="text-input">
-    <ion-buttons
-      ion-activatable
-      *ngIf="story?.user?.id !== auth.currentUserValue.id"
-    >
-      <ion-button color="primary" (click)="switchLikeStory()">
-        <ion-icon
-          slot="icon-only"
-          [name]="story?.like ? 'heart' : 'heart-outline'"
-        ></ion-icon>
-      </ion-button>
-    </ion-buttons>
     <form [formGroup]="commentForm" autocomplete="off">
       <ion-item lines="none">
         <ion-textarea
@@ -95,31 +119,17 @@
       </ion-button>
     </ion-buttons>
   </ion-item>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button id="view-views" shape="round">
-        <ion-icon name="heart"></ion-icon>
-        <ion-label>{{story?.likeStories.length}} kokoros</ion-label> /
-        <ion-label>{{story?.viewStories.length}} vistas</ion-label>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button id="view-comments" shape="round">
-        <ion-icon name="chatbubble-ellipses"></ion-icon>
-        <ion-label>{{story.comments.length}} Comentarios</ion-label>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
 </ion-footer>
 
 <!-- modals -->
 <ion-modal
   [breakpoints]="[0, 1]"
   [initialBreakpoint]="1"
-  trigger="view-views"
   cssClass="sheet-modal"
   (didPresent)="slides.autoplay.stop()"
   (didDismiss)="slides.autoplay.start()"
+  [isOpen]="showViews"
+  (ionModalDidDismiss)="closeCommentsSheet()"
 >
   <ng-template>
     <ion-content class="ion-padding">
@@ -130,6 +140,7 @@
           button
           detail="false"
           (click)="showProfile(view.user.id)"
+          color="dark"
         >
           <ion-avatar>
             <img [src]="view?.user?.thumbnail" />
@@ -140,7 +151,7 @@
           >
         </ion-item>
       </ion-list>
-      <ion-item *ngIf="story?.viewStories?.length == 0">
+      <ion-item *ngIf="story?.viewStories?.length == 0" color="dark">
         <p>No hay visualizaciones</p>
       </ion-item>
     </ion-content>
@@ -150,10 +161,11 @@
 <ion-modal
   [breakpoints]="[0, 1]"
   [initialBreakpoint]="1"
-  trigger="view-comments"
   cssClass="sheet-modal"
   (didPresent)="slides.autoplay.stop()"
   (didDismiss)="slides.autoplay.start()"
+  [isOpen]="showComments"
+  (ionModalDidDismiss)="closeViewsSheet()"
 >
   <ng-template>
     <ion-content class="comments-modal">
@@ -181,6 +193,7 @@
           button
           detail="false"
           lines="none"
+          color="dark"
         >
           <ion-avatar (click)="showProfile(comment.user.id)">
             <img [src]="comment.user.thumbnail" />
@@ -237,7 +250,7 @@
           </ion-note>
         </ion-item>
       </ion-list>
-      <ion-item *ngIf="story?.comments.length == 0">
+      <ion-item *ngIf="story?.comments.length == 0" color="dark">
         <p>No hay comentarios</p>
       </ion-item>
     </ion-content>
