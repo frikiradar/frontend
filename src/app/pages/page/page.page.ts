@@ -101,7 +101,7 @@ export class PagePage {
       componentProps: { hash: `#${this.page.slug}` },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();
@@ -120,7 +120,7 @@ export class PagePage {
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();
@@ -140,7 +140,7 @@ export class PagePage {
       },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();

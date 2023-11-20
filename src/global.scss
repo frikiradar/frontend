@@ -233,8 +233,17 @@ ion-modal::part(content) {
 .full-modal::part(content),
 .full-modal .modal-wrapper {
   @media (min-width: 668px) {
-    --height: 95%;
-    --width: 50%;
+    --height: 100%;
+    --width: 100%;
+  }
+}
+
+.vertical-modal::part(content),
+.vertical-modal .modal-wrapper {
+  @media (min-width: 668px) {
+    --height: 915px; // Ajusta esto a la altura que desees
+    --width: 600px; // Ajusta esto al ancho que desees
+    --border-radius: 20px; // Ajusta esto para cambiar cuánto se redondean las esquinas
   }
 }
 

@@ -60,7 +60,7 @@ export class ExplorePage {
     if (!rules) {
       const modal = await this.modalController.create({
         component: RulesPage,
-        cssClass: "full-modal",
+        cssClass: "vertical-modal",
         backdropDismiss: false,
       });
       return await modal.present();
@@ -97,7 +97,7 @@ export class ExplorePage {
       component: StoryModal,
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();
@@ -127,7 +127,7 @@ export class ExplorePage {
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();

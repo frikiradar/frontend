@@ -40,6 +40,7 @@
         *ngFor="let notification of notifications"
         (click)="showNotification(notification)"
         [ngClass]="!notification?.time_read ? 'unread' : ''"
+        color="dark"
       >
         <ion-avatar slot="start">
           <img

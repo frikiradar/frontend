@@ -50,7 +50,7 @@ export class ChatPage implements OnInit {
     if (!rules) {
       const modal = await this.modalController.create({
         component: RulesPage,
-        cssClass: "full-modal",
+        cssClass: "vertical-modal",
         backdropDismiss: false,
       });
       return await modal.present();

@@ -186,6 +186,10 @@ export class ViewStoriesModal implements OnInit {
     this.showComments = true;
   }
 
+  closeCommentSheet() {
+    this.showComments = false;
+  }
+
   setLikeStory() {
     this.story.viewStories.map(
       (v) =>
@@ -280,7 +284,7 @@ export class ViewStoriesModal implements OnInit {
       component: StoryModal,
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();
@@ -333,10 +337,6 @@ export class ViewStoriesModal implements OnInit {
       ).present();
     }*/
     this.modalCreate.dismiss();
-  }
-
-  viewComments() {
-    document.getElementById("view-comments").click();
   }
 
   async viewCommentLikes(likes: Story["comments"][0]["likes"]) {

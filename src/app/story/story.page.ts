@@ -68,7 +68,7 @@ export class StoryPage implements OnInit {
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();
@@ -81,7 +81,7 @@ export class StoryPage implements OnInit {
       component: StoryModal,
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();

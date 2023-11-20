@@ -47,7 +47,7 @@ export class MenuModal implements OnInit {
   async credits() {
     const modal = await this.subModal.create({
       component: CreditsModal,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
     return await modal.present();
   }
@@ -55,7 +55,7 @@ export class MenuModal implements OnInit {
   async rules() {
     const modal = await this.subModal.create({
       component: RulesPage,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
     return await modal.present();
   }

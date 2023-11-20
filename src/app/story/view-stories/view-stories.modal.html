@@ -60,6 +60,53 @@
             [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions} | hashtag"
           ></p>
         </ion-card-content>
+        <div class="comments preview-comments">
+          <ion-list *ngIf="story?.comments.length > 0">
+            <ion-item
+              *ngFor="let comment of story.comments.slice(-1)"
+              button
+              detail="false"
+              lines="none"
+            >
+              <ion-avatar (click)="showProfile(comment.user.id)">
+                <img [src]="comment.user.thumbnail" />
+              </ion-avatar>
+              <ion-label>
+                <p class="text">
+                  <a (click)="showProfile(comment.user.id)"
+                    >{{comment.user.username}}</a
+                  >
+                  &nbsp;
+                  <span
+                    [innerHTML]="comment.text | linky:{className: 'linkified'} | mentions:{mentions: comment.mentions} | hashtag"
+                    (click)="$event.stopImmediatePropagation(); openUrl($event);"
+                  ></span>
+                </p>
+
+                <ion-note class="note-date">
+                  <span>{{ comment.time_creation | date: "shortTime" }}</span>
+                  &nbsp;&nbsp;&nbsp;
+                  <span
+                    *ngIf="comment?.likes.length"
+                    button
+                    (click)="viewCommentLikes(comment.likes)"
+                    >{{ comment.likes.length }} kokoros</span
+                  >
+                </ion-note>
+              </ion-label>
+            </ion-item>
+            <ion-item
+              button
+              lines="none"
+              class="show-more"
+              (click)="$event.stopImmediatePropagation(); showCommentsSheet($event)"
+            >
+              <ion-label
+                >Ver los {{story?.comments.length}} comentarios</ion-label
+              >
+            </ion-item>
+          </ion-list>
+        </div>
       </ion-card>
       <div class="story-actions">
         <ion-buttons slot="start" ion-activatable>
@@ -165,7 +212,7 @@
   (didPresent)="slides.autoplay.stop()"
   (didDismiss)="slides.autoplay.start()"
   [isOpen]="showComments"
-  (ionModalDidDismiss)="closeViewsSheet()"
+  (ionModalDidDismiss)="closeCommentsSheet()"
 >
   <ng-template>
     <ion-content class="comments-modal">

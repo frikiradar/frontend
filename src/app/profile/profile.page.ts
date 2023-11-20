@@ -349,7 +349,7 @@ export class ProfilePage {
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
     await modal.present();
     await modal.onDidDismiss();

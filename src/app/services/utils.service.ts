@@ -109,7 +109,7 @@ export class UtilsService {
   ): Promise<Blob | boolean> {
     const modal = await this.modalController.create({
       component: WebcamModal,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
     await modal.present();
 

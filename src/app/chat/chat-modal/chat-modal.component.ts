@@ -460,7 +460,7 @@ export class ChatModalComponent implements OnInit {
       },
       keyboardClose: true,
       showBackdrop: true,
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
 
     await modal.present();
