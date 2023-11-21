@@ -44,7 +44,7 @@ export class UserService {
 
   async updateUser(user: User): Promise<User> {
     try {
-      user = (await this.rest.put("user", user).toPromise()) as User;
+      user = (await firstValueFrom(this.rest.put("user", user))) as User;
       this.auth.setAuthUser(user);
       return user;
     } catch (e) {
@@ -349,6 +349,32 @@ export class UserService {
       "Sexo ocasional",
       "Amistad con derechos",
       "Pareja formal",
+    ];
+  }
+
+  getLanguages() {
+    // Listado de idiomas principales para la aplicación
+    return [
+      { key: "es", name: "Español" },
+      { key: "en", name: "Inglés" },
+      { key: "ja", name: "Japonés" },
+      { key: "ko", name: "Coreano" },
+      { key: "zh", name: "Chino" },
+      { key: "pt", name: "Portugués" },
+      { key: "fr", name: "Francés" },
+      { key: "de", name: "Alemán" },
+      { key: "it", name: "Italiano" },
+      { key: "ru", name: "Ruso" },
+      { key: "ca", name: "Catalán/Valenciano/Balear" },
+      { key: "eu", name: "Euskera" },
+      { key: "gl", name: "Gallego" },
+      { key: "sv", name: "Sueco" },
+      { key: "no", name: "Noruego" },
+      { key: "da", name: "Danés" },
+      { key: "fi", name: "Finés" },
+      { key: "pl", name: "Polaco" },
+      { key: "ro", name: "Rumano" },
+      { key: "ar", name: "Árabe" },
     ];
   }
 }

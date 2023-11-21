@@ -8,13 +8,14 @@ import { Page } from "../models/page";
 import { User } from "../models/user";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
+import { firstValueFrom } from "rxjs";
 
 const httpOptions = {
-  headers: new HttpHeaders({ "Content-Type": "application/json" })
+  headers: new HttpHeaders({ "Content-Type": "application/json" }),
 };
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class EventService {
   constructor(
@@ -25,7 +26,7 @@ export class EventService {
 
   async getEvent(id: Event["id"]): Promise<Event> {
     try {
-      return (await this.rest.get(`event/${id}`).toPromise()) as Event;
+      return (await firstValueFrom(this.rest.get(`event/${id}`))) as Event;
     } catch (e) {
       throw new Error("No se puede obtener el evento");
     }
@@ -33,9 +34,9 @@ export class EventService {
 
   async getPublicEvent(id: Event["id"]): Promise<Event> {
     try {
-      return (await this.http
-        .get(`${environment.root}api/event/${id}`, httpOptions)
-        .toPromise()) as Event;
+      return (await firstValueFrom(
+        this.http.get(`${environment.root}api/event/${id}`, httpOptions)
+      )) as Event;
     } catch (e) {
       throw new Error("No se puede obtener el evento");
     }
@@ -150,30 +151,32 @@ export class EventService {
   }
 
   async getMyEvents() {
-    return (await this.rest.get(`my-events`).toPromise()) as Event[];
+    return (await firstValueFrom(this.rest.get(`my-events`))) as Event[];
   }
 
   async getSuggestedEvents() {
-    return (await this.rest.get(`suggested-events`).toPromise()) as Event[];
+    return (await firstValueFrom(this.rest.get(`suggested-events`))) as Event[];
   }
 
   async getOnlineEvents() {
-    return (await this.rest.get(`online-events`).toPromise()) as Event[];
+    return (await firstValueFrom(this.rest.get(`online-events`))) as Event[];
   }
 
   async getNearEvents() {
-    return (await this.rest.get(`near-events`).toPromise()) as Event[];
+    return (await firstValueFrom(this.rest.get(`near-events`))) as Event[];
   }
 
   async getEventsSlug(slug: string) {
-    return (await this.rest.get(`slug-events/${slug}`).toPromise()) as Event[];
+    return (await firstValueFrom(
+      this.rest.get(`slug-events/${slug}`)
+    )) as Event[];
   }
 
   async cancelEvent(id: Event["id"]): Promise<Event> {
     try {
-      const event = (await this.rest
-        .put("cancel-event", { id })
-        .toPromise()) as Event;
+      const event = (await firstValueFrom(
+        this.rest.put("cancel-event", { id })
+      )) as Event;
       return event;
     } catch (e) {
       throw new Error("No se puede cancelar el evento");
@@ -182,7 +185,7 @@ export class EventService {
 
   async deleteEvent(event: Event) {
     try {
-      await this.rest.delete(`delete-event/${event.id}`).toPromise();
+      await firstValueFrom(this.rest.delete(`delete-event/${event.id}`));
     } catch (e) {
       throw new Error("No se puede eliminar el evento");
     }
@@ -190,9 +193,9 @@ export class EventService {
 
   async participateEvent(id: Event["id"]) {
     try {
-      const event = (await this.rest
-        .post("participate-event", { id })
-        .toPromise()) as Event;
+      const event = (await firstValueFrom(
+        this.rest.post("participate-event", { id })
+      )) as Event;
       return event;
     } catch (e) {
       throw new Error("Error al participar en el evento");
@@ -201,9 +204,9 @@ export class EventService {
 
   async unparticipateEvent(id: Event["id"]) {
     try {
-      const event = (await this.rest
-        .delete(`remove-participant-event/${id}`)
-        .toPromise()) as Event;
+      const event = (await firstValueFrom(
+        this.rest.delete(`remove-participant-event/${id}`)
+      )) as Event;
       return event;
     } catch (e) {
       throw new Error("Error al quitar participación en el evento");
@@ -212,9 +215,9 @@ export class EventService {
 
   async confirmDate(id: Chat["id"]) {
     try {
-      const event = (await this.rest
-        .post("confirm-date", { id })
-        .toPromise()) as Event;
+      const event = (await firstValueFrom(
+        this.rest.post("confirm-date", { id })
+      )) as Event;
       return event;
     } catch (e) {
       throw new Error("Error al confirmar la cita");
@@ -223,9 +226,9 @@ export class EventService {
 
   async declineDate(id: Chat["id"]) {
     try {
-      const event = (await this.rest
-        .put("decline-date", { id })
-        .toPromise()) as Event;
+      const event = (await firstValueFrom(
+        this.rest.put("decline-date", { id })
+      )) as Event;
       return event;
     } catch (e) {
       throw new Error("No se puede rechazar la cita");

@@ -6,6 +6,7 @@ import { Chat } from "../models/chat";
 import { Page } from "../models/page";
 import { Story } from "../models/story";
 import { User } from "../models/user";
+import { firstValueFrom } from "rxjs";
 
 export interface Config {
   openTimes?: number;
@@ -52,9 +53,9 @@ export class ConfigService {
   async getConfig(force?: boolean): Promise<Config> {
     let config = JSON.parse(localStorage.getItem("config"));
     if (force || JSON.parse(localStorage.getItem("config")) === undefined) {
-      config = (await this.http
-        .get(`${this.root}api/config`)
-        .toPromise()) as Config;
+      config = (await firstValueFrom(
+        this.http.get(`${this.root}api/config`)
+      )) as Config;
       this.setConfig(config);
     }
 

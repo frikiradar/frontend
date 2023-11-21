@@ -11,6 +11,7 @@ export interface User {
   email: string;
   description: string;
   birthday: string;
+  languages: string[];
   gender: string;
   orientation: string;
   pronoun: string;

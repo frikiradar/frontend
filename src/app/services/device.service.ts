@@ -1,23 +1,20 @@
 import { Injectable } from "@angular/core";
 import { Device as DevicePlugin } from "@capacitor/device";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import * as platform from "platform";
-import { Platform } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { Device } from "./../models/device";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
+import { isPlatform } from "@ionic/angular";
+import platform from "platform";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class DeviceService {
-  constructor(
-    private rest: RestService,
-    private auth: AuthService,
-    private platform: Platform
-  ) {}
+  constructor(private rest: RestService, private auth: AuthService) {}
 
   async getDevices(forceApi = false): Promise<Device[]> {
     if (
@@ -27,7 +24,7 @@ export class DeviceService {
     ) {
       return this.auth.currentUserValue.devices;
     } else {
-      return (await this.rest.get(`devices`).toPromise()) as Device[];
+      return (await firstValueFrom(this.rest.get(`devices`))) as Device[];
     }
   }
 
@@ -36,7 +33,7 @@ export class DeviceService {
       const device = await this.getCurrentDevice(token);
       // console.log("device", device);
       let uuid: string = null;
-      if (this.platform.is("capacitor")) {
+      if (isPlatform("capacitor")) {
         uuid = (await DevicePlugin.getId()).identifier;
       } else {
         const fp = await FingerprintJS.load();
@@ -57,24 +54,24 @@ export class DeviceService {
         }
 
         let platform = "" as Device["platform"];
-        if (this.platform.is("capacitor")) {
-          if (this.platform.is("android")) {
+        if (isPlatform("capacitor")) {
+          if (isPlatform("android")) {
             platform = "android";
-          } else if (this.platform.is("ios")) {
+          } else if (isPlatform("ios")) {
             platform = "ios";
           }
         } else {
           platform = "web";
         }
 
-        const user = (await this.rest
-          .put("device", {
+        const user = (await firstValueFrom(
+          this.rest.put("device", {
             id: uuid,
             name: device.device_name,
             token,
             platform,
           })
-          .toPromise()) as User;
+        )) as User;
 
         // this.auth.setAuthUser(user);
       }
@@ -84,7 +81,7 @@ export class DeviceService {
   async getCurrentDevice(token?: string): Promise<Device> {
     let uuid: string = null;
     let device: Device;
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       uuid = (await DevicePlugin.getId()).identifier;
       const info = await DevicePlugin.getInfo();
       device = {
@@ -128,13 +125,15 @@ export class DeviceService {
     return this.rest.put("unknown-device", { device });
   }
 
-  removeDevice(device: Device) {
-    return this.rest.delete(`device/${device.id}`).toPromise() as Promise<User>;
+  async removeDevice(device: Device) {
+    return (await firstValueFrom(
+      this.rest.delete(`device/${device.id}`)
+    )) as User;
   }
 
-  switchDevice(device: Device) {
-    return this.rest
-      .get(`switch-device/${device.id}`)
-      .toPromise() as Promise<User>;
+  async switchDevice(device: Device) {
+    return (await firstValueFrom(
+      this.rest.get(`switch-device/${device.id}`)
+    )) as User;
   }
 }

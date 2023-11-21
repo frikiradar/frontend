@@ -80,15 +80,15 @@ export class ChatService {
   }
 
   async readChat(id: number) {
-    return (await this.rest.get(`read-chat/${id}`).toPromise()) as Chat;
+    return (await firstValueFrom(this.rest.get(`read-chat/${id}`))) as Chat;
   }
 
   async deleteMessage(id: number) {
-    await this.rest.delete(`chat-message/${id}`).toPromise();
+    await firstValueFrom(this.rest.delete(`chat-message/${id}`));
   }
 
   async deleteChat(touserid: number) {
-    await this.rest.delete(`chat/${touserid}`).toPromise();
+    await firstValueFrom(this.rest.delete(`chat/${touserid}`));
   }
 
   async archiveChat(chat: Chat, allChats: Chat[]) {
@@ -144,7 +144,9 @@ export class ChatService {
   }
 
   async report(message: Chat, note: string) {
-    return await this.rest.put("report-chat", { message, note }).toPromise();
+    return await firstValueFrom(
+      this.rest.put("report-chat", { message, note })
+    );
   }
 
   async realtimeChatInfo() {

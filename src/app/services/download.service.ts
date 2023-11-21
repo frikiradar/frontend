@@ -3,9 +3,10 @@ import { Injectable } from "@angular/core";
 
 import { environment } from "../../environments/environment";
 import { UtilsService } from "./utils.service";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class DownloadService {
   private apiUrl = environment.apiUrl;
@@ -15,11 +16,9 @@ export class DownloadService {
   async download(endpoint: string, id: number): Promise<string> {
     const params = new HttpParams();
 
-    const download = await this.http
-      .get<string>(`${this.apiUrl}${endpoint}/${id}`, {
-        params
-      })
-      .toPromise();
+    const download = await firstValueFrom(
+      this.http.get<string>(`${this.apiUrl}${endpoint}/${id}`, { params })
+    );
     return download;
   }
 }

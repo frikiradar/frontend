@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, firstValueFrom } from "rxjs";
 
 import { RestService } from "./rest.service";
 import { Notification } from "../models/notification";
@@ -11,7 +11,7 @@ export interface NotificationCounters {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class NotificationService {
   private notificationSubject: BehaviorSubject<NotificationCounters>;
@@ -34,32 +34,32 @@ export class NotificationService {
   }
 
   async getUnread() {
-    return this.rest.get(`notifications`).toPromise();
+    return await firstValueFrom(this.rest.get(`notifications`));
   }
 
-  getNotifications() {
-    return this.rest.get(`notifications-list`).toPromise() as Promise<
-      Notification[]
-    >;
+  async getNotifications() {
+    return (await firstValueFrom(
+      this.rest.get(`notifications-list`)
+    )) as Notification[];
   }
 
   async readNotification(id: Notification["id"]) {
-    return (await this.rest
-      .get(`read-notification/${id}`)
-      .toPromise()) as Notification;
+    return (await firstValueFrom(
+      this.rest.get(`read-notification/${id}`)
+    )) as Notification;
   }
 
   async unreadNotification(id: Notification["id"]) {
-    return (await this.rest
-      .get(`unread-notification/${id}`)
-      .toPromise()) as Notification;
+    return (await firstValueFrom(
+      this.rest.get(`unread-notification/${id}`)
+    )) as Notification;
   }
 
   async removeNotification(id: Notification["id"]) {
-    return await this.rest.delete(`remove-notification/${id}`).toPromise();
+    return await firstValueFrom(this.rest.delete(`remove-notification/${id}`));
   }
 
   async removeNotifications() {
-    return await this.rest.delete(`remove-notifications`).toPromise();
+    return await firstValueFrom(this.rest.delete(`remove-notifications`));
   }
 }
