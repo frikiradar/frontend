@@ -40,8 +40,9 @@
   <swiper
     (swiper)="setSwiperInstance($event)"
     (click)="tap($event)"
-    (touchStart)="touchStart($event)"
-    (touchEnd)="touchEnd($event)"
+    (touchStart)="touchStart()"
+    (touchEnd)="touchEnd()"
+    (doubleTap)="doubleTap($event)"
     [config]="slideOpts"
   >
     <ng-template swiperSlide *ngFor="let story of stories" class="story-slide">
@@ -117,7 +118,8 @@
           >
             <ion-icon
               [color]="story?.like ? 'primary' : 'light'"
-              name="heart"
+              [name]="story?.like ? 'heart' : 'heart-outline'"
+              [@pulse]="story.like"
             ></ion-icon>
           </ion-button>
         </ion-buttons>

@@ -36,6 +36,8 @@ import { StoryService } from "../../services/story.service";
 import { CommentLikesModal } from "../comment-likes/comment-likes.modal";
 import { StoryModal } from "../story-modal/story.modal";
 import { Haptics, NotificationType } from "@capacitor/haptics";
+import { transition, trigger, useAnimation } from "@angular/animations";
+import { pulse } from "ng-animate";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -43,6 +45,7 @@ SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
   selector: "view-stories-modal",
   templateUrl: "./view-stories.modal.html",
   styleUrls: ["./view-stories.modal.scss"],
+  animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])],
 })
 export class ViewStoriesModal implements OnInit {
   @Input() stories: Story[];
@@ -52,6 +55,7 @@ export class ViewStoriesModal implements OnInit {
   public story: Story;
   public showComments = false;
   public showViews = false;
+  public pulse: any;
 
   public commentForm: UntypedFormGroup;
   get comment() {
@@ -134,23 +138,33 @@ export class ViewStoriesModal implements OnInit {
     this.viewStory(this.stories[index]);
   }
 
-  touchStart(event: TouchEvent) {
+  touchStart() {
     this.slides.autoplay.stop();
   }
-  touchEnd(event: TouchEvent) {
+  touchEnd() {
     this.slides.autoplay.start();
   }
 
   async tap(event: any) {
     if (event instanceof PointerEvent) {
       const modal = await this.thisModal.getTop();
-      if (event.pageX > modal.offsetWidth / 2) {
+      const centerStart = modal.offsetWidth / 2 - 50; // 50px para el centro
+      const centerEnd = modal.offsetWidth / 2 + 50; // 50px para el centro
+
+      if (event.pageX > centerEnd) {
         this.slides.slideNext();
-      } else {
+      } else if (event.pageX < centerStart) {
         this.slides.slidePrev();
       }
+      // Si el evento está en el centro, no hagas nada
     }
     this.slides.autoplay.start();
+  }
+
+  async doubleTap(event: any) {
+    if (event[1] instanceof TouchEvent) {
+      await this.switchLikeStory(event[1]);
+    }
   }
 
   closeCommentsSheet() {

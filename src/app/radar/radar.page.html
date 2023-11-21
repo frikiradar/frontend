@@ -34,15 +34,32 @@
       [config]="slideOpts"
     >
       <ng-template swiperSlide *ngFor="let user of users;">
-        <ion-card (click)="showProfile(user.id)" class="no-scroll" button>
-          <div class="background-image">
-            <img
-              [src]="user?.avatar"
-              [alt]="users?.username"
-              default="/assets/img/users/default.png"
-            />
-          </div>
-          <div class="info">
+        <ion-card class="no-scroll" button>
+          <swiper
+            class="images-slide"
+            [config]="slideImagesOpts"
+            (tap)="tap($event)"
+          >
+            <ng-template swiperSlide>
+              <div class="background-image">
+                <img
+                  [src]="user?.avatar"
+                  [alt]="users?.username"
+                  default="/assets/img/users/default.png"
+                />
+              </div>
+            </ng-template>
+            <ng-template swiperSlide *ngFor="let image of user.images">
+              <div class="background-image">
+                <img
+                  [src]="image"
+                  [alt]="users?.username"
+                  default="/assets/img/users/default.png"
+                />
+              </div>
+            </ng-template>
+          </swiper>
+          <div class="info" button (click)="showProfile(user.id)">
             <ion-card-header>
               <div class="match full-center">{{ user.match }}%</div>
               <ion-card-title>
@@ -74,7 +91,6 @@
               </ion-item>
               <ion-text class="description">{{user.description}}</ion-text>
               <div class="tags" *ngIf="user?.common_tags?.length">
-                <p><ion-text>Gustos en común:</ion-text></p>
                 <ion-chip
                   *ngFor="let tag of user.common_tags"
                   color="secondary"
@@ -83,6 +99,9 @@
                 </ion-chip>
               </div>
             </ion-card-content>
+            <ion-item lines="none" class="more" button (click)="openProfile()">
+              <ion-icon name="chevron-down-outline"></ion-icon>
+            </ion-item>
           </div>
         </ion-card>
       </ng-template>

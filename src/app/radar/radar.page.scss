@@ -25,6 +25,14 @@ swiper#radar-slide {
   }
 }
 
+swiper.images-slide {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 .background-image {
   height: 100%;
   width: 100%;
@@ -55,7 +63,17 @@ ion-card {
   }
 }
 
+.images-slide ::ng-deep .swiper-scrollbar {
+  position: absolute;
+  left: 25px;
+  z-index: 50;
+  height: 5px;
+  width: 85%;
+  top: 10px;
+}
+
 ion-card .info {
+  z-index: 1;
   background: rgba(0, 0, 0, 0);
   background: -moz-linear-gradient(
     top,
@@ -101,6 +119,10 @@ ion-card .info {
   left: 0;
 }
 
+.more ion-icon {
+  width: 100%;
+}
+
 ion-card-header {
   text-align: left;
   padding-bottom: 5px;
@@ -120,6 +142,7 @@ ion-card-header {
     .name {
       color: white;
       font-size: 24px;
+      font-weight: bold;
     }
 
     .age {
@@ -172,7 +195,6 @@ ion-card-content {
   position: absolute;
   right: 15px;
   bottom: 5px;
-  top: 5px;
 }
 
 .info-distance ion-text {

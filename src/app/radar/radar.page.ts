@@ -17,6 +17,8 @@ import SwiperCore, {
   SwiperOptions,
   EffectCoverflow,
   Mousewheel,
+  Scrollbar,
+  Swiper,
 } from "swiper";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
 
@@ -32,7 +34,7 @@ import {
 } from "../services/notification.service";
 import { NavService } from "../services/navigation.service";
 
-SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel]);
+SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel, Scrollbar]);
 
 @Component({
   selector: "app-radar",
@@ -59,8 +61,19 @@ export class RadarPage {
     },
     grabCursor: true,
     lazy: true,
+    preloadImages: false,
     effect: "coverflow",
     mousewheel: true,
+  };
+
+  public slideImagesOpts: SwiperOptions = {
+    slidesPerView: 1,
+    grabCursor: false,
+    lazy: true,
+    preloadImages: false,
+    watchSlidesProgress: true,
+    scrollbar: true,
+    allowTouchMove: false,
   };
 
   public hide = false;
@@ -114,6 +127,23 @@ export class RadarPage {
 
   setSwiperInstance(swiper: SwiperCore) {
     this.slides = swiper;
+  }
+
+  tap(event: any) {
+    if (event[0] instanceof Swiper && event[1] instanceof TouchEvent) {
+      const slide = event[0];
+      const touch = slide.touches;
+      const centerStart = screen.width / 2 - 50; // 50px para el centro
+      const centerEnd = screen.width / 2 + 50; // 50px para el centro
+
+      if (touch.currentX > centerEnd) {
+        slide.slideNext();
+      } else if (touch.currentX < centerStart) {
+        slide.slidePrev();
+      } else {
+        this.showProfile(this.user.id);
+      }
+    }
   }
 
   async ngAfterViewInit() {
