@@ -1,9 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import {
   ActionSheetController,
   IonInput,
@@ -75,7 +71,7 @@ export class EditProfilePage {
 
   public showToolbar = false;
   public showFooter = true;
-  public profileForm: UntypedFormGroup;
+  public profileForm: FormGroup;
   public today: number = Date.now();
   public user: User;
   public tags: Tag[] = [];
@@ -85,9 +81,10 @@ export class EditProfilePage {
   public loading = true;
   public isPictureSheetOpen = false;
   private searchSubject = new Subject<{ query: string; category: string }>();
+  public languages = this.userSvc.getLanguages();
 
   constructor(
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     public userSvc: UserService,
     private tagSvc: TagService,
     public auth: AuthService,
@@ -105,6 +102,7 @@ export class EditProfilePage {
       description: [""],
       location: [""],
       birthday: [""],
+      languages: [""],
       gender: [""],
       orientation: [""],
       pronoun: [""],
@@ -112,7 +110,7 @@ export class EditProfilePage {
       status: [""],
       lovegender: [""],
       minage: [""],
-      maxage: new UntypedFormControl({ value: "", disabled: true }),
+      maxage: new FormControl({ value: "", disabled: true }),
       connection: [""],
       tags: [""],
     });
@@ -144,6 +142,7 @@ export class EditProfilePage {
       description: this.user.description,
       location: this.user.location,
       birthday: this.user.birthday.split("T")[0],
+      languages: this.user.languages,
       gender: this.user.gender,
       orientation: this.user.orientation,
       pronoun: this.user.pronoun,

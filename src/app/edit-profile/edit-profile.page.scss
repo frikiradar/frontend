@@ -44,10 +44,12 @@ ion-item ion-label p {
   white-space: normal;
 }
 
-form {
-  width: 100%;
+ion-item-divider {
   ion-icon {
     margin-right: 10px;
+  }
+  ion-label {
+    text-align: justify;
   }
 }
 

@@ -23,7 +23,9 @@ export class NavService {
 
   back(): void {
     const currentUrl = this.history[this.history.length - 1];
-    if (
+    if (currentUrl == "/edit-profile") {
+      this.nav.navigateRoot("/profile");
+    } else if (
       currentUrl.startsWith("/tabs/radar") ||
       currentUrl.startsWith("/login") ||
       currentUrl == "/"

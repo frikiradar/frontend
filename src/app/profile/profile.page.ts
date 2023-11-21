@@ -57,6 +57,7 @@ export class ProfilePage {
   public param: "received" | "delivered";
   private reward = false;
   public slides: SwiperCore;
+  public languages: string[];
 
   public sliderOpts: SwiperOptions = {
     keyboard: true,
@@ -103,7 +104,11 @@ export class ProfilePage {
     try {
       this.loading = true;
       if (this.auth.currentUserValue) {
-        this.user = await this.userSvc.getUser(id);
+        if (this.auth.currentUserValue.id === +id) {
+          this.user = await this.auth.getAuthUser();
+        } else {
+          this.user = await this.userSvc.getUser(id);
+        }
       } else {
         this.user = await this.userSvc.getPublicUser(id);
         // si no recibe entonces poner que no es public
@@ -133,6 +138,13 @@ export class ProfilePage {
       if (this.auth.currentUserValue) {
         this.stories = await this.storiesSvc.getUserStories(this.user.id);
         this.story = this.stories[this.stories.length - 1];
+      }
+
+      if (this.user.languages) {
+        const languages = this.userSvc.getLanguages();
+        this.languages = this.user.languages.map(
+          (l) => languages.find((l2) => l2.value === l).name
+        );
       }
     } catch (e) {
       this.loading = false;
