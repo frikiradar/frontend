@@ -39,9 +39,8 @@
 <ion-content [fullscreen]="true">
   <swiper
     (swiper)="setSwiperInstance($event)"
-    (click)="tap($event)"
     (touchStart)="touchStart()"
-    (touchEnd)="touchEnd()"
+    (touchEnd)="tap($event)"
     (doubleClick)="doubleTap($event)"
     [config]="slideOpts"
   >

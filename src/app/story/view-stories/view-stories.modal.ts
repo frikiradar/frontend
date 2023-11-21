@@ -25,6 +25,7 @@ import SwiperCore, {
   Pagination,
   Autoplay,
   Mousewheel,
+  Swiper,
 } from "swiper";
 
 import { Story } from "src/app/models/story";
@@ -141,19 +142,18 @@ export class ViewStoriesModal implements OnInit {
   touchStart() {
     this.slides.autoplay.stop();
   }
-  touchEnd() {
-    this.slides.autoplay.start();
-  }
 
   async tap(event: any) {
-    if (event instanceof PointerEvent) {
+    if (event[0] instanceof Swiper) {
+      const slide = event[0];
+      const touch = slide.touches;
       const modal = await this.thisModal.getTop();
       const centerStart = modal.offsetWidth / 2 - 50; // 50px para el centro
       const centerEnd = modal.offsetWidth / 2 + 50; // 50px para el centro
 
-      if (event.pageX > centerEnd) {
+      if (touch.currentX > centerEnd) {
         this.slides.slideNext();
-      } else if (event.pageX < centerStart) {
+      } else if (touch.currentX < centerStart) {
         this.slides.slidePrev();
       }
       // Si el evento está en el centro, no hagas nada

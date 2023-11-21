@@ -129,8 +129,8 @@ export class RadarPage {
     this.slides = swiper;
   }
 
-  tap(event: any) {
-    if (event[0] instanceof Swiper && event[1] instanceof PointerEvent) {
+  tap(event: any, id: number) {
+    if (event[0] instanceof Swiper) {
       const slide = event[0];
       const touch = slide.touches;
       const centerStart = screen.width / 2 - 50; // 50px para el centro
@@ -141,9 +141,14 @@ export class RadarPage {
       } else if (touch.currentX < centerStart) {
         slide.slidePrev();
       } else {
-        this.showProfile(this.user.id);
+        this.showProfile(id);
       }
     }
+  }
+
+  test(event: any) {
+    console.log(event);
+    event[1].stopPropagation();
   }
 
   async ngAfterViewInit() {

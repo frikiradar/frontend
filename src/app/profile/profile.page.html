@@ -61,7 +61,7 @@
       <swiper
         [config]="sliderOpts"
         (swiper)="setSwiperInstance($event)"
-        (click)="tap($event)"
+        (touchEnd)="tap($event)"
         [scrollbar]="user?.images?.length"
       >
         <ng-template swiperSlide>

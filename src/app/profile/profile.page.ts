@@ -11,7 +11,7 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
-import SwiperCore, { SwiperOptions, Keyboard, Scrollbar } from "swiper";
+import SwiperCore, { SwiperOptions, Keyboard, Scrollbar, Swiper } from "swiper";
 
 import { Like } from "../models/like";
 import { Story } from "../models/story";
@@ -160,8 +160,10 @@ export class ProfilePage {
   }
 
   async tap(event: any) {
-    if (event instanceof PointerEvent) {
-      if (event.pageX > screen.width / 2) {
+    if (event[0] instanceof Swiper && event[1] instanceof PointerEvent) {
+      const slide = event[0];
+      const touch = slide.touches;
+      if (touch.currentX > screen.width / 2) {
         this.slides.slideNext();
       } else {
         this.slides.slidePrev();

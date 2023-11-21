@@ -30,6 +30,7 @@
       id="radar-slide"
       #slides
       (slideChangeTransitionEnd)="slide()"
+      (sliderMove)="test($event)"
       (swiper)="setSwiperInstance($event)"
       [config]="slideOpts"
     >
@@ -38,7 +39,7 @@
           <swiper
             class="images-slide"
             [config]="slideImagesOpts"
-            (click)="tap($event)"
+            (touchEnd)="tap($event, user.id)"
           >
             <ng-template swiperSlide>
               <div class="background-image">
