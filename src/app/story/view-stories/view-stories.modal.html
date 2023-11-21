@@ -42,7 +42,7 @@
     (click)="tap($event)"
     (touchStart)="touchStart()"
     (touchEnd)="touchEnd()"
-    (doubleTap)="doubleTap($event)"
+    (doubleClick)="doubleTap($event)"
     [config]="slideOpts"
   >
     <ng-template swiperSlide *ngFor="let story of stories" class="story-slide">

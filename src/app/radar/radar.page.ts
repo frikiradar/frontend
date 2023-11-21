@@ -130,7 +130,7 @@ export class RadarPage {
   }
 
   tap(event: any) {
-    if (event[0] instanceof Swiper && event[1] instanceof TouchEvent) {
+    if (event[0] instanceof Swiper && event[1] instanceof PointerEvent) {
       const slide = event[0];
       const touch = slide.touches;
       const centerStart = screen.width / 2 - 50; // 50px para el centro
