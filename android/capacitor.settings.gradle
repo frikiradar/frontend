@@ -59,6 +59,9 @@ project(':codetrix-studio-capacitor-google-auth').projectDir = new File('../node
 include ':mauricewegner-capacitor-navigation-bar'
 project(':mauricewegner-capacitor-navigation-bar').projectDir = new File('../node_modules/@mauricewegner/capacitor-navigation-bar/android')
 
+include ':capacitor-native-settings'
+project(':capacitor-native-settings').projectDir = new File('../node_modules/capacitor-native-settings/android')
+
 include ':capacitor-rate-app'
 project(':capacitor-rate-app').projectDir = new File('../node_modules/capacitor-rate-app/android')
 

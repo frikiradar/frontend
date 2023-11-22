@@ -67,12 +67,11 @@ export class GeolocationService {
       this.toastController.dismiss();
       return { longitude, latitude };
     } catch (e) {
-      // this.config.set("geolocation", false);
-      this.config.set("geolocation", true);
+      this.config.set("geolocation", false);
       this.toastController.dismiss();
-      // await this.forcePermission();
-      // return await this.getCoordinates();
-      return { longitude: 0, latitude: 0 };
+      await this.forcePermission();
+      return await this.getCoordinates();
+      // return { longitude: 0, latitude: 0 };
     }
   }
 }

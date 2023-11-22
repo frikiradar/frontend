@@ -76,6 +76,10 @@
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
 	},
 	{
+		"pkg": "capacitor-native-settings",
+		"classpath": "nl.raphael.settings.NativeSettingsPlugin"
+	},
+	{
 		"pkg": "capacitor-rate-app",
 		"classpath": "com.capacitor.rateApp.CapacitorRateAppPlugin"
 	},

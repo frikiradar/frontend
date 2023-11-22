@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
 import { Network } from "@capacitor/network";
 import {
   AlertController,
@@ -27,11 +26,7 @@ import {
 } from "@capawesome/capacitor-app-update";
 import { first } from "rxjs";
 import { AdMob, AdmobConsentStatus } from "@capacitor-community/admob";
-import {
-  GoogleAuth,
-  InitOptions,
-} from "@codetrix-studio/capacitor-google-auth";
-import { Capacitor } from "@capacitor/core";
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 @Component({
   selector: "app-root",
@@ -148,7 +143,7 @@ export class AppComponent {
     }
     this.config.set("openTimes", openTimes);
 
-    if (openTimes >= 3 && !config.review && this.platform.is("capacitor")) {
+    if (openTimes >= 3 && !config.review && isPlatform("capacitor")) {
       const alert = await this.alert.create({
         header: "¡Únete a la batalla!",
         message:
@@ -210,7 +205,7 @@ export class AppComponent {
         {
           text: "Oki doki",
           handler: () => {
-            if (this.platform.is("capacitor")) {
+            if (isPlatform("capacitor")) {
               navigator["app"].exitApp();
             } else {
               window.open("", "_parent", "");
@@ -224,7 +219,7 @@ export class AppComponent {
 
     try {
       const config = await this.config.getConfig(true);
-      if (this.platform.is("capacitor")) {
+      if (isPlatform("capacitor")) {
         const info = await App.getInfo();
         let version = +info.version.replace(".", "");
         // Debe tener 3 digitos, por eso mayor o igual a 100
@@ -246,7 +241,7 @@ export class AppComponent {
                 {
                   text: "ACTUALIZAR",
                   handler: async () => {
-                    if (this.platform.is("android")) {
+                    if (isPlatform("android")) {
                       /*this.urlSvc.openUrl(
                         "market://details?id=com.frikiradar.app"
                       );*/
@@ -254,7 +249,7 @@ export class AppComponent {
                         await AppUpdate.performImmediateUpdate();
                       }
                     }
-                    if (this.platform.is("ios")) {
+                    if (isPlatform("ios")) {
                       /*this.urlSvc.openUrl(
                         "https://apps.apple.com/es/app/frikiradar/id1477838835"
                       );*/

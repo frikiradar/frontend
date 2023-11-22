@@ -1,5 +1,11 @@
+import { Geolocation } from "@capacitor/geolocation";
 import { Component } from "@angular/core";
-import { ModalController, Platform } from "@ionic/angular";
+import { ModalController, isPlatform } from "@ionic/angular";
+import {
+  NativeSettings,
+  AndroidSettings,
+  IOSSettings,
+} from "capacitor-native-settings";
 
 @Component({
   selector: "request-geolocation-modal",
@@ -8,24 +14,26 @@ import { ModalController, Platform } from "@ionic/angular";
 })
 export class RequestGeolocationModal {
   public view: "request" | "force" = "request";
+  public isPlatform = isPlatform;
 
-  constructor(
-    private modalController: ModalController,
-    public platform: Platform
-  ) {}
+  constructor(private modalController: ModalController) {}
 
   async changeSettings() {
-    /*if (this.platform.is("android")) {
-      const check = await this.androidPermissions.checkPermission(
-        this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION
-      );
-      if (!check.hasPermission) {
-        await this.diagnostic.switchToSettings();
-      }
+    const result = await Geolocation.checkPermissions();
+    if (result.location === "prompt") {
+      this.view = "request";
     } else {
-      await this.diagnostic.switchToSettings();
-    }*/
-    this.view = "request";
+      const settings = await NativeSettings.open({
+        optionAndroid: AndroidSettings.ApplicationDetails,
+        optionIOS: IOSSettings.App,
+      });
+
+      if (settings.status) {
+        this.view = "request";
+      } else {
+        this.view = "force";
+      }
+    }
   }
 
   close(data: boolean) {

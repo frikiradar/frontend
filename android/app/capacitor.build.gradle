@@ -28,6 +28,7 @@ dependencies {
     implementation project(':capawesome-capacitor-app-update')
     implementation project(':codetrix-studio-capacitor-google-auth')
     implementation project(':mauricewegner-capacitor-navigation-bar')
+    implementation project(':capacitor-native-settings')
     implementation project(':capacitor-rate-app')
     implementation project(':capacitor-voice-recorder')
     implementation project(':capacitor-community-http')

@@ -18,13 +18,13 @@
       Para que el FrikiRadar pueda encontrar personas que están cerca de ti es
       necesario que aceptes el permiso para ver tu ubicación.
     </p>
-    <div *ngIf="platform?.is('cordova'); else noCordova">
+    <div *ngIf="isPlatform('capacitor'); else noCapacitor">
       <p>Verifica los permisos de ubicación en los ajustes de la aplicación.</p>
       <ion-button shape="round" fill="outline" (click)="changeSettings()"
         >CAMBIAR AJUSTES</ion-button
       >
     </div>
-    <ng-template #noCordova>
+    <ng-template #noCapacitor>
       <p>Verifica los permisos de ubicación en los ajustes del navegador.</p>
       <ion-button
         shape="round"

@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:android": "cp src/environments/environment.prod.ts src/environments/environment.ts && npx cap sync && ng build && npx cap copy android && npx cap open android"
   },
   "private": true,
   "dependencies": {
@@ -48,6 +49,7 @@
     "@ionic/pwa-elements": "^3.2.2",
     "@mauricewegner/capacitor-navigation-bar": "^2.0.3",
     "autolinker": "^4.0.0",
+    "capacitor-native-settings": "^5.0.1",
     "capacitor-rate-app": "^4.0.3",
     "capacitor-voice-recorder": "^5.0.0",
     "core-js": "^3.9.1",
@@ -74,7 +76,7 @@
     "@angular-eslint/eslint-plugin-template": "^17.1.0",
     "@angular-eslint/schematics": "^17.1.0",
     "@angular-eslint/template-parser": "^17.1.0",
-    "@angular/cli": "^17.0.1",
+    "@angular/cli": "^17.0.3",
     "@angular/compiler-cli": "^17.0.4",
     "@angular/language-service": "^17.0.4",
     "@capacitor-community/http": "^1.4.1",
