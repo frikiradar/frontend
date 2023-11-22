@@ -160,7 +160,7 @@ export class ProfilePage {
   }
 
   async tap(event: any) {
-    if (event[0] instanceof Swiper && event[1] instanceof PointerEvent) {
+    if (event[0] instanceof Swiper) {
       const slide = event[0];
       const touch = slide.touches;
       if (touch.currentX > screen.width / 2) {

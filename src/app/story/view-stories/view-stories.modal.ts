@@ -148,8 +148,8 @@ export class ViewStoriesModal implements OnInit {
       const slide = event[0];
       const touch = slide.touches;
       const modal = await this.thisModal.getTop();
-      const centerStart = modal.offsetWidth / 2 - 50; // 50px para el centro
-      const centerEnd = modal.offsetWidth / 2 + 50; // 50px para el centro
+      const centerStart = modal.offsetWidth / 2; // 50px para el centro
+      const centerEnd = modal.offsetWidth / 2; // 50px para el centro
 
       if (touch.currentX > centerEnd) {
         this.slides.slideNext();
@@ -159,12 +159,6 @@ export class ViewStoriesModal implements OnInit {
       // Si el evento está en el centro, no hagas nada
     }
     this.slides.autoplay.start();
-  }
-
-  async doubleTap(event: any) {
-    if (event[1] instanceof TouchEvent) {
-      await this.switchLikeStory(event[1]);
-    }
   }
 
   closeCommentsSheet() {

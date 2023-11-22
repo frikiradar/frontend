@@ -30,7 +30,6 @@
       id="radar-slide"
       #slides
       (slideChangeTransitionEnd)="slide()"
-      (sliderMove)="test($event)"
       (swiper)="setSwiperInstance($event)"
       [config]="slideOpts"
     >
@@ -39,7 +38,7 @@
           <swiper
             class="images-slide"
             [config]="slideImagesOpts"
-            (touchEnd)="tap($event, user.id)"
+            (tap)="tap($event, user)"
           >
             <ng-template swiperSlide>
               <div class="background-image">
@@ -100,7 +99,7 @@
                 </ion-chip>
               </div>
             </ion-card-content>
-            <ion-item lines="none" class="more" button (click)="openProfile()">
+            <ion-item lines="none" class="more" button>
               <ion-icon name="chevron-down-outline"></ion-icon>
             </ion-item>
           </div>

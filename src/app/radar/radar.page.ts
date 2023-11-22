@@ -3,6 +3,7 @@ import {
   ViewChild,
   HostListener,
   ChangeDetectorRef,
+  NgZone,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import {
@@ -33,6 +34,7 @@ import {
   NotificationCounters,
 } from "../services/notification.service";
 import { NavService } from "../services/navigation.service";
+import { Haptics } from "@capacitor/haptics";
 
 SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel, Scrollbar]);
 
@@ -118,7 +120,8 @@ export class RadarPage {
     private config: ConfigService,
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
-    private nav: NavService
+    private nav: NavService,
+    private ngZone: NgZone
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
@@ -129,26 +132,37 @@ export class RadarPage {
     this.slides = swiper;
   }
 
-  tap(event: any, id: number) {
+  async tap(event: any, user: User) {
     if (event[0] instanceof Swiper) {
       const slide = event[0];
-      const touch = slide.touches;
       const centerStart = screen.width / 2 - 50; // 50px para el centro
       const centerEnd = screen.width / 2 + 50; // 50px para el centro
+      let currentX: number;
 
-      if (touch.currentX > centerEnd) {
-        slide.slideNext();
-      } else if (touch.currentX < centerStart) {
-        slide.slidePrev();
-      } else {
-        this.showProfile(id);
+      if (event[1] instanceof TouchEvent) {
+        currentX = slide.touches.currentX;
+      } else if (event[1] instanceof PointerEvent) {
+        currentX = event[1].clientX;
+      }
+
+      if (user.images?.length > 0 && currentX !== undefined) {
+        if (currentX > centerEnd) {
+          if (!slide.isEnd) {
+            slide.slideNext();
+            await Haptics.vibrate({ duration: 10 });
+          }
+        } else if (currentX < centerStart) {
+          if (!slide.isBeginning) {
+            slide.slidePrev();
+            await Haptics.vibrate({ duration: 10 });
+          }
+        } else if (event[1] instanceof TouchEvent) {
+          this.showProfile(user.id);
+        }
+      } else if (event[1] instanceof TouchEvent) {
+        this.showProfile(user.id);
       }
     }
-  }
-
-  test(event: any) {
-    console.log(event);
-    event[1].stopPropagation();
   }
 
   async ngAfterViewInit() {
@@ -290,7 +304,9 @@ export class RadarPage {
   }
 
   async showProfile(id: User["id"]) {
-    this.router.navigate(["/profile", id]);
+    this.ngZone.run(() => {
+      this.router.navigate(["/profile", id]);
+    });
   }
 
   editProfile() {
