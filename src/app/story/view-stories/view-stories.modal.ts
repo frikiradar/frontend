@@ -143,17 +143,19 @@ export class ViewStoriesModal implements OnInit {
     this.slides.autoplay.stop();
   }
 
+  touchEnd() {
+    this.slides.autoplay.start();
+  }
+
   async tap(event: any) {
-    if (event[0] instanceof Swiper) {
-      const slide = event[0];
-      const touch = slide.touches;
+    if (event instanceof PointerEvent) {
       const modal = await this.thisModal.getTop();
       const centerStart = modal.offsetWidth / 2; // 50px para el centro
       const centerEnd = modal.offsetWidth / 2; // 50px para el centro
 
-      if (touch.currentX > centerEnd) {
+      if (event.clientX > centerEnd) {
         this.slides.slideNext();
-      } else if (touch.currentX < centerStart) {
+      } else if (event.clientX < centerStart) {
         this.slides.slidePrev();
       }
       // Si el evento está en el centro, no hagas nada
@@ -190,7 +192,6 @@ export class ViewStoriesModal implements OnInit {
   }
 
   showCommentsSheet(event: Event) {
-    event.stopPropagation();
     this.showComments = true;
   }
 

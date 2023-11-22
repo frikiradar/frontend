@@ -22,9 +22,16 @@ export class NavService {
   }
 
   back(): void {
-    const currentUrl = this.history[this.history.length - 1];
-    if (currentUrl == "/edit-profile") {
-      this.nav.navigateRoot("/profile");
+    let currentUrl: string;
+    if (this.history.length > 1) {
+      currentUrl = this.history[this.history.length - 1];
+    } else {
+      currentUrl = this.router.url;
+    }
+    if (this.router.url == "/edit-profile") {
+      this.router.navigateByUrl("/profile");
+    } else if (this.router.url == "/profile") {
+      this.router.navigateByUrl("/");
     } else if (
       currentUrl.startsWith("/tabs/radar") ||
       currentUrl.startsWith("/login") ||

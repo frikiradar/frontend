@@ -10,11 +10,7 @@
           <h2>Hola,</h2>
           <h3>Te doy la bienvenida a FrikiRadar</h3>
           <div id="login-content">
-            <form
-              (submit)="submitLogin()"
-              [formGroup]="loginForm"
-              autocomplete="off"
-            >
+            <form [formGroup]="loginForm" autocomplete="off">
               <ion-item lines="full" class="login-input">
                 <ion-icon name="person-outline" slot="start"></ion-icon>
                 <ion-input
@@ -28,6 +24,7 @@
                   autocomplete="username"
                   appAutofill
                   clearOnEdit="true"
+                  (keyup.enter)="checkLogin()"
                 ></ion-input>
               </ion-item>
               <ion-item lines="full" *ngIf="insertPassword" class="login-input">
@@ -68,7 +65,7 @@
               >
               <ion-button
                 color="primary"
-                type="submit"
+                (click)="submitLogin()"
                 shape="round"
                 size="large"
                 expand="block"

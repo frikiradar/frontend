@@ -429,7 +429,7 @@ export class RadarPage {
     if (this.user?.id) {
       this.userSvc.view(this.user?.id);
     }
-    if (index >= this.users?.length - 10) {
+    if (index >= this.users?.length - 10 && !this.loading) {
       this.getRadarUsers();
     }
     if (this.view === "cards" && this.page === 0 && this.user.distance >= 100) {
