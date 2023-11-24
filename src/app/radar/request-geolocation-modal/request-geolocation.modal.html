@@ -33,12 +33,12 @@
         target="_blank"
         >MÁS INFORMACIÓN</ion-button
       >
-      <ion-item lines="none" button (click)="showManualGeolocation()">
-        <ion-label>
-          <ion-text color="secondary">Introducir manualmente</ion-text>
-        </ion-label>
-      </ion-item>
     </ng-template>
+    <ion-item lines="none" button (click)="showManualGeolocation()">
+      <ion-label>
+        <ion-text color="secondary">Introducir manualmente</ion-text>
+      </ion-label>
+    </ion-item>
   </div>
 </ion-content>
 
@@ -67,7 +67,7 @@
             placeholder="Selecciona uno"
             [value]="user?.country"
             debounce="2000"
-            (ionInput)="changePreferences('country', $event.detail.value)"
+            (ionChange)="changePreferences('country', $event.detail.value)"
           >
             <ion-select-option
               *ngFor="let country of countries"
