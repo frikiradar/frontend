@@ -87,7 +87,6 @@ export class RadarPage {
   users: User[] = undefined;
   public user: User;
   public view: "cards" | "list";
-  coordinates: User["coordinates"];
   public showBackdrop = false;
   public loading = true;
   public extended = true;
@@ -176,23 +175,50 @@ export class RadarPage {
     if (!this.auth.isDemo()) {
       try {
         this.showBackdrop = true;
-        this.coordinates = await this.geolocationSvc.getGeolocation();
+        const geolocation = await this.geolocationSvc.getGeolocation();
         this.showBackdrop = false;
         const oldCoordinates = this.authUser.coordinates;
-        if (
-          oldCoordinates === undefined ||
-          oldCoordinates.latitude === undefined ||
-          this.coordinates.latitude.toFixed(3) !==
-            oldCoordinates?.latitude.toFixed(3) ||
-          this.coordinates.longitude.toFixed(3) !==
-            oldCoordinates?.longitude.toFixed(3)
-        ) {
-          const coordinates = await this.userSvc.setCoordinates(
-            this.coordinates.longitude,
-            this.coordinates.latitude
-          );
-          this.authUser.coordinates = coordinates;
-          this.auth.setAuthUser(this.authUser);
+        const oldCountry = this.authUser.country;
+        const oldCity = this.authUser.city;
+
+        if (geolocation.longitude && geolocation.latitude) {
+          // Geolocalización disponible
+          // comparamos si ha cambiado la latitud o la longitud
+          if (
+            oldCoordinates === undefined ||
+            oldCoordinates.latitude === undefined ||
+            geolocation.latitude.toFixed(3) !==
+              oldCoordinates?.latitude.toFixed(3) ||
+            geolocation.longitude.toFixed(3) !==
+              oldCoordinates?.longitude.toFixed(3)
+          ) {
+            const coordinates = await this.userSvc.setCoordinates(
+              geolocation.longitude,
+              geolocation.latitude
+            );
+            this.authUser.coordinates = coordinates;
+            this.auth.setAuthUser(this.authUser);
+          } else {
+            // Si no ha cambiado la geolocalización, no hacemos nada
+          }
+        } else {
+          // Geolocalización no disponible, la hacemos manual
+          // comparamos si ha cambiado el país o la ciudad
+          if (
+            oldCountry === undefined ||
+            oldCity === undefined ||
+            oldCountry !== geolocation.country ||
+            oldCity !== geolocation.city
+          ) {
+            const coordinates = await this.userSvc.setManualGeolocation(
+              geolocation.country,
+              geolocation.city
+            );
+            this.authUser.coordinates = coordinates;
+            this.auth.setAuthUser(this.authUser);
+          } else {
+            // Si no ha cambiado la geolocalización, no hacemos nada
+          }
         }
       } catch (e) {
         console.error(e);

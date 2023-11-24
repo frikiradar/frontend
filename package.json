@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:android": "cp src/environments/environment.prod.ts src/environments/environment.ts && npx cap sync && ng build && npx cap copy android && npx cap open android"
+    "build:android": "ng build && npx cap copy android"
   },
   "private": true,
   "dependencies": {

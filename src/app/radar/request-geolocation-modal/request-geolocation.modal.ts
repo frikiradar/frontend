@@ -6,6 +6,10 @@ import {
   AndroidSettings,
   IOSSettings,
 } from "capacitor-native-settings";
+import { UtilsService } from "src/app/services/utils.service";
+import { AuthService } from "src/app/services/auth.service";
+import { User } from "src/app/models/user";
+import { UserService } from "src/app/services/user.service";
 
 @Component({
   selector: "request-geolocation-modal",
@@ -15,8 +19,19 @@ import {
 export class RequestGeolocationModal {
   public view: "request" | "force" = "request";
   public isPlatform = isPlatform;
+  public manualGeolocationModal = false;
+  public countries: string[] = [];
+  private user: User;
 
-  constructor(private modalController: ModalController) {}
+  constructor(
+    private modalController: ModalController,
+    private utils: UtilsService,
+    private auth: AuthService
+  ) {}
+
+  ngOnInit() {
+    this.user = this.auth.currentUserValue;
+  }
 
   async changeSettings() {
     const result = await Geolocation.checkPermissions();
@@ -36,7 +51,35 @@ export class RequestGeolocationModal {
     }
   }
 
-  close(data: boolean) {
+  changePreferences(property: string, value: string) {
+    if (property === "country") {
+      this.user.country = value;
+    }
+
+    if (property === "city") {
+      this.user.city = value;
+    }
+  }
+
+  showManualGeolocation() {
+    this.countries = this.utils.getCountries();
+    this.manualGeolocationModal = true;
+  }
+
+  async savePreferences() {
+    this.manualGeolocationModal = false;
+
+    if (this.user.country && this.user.city) {
+      const data = {
+        country: this.user.country,
+        city: this.user.city,
+      };
+      await this.modalController.dismiss();
+      this.close(data);
+    }
+  }
+
+  close(data: boolean | { country: string; city: string }) {
     this.modalController.dismiss(data);
   }
 }

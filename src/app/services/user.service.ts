@@ -84,10 +84,16 @@ export class UserService {
     }
   }
 
-  async setCoordinates(longitude, latitude) {
+  async setCoordinates(longitude: number, latitude: number) {
     return (await firstValueFrom(
       this.rest.put("coordinates", { longitude, latitude })
     )) as Promise<User["coordinates"]>;
+  }
+
+  setManualGeolocation(country: string, city: string) {
+    return firstValueFrom(
+      this.rest.put("manual-geolocation", { country, city })
+    ) as Promise<User["coordinates"]>;
   }
 
   getRadarUsers(

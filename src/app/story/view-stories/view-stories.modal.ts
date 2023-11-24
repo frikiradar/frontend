@@ -192,6 +192,7 @@ export class ViewStoriesModal implements OnInit {
   }
 
   showCommentsSheet(event: Event) {
+    event.stopPropagation();
     this.showComments = true;
   }
 

@@ -4,6 +4,7 @@ import { ModalController, ToastController } from "@ionic/angular";
 
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ConfigService } from "./config.service";
+import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: "root",
@@ -14,7 +15,8 @@ export class GeolocationService {
   constructor(
     private modalController: ModalController,
     private config: ConfigService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private auth: AuthService
   ) {}
 
   async requestPermission() {
@@ -36,7 +38,12 @@ export class GeolocationService {
     return await modal.onDidDismiss();
   }
 
-  async getGeolocation(): Promise<{ longitude: number; latitude: number }> {
+  async getGeolocation(): Promise<{
+    longitude?: number;
+    latitude?: number;
+    city?: string;
+    country?: string;
+  }> {
     const geoconfig = await this.config.get("geolocation");
     if (geoconfig === true) {
       return await this.getCoordinates();
@@ -67,11 +74,28 @@ export class GeolocationService {
       this.toastController.dismiss();
       return { longitude, latitude };
     } catch (e) {
-      this.config.set("geolocation", false);
-      this.toastController.dismiss();
-      await this.forcePermission();
+      let data: { city?: string; country?: string } = {};
+      const geoconfig = await this.config.get("geolocation");
+      // falla la geolocalización pero tiene activada la manual, entonces se usa la manual
+      const user = this.auth.currentUserValue;
+      if (geoconfig === true && user.city && user.country) {
+        const user = this.auth.currentUserValue;
+        return {
+          city: user.city,
+          country: user.country,
+        };
+      } else {
+        this.config.set("geolocation", false);
+        this.toastController.dismiss();
+        const res = await this.forcePermission();
+        data = res.data;
+        if (data.city && data.country) {
+          this.config.set("geolocation", true);
+          this.toastController.dismiss();
+          return data;
+        }
+      }
       return await this.getCoordinates();
-      // return { longitude: 0, latitude: 0 };
     }
   }
 }
