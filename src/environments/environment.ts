@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   root: "https://api.frikiradar.com/",
   apiUrl: "https://api.frikiradar.com/api/v1/",
   firebase: {
