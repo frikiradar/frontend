@@ -1,6 +1,6 @@
 {
 	"appId": "com.frikiradar.app",
-	"appName": "FrikiRadar",
+	"appName": "frikiradar",
 	"webDir": "www",
 	"server": {
 		"hostname": "frikiradar.app",
