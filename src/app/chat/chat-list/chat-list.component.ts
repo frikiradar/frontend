@@ -16,6 +16,7 @@ import { User } from "../../models/user";
 import { Chat } from "./../../models/chat";
 import { AuthService } from "./../../services/auth.service";
 import { ChatService } from "./../../services/chat.service";
+import { NavService } from "src/app/services/navigation.service";
 
 @Component({
   selector: "app-chat-list",
@@ -42,7 +43,8 @@ export class ChatListComponent {
     private toast: ToastController,
     private config: ConfigService,
     private cd: ChangeDetectorRef,
-    private router: Router
+    public router: Router,
+    private nav: NavService
   ) {}
 
   @HostListener("window:focus")
@@ -51,7 +53,7 @@ export class ChatListComponent {
   }
 
   async ngAfterViewInit() {
-    if (this.router.url === "/chat" || window.innerWidth > 991) {
+    if (this.router.url === "/tabs/chat" || window.innerWidth > 991) {
       await this.getLastMessages();
     }
   }
@@ -293,6 +295,6 @@ export class ChatListComponent {
   }
 
   back() {
-    this.router.navigateByUrl("/");
+    this.nav.navigateRoot("/tabs/chat");
   }
 }

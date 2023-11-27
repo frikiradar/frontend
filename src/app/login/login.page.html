@@ -6,9 +6,9 @@
       </ion-col>
       <ion-col class="login">
         <div *ngIf="activeView == 'login'" class="ion-padding">
-          <ion-img alt="frikiradar" src="./assets/img/logo/logo.png"></ion-img>
+          <ion-img alt="frikiradar" src="/assets/icon/icon.svg"></ion-img>
           <h2>Hola,</h2>
-          <h3>Te doy la bienvenida a FrikiRadar</h3>
+          <h3>Te doy la bienvenida a frikiradar</h3>
           <div id="login-content">
             <form [formGroup]="loginForm" autocomplete="off">
               <ion-item lines="full" class="login-input">
@@ -98,7 +98,7 @@
               class="login-button"
               *ngIf="!insertPassword"
             >
-              <ion-icon slot="start" name="logo-google" color="dark"></ion-icon>
+              <ion-icon src="/assets/icon/google.svg" slot="start"></ion-icon>
               <ion-label color="dark"
                 >Iniciar sesión con Google</ion-label
               ></ion-button

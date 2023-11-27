@@ -75,9 +75,9 @@ export class PushService {
       },
       {
         id: "frikiradar",
-        name: "Notificaciones de FrikiRadar",
+        name: "Notificaciones de frikiradar",
         description:
-          "Canal de información sobre FrikiRadar, novedades y actualizaciones.",
+          "Canal de información sobre frikiradar, novedades y actualizaciones.",
       },
       {
         id: "test",

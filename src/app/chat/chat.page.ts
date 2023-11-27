@@ -64,7 +64,7 @@ export class ChatPage implements OnInit {
   }
 
   async backToList() {
-    this.nav.navigateRoot("/chat");
+    this.nav.navigateRoot("/tabs/chat");
   }
 
   async firebaseListener() {

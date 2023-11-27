@@ -104,11 +104,7 @@ export class ProfilePage {
     try {
       this.loading = true;
       if (this.auth.currentUserValue) {
-        if (this.auth.currentUserValue.id === +id) {
-          this.user = await this.auth.getAuthUser();
-        } else {
-          this.user = await this.userSvc.getUser(id);
-        }
+        this.user = await this.userSvc.getUser(id);
       } else {
         this.user = await this.userSvc.getPublicUser(id);
         // si no recibe entonces poner que no es public
@@ -120,11 +116,11 @@ export class ProfilePage {
           content: "frikiradar, friki, red social, citas, " + this.user?.name,
         },
         { name: "robots", content: "index, follow" },
-        { name: "author", content: "FrikiRadar" },
+        { name: "author", content: "frikiradar" },
         { charset: "UTF-8" },
       ]);
 
-      this.title.setTitle("Perfil de " + this.user?.name + " en FrikiRadar");
+      this.title.setTitle("Perfil de " + this.user?.name + " en frikiradar");
       this.meta.updateTag({
         name: "description",
         content: this.user?.description,

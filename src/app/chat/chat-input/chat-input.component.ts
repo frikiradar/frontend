@@ -97,7 +97,6 @@ export class ChatInputComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // console.log(changes);
     if (
       changes["editing"] &&
       !changes["editing"].firstChange &&

@@ -78,11 +78,11 @@ export class PagePage {
           this.page?.category,
       },
       { name: "robots", content: "index, follow" },
-      { name: "author", content: "FrikiRadar" },
+      { name: "author", content: "frikiradar" },
       { charset: "UTF-8" },
     ]);
 
-    this.title.setTitle("Página de " + this.page?.name + " en FrikiRadar");
+    this.title.setTitle("Página de " + this.page?.name + " en frikiradar");
     this.meta.updateTag({
       name: "description",
       content: this.page?.description,

@@ -116,7 +116,7 @@ export class OptionsPopover {
     const alert = await this.alert.create({
       header: `¿Quieres bloquear a ${user.username}?`,
       message:
-        "Ya no podrá volver a verte, escribirte o interactuar contigo en FrikiRadar a menos que lo desbloquees. Si lo deseas puedes indicarnos el motivo del bloqueo.",
+        "Ya no podrá volver a verte, escribirte o interactuar contigo en frikiradar a menos que lo desbloquees. Si lo deseas puedes indicarnos el motivo del bloqueo.",
       inputs: [
         {
           name: "note",
@@ -207,7 +207,7 @@ export class OptionsPopover {
     const alert = await this.alert.create({
       header: `¿Quieres enviar una advertencia a ${user.username}?`,
       message:
-        "Se enviará un mensaje al usuario desde la cuenta de FrikiRadar advirtiéndole de su falta.",
+        "Se enviará un mensaje al usuario desde la cuenta de frikiradar advirtiéndole de su falta.",
       inputs: [
         {
           name: "note",

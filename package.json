@@ -109,5 +109,5 @@
     "ts-node": "~8.3.0",
     "typescript": "~5.2.2"
   },
-  "description": "FrikiRadar, conoce a personas frikis como tú."
+  "description": "frikiradar, la app de citas para frikis."
 }

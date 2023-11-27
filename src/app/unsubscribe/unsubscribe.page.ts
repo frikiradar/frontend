@@ -20,7 +20,7 @@ export class UnsubscribePage implements OnInit {
       await this.userSvc.unsubscribe(code);
       this.title = "Te has dado de baja correctamente :(";
       this.text =
-        "Ya no recibirás más notificaciones promocionales o informativas de FrikiRadar a tu correo electrónico. Recuerda que puedes volver a suscribirte de nuevo en cualquier momento desde la configuración de FrikiRadar.";
+        "Ya no recibirás más notificaciones promocionales o informativas de frikiradar a tu correo electrónico. Recuerda que puedes volver a suscribirte de nuevo en cualquier momento desde la configuración de frikiradar.";
     } catch (e) {
       this.title = "No se pudo dar de baja :)";
       this.text =

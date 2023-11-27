@@ -215,6 +215,8 @@ export class RadarPage {
               geolocation.city
             );
             this.authUser.coordinates = coordinates;
+            this.authUser.country = geolocation.country;
+            this.authUser.city = geolocation.city;
             this.auth.setAuthUser(this.authUser);
           } else {
             // Si no ha cambiado la geolocalización, no hacemos nada
@@ -494,7 +496,7 @@ export class RadarPage {
       const alert = await this.alert.create({
         header: "¿Pocas personas cerca tuya?",
         message:
-          "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de FrikiRadar compartiendo con tus amigas y amigos!",
+          "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de frikiradar compartiendo con tus amigas y amigos!",
         buttons: [
           {
             text: "¡Compartir!",

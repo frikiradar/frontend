@@ -285,8 +285,6 @@ export class ChatModalComponent implements OnInit {
         (m: Chat) => m.text || m.image || m.audio
       );
 
-      console.log(this.messages);
-
       this.scrollDown(300, true, true);
       let replyToId =
         this.selectedMessage && this.replying ? this.selectedMessage.id : null;

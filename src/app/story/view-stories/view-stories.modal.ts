@@ -271,6 +271,16 @@ export class ViewStoriesModal implements OnInit {
       )
     ) {
       this.storySvc.viewStory(story.id);
+      this.story.viewStories = [
+        ...this.story.viewStories,
+        {
+          date: new Date().toISOString(),
+          user: this.auth.currentUserValue,
+        },
+      ];
+      this.stories = this.stories.map((s) =>
+        s.id === this.story.id ? this.story : s
+      );
     }
   }
 
@@ -286,6 +296,10 @@ export class ViewStoriesModal implements OnInit {
       text,
       this.userMentions
     );
+    this.stories = this.stories.map((story) =>
+      story.id === this.story.id ? this.story : story
+    );
+
     this.setLikeStory();
   }
 
@@ -434,6 +448,9 @@ export class ViewStoriesModal implements OnInit {
     ).present();
     try {
       this.story = await this.storySvc.deleteComment(comment.id);
+      this.stories = this.stories.map((story) =>
+        story.id === this.story.id ? this.story : story
+      );
       this.setLikeStory();
       (
         await this.toast.create({

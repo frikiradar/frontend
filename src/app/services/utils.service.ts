@@ -215,7 +215,7 @@ export class UtilsService {
 
     if (!message) {
       message =
-        "Conoce a personas con tus mismos gustos con FrikiRadar, la app de citas para frikis";
+        "Conoce a personas con tus mismos gustos con frikiradar, la app de citas para frikis";
     }
 
     const referrer = this.auth.currentUserValue
@@ -235,7 +235,7 @@ export class UtilsService {
       await Share.share(options);
     } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
-        title: "FrikiRadar, conoce a personas frikis como tú",
+        title: "frikiradar, conoce a personas frikis como tú",
         text: message,
         url: `${url}?referrer=${referrer}`,
       })

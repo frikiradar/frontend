@@ -177,7 +177,7 @@ export class SettingsPage implements OnInit {
       const alert = await this.alert.create({
         header: "Tema exlusivo para miembros de Patreon",
         message:
-          "Conviértete en embajador Patreon de FrikiRadar y accede a ventajas exclusivas.",
+          "Conviértete en embajador Patreon de frikiradar y accede a ventajas exclusivas.",
         buttons: [
           {
             text: "¡Quiero informarme!",

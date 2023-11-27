@@ -147,7 +147,7 @@ export class AppComponent {
       const alert = await this.alert.create({
         header: "¡Únete a la batalla!",
         message:
-          "¿Qué te parece FrikiRadar? Déjanos tu valoración de 5 estrellas y una sugerencia para que cada vez más personas formen parte de esta gran comunidad.",
+          "¿Qué te parece frikiradar? Déjanos tu valoración de 5 estrellas y una sugerencia para que cada vez más personas formen parte de esta gran comunidad.",
         backdropDismiss: false,
         buttons: [
           {
@@ -180,7 +180,7 @@ export class AppComponent {
     const alert = await this.alert.create({
       header: "¡Con tu ayuda seguiremos creciendo!",
       message:
-        "FrikiRadar acaba de comenzar su andadura y aún le queda un largo camino por delante. Por eso agradecemos tu ayuda dando a conocer FrikiRadar y compartiendo con tus amigos.",
+        "frikiradar acaba de comenzar su andadura y aún le queda un largo camino por delante. Por eso agradecemos tu ayuda dando a conocer frikiradar y compartiendo con tus amigos.",
       buttons: [
         {
           text: "¡Compartir!",
@@ -235,7 +235,7 @@ export class AppComponent {
             const versionAlert = await this.alert.create({
               header: "Versión obsoleta",
               message:
-                "La versión de FrikiRadar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
+                "La versión de frikiradar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
               backdropDismiss: false,
               buttons: [
                 {
