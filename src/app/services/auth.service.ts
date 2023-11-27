@@ -209,13 +209,13 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  async twoStepCode() {
-    return await firstValueFrom(this.rest.get("two-step"));
+  async sendVerification() {
+    return await firstValueFrom(this.rest.get("verify"));
   }
 
-  async verifyLogin(verification_code: string) {
+  async verifyCode(verification_code: string) {
     return (await firstValueFrom(
-      this.rest.put("two-step", { verification_code })
+      this.rest.put("verify", { verification_code })
     )) as Promise<User>;
   }
 

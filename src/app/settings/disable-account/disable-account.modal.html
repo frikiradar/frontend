@@ -19,7 +19,7 @@
   </ion-segment>
 </ion-header>
 <ion-content class="ion-padding">
-  <div *ngIf="type === 'disable'">
+  <div *ngIf="type === 'disable' && !codeSent">
     <h4>¿Quieres desactivar tu cuenta?</h4>
     <p>Antes de desactivar la cuenta lee estos puntos:</p>
     <ul>
@@ -45,53 +45,8 @@
       Si aún así sigues queriendo desactivar tu cuenta, introduce de nuevo tu
       contraseña como medida de seguridad adicional para desactivar la cuenta.
     </p>
-
-    <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
-      <ion-item>
-        <ion-input
-          labelPlacement="floating"
-          label="Contraseña"
-          required
-          autocomplete="off"
-          [type]="clearPassword ? 'text' : 'password'"
-          formControlName="password"
-          debounce="500"
-          name="password"
-        ></ion-input>
-        <ion-buttons slot="end" *ngIf="!disableForm.get('password').pristine">
-          <ion-button (click)="clearPassword = !clearPassword">
-            <ion-icon
-              slot="icon-only"
-              [name]="clearPassword ? 'eye' : 'eye-off'"
-            ></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-      <div
-        class="error-message"
-        *ngIf="
-        disableForm.get('password').invalid && disableForm.get('password').value
-      "
-      >
-        <ion-icon name="information-circle-outline"></ion-icon>Introduce un
-        mínimo de 8 caracteres.
-      </div>
-      <ion-item>
-        <ion-label position="floating">Motivo de la desactivación</ion-label>
-        <ion-textarea formControlName="note" autocapitalize="on"></ion-textarea>
-      </ion-item>
-      <ion-button
-        color="primary"
-        type="submit"
-        expand="block"
-        [disabled]="disableForm.invalid"
-        shape="round"
-      >
-        Desactivar cuenta</ion-button
-      >
-    </form>
   </div>
-  <div *ngIf="type === 'remove'">
+  <div *ngIf="type === 'remove' && !codeSent">
     <h4>¿Quieres eliminar tu cuenta?</h4>
     <p>Antes de eliminar la cuenta lee estos puntos:</p>
     <ul>
@@ -126,43 +81,83 @@
       Si aún así sigues queriendo eliminar tu cuenta, introduce de nuevo tu
       contraseña como medida de seguridad adicional para eliminar la cuenta.
     </p>
+  </div>
 
+  <ion-button
+    *ngIf="!codeSent"
+    color="primary"
+    expand="block"
+    shape="round"
+    (click)="sendCode()"
+  >
+    Envíar código de verificación
+  </ion-button>
+
+  <div *ngIf="type === 'disable' && codeSent">
+    <p>
+      Te hemos enviado un código de seguridad a {{ user.email }}. Revisa tu
+      carpeta de spam/no deseado si no lo encuentras.
+    </p>
+    <p>Introduce el código de seguridad para desactivar tu cuenta.</p>
     <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
-      <ion-item>
+      <ion-item class="code">
         <ion-input
-          labelPlacement="floating"
-          label="Contraseña"
-          required
+          placeholder="Código de seguridad"
           autocomplete="off"
-          [type]="clearPassword ? 'text' : 'password'"
-          formControlName="password"
-          debounce="500"
-          name="password"
+          formControlName="code"
+          maxlength="6"
+          name="code"
+          required
+          type="text"
         ></ion-input>
-        <ion-buttons slot="end" *ngIf="!disableForm.get('password').pristine">
-          <ion-button (click)="clearPassword = !clearPassword">
-            <ion-icon
-              slot="icon-only"
-              [name]="clearPassword ? 'eye' : 'eye-off'"
-            ></ion-icon>
-          </ion-button>
-        </ion-buttons>
       </ion-item>
-      <div
-        class="error-message"
-        *ngIf="
-          disableForm.get('password').invalid && disableForm.get('password').value
-        "
-      >
-        <ion-icon name="information-circle-outline"></ion-icon>Introduce un
-        mínimo de 8 caracteres.
-      </div>
       <ion-item>
-        <ion-label position="floating">Motivo de la eliminación</ion-label>
-        <ion-textarea formControlName="note" autocapitalize="on"></ion-textarea>
+        <ion-textarea
+          label="Motivo de la desactivación"
+          labelPlacement="floating"
+          formControlName="note"
+          autocapitalize="on"
+        ></ion-textarea>
       </ion-item>
       <ion-button
-        *ngIf="!auth.isAdmin()"
+        color="primary"
+        type="submit"
+        expand="block"
+        [disabled]="disableForm.invalid"
+        shape="round"
+      >
+        Desactivar cuenta</ion-button
+      >
+    </form>
+  </div>
+  <div *ngIf="type === 'remove' && codeSent">
+    <p>
+      Te hemos enviado un código de seguridad a {{ user.email }}. Revisa tu
+      carpeta de spam/no deseado si no lo encuentras.
+    </p>
+    <p>Introduce el código de seguridad para eliminar tu cuenta.</p>
+    <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
+      <ion-item class="code">
+        <ion-input
+          placeholder="Código de seguridad"
+          autocomplete="off"
+          formControlName="code"
+          maxlength="6"
+          name="code"
+          required
+          type="text"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea
+          label="Motivo de la eliminación"
+          labelPlacement="floating"
+          formControlName="note"
+          autocapitalize="on"
+        ></ion-textarea>
+      </ion-item>
+      <ion-button
         color="primary"
         type="submit"
         expand="block"
@@ -173,5 +168,13 @@
       >
     </form>
   </div>
+  <p
+    color="primary"
+    *ngIf="codeSent"
+    class="ion-text-center"
+    (click)="sendCode()"
+  >
+    No he recibido mi código/código no válido
+  </p>
 </ion-content>
 <ion-backdrop visible="true" *ngIf="showBackdrop"></ion-backdrop>

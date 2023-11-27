@@ -33,12 +33,12 @@ export class TwoStepPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.auth.twoStepCode();
+    this.auth.sendVerification();
   }
 
   async submitCode() {
     try {
-      const user = await this.auth.verifyLogin(
+      const user = await this.auth.verifyCode(
         this.codeForm.get("code").value.toUpperCase()
       );
 

@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormControl,
+  FormBuilder,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import {
@@ -13,6 +13,7 @@ import {
 
 import { AuthService } from "./../../services/auth.service";
 import { UserService } from "./../../services/user.service";
+import { User } from "src/app/models/user";
 
 @Component({
   selector: "disable-account-modal",
@@ -20,26 +21,41 @@ import { UserService } from "./../../services/user.service";
   styleUrls: ["./disable-account.modal.scss"],
 })
 export class DisableAccountModal {
-  public disableForm: UntypedFormGroup;
+  public disableForm: FormGroup;
   public clearPassword = false;
   public type: "disable" | "remove" = "disable";
   public showBackdrop = false;
+  public codeSent = false;
+  public user: User;
 
   constructor(
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     private modalController: ModalController,
     private userSvc: UserService,
-    public auth: AuthService,
+    private auth: AuthService,
     private alert: AlertController,
     private toast: ToastController
   ) {
     this.disableForm = fb.group({
-      password: new UntypedFormControl("", [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      note: new UntypedFormControl(),
+      code: new FormControl("", [Validators.required, Validators.maxLength(6)]),
+      note: new FormControl(),
     });
+
+    this.user = this.auth.currentUserValue;
+  }
+
+  async sendCode() {
+    await this.auth.sendVerification();
+
+    (
+      await this.toast.create({
+        message: "Te hemos enviado un código de verificación al email",
+        duration: 2000,
+        position: "bottom",
+      })
+    ).present();
+
+    this.codeSent = true;
   }
 
   async submitForm() {
@@ -54,7 +70,7 @@ export class DisableAccountModal {
           })
         ).present();
         const user = await this.userSvc.disableUser(
-          this.disableForm.get("password").value,
+          this.disableForm.get("code").value,
           this.disableForm.get("note").value
         );
 
@@ -77,7 +93,7 @@ export class DisableAccountModal {
           })
         ).present();
         const user = await this.userSvc.removeAccount(
-          this.disableForm.get("password").value,
+          this.disableForm.get("code").value,
           this.disableForm.get("note").value
         );
         this.showBackdrop = false;
@@ -97,8 +113,8 @@ export class DisableAccountModal {
     } catch (e) {
       this.showBackdrop = false;
       const alert = await this.alert.create({
-        header: "La contraseña introducida no es válida",
-        message: "Revísala y vuelve a intentarlo.",
+        header: "El código introducido no es válido",
+        message: "Revísalo y vuelve a intentarlo.",
         buttons: ["¡Vale!"],
         cssClass: "round-alert",
       });

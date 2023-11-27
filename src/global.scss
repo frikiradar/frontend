@@ -379,6 +379,20 @@ ul {
 
 ion-item {
   --detail-icon-color: var(--ion-color-dark);
+
+  &.code {
+    text-align: center;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    --highlight-color-invalid: white;
+    --highlight-color-valid: white;
+
+    ion-input {
+      text-transform: uppercase;
+      font-family: monospace;
+    }
+  }
 }
 
 .hide {

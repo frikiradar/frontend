@@ -52,6 +52,8 @@ export class ActivateAccountPage {
         Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$"),
       ]),
     });
+
+    this.sendCode();
   }
 
   async submitCode() {
@@ -98,11 +100,11 @@ export class ActivateAccountPage {
     }
   }
 
-  async resendCode() {
-    await this.userSvc.resendActivationEmail();
+  async sendCode() {
+    await this.auth.sendVerification();
     (
       await this.toast.create({
-        message: "Te hemos enviado un nuevo código de verificación al email",
+        message: "Te hemos enviado un código de verificación al email",
         duration: 2000,
         position: "bottom",
       })
@@ -116,7 +118,7 @@ export class ActivateAccountPage {
         this.emailForm.get("email").value
       );
       this.auth.setAuthUser(this.user);
-      this.resendCode();
+      this.sendCode();
       this.changingEmail = false;
     } catch (e) {
       const alert = await this.alert.create({

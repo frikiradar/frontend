@@ -15,10 +15,9 @@
   </h4>
   <p>Introduce el código de seguridad para verificar tu inicio de sesión.</p>
   <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
-    <ion-item id="code">
+    <ion-item class="code">
       <ion-input
         aria-label
-        autocapitalize="characters"
         autocomplete="off"
         formControlName="code"
         maxlength="6"

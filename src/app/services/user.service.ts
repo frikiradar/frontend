@@ -130,23 +130,19 @@ export class UserService {
     ) as Promise<User>;
   }
 
-  async resendActivationEmail() {
-    return await firstValueFrom(this.rest.get("activation"));
-  }
-
-  disableUser(password: string, note: string) {
+  disableUser(code: string, note: string) {
     return firstValueFrom(
       this.rest.put("disable", {
-        password,
+        code,
         note,
       })
     ) as Promise<User>;
   }
 
-  removeAccount(password: string, note: string) {
+  removeAccount(code: string, note: string) {
     return firstValueFrom(
       this.rest.put("remove-account", {
-        password,
+        code,
         note,
       })
     ) as Promise<User>;

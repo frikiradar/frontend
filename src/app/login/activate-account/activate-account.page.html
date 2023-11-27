@@ -24,12 +24,11 @@
     </h4>
     <p>Introduce el código de seguridad para activar tu cuenta.</p>
     <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
-      <ion-item id="code">
+      <ion-item class="code">
         <ion-input
           autocomplete="off"
           formControlName="code"
           maxlength="6"
-          autocapitalize="characters"
           placeholder="Código de seguridad"
           type="text"
         ></ion-input>
@@ -43,7 +42,7 @@
         >Activar la cuenta</ion-button
       >
     </form>
-    <p color="primary" class="ion-text-center" (click)="resendCode()">
+    <p color="primary" class="ion-text-center" (click)="sendCode()">
       No he recibido mi código/código no válido
     </p>
   </div>
