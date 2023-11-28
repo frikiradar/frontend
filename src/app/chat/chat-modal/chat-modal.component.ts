@@ -25,17 +25,16 @@ import { Haptics } from "@capacitor/haptics";
 import { Chat } from "../../models/chat";
 import { User } from "../../models/user";
 import { ChatService } from "../../services/chat.service";
-import { ConfigService } from "../../services/config.service";
 import { UrlService } from "../../services/url.service";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import { UtilsService } from "../../services/utils.service";
 import { OptionsPopover } from "../../options-popover/options-popover";
-import { NavService } from "src/app/services/navigation.service";
 import { EventModal } from "src/app/events/event-modal/event.modal";
 import { Event } from "src/app/models/event";
 import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 import { App } from "@capacitor/app";
+import { Meta, Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-chat-modal",
@@ -72,14 +71,14 @@ export class ChatModalComponent implements OnInit {
     public chatSvc: ChatService,
     private toast: ToastController,
     public platform: Platform,
-    private config: ConfigService,
     private urlSvc: UrlService,
     public utils: UtilsService,
     public modalController: ModalController,
     private popover: PopoverController,
-    private nav: NavService,
     private dc: ChangeDetectorRef,
-    private eventSvc: EventService
+    private eventSvc: EventService,
+    private meta: Meta,
+    private title: Title
   ) {}
 
   @HostListener("window:focus")
@@ -88,6 +87,16 @@ export class ChatModalComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.meta.addTags([
+      {
+        name: "keywords",
+        content: "frikiradar, friki, red social, chat",
+      },
+      { name: "robots", content: "index, follow" },
+      { name: "author", content: "frikiradar" },
+      { charset: "UTF-8" },
+    ]);
+
     if (this.userId) {
       const min = Math.min(this.auth.currentUserValue.id, this.userId);
       const max = Math.max(this.auth.currentUserValue.id, this.userId);
@@ -101,12 +110,6 @@ export class ChatModalComponent implements OnInit {
         }
       });
     }
-
-    const config: {
-      maintenance: boolean;
-      min_version: string;
-      chat: boolean;
-    } = (await this.config.getConfig()) as any;
 
     this.messageEvent.subscribe(async (message) => {
       if (!message) {
@@ -179,6 +182,14 @@ export class ChatModalComponent implements OnInit {
         } else {
           this.user = this.messages[0].touser;
         }
+
+        this.title.setTitle(
+          "Chat con " + this.user.username + " en frikiradar"
+        );
+        this.meta.updateTag({
+          name: "description",
+          content: "Chat con " + this.user.username + " en frikiradar",
+        });
       } else {
         try {
           this.user = await this.userSvc.getUser(this.userId);

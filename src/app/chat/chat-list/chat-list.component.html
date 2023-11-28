@@ -17,7 +17,10 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="!showOptions && !showingArchived">Chat</ion-title>
+    <ion-title *ngIf="!showOptions && !showingArchived">
+      <ion-icon name="chatbubbles"></ion-icon>
+      <ion-label>Chat</ion-label>
+    </ion-title>
     <ion-title *ngIf="showingArchived && !showOptions"
       >Chats archivados</ion-title
     >
