@@ -8,6 +8,7 @@ import {
   NotificationCounters,
   NotificationService,
 } from "../services/notification.service";
+import { Meta, Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-tabs",
@@ -24,7 +25,9 @@ export class TabsPage implements OnInit {
     public auth: AuthService,
     private router: Router,
     public platform: Platform,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private meta: Meta,
+    private title: Title
   ) {
     this.router.events.subscribe((event: any) => {
       event.url = event.url === "/" ? "/tabs/radar" : event.url;
@@ -40,6 +43,25 @@ export class TabsPage implements OnInit {
       if (!this.detectorRef["destroyed"]) {
         this.detectorRef.detectChanges();
       }
+    });
+
+    this.meta.addTags([
+      {
+        name: "keywords",
+        content:
+          "frikiradar, friki, red social, citas, radar, geolocalización, chat, conocer, gente, amigos, amigas, amor, pareja, ligar, frikis, otakus, gamers, anime, manga, cómics, cosplay",
+      },
+      { name: "robots", content: "index, follow" },
+      { name: "author", content: "frikiradar" },
+      { charset: "UTF-8" },
+    ]);
+
+    this.title.setTitle(
+      "Página principal, frikiradar, la app de citas para frikis"
+    );
+    this.meta.updateTag({
+      name: "description",
+      content: "Encuentra personas cerca de ti con tus mismos gustos",
     });
   }
 
