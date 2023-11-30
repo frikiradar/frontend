@@ -276,7 +276,7 @@ export class RadarPage {
       await this.utils.delay(500);
       this.slides?.slideTo(0);
     }
-    this.getRadarUsers();
+    await this.getRadarUsers();
   }
 
   async getRadarUsers(event?: any) {
@@ -400,7 +400,7 @@ export class RadarPage {
     }
     this.config.set("radar_config", radar_config);
 
-    this.getRadarUsers();
+    await this.getRadarUsers();
   }
 
   async changeRatio(value: number) {
@@ -441,7 +441,7 @@ export class RadarPage {
       this.page = 0;
       this.users = undefined;
       this.radarlist?.scrollToTop(0);
-      this.getRadarUsers();
+      await this.getRadarUsers();
     }
   }
 
@@ -492,7 +492,7 @@ export class RadarPage {
         this.userSvc.view(this.user?.id);
       }
       if (index >= this.users?.length - 10 && !this.loading) {
-        this.getRadarUsers();
+        await this.getRadarUsers();
       }
       if (
         this.view === "cards" &&
@@ -589,7 +589,7 @@ export class RadarPage {
     this.searchOptions = radar_config.options;
   }
 
-  dismissFilterOptions() {
+  async dismissFilterOptions() {
     if (this.searchOptionsChanged) {
       this.searchOptionsChanged = false;
       this.loading = true;
@@ -597,7 +597,7 @@ export class RadarPage {
       this.page = 0;
       this.users = undefined;
       this.radarlist?.scrollToTop(0);
-      this.getRadarUsers();
+      await this.getRadarUsers();
     }
   }
 }
