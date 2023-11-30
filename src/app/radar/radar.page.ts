@@ -1,10 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  HostListener,
-  ChangeDetectorRef,
-  NgZone,
-} from "@angular/core";
+import { Component, ViewChild, ChangeDetectorRef, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   AlertController,
@@ -14,7 +8,6 @@ import {
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import SwiperCore, {
-  Keyboard,
   SwiperOptions,
   EffectCoverflow,
   Mousewheel,
@@ -38,7 +31,7 @@ import { Haptics } from "@capacitor/haptics";
 import { AdService } from "../services/ad.service";
 import { Ad } from "../models/ad";
 
-SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel, Scrollbar]);
+SwiperCore.use([EffectCoverflow, Mousewheel, Scrollbar]);
 
 @Component({
   selector: "app-radar",
@@ -55,7 +48,6 @@ export class RadarPage {
   private slides: SwiperCore;
 
   public slideOpts: SwiperOptions = {
-    keyboard: true,
     slidesPerView: 1,
     breakpoints: {
       1920: {
@@ -89,12 +81,12 @@ export class RadarPage {
   };
 
   public hide = false;
-  page = 0;
+  public page = 0;
   public ratio = -1;
   public automatic = true;
   public rangeValue = 0;
   authUser: User;
-  users: (User | Ad)[] = undefined;
+  users: (User | Ad)[] = [];
   public user: User;
   public view: "cards" | "list";
   public showBackdrop = false;
@@ -106,17 +98,6 @@ export class RadarPage {
     connection: false,
   };
   private searchOptionsChanged = false;
-
-  @HostListener("document:keydown", ["$event"])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (
-      this.users?.length &&
-      this.router.url === "/tabs/radar" &&
-      event.key === "Enter"
-    ) {
-      this.showProfile(this.user.id);
-    }
-  }
 
   constructor(
     public userSvc: UserService,
@@ -323,6 +304,8 @@ export class RadarPage {
           ? (this.users = mixedList)
           : [...this.users, ...mixedList];
 
+      this.detectorRef.detectChanges();
+
       if (this.users?.length > 0) {
         if (this.ratio === -1) {
           if (resUsers?.length > 0 && !this.users?.length) {
@@ -485,6 +468,7 @@ export class RadarPage {
   }
 
   async slide() {
+    await new Promise((resolve) => setTimeout(resolve, 100)); // Agrega un pequeño retraso
     const index = this.slides.activeIndex;
     const user = this.users[index];
     if (user && "username" in user) {
@@ -593,9 +577,9 @@ export class RadarPage {
     if (this.searchOptionsChanged) {
       this.searchOptionsChanged = false;
       this.loading = true;
-      this.detectorRef.detectChanges();
       this.page = 0;
-      this.users = undefined;
+      this.users = [];
+      this.slides.activeIndex = 0;
       this.radarlist?.scrollToTop(0);
       await this.getRadarUsers();
     }

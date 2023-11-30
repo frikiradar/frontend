@@ -29,7 +29,7 @@
     <swiper
       id="radar-slide"
       #slides
-      (slideChangeTransitionEnd)="slide()"
+      (slideNextTransitionEnd)="slide()"
       (swiper)="setSwiperInstance($event)"
       [config]="slideOpts"
     >
@@ -142,7 +142,7 @@
         porcentaje de
         coincidencia más alto.
       </p>-->
-    <ion-list *ngIf="!users">
+    <ion-list *ngIf="!users.length">
       <ion-item *ngFor="let i of [].constructor(8)" lines="none">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
