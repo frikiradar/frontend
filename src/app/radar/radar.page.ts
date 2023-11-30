@@ -46,6 +46,7 @@ export class RadarPage {
 
   public counters: NotificationCounters;
   private slides: SwiperCore;
+  private allUsersLoaded = false;
 
   public slideOpts: SwiperOptions = {
     slidesPerView: 1,
@@ -281,63 +282,66 @@ export class RadarPage {
         this.config.set("radar", resUsers);
       }
 
-      let users = resUsers;
-
-      let mixedList = [];
-      let adCounter = 0;
-      for (let i = 0; i < users.length; i++) {
-        mixedList.push(users[i]);
-        adCounter++;
-        if (adCounter === 5) {
-          const ad = this.adService.getRandomAd();
-          if (ad) {
-            console.log(ad);
-            mixedList.push(ad);
-            break;
+      if (resUsers?.length > 0) {
+        let users = resUsers;
+        let mixedList = [];
+        let adCounter = 0;
+        for (let i = 0; i < users.length; i++) {
+          mixedList.push(users[i]);
+          adCounter++;
+          if (adCounter === 5) {
+            const ad = this.adService.getRandomAd();
+            if (ad) {
+              console.log(ad);
+              mixedList.push(ad);
+              break;
+            }
+            adCounter = 0;
           }
-          adCounter = 0;
         }
-      }
 
-      this.users =
-        this.page === 1
-          ? (this.users = mixedList)
-          : [...this.users, ...mixedList];
+        this.users =
+          this.page === 1
+            ? (this.users = mixedList)
+            : [...this.users, ...mixedList];
 
-      this.detectorRef.detectChanges();
+        this.detectorRef.detectChanges();
 
-      if (this.users?.length > 0) {
-        if (this.ratio === -1) {
-          if (resUsers?.length > 0 && !this.users?.length) {
-            this.users = [...this.users, ...resUsers];
-          }
+        if (this.users?.length > 0) {
+          if (this.ratio === -1) {
+            if (resUsers?.length > 0 && !this.users?.length) {
+              this.users = [...this.users, ...resUsers];
+            }
 
-          if ("username" in this.users[0]) {
-            this.user = this.users[0];
-            this.userSvc.view(this.user.id);
-          }
-        } else {
-          if (event) {
-            event.target.complete();
+            if ("username" in this.users[0]) {
+              this.user = this.users[0];
+              this.userSvc.view(this.user.id);
+            }
+          } else {
+            if (event) {
+              event.target.complete();
 
-            if (users.length < 15) {
-              event.target.disabled = true;
+              if (users.length < 15) {
+                event.target.disabled = true;
+              }
             }
           }
+        } else if (
+          (this.range.value as number) > -1 &&
+          (this.range.value as number) < 5 &&
+          this.automatic
+        ) {
+          let value = this.range.value as number;
+          value++;
+          this.range.value = value;
+          this.changeRatio(value);
         }
-      } else if (
-        (this.range.value as number) > -1 &&
-        (this.range.value as number) < 5 &&
-        this.automatic
-      ) {
-        let value = this.range.value as number;
-        value++;
-        this.range.value = value;
-        this.changeRatio(value);
-      }
 
-      if (await this.toast.getTop()) {
-        this.toast.dismiss();
+        if (await this.toast.getTop()) {
+          this.toast.dismiss();
+        }
+      } else {
+        this.allUsersLoaded = true;
       }
     } catch (e) {
       console.error(e);
@@ -360,7 +364,8 @@ export class RadarPage {
 
   async changeView() {
     this.page = 0;
-    this.users = undefined;
+    this.users = [];
+    this.allUsersLoaded = false;
     let radar_config = (await this.config.get(
       "radar_config"
     )) as Config["radar_config"];
@@ -422,7 +427,8 @@ export class RadarPage {
       ).present();
 
       this.page = 0;
-      this.users = undefined;
+      this.users = [];
+      this.allUsersLoaded = false;
       this.radarlist?.scrollToTop(0);
       await this.getRadarUsers();
     }
@@ -475,7 +481,11 @@ export class RadarPage {
       if (this.user?.id) {
         this.userSvc.view(this.user?.id);
       }
-      if (index >= this.users?.length - 10 && !this.loading) {
+      if (
+        index >= this.users?.length - 10 &&
+        !this.loading &&
+        !this.allUsersLoaded
+      ) {
         await this.getRadarUsers();
       }
       if (
@@ -579,6 +589,7 @@ export class RadarPage {
       this.loading = true;
       this.page = 0;
       this.users = [];
+      this.allUsersLoaded = false;
       this.slides.activeIndex = 0;
       this.radarlist?.scrollToTop(0);
       await this.getRadarUsers();
