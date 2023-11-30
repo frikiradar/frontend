@@ -10,7 +10,6 @@ import { ChangeEmailModal } from "./change-email/change-email.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
-import { DisableAccountModal } from "./disable-account/disable-account.modal";
 import { SettingsPage } from "./settings.page";
 import { VerificationModal } from "./verification/verification.modal";
 import { HideUsersModal } from "./hide-users/hide-users.modal";
@@ -18,29 +17,28 @@ import { HideUsersModal } from "./hide-users/hide-users.modal";
 const routes: Routes = [
   {
     path: "",
-    component: SettingsPage
-  }
+    component: SettingsPage,
+  },
 ];
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        IonicModule,
-        RouterModule.forChild(routes),
-        SharedModule
-    ],
-    declarations: [
-        SettingsPage,
-        ChangePasswordModal,
-        ChangeEmailModal,
-        ChangeUsernameModal,
-        DisableAccountModal,
-        DevicesSettingsModal,
-        BlockUsersModal,
-        HideUsersModal,
-        VerificationModal
-    ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule,
+    RouterModule.forChild(routes),
+    SharedModule,
+  ],
+  declarations: [
+    SettingsPage,
+    ChangePasswordModal,
+    ChangeEmailModal,
+    ChangeUsernameModal,
+    DevicesSettingsModal,
+    BlockUsersModal,
+    HideUsersModal,
+    VerificationModal,
+  ],
 })
 export class SettingsPageModule {}

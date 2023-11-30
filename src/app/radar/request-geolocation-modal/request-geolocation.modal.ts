@@ -9,7 +9,6 @@ import {
 import { UtilsService } from "src/app/services/utils.service";
 import { AuthService } from "src/app/services/auth.service";
 import { User } from "src/app/models/user";
-import { UserService } from "src/app/services/user.service";
 
 @Component({
   selector: "request-geolocation-modal",

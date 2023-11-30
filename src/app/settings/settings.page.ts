@@ -10,7 +10,7 @@ import { ChangeEmailModal } from "./change-email/change-email.modal";
 import { ChangePasswordModal } from "./change-password/change-password.modal";
 import { ChangeUsernameModal } from "./change-username/change-username.modal";
 import { DevicesSettingsModal } from "./devices/devices.modal";
-import { DisableAccountModal } from "./disable-account/disable-account.modal";
+import { DisableAccountPage } from "./disable-account/disable-account.page";
 import { VerificationModal } from "./verification/verification.modal";
 import { HideUsersModal } from "./hide-users/hide-users.modal";
 import { NavService } from "../services/navigation.service";
@@ -129,7 +129,7 @@ export class SettingsPage implements OnInit {
 
   async disableAccountModal() {
     const modal = await this.modalController.create({
-      component: DisableAccountModal,
+      component: DisableAccountPage,
       cssClass: "full-modal",
     });
     return await modal.present();

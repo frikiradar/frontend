@@ -34,7 +34,11 @@
       [config]="slideOpts"
     >
       <ng-template swiperSlide *ngFor="let user of users;">
-        <ion-card class="no-scroll" button>
+        <ion-card
+          class="no-scroll"
+          button
+          *ngIf="user?.username; else adContainer"
+        >
           <swiper
             class="images-slide"
             [config]="slideImagesOpts"
@@ -104,6 +108,9 @@
             </ion-item>
           </div>
         </ion-card>
+        <ng-template #adContainer>
+          <app-ad [ad]="user"></app-ad>
+        </ng-template>
       </ng-template>
       <ng-template swiperSlide *ngIf="!loading">
         <div class="full-center ion-padding">

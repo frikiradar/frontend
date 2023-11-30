@@ -11,16 +11,17 @@ import {
   ToastController,
 } from "@ionic/angular";
 
-import { AuthService } from "./../../services/auth.service";
-import { UserService } from "./../../services/user.service";
+import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 import { User } from "src/app/models/user";
+import { NavService } from "src/app/services/navigation.service";
 
 @Component({
-  selector: "disable-account-modal",
-  templateUrl: "./disable-account.modal.html",
-  styleUrls: ["./disable-account.modal.scss"],
+  selector: "app-disable-account",
+  templateUrl: "./disable-account.page.html",
+  styleUrls: ["./disable-account.page.scss"],
 })
-export class DisableAccountModal {
+export class DisableAccountPage {
   public disableForm: FormGroup;
   public clearPassword = false;
   public type: "disable" | "remove" = "disable";
@@ -34,7 +35,8 @@ export class DisableAccountModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private toast: ToastController
+    private toast: ToastController,
+    private nav: NavService
   ) {
     this.disableForm = fb.group({
       code: new FormControl("", [Validators.required, Validators.maxLength(6)]),
@@ -129,5 +131,6 @@ export class DisableAccountModal {
 
   close() {
     this.modalController.dismiss();
+    this.nav.back();
   }
 }

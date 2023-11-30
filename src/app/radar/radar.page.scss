@@ -37,9 +37,10 @@ swiper.images-slide {
   height: 100%;
   width: 100%;
   position: absolute;
-  bottom: 5px;
+  bottom: 2px;
   left: 0;
   right: 0;
+  overflow-y: hidden;
 
   img {
     object-fit: cover !important;
@@ -360,4 +361,9 @@ ion-toggle {
   h2 {
     font-size: 16px;
   }
+}
+
+app-ad {
+  height: 100%;
+  width: 100%;
 }

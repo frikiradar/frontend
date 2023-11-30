@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "mentions"
+  name: "mentions",
 })
 export class MentionsPipe implements PipeTransform {
   transform(value: any, data?: any) {
@@ -9,13 +9,13 @@ export class MentionsPipe implements PipeTransform {
       const mentions = data.mentions;
       mentions.forEach((mention: string) => {
         value = value?.replace(
-          `@${mention}`,
+          new RegExp(`(?<![a-z0-9_.-])@${mention}(?![a-z0-9_.-])`, "gi"),
           `<a href='#' class="mention">@${mention}</a>`
         );
       });
     } else {
       value = value?.replace(
-        /@([a-z\d_]+)/gi,
+        /(?<![a-z0-9_.-])@([a-z\d_]+)(?![a-z0-9_.-])/gi,
         `<a href='#' class="mention">@$1</a>`
       );
     }

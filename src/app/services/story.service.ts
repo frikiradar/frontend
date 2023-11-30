@@ -5,7 +5,6 @@ import { User } from "../models/user";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
-import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -18,13 +17,11 @@ export class StoryService {
   ) {}
 
   async getStory(id: Story["id"]) {
-    return (await firstValueFrom(this.rest.get(`story/${id}`))) as Story;
+    return (await this.rest.get(`story/${id}`)) as Story;
   }
 
   async getUserStories(id: User["id"]) {
-    const stories = (await firstValueFrom(
-      this.rest.get(`user-stories/${id}`)
-    )) as Story[];
+    const stories = (await this.rest.get(`user-stories/${id}`)) as Story[];
     stories.map((s) => {
       if (
         s.viewStories.some(
@@ -40,7 +37,7 @@ export class StoryService {
   }
 
   async getStories() {
-    const stories = (await firstValueFrom(this.rest.get("stories"))) as Story[];
+    const stories = (await this.rest.get("stories")) as Story[];
     stories.map((s) => {
       if (
         s.viewStories.some(
@@ -56,9 +53,7 @@ export class StoryService {
   }
 
   async getStoriesSlug(slug: string) {
-    const stories = (await firstValueFrom(
-      this.rest.get(`stories-slug/${slug}`)
-    )) as Story[];
+    const stories = (await this.rest.get(`stories-slug/${slug}`)) as Story[];
     stories.map((s) => {
       if (
         s.viewStories.some(
@@ -74,9 +69,7 @@ export class StoryService {
   }
 
   async getAllStories() {
-    const stories = (await firstValueFrom(
-      this.rest.get("all-stories")
-    )) as Story[];
+    const stories = (await this.rest.get("all-stories")) as Story[];
     stories.map((s) => {
       if (
         s.viewStories.some(
@@ -130,23 +123,19 @@ export class StoryService {
   }
 
   viewStory(id: Story["id"]) {
-    firstValueFrom(this.rest.put("view-story", { story: id }));
+    this.rest.put("view-story", { story: id });
   }
 
   deleteStory(id: Story["id"]) {
-    return firstValueFrom(this.rest.delete(`delete-story/${id}`));
+    return this.rest.delete(`delete-story/${id}`);
   }
 
   like(id: Story["id"]) {
-    return firstValueFrom(
-      this.rest.put("like-story", { story: id })
-    ) as Promise<Story>;
+    return this.rest.put("like-story", { story: id }) as Promise<Story>;
   }
 
   unlike(id: Story["id"]) {
-    return firstValueFrom(
-      this.rest.delete(`like-story/${id}`)
-    ) as Promise<Story>;
+    return this.rest.delete(`like-story/${id}`) as Promise<Story>;
   }
 
   async commentStory(
@@ -154,24 +143,22 @@ export class StoryService {
     text: Story["text"],
     mentions?: User["username"][]
   ) {
-    return (await firstValueFrom(
-      this.rest.put("comment-story", { story: id, text, mentions })
-    )) as Story;
+    return (await this.rest.put("comment-story", {
+      story: id,
+      text,
+      mentions,
+    })) as Story;
   }
 
   likeComment(id: Story["comments"][0]["id"]) {
-    return firstValueFrom(
-      this.rest.put("like-comment", { comment: id })
-    ) as Promise<Story>;
+    return this.rest.put("like-comment", { comment: id }) as Promise<Story>;
   }
 
   unlikeComment(id: Story["comments"][0]["id"]) {
-    return firstValueFrom(
-      this.rest.delete(`like-comment/${id}`)
-    ) as Promise<Story>;
+    return this.rest.delete(`like-comment/${id}`) as Promise<Story>;
   }
 
   deleteComment(id: Story["id"]) {
-    return firstValueFrom(this.rest.delete(`delete-comment/${id}`));
+    return this.rest.delete(`delete-comment/${id}`);
   }
 }

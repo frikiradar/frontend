@@ -24,15 +24,15 @@ export class PageService {
     } else {
       endpoint = `pages`;
     }
-    return (await firstValueFrom(this.rest.get(endpoint))) as Page[];
+    return (await this.rest.get(endpoint)) as Page[];
   }
 
   async getPage(slug: Page["slug"]) {
-    return (await firstValueFrom(this.rest.get(`page/${slug}`))) as Page;
+    return (await this.rest.get(`page/${slug}`)) as Page;
   }
 
   async setPage(id: Tag["id"]) {
-    return (await firstValueFrom(this.rest.post("page", { id }))) as Page;
+    return (await this.rest.post("page", { id })) as Page;
   }
 
   async getPublicPage(slug: Page["slug"]) {

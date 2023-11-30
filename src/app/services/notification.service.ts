@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, firstValueFrom } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { RestService } from "./rest.service";
 import { Notification } from "../models/notification";
@@ -34,32 +34,26 @@ export class NotificationService {
   }
 
   async getUnread() {
-    return await firstValueFrom(this.rest.get(`notifications`));
+    return await this.rest.get(`notifications`);
   }
 
   async getNotifications() {
-    return (await firstValueFrom(
-      this.rest.get(`notifications-list`)
-    )) as Notification[];
+    return (await this.rest.get(`notifications-list`)) as Notification[];
   }
 
   async readNotification(id: Notification["id"]) {
-    return (await firstValueFrom(
-      this.rest.get(`read-notification/${id}`)
-    )) as Notification;
+    return (await this.rest.get(`read-notification/${id}`)) as Notification;
   }
 
   async unreadNotification(id: Notification["id"]) {
-    return (await firstValueFrom(
-      this.rest.get(`unread-notification/${id}`)
-    )) as Notification;
+    return (await this.rest.get(`unread-notification/${id}`)) as Notification;
   }
 
   async removeNotification(id: Notification["id"]) {
-    return await firstValueFrom(this.rest.delete(`remove-notification/${id}`));
+    return await this.rest.delete(`remove-notification/${id}`);
   }
 
   async removeNotifications() {
-    return await firstValueFrom(this.rest.delete(`remove-notifications`));
+    return await this.rest.delete(`remove-notifications`);
   }
 }

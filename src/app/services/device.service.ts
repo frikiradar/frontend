@@ -8,7 +8,6 @@ import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { isPlatform } from "@ionic/angular";
 import platform from "platform";
-import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -24,7 +23,7 @@ export class DeviceService {
     ) {
       return this.auth.currentUserValue.devices;
     } else {
-      return (await firstValueFrom(this.rest.get(`devices`))) as Device[];
+      return (await this.rest.get(`devices`)) as Device[];
     }
   }
 
@@ -64,14 +63,12 @@ export class DeviceService {
           platform = "web";
         }
 
-        const user = (await firstValueFrom(
-          this.rest.put("device", {
-            id: uuid,
-            name: device.device_name,
-            token,
-            platform,
-          })
-        )) as User;
+        const user = (await this.rest.put("device", {
+          id: uuid,
+          name: device.device_name,
+          token,
+          platform,
+        })) as User;
 
         // this.auth.setAuthUser(user);
       }
@@ -126,14 +123,10 @@ export class DeviceService {
   }
 
   async removeDevice(device: Device) {
-    return (await firstValueFrom(
-      this.rest.delete(`device/${device.id}`)
-    )) as User;
+    return (await this.rest.delete(`device/${device.id}`)) as User;
   }
 
   async switchDevice(device: Device) {
-    return (await firstValueFrom(
-      this.rest.get(`switch-device/${device.id}`)
-    )) as User;
+    return (await this.rest.get(`switch-device/${device.id}`)) as User;
   }
 }

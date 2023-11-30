@@ -7,7 +7,6 @@ import { AuthService } from "./auth.service";
 import { Config } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
-import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -23,14 +22,14 @@ export class ChatService {
   ) {}
 
   async getChats() {
-    const chats = (await firstValueFrom(this.rest.get(`chats`))) as Chat[];
+    const chats = (await this.rest.get(`chats`)) as Chat[];
 
     return chats;
   }
 
   async getMessages(id: number, read?: boolean, page = 1, lastId = 0) {
-    return (await firstValueFrom(
-      this.rest.get(`chat/${id}?read=${read}&page=${page}&lastid=${lastId}`)
+    return (await this.rest.get(
+      `chat/${id}?read=${read}&page=${page}&lastid=${lastId}`
     )) as Chat[];
   }
 
@@ -40,9 +39,12 @@ export class ChatService {
     replyto?: number,
     tmp_id?: string
   ): Promise<Chat> {
-    return (await firstValueFrom(
-      this.rest.put("chat", { touser: id, text, replyto, tmp_id })
-    )) as Chat;
+    return (await this.rest.put("chat", {
+      touser: id,
+      text,
+      replyto,
+      tmp_id,
+    })) as Chat;
   }
 
   async sendImage(
@@ -68,27 +70,23 @@ export class ChatService {
   }
 
   async writing(fromuser: number, touser: number) {
-    return (await firstValueFrom(
-      this.rest.put("writing-chat", { fromuser, touser })
-    )) as Chat;
+    return (await this.rest.put("writing-chat", { fromuser, touser })) as Chat;
   }
 
   async updateMessage(id: Chat["id"], text: Chat["text"]) {
-    return (await firstValueFrom(
-      this.rest.put("update-message", { id, text })
-    )) as Chat;
+    return (await this.rest.put("update-message", { id, text })) as Chat;
   }
 
   async readChat(id: number) {
-    return (await firstValueFrom(this.rest.get(`read-chat/${id}`))) as Chat;
+    return (await this.rest.get(`read-chat/${id}`)) as Chat;
   }
 
   async deleteMessage(id: number) {
-    await firstValueFrom(this.rest.delete(`chat-message/${id}`));
+    await this.rest.delete(`chat-message/${id}`);
   }
 
   async deleteChat(touserid: number) {
-    await firstValueFrom(this.rest.delete(`chat/${touserid}`));
+    await this.rest.delete(`chat/${touserid}`);
   }
 
   async archiveChat(chat: Chat, allChats: Chat[]) {
@@ -132,9 +130,9 @@ export class ChatService {
   }
 
   async setChatsConfig(chats_config: Config["chats"]) {
-    const user = (await firstValueFrom(
-      this.rest.put("chats-config", { chats_config })
-    )) as User;
+    const user = (await this.rest.put("chats-config", {
+      chats_config,
+    })) as User;
     this.auth.setAuthUser(user);
   }
 
@@ -144,9 +142,7 @@ export class ChatService {
   }
 
   async report(message: Chat, note: string) {
-    return await firstValueFrom(
-      this.rest.put("report-chat", { message, note })
-    );
+    return await this.rest.put("report-chat", { message, note });
   }
 
   async realtimeChatInfo() {

@@ -17,6 +17,7 @@ import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
 import { NavService } from "./services/navigation.service";
 import { SwService } from "./services/sw.service";
+import { AdService } from "./services/ad.service";
 
 import { Device } from "@capacitor/device";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
@@ -46,7 +47,8 @@ export class AppComponent {
     private push: PushService,
     private nav: NavService,
     private sw: SwService,
-    private toast: ToastController
+    private toast: ToastController,
+    private adService: AdService
   ) {
     this.initializeApp();
   }
@@ -301,37 +303,43 @@ export class AppComponent {
   }
 
   async initAds() {
-    if (!this.auth.isPremium() && this.platform.is("capacitor")) {
-      await AdMob.initialize();
+    if (!this.auth.isPremium()) {
+      if (isPlatform("capacitor")) {
+        await AdMob.initialize();
 
-      const [trackingInfo, consentInfo] = await Promise.all([
-        AdMob.trackingAuthorizationStatus(),
-        AdMob.requestConsentInfo(),
-      ]);
+        const [trackingInfo, consentInfo] = await Promise.all([
+          AdMob.trackingAuthorizationStatus(),
+          AdMob.requestConsentInfo(),
+        ]);
 
-      if (trackingInfo.status === "notDetermined") {
-        /**
-         * If you want to explain TrackingAuthorization before showing the iOS dialog,
-         * you can show the modal here.
-         * ex)
-         * const modal = await this.modalCtrl.create({
-         *   component: RequestTrackingPage,
-         * });
-         * await modal.present();
-         * await modal.onDidDismiss();  // Wait for close modal
-         **/
+        if (trackingInfo.status === "notDetermined") {
+          /**
+           * If you want to explain TrackingAuthorization before showing the iOS dialog,
+           * you can show the modal here.
+           * ex)
+           * const modal = await this.modalCtrl.create({
+           *   component: RequestTrackingPage,
+           * });
+           * await modal.present();
+           * await modal.onDidDismiss();  // Wait for close modal
+           **/
 
-        await AdMob.requestTrackingAuthorization();
+          await AdMob.requestTrackingAuthorization();
+        }
+
+        const authorizationStatus = await AdMob.trackingAuthorizationStatus();
+        if (
+          authorizationStatus.status === "authorized" &&
+          consentInfo.isConsentFormAvailable &&
+          consentInfo.status === AdmobConsentStatus.REQUIRED
+        ) {
+          await AdMob.showConsentForm();
+        }
       }
 
-      const authorizationStatus = await AdMob.trackingAuthorizationStatus();
-      if (
-        authorizationStatus.status === "authorized" &&
-        consentInfo.isConsentFormAvailable &&
-        consentInfo.status === AdmobConsentStatus.REQUIRED
-      ) {
-        await AdMob.showConsentForm();
-      }
+      // Cargamos los anuncios de patrocinadores
+      const ads = await this.adService.getActiveAds();
+      console.log(ads);
     }
   }
 }

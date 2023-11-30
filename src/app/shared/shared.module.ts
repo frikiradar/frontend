@@ -30,6 +30,8 @@ import { EventModal } from "../events/event-modal/event.modal";
 import { RulesPage } from "../rules/rules.page";
 import { LikesModal } from "./../profile/likes-modal/likes.modal";
 import { ImageViewerModal } from "../image-viewer/image-viewer.modal";
+import { AdComponent } from "../ad/ad.component";
+import { DisableAccountPage } from "../settings/disable-account/disable-account.page";
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { ImageViewerModal } from "../image-viewer/image-viewer.modal";
     CommentLikesModal,
     RulesPage,
     ImageViewerModal,
+    AdComponent,
+    DisableAccountPage,
   ],
   imports: [
     FormsModule,
@@ -74,6 +78,7 @@ import { ImageViewerModal } from "../image-viewer/image-viewer.modal";
     MentionsPipe,
     HashtagPipe,
     ChatInputComponent,
+    AdComponent,
     ChatListComponent,
     ChatModalComponent,
     LinkyModule,

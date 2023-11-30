@@ -1,0 +1,18 @@
+<ion-card button (click)="openUrl()">
+  <ion-header class="ion-no-border">
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <!--<ion-button (click)="close()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>-->
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <div class="background-image">
+    <img [src]="ad.image_url" />
+  </div>
+  <ion-card-content *ngIf="ad.title || ad.description">
+    <ion-card-title>{{ ad.title }}</ion-card-title>
+    <p>{{ ad.description }}</p>
+  </ion-card-content>
+</ion-card>

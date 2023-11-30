@@ -22,16 +22,19 @@ const routes: Routes = [
       import("./edit-profile/edit-profile.module").then(
         (m) => m.EditProfilePageModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: "profile",
     loadChildren: () =>
       import("./profile/profile.module").then((m) => m.ProfilePageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "profile/:id",
     loadChildren: () =>
       import("./profile/profile.module").then((m) => m.ProfilePageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "notification",
@@ -39,31 +42,37 @@ const routes: Routes = [
       import("./notification/notification.module").then(
         (m) => m.NotificationPageModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: "chat",
     loadChildren: () =>
       import("./chat/chat.module").then((m) => m.ChatPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "chat/:id",
     loadChildren: () =>
       import("./chat/chat.module").then((m) => m.ChatPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "search",
     loadChildren: () =>
       import("./search/search.module").then((m) => m.SearchPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "search/:query",
     loadChildren: () =>
       import("./search/search.module").then((m) => m.SearchPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "settings",
     loadChildren: () =>
       import("./settings/settings.module").then((m) => m.SettingsPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "admin",
@@ -75,16 +84,19 @@ const routes: Routes = [
     path: "story",
     loadChildren: () =>
       import("./story/story.module").then((m) => m.StoryPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "page/:slug",
     loadChildren: () =>
       import("./pages/page/page.module").then((m) => m.PagePageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "pages",
     loadChildren: () =>
       import("./pages/pages.module").then((m) => m.PagesPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "ambassador",
@@ -92,6 +104,7 @@ const routes: Routes = [
       import("./ambassador/ambassador.module").then(
         (m) => m.AmbassadorPageModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: "patreon",
@@ -109,6 +122,15 @@ const routes: Routes = [
     path: "rules",
     loadChildren: () =>
       import("./rules/rules.module").then((m) => m.RulesPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "disable-account",
+    loadChildren: () =>
+      import("./settings/disable-account/disable-account.module").then(
+        (m) => m.DisableAccountPageModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: "event/:id",
@@ -131,6 +153,7 @@ const routes: Routes = [
     path: "download",
     loadChildren: () =>
       import("./download/download.module").then((m) => m.DownloadPageModule),
+    canActivate: [AuthGuard],
   },
 ];
 @NgModule({

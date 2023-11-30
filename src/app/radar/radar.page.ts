@@ -35,6 +35,8 @@ import {
 } from "../services/notification.service";
 import { NavService } from "../services/navigation.service";
 import { Haptics } from "@capacitor/haptics";
+import { AdService } from "../services/ad.service";
+import { Ad } from "../models/ad";
 
 SwiperCore.use([Keyboard, EffectCoverflow, Mousewheel, Scrollbar]);
 
@@ -56,8 +58,12 @@ export class RadarPage {
     keyboard: true,
     slidesPerView: 1,
     breakpoints: {
-      1024: {
+      1280: {
         slidesPerView: 3,
+        centeredSlides: true,
+      },
+      780: {
+        slidesPerView: 2,
         centeredSlides: true,
       },
     },
@@ -84,7 +90,7 @@ export class RadarPage {
   public automatic = true;
   public rangeValue = 0;
   authUser: User;
-  users: User[] = undefined;
+  users: (User | Ad)[] = undefined;
   public user: User;
   public view: "cards" | "list";
   public showBackdrop = false;
@@ -120,7 +126,8 @@ export class RadarPage {
     private notificationSvc: NotificationService,
     public detectorRef: ChangeDetectorRef,
     private nav: NavService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private adService: AdService
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
@@ -291,15 +298,34 @@ export class RadarPage {
 
       let users = resUsers;
 
+      let mixedList = [];
+      let adCounter = 0;
+      for (let i = 0; i < users.length; i++) {
+        mixedList.push(users[i]);
+        adCounter++;
+        if (adCounter === 5) {
+          const ad = this.adService.getRandomAd();
+          if (ad) {
+            console.log(ad);
+            mixedList.push(ad);
+            break;
+          }
+          adCounter = 0;
+        }
+      }
+
       this.users =
-        this.page === 1 ? (this.users = users) : [...this.users, ...users];
+        this.page === 1
+          ? (this.users = mixedList)
+          : [...this.users, ...mixedList];
+
       if (this.users?.length > 0) {
         if (this.ratio === -1) {
           if (resUsers?.length > 0 && !this.users?.length) {
             this.users = [...this.users, ...resUsers];
           }
 
-          if (this.users[0]?.id) {
+          if ("username" in this.users[0]) {
             this.user = this.users[0];
             this.userSvc.view(this.user.id);
           }
@@ -417,28 +443,31 @@ export class RadarPage {
 
   async hideProfile(id: User["id"]) {
     const nextIndex = this.users.findIndex((u) => u.id === id) + 1;
-    this.user = this.users[nextIndex];
-    const users = this.users;
-    this.users = this.users.filter((u) => u.id !== id);
+    const user = this.users[nextIndex];
+    if (user && "username" in user) {
+      this.user = user;
+      const users = this.users;
+      this.users = this.users.filter((u) => u.id !== id);
 
-    const toast = await this.toast.create({
-      message: "Has ocultado el usuario",
-      duration: 3000,
-      position: "bottom",
-      buttons: [
-        {
-          text: "Deshacer",
-          handler: () => {
-            this.users = users;
+      const toast = await this.toast.create({
+        message: "Has ocultado el usuario",
+        duration: 3000,
+        position: "bottom",
+        buttons: [
+          {
+            text: "Deshacer",
+            handler: () => {
+              this.users = users;
+            },
           },
-        },
-      ],
-    });
-    toast.present();
+        ],
+      });
+      toast.present();
 
-    const log = await toast.onDidDismiss();
-    if (log.role === "timeout") {
-      this.userSvc.hide(id);
+      const log = await toast.onDidDismiss();
+      if (log.role === "timeout") {
+        this.userSvc.hide(id);
+      }
     }
   }
 
@@ -453,15 +482,24 @@ export class RadarPage {
 
   async slide() {
     const index = this.slides.activeIndex;
-    this.user = this.users[index];
-    if (this.user?.id) {
-      this.userSvc.view(this.user?.id);
-    }
-    if (index >= this.users?.length - 10 && !this.loading) {
-      this.getRadarUsers();
-    }
-    if (this.view === "cards" && this.page === 0 && this.user.distance >= 100) {
-      this.radarAdv();
+    const user = this.users[index];
+    if (user && "username" in user) {
+      if (this.user?.id) {
+        this.userSvc.view(this.user?.id);
+      }
+      if (index >= this.users?.length - 10 && !this.loading) {
+        this.getRadarUsers();
+      }
+      if (
+        this.view === "cards" &&
+        this.page === 0 &&
+        this.user.distance >= 100
+      ) {
+        this.radarAdv();
+      }
+    } else if (user) {
+      const ad = user as Ad;
+      await this.adService.viewAd(ad);
     }
   }
 

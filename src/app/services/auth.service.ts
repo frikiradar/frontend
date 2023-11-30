@@ -185,17 +185,13 @@ export class AuthService {
     const token = this.currentUserValue.token;
     const google_token = this.currentUserValue.google_token;
 
-    return await firstValueFrom(
-      this.rest.get("user").pipe(
-        map((user: User) => {
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify({ ...user, token, google_token })
-          );
-          return user;
-        })
-      )
-    );
+    return this.rest.get("user").then((user: User) => {
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({ ...user, token, google_token })
+      );
+      return user;
+    });
   }
 
   setAuthUser(user: User) {
@@ -210,13 +206,13 @@ export class AuthService {
   }
 
   async sendVerification() {
-    return await firstValueFrom(this.rest.get("verify"));
+    return await this.rest.get("verify");
   }
 
   async verifyCode(verification_code: string) {
-    return (await firstValueFrom(
-      this.rest.put("verify", { verification_code })
-    )) as Promise<User>;
+    return (await this.rest.put("verify", {
+      verification_code,
+    })) as Promise<User>;
   }
 
   async requestPassword(username: string) {
@@ -317,7 +313,7 @@ export class AuthService {
     // Desactivamos las notificaciones
     if (uuid && this.currentUserValue) {
       try {
-        await firstValueFrom(this.rest.get(`turnoff-device/${uuid}`));
+        await this.rest.get(`turnoff-device/${uuid}`);
       } catch (e) {
         console.error(e);
       }

@@ -26,7 +26,7 @@ export class UserService {
 
   async getUser(id: User["id"] | User["username"]): Promise<User> {
     try {
-      return (await firstValueFrom(this.rest.get(`user/${id}`))) as User;
+      return (await this.rest.get(`user/${id}`)) as User;
     } catch (e) {
       throw new Error("No se puede obtener el usuario");
     }
@@ -44,7 +44,7 @@ export class UserService {
 
   async updateUser(user: User): Promise<User> {
     try {
-      user = (await firstValueFrom(this.rest.put("user", user))) as User;
+      user = (await this.rest.put("user", user)) as User;
       this.auth.setAuthUser(user);
       return user;
     } catch (e) {
@@ -62,9 +62,7 @@ export class UserService {
 
   async setAvatar(src: SafeResourceUrl) {
     try {
-      const user = (await firstValueFrom(
-        this.rest.put("avatar", { avatar: src })
-      )) as User;
+      const user = (await this.rest.put("avatar", { avatar: src })) as User;
       this.auth.setAuthUser(user);
       return user;
     } catch (e) {
@@ -74,9 +72,9 @@ export class UserService {
 
   async deleteAvatar(src: SafeResourceUrl) {
     try {
-      const user = (await firstValueFrom(
-        this.rest.put("delete-avatar", { avatar: src })
-      )) as User;
+      const user = (await this.rest.put("delete-avatar", {
+        avatar: src,
+      })) as User;
       this.auth.setAuthUser(user);
       return user;
     } catch (e) {
@@ -85,15 +83,16 @@ export class UserService {
   }
 
   async setCoordinates(longitude: number, latitude: number) {
-    return (await firstValueFrom(
-      this.rest.put("coordinates", { longitude, latitude })
-    )) as Promise<User["coordinates"]>;
+    return (await this.rest.put("coordinates", {
+      longitude,
+      latitude,
+    })) as Promise<User["coordinates"]>;
   }
 
   setManualGeolocation(country: string, city: string) {
-    return firstValueFrom(
-      this.rest.put("manual-geolocation", { country, city })
-    ) as Promise<User["coordinates"]>;
+    return this.rest.put("manual-geolocation", { country, city }) as Promise<
+      User["coordinates"]
+    >;
   }
 
   getRadarUsers(
@@ -101,121 +100,106 @@ export class UserService {
     ratio = -1,
     options?: { identity: boolean; range: boolean; connection: boolean }
   ) {
-    return firstValueFrom(
-      this.rest.put("radar", { page, ratio, options })
-    ) as Promise<User[]>;
+    return this.rest.put("radar", { page, ratio, options }) as Promise<User[]>;
   }
 
   searchUsers(query: string, order: "distance" | "match", page: number) {
-    return firstValueFrom(
-      this.rest.post(`search?page=${page}`, { query, order })
-    ) as Promise<User[]>;
+    return this.rest.post(`search?page=${page}`, { query, order }) as Promise<
+      User[]
+    >;
   }
 
   searchUsersBySlug(slug: string, order: "distance" | "match", page: number) {
-    return firstValueFrom(
-      this.rest.post(`search-by-slug?page=${page}`, { slug, order })
-    ) as Promise<User[]>;
+    return this.rest.post(`search-by-slug?page=${page}`, {
+      slug,
+      order,
+    }) as Promise<User[]>;
   }
 
   searchUsernames(query: string) {
-    return firstValueFrom(
-      this.rest.get(`search-usernames/${query}`)
-    ) as Promise<User[]>;
+    return this.rest.get(`search-usernames/${query}`) as Promise<User[]>;
   }
 
   activateUser(verification_code: string) {
-    return firstValueFrom(
-      this.rest.put("activation", { verification_code })
-    ) as Promise<User>;
+    return this.rest.put("activation", { verification_code }) as Promise<User>;
   }
 
   disableUser(code: string, note: string) {
-    return firstValueFrom(
-      this.rest.put("disable", {
-        code,
-        note,
-      })
-    ) as Promise<User>;
+    return this.rest.put("disable", {
+      code,
+      note,
+    }) as Promise<User>;
   }
 
   removeAccount(code: string, note: string) {
-    return firstValueFrom(
-      this.rest.put("remove-account", {
-        code,
-        note,
-      })
-    ) as Promise<User>;
+    return this.rest.put("remove-account", {
+      code,
+      note,
+    }) as Promise<User>;
   }
 
   changePassword(old_password: string, new_password: string) {
-    return firstValueFrom(
-      this.rest.put("password", {
-        old_password,
-        new_password,
-      })
-    ) as Promise<User>;
+    return this.rest.put("password", {
+      old_password,
+      new_password,
+    }) as Promise<User>;
   }
 
   changeEmail(old_email: string, new_email: string) {
-    return firstValueFrom(
-      this.rest.put("email", {
-        old_email,
-        new_email,
-      })
-    ) as Promise<User>;
+    return this.rest.put("email", {
+      old_email,
+      new_email,
+    }) as Promise<User>;
   }
 
   changeUsername(new_username: string) {
-    return firstValueFrom(
-      this.rest.put("username", {
-        new_username,
-      })
-    ) as Promise<User>;
+    return this.rest.put("username", {
+      new_username,
+    }) as Promise<User>;
   }
 
   getLikes() {
-    return firstValueFrom(this.rest.get("likes")) as Promise<User[]>;
+    return this.rest.get("likes") as Promise<User[]>;
   }
 
   like(id: User["id"]) {
-    return firstValueFrom(this.rest.put("like", { user: id })) as Promise<User>;
+    return this.rest.put("like", { user: id }) as Promise<User>;
   }
 
   unlike(id: User["id"]) {
-    return firstValueFrom(this.rest.delete(`like/${id}`)) as Promise<User>;
+    return this.rest.delete(`like/${id}`) as Promise<User>;
   }
 
   getBlocks() {
-    return firstValueFrom(this.rest.get("blocks")) as Promise<User[]>;
+    return this.rest.get("blocks") as Promise<User[]>;
   }
 
   block(id: User["id"], note?: string) {
-    return firstValueFrom(this.rest.put("block", { user: id, note }));
+    return this.rest.put("block", { user: id, note });
   }
 
   unblock(id: User["id"]) {
-    return firstValueFrom(this.rest.delete(`block/${id}`)) as Promise<User[]>;
+    return this.rest.delete(`block/${id}`) as Promise<User[]>;
   }
 
   report(id: User["id"], note?: string) {
-    return firstValueFrom(this.rest.put("report", { user: id, note }));
+    return this.rest.put("report", { user: id, note });
   }
 
   getHides() {
-    return firstValueFrom(this.rest.get("hides")) as Promise<User[]>;
+    return this.rest.get("hides") as Promise<User[]>;
   }
 
   hide(id: User["id"]) {
-    return firstValueFrom(this.rest.put("hide", { user: id }));
+    return this.rest.put("hide", { user: id });
   }
 
   view(id: User["id"]) {
-    firstValueFrom(this.rest.put("view", { user: id }));
+    this.rest.put("view", { user: id });
   }
 
   unhide(id: User["id"]) {
-    return firstValueFrom(this.rest.delete(`hide/${id}`)) as Promise<User[]>;
+    return this.rest.delete(`hide/${id}`) as Promise<User[]>;
   }
 
   async showRole(user: User) {
@@ -289,7 +273,7 @@ export class UserService {
   }
 
   async linkToPatreon(code: string) {
-    await firstValueFrom(this.rest.put("link-patreon", { oauth_code: code }));
+    await this.rest.put("link-patreon", { oauth_code: code });
   }
 
   async unsubscribe(code: string) {
