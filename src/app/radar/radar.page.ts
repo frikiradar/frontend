@@ -58,6 +58,10 @@ export class RadarPage {
     keyboard: true,
     slidesPerView: 1,
     breakpoints: {
+      1920: {
+        slidesPerView: 4,
+        centeredSlides: true,
+      },
       1280: {
         slidesPerView: 3,
         centeredSlides: true,
@@ -270,7 +274,7 @@ export class RadarPage {
       this.view = "cards";
       this.ratio = -1;
       await this.utils.delay(500);
-      await this.slides?.slideTo(0);
+      this.slides?.slideTo(0);
     }
     this.getRadarUsers();
   }
@@ -499,7 +503,7 @@ export class RadarPage {
       }
     } else if (user) {
       const ad = user as Ad;
-      await this.adService.viewAd(ad);
+      this.adService.viewAd(ad);
     }
   }
 

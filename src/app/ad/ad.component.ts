@@ -18,7 +18,7 @@ export class AdComponent implements OnInit {
 
   async openUrl() {
     this.urlSvc.openUrl(this.ad.url);
-    await this.adSvc.clickAd(this.ad);
+    this.adSvc.clickAd(this.ad);
     return false;
   }
 
