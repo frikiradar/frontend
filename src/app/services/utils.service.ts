@@ -19,8 +19,9 @@ import {
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { AuthService } from "./auth.service";
-import { Config } from "./config.service";
+import { Config, ConfigService } from "./config.service";
 import { NavigationBar } from "@mauricewegner/capacitor-navigation-bar";
+import { SafeAreaController } from "@aashu-dubey/capacitor-statusbar-safe-area";
 
 @Injectable({
   providedIn: "root",
@@ -32,7 +33,8 @@ export class UtilsService {
     private auth: AuthService,
     private platform: Platform,
     private modalController: ModalController,
-    private toast: ToastController
+    private toast: ToastController,
+    private config: ConfigService
   ) {}
 
   async takePicture(
@@ -302,14 +304,23 @@ export class UtilsService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  toggleTheme(theme: Config["theme"], oldTheme?: Config["theme"], delay = 0) {
+  async toggleTheme(
+    theme: Config["theme"],
+    oldTheme?: Config["theme"],
+    delay = 0
+  ) {
     if (oldTheme) {
       document.body.classList.toggle(oldTheme, false);
     }
     document.body.classList.toggle(theme, true);
 
     if (this.platform.is("capacitor")) {
-      setTimeout(() => {
+      await StatusBar.show();
+      await NavigationBar.show();
+      StatusBar.setOverlaysWebView({ overlay: false });
+      NavigationBar.setTransparency({ isTransparent: false });
+
+      setTimeout(async () => {
         switch (theme) {
           case "dark":
             StatusBar.setBackgroundColor({ color: "#1f1f1f" });
@@ -341,6 +352,10 @@ export class UtilsService {
             StatusBar.setStyle({ style: Style.Light });
             NavigationBar.setColor({ color: "#ffebee", darkButtons: true });
             break;
+          case "transparent":
+            this.transparentStatusBar();
+            this.transparentNavigationBar();
+            break;
           default:
             StatusBar.setBackgroundColor({ color: "#1f1f1f" });
             StatusBar.setStyle({ style: Style.Dark });
@@ -348,6 +363,36 @@ export class UtilsService {
         }
       }, delay);
     }
+  }
+
+  async transparentStatusBar(hide = false) {
+    if (this.platform.is("capacitor")) {
+      await SafeAreaController.injectCSSVariables();
+      StatusBar.setOverlaysWebView({ overlay: true });
+      StatusBar.setStyle({ style: Style.Dark });
+      if (hide) {
+        await StatusBar.hide();
+      } else {
+        await StatusBar.show();
+      }
+    }
+  }
+
+  async transparentNavigationBar(hide = false) {
+    if (this.platform.is("capacitor")) {
+      await SafeAreaController.injectCSSVariables();
+      NavigationBar.setTransparency({ isTransparent: true });
+      if (hide) {
+        await NavigationBar.hide();
+      } else {
+        await NavigationBar.show();
+      }
+    }
+  }
+
+  async resetTheme() {
+    const theme = (await this.config.get("theme")) as Config["theme"];
+    this.toggleTheme(theme);
   }
 
   makeId(length: number): string {

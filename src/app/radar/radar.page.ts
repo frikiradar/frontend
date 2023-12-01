@@ -292,7 +292,6 @@ export class RadarPage {
           if (adCounter === 5) {
             const ad = this.adService.getRandomAd();
             if (ad) {
-              console.log(ad);
               mixedList.push(ad);
               break;
             }

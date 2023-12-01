@@ -26,7 +26,6 @@ import {
   AppUpdateAvailability,
 } from "@capawesome/capacitor-app-update";
 import { first } from "rxjs";
-import { AdMob, AdmobConsentStatus } from "@capacitor-community/admob";
 import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 @Component({
@@ -88,7 +87,7 @@ export class AppComponent {
           // Contar veces abierto
           this.countOpenTimes();
           // Mostrar publicidad
-          this.initAds();
+          this.adService.init();
         }
       });
   }
@@ -294,52 +293,10 @@ export class AppComponent {
         scopes: [
           "profile",
           "email",
-          /*"https://www.googleapis.com/auth/user.gender.read",
-          "https://www.googleapis.com/auth/user.birthday.read"*/
-          ,
+          "https://www.googleapis.com/auth/user.gender.read",
+          "https://www.googleapis.com/auth/user.birthday.read",
         ],
       });
     });
-  }
-
-  async initAds() {
-    if (!this.auth.isPremium()) {
-      if (isPlatform("capacitor")) {
-        await AdMob.initialize();
-
-        const [trackingInfo, consentInfo] = await Promise.all([
-          AdMob.trackingAuthorizationStatus(),
-          AdMob.requestConsentInfo(),
-        ]);
-
-        if (trackingInfo.status === "notDetermined") {
-          /**
-           * If you want to explain TrackingAuthorization before showing the iOS dialog,
-           * you can show the modal here.
-           * ex)
-           * const modal = await this.modalCtrl.create({
-           *   component: RequestTrackingPage,
-           * });
-           * await modal.present();
-           * await modal.onDidDismiss();  // Wait for close modal
-           **/
-
-          await AdMob.requestTrackingAuthorization();
-        }
-
-        const authorizationStatus = await AdMob.trackingAuthorizationStatus();
-        if (
-          authorizationStatus.status === "authorized" &&
-          consentInfo.isConsentFormAvailable &&
-          consentInfo.status === AdmobConsentStatus.REQUIRED
-        ) {
-          await AdMob.showConsentForm();
-        }
-      }
-
-      // Cargamos los anuncios de patrocinadores
-      const ads = await this.adService.getActiveAds();
-      console.log(ads);
-    }
   }
 }

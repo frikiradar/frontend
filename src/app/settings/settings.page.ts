@@ -16,14 +16,6 @@ import { HideUsersModal } from "./hide-users/hide-users.modal";
 import { NavService } from "../services/navigation.service";
 import { UtilsService } from "../services/utils.service";
 import { ConfigService, Config } from "../services/config.service";
-import {
-  AdMob,
-  BannerAdPluginEvents,
-  AdMobBannerSize,
-  BannerAdOptions,
-  BannerAdSize,
-  BannerAdPosition,
-} from "@capacitor-community/admob";
 
 @Component({
   selector: "app-settings",
@@ -57,7 +49,6 @@ export class SettingsPage implements OnInit {
 
   async ngOnInit() {
     this.user = this.auth.currentUserValue;
-    // this.banner();
   }
 
   async passwordModal() {
@@ -193,37 +184,7 @@ export class SettingsPage implements OnInit {
     }
   }
 
-  async banner() {
-    if (!this.auth.isPremium() && this.platform.is("capacitor")) {
-      AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-        // Subscribe Banner Event Listener
-      });
-
-      AdMob.addListener(
-        BannerAdPluginEvents.SizeChanged,
-        (size: AdMobBannerSize) => {
-          // Subscribe Change Banner Size
-          const banner = document.getElementById("banner");
-          banner.style.height = size.height.toString() + "px";
-        }
-      );
-
-      const options: BannerAdOptions = {
-        adId: "ca-app-pub-3470820326017899/2750737138",
-        adSize: BannerAdSize.ADAPTIVE_BANNER,
-        position: BannerAdPosition.BOTTOM_CENTER,
-        margin: 0,
-        isTesting: this.auth.isAdmin() ? true : false,
-      };
-      AdMob.showBanner(options);
-    }
-  }
-
   back() {
     this.nav.back();
-  }
-
-  async ionViewWillLeave() {
-    await AdMob.removeBanner();
   }
 }

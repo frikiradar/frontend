@@ -25,7 +25,6 @@ import SwiperCore, {
   Pagination,
   Autoplay,
   Mousewheel,
-  Swiper,
 } from "swiper";
 
 import { Story } from "src/app/models/story";
@@ -39,6 +38,7 @@ import { StoryModal } from "../story-modal/story.modal";
 import { Haptics, NotificationType } from "@capacitor/haptics";
 import { transition, trigger, useAnimation } from "@angular/animations";
 import { pulse } from "ng-animate";
+import { UtilsService } from "src/app/services/utils.service";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -96,7 +96,8 @@ export class ViewStoriesModal implements OnInit {
     private router: Router,
     public auth: AuthService,
     private urlSvc: UrlService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private utils: UtilsService
   ) {
     this.commentForm = formBuilder.group({
       comment: new UntypedFormControl("", [Validators.required]),
@@ -107,6 +108,7 @@ export class ViewStoriesModal implements OnInit {
     this.story = this.stories[0];
     this.setLikeStory();
     this.viewStory(this.stories[0]);
+    await this.utils.toggleTheme("transparent");
   }
 
   ngAfterViewInit() {

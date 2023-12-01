@@ -35,6 +35,7 @@ import { Event } from "src/app/models/event";
 import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 import { App } from "@capacitor/app";
 import { Meta, Title } from "@angular/platform-browser";
+import { NavService } from "src/app/services/navigation.service";
 
 @Component({
   selector: "app-chat-modal",
@@ -45,7 +46,6 @@ export class ChatModalComponent implements OnInit {
   @Input() userId: User["id"];
   @Input() messageEvent: EventEmitter<Chat>;
   @Output() messageChange: EventEmitter<Chat> = new EventEmitter();
-  @Output() backToList: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(IonContent)
   chatlist: IonContent;
@@ -78,7 +78,8 @@ export class ChatModalComponent implements OnInit {
     private dc: ChangeDetectorRef,
     private eventSvc: EventService,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    private nav: NavService
   ) {}
 
   @HostListener("window:focus")
@@ -546,6 +547,6 @@ export class ChatModalComponent implements OnInit {
   }
 
   back() {
-    this.backToList.emit();
+    this.nav.back();
   }
 }

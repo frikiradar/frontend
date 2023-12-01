@@ -39,7 +39,8 @@ export interface Config {
     | "cyberpunk"
     | "black"
     | "fire"
-    | "strawberries-and-cream";
+    | "strawberries-and-cream"
+    | "transparent";
   rules?: boolean;
 }
 @Injectable({

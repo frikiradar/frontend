@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
-import { ModalController, NavController, Platform } from "@ionic/angular";
+import { ModalController, Platform } from "@ionic/angular";
 import { getMessaging, onMessage } from "firebase/messaging";
 import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 
@@ -12,6 +12,7 @@ import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
 import { initializeApp } from "firebase/app";
 import { environment } from "src/environments/environment";
+import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-chat",
@@ -26,12 +27,11 @@ export class ChatPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     public auth: AuthService,
     private platform: Platform,
     private modalController: ModalController,
     private config: ConfigService,
-    private nav: NavController
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -60,11 +60,7 @@ export class ChatPage implements OnInit {
   }
 
   async showChat(id: User["id"]) {
-    this.nav.navigateRoot(["/chat", id]);
-  }
-
-  async backToList() {
-    this.nav.navigateRoot(["/tabs/chat"]);
+    this.router.navigate(["/chat", id]);
   }
 
   async firebaseListener() {

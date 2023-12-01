@@ -125,7 +125,7 @@ export class LoginPage {
     }
     try {
       const googleUser = await GoogleAuth.signIn();
-      console.log(googleUser);
+      // console.log(googleUser);
       if (googleUser.authentication.idToken) {
         this.credential = googleUser.authentication.idToken;
         this.provider = "google";

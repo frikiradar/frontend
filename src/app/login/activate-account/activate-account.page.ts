@@ -53,7 +53,11 @@ export class ActivateAccountPage {
       ]),
     });
 
-    this.sendCode();
+    // No descomentes la siguiente línea.
+    // Backend enviará un código de activación al email automáticamente
+    // en la función checkPostAuth() de UserChecker
+    // si lo descomentas se enviará doble código de activación
+    // this.sendCode();
   }
 
   async submitCode() {

@@ -6,7 +6,6 @@
 ></app-chat-list>
 <app-chat-modal
   [ngClass]="userId ? '' : 'hide'"
-  (backToList)="backToList()"
   [userId]="userId"
   [messageEvent]="messageEvent"
   (messageChange)="messageChange($event)"

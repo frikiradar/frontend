@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar [@slideUp]="isHidden ? 'hide' : 'show'">
     <ion-buttons slot="start">
       <ion-button (click)="back()">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
@@ -14,14 +14,20 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <swiper [config]="slideOpts">
+  <swiper
+    [config]="slideOpts"
+    (click)="toggleVisibility($event)"
+    (swiper)="setSwiperInstance($event)"
+  >
     <ng-template swiperSlide>
-      <img [src]="params.src" />
+      <div class="swiper-zoom-container">
+        <img [src]="params.src" />
+      </div>
     </ng-template>
   </swiper>
 </ion-content>
-<ion-footer>
-  <ion-toolbar>
+<ion-footer class="ion-no-border">
+  <ion-toolbar [@slideDown]="isHidden ? 'hide' : 'show'">
     <p class="ion-padding">{{params?.description}}</p>
   </ion-toolbar>
 </ion-footer>

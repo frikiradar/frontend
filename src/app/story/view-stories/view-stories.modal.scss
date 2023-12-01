@@ -1,6 +1,7 @@
 ion-header ion-toolbar {
   position: absolute;
   --background: transparent !important;
+  padding-top: var(--status-bar-height);
 }
 
 ion-footer {
@@ -9,8 +10,8 @@ ion-footer {
   bottom: 0;
 }
 
-ion-footer ion-toolbar {
-  --background: transparent !important;
+ion-footer {
+  padding-bottom: var(--safe-area-inset-bottom);
 }
 
 ion-label {
@@ -69,7 +70,7 @@ ion-card {
 .story-actions {
   position: absolute;
   justify-self: flex-end;
-  bottom: 80px;
+  bottom: 120px;
   right: 20px;
   text-shadow: 1px 1px 4px #000; // sombra de texto
   opacity: 0.9; // transparencia ligera

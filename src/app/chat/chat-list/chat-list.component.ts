@@ -295,6 +295,6 @@ export class ChatListComponent {
   }
 
   back() {
-    this.nav.navigateRoot("/tabs/chat");
+    this.nav.back();
   }
 }
