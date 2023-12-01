@@ -47,7 +47,7 @@ export class DisableAccountPage {
   }
 
   async sendCode() {
-    await this.auth.sendVerification();
+    this.auth.sendVerification();
 
     (
       await this.toast.create({
