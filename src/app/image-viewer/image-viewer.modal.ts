@@ -112,7 +112,6 @@ export class ImageViewerModal {
   }
 
   async ngOnDestroy() {
-    const theme = (await this.config.get("theme")) as Config["theme"];
-    this.utils.toggleTheme(theme);
+    await this.utils.resetTheme();
   }
 }

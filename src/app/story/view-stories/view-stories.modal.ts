@@ -491,4 +491,8 @@ export class ViewStoriesModal implements OnInit {
   close() {
     this.thisModal.dismiss();
   }
+
+  async ngOnDestroy() {
+    await this.utils.resetTheme();
+  }
 }
