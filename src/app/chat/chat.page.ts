@@ -31,7 +31,8 @@ export class ChatPage implements OnInit {
     private platform: Platform,
     private modalController: ModalController,
     private config: ConfigService,
-    private router: Router
+    private router: Router,
+    private nav: NavService
   ) {}
 
   async ngOnInit() {
@@ -60,7 +61,7 @@ export class ChatPage implements OnInit {
   }
 
   async showChat(id: User["id"]) {
-    this.router.navigate(["/chat", id]);
+    this.nav.navigateRoot("/chat/" + id);
   }
 
   async firebaseListener() {
