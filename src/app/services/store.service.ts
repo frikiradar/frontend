@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
-import { AlertController, Platform, isPlatform } from "@ionic/angular";
+import {
+  AlertController,
+  LoadingController,
+  Platform,
+  isPlatform,
+} from "@ionic/angular";
 import {
   LOG_LEVEL,
   PURCHASES_ERROR_CODE,
@@ -25,7 +30,8 @@ export class StoreService {
     private userSvc: UserService,
     private payment: PaymentService,
     private alert: AlertController,
-    private utils: UtilsService
+    private utils: UtilsService,
+    public loading: LoadingController
   ) {
     this.platform.ready().then(async () => {
       await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Enable to get debug logs
@@ -130,9 +136,15 @@ export class StoreService {
     });
 
     try {
+      const loading = await this.loading.create({
+        translucent: true,
+        message: "Cargando",
+      });
+      await loading.present();
       const purchaseResult = await Purchases.purchaseStoreProduct({
         product,
       });
+      await loading.dismiss();
       // console.log("purchaseResult", purchaseResult);
       if (
         typeof purchaseResult.customerInfo.entitlements.active[

@@ -5,13 +5,13 @@ import {
   ModalController,
   isPlatform,
 } from "@ionic/angular";
-import { PurchasesStoreProduct } from "@revenuecat/purchases-capacitor";
 
 import { User } from "src/app/models/user";
 import { StoreService } from "src/app/services/store.service";
 import { AuthService } from "../services/auth.service";
 import { NavService } from "../services/navigation.service";
 import { Product } from "../models/product";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "unlimited-modal",
@@ -34,7 +34,8 @@ export class UnlimitedModal {
     public storeSvc: StoreService,
     public detectorRef: ChangeDetectorRef,
     private nav: NavService,
-    private alert: AlertController
+    private alert: AlertController,
+    private router: Router
   ) {
     this.user = this.auth.currentUserValue;
   }
@@ -100,7 +101,7 @@ export class UnlimitedModal {
             text: "¡Muchas gracias!",
             handler: () => {
               this.close(true);
-              location.reload();
+              this.router.navigate(["/"]);
             },
           },
         ],
