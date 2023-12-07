@@ -1,7 +1,14 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import { ModalController, isPlatform } from "@ionic/angular";
-import { AdMob, AdmobConsentStatus } from "@capacitor-community/admob";
+import {
+  AdLoadInfo,
+  AdMob,
+  AdMobRewardItem,
+  AdmobConsentStatus,
+  RewardAdOptions,
+  RewardAdPluginEvents,
+} from "@capacitor-community/admob";
 
 import { RestService } from "./rest.service";
 import { Ad } from "../models/ad";
@@ -14,6 +21,7 @@ import { AuthService } from "./auth.service";
 export class AdService {
   private ads = new BehaviorSubject<any[]>([]);
   private shownAds: Ad["id"][] = [];
+  private reward = false;
 
   constructor(
     private rest: RestService,
@@ -102,6 +110,10 @@ export class AdService {
     }
   }
   async showRandomAd() {
+    if (this.reward) {
+      return true;
+    }
+
     const ad = this.getRandomAd();
     if (ad !== null) {
       const modal = await this.modalCtrl.create({
@@ -113,6 +125,16 @@ export class AdService {
       });
 
       await modal.present();
+
+      const { data } = await modal.onDidDismiss();
+      if (data) {
+        this.reward = true;
+      }
+      return data;
+    } else if (isPlatform("capacitor")) {
+      return await this.rewardVideo();
+    } else {
+      return true;
     }
   }
 
@@ -126,5 +148,42 @@ export class AdService {
     if (!this.auth.isMaster() && this.auth.currentUserValue.id !== ad.user.id) {
       await this.rest.post(`ads/${ad.id}/click`);
     }
+  }
+
+  async rewardVideo() {
+    // Vamos a mostrar el reward video un 50% de las veces
+    const random = Math.floor(Math.random() * 2);
+    if (random !== 0) {
+      return;
+    }
+
+    if (!this.auth.isPremium() && isPlatform("capacitor")) {
+      if (this.reward) {
+        return;
+      }
+      AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+        // Subscribe prepared rewardVideo
+      });
+
+      AdMob.addListener(
+        RewardAdPluginEvents.Rewarded,
+        (rewardItem: AdMobRewardItem) => {
+          // Subscribe user rewarded
+          console.log(rewardItem);
+        }
+      );
+
+      const options: RewardAdOptions = {
+        adId: "ca-app-pub-3470820326017899/5892787677",
+        isTesting: this.auth.isAdmin() ? true : false,
+      };
+      await AdMob.prepareRewardVideoAd(options);
+      const rewardItem = await AdMob.showRewardVideoAd();
+      console.log(rewardItem);
+
+      this.reward = true;
+    }
+
+    return this.reward;
   }
 }

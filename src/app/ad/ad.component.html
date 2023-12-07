@@ -1,17 +1,23 @@
-<ion-card button (click)="openUrl()">
+<ion-card button>
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <ion-buttons slot="end">
-        <!--<ion-button (click)="close()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
-        </ion-button>-->
+        <ion-chip (click)="close()">
+          <ion-label>
+            <ng-container *ngIf="!adViewed; else closeLabel">{{
+              counter
+            }}</ng-container>
+            <ng-template #closeLabel>Cerrar</ng-template>
+          </ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <div class="background-image">
+  <div class="background-image" (click)="openUrl()">
     <img [src]="ad.image_url" />
   </div>
-  <ion-card-content *ngIf="ad.title || ad.description">
+  <ion-card-content *ngIf="ad.title || ad.description" (click)="openUrl()">
     <ion-card-title>{{ ad.title }}</ion-card-title>
     <p>{{ ad.description }}</p>
   </ion-card-content>

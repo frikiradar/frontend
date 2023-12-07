@@ -5,6 +5,7 @@ import {
   IonRange,
   IonContent,
   ToastController,
+  ModalController,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import SwiperCore, {
@@ -30,6 +31,7 @@ import { NavService } from "../services/navigation.service";
 import { Haptics } from "@capacitor/haptics";
 import { AdService } from "../services/ad.service";
 import { Ad } from "../models/ad";
+import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
 SwiperCore.use([EffectCoverflow, Mousewheel, Scrollbar]);
 
@@ -46,7 +48,8 @@ export class RadarPage {
 
   public counters: NotificationCounters;
   private slides: SwiperCore;
-  private allUsersLoaded = false;
+  public allUsersLoaded = false;
+  public filterOptions = false;
 
   public slideOpts: SwiperOptions = {
     slidesPerView: 1,
@@ -86,6 +89,7 @@ export class RadarPage {
   public ratio = -1;
   public automatic = true;
   public rangeValue = 0;
+  public previousRangeValue = 0;
   authUser: User;
   users: (User | Ad)[] = [];
   public user: User;
@@ -97,8 +101,18 @@ export class RadarPage {
     identity: true,
     range: false,
     connection: false,
+    online: false,
+    worldwide: this.auth.isPremium() ? true : false,
+    fake_location: false,
   };
+
+  public location = {
+    country: "",
+    city: "",
+  };
+
   private searchOptionsChanged = false;
+  public countries: string[] = [];
 
   constructor(
     public userSvc: UserService,
@@ -113,7 +127,8 @@ export class RadarPage {
     public detectorRef: ChangeDetectorRef,
     private nav: NavService,
     private ngZone: NgZone,
-    private adService: AdService
+    private adService: AdService,
+    private modalController: ModalController
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
@@ -242,12 +257,30 @@ export class RadarPage {
     }
     if (radar_config?.options !== undefined) {
       this.searchOptions = radar_config.options;
+      if (!this.auth.isPremium()) {
+        radar_config.options.online = false;
+        radar_config.options.fake_location = false;
+        radar_config.options.worldwide = false;
+        if (radar_config.range === 4) {
+          radar_config.range = 2;
+        }
+      } else if (radar_config.options.worldwide === undefined) {
+        radar_config.options.worldwide = true;
+      }
+      this.config.set("radar_config", radar_config);
+      this.searchOptions = radar_config.options;
     }
+    if (radar_config?.location !== undefined) {
+      this.location = radar_config.location;
+    }
+    this.countries = this.utils.getCountries();
+
     if (radar_config?.view === "list") {
       this.view = "list";
       const range = radar_config?.range;
       if (range !== undefined) {
         this.rangeValue = range;
+        this.previousRangeValue = range;
         this.ratio = this.getRatio(range);
       } else {
         this.ratio = 50;
@@ -273,7 +306,8 @@ export class RadarPage {
         resUsers = await this.userSvc.getRadarUsers(
           this.page,
           this.ratio,
-          this.searchOptions
+          this.searchOptions,
+          this.location
         );
       }
       this.loading = false;
@@ -282,65 +316,72 @@ export class RadarPage {
         this.config.set("radar", resUsers);
       }
 
-      if (resUsers?.length > 0) {
+      if (resUsers.length > 0) {
         let users = resUsers;
-        let mixedList = [];
-        let adCounter = 0;
-        for (let i = 0; i < users.length; i++) {
-          mixedList.push(users[i]);
-          adCounter++;
-          if (adCounter === 5) {
-            const ad = this.adService.getRandomAd();
-            if (ad) {
-              mixedList.push(ad);
-              break;
+        if (this.view === "cards") {
+          // TODO: que tambien se vea en la vista de lista
+          let mixedList = [];
+          let adCounter = 0;
+          for (let i = 0; i < users.length; i++) {
+            mixedList.push(users[i]);
+            adCounter++;
+            if (adCounter === 5) {
+              const ad = this.adService.getRandomAd();
+              if (ad) {
+                mixedList.push(ad);
+                break;
+              }
+              adCounter = 0;
             }
-            adCounter = 0;
           }
+
+          this.users =
+            this.page === 1
+              ? (this.users = mixedList)
+              : [...this.users, ...mixedList];
+        } else {
+          this.users =
+            this.page === 1 ? (this.users = users) : [...this.users, ...users];
         }
-
-        this.users =
-          this.page === 1
-            ? (this.users = mixedList)
-            : [...this.users, ...mixedList];
-
         this.detectorRef.detectChanges();
 
-        if (this.users?.length > 0) {
-          if (this.ratio === -1) {
-            if (resUsers?.length > 0 && !this.users?.length) {
-              this.users = [...this.users, ...resUsers];
-            }
+        if (this.ratio === -1) {
+          if (resUsers?.length > 0 && !this.users?.length) {
+            this.users = [...this.users, ...resUsers];
+          }
 
-            if ("username" in this.users[0]) {
-              this.user = this.users[0];
-              this.userSvc.view(this.user.id);
-            }
-          } else {
-            if (event) {
-              event.target.complete();
+          if ("username" in this.users[0]) {
+            this.user = this.users[0];
+            this.userSvc.view(this.user.id);
+          }
+        } else {
+          if (event) {
+            event.target.complete();
 
-              if (users.length < 15) {
-                event.target.disabled = true;
-              }
+            if (users.length < 15) {
+              event.target.disabled = true;
             }
           }
-        } else if (
-          (this.range.value as number) > -1 &&
-          (this.range.value as number) < 5 &&
-          this.automatic
-        ) {
-          let value = this.range.value as number;
-          value++;
-          this.range.value = value;
-          this.changeRatio(value);
         }
-
-        if (await this.toast.getTop()) {
-          this.toast.dismiss();
-        }
+      } else if (
+        this.range &&
+        (this.range.value as number) > -1 &&
+        (this.range.value as number) < 3 &&
+        this.automatic &&
+        this.view === "list"
+      ) {
+        let value = this.range.value as number;
+        value++;
+        this.range.value = value;
+        this.changeRatio(value);
       } else {
+        this.automatic = false;
+        this.loading = false;
         this.allUsersLoaded = true;
+      }
+
+      if (await this.toast.getTop()) {
+        this.toast.dismiss();
       }
     } catch (e) {
       console.error(e);
@@ -370,8 +411,9 @@ export class RadarPage {
     )) as Config["radar_config"];
 
     if (this.view === "cards") {
+      this.automatic = true;
       this.view = "list";
-      this.ratio = 50;
+      this.ratio = this.getRatio(this.rangeValue);
       if (radar_config) {
         radar_config.view = this.view;
         radar_config.range = this.rangeValue;
@@ -391,9 +433,15 @@ export class RadarPage {
   }
 
   async changeRatio(value: number) {
-    if (value !== this.range.value) {
-      this.range.value = value;
+    if (value === 4 && !this.auth.isPremium()) {
+      this.showPremium("radar");
+      this.rangeValue = this.previousRangeValue;
+      this.range.value = this.previousRangeValue;
+      this.ratio = this.getRatio(this.previousRangeValue);
     } else {
+      if (value === 4) {
+        this.searchOptions.worldwide = true;
+      }
       if (this.users?.length < 15) {
         this.radarAdv();
       }
@@ -406,6 +454,8 @@ export class RadarPage {
       )) as Config["radar_config"];
       radar_config.view = this.view;
       radar_config.range = value;
+      this.rangeValue = value;
+      this.previousRangeValue = value;
       this.config.set("radar_config", radar_config);
 
       let message = "";
@@ -525,18 +575,18 @@ export class RadarPage {
   }
 
   async radarAdv() {
-    const radarAdv = this.config.get("radarAdv");
+    const radarAdv = await this.config.get("radarAdv");
 
     if (!radarAdv) {
       const alert = await this.alert.create({
         header: "¿Pocas personas cerca tuya?",
         message:
-          "No llores, acabamos de lanzar la aplicación y aún no hemos llegado a todas partes. ¡Ayúdanos a crecer y conviértete en embajador de frikiradar compartiendo con tus amigas y amigos!",
+          "¡Ayúdanos a crecer participando en nuestro nuevo programa 'Recluta y gana', compartiendo con tus amigas y amigos!",
         buttons: [
           {
-            text: "¡Compartir!",
-            handler: () => {
-              this.utils.share();
+            text: "¡Quiero informarme!",
+            handler: async () => {
+              this.nav.navigateRoot("/recruit");
             },
           },
         ],
@@ -583,15 +633,48 @@ export class RadarPage {
   }
 
   async dismissFilterOptions() {
+    this.filterOptions = false;
     if (this.searchOptionsChanged) {
       this.searchOptionsChanged = false;
       this.loading = true;
       this.page = 0;
       this.users = [];
       this.allUsersLoaded = false;
-      this.slides.activeIndex = 0;
-      this.radarlist?.scrollToTop(0);
+      if (this.view === "list") {
+        this.radarlist?.scrollToTop(0);
+        this.automatic = true;
+      } else {
+        this.slides.activeIndex = 0;
+      }
       await this.getRadarUsers();
     }
+  }
+
+  async changeLocation(property: string, value: string) {
+    this.searchOptionsChanged = true;
+    let radar_config = (await this.config.get(
+      "radar_config"
+    )) as Config["radar_config"];
+
+    if (radar_config?.location) {
+      radar_config.location = this.location;
+    } else {
+      radar_config = { location: this.location };
+    }
+
+    radar_config.location[property] = value;
+    this.config.set("radar_config", radar_config);
+    this.location = radar_config.location;
+  }
+
+  async showPremium(
+    topic: "ad" | "location" | "radar" | "filter" | "default" = "default"
+  ) {
+    const modal = await this.modalController.create({
+      component: UnlimitedModal,
+      cssClass: "vertical-modal",
+      componentProps: { topic },
+    });
+    await modal.present();
   }
 }

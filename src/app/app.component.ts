@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Network } from "@capacitor/network";
 import {
   AlertController,
+  ModalController,
   Platform,
   ToastController,
   isPlatform,
@@ -47,7 +48,8 @@ export class AppComponent {
     private nav: NavService,
     private sw: SwService,
     private toast: ToastController,
-    private adService: AdService
+    private adService: AdService,
+    private modal: ModalController
   ) {
     this.initializeApp();
   }
@@ -144,7 +146,24 @@ export class AppComponent {
     }
     this.config.set("openTimes", openTimes);
 
-    if (openTimes >= 3 && !config.review && isPlatform("capacitor")) {
+    if (openTimes == 7) {
+      const alert = await this.alert.create({
+        header: "¡Recluta y gana!",
+        message:
+          "Recluta a tus amigos y conseguirás meses de frikiradar UNLIMITED gratis. ¡Infórmate!",
+        buttons: [
+          {
+            text: "¡Quiero informarme!",
+            handler: async () => {
+              this.nav.navigateRoot("/recruit");
+            },
+          },
+        ],
+        cssClass: "round-alert",
+      });
+
+      await alert.present();
+    } else if (openTimes >= 3 && !config.review && isPlatform("capacitor")) {
       const alert = await this.alert.create({
         header: "¡Únete a la batalla!",
         message:
@@ -293,8 +312,8 @@ export class AppComponent {
         scopes: [
           "profile",
           "email",
-          "https://www.googleapis.com/auth/user.gender.read",
-          "https://www.googleapis.com/auth/user.birthday.read",
+          /*"https://www.googleapis.com/auth/user.gender.read",
+          "https://www.googleapis.com/auth/user.birthday.read",*/
         ],
       });
     });

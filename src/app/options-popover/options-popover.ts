@@ -2,9 +2,9 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   AlertController,
-  Platform,
   PopoverController,
   ToastController,
+  isPlatform,
 } from "@ionic/angular";
 import { Clipboard } from "@capacitor/clipboard";
 
@@ -22,6 +22,7 @@ import { UtilsService } from "../services/utils.service";
 export class OptionsPopover {
   public user: User;
   public page: string;
+  public isPlatform = isPlatform;
 
   constructor(
     public popover: PopoverController,
@@ -31,8 +32,7 @@ export class OptionsPopover {
     private alert: AlertController,
     private toast: ToastController,
     private admin: AdminService,
-    private utils: UtilsService,
-    public platform: Platform
+    private utils: UtilsService
   ) {}
 
   close() {

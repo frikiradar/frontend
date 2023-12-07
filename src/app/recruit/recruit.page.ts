@@ -6,11 +6,11 @@ import { NavService } from "../services/navigation.service";
 import { UrlService } from "../services/url.service";
 
 @Component({
-  selector: "ambassador-modal",
-  templateUrl: "./ambassador.page.html",
-  styleUrls: ["./ambassador.page.scss"],
+  selector: "recruit-modal",
+  templateUrl: "./recruit.page.html",
+  styleUrls: ["./recruit.page.scss"],
 })
-export class AmbassadorPage implements OnInit {
+export class RecruitPage implements OnInit {
   public user: User;
   constructor(
     private auth: AuthService,
@@ -24,7 +24,7 @@ export class AmbassadorPage implements OnInit {
 
   public goToPatreon() {}
 
-  close() {
+  back() {
     this.nav.back();
   }
 }

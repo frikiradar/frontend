@@ -6,6 +6,7 @@ import { CreditsModal } from "../credits/credits.modal";
 import { AuthService } from "../services/auth.service";
 import { RulesPage } from "../rules/rules.page";
 import { UserService } from "../services/user.service";
+import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
 @Component({
   selector: "menu-modal",
@@ -39,9 +40,17 @@ export class MenuModal implements OnInit {
     this.modalController.dismiss();
   }
 
-  async showAmbassador() {
-    this.router.navigate(["/ambassador"]);
+  async showRecruit() {
+    this.router.navigate(["/recruit"]);
     this.modalController.dismiss();
+  }
+
+  async showPremium() {
+    const modal = await this.subModal.create({
+      component: UnlimitedModal,
+      cssClass: "vertical-modal",
+    });
+    return await modal.present();
   }
 
   async credits() {

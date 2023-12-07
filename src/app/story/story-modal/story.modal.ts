@@ -9,8 +9,8 @@ import { Keyboard } from "@capacitor/keyboard";
 import {
   IonTextarea,
   ModalController,
-  Platform,
   ToastController,
+  isPlatform,
 } from "@ionic/angular";
 
 import { User } from "../../models/user";
@@ -47,7 +47,6 @@ export class StoryModal implements OnInit {
   constructor(
     public modalController: ModalController,
     public formBuilder: UntypedFormBuilder,
-    public platform: Platform,
     private utils: UtilsService,
     private sanitizer: DomSanitizer,
     private storySvc: StoryService,
@@ -66,7 +65,7 @@ export class StoryModal implements OnInit {
   }
 
   async selectPicture(type: "camera" | "gallery") {
-    if (this.platform.is("android") && this.platform.is("capacitor")) {
+    if (isPlatform("android") && isPlatform("capacitor")) {
       /*await this.androidPermissions.requestPermissions([
         this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
         this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
@@ -74,7 +73,7 @@ export class StoryModal implements OnInit {
     }
 
     if (type == "camera") {
-      if (this.platform.is("capacitor")) {
+      if (isPlatform("capacitor")) {
         const image = (await this.utils.takePicture(
           "camera",
           true,
@@ -91,7 +90,7 @@ export class StoryModal implements OnInit {
         this.addPicture(image);
       }
     } else if (type == "gallery") {
-      if (this.platform.is("capacitor")) {
+      if (isPlatform("capacitor")) {
         const image = (await this.utils.takePicture(
           "gallery",
           true,
@@ -174,7 +173,7 @@ export class StoryModal implements OnInit {
     this.text.setValue(this.text.value.replace(this.mention, `@${username} `));
     this.userMentions = [...this.userMentions, username];
     this.textarea.setFocus();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       Keyboard.show();
     }
   }

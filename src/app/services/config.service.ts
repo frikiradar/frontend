@@ -19,6 +19,13 @@ export interface Config {
       identity: boolean;
       range: boolean;
       connection: boolean;
+      online: boolean;
+      worldwide: boolean;
+      fake_location: boolean;
+    };
+    location?: {
+      city: string;
+      country: string;
     };
   };
   radarAdv?: boolean;
@@ -28,7 +35,6 @@ export interface Config {
   chat?: boolean;
   push_url?: string;
   geolocation?: boolean;
-  patreon?: string;
   chats?: Chat[];
   radar?: User[];
   pages?: Page[];

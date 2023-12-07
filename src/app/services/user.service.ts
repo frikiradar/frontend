@@ -98,9 +98,15 @@ export class UserService {
   getRadarUsers(
     page = 1,
     ratio = -1,
-    options?: { identity: boolean; range: boolean; connection: boolean }
+    options?: { identity: boolean; range: boolean; connection: boolean },
+    location?: { country: string; city: string }
   ) {
-    return this.rest.put("radar", { page, ratio, options }) as Promise<User[]>;
+    return this.rest.put("radar", {
+      page,
+      ratio,
+      options,
+      location,
+    }) as Promise<User[]>;
   }
 
   searchUsers(query: string, order: "distance" | "match", page: number) {
@@ -284,6 +290,10 @@ export class UserService {
     } catch (e) {
       throw new Error("Error al desuscribirse");
     }
+  }
+
+  subscribePremium(premium_expiration: string) {
+    return this.rest.put("premium", { premium_expiration }) as Promise<User>;
   }
 
   getOrientations() {

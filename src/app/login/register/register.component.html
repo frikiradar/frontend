@@ -199,8 +199,7 @@
       <ion-label position="floating">
         {{
           registerForm.get("meet").value === "friend"
-            ? "Nombre de
-              usuario tu amigo"
+            ? "Nombre de usuario o email de tu amigo"
             : ""
         }}
         {{
@@ -210,8 +209,7 @@
         }}
         {{
           registerForm.get("meet").value === "blog"
-            ? "¿Cómo se llama el
-              blog o la web?"
+            ? "¿Cómo se llama el blog o la web?"
             : ""
         }}
         {{
@@ -221,8 +219,7 @@
         }}
         {{
           registerForm.get("meet").value === "event"
-            ? "Nombre del evento o
-              convención"
+            ? "Nombre del evento o convención"
             : ""
         }}
         {{
@@ -246,6 +243,10 @@
       >
       </ion-input>
     </ion-item>
+    <div class="error-message" *ngIf="referralFailed">
+      <ion-icon name="information-circle-outline"></ion-icon>No encontramos el
+      usuario. ¿Está bien escrito?
+    </div>
     <div
       class="error-message"
       *ngIf="

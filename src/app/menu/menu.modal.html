@@ -40,26 +40,26 @@
       <ion-icon color="light" name="settings-outline" slot="start"></ion-icon>
       <ion-label color="light"> Configuración y privacidad </ion-label>
     </ion-item>
-    <!--<ion-item
-      color="dark"
+
+    <ion-item
       button
-      (click)="showAmbassador()"
-      *ngIf="!platform.is('ios')"
+      lines="none"
+      (click)="showPremium()"
+      *ngIf="!auth.isPremium()"
     >
-      <ion-icon src="/assets/icon/patreon_coral.svg" slot="start"></ion-icon>
+      <ion-icon name="infinite" slot="start"></ion-icon>
+      <ion-label>frikiradar UNLIMITED</ion-label>
+    </ion-item>
+
+    <ion-item button lines="none" (click)="showRecruit()">
+      <ion-icon name="people-outline" slot="start"></ion-icon>
       <ion-label>
-        <h2><ion-text color="patreon">Patreon de embajador</ion-text></h2>
-        <p>Ayúdanos y consigue ventajas exclusivas</p>
+        <h2>Recluta y gana</h2>
+        <p>Obtén recomensas invitando a tus amigos</p>
       </ion-label>
-    </ion-item>-->
-    <!--<ion-item color="dark" button lines="none" (click)="credits()">
-      <ion-icon color="light" name="rocket-outline" slot="start"></ion-icon>
-      <ion-label>
-        <h2>Créditos</h2>
-        <p>Las personas que hacemos posible frikiradar</p>
-      </ion-label>
-    </ion-item>-->
-    <ion-item color="dark" button (click)="rules()">
+    </ion-item>
+
+    <ion-item lines="full" color="dark" button (click)="rules()">
       <ion-icon name="receipt-outline" slot="start"></ion-icon>
       <ion-label>
         <h2>Normas de la comunidad</h2>
@@ -72,7 +72,14 @@
         <p>Si encuentras cualquier problema escríbenos por aquí</p>
       </ion-label>
     </ion-item>-->
-    <ion-item color="dark" button (click)="admin()" *ngIf="auth.isMaster()">
+    <!--<ion-item color="dark" button lines="none" (click)="credits()">
+      <ion-icon color="light" name="rocket-outline" slot="start"></ion-icon>
+      <ion-label>
+        <h2>Créditos</h2>
+        <p>Las personas que hacemos posible frikiradar</p>
+      </ion-label>
+    </ion-item>-->
+    <ion-item lines="none" button (click)="admin()" *ngIf="auth.isMaster()">
       <ion-icon name="bonfire-outline" color="danger" slot="start"></ion-icon>
       <ion-label color="danger">Administración</ion-label>
     </ion-item>

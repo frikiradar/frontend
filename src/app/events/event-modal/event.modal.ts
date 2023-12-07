@@ -6,7 +6,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { ModalController, Platform, ToastController } from "@ionic/angular";
+import { ModalController, ToastController, isPlatform } from "@ionic/angular";
 
 import { Event } from "src/app/models/event";
 import { Page } from "src/app/models/page";
@@ -46,8 +46,7 @@ export class EventModal {
     public utils: UtilsService,
     private sanitizer: DomSanitizer,
     private eventSvc: EventService,
-    public auth: AuthService,
-    private platform: Platform
+    public auth: AuthService
   ) {
     this.eventForm = formBuilder.group({
       title: new UntypedFormControl("", [Validators.required]),
@@ -224,7 +223,7 @@ export class EventModal {
   }
 
   async selectPicture() {
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       const image = (await this.utils.takePicture(
         "gallery",
         true,

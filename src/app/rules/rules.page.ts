@@ -24,7 +24,6 @@ export class RulesPage implements OnInit {
 
   deny() {
     this.close();
-    this.nav.back();
   }
 
   async accept() {
@@ -34,6 +33,10 @@ export class RulesPage implements OnInit {
   }
 
   async close() {
-    this.modalController.dismiss();
+    if (await this.modalController.getTop()) {
+      this.modalController.dismiss();
+    } else {
+      this.nav.back();
+    }
   }
 }

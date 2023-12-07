@@ -16,8 +16,8 @@ import { Keyboard } from "@capacitor/keyboard";
 import {
   IonTextarea,
   ModalController,
-  Platform,
   ToastController,
+  isPlatform,
 } from "@ionic/angular";
 import SwiperCore, {
   Keyboard as SwiperKeyboard,
@@ -89,7 +89,6 @@ export class ViewStoriesModal implements OnInit {
     private modalCreate: ModalController,
     private likeModal: ModalController,
     public formBuilder: UntypedFormBuilder,
-    public platform: Platform,
     private storySvc: StoryService,
     public userSvc: UserService,
     private toast: ToastController,
@@ -108,7 +107,6 @@ export class ViewStoriesModal implements OnInit {
     this.story = this.stories[0];
     this.setLikeStory();
     this.viewStory(this.stories[0]);
-    await this.utils.toggleTheme("transparent");
   }
 
   ngAfterViewInit() {
@@ -178,7 +176,7 @@ export class ViewStoriesModal implements OnInit {
     this.showComments = true;
     setTimeout(() => {
       this.textarea.setFocus();
-      if (this.platform.is("capacitor")) {
+      if (isPlatform("capacitor")) {
         Keyboard.show();
       }
     }, 500);
@@ -387,7 +385,7 @@ export class ViewStoriesModal implements OnInit {
       this.setMention(comment.user.username);
     }
     this.commentFocus();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       Keyboard.show();
     }
   }
@@ -400,7 +398,7 @@ export class ViewStoriesModal implements OnInit {
     );
     this.userMentions = [...this.userMentions, username];
     this.commentFocus();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       Keyboard.show();
     }
   }
@@ -490,9 +488,5 @@ export class ViewStoriesModal implements OnInit {
 
   close() {
     this.thisModal.dismiss();
-  }
-
-  async ngOnDestroy() {
-    await this.utils.resetTheme();
   }
 }

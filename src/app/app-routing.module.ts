@@ -99,23 +99,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "ambassador",
+    path: "recruit",
     loadChildren: () =>
-      import("./ambassador/ambassador.module").then(
-        (m) => m.AmbassadorPageModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: "patreon",
-    loadChildren: () =>
-      import("./patreon/patreon.module").then((m) => m.PatreonPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: "patreon/",
-    loadChildren: () =>
-      import("./patreon/patreon.module").then((m) => m.PatreonPageModule),
+      import("./recruit/recruit.module").then((m) => m.RecruitPageModule),
     canActivate: [AuthGuard],
   },
   {

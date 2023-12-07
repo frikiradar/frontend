@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EventEmitter } from "@angular/core";
-import { ModalController, Platform } from "@ionic/angular";
+import { ModalController, isPlatform } from "@ionic/angular";
 import { getMessaging, onMessage } from "firebase/messaging";
 import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 
@@ -28,7 +28,6 @@ export class ChatPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public auth: AuthService,
-    private platform: Platform,
     private modalController: ModalController,
     private config: ConfigService,
     private router: Router,
@@ -65,7 +64,7 @@ export class ChatPage implements OnInit {
   }
 
   async firebaseListener() {
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       FirebaseMessaging.addListener("notificationReceived", (payload) => {
         const notification = payload.notification;
         const data = notification.data as {

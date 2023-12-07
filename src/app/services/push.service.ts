@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { Platform } from "@ionic/angular";
+import { isPlatform } from "@ionic/angular";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
@@ -27,13 +27,12 @@ export class PushService {
     private device: DeviceService,
     private router: Router,
     private notificationSvc: NotificationService,
-    private platform: Platform,
     private auth: AuthService,
     private swPush: SwPush
   ) {}
 
   async ngOnInit() {
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
     } else {
       if (!navigator.serviceWorker) {
         return console.error("Service Worker not supported");
@@ -46,7 +45,7 @@ export class PushService {
   }
 
   async init() {
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       await this.initCapacitor();
     } else {
       await this.initWeb();
@@ -123,7 +122,7 @@ export class PushService {
         }
       ] as any[];
     }*/
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       if (this.router.url !== notification.data.url) {
         LocalNotifications.schedule({
           notifications: [

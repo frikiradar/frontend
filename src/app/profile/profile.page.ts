@@ -9,6 +9,7 @@ import {
   Platform,
   PopoverController,
   ToastController,
+  isPlatform,
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
 import SwiperCore, { SwiperOptions, Keyboard, Scrollbar, Swiper } from "swiper";
@@ -28,13 +29,8 @@ import { UtilsService } from "../services/utils.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { AuthService } from "./../services/auth.service";
 import { LikesModal } from "./likes-modal/likes.modal";
-import {
-  AdMob,
-  AdLoadInfo,
-  AdMobRewardItem,
-  RewardAdOptions,
-  RewardAdPluginEvents,
-} from "@capacitor-community/admob";
+import { AdService } from "../services/ad.service";
+import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
 SwiperCore.use([Keyboard, Scrollbar]);
 
@@ -55,7 +51,6 @@ export class ProfilePage {
   public loading = true;
   public pulse: any;
   public param: "received" | "delivered";
-  private reward = false;
   public slides: SwiperCore;
   public languages: string[];
 
@@ -83,7 +78,8 @@ export class ProfilePage {
     private meta: Meta,
     private title: Title,
     private nav: NavService,
-    private platform: Platform
+    private platform: Platform,
+    private ad: AdService
   ) {}
 
   async ngAfterViewInit() {
@@ -191,8 +187,10 @@ export class ProfilePage {
     }
 
     if (this.user.chat && !this.user.block) {
-      this.rewardVideo();
-      this.router.navigate(["/chat", this.user.id]);
+      const data = await this.doAction();
+      if (data) {
+        this.router.navigate(["/chat", this.user.id]);
+      }
     } else {
       if (
         this.user.match > 0 ||
@@ -200,8 +198,10 @@ export class ProfilePage {
         this.auth?.isVerified() ||
         this.user.roles?.includes("ROLE_MASTER")
       ) {
-        this.rewardVideo();
-        this.router.navigate(["/chat", this.user.id]);
+        const data = await this.doAction();
+        if (data) {
+          this.router.navigate(["/chat", this.user.id]);
+        }
       } else {
         const alert = await this.alert.create({
           header: "No puedes iniciar un chat con esta persona",
@@ -225,36 +225,38 @@ export class ProfilePage {
 
     try {
       if (!this.user.like) {
-        await Haptics.notification({ type: NotificationType.Success });
-        this.rewardVideo();
-        this.userSvc.like(this.user.id);
-        this.user.like = true;
-        if (
-          this.user.block_messages ||
-          !this.user.match ||
-          !this.auth.isVerified()
-        ) {
-          let message = "";
-          if (this.user.from_like) {
-            message = `¡Felicidades por el match! Ya puedes chatear con ${this.user.name}.`;
+        const data = await this.doAction();
+        if (data) {
+          await Haptics.notification({ type: NotificationType.Success });
+          this.userSvc.like(this.user.id);
+          this.user.like = true;
+          if (
+            this.user.block_messages ||
+            !this.user.match ||
+            !this.auth.isVerified()
+          ) {
+            let message = "";
+            if (this.user.from_like) {
+              message = `¡Felicidades por el match! Ya puedes chatear con ${this.user.name}.`;
+            } else {
+              message = `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`;
+            }
+            (
+              await this.toast.create({
+                message,
+                duration: 5000,
+                position: "middle",
+              })
+            ).present();
           } else {
-            message = `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`;
+            (
+              await this.toast.create({
+                message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
+                duration: 5000,
+                position: "middle",
+              })
+            ).present();
           }
-          (
-            await this.toast.create({
-              message,
-              duration: 5000,
-              position: "middle",
-            })
-          ).present();
-        } else {
-          (
-            await this.toast.create({
-              message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
-              duration: 5000,
-              position: "middle",
-            })
-          ).present();
         }
       } else {
         await Haptics.notification({ type: NotificationType.Error });
@@ -278,6 +280,24 @@ export class ProfilePage {
         })
       ).present();
     }
+  }
+
+  async doAction() {
+    if (!this.auth.isPremium()) {
+      const showPromo = await this.ad.showRandomAd();
+      if (!showPromo) {
+        // Modal hazte premium
+        const modal = await this.modalController.create({
+          component: UnlimitedModal,
+          cssClass: "vertical-modal",
+          componentProps: { topic: "ad" },
+        });
+        await modal.present();
+        return false;
+      }
+    }
+
+    return true;
   }
 
   async hideProfile() {
@@ -380,41 +400,6 @@ export class ProfilePage {
       showBackdrop: true,
     });
     return await modal.present();
-  }
-
-  async rewardVideo() {
-    // Vamos a mostrar el reward video un 33% de las veces
-    const random = Math.floor(Math.random() * 3);
-    if (random !== 0) {
-      return;
-    }
-
-    if (!this.auth.isPremium() && this.platform.is("capacitor")) {
-      if (this.reward) {
-        return;
-      }
-      AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-        // Subscribe prepared rewardVideo
-      });
-
-      AdMob.addListener(
-        RewardAdPluginEvents.Rewarded,
-        (rewardItem: AdMobRewardItem) => {
-          // Subscribe user rewarded
-          console.log(rewardItem);
-        }
-      );
-
-      const options: RewardAdOptions = {
-        adId: "ca-app-pub-3470820326017899/5892787677",
-        isTesting: this.auth.isAdmin() ? true : false,
-      };
-      await AdMob.prepareRewardVideoAd(options);
-      const rewardItem = await AdMob.showRewardVideoAd();
-      console.log(rewardItem);
-
-      this.reward = true;
-    }
   }
 
   back() {

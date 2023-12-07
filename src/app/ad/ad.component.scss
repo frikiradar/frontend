@@ -17,6 +17,11 @@ ion-card {
 
   ion-toolbar {
     --background: transparent;
+
+    ion-chip {
+      background: #0000004d;
+      border-radius: 20px;
+    }
   }
 
   ion-card-content {

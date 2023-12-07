@@ -129,8 +129,11 @@ export class DisableAccountPage {
     this.type = type;
   }
 
-  close() {
-    this.modalController.dismiss();
-    this.nav.back();
+  async close() {
+    if (await this.modalController.getTop()) {
+      this.modalController.dismiss();
+    } else {
+      this.nav.back();
+    }
   }
 }

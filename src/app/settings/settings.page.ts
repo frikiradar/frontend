@@ -16,6 +16,8 @@ import { HideUsersModal } from "./hide-users/hide-users.modal";
 import { NavService } from "../services/navigation.service";
 import { UtilsService } from "../services/utils.service";
 import { ConfigService, Config } from "../services/config.service";
+import { PaymentsModal } from "./payments/payments.modal";
+import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
 @Component({
   selector: "app-settings",
@@ -126,6 +128,22 @@ export class SettingsPage implements OnInit {
     return await modal.present();
   }
 
+  async premiumModal() {
+    const modal = await this.modalController.create({
+      component: UnlimitedModal,
+      cssClass: "vertical-modal",
+    });
+    return await modal.present();
+  }
+
+  async paymentsModal() {
+    const modal = await this.modalController.create({
+      component: PaymentsModal,
+      cssClass: "vertical-modal",
+    });
+    return await modal.present();
+  }
+
   async verificationModal() {
     const modal = await this.modalController.create({
       component: VerificationModal,
@@ -150,8 +168,13 @@ export class SettingsPage implements OnInit {
     }
   }
 
-  patreon() {
-    this.router.navigate(["/patreon"]);
+  async premium() {
+    const modal = await this.modalController.create({
+      component: UnlimitedModal,
+      cssClass: "vertical-modal",
+      componentProps: { topic: "ad" },
+    });
+    await modal.present();
   }
 
   async toggleTheme(theme: Config["theme"]) {
@@ -166,14 +189,13 @@ export class SettingsPage implements OnInit {
       await this.config.set("theme", theme);
     } else {
       const alert = await this.alert.create({
-        header: "Tema exlusivo para miembros de Patreon",
-        message:
-          "Conviértete en embajador Patreon de frikiradar y accede a ventajas exclusivas.",
+        header: "Tema exclusivo para miembros de frikiradar UNLIMITED",
+        message: "Únete a frikiradar UNLIMITED y accede a ventajas exclusivas.",
         buttons: [
           {
             text: "¡Quiero informarme!",
             handler: () => {
-              this.patreon();
+              this.premium();
             },
           },
         ],

@@ -1,0 +1,200 @@
+import { Injectable } from "@angular/core";
+import { AlertController, Platform, isPlatform } from "@ionic/angular";
+import {
+  LOG_LEVEL,
+  PURCHASES_ERROR_CODE,
+  Purchases,
+  PurchasesStoreProduct,
+} from "@revenuecat/purchases-capacitor";
+
+import { AuthService } from "./auth.service";
+import { PaymentService } from "./payment.service";
+import { UserService } from "./user.service";
+import { UtilsService } from "./utils.service";
+import { Product } from "../models/product";
+
+@Injectable({
+  providedIn: "root",
+})
+export class StoreService {
+  private active: string;
+
+  constructor(
+    private auth: AuthService,
+    private platform: Platform,
+    private userSvc: UserService,
+    private payment: PaymentService,
+    private alert: AlertController,
+    private utils: UtilsService
+  ) {
+    this.platform.ready().then(async () => {
+      await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Enable to get debug logs
+      if (isPlatform("capacitor")) {
+        if (isPlatform("android")) {
+          await Purchases.configure({
+            apiKey: "goog_oXaEOmufpOiAFNQyjDjCYSvLgjb",
+            appUserID: `${this.auth.currentUserValue.id}`,
+          });
+        }
+
+        Purchases.setAttributes({
+          email: this.auth.currentUserValue.email,
+          username: this.auth.currentUserValue.username,
+          name: this.auth.currentUserValue.name,
+        });
+
+        const customer = (await this.getCustomerInfo()).customerInfo;
+
+        const active =
+          customer.entitlements.active["frikiradar unlimited"].isActive;
+
+        if (active) {
+          this.active = customer.activeSubscriptions[0];
+        }
+
+        if (
+          customer.activeSubscriptions.length > 0 &&
+          active &&
+          this.auth.currentUserValue.premium_expiration !==
+            customer.latestExpirationDate
+        ) {
+          const user = await this.userSvc.subscribePremium(
+            customer.latestExpirationDate
+          );
+          this.auth.setAuthUser(user);
+        }
+      }
+    });
+  }
+
+  async getProducts(): Promise<Product[]> {
+    try {
+      const offerings = await Purchases.getOfferings();
+      if (
+        offerings.current !== null &&
+        offerings.current.availablePackages.length !== 0
+      ) {
+        const packages = offerings.current.availablePackages;
+        // console.log("packages", packages);
+        const storeProducts = packages.map((p) => {
+          return p.product;
+        });
+        // console.log("products", products);
+
+        let basePricePerMonth = Number(storeProducts[0].price);
+
+        const products = storeProducts.map((product) => {
+          let totalMonths = this.utils.convertISO8601ToMonths(
+            product.subscriptionPeriod
+          );
+          let pricePerMonth = product.price / totalMonths;
+          let discount = Math.round(
+            (1 - pricePerMonth / basePricePerMonth) * 100
+          );
+
+          return {
+            product: product,
+            price: product.priceString,
+            period: this.utils.convertISO8601ToSpanish(
+              product.subscriptionPeriod
+            ),
+            price_per_month: `${pricePerMonth.toFixed(2)}${
+              product.currencyCode
+            }`,
+            discount,
+            active: this.active === product.identifier,
+          };
+        });
+        // console.log("products", products);
+
+        return products;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async purchaseProduct(product: PurchasesStoreProduct): Promise<boolean> {
+    const alert = await this.alert.create({
+      header: "¡Buzzz! Error",
+      message: `Hemos detectado una anomalía en la transacción. Escríbenos a hola@frikiradar.com si crees que ha habido un problema.`,
+      buttons: [
+        {
+          text: "¡Muchas gracias!",
+          handler: () => {
+            location.reload();
+          },
+        },
+      ],
+      cssClass: "round-alert",
+    });
+
+    try {
+      const purchaseResult = await Purchases.purchaseStoreProduct({
+        product,
+      });
+      // console.log("purchaseResult", purchaseResult);
+      if (
+        typeof purchaseResult.customerInfo.entitlements.active[
+          "frikiradar unlimited"
+        ] !== "undefined"
+      ) {
+        const purchase =
+          purchaseResult.customerInfo.entitlements.active[
+            "frikiradar unlimited"
+          ];
+        // 1 - Registramos la compra en base de datos - payment
+        // 2 - Actualizamos el user a premium y le ponemos la fecha de expiración
+        // 3 - Cuando el usuario se loguee comprobamos si es premium y si ha expirado o si tiene fecha de expiración nueva
+
+        const names = {
+          "frikiradar_unlimited:1-unlimited": "1 mes",
+          "frikiradar_unlimited:3-unlimited": "3 meses",
+          "frikiradar_unlimited:6-frikiradar-unlimited": "6 meses",
+        };
+
+        await this.payment.setPayment({
+          title: product.identifier,
+          description: `Has añadido ${
+            names[product.identifier]
+          } de frikiradar UNLIMITED a tu cuenta.`,
+          method: purchase.store,
+          payment_date: purchase.latestPurchaseDate,
+          expiration_date: purchase.expirationDate,
+          amount: product.price,
+          currency: product.currencyCode,
+          purchase: JSON.stringify(purchase),
+          product: JSON.stringify(product),
+        });
+
+        const user = await this.userSvc.subscribePremium(
+          purchaseResult.customerInfo.latestExpirationDate
+        );
+        this.auth.setAuthUser(user);
+
+        return true;
+      } else {
+        await alert.present();
+        throw new Error("No se ha podido registrar la compra en base de datos");
+      }
+    } catch (error) {
+      if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+        // Purchase cancelled
+      } else if (
+        error.code === PURCHASES_ERROR_CODE.PRODUCT_ALREADY_PURCHASED_ERROR
+      ) {
+        // Product already purchased
+      } else {
+        console.error(error);
+        await alert.present();
+      }
+      throw new Error("Compra cancelada");
+    }
+  }
+
+  async getCustomerInfo() {
+    const customerInfo = await Purchases.getCustomerInfo();
+    console.log("customerInfo", customerInfo);
+    return customerInfo;
+  }
+}

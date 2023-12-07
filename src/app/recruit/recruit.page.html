@@ -1,0 +1,49 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="back()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Recluta y gana</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <p>Recluta a tus amigos y consigue recompensas especiales.</p>
+  <p>
+    Cuando tu amigo se registre y adquiera tiempo de frikiradar UNLIMITED por
+    primera vez, obtendrás tu recompensa.
+  </p>
+  <ion-list>
+    <ion-item>
+      <ion-icon name="infinite" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <p>
+          <strong>frikiradar UNLIMITED.</strong> Si tu amigo compra tiempo de
+          frikiradar UNLIMITED obtendrás 1 mes completamente GRATIS que se
+          añadirá a tu cuenta o se sumará al que ya tengas.
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <p>
+    Para poder disfrutar del programa "Reculuta y gana" y adquirir tus
+    recompensas sigue estos pasos:
+  </p>
+  <ul>
+    <li>
+      Tu amigo debe ser un nuevo usuario, no puede estar ya registrado en
+      frikiradar.
+    </li>
+    <li>
+      Al registrarse debe indicar que nos ha conocido
+      <b>a través de un amigo</b> e indicar tu nombre de usuario:
+      <b>{{user?.username}}</b>
+    </li>
+    <li>
+      En el momento en que tu amigo añada tiempo de frikiradar UNLIMITED a su
+      cuenta obtendrás tus recompensas.
+    </li>
+    <li>No hay límite de amigos para reclutar.</li>
+  </ul>
+</ion-content>

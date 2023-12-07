@@ -10,7 +10,7 @@
   <ion-item
     button
     (click)="copyProfile()"
-    *ngIf="page !== 'chat' && platform.is('cordova')"
+    *ngIf="page !== 'chat' && isPlatform('cordova')"
   >
     <ion-icon color="light" name="copy" slot="start"></ion-icon>
     <ion-label color="light">Copiar URL del perfil</ion-label>

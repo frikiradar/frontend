@@ -6,7 +6,6 @@ import {
   IonSegment,
   ModalController,
   PickerController,
-  Platform,
   ToastController,
   isPlatform,
 } from "@ionic/angular";
@@ -92,7 +91,6 @@ export class EditProfilePage {
     public sheet: ActionSheetController,
     private utils: UtilsService,
     private toast: ToastController,
-    private platform: Platform,
     private nav: NavService,
     private modalController: ModalController,
     private config: ConfigService
@@ -348,7 +346,7 @@ export class EditProfilePage {
 
   async selectPictureFromCamera() {
     this.closePictureSheet();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       const avatar = (await this.utils.takePicture(
         "camera",
         true,
@@ -367,7 +365,7 @@ export class EditProfilePage {
 
   async selectPictureFromGallery() {
     this.closePictureSheet();
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       const avatar = await this.utils.takePicture(
         "gallery",
         true,

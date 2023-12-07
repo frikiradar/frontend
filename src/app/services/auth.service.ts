@@ -1,10 +1,9 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { NavController } from "@ionic/angular";
+import { NavController, isPlatform } from "@ionic/angular";
 import { BehaviorSubject, Observable, firstValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import { Platform } from "@ionic/angular";
 import { Device as DevicePlugin } from "@capacitor/device";
 
 import { environment } from "../../environments/environment";
@@ -24,8 +23,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private rest: RestService,
-    private nav: NavController,
-    private platform: Platform
+    private nav: NavController
   ) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("currentUser"))
@@ -243,21 +241,21 @@ export class AuthService {
     );
   }
 
-  isAdmin(user?: User) {
+  isAdmin(user?: User): boolean {
     if (!user) {
       user = this.currentUserValue;
     }
     return user?.roles?.includes("ROLE_ADMIN");
   }
 
-  isMaster(user?: User) {
+  isMaster(user?: User): boolean {
     if (!user) {
       user = this.currentUserValue;
     }
     return user?.roles?.includes("ROLE_MASTER");
   }
 
-  isPremium(user?: User) {
+  isPremium(user?: User): boolean {
     if (!user) {
       user = this.currentUserValue;
     }
@@ -267,28 +265,21 @@ export class AuthService {
     );
   }
 
-  isPatreon(user?: User) {
-    if (!user) {
-      user = this.currentUserValue;
-    }
-    return user?.roles?.includes("ROLE_PATREON");
-  }
-
-  isDemo(user?: User) {
+  isDemo(user?: User): boolean {
     if (!user) {
       user = this.currentUserValue;
     }
     return user?.roles?.includes("ROLE_DEMO");
   }
 
-  isVerified(user?: User) {
+  isVerified(user?: User): boolean {
     if (!user) {
       user = this.currentUserValue;
     }
     return user.verified;
   }
 
-  isAdult(birthday?: string) {
+  isAdult(birthday?: string): boolean {
     if (!birthday) {
       birthday = this.currentUserValue?.birthday;
     }
@@ -302,7 +293,7 @@ export class AuthService {
 
   async logout() {
     let uuid = null;
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       uuid = (await DevicePlugin.getId()).identifier;
     } else {
       const fp = await FingerprintJS.load();

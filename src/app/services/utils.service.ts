@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 import {
   AlertController,
   ModalController,
-  Platform,
   ToastController,
+  isPlatform,
 } from "@ionic/angular";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Share } from "@capacitor/share";
@@ -31,7 +31,6 @@ export class UtilsService {
     public http: HttpClient,
     private alert: AlertController,
     private auth: AuthService,
-    private platform: Platform,
     private modalController: ModalController,
     private toast: ToastController,
     private config: ConfigService
@@ -222,11 +221,11 @@ export class UtilsService {
 
     const referrer = this.auth.currentUserValue
       ? this.auth.currentUserValue.username
-      : this.platform.is("capacitor")
+      : isPlatform("capacitor")
       ? "app"
       : "web";
 
-    if (this.platform.is("hybrid")) {
+    if (isPlatform("hybrid")) {
       const options = {
         title: "Compartir",
         text: message, // not supported on some apps (Facebook, Instagram)
@@ -314,7 +313,7 @@ export class UtilsService {
     }
     document.body.classList.toggle(theme, true);
 
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       await StatusBar.show();
       await NavigationBar.show();
       StatusBar.setOverlaysWebView({ overlay: false });
@@ -366,7 +365,7 @@ export class UtilsService {
   }
 
   async transparentStatusBar(hide = false) {
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       await SafeAreaController.injectCSSVariables();
       StatusBar.setOverlaysWebView({ overlay: true });
       StatusBar.setStyle({ style: Style.Dark });
@@ -379,7 +378,7 @@ export class UtilsService {
   }
 
   async transparentNavigationBar(hide = false) {
-    if (this.platform.is("capacitor")) {
+    if (isPlatform("capacitor")) {
       await SafeAreaController.injectCSSVariables();
       NavigationBar.setTransparency({ isTransparent: true });
       if (hide) {
@@ -607,5 +606,32 @@ export class UtilsService {
 
   getDeviceSymbols() {
     return ["$", "€", "S/.", "¥", "£", ""];
+  }
+
+  convertISO8601ToSpanish(period: string): { quantity: number; unit: string } {
+    const match = period.match(/P(?:([0-9]+)Y)?(?:([0-9]+)M)?(?:([0-9]+)D)?/);
+    const years = match[1]
+      ? `${match[1]} ${Number(match[1]) > 1 ? "años" : "año"} `
+      : "";
+    const months = match[2]
+      ? `${match[2]} ${Number(match[2]) > 1 ? "meses" : "mes"} `
+      : "";
+    const days = match[3]
+      ? `${match[3]} ${Number(match[3]) > 1 ? "días" : "día"} `
+      : "";
+
+    let result = years || months || days;
+    let split = result.trim().split(" ");
+    let quantity = parseInt(split[0]);
+    let unit = split[1];
+
+    return { quantity, unit };
+  }
+
+  convertISO8601ToMonths(period: string): number {
+    const match = period.match(/P(?:([0-9]+)Y)?(?:([0-9]+)M)?/);
+    const years = match[1] ? Number(match[1]) * 12 : 0; // Convertir años a meses
+    const months = match[2] ? Number(match[2]) : 0;
+    return years + months;
   }
 }

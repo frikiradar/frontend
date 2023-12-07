@@ -115,19 +115,24 @@
       <ng-template swiperSlide *ngIf="!loading">
         <div class="full-center ion-padding">
           <ion-icon name="location"></ion-icon>
-          <h2>Sin resultados</h2>
+          <h2 *ngIf="users && users.length === 0">Sin resultados</h2>
+          <h2 *ngIf="users && users.length > 0">No hay más resultados</h2>
           <p>
-            Modifica tus ajustes de "Estoy buscando..." en tu configuración de
-            perfil y añade más "Gustos frikis" para mejorar los resultados.
+            Modifica tus filtros de búsqueda o suscríbete a frikiradar UNLIMITED
+            para encontrar personas de todo el mundo.
           </p>
-          <ion-button shape="round" (click)="editProfile()"
-            >Editar mi perfil</ion-button
+          <ion-button
+            class="ion-padding"
+            shape="round"
+            (click)="filterOptions = true"
+            ><ion-icon name="filter" slot="start" size="small"></ion-icon
+            >Modificar filtros de búsqueda</ion-button
           >
           <br />
           <p>
             También puedes probar suerte cambiando a la vista por kilómetros
           </p>
-          <ion-button shape="round" (click)="changeView()"
+          <ion-button class="ion-padding" shape="round" (click)="changeView()"
             ><ion-icon name="list" slot="start" size="small"></ion-icon>Cambiar
             a vista por kilómetros</ion-button
           >
@@ -136,13 +141,7 @@
     </swiper>
   </div>
   <div *ngIf="view === 'list'" style="height: 100%">
-    <!--<p class="ion-padding">
-        Estos son los resultados obtenidos
-        <span *ngIf="ratio <= 1000"> un radio de {{ ratio }}km</span><span *ngIf="ratio > 1000">mundialmente</span> con un
-        porcentaje de
-        coincidencia más alto.
-      </p>-->
-    <ion-list *ngIf="!users.length">
+    <ion-list *ngIf="!users.length && !allUsersLoaded">
       <ion-item *ngFor="let i of [].constructor(8)" lines="none">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
@@ -215,13 +214,18 @@
       *ngIf="users?.length === 0 && (!automatic || ratio === 25000)"
     >
       <ion-icon name="location"></ion-icon>
-      <h2>Sin resultados</h2>
+      <h2 *ngIf="users.length === 0">Sin resultados</h2>
+      <h2 *ngIf="users.length > 0">No hay más resultados</h2>
       <p>
-        Modifica tus ajustes de "Estoy buscando..." en tu configuración de
-        perfil y añade tus "Gustos frikis" para mejorar los resultados.
+        Modifica tus filtros de búsqueda o suscríbete a frikiradar UNLIMITED
+        para encontrar de todo el mundo.
       </p>
-      <ion-button shape="round" (click)="editProfile()"
-        >Editar perfil</ion-button
+      <ion-button
+        class="ion-padding"
+        shape="round"
+        (click)="filterOptions = true"
+        ><ion-icon name="filter" slot="start" size="small"></ion-icon>Modificar
+        filtros de búsqueda</ion-button
       >
     </div>
   </div>
@@ -261,9 +265,10 @@
 <!-- modals -->
 
 <ion-modal
-  [initialBreakpoint]="0.5"
-  [breakpoints]="[0, 0.5]"
+  [initialBreakpoint]="0.8"
+  [breakpoints]="[0, 0.8]"
   trigger="filter-options"
+  [isOpen]="filterOptions"
   cssClass="sheet-modal"
   (didDismiss)="dismissFilterOptions()"
 >
@@ -278,8 +283,8 @@
             [ngModel]="extended"
             (ngModelChange)="radarSearchChange($event)"
           >
-            <p *ngIf="extended">Búsqueda ampliada</p>
-            <p *ngIf="!extended">Búsqueda estricta</p>
+            <h2 *ngIf="extended">Búsqueda ampliada</h2>
+            <h2 *ngIf="!extended">Búsqueda estricta</h2>
           </ion-toggle>
         </ion-item>
         <ion-item>
@@ -322,7 +327,7 @@
             </ion-toggle>
           </ion-item>
           <ion-item
-            lines="none"
+            lines="full"
             *ngIf="auth.currentUserValue?.connection?.length"
           >
             <ion-toggle
@@ -334,6 +339,87 @@
               <p>{{auth.currentUserValue?.connection}}</p>
             </ion-toggle>
           </ion-item>
+          <ion-item lines="none">
+            <ion-toggle
+              [ngModel]="searchOptions?.online"
+              (ngModelChange)="radarSearchOptions('online', $event)"
+              [disabled]="!auth.isPremium()"
+              aria-label="Solo personas en línea"
+              (click)="!auth.isPremium() ? showPremium('filter') : ''"
+            >
+              <h2>Solo personas en línea</h2>
+              <p>Mostrar solamente las personas conectadas</p>
+            </ion-toggle>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-toggle
+              [ngModel]="searchOptions?.worldwide"
+              (ngModelChange)="radarSearchOptions('worldwide', $event)"
+              [disabled]="!auth.isPremium()"
+              aria-label="Búsqueda mundial"
+              (click)="!auth.isPremium() ? showPremium('radar') : ''"
+            >
+              <ion-label *ngIf="searchOptions?.worldwide">
+                <h2>Búsqueda mundial</h2>
+                <p>Muestra personas de todo el mundo</p>
+              </ion-label>
+              <ion-label *ngIf="!searchOptions?.worldwide">
+                <h2 *ngIf="!searchOptions?.worldwide">Búsqueda local</h2>
+                <p>Muestra personas cercanas</p>
+              </ion-label>
+            </ion-toggle>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-toggle
+              [ngModel]="searchOptions?.fake_location"
+              (ngModelChange)="radarSearchOptions('fake_location', $event)"
+              [disabled]="!auth.isPremium()"
+              aria-label="Ubicación manual"
+              (click)="!auth.isPremium() ? showPremium('location') : ''"
+            >
+              <ion-label *ngIf="searchOptions?.fake_location">
+                <h2>Ubicación manual</h2>
+                <p>Te aparecen personas cercanas al lugar elegido</p>
+              </ion-label>
+              <ion-label *ngIf="!searchOptions?.fake_location">
+                <h2 *ngIf="!searchOptions?.fake_location">
+                  Ubicación automática
+                </h2>
+                <p>Te aparecen personas cercanas a tu posición real</p>
+              </ion-label>
+            </ion-toggle>
+          </ion-item>
+          <ion-list *ngIf="searchOptions?.fake_location">
+            <ion-item color="dark">
+              <ion-icon name="earth" slot="start"></ion-icon>
+              <ion-select
+                label="País"
+                labelPlacement="floating"
+                interface="action-sheet"
+                cancel-text="Cancelar"
+                placeholder="Selecciona uno"
+                [value]="location?.country"
+                debounce="2000"
+                (ionChange)="changeLocation('country', $event.detail.value)"
+              >
+                <ion-select-option
+                  *ngFor="let country of countries"
+                  [value]="country"
+                  >{{ country }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item color="dark">
+              <ion-icon name="location-outline" slot="start"></ion-icon>
+              <ion-input
+                label="Municipio o C.P."
+                labelPlacement="floating"
+                clearOnEdit="true"
+                (ionInput)="changeLocation('city', $event.detail.value)"
+                [value]="location?.city"
+              ></ion-input>
+            </ion-item>
+          </ion-list>
         </ion-item-group>
       </ion-list>
     </ion-content>

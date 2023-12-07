@@ -32,6 +32,8 @@ import { LikesModal } from "./../profile/likes-modal/likes.modal";
 import { ImageViewerModal } from "../image-viewer/image-viewer.modal";
 import { AdComponent } from "../ad/ad.component";
 import { DisableAccountPage } from "../settings/disable-account/disable-account.page";
+import { PaymentsModal } from "../settings/payments/payments.modal";
+import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { DisableAccountPage } from "../settings/disable-account/disable-account.
     ImageViewerModal,
     AdComponent,
     DisableAccountPage,
+    PaymentsModal,
+    UnlimitedModal,
   ],
   imports: [
     FormsModule,

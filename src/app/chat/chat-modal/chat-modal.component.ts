@@ -16,9 +16,9 @@ import {
   IonContent,
   IonInfiniteScroll,
   ModalController,
-  Platform,
   PopoverController,
   ToastController,
+  isPlatform,
 } from "@ionic/angular";
 import { Haptics } from "@capacitor/haptics";
 
@@ -70,7 +70,6 @@ export class ChatModalComponent implements OnInit {
     private router: Router,
     public chatSvc: ChatService,
     private toast: ToastController,
-    public platform: Platform,
     private urlSvc: UrlService,
     public utils: UtilsService,
     public modalController: ModalController,
@@ -127,7 +126,7 @@ export class ChatModalComponent implements OnInit {
       }
     });
 
-    if (!this.platform.is("capacitor")) {
+    if (!isPlatform("capacitor")) {
       try {
         const permission = await Notification.requestPermission();
         if (permission === "denied") {
@@ -198,7 +197,7 @@ export class ChatModalComponent implements OnInit {
           console.error(e);
         }
       }
-      if (this.platform.is("capacitor")) {
+      if (isPlatform("capacitor")) {
         Keyboard.addListener("keyboardWillShow", () => {
           this.scrollDown(0, true, false);
         });

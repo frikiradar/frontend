@@ -338,6 +338,7 @@ ion-content {
 
     ion-col {
       padding-top: 0;
+      text-align: center;
     }
   }
 }
@@ -360,6 +361,10 @@ ion-toggle {
 
   h2 {
     font-size: 16px;
+  }
+
+  p {
+    font-size: 12px;
   }
 }
 

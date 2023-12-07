@@ -34,6 +34,7 @@ export class RegisterComponent {
   public today: number = Date.now();
   public clearPassword = false;
   public usernameSuggestion = "";
+  public referralFailed = false;
   public birthdayValue = "";
 
   constructor(
@@ -93,6 +94,23 @@ export class RegisterComponent {
             this.usernameSuggestion = u as string;
           } else {
             this.usernameSuggestion = "";
+          }
+        }
+      });
+
+    this.registerForm
+      .get("referral")
+      .valueChanges.subscribe(async (referral) => {
+        this.referralFailed = false;
+        if (
+          referral?.trim() !== "" &&
+          this.registerForm.get("meet").value == "friend"
+        ) {
+          try {
+            await this.auth.checkLogin(referral);
+          } catch (error) {
+            this.registerForm.get("referral").setErrors({ incorrect: true });
+            this.referralFailed = true;
           }
         }
       });
