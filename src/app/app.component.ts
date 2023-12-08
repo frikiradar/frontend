@@ -82,7 +82,8 @@ export class AppComponent {
     if (!theme) {
       theme = "dark";
     }
-    this.utils.toggleTheme(theme, undefined, 600);
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    await this.utils.toggleTheme(theme);
 
     // Firebase Analytics
     const deviceInfo = Device.getInfo();
