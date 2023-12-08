@@ -82,7 +82,7 @@ export class AppComponent {
     if (!theme) {
       theme = "dark";
     }
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 600));
     await this.utils.toggleTheme(theme);
 
     // Firebase Analytics

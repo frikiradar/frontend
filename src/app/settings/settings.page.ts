@@ -178,12 +178,7 @@ export class SettingsPage implements OnInit {
   }
 
   async toggleTheme(theme: Config["theme"]) {
-    if (
-      this.auth.isPremium() ||
-      this.auth.isAdmin() ||
-      theme === "dark" ||
-      theme === "light"
-    ) {
+    if (this.auth.isPremium() || theme === "dark" || theme === "light") {
       const oldTheme = (await this.config.get("theme")) as Config["theme"];
       this.utils.toggleTheme(theme, oldTheme);
       await this.config.set("theme", theme);

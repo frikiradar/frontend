@@ -317,43 +317,58 @@ export class UtilsService {
 
       switch (theme) {
         case "dark":
-          StatusBar.setBackgroundColor({ color: "#1f1f1f" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
+          await NavigationBar.setColor({
+            color: "#1f1f1f",
+            darkButtons: false,
+          });
+          await StatusBar.setStyle({ style: Style.Dark });
+          await StatusBar.setBackgroundColor({ color: "#1f1f1f" });
           break;
         case "light":
-          StatusBar.setBackgroundColor({ color: "#fafafa" });
-          StatusBar.setStyle({ style: Style.Light });
-          NavigationBar.setColor({ color: "#fafafa", darkButtons: true });
+          await NavigationBar.setColor({ color: "#fafafa", darkButtons: true });
+          await StatusBar.setStyle({ style: Style.Light });
+          await StatusBar.setBackgroundColor({ color: "#fafafa" });
           break;
         case "cyberpunk":
-          StatusBar.setBackgroundColor({ color: "#0c1340" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#0c1340", darkButtons: false });
+          await NavigationBar.setColor({
+            color: "#0c1340",
+            darkButtons: false,
+          });
+          await StatusBar.setStyle({ style: Style.Dark });
+          await StatusBar.setBackgroundColor({ color: "#0c1340" });
           break;
         case "black":
-          StatusBar.setBackgroundColor({ color: "#000000" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#000000", darkButtons: false });
+          await NavigationBar.setColor({
+            color: "#000000",
+            darkButtons: false,
+          });
+          await StatusBar.setStyle({ style: Style.Dark });
+          await StatusBar.setBackgroundColor({ color: "#000000" });
           break;
         case "fire":
-          StatusBar.setBackgroundColor({ color: "#000000" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#000000", darkButtons: false });
+          await NavigationBar.setColor({
+            color: "#000000",
+            darkButtons: false,
+          });
+          await StatusBar.setStyle({ style: Style.Dark });
+          await StatusBar.setBackgroundColor({ color: "#000000" });
           break;
         case "strawberries-and-cream":
-          StatusBar.setBackgroundColor({ color: "#ffebee" });
-          StatusBar.setStyle({ style: Style.Light });
-          NavigationBar.setColor({ color: "#ffebee", darkButtons: true });
+          await NavigationBar.setColor({ color: "#ffebee", darkButtons: true });
+          await StatusBar.setStyle({ style: Style.Light });
+          await StatusBar.setBackgroundColor({ color: "#ffebee" });
           break;
         case "transparent":
-          this.transparentStatusBar();
-          this.transparentNavigationBar();
+          await this.transparentStatusBar();
+          await this.transparentNavigationBar();
           break;
         default:
-          StatusBar.setBackgroundColor({ color: "#1f1f1f" });
-          StatusBar.setStyle({ style: Style.Dark });
-          NavigationBar.setColor({ color: "#1f1f1f", darkButtons: false });
+          await NavigationBar.setColor({
+            color: "#1f1f1f",
+            darkButtons: false,
+          });
+          await StatusBar.setStyle({ style: Style.Dark });
+          await StatusBar.setBackgroundColor({ color: "#1f1f1f" });
       }
     }
   }
