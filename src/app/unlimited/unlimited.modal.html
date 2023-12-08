@@ -24,8 +24,11 @@
     ¡Disfruta del poder ILIMITADO!
   </h3>
   <div *ngIf="auth.isPremium()">
-    <p class="ion-text-center">
+    <p class="ion-text-center" *ngIf="user?.premium_expiration">
       ESTADO: Activo hasta el {{ user?.premium_expiration | date: "medium" }}
+    </p>
+    <p class="ion-text-center" *ngIf="!user?.premium_expiration">
+      ESTADO: Activo indefinidamente
     </p>
     <p class="ion-text-center">
       Actualmente estás disfrutando de frikiradar UNLIMITED, pero puedes cambiar
