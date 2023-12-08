@@ -32,6 +32,7 @@ import { Haptics } from "@capacitor/haptics";
 import { AdService } from "../services/ad.service";
 import { Ad } from "../models/ad";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
+import { first } from "rxjs";
 
 SwiperCore.use([EffectCoverflow, Mousewheel, Scrollbar]);
 
@@ -177,9 +178,13 @@ export class RadarPage {
   }
 
   async ngOnInit() {
-    this.authUser = this.auth.currentUserValue;
+    this.auth.currentUser.pipe(first((user) => !!user)).subscribe((user) => {
+      this.authUser = user;
+      this.initGeolocation();
+    });
+  }
 
-    // Y despues iniciamos la geolocalización
+  async initGeolocation() {
     if (!this.auth.isDemo()) {
       try {
         this.showBackdrop = true;
@@ -191,7 +196,6 @@ export class RadarPage {
 
         if (geolocation.longitude && geolocation.latitude) {
           // Geolocalización disponible
-          // comparamos si ha cambiado la latitud o la longitud
           if (
             oldCoordinates === undefined ||
             oldCoordinates.latitude === undefined ||
@@ -204,14 +208,12 @@ export class RadarPage {
               geolocation.longitude,
               geolocation.latitude
             );
-            this.authUser.coordinates = coordinates;
-            this.auth.setAuthUser(this.authUser);
-          } else {
-            // Si no ha cambiado la geolocalización, no hacemos nada
+            const user = this.auth.currentUserValue;
+            user.coordinates = coordinates;
+            this.auth.setAuthUser(this.auth.currentUserValue);
           }
         } else {
           // Geolocalización no disponible, la hacemos manual
-          // comparamos si ha cambiado el país o la ciudad
           if (
             oldCountry === undefined ||
             oldCity === undefined ||
@@ -222,12 +224,12 @@ export class RadarPage {
               geolocation.country,
               geolocation.city
             );
-            this.authUser.coordinates = coordinates;
-            this.authUser.country = geolocation.country;
-            this.authUser.city = geolocation.city;
-            this.auth.setAuthUser(this.authUser);
-          } else {
-            // Si no ha cambiado la geolocalización, no hacemos nada
+
+            const user = this.auth.currentUserValue;
+            user.coordinates = coordinates;
+            user.country = geolocation.country;
+            user.city = geolocation.city;
+            this.auth.setAuthUser(this.auth.currentUserValue);
           }
         }
       } catch (e) {

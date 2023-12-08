@@ -180,16 +180,9 @@ export class AuthService {
       return;
     }
 
-    const token = this.currentUserValue.token;
-    const google_token = this.currentUserValue.google_token;
-
-    return this.rest.get("user").then((user: User) => {
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify({ ...user, token, google_token })
-      );
-      return user;
-    });
+    const user = (await this.rest.get("user")) as User;
+    this.setAuthUser(user);
+    return user;
   }
 
   setAuthUser(user: User) {

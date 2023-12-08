@@ -55,29 +55,6 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    this.loadConfig();
-    this.networkStatus();
-    this.initGoogleAuth();
-    this.nav.backButtonStatus();
-
-    // Obtenemos tema en configuración local. Si no hay le mandamos el dark
-    let theme = (await this.config.get("theme")) as Config["theme"];
-    if (!theme) {
-      theme = "dark";
-    }
-    this.utils.toggleTheme(theme, undefined, 1000);
-
-    // Firebase Analytics
-    const deviceInfo = Device.getInfo();
-    if ((await deviceInfo).platform === "web") {
-      await FirebaseAnalytics.initializeFirebase(environment.firebase);
-    }
-
-    FirebaseAnalytics.setUserProperty({
-      name: "theme",
-      value: theme,
-    });
-
     this.auth.currentUser
       .pipe(first((u) => !!u?.id))
       .subscribe(async (authUser) => {
@@ -94,6 +71,29 @@ export class AppComponent {
           this.store.init();
         }
       });
+
+    this.loadConfig();
+    this.networkStatus();
+    this.initGoogleAuth();
+    this.nav.backButtonStatus();
+
+    // Obtenemos tema en configuración local. Si no hay le mandamos el dark
+    let theme = (await this.config.get("theme")) as Config["theme"];
+    if (!theme) {
+      theme = "dark";
+    }
+    this.utils.toggleTheme(theme, undefined, 600);
+
+    // Firebase Analytics
+    const deviceInfo = Device.getInfo();
+    if ((await deviceInfo).platform === "web") {
+      await FirebaseAnalytics.initializeFirebase(environment.firebase);
+    }
+
+    FirebaseAnalytics.setUserProperty({
+      name: "theme",
+      value: theme,
+    });
   }
 
   async networkStatus() {

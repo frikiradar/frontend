@@ -265,8 +265,8 @@
 <!-- modals -->
 
 <ion-modal
-  [initialBreakpoint]="0.8"
-  [breakpoints]="[0, 0.8]"
+  [initialBreakpoint]="0.9"
+  [breakpoints]="[0, 0.9]"
   trigger="filter-options"
   [isOpen]="filterOptions"
   cssClass="sheet-modal"
@@ -287,7 +287,7 @@
             <h2 *ngIf="!extended">Búsqueda estricta</h2>
           </ion-toggle>
         </ion-item>
-        <ion-item>
+        <ion-item color="dark">
           <ion-label class="ion-text-wrap" *ngIf="!extended">
             <p>
               Se tiene en cuenta tu configuración del perfil en la búsqueda
@@ -339,6 +339,8 @@
               <p>{{auth.currentUserValue?.connection}}</p>
             </ion-toggle>
           </ion-item>
+        </ion-item-group>
+        <ion-item-group>
           <ion-item lines="none">
             <ion-toggle
               [ngModel]="searchOptions?.online"
