@@ -37,11 +37,11 @@
       <ion-col
         size="4"
         *ngFor="let product of products; let i = index"
-        (click)="selectedCardIndex = i"
+        (click)="!product?.active ? selectedCardIndex = i : null"
       >
         <ion-card
           button
-          [class.selected]="selectedCardIndex === i && !product?.active"
+          [class.selected]="!product?.active && selectedCardIndex === i"
           (click)="selectProduct(product)"
           [disabled]="product?.active"
         >

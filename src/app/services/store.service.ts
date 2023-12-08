@@ -178,10 +178,10 @@ export class StoreService {
           product: JSON.stringify(product),
         });
 
-        const user = await this.userSvc.subscribePremium(
+        await this.userSvc.subscribePremium(
           purchaseResult.customerInfo.latestExpirationDate
         );
-        this.auth.setAuthUser(user);
+        await this.init();
 
         return true;
       } else {
