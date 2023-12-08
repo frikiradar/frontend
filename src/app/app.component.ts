@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Network } from "@capacitor/network";
 import {
   AlertController,
-  ModalController,
   Platform,
   ToastController,
   isPlatform,
@@ -28,6 +27,7 @@ import {
 } from "@capawesome/capacitor-app-update";
 import { first } from "rxjs";
 import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
+import { StoreService } from "./services/store.service";
 
 @Component({
   selector: "app-root",
@@ -49,7 +49,7 @@ export class AppComponent {
     private sw: SwService,
     private toast: ToastController,
     private adService: AdService,
-    private modal: ModalController
+    private store: StoreService
   ) {
     this.initializeApp();
   }
@@ -90,6 +90,8 @@ export class AppComponent {
           this.countOpenTimes();
           // Mostrar publicidad
           this.adService.init();
+          // Init store
+          this.store.init();
         }
       });
   }

@@ -1,10 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-  AlertController,
-  LoadingController,
-  Platform,
-  isPlatform,
-} from "@ionic/angular";
+import { AlertController, LoadingController, isPlatform } from "@ionic/angular";
 import {
   LOG_LEVEL,
   PURCHASES_ERROR_CODE,
@@ -17,6 +12,7 @@ import { PaymentService } from "./payment.service";
 import { UserService } from "./user.service";
 import { UtilsService } from "./utils.service";
 import { Product } from "../models/product";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
@@ -26,51 +22,53 @@ export class StoreService {
 
   constructor(
     private auth: AuthService,
-    private platform: Platform,
     private userSvc: UserService,
     private payment: PaymentService,
     private alert: AlertController,
     private utils: UtilsService,
     public loading: LoadingController
-  ) {
-    this.platform.ready().then(async () => {
-      await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Enable to get debug logs
-      if (isPlatform("capacitor")) {
-        if (isPlatform("android")) {
-          await Purchases.configure({
-            apiKey: "goog_oXaEOmufpOiAFNQyjDjCYSvLgjb",
-            appUserID: `${this.auth.currentUserValue.id}`,
-          });
-        }
+  ) {}
 
-        Purchases.setAttributes({
-          email: this.auth.currentUserValue.email,
-          username: this.auth.currentUserValue.username,
-          name: this.auth.currentUserValue.name,
+  async init() {
+    // await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Enable to get debug logs
+    if (isPlatform("capacitor")) {
+      if (isPlatform("android")) {
+        await Purchases.configure({
+          apiKey: environment.revenueCat.apiKey,
+          appUserID: `${this.auth.currentUserValue.id}`,
         });
-
-        const customer = (await this.getCustomerInfo()).customerInfo;
-
-        const active =
-          customer.entitlements.active["frikiradar unlimited"].isActive;
-
-        if (active) {
-          this.active = customer.activeSubscriptions[0];
-        }
-
-        if (
-          customer.activeSubscriptions.length > 0 &&
-          active &&
-          this.auth.currentUserValue.premium_expiration !==
-            customer.latestExpirationDate
-        ) {
-          const user = await this.userSvc.subscribePremium(
-            customer.latestExpirationDate
-          );
-          this.auth.setAuthUser(user);
-        }
       }
-    });
+
+      Purchases.setAttributes({
+        email: this.auth.currentUserValue.email,
+        displayName: this.auth.currentUserValue.username,
+      });
+
+      const customer = (await this.getCustomerInfo()).customerInfo;
+      // console.log("customer", customer);
+
+      const active =
+        customer.entitlements.active &&
+        customer.entitlements.active["frikiradar unlimited"] &&
+        customer.entitlements.active["frikiradar unlimited"].isActive;
+
+      if (active && customer.activeSubscriptions.length > 0) {
+        this.active = customer.activeSubscriptions[0];
+      }
+
+      if (
+        customer.activeSubscriptions.length > 0 &&
+        active &&
+        customer.latestExpirationDate &&
+        new Date(this.auth.currentUserValue.premium_expiration) <
+          new Date(customer.latestExpirationDate)
+      ) {
+        const user = await this.userSvc.subscribePremium(
+          customer.latestExpirationDate
+        );
+        this.auth.setAuthUser(user);
+      }
+    }
   }
 
   async getProducts(): Promise<Product[]> {
@@ -135,11 +133,12 @@ export class StoreService {
       cssClass: "round-alert",
     });
 
+    const loading = await this.loading.create({
+      translucent: true,
+      message: "Cargando",
+    });
+
     try {
-      const loading = await this.loading.create({
-        translucent: true,
-        message: "Cargando",
-      });
       await loading.present();
       const purchaseResult = await Purchases.purchaseStoreProduct({
         product,
@@ -190,6 +189,7 @@ export class StoreService {
         throw new Error("No se ha podido registrar la compra en base de datos");
       }
     } catch (error) {
+      await loading.dismiss();
       if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
         // Purchase cancelled
       } else if (
@@ -206,7 +206,6 @@ export class StoreService {
 
   async getCustomerInfo() {
     const customerInfo = await Purchases.getCustomerInfo();
-    console.log("customerInfo", customerInfo);
     return customerInfo;
   }
 }

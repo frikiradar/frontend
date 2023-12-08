@@ -18,6 +18,9 @@ export const environment = {
     vapidKey:
       "BCo47gHUNeFYajnd_WuaN85FWxZVkIhX00Xa2XZ9BGcXKkS6ourI99ZuFixCM03vhmGLxpLBzgFwRwtQCHe-Pjc",
   },
+  revenueCat: {
+    apiKey: "goog_oXaEOmufpOiAFNQyjDjCYSvLgjb",
+  },
 };
 
 /*
