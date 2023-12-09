@@ -4,9 +4,9 @@
       <ion-buttons slot="end">
         <ion-chip (click)="close()">
           <ion-label>
-            <ng-container *ngIf="!adViewed; else closeLabel">{{
-              counter
-            }}</ng-container>
+            <ng-container *ngIf="!adViewed; else closeLabel"
+              >Recompensa en {{ counter }}</ng-container
+            >
             <ng-template #closeLabel>Cerrar</ng-template>
           </ion-label>
           <ion-icon name="close-circle"></ion-icon>

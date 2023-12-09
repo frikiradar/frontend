@@ -8,11 +8,11 @@ import {
 } from "@revenuecat/purchases-capacitor";
 
 import { AuthService } from "./auth.service";
-import { PaymentService } from "./payment.service";
 import { UserService } from "./user.service";
 import { UtilsService } from "./utils.service";
 import { Product } from "../models/product";
 import { environment } from "src/environments/environment";
+import { UrlService } from "./url.service";
 
 @Injectable({
   providedIn: "root",
@@ -23,10 +23,10 @@ export class StoreService {
   constructor(
     private auth: AuthService,
     private userSvc: UserService,
-    private payment: PaymentService,
     private alert: AlertController,
     private utils: UtilsService,
-    public loading: LoadingController
+    private loading: LoadingController,
+    private url: UrlService
   ) {}
 
   async init() {
@@ -120,8 +120,9 @@ export class StoreService {
 
   async purchaseProduct(product: PurchasesStoreProduct): Promise<boolean> {
     const alert = await this.alert.create({
-      header: "¡Buzzz! Error",
-      message: `Hemos detectado una anomalía en la transacción. Escríbenos a hola@frikiradar.com si crees que ha habido un problema.`,
+      header: "Error con la transacción",
+      message:
+        "Ha habido un problema con la compra. Revisa que esté todo bien y vuelve a intentarlo transcurridos unos minutos.",
       buttons: [
         {
           text: "¡Muchas gracias!",
@@ -150,34 +151,6 @@ export class StoreService {
           "frikiradar unlimited"
         ] !== "undefined"
       ) {
-        const purchase =
-          purchaseResult.customerInfo.entitlements.active[
-            "frikiradar unlimited"
-          ];
-        // 1 - Registramos la compra en base de datos - payment
-        // 2 - Actualizamos el user a premium y le ponemos la fecha de expiración
-        // 3 - Cuando el usuario se loguee comprobamos si es premium y si ha expirado o si tiene fecha de expiración nueva
-
-        const names = {
-          "frikiradar_unlimited:1-unlimited": "1 mes",
-          "frikiradar_unlimited:3-unlimited": "3 meses",
-          "frikiradar_unlimited:6-frikiradar-unlimited": "6 meses",
-        };
-
-        await this.payment.setPayment({
-          title: product.identifier,
-          description: `Has añadido ${
-            names[product.identifier]
-          } de frikiradar UNLIMITED a tu cuenta.`,
-          method: purchase.store,
-          payment_date: purchase.latestPurchaseDate,
-          expiration_date: purchase.expirationDate,
-          amount: product.price,
-          currency: product.currencyCode,
-          purchase: JSON.stringify(purchase),
-          product: JSON.stringify(product),
-        });
-
         await this.userSvc.subscribePremium(
           purchaseResult.customerInfo.latestExpirationDate
         );
@@ -186,7 +159,9 @@ export class StoreService {
         return true;
       } else {
         await alert.present();
-        throw new Error("No se ha podido registrar la compra en base de datos");
+        throw new Error(
+          "Ha habido un problema con la compra. Vuelve a intentarlo transcurridos unos minutos."
+        );
       }
     } catch (error) {
       await loading.dismiss();
@@ -202,6 +177,25 @@ export class StoreService {
       }
       throw new Error("Compra cancelada");
     }
+  }
+
+  async cancelSubscription() {
+    const loading = await this.loading.create({
+      translucent: true,
+      message: "Cargando",
+    });
+    await loading.present();
+    try {
+      const customerInfo = (await Purchases.getCustomerInfo()).customerInfo;
+      const activeSubscriptions = customerInfo.activeSubscriptions;
+      if (activeSubscriptions.length > 0) {
+        const url = customerInfo.managementURL;
+        await this.url.openUrl(url);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    await loading.dismiss();
   }
 
   async getCustomerInfo() {

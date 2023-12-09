@@ -48,7 +48,7 @@ export class UrlService {
     }
   }
 
-  convertUrl(url: string): string {
+  private convertUrl(url: string): string {
     // si estoy en app y recibo https://frikiradar.app/albertoi -> convierto a /albertoi
     if (url.includes("https://frikiradar.app/")) {
       url = url.replace("https://frikiradar.app/", "/");

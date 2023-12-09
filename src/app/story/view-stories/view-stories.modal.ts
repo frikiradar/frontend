@@ -221,45 +221,74 @@ export class ViewStoriesModal implements OnInit {
   async switchLikeStory(event: Event) {
     event.stopPropagation();
     this.slides.autoplay.stop();
-    if (
-      this.story.likeStories.some(
-        (l) => l.user.id === this.auth.currentUserValue.id
-      )
-    ) {
-      this.story = await this.storySvc.unlike(this.story.id);
-      Haptics.notification({ type: NotificationType.Error });
-      this.story.like = false;
-    } else {
-      this.story = await this.storySvc.like(this.story.id);
-      Haptics.notification({ type: NotificationType.Success });
-      this.story.like = true;
-    }
 
+    const liked = this.story.likeStories.some(
+      (l) => l.user.id === this.auth.currentUserValue.id
+    );
+
+    // Cambia el estado del "like" inmediatamente
+    this.story.like = !liked;
     this.stories = this.stories.map((story) =>
       story.id === this.story.id ? this.story : story
     );
     this.cd.detectChanges();
+
+    try {
+      // Envía la solicitud al servidor en segundo plano
+      if (liked) {
+        this.story = await this.storySvc.unlike(this.story.id);
+        Haptics.notification({ type: NotificationType.Error });
+      } else {
+        this.story = await this.storySvc.like(this.story.id);
+        Haptics.notification({ type: NotificationType.Success });
+      }
+    } catch (error) {
+      // Si la solicitud falla, revierte el cambio y muestra un mensaje de error
+      this.story.like = liked;
+      this.stories = this.stories.map((story) =>
+        story.id === this.story.id ? this.story : story
+      );
+      this.cd.detectChanges();
+      console.error(`Error al cambiar el estado del "like": ${error}`);
+    }
 
     this.slides.autoplay.start();
   }
 
   async switchLikeComment(comment: Story["comments"][0]) {
     this.slides.autoplay.stop();
-    if (comment.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
-      this.story.comments.map((c) => {
+
+    const liked = comment.likes.some(
+      (l) => l.id === this.auth.currentUserValue.id
+    );
+
+    // Cambia el estado del "like" inmediatamente
+    this.story.comments = this.story.comments.map((c) => {
+      if (c.id === comment.id) {
+        c.like = !liked;
+      }
+      return c;
+    });
+
+    try {
+      // Envía la solicitud al servidor en segundo plano
+      if (liked) {
+        this.story = await this.storySvc.unlikeComment(comment.id);
+      } else {
+        this.story = await this.storySvc.likeComment(comment.id);
+        this.setLikeStory();
+      }
+    } catch (error) {
+      // Si la solicitud falla, revierte el cambio y muestra un mensaje de error
+      this.story.comments = this.story.comments.map((c) => {
         if (c.id === comment.id) {
-          c.like = false;
+          c.like = liked;
         }
+        return c;
       });
-      this.story = await this.storySvc.unlikeComment(comment.id);
-    } else {
-      this.story.comments.map((c) => {
-        if (c.id === comment.id) {
-          c.like = true;
-        }
-      });
-      this.story = await this.storySvc.likeComment(comment.id);
-      this.setLikeStory();
+      console.error(
+        `Error al cambiar el estado del "like" del comentario: ${error}`
+      );
     }
   }
 

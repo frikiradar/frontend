@@ -19,7 +19,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./unlimited.modal.scss"],
 })
 export class UnlimitedModal {
-  @Input() topic: "ad" | "location" | "radar" | "filter" | "default" =
+  @Input() topic: "ad" | "location" | "radar" | "filter" | "theme" | "default" =
     "default";
   public user: User;
   public isPlatform = isPlatform;
@@ -101,7 +101,7 @@ export class UnlimitedModal {
             text: "¡Muchas gracias!",
             handler: () => {
               this.close(true);
-              this.router.navigate(["/"]);
+              // this.router.navigate(["/"]);
             },
           },
         ],
@@ -110,6 +110,10 @@ export class UnlimitedModal {
 
       alert.present();
     } catch (error) {}
+  }
+
+  async cancelSubscription() {
+    await this.storeSvc.cancelSubscription();
   }
 
   async close(data?: any) {

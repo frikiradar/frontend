@@ -7,6 +7,7 @@ import { RestService } from "./rest.service";
 export class PaymentService {
   constructor(private rest: RestService) {}
 
+  // Para revenuecat no se usa este método
   async setPayment(payment: Payment) {
     try {
       return await this.rest.post("payment", payment);

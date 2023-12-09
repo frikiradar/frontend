@@ -39,8 +39,8 @@ export class NotificationPage implements OnInit {
       componentProps: {
         notification: notification,
       },
-      initialBreakpoint: 0.3,
-      breakpoints: [0, 0.3],
+      initialBreakpoint: 0.4,
+      breakpoints: [0, 0.4, 0.6],
       cssClass: "sheet-modal",
     });
     await modal.present();

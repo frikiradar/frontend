@@ -172,7 +172,7 @@ export class SettingsPage implements OnInit {
     const modal = await this.modalController.create({
       component: UnlimitedModal,
       cssClass: "vertical-modal",
-      componentProps: { topic: "ad" },
+      componentProps: { topic: "theme" },
     });
     await modal.present();
   }

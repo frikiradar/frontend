@@ -21,6 +21,7 @@
       >¿Quieres ver personas de todo el mundo?<br
     /></span>
     <span *ngIf="topic == 'filter'">¿Te gustaría usar este filtro?<br /></span>
+    <span *ngIf="topic == 'theme'">¿Quieres usar este tema?<br /></span>
     ¡Disfruta del poder ILIMITADO!
   </h3>
   <div *ngIf="auth.isPremium()">
@@ -30,9 +31,8 @@
     <p class="ion-text-center" *ngIf="!user?.premium_expiration">
       ESTADO: Activo indefinidamente
     </p>
-    <p class="ion-text-center">
-      Actualmente estás disfrutando de frikiradar UNLIMITED, pero puedes cambiar
-      tu plan de suscripción por el tiempo que desees.
+    <p *ngIf="isPlatform('capacitor')">
+      Puedes modificar tu plan de suscripción por el tiempo que desees.
     </p>
   </div>
   <ion-grid *ngIf="products.length">
@@ -76,6 +76,18 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <div *ngIf="auth.isPremium() && isPlatform('capacitor')">
+    <p>
+      También puedes pausar o cancelar tu suscripción desde la página de ajustes
+      de Play Store.
+    </p>
+    <ion-item button lines="full" (click)="cancelSubscription()">
+      <ion-icon name="logo-google-playstore" slot="start"></ion-icon>
+      <ion-label>Ir a Play Store</ion-label>
+    </ion-item>
+  </div>
+
   <ion-list>
     <ion-item color="dark">
       <ion-icon name="hand-left" color="danger" slot="start"></ion-icon>
