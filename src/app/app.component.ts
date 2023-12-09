@@ -55,6 +55,16 @@ export class AppComponent {
   }
 
   async initializeApp() {
+    // Obtenemos tema en configuración local. Si no hay le mandamos el dark
+    let theme = (await this.config.get("theme")) as Config["theme"];
+    if (!theme) {
+      theme = "dark";
+    }
+    if (isPlatform("capacitor")) {
+      await new Promise((resolve) => setTimeout(resolve, 600));
+    }
+    await this.utils.toggleTheme(theme);
+
     this.auth.currentUser
       .pipe(first((u) => !!u?.id))
       .subscribe(async (authUser) => {
@@ -76,14 +86,6 @@ export class AppComponent {
     this.networkStatus();
     this.initGoogleAuth();
     this.nav.backButtonStatus();
-
-    // Obtenemos tema en configuración local. Si no hay le mandamos el dark
-    let theme = (await this.config.get("theme")) as Config["theme"];
-    if (!theme) {
-      theme = "dark";
-    }
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    await this.utils.toggleTheme(theme);
 
     // Firebase Analytics
     const deviceInfo = Device.getInfo();
