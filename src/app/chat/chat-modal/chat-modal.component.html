@@ -162,8 +162,8 @@
             *ngIf="
               message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
               message?.reply_to ||
-              (message?.time_creation | date : 'shortDate') !==
-                (messages[i - 1]?.time_creation | date : 'shortDate') ||
+              (message?.time_creation | date : 'ddhh') !==
+                (messages[i - 1]?.time_creation | date : 'ddhh') ||
               message?.event
             "
           >
@@ -176,8 +176,8 @@
             *ngIf="
               message?.fromuser?.id === messages[i - 1]?.fromuser?.id &&
               !message?.reply_to &&
-              (message?.time_creation | date : 'shortDate') ===
-                (messages[i - 1]?.time_creation | date : 'shortDate') &&
+              (message?.time_creation | date : 'ddhh') ===
+                (messages[i - 1]?.time_creation | date : 'ddhh') &&
               !message?.event
             "
           ></div>
