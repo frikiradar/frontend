@@ -10,7 +10,6 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':aashu-dubey-capacitor-statusbar-safe-area')
-    implementation project(':capacitor-community-admob')
     implementation project(':capacitor-community-firebase-analytics')
     implementation project(':capacitor-firebase-messaging')
     implementation project(':capacitor-app')
@@ -33,7 +32,6 @@ dependencies {
     implementation project(':capacitor-native-settings')
     implementation project(':capacitor-rate-app')
     implementation project(':capacitor-voice-recorder')
-    implementation project(':capacitor-community-http')
     implementation project(':capacitor-device')
     implementation project(':capacitor-dialog')
     implementation project(':capacitor-filesystem')

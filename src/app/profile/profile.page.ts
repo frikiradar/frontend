@@ -6,10 +6,8 @@ import { Haptics, NotificationType } from "@capacitor/haptics";
 import {
   AlertController,
   ModalController,
-  Platform,
   PopoverController,
   ToastController,
-  isPlatform,
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
 import SwiperCore, { SwiperOptions, Keyboard, Scrollbar, Swiper } from "swiper";
@@ -78,7 +76,6 @@ export class ProfilePage {
     private meta: Meta,
     private title: Title,
     private nav: NavService,
-    private platform: Platform,
     private ad: AdService
   ) {}
 

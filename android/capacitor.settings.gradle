@@ -5,9 +5,6 @@ project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/
 include ':aashu-dubey-capacitor-statusbar-safe-area'
 project(':aashu-dubey-capacitor-statusbar-safe-area').projectDir = new File('../node_modules/@aashu-dubey/capacitor-statusbar-safe-area/android')
 
-include ':capacitor-community-admob'
-project(':capacitor-community-admob').projectDir = new File('../node_modules/@capacitor-community/admob/android')
-
 include ':capacitor-community-firebase-analytics'
 project(':capacitor-community-firebase-analytics').projectDir = new File('../node_modules/@capacitor-community/firebase-analytics/android')
 
@@ -73,9 +70,6 @@ project(':capacitor-rate-app').projectDir = new File('../node_modules/capacitor-
 
 include ':capacitor-voice-recorder'
 project(':capacitor-voice-recorder').projectDir = new File('../node_modules/capacitor-voice-recorder/android')
-
-include ':capacitor-community-http'
-project(':capacitor-community-http').projectDir = new File('../node_modules/@capacitor-community/http/android')
 
 include ':capacitor-device'
 project(':capacitor-device').projectDir = new File('../node_modules/@capacitor/device/android')

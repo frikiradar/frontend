@@ -4,10 +4,6 @@
 		"classpath": "dev.ashu.capacitor.statusbar.safearea.SafeAreaPlugin"
 	},
 	{
-		"pkg": "@capacitor-community/admob",
-		"classpath": "com.getcapacitor.community.admob.AdMob"
-	},
-	{
 		"pkg": "@capacitor-community/firebase-analytics",
 		"classpath": "com.getcapacitor.community.firebaseanalytics.FirebaseAnalytics"
 	},
@@ -94,10 +90,6 @@
 	{
 		"pkg": "capacitor-voice-recorder",
 		"classpath": "com.tchvu3.capacitorvoicerecorder.VoiceRecorder"
-	},
-	{
-		"pkg": "@capacitor-community/http",
-		"classpath": "com.getcapacitor.plugin.http.Http"
 	},
 	{
 		"pkg": "@capacitor/device",
