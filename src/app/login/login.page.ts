@@ -12,13 +12,13 @@ import {
   Platform,
   ToastController,
 } from "@ionic/angular";
-import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 import { User } from "../models/user";
 import { ConfigService } from "../services/config.service";
 import { NavService } from "../services/navigation.service";
 import { AuthService } from "./../services/auth.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
+import { GoogleAuthService } from "../services/google-auth.service";
 
 @Component({
   selector: "app-login",
@@ -54,7 +54,8 @@ export class LoginPage {
     public fb: UntypedFormBuilder,
     private nav: NavService,
     public platform: Platform,
-    private config: ConfigService
+    private config: ConfigService,
+    private googleAuth: GoogleAuthService
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -119,13 +120,12 @@ export class LoginPage {
 
   async loginWithGoogle() {
     try {
-      this.auth.logoutGoogle();
+      this.googleAuth.logout();
     } catch (e) {
       console.error(e);
     }
     try {
-      const googleUser = await GoogleAuth.signIn();
-      // console.log(googleUser);
+      const googleUser = await this.googleAuth.signIn();
       if (googleUser.authentication.idToken) {
         this.credential = googleUser.authentication.idToken;
         this.provider = "google";

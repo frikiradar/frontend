@@ -91,6 +91,7 @@ export class RadarPage {
   public automatic = true;
   public rangeValue = 0;
   public previousRangeValue = 0;
+  public tutorial = true;
   authUser: User;
   users: (User | Ad)[] = [];
   public user: User;
@@ -169,6 +170,48 @@ export class RadarPage {
         }
       } else if (event[1] instanceof TouchEvent) {
         this.showProfile(user.id);
+      }
+    }
+  }
+
+  async tapTutorial(event: any) {
+    if (event[0] instanceof Swiper) {
+      const slide = event[0];
+      const centerStart = screen.width / 2 - 50; // 50px para el centro
+      const centerEnd = screen.width / 2 + 50; // 50px para el centro
+      let currentX: number;
+      let currentY: number;
+
+      if (event[1] instanceof TouchEvent) {
+        currentX = slide.touches.currentX;
+        currentY = slide.touches.currentY;
+      } else if (event[1] instanceof PointerEvent) {
+        currentX = event[1].clientX;
+        currentY = event[1].clientY;
+      }
+
+      if (currentY < screen.height / 2) {
+        if (currentX > centerEnd) {
+          if (!slide.isEnd) {
+            slide.slideNext();
+            await Haptics.vibrate({ duration: 10 });
+          }
+        } else if (currentX < centerStart) {
+          if (!slide.isBeginning) {
+            slide.slidePrev();
+            await Haptics.vibrate({ duration: 10 });
+          }
+        }
+      } else {
+        this.alert
+          .create({
+            header: "¡Muy bien!",
+            message:
+              "Así es como se entra al perfil de una persona. ¡Sigue deslizando y que comience la diversión!",
+            buttons: ["¡Vamos!"],
+            cssClass: "round-alert",
+          })
+          .then((alert) => alert.present());
       }
     }
   }
@@ -289,6 +332,7 @@ export class RadarPage {
       }
     } else {
       this.view = "cards";
+      this.tutorial = radar_config?.tutorial ?? true;
       this.ratio = -1;
       await this.utils.delay(500);
       this.slides?.slideTo(0);
@@ -526,8 +570,27 @@ export class RadarPage {
 
   async slide() {
     await new Promise((resolve) => setTimeout(resolve, 100)); // Agrega un pequeño retraso
-    const index = this.slides.activeIndex;
+    let index = this.slides.activeIndex;
+
+    if (this.tutorial) {
+      index = index - 2;
+    }
+
     const user = this.users[index];
+
+    if (user && "username" in user && this.tutorial) {
+      this.detectorRef.detectChanges();
+      let radar_config = (await this.config.get(
+        "radar_config"
+      )) as Config["radar_config"];
+      if (!radar_config) {
+        radar_config = {};
+      }
+      radar_config.tutorial = false;
+      this.config.set("radar_config", radar_config);
+    }
+
+    console.log(user);
     if (user && "username" in user) {
       if (this.user?.id) {
         this.userSvc.view(this.user?.id);

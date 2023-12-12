@@ -1,5 +1,10 @@
 <ion-list>
-  <ion-item button (click)="showProfile(user?.id)" *ngIf="page === 'chat'">
+  <ion-item
+    button
+    (click)="showProfile(user?.id)"
+    *ngIf="page === 'chat'"
+    color="dark"
+  >
     <ion-icon name="person" slot="start"></ion-icon>
     <ion-label>Ver Perfil</ion-label>
   </ion-item>
@@ -11,11 +16,17 @@
     button
     (click)="copyProfile()"
     *ngIf="page !== 'chat' && isPlatform('cordova')"
+    color="dark"
   >
     <ion-icon color="light" name="copy" slot="start"></ion-icon>
     <ion-label color="light">Copiar URL del perfil</ion-label>
   </ion-item>
-  <ion-item button (click)="shareProfile()" *ngIf="page !== 'chat'">
+  <ion-item
+    button
+    (click)="shareProfile()"
+    *ngIf="page !== 'chat'"
+    color="dark"
+  >
     <ion-icon color="light" name="share-social" slot="start"></ion-icon>
     <ion-label color="light">Compartir el perfil</ion-label>
   </ion-item>
@@ -24,6 +35,7 @@
     (click)="report(user)"
     lines="full"
     *ngIf="auth?.currentUserValue?.id !== user?.id"
+    color="dark"
   >
     <ion-icon color="light" name="warning" slot="start"></ion-icon>
     <ion-label color="light">Reportar</ion-label>
@@ -33,6 +45,7 @@
     (click)="block(user)"
     lines="full"
     *ngIf="auth?.currentUserValue?.id !== user?.id && !user?.roles.includes('ROLE_MASTER')"
+    color="dark"
   >
     <ion-icon color="light" name="ban" slot="start"></ion-icon>
     <ion-label color="light">Bloquear</ion-label>
@@ -41,6 +54,7 @@
     button
     (click)="warn(user)"
     *ngIf="auth.isMaster() && auth?.currentUserValue?.id !== user?.id"
+    color="dark"
   >
     <ion-icon color="danger" name="warning" slot="start"></ion-icon>
     <ion-label color="danger">Advertir al usuario</ion-label>
@@ -50,6 +64,7 @@
     (click)="ban(user)"
     lines="none"
     *ngIf="auth.isMaster() && auth?.currentUserValue?.id !== user?.id"
+    color="dark"
   >
     <ion-icon color="danger" name="hammer" slot="start"></ion-icon>
     <ion-label color="danger">Banear</ion-label>

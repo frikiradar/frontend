@@ -161,7 +161,7 @@
         </ion-textarea>
       </ion-item>
     </form>
-    <ion-buttons ion-activatable>
+    <ion-buttons ion-activatable slot="end">
       <ion-button [disabled]="!comment.value" (click)="sendComment()">
         <ion-icon slot="icon-only" color="primary" name="send"></ion-icon>
       </ion-button>
@@ -304,7 +304,7 @@
     </ion-content>
     <ion-footer>
       <ion-item id="comment-input" lines="none">
-        <ion-avatar>
+        <ion-avatar slot="start">
           <img
             [src]="auth.currentUserValue.thumbnail"
             [alt]="auth.currentUserValue.username"
@@ -324,7 +324,7 @@
             </ion-textarea>
           </ion-item>
         </form>
-        <ion-buttons ion-activatable>
+        <ion-buttons ion-activatable slot="end">
           <ion-button [disabled]="!comment.value" (click)="sendComment()">
             <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
           </ion-button>

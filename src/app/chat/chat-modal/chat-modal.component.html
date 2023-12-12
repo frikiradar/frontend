@@ -132,7 +132,7 @@
         </ion-thumbnail>
         <ion-label class="replyfrom-message">
           <p class="replyfrom-text">
-            &#64;{{ message?.reply_to?.fromuser?.username }}
+            &#64;{{ message?.reply_to?.fromuser?.name }}
             {{ message?.reply_to?.text }}
           </p>
         </ion-label>
@@ -158,29 +158,19 @@
             selectedMessage?.id == message?.id && pressOptions ? 'pressed' : ''
           "
         >
-          <ion-avatar
-            *ngIf="
-              message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
-              message?.reply_to ||
-              (message?.time_creation | date : 'ddhh') !==
-                (messages[i - 1]?.time_creation | date : 'ddhh') ||
-              message?.event
-            "
-          >
+          <ion-avatar slot="start">
             <img
+              *ngIf="
+                message?.fromuser?.id !== messages[i - 1]?.fromuser?.id ||
+                message?.reply_to ||
+                (message?.time_creation | date : 'ddhh') !==
+                  (messages[i - 1]?.time_creation | date : 'ddhh') ||
+                message?.event
+              "
               (click)="showProfile(message.fromuser.id)"
               [src]="message.fromuser.thumbnail"
             />
           </ion-avatar>
-          <div
-            *ngIf="
-              message?.fromuser?.id === messages[i - 1]?.fromuser?.id &&
-              !message?.reply_to &&
-              (message?.time_creation | date : 'ddhh') ===
-                (messages[i - 1]?.time_creation | date : 'ddhh') &&
-              !message?.event
-            "
-          ></div>
           <ion-card
             (click)="showEvent(message.event)"
             *ngIf="message.event"
@@ -334,35 +324,7 @@
                 </span>
               </ion-note>
             </div>
-            <ion-card-content *ngIf="message.audio" class="audio-content">
-              <ion-item lines="none">
-                <audio-player [src]="message.audio"></audio-player>
-                <ion-note class="note-text note-audio" slot="end">
-                  {{ message.time_creation | date : "shortTime" }}
-                  <span
-                    *ngIf="message.fromuser?.id == auth.currentUserValue?.id"
-                  >
-                    <ion-icon *ngIf="message.sending" name="time"></ion-icon>
-                    <ion-icon
-                      *ngIf="!message.sending && !message.time_read"
-                      name="checkmark"
-                    ></ion-icon>
-                    <ion-icon
-                      *ngIf="message.time_read"
-                      color="secondary"
-                      name="checkmark-done"
-                    ></ion-icon>
-                  </span>
-                </ion-note>
-                <ion-avatar slot="end">
-                  <img
-                    [src]="message.fromuser?.thumbnail"
-                    [alt]="message.fromuser?.username"
-                  />
-                </ion-avatar>
-              </ion-item>
-            </ion-card-content>
-            <ion-card-content *ngIf="message.text">
+            <ion-card-content *ngIf="message.text || message.audio">
               <p
                 class="text-name"
                 *ngIf="
@@ -374,7 +336,7 @@
               >
                 <a (click)="showProfile(message.fromuser.id)">
                   <ion-text [color]="userSvc.getRoleColor(message.fromuser)">{{
-                    message.fromuser.username
+                    message.fromuser.name
                   }}</ion-text>
                 </a>
                 <ion-icon
@@ -390,8 +352,13 @@
                   · {{ message.time_creation | chatDate }}
                 </span>
               </p>
-              <ion-text class="text" *ngIf="!message?.event">
+              <div class="text" *ngIf="!message?.event">
+                <audio-player
+                  *ngIf="message.audio"
+                  [src]="message.audio"
+                ></audio-player>
                 <ion-text
+                  *ngIf="message.text"
                   color="light"
                   class="message-text"
                   [innerHTML]="
@@ -402,6 +369,9 @@
                   "
                   (click)="$event.stopImmediatePropagation(); openUrl($event)"
                 ></ion-text>
+                <ion-text *ngIf="message.audio && !message.text">
+                  🎤 Mensaje de audio de {{ message.fromuser.name }}
+                </ion-text>
                 <span class="edited" *ngIf="message?.edited"> · Editado</span>
                 <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                   <ion-icon *ngIf="message.sending" name="time"></ion-icon>
@@ -418,7 +388,7 @@
                 <span class="text-note-time">
                   · {{ message.time_creation | date : "shortTime" }}
                 </span>
-              </ion-text>
+              </div>
             </ion-card-content>
           </ion-card>
         </ion-item>

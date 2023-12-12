@@ -13,6 +13,7 @@ export interface Config {
   review?: boolean;
   radar_config?: {
     view?: "cards" | "list";
+    tutorial?: boolean;
     range?: number;
     extended?: boolean;
     options?: {

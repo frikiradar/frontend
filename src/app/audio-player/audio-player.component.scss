@@ -1,24 +1,22 @@
 .toggle {
-    height: 30px;
-    margin: 0;
-    margin-left: -25px;
-    ion-icon {
-        font-size: 30px;
-    }
+  height: 30px;
+  margin: 0;
+  margin-left: -25px;
+  ion-icon {
+    font-size: 30px;
+  }
 }
 
 ion-range {
-    width: 180px;
+  width: 180px;
 }
 
 ion-note {
-    position: absolute;
-    top: 23px;
-    left: 36px;
-    color: white;
+  color: white;
+  margin-right: 0;
 
-    &.ios {
-        font-size: 10px;
-        top: 42px;
-    }
+  &.ios {
+    font-size: 10px;
+    top: 42px;
+  }
 }

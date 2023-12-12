@@ -73,7 +73,7 @@ export class ChatModalComponent implements OnInit {
     private urlSvc: UrlService,
     public utils: UtilsService,
     public modalController: ModalController,
-    private popover: PopoverController,
+    private popoverController: PopoverController,
     private dc: ChangeDetectorRef,
     private eventSvc: EventService,
     private meta: Meta,
@@ -476,7 +476,7 @@ export class ChatModalComponent implements OnInit {
   }
 
   async showOptions(event: any) {
-    const popover = await this.popover.create({
+    const popover = await this.popoverController.create({
       component: OptionsPopover,
       cssClass: "options-popover",
       event: event,

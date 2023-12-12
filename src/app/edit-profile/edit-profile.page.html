@@ -281,8 +281,9 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <ion-item class="ages">
+          <ion-item class="ages" lines="full">
             <ion-input
+              slot="start"
               label="Edad desde "
               labelPlacement="floating"
               type="text"
@@ -339,8 +340,8 @@
       </ion-item-divider>
     </ion-item-group>
     <ion-item-group>
-      <ion-item class="category-header">
-        <ion-icon name="game-controller"></ion-icon>
+      <ion-item class="category-header" lines="full">
+        <ion-icon slot="start" name="game-controller"></ion-icon>
         <ion-input
           aria-label="Videojuegos favoritos"
           #games
@@ -376,8 +377,8 @@
     </ion-item-group>
 
     <ion-item-group>
-      <ion-item class="category-header">
-        <ion-icon name="film"></ion-icon>
+      <ion-item class="category-header" lines="full">
+        <ion-icon name="film" slot="start"></ion-icon>
         <ion-input
           aria-label="Películas, series o animes favoritos"
           #films
@@ -413,8 +414,8 @@
     </ion-item-group>
 
     <ion-item-group>
-      <ion-item class="category-header">
-        <ion-icon name="book"></ion-icon>
+      <ion-item class="category-header" lines="full">
+        <ion-icon name="book" slot="start"></ion-icon>
         <ion-input
           aria-label="Cómics, mangas o libros"
           #books
@@ -450,8 +451,8 @@
     </ion-item-group>
 
     <ion-item-group>
-      <ion-item class="category-header">
-        <ion-icon name="dice"></ion-icon>
+      <ion-item class="category-header" lines="full">
+        <ion-icon name="dice" slot="start"></ion-icon>
         <ion-input
           aria-label="Juegos de mesa, rol y cartas frikis"
           #role
@@ -487,8 +488,8 @@
     </ion-item-group>
 
     <ion-item-group>
-      <ion-item class="category-header">
-        <ion-icon name="headset"></ion-icon>
+      <ion-item class="category-header" lines="full">
+        <ion-icon name="headset" slot="start"></ion-icon>
         <ion-input
           aria-label="Música, artistas o canciones favoritas"
           #music

@@ -25,7 +25,7 @@ export class OptionsPopover {
   public isPlatform = isPlatform;
 
   constructor(
-    public popover: PopoverController,
+    public popoverController: PopoverController,
     private router: Router,
     public auth: AuthService,
     private userSvc: UserService,
@@ -36,7 +36,7 @@ export class OptionsPopover {
   ) {}
 
   close() {
-    this.popover.dismiss();
+    this.popoverController.dismiss();
   }
 
   showProfile(id: User["id"]) {

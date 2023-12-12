@@ -33,6 +33,33 @@
       (swiper)="setSwiperInstance($event)"
       [config]="slideOpts"
     >
+      <ng-template swiperSlide *ngIf="tutorial">
+        <ion-card button class="no-scroll">
+          <div class="background-image">
+            <img src="/assets/img/layout/tutorial-1.svg" alt="tutorial-1" />
+          </div>
+        </ion-card>
+      </ng-template>
+      <ng-template swiperSlide *ngIf="tutorial">
+        <ion-card button class="no-scroll">
+          <swiper
+            class="images-slide"
+            [config]="slideImagesOpts"
+            (tap)="tapTutorial($event)"
+          >
+            <ng-template swiperSlide>
+              <div class="background-image">
+                <img src="/assets/img/layout/tutorial-2.svg" alt="tutorial-2" />
+              </div>
+            </ng-template>
+            <ng-template swiperSlide>
+              <div class="background-image">
+                <img src="/assets/img/layout/tutorial-3.svg" alt="tutorial-3" />
+              </div>
+            </ng-template>
+          </swiper>
+        </ion-card>
+      </ng-template>
       <ng-template swiperSlide *ngFor="let user of users;">
         <ion-card
           class="no-scroll"

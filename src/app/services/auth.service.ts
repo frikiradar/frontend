@@ -1,15 +1,14 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { NavController, isPlatform } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 import { BehaviorSubject, Observable, firstValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { Device as DevicePlugin } from "@capacitor/device";
 
 import { environment } from "../../environments/environment";
 import { User } from "./../models/user";
 import { RestService } from "./rest.service";
-import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
+import { GoogleAuthService } from "./google-auth.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -23,7 +22,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private rest: RestService,
-    private nav: NavController
+    private nav: NavController,
+    private googleAuth: GoogleAuthService
   ) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem("currentUser"))
@@ -160,21 +160,6 @@ export class AuthService {
     }
   }
 
-  checkGoogleLogin() {
-    GoogleAuth.refresh()
-      .then((data) => {
-        if (data.accessToken) {
-          // User is signed in
-        }
-      })
-      .catch((error) => {
-        // console.log(error);
-        if (error.type === "userLoggedOut") {
-          this.logout();
-        }
-      });
-  }
-
   async getAuthUser() {
     if (!this.currentUserValue) {
       return;
@@ -285,14 +270,7 @@ export class AuthService {
   }
 
   async logout() {
-    let uuid = null;
-    if (isPlatform("capacitor")) {
-      uuid = (await DevicePlugin.getId()).identifier;
-    } else {
-      const fp = await FingerprintJS.load();
-      const fingerprint = await fp.get();
-      uuid = fingerprint.visitorId;
-    }
+    const uuid = (await DevicePlugin.getId()).identifier;
 
     // Desactivamos las notificaciones
     if (uuid && this.currentUserValue) {
@@ -304,7 +282,7 @@ export class AuthService {
     }
 
     // Cerramos sesión de google
-    await this.logoutGoogle();
+    await this.googleAuth.logout();
 
     // Eliminamos la sesión y configuraciones
     localStorage.clear();
@@ -313,9 +291,5 @@ export class AuthService {
 
     // Regresamos a la página de login
     this.nav.navigateRoot(["/login"]);
-  }
-
-  async logoutGoogle() {
-    await GoogleAuth.signOut();
   }
 }

@@ -1,11 +1,6 @@
 import { Component } from "@angular/core";
 import { Network } from "@capacitor/network";
-import {
-  AlertController,
-  Platform,
-  ToastController,
-  isPlatform,
-} from "@ionic/angular";
+import { AlertController, ToastController, isPlatform } from "@ionic/angular";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
 import { environment } from "src/environments/environment";
@@ -26,8 +21,8 @@ import {
   AppUpdateAvailability,
 } from "@capawesome/capacitor-app-update";
 import { first } from "rxjs";
-import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 import { StoreService } from "./services/store.service";
+import { GoogleAuthService } from "./services/google-auth.service";
 
 @Component({
   selector: "app-root",
@@ -41,7 +36,6 @@ export class AppComponent {
   constructor(
     private auth: AuthService,
     private alert: AlertController,
-    private platform: Platform,
     private utils: UtilsService,
     private config: ConfigService,
     private push: PushService,
@@ -49,7 +43,8 @@ export class AppComponent {
     private sw: SwService,
     private toast: ToastController,
     private adService: AdService,
-    private store: StoreService
+    private store: StoreService,
+    private googleAuth: GoogleAuthService
   ) {
     this.initializeApp();
   }
@@ -84,7 +79,7 @@ export class AppComponent {
 
     this.loadConfig();
     this.networkStatus();
-    this.initGoogleAuth();
+    this.googleAuth.init();
     this.nav.backButtonStatus();
 
     // Firebase Analytics
@@ -307,20 +302,5 @@ export class AppComponent {
     if (!isPlatform("capacitor")) {
       this.sw.init();
     }
-  }
-
-  initGoogleAuth() {
-    this.platform.ready().then(async () => {
-      GoogleAuth.initialize({
-        clientId:
-          "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",
-        scopes: [
-          "profile",
-          "email",
-          /*"https://www.googleapis.com/auth/user.gender.read",
-          "https://www.googleapis.com/auth/user.birthday.read",*/
-        ],
-      });
-    });
   }
 }

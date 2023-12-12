@@ -14,6 +14,10 @@ export const environment = {
     vapidKey:
       "BCo47gHUNeFYajnd_WuaN85FWxZVkIhX00Xa2XZ9BGcXKkS6ourI99ZuFixCM03vhmGLxpLBzgFwRwtQCHe-Pjc",
   },
+  googleAuth: {
+    clientId:
+      "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",
+  },
   revenueCat: {
     apiKey: "goog_oXaEOmufpOiAFNQyjDjCYSvLgjb",
   },

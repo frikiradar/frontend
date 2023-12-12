@@ -34,6 +34,7 @@
   >
     <ion-icon name="pause" color="light"></ion-icon>
   </ion-button>
+  <ion-note slot="start">{{ progress ? timeProgress : timeDuration }}</ion-note>
   <ion-range
     mode="md"
     #range
@@ -44,5 +45,4 @@
     (mouseup)="seek()"
   >
   </ion-range>
-  <ion-note slot="start">{{ progress ? timeProgress : timeDuration }}</ion-note>
 </ion-item>

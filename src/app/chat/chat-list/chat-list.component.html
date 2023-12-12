@@ -90,10 +90,11 @@
           >
         </ion-avatar>
 
-        <ion-label>
+        <ion-label class="ion-text-nowrap">
           <h2>{{ chat.user?.name }}</h2>
           <p>{{ chat.text }}</p>
         </ion-label>
+
         <ion-note slot="end">
           <span
             *ngIf="chat.fromuser == auth.currentUserValue?.id && !chat.writing"

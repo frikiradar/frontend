@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Device as DevicePlugin } from "@capacitor/device";
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 import { User } from "../models/user";
 import { Device } from "./../models/device";
@@ -30,15 +29,7 @@ export class DeviceService {
   async setDevice(token?: string) {
     if (this.auth.currentUserValue && this.auth.currentUserValue.id) {
       const device = await this.getCurrentDevice(token);
-      // console.log("device", device);
-      let uuid: string = null;
-      if (isPlatform("capacitor")) {
-        uuid = (await DevicePlugin.getId()).identifier;
-      } else {
-        const fp = await FingerprintJS.load();
-        const fingerprint = await fp.get();
-        uuid = fingerprint.visitorId;
-      }
+      const uuid = (await DevicePlugin.getId()).identifier;
       if (uuid !== null) {
         const devices = await this.getDevices();
         if (
@@ -78,25 +69,20 @@ export class DeviceService {
   async getCurrentDevice(token?: string): Promise<Device> {
     let uuid: string = null;
     let device: Device;
-    if (isPlatform("capacitor")) {
-      uuid = (await DevicePlugin.getId()).identifier;
-      const info = await DevicePlugin.getInfo();
-      device = {
-        device_id: uuid,
-        device_name: `${info.manufacturer} ${info.model} (${
+
+    uuid = (await DevicePlugin.getId()).identifier;
+    const info = await DevicePlugin.getInfo();
+    const description = isPlatform("capacitor")
+      ? `${info.manufacturer} ${info.model} (${
           info?.platform?.charAt(0).toUpperCase() + info?.platform?.slice(1)
-        } ${info?.osVersion})`,
-        token,
-      };
-    } else {
-      const fp = await FingerprintJS.load();
-      const fingerprint = await fp.get();
-      device = {
-        device_id: fingerprint.visitorId,
-        device_name: platform.description,
-        token,
-      };
-    }
+        } ${info?.osVersion})`
+      : platform.description;
+
+    device = {
+      device_id: uuid,
+      device_name: description,
+      token,
+    };
 
     const devices = await this.getDevices();
     if (
