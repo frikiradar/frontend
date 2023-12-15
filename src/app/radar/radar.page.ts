@@ -177,8 +177,8 @@ export class RadarPage {
   async tapTutorial(event: any) {
     if (event[0] instanceof Swiper) {
       const slide = event[0];
-      const centerStart = screen.width / 2 - 50; // 50px para el centro
-      const centerEnd = screen.width / 2 + 50; // 50px para el centro
+      const centerStart = screen.width / 2; // 50px para el centro
+      const centerEnd = screen.width / 2; // 50px para el centro
       let currentX: number;
       let currentY: number;
 
@@ -590,7 +590,6 @@ export class RadarPage {
       this.config.set("radar_config", radar_config);
     }
 
-    console.log(user);
     if (user && "username" in user) {
       if (this.user?.id) {
         this.userSvc.view(this.user?.id);

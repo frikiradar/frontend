@@ -303,11 +303,16 @@ export class UtilsService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async toggleTheme(theme: Config["theme"], oldTheme?: Config["theme"]) {
-    if (oldTheme) {
+  async toggleTheme(theme?: Config["theme"]) {
+    const oldTheme = (await this.config.get("theme")) as Config["theme"];
+    if (!theme) {
+      theme = oldTheme || "dark";
+      document.body.classList.toggle(theme, true);
+    } else {
       document.body.classList.toggle(oldTheme, false);
+      document.body.classList.toggle(theme, true);
     }
-    document.body.classList.toggle(theme, true);
+    await this.config.set("theme", theme);
 
     if (isPlatform("capacitor")) {
       await StatusBar.show();
@@ -398,9 +403,28 @@ export class UtilsService {
     }
   }
 
-  async resetTheme() {
-    const theme = (await this.config.get("theme")) as Config["theme"];
-    this.toggleTheme(theme);
+  async toggleTransparent(
+    type: "statusbar" | "navigationbar" | "both" = "both"
+  ) {
+    const isTransparent = document.body.classList.contains("transparent");
+    if (isTransparent) {
+      document.body.classList.toggle("transparent", false);
+      await this.toggleTheme();
+    } else {
+      document.body.classList.toggle("transparent", true);
+      switch (type) {
+        case "statusbar":
+          await this.transparentStatusBar();
+          break;
+        case "navigationbar":
+          await this.transparentNavigationBar();
+          break;
+        case "both":
+          await this.transparentStatusBar();
+          await this.transparentNavigationBar();
+          break;
+      }
+    }
   }
 
   makeId(length: number): string {

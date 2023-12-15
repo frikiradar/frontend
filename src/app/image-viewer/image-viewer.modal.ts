@@ -1,12 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ModalController } from "@ionic/angular";
-import SwiperCore, {
-  Keyboard,
-  SwiperOptions,
-  Mousewheel,
-  Zoom,
-  Swiper,
-} from "swiper";
+import SwiperCore, { Keyboard, SwiperOptions, Mousewheel, Zoom } from "swiper";
 import {
   trigger,
   state,
@@ -16,7 +10,6 @@ import {
 } from "@angular/animations";
 
 import { UtilsService } from "../services/utils.service";
-import { Config, ConfigService } from "../services/config.service";
 
 SwiperCore.use([Keyboard, Mousewheel, Zoom]);
 
@@ -82,12 +75,11 @@ export class ImageViewerModal {
 
   constructor(
     public modalController: ModalController,
-    private utils: UtilsService,
-    private config: ConfigService
+    private utils: UtilsService
   ) {}
 
   async ngOnInit() {
-    await this.utils.toggleTheme("transparent");
+    await this.utils.toggleTransparent();
   }
 
   setSwiperInstance(swiper: SwiperCore) {
@@ -112,6 +104,6 @@ export class ImageViewerModal {
   }
 
   async ngOnDestroy() {
-    await this.utils.resetTheme();
+    await this.utils.toggleTransparent();
   }
 }

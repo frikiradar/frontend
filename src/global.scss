@@ -452,3 +452,26 @@ input:-webkit-autofill:active {
   padding-top: 18px;
   padding-bottom: 18px;
 }
+
+body.transparent {
+  ion-header,
+  ion-footer {
+    background: transparent;
+    --background: transparent;
+
+    ion-toolbar {
+      background: transparent;
+      --background: transparent;
+    }
+  }
+
+  ion-header {
+    ion-toolbar {
+      padding-top: var(--status-bar-height);
+    }
+  }
+
+  ion-footer {
+    padding-bottom: var(--safe-area-inset-bottom);
+  }
+}

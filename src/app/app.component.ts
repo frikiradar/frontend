@@ -50,15 +50,10 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    // Obtenemos tema en configuración local. Si no hay le mandamos el dark
-    let theme = (await this.config.get("theme")) as Config["theme"];
-    if (!theme) {
-      theme = "dark";
-    }
     if (isPlatform("capacitor")) {
       await new Promise((resolve) => setTimeout(resolve, 600));
     }
-    await this.utils.toggleTheme(theme);
+    await this.utils.toggleTheme();
 
     this.auth.currentUser
       .pipe(first((u) => !!u?.id))
@@ -87,11 +82,6 @@ export class AppComponent {
     if ((await deviceInfo).platform === "web") {
       await FirebaseAnalytics.initializeFirebase(environment.firebase);
     }
-
-    FirebaseAnalytics.setUserProperty({
-      name: "theme",
-      value: theme,
-    });
   }
 
   async networkStatus() {

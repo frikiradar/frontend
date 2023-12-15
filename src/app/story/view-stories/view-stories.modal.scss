@@ -1,17 +1,12 @@
 ion-header ion-toolbar {
   position: absolute;
   --background: transparent !important;
-  /*padding-top: var(--status-bar-height);*/
 }
 
 ion-footer {
   --background: transparent !important;
   position: absolute;
   bottom: 0;
-}
-
-ion-footer {
-  padding-bottom: var(--safe-area-inset-bottom);
 }
 
 ion-label {

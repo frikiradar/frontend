@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { AlertController, ModalController, Platform } from "@ionic/angular";
-import { Router } from "@angular/router";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -15,9 +14,9 @@ import { VerificationModal } from "./verification/verification.modal";
 import { HideUsersModal } from "./hide-users/hide-users.modal";
 import { NavService } from "../services/navigation.service";
 import { UtilsService } from "../services/utils.service";
-import { ConfigService, Config } from "../services/config.service";
 import { PaymentsModal } from "./payments/payments.modal";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
+import { Config } from "../services/config.service";
 
 @Component({
   selector: "app-settings",
@@ -31,7 +30,7 @@ export class SettingsPage implements OnInit {
     slidesPerView: 3.5,
     breakpoints: {
       1024: {
-        slidesPerView: 8.5,
+        slidesPerView: 5.5,
       },
     },
     grabCursor: true,
@@ -43,10 +42,7 @@ export class SettingsPage implements OnInit {
     private userSvc: UserService,
     private alert: AlertController,
     private nav: NavService,
-    private router: Router,
-    private utils: UtilsService,
-    private config: ConfigService,
-    private platform: Platform
+    private utils: UtilsService
   ) {}
 
   async ngOnInit() {
@@ -179,9 +175,7 @@ export class SettingsPage implements OnInit {
 
   async toggleTheme(theme: Config["theme"]) {
     if (this.auth.isPremium() || theme === "dark" || theme === "light") {
-      const oldTheme = (await this.config.get("theme")) as Config["theme"];
-      this.utils.toggleTheme(theme, oldTheme);
-      await this.config.set("theme", theme);
+      this.utils.toggleTheme(theme);
     } else {
       const alert = await this.alert.create({
         header: "Tema exclusivo para miembros de frikiradar UNLIMITED",

@@ -107,6 +107,7 @@ export class ViewStoriesModal implements OnInit {
     this.story = this.stories[0];
     this.setLikeStory();
     this.viewStory(this.stories[0]);
+    // await this.utils.toggleTransparent();
   }
 
   ngAfterViewInit() {
@@ -517,5 +518,9 @@ export class ViewStoriesModal implements OnInit {
 
   close() {
     this.thisModal.dismiss();
+  }
+
+  async ngOnDestroy() {
+    // await this.utils.toggleTransparent();
   }
 }
