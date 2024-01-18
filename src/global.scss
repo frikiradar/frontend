@@ -14,9 +14,11 @@
 
 @import "swiper/swiper.min.css";
 @import "swiper/swiper-bundle.css";
+@import "swiper-new/css/bundle";
 
 body {
   background-color: var(--ion-color-dark);
+  --swiper-scrollbar-drag-bg-color: var(--ion-color-primary);
 }
 
 ion-content,
@@ -312,11 +314,6 @@ ul {
     width: 64px;
     height: 64px;
 
-    img {
-      width: 64px;
-      height: 64px;
-    }
-
     &.not-view img {
       border: 2px solid #e91e63 !important;
     }
@@ -324,15 +321,20 @@ ul {
 
   ion-badge {
     position: absolute;
-    left: 35px;
-    bottom: 5px;
-    border-radius: 15px;
+    border-radius: 100%;
     z-index: 1;
-    width: 22px;
-    height: 22px;
     border: 2px solid var(--ion-color-dark);
-    font-size: 14pt;
-    line-height: 0.7;
+    font-size: 10pt;
+    bottom: 0.5rem;
+    right: 1.25rem;
+    padding: 0;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+
+    ion-icon {
+      vertical-align: middle;
+    }
   }
 
   ion-label {
@@ -432,10 +434,6 @@ ion-item {
 .swiper-pagination-bullet-active,
 .swiper-pagination-progressbar-fill {
   background: #e91e63 !important;
-}
-
-.swiper-scrollbar-drag {
-  background: var(--ion-color-primary);
 }
 
 input:-webkit-autofill,

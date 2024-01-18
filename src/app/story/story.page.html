@@ -19,8 +19,10 @@
           [src]="auth.currentUserValue?.thumbnail"
           alt="auth.currentUserValue?.name"
         />
-        <ion-badge color="tertiary" mode="md">+</ion-badge>
       </ion-avatar>
+      <ion-badge slot="start" color="primary"
+        ><ion-icon name="add"></ion-icon
+      ></ion-badge>
       <ion-label>
         <h2>Añadir historia</h2>
       </ion-label>
@@ -39,9 +41,7 @@
         <h2>{{story.user.username}}</h2>
         <p>{{story.text}}</p>
       </ion-label>
-      <ion-note slot="end">
-        {{ story.time_creation | niceDate }}
-      </ion-note>
+      <ion-note slot="end"> {{ story.time_creation | niceDate }} </ion-note>
     </ion-item>
   </ion-list>
 </ion-content>

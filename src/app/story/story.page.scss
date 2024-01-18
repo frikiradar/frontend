@@ -17,15 +17,20 @@ ion-item {
   }
 
   ion-badge {
-    position: relative;
-    left: 40px;
-    border-radius: 15px;
+    position: absolute;
+    border-radius: 100%;
     z-index: 1;
-    width: 22px;
-    height: 22px;
-    bottom: 27px;
-    border: 2px solid #1f1f1f;
-    font-size: 14pt;
-    line-height: 0.7;
+    border: 2px solid var(--ion-color-dark);
+    font-size: 10pt;
+    bottom: 0.5rem;
+    padding: 0;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    left: 54px;
+
+    ion-icon {
+      vertical-align: middle;
+    }
   }
 }

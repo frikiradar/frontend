@@ -140,7 +140,9 @@ export class ChatListComponent {
       if (this.chats[0].id === chats[0].id) {
         this.chats[0].time_read = chats[0].time_read;
         this.chats[0].count = chats[0].count;
-        this.chats[0].user.last_login = chats[0].user.last_login;
+        if (this.chats[0].user) {
+          this.chats[0].user.last_login = chats[0].user.last_login;
+        }
       } else {
         // TODO: Actualizar cada user del listado, comprobando si algún user nuevo y añadiendolo
         this.chats = chats;

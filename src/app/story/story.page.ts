@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
-import * as deepEqual from "deep-equal";
 
 import { Story } from "../models/story";
 import { User } from "../models/user";
@@ -42,16 +41,8 @@ export class StoryPage implements OnInit {
   async getStories() {
     const stories = await this.storySvc.getAllStories();
     this.stories = this.storySvc.orderStories(stories);
-    const groupedStories = this.storySvc.groupStories(this.stories);
-    if (this.groupedStories) {
-      if (!deepEqual(this.groupedStories, groupedStories)) {
-        this.groupedStories = groupedStories;
-        this.config.set("stories", groupedStories);
-      }
-    } else {
-      this.groupedStories = groupedStories;
-      this.config.set("stories", groupedStories);
-    }
+    this.groupedStories = this.storySvc.groupStories(this.stories);
+    this.config.set("stories", this.groupedStories);
 
     this.loading = false;
   }

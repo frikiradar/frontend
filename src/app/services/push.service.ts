@@ -222,6 +222,10 @@ export class PushService {
       };
       if (payload.actionId == "tap") {
         this.router.navigate([data.url]);
+
+        FirebaseMessaging.removeDeliveredNotifications({
+          notifications: [notification],
+        });
       }
     });
 
@@ -230,6 +234,10 @@ export class PushService {
       (payload) => {
         if (payload.actionId == "tap") {
           this.router.navigate([payload.notification.extra.url]);
+
+          LocalNotifications.cancel({
+            notifications: [payload.notification],
+          });
         }
       }
     );

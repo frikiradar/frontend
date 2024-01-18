@@ -119,6 +119,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: "unlimited",
+    loadChildren: () =>
+      import("./unlimited/unlimited.module").then(
+        (m) => m.UnlimitedModalModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: "event/:id",
     loadChildren: () =>
       import("./events/event/event.module").then((m) => m.EventPageModule),

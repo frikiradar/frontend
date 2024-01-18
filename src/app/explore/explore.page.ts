@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import * as deepEqual from "deep-equal";
+import { SwiperOptions } from "swiper";
 
 import { Config, ConfigService } from "../services/config.service";
 import { AuthService } from "../services/auth.service";
@@ -8,7 +8,6 @@ import { Story } from "../models/story";
 import { Page } from "../models/page";
 import { PageService } from "../services/page.service";
 import { AnimateService } from "../services/animate.service";
-import { SwiperOptions } from "swiper";
 import { User } from "../models/user";
 import { StoryModal } from "../story/story-modal/story.modal";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
@@ -29,8 +28,6 @@ export class ExplorePage {
   public loading = true;
 
   public storiesOpts: SwiperOptions = {
-    preloadImages: false,
-    lazy: true,
     slidesPerView: 4.5,
     breakpoints: {
       1024: {
@@ -68,7 +65,7 @@ export class ExplorePage {
   }
 
   async ngOnInit() {
-    this.getStories();
+    await this.getStories();
     this.getPages();
 
     const id = this.route.snapshot.paramMap.get("id");
@@ -84,12 +81,8 @@ export class ExplorePage {
 
   async getStories() {
     let stories = await this.storySvc.getAllStories();
-    stories = this.storySvc.orderStories(stories);
-    if (!deepEqual(this.stories, stories)) {
-      this.stories = stories;
-      const groupedStories = this.storySvc.groupStories(stories);
-      this.groupedStories = groupedStories;
-    }
+    this.stories = this.storySvc.orderStories(stories);
+    this.groupedStories = this.storySvc.groupStories(this.stories);
   }
 
   async newStory() {
@@ -140,16 +133,8 @@ export class ExplorePage {
 
   async getPages() {
     const pages = await this.pageSvc.getPages(12);
-    if (this.pages) {
-      this.pages = this.pages.slice(0, 12);
-      if (!deepEqual(this.pages, pages)) {
-        this.pages = pages;
-        this.config.set("pages", pages);
-      }
-    } else {
-      this.pages = pages;
-      this.config.set("pages", pages);
-    }
+    this.pages = pages.slice(0, 12);
+    this.config.set("pages", this.pages);
 
     this.loading = false;
   }

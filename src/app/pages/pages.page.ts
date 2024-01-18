@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import * as deepEqual from "deep-equal";
 
 import { Page } from "../models/page";
 import { Config, ConfigService } from "../services/config.service";
@@ -10,7 +9,7 @@ import { PageService } from "../services/page.service";
 @Component({
   selector: "app-pages",
   templateUrl: "./pages.page.html",
-  styleUrls: ["./pages.page.scss"]
+  styleUrls: ["./pages.page.scss"],
 })
 export class PagesPage implements OnInit {
   public pages: Page[];
@@ -28,16 +27,8 @@ export class PagesPage implements OnInit {
   }
 
   async ngOnInit() {
-    const pages = await this.pagesSvc.getPages();
-    if (this.pages) {
-      if (!deepEqual(this.pages, pages)) {
-        this.pages = pages;
-        this.config.set("pages", pages);
-      }
-    } else {
-      this.pages = pages;
-      this.config.set("pages", pages);
-    }
+    this.pages = await this.pagesSvc.getPages();
+    this.config.set("pages", this.pages);
 
     this.loading = false;
   }
