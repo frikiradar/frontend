@@ -57,7 +57,14 @@ export class AdService {
   }
 
   getRandomAd(): Ad | null {
-    const ads = this.getAds().filter((ad) => !this.shownAds.includes(ad.id));
+    let ads = this.getAds().filter((ad) => !this.shownAds.includes(ad.id));
+
+    // Si no quedan anuncios para mostrar, vacía la lista de anuncios mostrados
+    if (ads.length === 0) {
+      this.shownAds = [];
+      ads = this.getAds();
+    }
+
     const random = Math.floor(Math.random() * 3);
     if (random === 0 && ads.length > 0) {
       const randomAdIndex = Math.floor(Math.random() * ads.length);
@@ -68,6 +75,7 @@ export class AdService {
       return null;
     }
   }
+
   async showRandomAd() {
     if (this.reward) {
       return true;
@@ -105,5 +113,9 @@ export class AdService {
     if (!this.auth.isMaster() && this.auth.currentUserValue.id !== ad.user.id) {
       await this.rest.post(`ads/${ad.id}/click`);
     }
+  }
+
+  async resetReward() {
+    this.reward = false;
   }
 }

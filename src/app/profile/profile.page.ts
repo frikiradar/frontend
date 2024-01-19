@@ -138,6 +138,8 @@ export class ProfilePage {
     } catch (e) {
       this.loading = false;
     }
+
+    this.ad.resetReward();
   }
 
   setSwiperInstance(swiper: any) {
