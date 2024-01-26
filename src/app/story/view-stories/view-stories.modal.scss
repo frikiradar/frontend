@@ -50,6 +50,7 @@ ion-card {
   align-self: center;
   box-shadow: none;
   background: transparent;
+  height: 80vh;
 
   img {
     pointer-events: none; // for Android
@@ -65,7 +66,7 @@ ion-card {
 .story-actions {
   position: absolute;
   justify-self: flex-end;
-  bottom: 120px;
+  bottom: 150px;
   right: 20px;
   text-shadow: 1px 1px 4px #000; // sombra de texto
   opacity: 0.9; // transparencia ligera
@@ -80,10 +81,15 @@ ion-card {
 }
 
 .story-text {
-  padding: 20px 5px;
+  padding: 20px;
   width: 70%;
   text-align: left;
   text-shadow: 1px 1px 4px #000;
+  position: absolute;
+  bottom: 40px;
+  background: #0000004f;
+  border-radius: 20px;
+  margin: 10px;
 }
 
 #text-input,
@@ -169,10 +175,6 @@ ion-footer {
   ion-avatar {
     min-width: 40px;
   }
-}
-
-.preview-comments {
-  width: 70%;
 }
 
 #usernames {

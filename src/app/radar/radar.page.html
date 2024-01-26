@@ -1,4 +1,5 @@
 <ion-header class="ion-no-border">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
   <ion-toolbar>
     <ion-title mode="md">
       <ion-icon src="/assets/icon/icon.svg"></ion-icon>
@@ -24,54 +25,53 @@
   </ion-toolbar>
 </ion-header>
 <ion-content #radarlist [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
-  <div *ngIf="view === 'cards'" style="height: 100%">
-    <swiper
-      id="radar-slide"
-      #slides
-      (slideNextTransitionEnd)="slide()"
-      (swiper)="setSwiperInstance($event)"
-      [config]="slideOpts"
-    >
-      <ng-template swiperSlide *ngIf="tutorial">
+  <div *ngIf="view === 'cards'" id="radar-container">
+    <swiper-container id="radar-slide" #slides init="false">
+      <swiper-slide *ngIf="tutorial">
         <ion-card button class="no-scroll">
           <div class="background-image">
             <img src="/assets/img/layout/tutorial-1.svg" alt="tutorial-1" />
           </div>
         </ion-card>
-      </ng-template>
-      <ng-template swiperSlide *ngIf="tutorial">
+      </swiper-slide>
+      <swiper-slide *ngIf="tutorial" class="tutorial">
         <ion-card button class="no-scroll">
-          <swiper
+          <swiper-container
             class="images-slide"
-            [config]="slideImagesOpts"
-            (tap)="tapTutorial($event)"
+            (click)="tapTutorial($event)"
+            scrollbar="true"
+            allow-touch-move="false"
+            slides-per-view="1"
           >
-            <ng-template swiperSlide>
+            <swiper-slide>
               <div class="background-image">
                 <img src="/assets/img/layout/tutorial-2.svg" alt="tutorial-2" />
               </div>
-            </ng-template>
-            <ng-template swiperSlide>
+            </swiper-slide>
+            <swiper-slide>
               <div class="background-image">
                 <img src="/assets/img/layout/tutorial-3.svg" alt="tutorial-3" />
               </div>
-            </ng-template>
-          </swiper>
+            </swiper-slide>
+          </swiper-container>
         </ion-card>
-      </ng-template>
-      <ng-template swiperSlide *ngFor="let user of users;">
+      </swiper-slide>
+      <swiper-slide *ngFor="let user of users; let i = index">
         <ion-card
           class="no-scroll"
           button
           *ngIf="user?.username; else adContainer"
         >
-          <swiper
+          <swiper-container
             class="images-slide"
-            [config]="slideImagesOpts"
-            (tap)="tap($event, user)"
+            (click)="tap($event, user)"
+            scrollbar="true"
+            allow-touch-move="false"
+            slides-per-view="1"
+            modules="Scrollbar"
           >
-            <ng-template swiperSlide>
+            <div class="swiper-scrollbar"></div>
+            <swiper-slide>
               <div class="background-image">
                 <img
                   [src]="user?.avatar"
@@ -79,8 +79,8 @@
                   default="/assets/img/users/default.png"
                 />
               </div>
-            </ng-template>
-            <ng-template swiperSlide *ngFor="let image of user.images">
+            </swiper-slide>
+            <swiper-slide *ngFor="let image of user.images">
               <div class="background-image">
                 <img
                   [src]="image"
@@ -88,8 +88,8 @@
                   default="/assets/img/users/default.png"
                 />
               </div>
-            </ng-template>
-          </swiper>
+            </swiper-slide>
+          </swiper-container>
           <div class="info" button (click)="showProfile(user.id)">
             <ion-card-header>
               <div class="match full-center">{{ user.match }}%</div>
@@ -138,8 +138,8 @@
         <ng-template #adContainer>
           <app-ad [ad]="user"></app-ad>
         </ng-template>
-      </ng-template>
-      <ng-template swiperSlide *ngIf="!loading">
+      </swiper-slide>
+      <swiper-slide *ngIf="!loading">
         <div class="full-center ion-padding">
           <ion-icon name="location"></ion-icon>
           <h2 *ngIf="users && users.length === 0">Sin resultados</h2>
@@ -164,8 +164,8 @@
             a vista por kilómetros</ion-button
           >
         </div>
-      </ng-template>
-    </swiper>
+      </swiper-slide>
+    </swiper-container>
   </div>
   <div *ngIf="view === 'list'" style="height: 100%">
     <ion-list *ngIf="!users.length && !allUsersLoaded">

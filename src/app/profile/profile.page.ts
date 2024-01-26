@@ -10,7 +10,9 @@ import {
   ToastController,
 } from "@ionic/angular";
 import { pulse } from "ng-animate";
-import SwiperCore, { SwiperOptions, Keyboard, Scrollbar, Swiper } from "swiper";
+import { SwiperOptions } from "swiper-new/types";
+import { Swiper } from "swiper-new";
+import { SwiperContainer } from "swiper-new/element";
 
 import { Like } from "../models/like";
 import { Story } from "../models/story";
@@ -30,8 +32,6 @@ import { LikesModal } from "./likes-modal/likes.modal";
 import { AdService } from "../services/ad.service";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
-SwiperCore.use([Keyboard, Scrollbar]);
-
 @Component({
   selector: "app-profile",
   templateUrl: "./profile.page.html",
@@ -49,14 +49,13 @@ export class ProfilePage {
   public loading = true;
   public pulse: any;
   public param: "received" | "delivered";
-  public slides: SwiperCore;
+  public slides: Swiper;
   public languages: string[];
 
   public sliderOpts: SwiperOptions = {
     keyboard: true,
-    preloadImages: false,
-    lazy: true,
     grabCursor: true,
+    centeredSlides: true,
   };
 
   constructor(
@@ -139,26 +138,27 @@ export class ProfilePage {
       this.loading = false;
     }
 
+    await this.utils.delay(500);
+    this.initSwiper();
     this.ad.resetReward();
   }
 
-  setSwiperInstance(swiper: any) {
-    this.slides = swiper;
-    this.slides.update();
+  initSwiper() {
+    const swiperContainer: SwiperContainer =
+      document.querySelector("#swiper-profile");
+    Object.assign(swiperContainer, this.sliderOpts);
+    this.slides = swiperContainer.swiper;
+
     this.slides.on("slideChange", async () => {
       await Haptics.vibrate({ duration: 10 });
     });
   }
 
   async tap(event: any) {
-    if (event[0] instanceof Swiper) {
-      const slide = event[0];
-      const touch = slide.touches;
-      if (touch.currentX > screen.width / 2) {
-        this.slides.slideNext();
-      } else {
-        this.slides.slidePrev();
-      }
+    if (event.x > screen.width / 2) {
+      this.slides.slideNext();
+    } else {
+      this.slides.slidePrev();
     }
   }
 

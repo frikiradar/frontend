@@ -9,6 +9,7 @@ import { WebcamModule } from "ngx-webcam";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { LinkyModule } from "ngx-linky";
 import { SwiperModule } from "swiper/angular";
+import { register } from "swiper-new/element/bundle";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { CreditsModal } from "../credits/credits.modal";
@@ -34,6 +35,9 @@ import { AdComponent } from "../ad/ad.component";
 import { DisableAccountPage } from "../settings/disable-account/disable-account.page";
 import { PaymentsModal } from "../settings/payments/payments.modal";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
+
+// install Swiper modules
+register();
 
 @NgModule({
   declarations: [

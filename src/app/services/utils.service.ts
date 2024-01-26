@@ -299,11 +299,11 @@ export class UtilsService {
     return number < 10 ? "0" + n : n;
   }
 
-  delay(ms: number) {
+  delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async toggleTheme(theme?: Config["theme"]) {
+  async toggleTheme(theme?: Config["theme"], delay = false) {
     const oldTheme = (await this.config.get("theme")) as Config["theme"];
     if (!theme) {
       theme = oldTheme || "dark";
@@ -315,6 +315,9 @@ export class UtilsService {
     await this.config.set("theme", theme);
 
     if (isPlatform("capacitor")) {
+      if (delay) {
+        await this.delay(600);
+      }
       await StatusBar.show();
       await NavigationBar.show();
       StatusBar.setOverlaysWebView({ overlay: false });

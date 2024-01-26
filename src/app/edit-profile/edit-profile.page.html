@@ -35,7 +35,7 @@
     (change)="cropImagebyEvent($event)"
     (click)="imageInput.value = null"
   />
-  <ion-list *ngIf="loading; else profile">
+  <ion-list *ngIf="loading">
     <ion-item lines="none">
       <ion-label>
         <h1>
@@ -59,20 +59,20 @@
       </ion-label>
     </ion-item>
   </ion-list>
-  <ng-template #profile>
-    <swiper
-      [config]="sliderOpts"
-      (swiper)="setSwiperInstance($event)"
+  <div *ngIf="!loading">
+    <swiper-container
+      id="swiper-edit-profile"
       (click)="tap($event)"
-      [scrollbar]="user?.images?.length"
+      scrollbar="true"
+      modules="Scrollbar"
     >
-      <ng-template swiperSlide>
+      <swiper-slide>
         <img [src]="user?.avatar" default="/assets/img/users/default.png" />
-      </ng-template>
-      <ng-template swiperSlide *ngFor="let image of user?.images">
+      </swiper-slide>
+      <swiper-slide *ngFor="let image of user?.images">
         <img [src]="image" default="/assets/img/users/default.png" />
-      </ng-template>
-    </swiper>
+      </swiper-slide>
+    </swiper-container>
     <form [formGroup]="profileForm">
       <ion-list>
         <ion-item-group>
@@ -325,7 +325,7 @@
         </ion-item-group>
       </ion-list>
     </form>
-  </ng-template>
+  </div>
   <ion-list>
     <ion-item-group>
       <ion-item-divider color="primary">

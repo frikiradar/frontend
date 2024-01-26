@@ -7,7 +7,7 @@ import { environment } from "src/environments/environment";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
-import { Config, ConfigService } from "./services/config.service";
+import { ConfigService } from "./services/config.service";
 import { UtilsService } from "./services/utils.service";
 import { PushService } from "./services/push.service";
 import { NavService } from "./services/navigation.service";
@@ -50,10 +50,7 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    if (isPlatform("capacitor")) {
-      await new Promise((resolve) => setTimeout(resolve, 600));
-    }
-    await this.utils.toggleTheme();
+    await this.utils.toggleTheme(undefined, true);
 
     this.auth.currentUser
       .pipe(first((u) => !!u?.id))

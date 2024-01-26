@@ -154,7 +154,7 @@
   <ion-item
     color="dark"
     button
-    *ngIf="!showingArchived && archivedChats?.length"
+    *ngIf="!showingArchived && archivedChats?.length && !loading"
     lines="none"
     (click)="showArchivedChats()"
   >

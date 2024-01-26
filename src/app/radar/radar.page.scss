@@ -11,9 +11,12 @@ ion-toolbar {
   }
 }
 
-swiper#radar-slide {
-  display: flex;
-  height: 100%;
+#radar-container {
+  display: unset;
+}
+
+#radar-slide {
+  display: unset;
 
   ::ng-deep {
     .swiper-slide {
@@ -25,7 +28,7 @@ swiper#radar-slide {
   }
 }
 
-swiper.images-slide {
+.images-slide {
   position: absolute;
   bottom: 0;
   top: 0;
@@ -53,7 +56,6 @@ ion-card {
   --background: var(--ion-color-medium-dark);
   overflow: auto;
   border-radius: 25px;
-  width: 100%;
 
   &.md {
     height: 97%;
@@ -64,7 +66,7 @@ ion-card {
   }
 }
 
-.images-slide ::ng-deep .swiper-scrollbar {
+.images-slide::part(scrollbar) {
   position: absolute;
   left: 25px;
   z-index: 50;
@@ -130,6 +132,7 @@ ion-card-header {
 
   ion-card-title {
     color: white;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
 
     ion-badge {
       margin-right: 5px;
@@ -159,17 +162,19 @@ ion-card-content {
   width: 100%;
   max-height: 250px;
   overflow-y: auto;
+  scrollbar-width: none;
 
   .description {
     color: white;
-    max-height: 37px;
+    max-height: 45px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 13px;
+    font-size: 15px;
     white-space: initial;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
   }
 
   .tags {
@@ -200,6 +205,7 @@ ion-card-content {
 
 .info-distance ion-text {
   color: white;
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
 }
 
 ion-content {

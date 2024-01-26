@@ -19,6 +19,7 @@ import {
   ServiceWorkerModule,
   SwRegistrationOptions,
 } from "@angular/service-worker";
+import { register } from "swiper-new/element";
 
 import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
@@ -31,6 +32,8 @@ import { OptionsPopover } from "./options-popover/options-popover";
 
 // registrar los locales con el nombre que quieras utilizar a la hora de proveer
 registerLocaleData(localeEs, "es");
+// install Swiper modules
+register();
 
 @NgModule({
   declarations: [AppComponent, OptionsPopover],

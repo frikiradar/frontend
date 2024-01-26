@@ -9,11 +9,9 @@ import {
   ToastController,
   isPlatform,
 } from "@ionic/angular";
-import SwiperCore, {
-  SwiperOptions,
-  Keyboard as SwiperKeyboard,
-  Scrollbar,
-} from "swiper";
+import { SwiperOptions } from "swiper-new/types";
+import { Swiper } from "swiper-new";
+import { SwiperContainer } from "swiper-new/element";
 import { Subject } from "rxjs";
 import { debounceTime } from "rxjs/operators";
 import { Keyboard } from "@capacitor/keyboard";
@@ -28,8 +26,6 @@ import { UtilsService } from "./../services/utils.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
 import { Haptics } from "@capacitor/haptics";
-
-SwiperCore.use([SwiperKeyboard, Scrollbar]);
 
 @Component({
   selector: "app-edit-profile",
@@ -60,12 +56,11 @@ export class EditProfilePage {
   @ViewChild("imageInput", { static: true })
   imageInput: ElementRef;
 
-  public slides: SwiperCore;
+  public slides: Swiper;
   public sliderOpts: SwiperOptions = {
     keyboard: true,
-    preloadImages: true,
-    lazy: true,
     grabCursor: true,
+    centeredSlides: true,
   };
 
   public showToolbar = false;
@@ -169,22 +164,28 @@ export class EditProfilePage {
       });
       return await modal.present();
     }
+
+    await this.utils.delay(500);
+    this.initSwiper();
   }
 
-  setSwiperInstance(swiper: SwiperCore) {
-    this.slides = swiper;
+  initSwiper() {
+    const swiperContainer: SwiperContainer = document.querySelector(
+      "#swiper-edit-profile"
+    );
+    Object.assign(swiperContainer, this.sliderOpts);
+    this.slides = swiperContainer.swiper;
+
     this.slides.on("slideChange", async () => {
       await Haptics.vibrate({ duration: 10 });
     });
   }
 
   async tap(event: any) {
-    if (event instanceof PointerEvent) {
-      if (event.pageX > screen.width / 2) {
-        this.slides.slideNext();
-      } else {
-        this.slides.slidePrev();
-      }
+    if (event.x > screen.width / 2) {
+      this.slides.slideNext();
+    } else {
+      this.slides.slidePrev();
     }
   }
 
