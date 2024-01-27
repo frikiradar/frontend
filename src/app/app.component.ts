@@ -280,7 +280,9 @@ export class AppComponent {
         maintenanceAlert.present();
       }
     } catch (e) {
-      maintenanceAlert.present();
+      if (this.internet) {
+        maintenanceAlert.present();
+      }
     }
   }
 

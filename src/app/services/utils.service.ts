@@ -316,7 +316,7 @@ export class UtilsService {
 
     if (isPlatform("capacitor")) {
       if (delay) {
-        await this.delay(600);
+        await this.delay(1000);
       }
       await StatusBar.show();
       await NavigationBar.show();

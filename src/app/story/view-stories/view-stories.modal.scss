@@ -51,6 +51,8 @@ ion-card {
   box-shadow: none;
   background: transparent;
   height: 80vh;
+  display: flex;
+  align-items: center;
 
   img {
     pointer-events: none; // for Android
