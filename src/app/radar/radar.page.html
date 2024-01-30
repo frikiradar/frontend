@@ -18,7 +18,8 @@
       <ion-button (click)="notifications()">
         <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
         <ion-badge slot="end" color="primary" *ngIf="counters?.notifications"
-          >{{ counters.notifications }}</ion-badge
+          >{{ counters.notifications > 9 ? "+9" : counters.notifications
+          }}</ion-badge
         >
       </ion-button>
     </ion-buttons>
