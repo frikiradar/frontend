@@ -7,6 +7,9 @@
     </ion-buttons>
     <ion-title>Notificaciones</ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="readNotifications()" *ngIf="notifications?.length">
+        <ion-icon slot="icon-only" name="mail-open-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="removeNotifications()" *ngIf="notifications?.length">
         <ion-icon
           slot="icon-only"
@@ -40,7 +43,6 @@
         *ngFor="let notification of notifications"
         (click)="showNotification(notification)"
         [ngClass]="!notification?.time_read ? 'unread' : ''"
-        color="dark"
       >
         <ion-avatar slot="start">
           <img

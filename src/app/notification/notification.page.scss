@@ -1,5 +1,9 @@
+ion-item {
+  --background: var(--ion-color-dark);
+}
+
 ion-item.unread {
-  --background: var(--ion-color-dark-shade) !important;
+  --background: var(--ion-color-medium-dark) !important;
 }
 
 ion-label p {

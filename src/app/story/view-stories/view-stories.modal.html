@@ -54,7 +54,10 @@
         <ion-thumbnail>
           <img [src]="story?.image" [alt]="story?.user.username" />
         </ion-thumbnail>
-        <ion-card-content class="story-text">
+        <ion-card-content
+          class="story-text"
+          *ngIf="story.text || story?.comments.length > 0"
+        >
           <p
             (click)="$event.stopImmediatePropagation(); openUrl($event);"
             [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions} | hashtag"

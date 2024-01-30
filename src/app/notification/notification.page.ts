@@ -88,6 +88,15 @@ export class NotificationPage implements OnInit {
     }
   }
 
+  async readNotifications() {
+    try {
+      await this.notificationSvc.readNotifications();
+      this.notifications = await this.notificationSvc.getNotifications();
+    } catch (e) {
+      console.error(`Error al leer las notificaciones`);
+    }
+  }
+
   async removeNotification(notification: Notification) {
     try {
       await this.notificationSvc.removeNotification(notification.id);

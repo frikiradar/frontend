@@ -49,6 +49,10 @@ export class NotificationService {
     return (await this.rest.get(`unread-notification/${id}`)) as Notification;
   }
 
+  async readNotifications() {
+    return await this.rest.get(`read-notifications`);
+  }
+
   async removeNotification(id: Notification["id"]) {
     return await this.rest.delete(`remove-notification/${id}`);
   }
