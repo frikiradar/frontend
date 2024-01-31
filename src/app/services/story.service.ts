@@ -23,14 +23,7 @@ export class StoryService {
   async getUserStories(id: User["id"]) {
     const stories = (await this.rest.get(`user-stories/${id}`)) as Story[];
     stories.map((s) => {
-      if (
-        s.viewStories.some(
-          (v) => v.user.id === this.auth.currentUserValue.id
-        ) ||
-        s.user.id === this.auth.currentUserValue.id
-      ) {
-        s.viewed = true;
-      }
+      s = this.setLikesStory(s);
     });
 
     return stories;
@@ -39,14 +32,7 @@ export class StoryService {
   async getStories() {
     const stories = (await this.rest.get("stories")) as Story[];
     stories.map((s) => {
-      if (
-        s.viewStories.some(
-          (v) => v.user.id === this.auth.currentUserValue.id
-        ) ||
-        s.user.id === this.auth.currentUserValue.id
-      ) {
-        s.viewed = true;
-      }
+      s = this.setLikesStory(s);
     });
 
     return stories;
@@ -55,14 +41,7 @@ export class StoryService {
   async getStoriesSlug(slug: string) {
     const stories = (await this.rest.get(`stories-slug/${slug}`)) as Story[];
     stories.map((s) => {
-      if (
-        s.viewStories.some(
-          (v) => v.user.id === this.auth.currentUserValue.id
-        ) ||
-        s.user.id === this.auth.currentUserValue.id
-      ) {
-        s.viewed = true;
-      }
+      s = this.setLikesStory(s);
     });
 
     return stories;
@@ -71,14 +50,7 @@ export class StoryService {
   async getAllStories() {
     const stories = (await this.rest.get("all-stories")) as Story[];
     stories.map((s) => {
-      if (
-        s.viewStories.some(
-          (v) => v.user.id === this.auth.currentUserValue.id
-        ) ||
-        s.user.id === this.auth.currentUserValue.id
-      ) {
-        s.viewed = true;
-      }
+      s = this.setLikesStory(s);
     });
 
     return stories;
@@ -130,12 +102,35 @@ export class StoryService {
     return this.rest.delete(`delete-story/${id}`);
   }
 
-  like(id: Story["id"]) {
-    return this.rest.put("like-story", { story: id }) as Promise<Story>;
+  async like(id: Story["id"]) {
+    const story = (await this.rest.put("like-story", { story: id })) as Story;
+    return this.setLikesStory(story);
   }
 
-  unlike(id: Story["id"]) {
-    return this.rest.delete(`like-story/${id}`) as Promise<Story>;
+  async unlike(id: Story["id"]) {
+    const story = (await this.rest.delete(`like-story/${id}`)) as Story;
+    return this.setLikesStory(story);
+  }
+
+  setLikesStory(story: Story) {
+    story.viewed = story.viewStories.some(
+      (s) => s.user.id === this.auth.currentUserValue.id
+    );
+    story.viewStories.map(
+      (v) =>
+        (v.user.like = story.likeStories.some((l) => l.user.id === v.user.id))
+    );
+    story.like = story.likeStories.some(
+      (l) => l.user.id === this.auth.currentUserValue.id
+    );
+
+    story.comments.map((c) => {
+      if (c.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
+        c.like = true;
+      }
+    });
+
+    return story;
   }
 
   async commentStory(

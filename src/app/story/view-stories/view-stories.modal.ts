@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -38,7 +32,6 @@ import { StoryModal } from "../story-modal/story.modal";
 import { Haptics, NotificationType } from "@capacitor/haptics";
 import { transition, trigger, useAnimation } from "@angular/animations";
 import { pulse } from "ng-animate";
-import { UtilsService } from "src/app/services/utils.service";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -94,9 +87,7 @@ export class ViewStoriesModal implements OnInit {
     private toast: ToastController,
     private router: Router,
     public auth: AuthService,
-    private urlSvc: UrlService,
-    private cd: ChangeDetectorRef,
-    private utils: UtilsService
+    private urlSvc: UrlService
   ) {
     this.commentForm = formBuilder.group({
       comment: new UntypedFormControl("", [Validators.required]),
@@ -104,9 +95,9 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async ngOnInit() {
-    this.story = this.stories[0];
-    this.setLikeStory();
+    this.storySvc.setLikesStory(this.stories[0]);
     this.viewStory(this.stories[0]);
+    this.story = this.stories[0];
     // await this.utils.toggleTransparent();
   }
 
@@ -135,8 +126,6 @@ export class ViewStoriesModal implements OnInit {
   slide(index: number) {
     this.comment.setValue("");
     this.story = this.stories[index];
-    this.cd.detectChanges();
-    this.setLikeStory();
     this.viewStory(this.stories[index]);
   }
 
@@ -201,55 +190,22 @@ export class ViewStoriesModal implements OnInit {
     this.showComments = false;
   }
 
-  setLikeStory() {
-    this.story.viewStories.map(
-      (v) =>
-        (v.user.like = this.story.likeStories.some(
-          (l) => l.user.id === v.user.id
-        ))
-    );
-    this.story.like = !!this.story.likeStories.some(
-      (l) => l.user.id === this.auth.currentUserValue.id
-    );
-
-    this.story.comments.map((c) => {
-      if (c.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
-        c.like = true;
-      }
-    });
-  }
-
-  async switchLikeStory(event: Event) {
+  async switchLikeStory(story: Story, event: Event) {
     event.stopPropagation();
     this.slides.autoplay.stop();
-
-    const liked = this.story.likeStories.some(
-      (l) => l.user.id === this.auth.currentUserValue.id
-    );
-
-    // Cambia el estado del "like" inmediatamente
-    this.story.like = !liked;
-    this.stories = this.stories.map((story) =>
-      story.id === this.story.id ? this.story : story
-    );
-    this.cd.detectChanges();
-
     try {
       // Envía la solicitud al servidor en segundo plano
-      if (liked) {
-        this.story = await this.storySvc.unlike(this.story.id);
+      if (story.like) {
+        story = await this.storySvc.unlike(story.id);
         Haptics.notification({ type: NotificationType.Error });
       } else {
-        this.story = await this.storySvc.like(this.story.id);
+        story = await this.storySvc.like(story.id);
         Haptics.notification({ type: NotificationType.Success });
       }
+
+      // actualizamos los stories
+      this.stories = this.stories.map((s) => (s.id === story.id ? story : s));
     } catch (error) {
-      // Si la solicitud falla, revierte el cambio y muestra un mensaje de error
-      this.story.like = liked;
-      this.stories = this.stories.map((story) =>
-        story.id === this.story.id ? this.story : story
-      );
-      this.cd.detectChanges();
       console.error(`Error al cambiar el estado del "like": ${error}`);
     }
 
@@ -275,9 +231,21 @@ export class ViewStoriesModal implements OnInit {
       // Envía la solicitud al servidor en segundo plano
       if (liked) {
         this.story = await this.storySvc.unlikeComment(comment.id);
+        this.story.comments = this.story.comments.map((c) => {
+          if (c.id === comment.id) {
+            c.like = false;
+          }
+          return c;
+        });
       } else {
         this.story = await this.storySvc.likeComment(comment.id);
-        this.setLikeStory();
+        this.story.like = true;
+        this.story.comments = this.story.comments.map((c) => {
+          if (c.id === comment.id) {
+            c.like = true;
+          }
+          return c;
+        });
       }
     } catch (error) {
       // Si la solicitud falla, revierte el cambio y muestra un mensaje de error
@@ -301,16 +269,14 @@ export class ViewStoriesModal implements OnInit {
       )
     ) {
       this.storySvc.viewStory(story.id);
-      this.story.viewStories = [
-        ...this.story.viewStories,
+      story.viewStories = [
+        ...story.viewStories,
         {
           date: new Date().toISOString(),
           user: this.auth.currentUserValue,
         },
       ];
-      this.stories = this.stories.map((s) =>
-        s.id === this.story.id ? this.story : s
-      );
+      this.stories = this.stories.map((s) => (s.id === story.id ? story : s));
     }
   }
 
@@ -329,8 +295,6 @@ export class ViewStoriesModal implements OnInit {
     this.stories = this.stories.map((story) =>
       story.id === this.story.id ? this.story : story
     );
-
-    this.setLikeStory();
   }
 
   async addStory() {
@@ -345,9 +309,9 @@ export class ViewStoriesModal implements OnInit {
     await modal.onDidDismiss();
   }
 
-  async removeStory() {
+  async removeStory(story: Story) {
     try {
-      await this.storySvc.deleteStory(this.story.id);
+      await this.storySvc.deleteStory(story.id);
       (
         await this.toast.create({
           message: "Historia eliminada correctamente",
@@ -477,11 +441,10 @@ export class ViewStoriesModal implements OnInit {
       })
     ).present();
     try {
-      this.story = await this.storySvc.deleteComment(comment.id);
-      this.stories = this.stories.map((story) =>
-        story.id === this.story.id ? this.story : story
+      this.stories = this.stories.map((s) =>
+        s.id === this.story.id ? this.story : s
       );
-      this.setLikeStory();
+
       (
         await this.toast.create({
           message: "Comentario eliminado correctamente",

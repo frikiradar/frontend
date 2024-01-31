@@ -115,7 +115,7 @@
         <ion-buttons slot="start" ion-activatable>
           <ion-button
             color="primary"
-            (click)="switchLikeStory($event)"
+            (click)="switchLikeStory(story, $event)"
             shape="round"
           >
             <ion-icon
@@ -351,7 +351,7 @@
         <ion-item
           button
           detail="false"
-          (click)="removeStory(notification)"
+          (click)="removeStory(story)"
           lines="none"
           *ngIf="story.user.id === auth.currentUserValue.id || auth.isMaster()"
         >
