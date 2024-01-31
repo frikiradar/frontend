@@ -14,7 +14,6 @@ import { NavService } from "./services/navigation.service";
 import { SwService } from "./services/sw.service";
 import { AdService } from "./services/ad.service";
 
-import { Device } from "@capacitor/device";
 import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
 import {
   AppUpdate,
@@ -50,6 +49,11 @@ export class AppComponent {
   }
 
   async initializeApp() {
+    // Firebase Analytics
+    if (!isPlatform("capacitor")) {
+      await FirebaseAnalytics.initializeFirebase(environment.firebase);
+    }
+
     await this.utils.toggleTheme(undefined, true);
 
     this.auth.currentUser
@@ -73,12 +77,6 @@ export class AppComponent {
     this.networkStatus();
     this.googleAuth.init();
     this.nav.backButtonStatus();
-
-    // Firebase Analytics
-    const deviceInfo = Device.getInfo();
-    if ((await deviceInfo).platform === "web") {
-      await FirebaseAnalytics.initializeFirebase(environment.firebase);
-    }
   }
 
   async networkStatus() {
