@@ -288,11 +288,13 @@ export class AppComponent {
   }
 
   async initAnalytics() {
-    FirebaseAnalytics.setUserId({
+    await FirebaseAnalytics.setEnabled({ enabled: true });
+
+    await FirebaseAnalytics.setUserId({
       userId: "" + this.auth.currentUserValue.id,
     });
 
-    FirebaseAnalytics.setUserProperty({
+    await FirebaseAnalytics.setUserProperty({
       key: "username",
       value: this.auth.currentUserValue.username,
     });
