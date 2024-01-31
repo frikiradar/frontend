@@ -33,8 +33,8 @@ export class NotificationService {
     this.notificationSubject.next(notification);
   }
 
-  async getUnread() {
-    return await this.rest.get(`notifications`);
+  async getUnread(): Promise<NotificationCounters> {
+    return (await this.rest.get(`notifications`)) as NotificationCounters;
   }
 
   async getNotifications() {

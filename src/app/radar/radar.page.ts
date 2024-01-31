@@ -204,7 +204,7 @@ export class RadarPage {
 
   async ngOnInit() {
     this.auth.currentUser
-      .pipe(first((user) => !!user))
+      .pipe(first((user) => !!user && user.active))
       .subscribe(async (user) => {
         this.authUser = user;
         await this.initGeolocation();

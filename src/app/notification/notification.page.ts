@@ -2,7 +2,10 @@ import { NotificationOptionsModal } from "./notification-options-modal/notificat
 import { ModalController } from "@ionic/angular";
 import { Component, OnInit } from "@angular/core";
 
-import { NotificationService } from "../services/notification.service";
+import {
+  NotificationCounters,
+  NotificationService,
+} from "../services/notification.service";
 import { Notification } from "../models/notification";
 import { UrlService } from "../services/url.service";
 import { NavService } from "../services/navigation.service";
@@ -14,6 +17,7 @@ import { NavService } from "../services/navigation.service";
 })
 export class NotificationPage implements OnInit {
   public notifications: Notification[] = undefined;
+  public unreadNotifications: NotificationCounters = undefined;
 
   constructor(
     private notificationSvc: NotificationService,
@@ -24,6 +28,7 @@ export class NotificationPage implements OnInit {
 
   async ngOnInit() {
     this.notifications = await this.notificationSvc.getNotifications();
+    this.unreadNotifications = await this.notificationSvc.getUnread();
   }
 
   async showNotification(notification: Notification) {
@@ -66,7 +71,7 @@ export class NotificationPage implements OnInit {
           n.time_read = notification.time_read;
         }
       });
-      await this.notificationSvc.getUnread();
+      this.unreadNotifications = await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al marcar como leída`);
     }
@@ -82,7 +87,7 @@ export class NotificationPage implements OnInit {
           n.time_read = notification.time_read;
         }
       });
-      await this.notificationSvc.getUnread();
+      this.unreadNotifications = await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al desmarcar como leída`);
     }
@@ -92,6 +97,7 @@ export class NotificationPage implements OnInit {
     try {
       await this.notificationSvc.readNotifications();
       this.notifications = await this.notificationSvc.getNotifications();
+      this.unreadNotifications = await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al leer las notificaciones`);
     }
@@ -103,7 +109,7 @@ export class NotificationPage implements OnInit {
       this.notifications = this.notifications.filter(
         (n) => n.id !== notification.id
       );
-      await this.notificationSvc.getUnread();
+      this.unreadNotifications = await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al eliminar la notificación`);
     }
@@ -113,7 +119,7 @@ export class NotificationPage implements OnInit {
     try {
       await this.notificationSvc.removeNotifications();
       this.notifications = [];
-      await this.notificationSvc.getUnread();
+      this.unreadNotifications = await this.notificationSvc.getUnread();
     } catch (e) {
       console.error(`Error al eliminar las notificaciones`);
     }
