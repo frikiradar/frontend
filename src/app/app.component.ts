@@ -3,7 +3,12 @@ import { Network } from "@capacitor/network";
 import { AlertController, ToastController, isPlatform } from "@ionic/angular";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
-import { environment } from "src/environments/environment";
+import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
+import {
+  AppUpdate,
+  AppUpdateAvailability,
+} from "@capawesome/capacitor-app-update";
+import { first } from "rxjs";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
@@ -14,12 +19,6 @@ import { NavService } from "./services/navigation.service";
 import { SwService } from "./services/sw.service";
 import { AdService } from "./services/ad.service";
 
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
-import {
-  AppUpdate,
-  AppUpdateAvailability,
-} from "@capawesome/capacitor-app-update";
-import { first } from "rxjs";
 import { StoreService } from "./services/store.service";
 import { GoogleAuthService } from "./services/google-auth.service";
 
@@ -49,11 +48,6 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    // Firebase Analytics
-    if (!isPlatform("capacitor")) {
-      await FirebaseAnalytics.initializeFirebase(environment.firebase);
-    }
-
     await this.utils.toggleTheme(undefined, true);
 
     this.auth.currentUser
@@ -70,6 +64,8 @@ export class AppComponent {
           this.adService.init();
           // Init store
           this.store.init();
+          // Init analytics
+          this.initAnalytics();
         }
       });
 
@@ -289,5 +285,16 @@ export class AppComponent {
     if (!isPlatform("capacitor")) {
       this.sw.init();
     }
+  }
+
+  async initAnalytics() {
+    FirebaseAnalytics.setUserId({
+      userId: "" + this.auth.currentUserValue.id,
+    });
+
+    FirebaseAnalytics.setUserProperty({
+      key: "username",
+      value: this.auth.currentUserValue.username,
+    });
   }
 }

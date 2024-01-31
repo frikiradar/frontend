@@ -8,7 +8,7 @@ import {
   ModalController,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
+import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 import { first } from "rxjs";
 import { SwiperOptions } from "swiper-new/types";
 import { Swiper } from "swiper-new";
@@ -267,16 +267,6 @@ export class RadarPage {
 
       this.authUser = this.auth.currentUserValue;
     }
-
-    FirebaseAnalytics.setUserId({
-      userId: "" + this.authUser.id,
-    });
-
-    FirebaseAnalytics.setUserProperty({
-      name: "username",
-      value: this.authUser.username,
-    });
-
     // --------------------------------------------------
 
     const radar_config = (await this.config.get(

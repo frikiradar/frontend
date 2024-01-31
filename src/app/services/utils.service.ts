@@ -15,7 +15,7 @@ import {
   CameraResultType,
   CameraSource,
 } from "@capacitor/camera";
-import { FirebaseAnalytics } from "@capacitor-community/firebase-analytics";
+import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
@@ -315,7 +315,7 @@ export class UtilsService {
     }
     await this.config.set("theme", theme);
     FirebaseAnalytics.setUserProperty({
-      name: "theme",
+      key: "theme",
       value: theme,
     });
 

@@ -4,8 +4,8 @@
 		"classpath": "dev.ashu.capacitor.statusbar.safearea.SafeAreaPlugin"
 	},
 	{
-		"pkg": "@capacitor-community/firebase-analytics",
-		"classpath": "com.getcapacitor.community.firebaseanalytics.FirebaseAnalytics"
+		"pkg": "@capacitor-firebase/analytics",
+		"classpath": "io.capawesome.capacitorjs.plugins.firebase.analytics.FirebaseAnalyticsPlugin"
 	},
 	{
 		"pkg": "@capacitor-firebase/messaging",
