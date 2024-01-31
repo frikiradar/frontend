@@ -3,7 +3,6 @@ import { Network } from "@capacitor/network";
 import { AlertController, ToastController, isPlatform } from "@ionic/angular";
 import { App } from "@capacitor/app";
 import { RateApp } from "capacitor-rate-app";
-import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 import {
   AppUpdate,
   AppUpdateAvailability,
@@ -21,6 +20,7 @@ import { AdService } from "./services/ad.service";
 
 import { StoreService } from "./services/store.service";
 import { GoogleAuthService } from "./services/google-auth.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-root",
@@ -64,8 +64,6 @@ export class AppComponent {
           this.adService.init();
           // Init store
           this.store.init();
-          // Init analytics
-          this.initAnalytics();
         }
       });
 
@@ -285,18 +283,5 @@ export class AppComponent {
     if (!isPlatform("capacitor")) {
       this.sw.init();
     }
-  }
-
-  async initAnalytics() {
-    await FirebaseAnalytics.setEnabled({ enabled: true });
-
-    await FirebaseAnalytics.setUserId({
-      userId: "" + this.auth.currentUserValue.id,
-    });
-
-    await FirebaseAnalytics.setUserProperty({
-      key: "username",
-      value: this.auth.currentUserValue.username,
-    });
   }
 }

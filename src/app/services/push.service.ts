@@ -15,6 +15,8 @@ import { environment } from "src/environments/environment";
 import { getMessaging } from "firebase/messaging";
 import { getToken, onMessage } from "firebase/messaging";
 import { FirebaseMessaging, Visibility } from "@capacitor-firebase/messaging";
+import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
+import { getAnalytics } from "firebase/analytics";
 
 @Injectable({
   providedIn: "root",
@@ -50,6 +52,17 @@ export class PushService {
     } else {
       await this.initWeb();
     }
+
+    await FirebaseAnalytics.setEnabled({ enabled: true });
+
+    await FirebaseAnalytics.setUserId({
+      userId: "" + this.auth.currentUserValue.id,
+    });
+
+    await FirebaseAnalytics.setUserProperty({
+      key: "username",
+      value: this.auth.currentUserValue.username,
+    });
   }
 
   setChannels() {
@@ -168,6 +181,7 @@ export class PushService {
 
   async initWeb() {
     const firebaseApp = initializeApp(environment.firebase);
+    const analytics = getAnalytics(firebaseApp);
     const messaging = getMessaging(firebaseApp);
     const token = await getToken(messaging);
     await this.device.setDevice(token);
