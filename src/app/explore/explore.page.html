@@ -1,4 +1,10 @@
 <ion-header class="ion-no-border">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-progress-bar
+    type="determinate"
+    color="dark"
+    *ngIf="!loading"
+  ></ion-progress-bar>
   <ion-toolbar>
     <ion-title>
       <ion-icon name="compass"></ion-icon>
@@ -13,7 +19,6 @@
 </ion-header>
 
 <ion-content>
-  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
   <ion-item
     lines="none"
     (click)="showAllStories()"

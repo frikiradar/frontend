@@ -8,7 +8,6 @@ import {
   ModalController,
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
-import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 import { first } from "rxjs";
 import { SwiperOptions } from "swiper-new/types";
 import { Swiper } from "swiper-new";

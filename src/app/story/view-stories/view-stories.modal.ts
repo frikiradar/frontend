@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -87,7 +93,8 @@ export class ViewStoriesModal implements OnInit {
     private toast: ToastController,
     private router: Router,
     public auth: AuthService,
-    private urlSvc: UrlService
+    private urlSvc: UrlService,
+    private cd: ChangeDetectorRef
   ) {
     this.commentForm = formBuilder.group({
       comment: new UntypedFormControl("", [Validators.required]),
@@ -126,6 +133,7 @@ export class ViewStoriesModal implements OnInit {
   slide(index: number) {
     this.comment.setValue("");
     this.story = this.stories[index];
+    this.cd.detectChanges();
     this.viewStory(this.stories[index]);
   }
 

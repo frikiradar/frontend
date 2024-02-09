@@ -1,4 +1,10 @@
 <ion-header class="ion-no-border">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-progress-bar
+    type="determinate"
+    color="dark"
+    *ngIf="!loading"
+  ></ion-progress-bar>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!showOptions && !showingArchived">
       <ion-button [ngClass]="router.url == '/tabs/chat' ? 'hide' : ''">
@@ -39,7 +45,6 @@
 </ion-header>
 
 <ion-content class="no-scroll">
-  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
   <ion-list *ngIf="!allChats">
     <ion-item *ngFor="let i of [].constructor(15)">
       <ion-avatar slot="start">

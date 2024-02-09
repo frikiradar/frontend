@@ -28,7 +28,7 @@ export class ChatListComponent {
   @Input() selected: User["id"];
   @Input() messageEvent: EventEmitter<Chat>;
 
-  public loading = false;
+  public loading: boolean;
   public showOptions = false;
   public selectedChat: Chat;
   public archivedChats: Config["chats"];
@@ -53,8 +53,10 @@ export class ChatListComponent {
   }
 
   async ngAfterViewInit() {
-    if (this.router.url === "/tabs/chat" || window.innerWidth > 991) {
+    if (this.router.url === "/tabs/chat") {
       await this.getLastMessages();
+    } else if (window.innerWidth > 991) {
+      await this.getLastMessages(false);
     }
   }
 
@@ -120,7 +122,8 @@ export class ChatListComponent {
     await this.setChats();
   }
 
-  async getLastMessages() {
+  async getLastMessages(loading = true) {
+    this.loading = loading;
     this.getCachedMessages();
     const allChats = await this.chatSvc.getChats();
     this.allChats = allChats;
