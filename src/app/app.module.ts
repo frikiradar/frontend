@@ -3,11 +3,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import localeEs from "@angular/common/locales/es";
 import { LOCALE_ID, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {
-  BrowserModule,
-  HAMMER_GESTURE_CONFIG,
-  HammerModule,
-} from "@angular/platform-browser";
+import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
@@ -21,7 +17,6 @@ import {
 } from "@angular/service-worker";
 import { register } from "swiper-new/element";
 
-import { IonicGestureConfig } from "src/helpers/ionicgesture.config";
 import { environment } from "../environments/environment";
 import { ErrorInterceptor } from "../helpers/error.interceptor";
 import { JwtInterceptor } from "../helpers/jwt.interceptor";
@@ -48,7 +43,6 @@ register();
     SharedModule,
     BrowserAnimationsModule,
     LinkyModule,
-    HammerModule,
     ImageCropperModule,
     ServiceWorkerModule.register("ngsw-worker.js"),
     WebcamModule,
@@ -58,7 +52,6 @@ register();
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LOCALE_ID, useValue: "es" },
-    { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
     {
       provide: SwRegistrationOptions,
       useFactory: () => ({ enabled: environment.production }),
