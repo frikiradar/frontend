@@ -28,7 +28,7 @@ export class UnlimitedModal {
   public products: Product[] = [];
   public selectedCardIndex: number = 0;
   private product: Product;
-  public lastMethod: Payment["method"];
+  public lastMethod: Payment["method"] = undefined;
 
   constructor(
     private modalController: ModalController,
@@ -52,7 +52,10 @@ export class UnlimitedModal {
 
     await loading.present();
 
-    this.lastMethod = (await this.paymentSvc.getLastPayment())["method"];
+    const lastPayment = await this.paymentSvc.getLastPayment();
+    if (lastPayment) {
+      this.lastMethod = lastPayment["method"];
+    }
 
     if (isPlatform("capacitor")) {
       this.products = await this.storeSvc.getProducts();
