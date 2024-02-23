@@ -63,7 +63,9 @@
       >
         <div>
           <ion-item button lines="none" (click)="showStories(story?.user?.id)">
-            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
+            <ion-avatar
+              [ngClass]="story?.viewed || story?.user?.id === auth.currentUserValue?.id ? '' : 'not-view'"
+            >
               <img [src]="story?.image" [alt]="story?.text" />
             </ion-avatar>
           </ion-item>

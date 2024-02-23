@@ -21,4 +21,11 @@ export const environment = {
   revenueCat: {
     apiKey: "goog_oXaEOmufpOiAFNQyjDjCYSvLgjb",
   },
+  paypal: {
+    url: "https://api.paypal.com",
+    clientId:
+      "AVWOew44ZZSW29lJ5PDX5EQSZEjzocTR-0i0GhnDx3FomM4YOXtegFXfhX-gFUqodmec4_wiJHL3g5Yt",
+    clientSecret:
+      "EDTLvsS3Q61un07eC45gAS41o5NUJ0Wa1iRmJLM2y7Ydea1lsYzdMnuDxZx4PVmDIqceOVPGnbN_mTuc",
+  },
 };

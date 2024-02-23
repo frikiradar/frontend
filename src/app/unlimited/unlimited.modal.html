@@ -31,7 +31,7 @@
     <p class="ion-text-center" *ngIf="!user?.premium_expiration">
       ESTADO: Activo indefinidamente
     </p>
-    <p *ngIf="isPlatform('capacitor')">
+    <p *ngIf="isPlatform('capacitor') && lastMethod == 'PLAY_STORE'">
       Puedes modificar tu plan de suscripción por el tiempo que desees.
     </p>
   </div>
@@ -77,14 +77,22 @@
     </ion-row>
   </ion-grid>
 
-  <div *ngIf="auth.isPremium() && isPlatform('capacitor')">
+  <div *ngIf="auth.isPremium() && lastMethod == 'PLAY_STORE'">
     <p>
-      También puedes pausar o cancelar tu suscripción desde la página de ajustes
-      de Play Store.
+      También puedes gestionar tu suscripción desde la página de ajustes de Play
+      Store.
     </p>
     <ion-item button lines="full" (click)="cancelSubscription()">
       <ion-icon name="logo-google-playstore" slot="start"></ion-icon>
       <ion-label>Ir a Play Store</ion-label>
+    </ion-item>
+  </div>
+
+  <div *ngIf="auth.isPremium() && lastMethod == 'PAYPAL'">
+    <p>Puedes gestionar tu suscripción desde la página de ajustes de PayPal.</p>
+    <ion-item button lines="full" (click)="cancelSubscription()">
+      <ion-icon name="logo-paypal" slot="start"></ion-icon>
+      <ion-label>Gestionar suscripción</ion-label>
     </ion-item>
   </div>
 
@@ -169,12 +177,33 @@
     >Continuar</ion-button
   >
 </ion-footer>
-<ion-footer class="ion-padding" *ngIf="!isPlatform('capacitor')">
+<ion-footer
+  class="ion-padding"
+  *ngIf="!isPlatform('capacitor') && !auth.isPremium()"
+>
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
-      Por el momento no está disponible la compra de suscripciones desde la
-      versión web de frikiradar. Puedes descargar la aplicación para Android
-      desde la Play Store y activarlo desde allí.
+      Al pulsar "Continuar", se te cobrará automáticamente la suscripción que
+      elijas. Este cargo se realizará de manera recurrente hasta que decidas
+      cancelar la suscripción.
     </ion-label>
   </ion-item>
+  <ion-button
+    id="paypal-purchase"
+    expand="block"
+    shape="round"
+    (click)="purchaseProduct()"
+  >
+    <ion-icon slot="start" src="/assets/icon/paypal.svg"></ion-icon>
+    <ion-label color="dark">Suscribirse</ion-label>
+  </ion-button>
+  <ion-button
+    color="dark"
+    expand="block"
+    shape="round"
+    (click)="purchaseProduct()"
+  >
+    <ion-icon color="light" slot="start" name="card-outline"></ion-icon>
+    <ion-label color="light">Tarjeta de débito o crédito</ion-label>
+  </ion-button>
 </ion-footer>

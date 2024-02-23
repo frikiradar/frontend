@@ -2,7 +2,7 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
@@ -25,14 +25,19 @@ export class ErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
-      catchError(err => {
+      catchError((err) => {
         if (err.status === 401) {
+          // si es paypal, no hacemos nada
+          if (err.url.includes("paypal")) {
+            return throwError(err);
+          }
+
           if (localStorage.getItem("currentUser")) {
             // auto logout if 401 response returned from api
             this.auth.logout();
           } else {
             this.nav.navigateRoot(["/login"], {
-              queryParams: { returnUrl: this.router.url }
+              queryParams: { returnUrl: this.router.url },
             });
           }
         }

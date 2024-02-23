@@ -14,6 +14,7 @@ import {
 import { Router } from "@angular/router";
 import { Keyboard } from "@capacitor/keyboard";
 import {
+  AlertController,
   IonTextarea,
   ModalController,
   ToastController,
@@ -38,6 +39,7 @@ import { StoryModal } from "../story-modal/story.modal";
 import { Haptics, NotificationType } from "@capacitor/haptics";
 import { transition, trigger, useAnimation } from "@angular/animations";
 import { pulse } from "ng-animate";
+import { UtilsService } from "src/app/services/utils.service";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -94,7 +96,9 @@ export class ViewStoriesModal implements OnInit {
     private router: Router,
     public auth: AuthService,
     private urlSvc: UrlService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private alertCtrl: AlertController,
+    private utils: UtilsService
   ) {
     this.commentForm = formBuilder.group({
       comment: new UntypedFormControl("", [Validators.required]),
@@ -318,6 +322,8 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async removeStory(story: Story) {
+    await this.utils.delay(500);
+    this.slides.autoplay.stop();
     try {
       await this.storySvc.deleteStory(story.id);
       (
@@ -338,31 +344,78 @@ export class ViewStoriesModal implements OnInit {
         })
       ).present();
     }
+    this.slides.autoplay.start();
     this.modalCreate.dismiss();
   }
 
-  async reportStory() {
-    /*try {
-      await this.storySvc.deleteStory(this.story.id);
-      (
-        await this.toast.create({
-          message: "Historia eliminada correctamente",
-          position: "middle",
-          duration: 2000,
-        })
-      ).present();
-      this.close();
-    } catch (e) {
-      (
-        await this.toast.create({
-          message: "Error al eliminar la historia",
-          duration: 2000,
-          position: "middle",
-          color: "danger",
-        })
-      ).present();
-    }*/
-    this.modalCreate.dismiss();
+  async reportStory(story: Story) {
+    await this.modalCreate.dismiss();
+    const alert = await this.alertCtrl.create({
+      header: `¿Quieres reportar la historia de ${story.user.username}?`,
+      message:
+        "Nos llegará un aviso para que revisemos el caso y actuemos en consecuencia. Describe a continuación el motivo del reporte.",
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: "Motivo del reporte",
+        },
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel",
+          cssClass: "secondary",
+        },
+        {
+          text: "Reportar",
+          role: "block",
+          handler: async (data: any) => {
+            if (data.note.trim().length) {
+              try {
+                await this.storySvc.report(story, data.note);
+                (
+                  await this.toast.create({
+                    message: "Historia reportada correctamente",
+                    duration: 2000,
+                    position: "bottom",
+                  })
+                ).present();
+              } catch (e) {
+                (
+                  await this.toast.create({
+                    message: `Error al reportar la historia ${e}`,
+                    duration: 2000,
+                    position: "bottom",
+                    color: "danger",
+                  })
+                ).present();
+                alert.present();
+              }
+            } else {
+              (
+                await this.toast.create({
+                  message: `El mensaje de reporte no puede estar en blanco`,
+                  duration: 2000,
+                  position: "middle",
+                  color: "danger",
+                })
+              ).present();
+
+              this.reportStory(story);
+            }
+          },
+        },
+      ],
+      cssClass: "round-alert",
+    });
+
+    await alert.present();
+    this.slides.autoplay.stop();
+
+    alert.onDidDismiss().then(() => {
+      this.slides.autoplay.start();
+    });
   }
 
   async viewCommentLikes(likes: Story["comments"][0]["likes"]) {
@@ -487,8 +540,13 @@ export class ViewStoriesModal implements OnInit {
     return false;
   }
 
-  close() {
-    this.thisModal.dismiss();
+  async close() {
+    if (await this.modalCreate.getTop()) {
+      await this.modalCreate.dismiss();
+    }
+    if (await this.thisModal.getTop()) {
+      this.thisModal.dismiss();
+    }
   }
 
   async ngOnDestroy() {

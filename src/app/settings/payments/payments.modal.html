@@ -13,10 +13,19 @@
     <ion-list>
       <ion-item lines="full" *ngFor="let payment of payments">
         <ion-icon
+          *ngIf="payment.method === 'PLAY_STORE'"
           slot="start"
-          name="{{
-              payment.method === 'PLAY_STORE' ? 'logo-android' : 'logo-apple'
-            }}"
+          name="logo-android"
+        ></ion-icon>
+        <ion-icon
+          *ngIf="payment.method === 'APP_STORE'"
+          slot="start"
+          name="logo-apple"
+        ></ion-icon>
+        <ion-icon
+          *ngIf="payment.method === 'PAYPAL'"
+          slot="start"
+          name="logo-paypal"
         ></ion-icon>
         <ion-label>
           <h3>{{ payment.title }}</h3>

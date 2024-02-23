@@ -640,8 +640,26 @@ export class UtilsService {
     ];
   }
 
-  getDeviceSymbols() {
+  getCurrencySymbols() {
     return ["$", "€", "S/.", "¥", "£", ""];
+  }
+
+  currencyToSymbol(currency: string) {
+    currency = currency.toUpperCase();
+    switch (currency) {
+      case "EUR":
+        return "€";
+      case "USD":
+        return "$";
+      case "PEN":
+        return "S/.";
+      case "JPY":
+        return "¥";
+      case "GBP":
+        return "£";
+      default:
+        return currency;
+    }
   }
 
   convertISO8601ToSpanish(period: string): { quantity: number; unit: string } {

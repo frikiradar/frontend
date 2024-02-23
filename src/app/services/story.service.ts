@@ -102,6 +102,10 @@ export class StoryService {
     return this.rest.delete(`delete-story/${id}`);
   }
 
+  async report(story: Story, note: string) {
+    return await this.rest.put("report-story", { story, note });
+  }
+
   async like(id: Story["id"]) {
     const story = (await this.rest.put("like-story", { story: id })) as Story;
     return this.setLikesStory(story);

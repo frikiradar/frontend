@@ -25,6 +25,13 @@ export const environment = {
   revenueCat: {
     apiKey: "goog_oXaEOmufpOiAFNQyjDjCYSvLgjb",
   },
+  paypal: {
+    url: "https://api.sandbox.paypal.com",
+    clientId:
+      "ASRuKQXmjowHg2FzHysaC7h_ijhUpWeSkV1LDMbcMY3saWpLXw8NhRBC41dHs_jws6sdLSzGed5dpGBh",
+    clientSecret:
+      "ENEKWLMh8lae33y1Dbyl3r-ylpaDl2y_tBRUSUAa1nrU0h341mUJ9ILNZ42cdjsm1uzo5yKLnunrxko7",
+  },
 };
 
 /*
