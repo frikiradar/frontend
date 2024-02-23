@@ -99,7 +99,7 @@ export class PaypalService {
       };
     });
 
-    console.log("products", products);
+    // console.log("products", products);
     return products;
   }
 
@@ -223,8 +223,7 @@ export class PaypalService {
 
   async cancelSubscription() {
     const paypalId = (await this.payment.getLastPayment())["paypal_id"];
-    const url =
-      "https://sandbox.paypal.com/myaccount/autopay/connect/" + paypalId;
+    const url = "https://paypal.com/myaccount/autopay/connect/" + paypalId;
     await this.url.openUrl(url);
   }
 }

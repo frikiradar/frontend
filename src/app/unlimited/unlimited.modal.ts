@@ -70,7 +70,7 @@ export class UnlimitedModal {
 
   selectProduct(product: Product) {
     this.product = product;
-    console.log("product", product);
+    // console.log("product", product);
   }
 
   async purchaseProduct() {
