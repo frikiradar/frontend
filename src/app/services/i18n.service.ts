@@ -33,16 +33,12 @@ export class I18nService {
   async getLanguage(): Promise<string> {
     let configLanguage = undefined;
     if (this.auth.currentUserValue) {
-      console.log("entra");
       configLanguage = this.auth.currentUserValue.config["language"];
-      console.log(configLanguage);
     }
     if (!configLanguage) {
-      console.log("no entra");
       configLanguage = (await this.config.get(
         "language"
       )) as Config["language"];
-      console.log(configLanguage);
     }
 
     if (!configLanguage) {
