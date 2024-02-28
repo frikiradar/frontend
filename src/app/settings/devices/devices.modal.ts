@@ -10,6 +10,7 @@ import { UserService } from "src/app/services/user.service";
 import { Device } from "./../../models/device";
 import { AuthService } from "./../../services/auth.service";
 import { DeviceService } from "./../../services/device.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "devices-modal",
@@ -26,7 +27,8 @@ export class DevicesSettingsModal implements OnInit {
     private devicesSvc: DeviceService,
     private auth: AuthService,
     private toast: ToastController,
-    private userSvc: UserService
+    private userSvc: UserService,
+    private i18n: I18nService
   ) {}
 
   async ngOnInit() {
@@ -52,7 +54,7 @@ export class DevicesSettingsModal implements OnInit {
 
       (
         await this.toast.create({
-          message: "¡Dispositivo eliminado!",
+          message: this.i18n.translate("device-removed"),
           duration: 2000,
           position: "bottom",
         })
@@ -60,8 +62,8 @@ export class DevicesSettingsModal implements OnInit {
     } else {
       (
         await this.alert.create({
-          message: "¡No puedes eliminar tu dispositivo actual!",
-          buttons: ["Entendido"],
+          message: this.i18n.translate("cannot-remove-current-device"),
+          buttons: [this.i18n.translate("understood")],
           cssClass: "round-alert",
         })
       ).present();
@@ -81,7 +83,7 @@ export class DevicesSettingsModal implements OnInit {
     if (!device.active) {
       (
         await this.toast.create({
-          message: "¡Notificaciones silenciadas!",
+          message: this.i18n.translate("notifications-muted"),
           duration: 2000,
           position: "bottom",
         })
@@ -89,7 +91,7 @@ export class DevicesSettingsModal implements OnInit {
     } else {
       (
         await this.toast.create({
-          message: "¡Notificaciones activadas!",
+          message: this.i18n.translate("notifications-activated"),
           duration: 2000,
           position: "bottom",
         })

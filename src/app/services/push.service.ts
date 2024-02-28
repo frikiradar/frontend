@@ -17,6 +17,7 @@ import { getToken, onMessage } from "firebase/messaging";
 import { FirebaseMessaging, Visibility } from "@capacitor-firebase/messaging";
 import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 import { getAnalytics } from "firebase/analytics";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -30,7 +31,8 @@ export class PushService {
     private router: Router,
     private notificationSvc: NotificationService,
     private auth: AuthService,
-    private swPush: SwPush
+    private swPush: SwPush,
+    private i18n: I18nService
   ) {}
 
   async ngOnInit() {
@@ -69,32 +71,29 @@ export class PushService {
     const channels = [
       {
         id: "chat",
-        name: "Notificaciones de Chat",
-        description: "Recibe notificaciones de chat cuando alguien te escribe.",
+        name: this.i18n.translate("chat-notifications"),
+        description: this.i18n.translate("receive-chat-notifications"),
         visibility: 0,
       },
       {
         id: "radar",
-        name: "Notificaciones de Radar",
-        description:
-          "Recibe notificaciones cuando hay un usuario interesante cerca de ti.",
+        name: this.i18n.translate("radar-notifications"),
+        description: this.i18n.translate("receive-radar-notifications"),
       },
       {
         id: "like",
-        name: "Notificaciones de Kokoros",
-        description:
-          "Recibe notificaciones cuando un usuario te entregue su kokoro.",
+        name: this.i18n.translate("kokoros-notifications"),
+        description: this.i18n.translate("receive-kokoros-notifications"),
       },
       {
         id: "frikiradar",
-        name: "Notificaciones de frikiradar",
-        description:
-          "Canal de información sobre frikiradar, novedades y actualizaciones.",
+        name: this.i18n.translate("frikiradar-notifications"),
+        description: this.i18n.translate("frikiradar-info-notifications"),
       },
       {
         id: "test",
-        name: "Notificaciones de testeo",
-        description: "Canal de testeo, exclusivo para masters.",
+        name: this.i18n.translate("testing-notifications"),
+        description: this.i18n.translate("testing-channel-notifications"),
       },
     ];
 

@@ -17,6 +17,7 @@ import { User } from "../../models/user";
 import { StoryService } from "../../services/story.service";
 import { UserService } from "../../services/user.service";
 import { UtilsService } from "../../services/utils.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "story-modal",
@@ -51,7 +52,8 @@ export class StoryModal implements OnInit {
     private sanitizer: DomSanitizer,
     private storySvc: StoryService,
     private toast: ToastController,
-    private userSvc: UserService
+    private userSvc: UserService,
+    private i18n: I18nService
   ) {
     this.storyForm = formBuilder.group({
       text: new UntypedFormControl(),
@@ -134,7 +136,7 @@ export class StoryModal implements OnInit {
       this.showBackdrop = true;
       (
         await this.toast.create({
-          message: "Publicando...",
+          message: this.i18n.translate("publishing"),
           position: "middle",
         })
       ).present();
@@ -146,7 +148,7 @@ export class StoryModal implements OnInit {
       this.toast.dismiss();
       (
         await this.toast.create({
-          message: "Historia publicada correctamente",
+          message: this.i18n.translate("story-published-successfully"),
           duration: 2000,
           position: "middle",
         })
@@ -158,7 +160,7 @@ export class StoryModal implements OnInit {
       this.toast.dismiss();
       (
         await this.toast.create({
-          message: "Error al publicar tu historia",
+          message: this.i18n.translate("error-publishing-your-story"),
           duration: 2000,
           position: "middle",
           color: "danger",

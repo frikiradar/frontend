@@ -15,6 +15,7 @@ import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import { User } from "src/app/models/user";
 import { NavService } from "src/app/services/navigation.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "app-disable-account",
@@ -36,7 +37,8 @@ export class DisableAccountPage {
     private auth: AuthService,
     private alert: AlertController,
     private toast: ToastController,
-    private nav: NavService
+    private nav: NavService,
+    private i18n: I18nService
   ) {
     this.disableForm = fb.group({
       code: new FormControl("", [Validators.required, Validators.maxLength(6)]),
@@ -51,7 +53,7 @@ export class DisableAccountPage {
 
     (
       await this.toast.create({
-        message: "Te hemos enviado un código de verificación al email",
+        message: this.i18n.translate("verification-code-sent"),
         duration: 2000,
         position: "bottom",
       })
@@ -66,7 +68,7 @@ export class DisableAccountPage {
         this.showBackdrop = true;
         (
           await this.toast.create({
-            message: "Desactivando cuenta...",
+            message: this.i18n.translate("disabling-account"),
             duration: 5000,
             position: "bottom",
           })
@@ -80,7 +82,7 @@ export class DisableAccountPage {
         this.showBackdrop = false;
         (
           await this.toast.create({
-            message: "¡Cuenta desactivada correctamente!",
+            message: this.i18n.translate("account-disabled-successfully"),
             duration: 5000,
             position: "bottom",
           })
@@ -89,7 +91,7 @@ export class DisableAccountPage {
         this.showBackdrop = true;
         (
           await this.toast.create({
-            message: "Eliminando cuenta...",
+            message: this.i18n.translate("removing-account"),
             duration: 5000,
             position: "bottom",
           })
@@ -103,7 +105,7 @@ export class DisableAccountPage {
 
         (
           await this.toast.create({
-            message: "¡Cuenta eliminada correctamente!",
+            message: this.i18n.translate("account-removed-successfully"),
             duration: 5000,
             position: "bottom",
           })
@@ -115,9 +117,9 @@ export class DisableAccountPage {
     } catch (e) {
       this.showBackdrop = false;
       const alert = await this.alert.create({
-        header: "El código introducido no es válido",
-        message: "Revísalo y vuelve a intentarlo.",
-        buttons: ["¡Vale!"],
+        header: this.i18n.translate("invalid-code-entered"),
+        message: this.i18n.translate("check-and-try-again"),
+        buttons: [this.i18n.translate("okay")],
         cssClass: "round-alert",
       });
 

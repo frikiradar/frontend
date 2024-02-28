@@ -8,7 +8,7 @@
   <ion-toolbar>
     <ion-title mode="md">
       <ion-icon src="/assets/icon/icon.svg"></ion-icon>
-      <ion-label>{{ "frikiradar" | i18n }}</ion-label>
+      <ion-label>frikiradar</ion-label>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="changeView()" *ngIf="users">
@@ -101,7 +101,7 @@
               <div class="match full-center">{{ user.match }}%</div>
               <ion-card-title>
                 <ion-badge
-                  *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+                  *ngIf="(user?.last_login | niceDate) === ('just-now' | i18n)"
                   color="secondary"
                   >&nbsp;</ion-badge
                 >
@@ -211,7 +211,7 @@
               default="/assets/img/users/default.png"
             />
             <ion-badge
-              *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+              *ngIf="(user?.last_login | niceDate) === ('just-now' | i18n)"
               color="secondary"
               >&nbsp;</ion-badge
             >

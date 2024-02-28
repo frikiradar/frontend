@@ -14,6 +14,7 @@ import {
 import { User } from "src/app/models/user";
 import { AuthService } from "./../../services/auth.service";
 import { UserService } from "./../../services/user.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "change-email-modal",
@@ -32,7 +33,8 @@ export class ChangeEmailModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private toast: ToastController
+    private toast: ToastController,
+    private i18n: I18nService
   ) {
     this.user = this.auth.currentUserValue;
 
@@ -55,7 +57,7 @@ export class ChangeEmailModal {
 
       (
         await this.toast.create({
-          message: "¡Cuenta de correo cambiada correctamente!",
+          message: this.i18n.translate("email-changed-successfully"),
           duration: 2000,
           position: "bottom",
         })
@@ -64,10 +66,9 @@ export class ChangeEmailModal {
       this.modalController.dismiss();
     } catch (e) {
       const alert = await this.alert.create({
-        header: "Ha habido un error",
-        message:
-          "¿Es posible que este correo ya esté en uso? Vuelve a intentarlo transcurridos unos minutos.",
-        buttons: ["¡De acuerdo!"],
+        header: this.i18n.translate("there-has-been-an-error"),
+        message: this.i18n.translate("email-already-in-use"),
+        buttons: [this.i18n.translate("okay")],
         cssClass: "round-alert",
       });
 

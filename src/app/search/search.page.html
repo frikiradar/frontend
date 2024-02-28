@@ -75,7 +75,7 @@
               </h2>
               <h3>
                 <span *ngIf="user.distance !== undefined"
-                  >A {{ user.distance }}km de distancia</span
+                  >{{ "km-distancia" | i18n: {distance: user.distance} }}</span
                 >
               </h3>
               <p class="description">{{ user.description }}</p>

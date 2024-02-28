@@ -10,6 +10,7 @@ import { AuthService } from "./auth.service";
 import { UserService } from "./user.service";
 import { UtilsService } from "./utils.service";
 import { UrlService } from "./url.service";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +24,8 @@ export class RevenuecatService {
     private userSvc: UserService,
     private utils: UtilsService,
     private alert: AlertController,
-    private loading: LoadingController
+    private loading: LoadingController,
+    private i18n: I18nService
   ) {}
 
   async init() {
@@ -119,12 +121,11 @@ export class RevenuecatService {
 
   async purchaseProduct(product: PurchasesStoreProduct) {
     const alert = await this.alert.create({
-      header: "Error con la transacción",
-      message:
-        "Ha habido un problema con la compra. Revisa que esté todo bien y vuelve a intentarlo transcurridos unos minutos.",
+      header: this.i18n.translate("transaction-error"),
+      message: this.i18n.translate("purchase-problem"),
       buttons: [
         {
-          text: "¡Muchas gracias!",
+          text: this.i18n.translate("thank-you"),
           handler: () => {
             location.reload();
           },
@@ -135,8 +136,7 @@ export class RevenuecatService {
 
     const loading = await this.loading.create({
       translucent: true,
-      message:
-        "Continúa el proceso de pago. Regresa aquí cuando hayas terminado.",
+      message: this.i18n.translate("continue-payment-process"),
     });
 
     try {
@@ -182,7 +182,7 @@ export class RevenuecatService {
   async cancelSubscription() {
     const loading = await this.loading.create({
       translucent: true,
-      message: "Cargando",
+      message: this.i18n.translate("loading"),
     });
     await loading.present();
     try {

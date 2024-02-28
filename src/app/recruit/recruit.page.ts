@@ -3,7 +3,6 @@ import { Component, OnInit } from "@angular/core";
 import { User } from "../models/user";
 import { AuthService } from "../services/auth.service";
 import { NavService } from "../services/navigation.service";
-import { UrlService } from "../services/url.service";
 
 @Component({
   selector: "recruit-modal",
@@ -12,11 +11,7 @@ import { UrlService } from "../services/url.service";
 })
 export class RecruitPage implements OnInit {
   public user: User;
-  constructor(
-    private auth: AuthService,
-    private urlSvc: UrlService,
-    private nav: NavService
-  ) {}
+  constructor(private auth: AuthService, private nav: NavService) {}
 
   async ngOnInit() {
     this.user = this.auth.currentUserValue;

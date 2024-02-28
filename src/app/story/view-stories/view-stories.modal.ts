@@ -40,6 +40,7 @@ import { Haptics, NotificationType } from "@capacitor/haptics";
 import { transition, trigger, useAnimation } from "@angular/animations";
 import { pulse } from "ng-animate";
 import { UtilsService } from "src/app/services/utils.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -98,7 +99,8 @@ export class ViewStoriesModal implements OnInit {
     private urlSvc: UrlService,
     private cd: ChangeDetectorRef,
     private alertCtrl: AlertController,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private i18n: I18nService
   ) {
     this.commentForm = formBuilder.group({
       comment: new UntypedFormControl("", [Validators.required]),
@@ -328,7 +330,7 @@ export class ViewStoriesModal implements OnInit {
       await this.storySvc.deleteStory(story.id);
       (
         await this.toast.create({
-          message: "Historia eliminada correctamente",
+          message: this.i18n.translate("story-deleted-successfully"),
           position: "middle",
           duration: 2000,
         })
@@ -337,7 +339,7 @@ export class ViewStoriesModal implements OnInit {
     } catch (e) {
       (
         await this.toast.create({
-          message: "Error al eliminar la historia",
+          message: this.i18n.translate("error-deleting-story"),
           duration: 2000,
           position: "middle",
           color: "danger",
@@ -351,24 +353,25 @@ export class ViewStoriesModal implements OnInit {
   async reportStory(story: Story) {
     await this.modalCreate.dismiss();
     const alert = await this.alertCtrl.create({
-      header: `¿Quieres reportar la historia de ${story.user.username}?`,
-      message:
-        "Nos llegará un aviso para que revisemos el caso y actuemos en consecuencia. Describe a continuación el motivo del reporte.",
+      header: this.i18n.translate("do-you-want-to-report-story", {
+        username: story.user.username,
+      }),
+      message: this.i18n.translate("we-will-review-the-case"),
       inputs: [
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del reporte",
+          placeholder: this.i18n.translate("report-reason"),
         },
       ],
       buttons: [
         {
-          text: "Cancelar",
+          text: this.i18n.translate("cancel"),
           role: "cancel",
           cssClass: "secondary",
         },
         {
-          text: "Reportar",
+          text: this.i18n.translate("report"),
           role: "block",
           handler: async (data: any) => {
             if (data.note.trim().length) {
@@ -376,7 +379,7 @@ export class ViewStoriesModal implements OnInit {
                 await this.storySvc.report(story, data.note);
                 (
                   await this.toast.create({
-                    message: "Historia reportada correctamente",
+                    message: this.i18n.translate("story-reported-successfully"),
                     duration: 2000,
                     position: "bottom",
                   })
@@ -384,7 +387,9 @@ export class ViewStoriesModal implements OnInit {
               } catch (e) {
                 (
                   await this.toast.create({
-                    message: `Error al reportar la historia ${e}`,
+                    message: this.i18n.translate("error-reporting-story", {
+                      error: e,
+                    }),
                     duration: 2000,
                     position: "bottom",
                     color: "danger",
@@ -395,7 +400,9 @@ export class ViewStoriesModal implements OnInit {
             } else {
               (
                 await this.toast.create({
-                  message: `El mensaje de reporte no puede estar en blanco`,
+                  message: this.i18n.translate(
+                    "report-message-cannot-be-blank"
+                  ),
                   duration: 2000,
                   position: "middle",
                   color: "danger",
@@ -496,7 +503,7 @@ export class ViewStoriesModal implements OnInit {
   async deleteComment(comment: Story["comments"][0]) {
     (
       await this.toast.create({
-        message: "Eliminando comentario...",
+        message: this.i18n.translate("deleting-comment"),
         position: "middle",
         duration: 2000,
       })
@@ -508,7 +515,7 @@ export class ViewStoriesModal implements OnInit {
 
       (
         await this.toast.create({
-          message: "Comentario eliminado correctamente",
+          message: this.i18n.translate("comment-deleted-successfully"),
           position: "middle",
           duration: 2000,
         })
@@ -516,7 +523,7 @@ export class ViewStoriesModal implements OnInit {
     } catch (e) {
       (
         await this.toast.create({
-          message: "Error al eliminar el comentario",
+          message: this.i18n.translate("error-deleting-comment"),
           duration: 2000,
           position: "middle",
           color: "danger",

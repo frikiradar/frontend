@@ -212,9 +212,9 @@ export class ProfilePage {
         }
       } else {
         const alert = await this.alert.create({
-          header: "No puedes iniciar un chat con esta persona",
-          message: `Para poder iniciar una conversación es necesario tener temas de conversación en común o haber recibido su kokoro ❤️.`,
-          buttons: ["Entendido, gracias!"],
+          header: this.i18n.translate("cannot-start-chat"),
+          message: this.i18n.translate("start-chat-requirements"),
+          buttons: [this.i18n.translate("understood-thanks")],
           cssClass: "round-alert",
         });
 
@@ -245,9 +245,15 @@ export class ProfilePage {
           ) {
             let message = "";
             if (this.user.from_like) {
-              message = `¡Felicidades por el match! Ya puedes chatear con ${this.user.name}.`;
+              message =
+                this.i18n.translate("congratulations-on-match") +
+                this.user.name +
+                ".";
             } else {
-              message = `¡Le has entregado tu kokoro a ${this.user.name}! No podrás iniciar un chat hasta que te entregue el suyo también.`;
+              message =
+                this.i18n.translate("you-have-given-your-kokoro") +
+                this.user.name +
+                this.i18n.translate("cannot-start-chat-until-kokoro");
             }
             (
               await this.toast.create({
@@ -259,7 +265,10 @@ export class ProfilePage {
           } else {
             (
               await this.toast.create({
-                message: `¡Le has entregado tu kokoro a ${this.user.name}!`,
+                message:
+                  this.i18n.translate("you-have-given-your-kokoro") +
+                  this.user.name +
+                  "!",
                 duration: 5000,
                 position: "middle",
               })
@@ -272,7 +281,9 @@ export class ProfilePage {
         this.user.like = false;
         (
           await this.toast.create({
-            message: `Le has retirado tu kokoro a ${this.user.name}`,
+            message:
+              this.i18n.translate("you-have-removed-your-kokoro") +
+              this.user.name,
             duration: 5000,
             position: "middle",
           })
@@ -281,7 +292,7 @@ export class ProfilePage {
     } catch (e) {
       (
         await this.toast.create({
-          message: `Error al entregar o retirar el kokoro`,
+          message: this.i18n.translate("error-giving-or-removing-kokoro"),
           duration: 5000,
           position: "middle",
           color: "danger",
@@ -311,13 +322,12 @@ export class ProfilePage {
   async hideProfile() {
     this.router.navigate(["/"]);
     const toast = await this.toast.create({
-      message:
-        "Has ocultado al usuario. No volverá a aparecerte como sugerencia.",
+      message: this.i18n.translate("user-hidden"),
       duration: 3000,
       position: "bottom",
       buttons: [
         {
-          text: "Deshacer",
+          text: this.i18n.translate("undo"),
           handler: () => {
             this.router.navigate(["/profile/" + this.user.id]);
           },
@@ -354,7 +364,7 @@ export class ProfilePage {
         } else {
           (
             await this.toast.create({
-              message: "Creando página...",
+              message: this.i18n.translate("creating-page"),
               position: "middle",
             })
           ).present();

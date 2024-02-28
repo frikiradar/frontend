@@ -3,7 +3,6 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { AdminGuard } from "./guards/admin.guard";
 import { AuthGuard } from "./guards/auth.guard";
-import { EmptyComponent } from "./empty.component";
 
 const routes: Routes = [
   {
@@ -16,10 +15,6 @@ const routes: Routes = [
     path: "login",
     loadChildren: () =>
       import("./login/login.module").then((m) => m.LoginPageModule),
-  },
-  {
-    path: "reload",
-    component: EmptyComponent,
   },
   {
     path: "edit-profile",

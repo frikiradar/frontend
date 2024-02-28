@@ -17,6 +17,7 @@ import { Chat } from "./../../models/chat";
 import { AuthService } from "./../../services/auth.service";
 import { ChatService } from "./../../services/chat.service";
 import { NavService } from "src/app/services/navigation.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "app-chat-list",
@@ -44,7 +45,8 @@ export class ChatListComponent {
     private config: ConfigService,
     private cd: ChangeDetectorRef,
     public router: Router,
-    private nav: NavService
+    private nav: NavService,
+    private i18n: I18nService
   ) {}
 
   @HostListener("window:focus")
@@ -178,12 +180,12 @@ export class ChatListComponent {
     const chats = this.chats;
     this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
     const toast = await this.toast.create({
-      message: "Has eliminado el chat con " + chat.user.name,
+      message: this.i18n.translate("you-have-deleted-chat") + chat.user.name,
       duration: 3000,
       position: "bottom",
       buttons: [
         {
-          text: "Deshacer",
+          text: this.i18n.translate("undo"),
           handler: () => {
             this.chats = chats;
           },
@@ -208,7 +210,7 @@ export class ChatListComponent {
       await this.setArchivedChats();
       this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
       const toast = await this.toast.create({
-        message: "Has archivado el chat con " + chat.user.name,
+        message: this.i18n.translate("you-have-archived-chat") + chat.user.name,
         duration: 3000,
         position: "bottom",
       });
@@ -228,7 +230,8 @@ export class ChatListComponent {
       await this.setArchivedChats();
       this.chats = this.chats.filter((c) => c.user.id !== chat.user.id);
       const toast = await this.toast.create({
-        message: "Has desarchivado el chat con " + chat.user.name,
+        message:
+          this.i18n.translate("you-have-unarchived-chat") + chat.user.name,
         duration: 3000,
         position: "bottom",
       });

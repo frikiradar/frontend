@@ -90,7 +90,7 @@
           <ion-badge
             class="user-online"
             color="secondary"
-            *ngIf="(chat.user?.last_login | niceDate) === 'Ahora mismo'"
+            *ngIf="(chat.user?.last_login | niceDate) === ('just-now' | i18n)"
             >&nbsp;</ion-badge
           >
         </ion-avatar>
@@ -112,7 +112,9 @@
             ></ion-icon>
           </span>
           {{
-            chat.writing ? "⌨ Escribiendo..." : (chat.time_creation | niceDate)
+            chat.writing
+              ? "⌨ " + ("writing" | i18n) + "..."
+              : (chat.time_creation | niceDate)
           }}
           <ion-text class="chat-count ion-text-right">
             <ion-badge color="primary" *ngIf="chat?.count > 0">{{
@@ -148,10 +150,7 @@
     <div class="full-center ion-padding">
       <ion-icon name="chatbubbles"></ion-icon>
       <h2>{{ "sin-conversaciones" | i18n }}</h2>
-      <p>
-        Aún no le has escrito a ningún usuario. Vuelve por aquí cuando lo hayas
-        hecho.
-      </p>
+      <p>{{ "an-no-le-has-escrito" | i18n }}</p>
     </div>
   </div>
 </ion-content>

@@ -102,7 +102,7 @@
               <span *ngIf="user?.age" class="age">, {{ user.age }}</span>
               <ion-badge
                 color="secondary"
-                *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+                *ngIf="(user?.last_login | niceDate) === ('just-now' | i18n)"
                 >&nbsp;</ion-badge
               >
               <p>&#64;{{user.username}}</p>
@@ -162,7 +162,7 @@
             <ion-icon name="time"></ion-icon>
             <ion-label
               >{{"ltima-conexin" | i18n}}: {{ (user?.last_login | niceDate) ===
-              'Ahora mismo' ? 'En línea' : (user?.last_login | niceDate)
+              ('just-now' | i18n) ? 'En línea' : (user?.last_login | niceDate)
               }}</ion-label
             >
           </ion-item>

@@ -13,6 +13,7 @@ import {
 
 import { AuthService } from "./../../services/auth.service";
 import { UserService } from "./../../services/user.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "change-password-modal",
@@ -30,7 +31,8 @@ export class ChangePasswordModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private toast: ToastController
+    private toast: ToastController,
+    private i18n: I18nService
   ) {
     this.passForm = fb.group({
       oldPassword: new UntypedFormControl("", [
@@ -55,7 +57,7 @@ export class ChangePasswordModal {
 
       (
         await this.toast.create({
-          message: "¡Contraseña cambiada correctamente!",
+          message: this.i18n.translate("password-changed-successfully"),
           duration: 2000,
           position: "bottom",
         })
@@ -64,9 +66,9 @@ export class ChangePasswordModal {
       this.modalController.dismiss();
     } catch (e) {
       const alert = await this.alert.create({
-        header: "La contraseña actual introducida no es válida",
-        message: "Revísala y vuelve a intentarlo.",
-        buttons: ["¡Vale!"],
+        header: this.i18n.translate("current-password-not-valid"),
+        message: this.i18n.translate("check-and-try-again"),
+        buttons: [this.i18n.translate("okay")],
         cssClass: "round-alert",
       });
 

@@ -9,6 +9,7 @@ import {
   NotificationService,
 } from "../services/notification.service";
 import { Meta, Title } from "@angular/platform-browser";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "app-tabs",
@@ -27,7 +28,8 @@ export class TabsPage implements OnInit {
     public platform: Platform,
     private modalController: ModalController,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    private i18n: I18nService
   ) {
     this.router.events.subscribe((event: any) => {
       event.url = event.url === "/" ? "/tabs/radar" : event.url;
@@ -57,11 +59,11 @@ export class TabsPage implements OnInit {
     ]);
 
     this.title.setTitle(
-      "Página principal, frikiradar, la app de citas para frikis"
+      this.i18n.translate("main-page-frikiradar-dating-app-for-geeks")
     );
     this.meta.updateTag({
       name: "description",
-      content: "Encuentra personas cerca de ti con tus mismos gustos",
+      content: this.i18n.translate("find-people-nearby-with-same-tastes"),
     });
   }
 

@@ -7,6 +7,7 @@ import { AuthService } from "./auth.service";
 import { Config } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -18,7 +19,8 @@ export class ChatService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService,
-    private alert: AlertController
+    private alert: AlertController,
+    private i18n: I18nService
   ) {}
 
   async getChats() {
@@ -148,12 +150,11 @@ export class ChatService {
   async realtimeChatInfo() {
     (
       await this.alert.create({
-        header: "Notificaciones desactivadas",
-        message:
-          "Para tener chat en tiempo real es necesario activar las notificaciones. Actívalas para tener esta función.",
+        header: this.i18n.translate("notifications-disabled"),
+        message: this.i18n.translate("realtime-chat-requirement"),
         buttons: [
           {
-            text: "Entendido!",
+            text: this.i18n.translate("understood"),
             handler: async () => {
               await Notification.requestPermission();
             },

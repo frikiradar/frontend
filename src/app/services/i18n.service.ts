@@ -9,7 +9,7 @@ import { AuthService } from "./auth.service";
 })
 export class I18nService {
   private texts: { [key: string]: { [key: string]: string } } = {};
-  private currentLanguage: string;
+  public currentLanguage: string = "en";
 
   constructor(
     private config: ConfigService,
@@ -64,7 +64,10 @@ export class I18nService {
   }
 
   translate(key: string, variables: { [key: string]: string } = {}): string {
-    let text = this.texts[this.currentLanguage][key] || key;
+    let text =
+      (this.texts[this.currentLanguage] &&
+        this.texts[this.currentLanguage][key]) ||
+      key;
     for (let variableKey in variables) {
       text = text.replace(`%{${variableKey}}%`, variables[variableKey]);
     }

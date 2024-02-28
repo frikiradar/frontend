@@ -14,6 +14,7 @@ import {
 import { User } from "src/app/models/user";
 import { AuthService } from "./../../services/auth.service";
 import { UserService } from "./../../services/user.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "change-username-modal",
@@ -32,7 +33,8 @@ export class ChangeUsernameModal {
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
-    private toast: ToastController
+    private toast: ToastController,
+    private i18n: I18nService
   ) {
     this.user = this.auth.currentUserValue;
 
@@ -56,8 +58,7 @@ export class ChangeUsernameModal {
 
       (
         await this.toast.create({
-          message:
-            "¡Nombre de usuario cambiado correctamente! Vuelve a iniciar sesión.",
+          message: this.i18n.translate("username-changed-successfully"),
           duration: 2000,
           position: "bottom",
         })
@@ -67,9 +68,9 @@ export class ChangeUsernameModal {
       this.auth.logout();
     } catch (e) {
       const alert = await this.alert.create({
-        header: "Ha habido un error",
-        message: "Ya hay alguien utilizando este nombre de usuario.",
-        buttons: ["¡Ok, probaré otro!"],
+        header: this.i18n.translate("there-has-been-an-error"),
+        message: this.i18n.translate("username-already-in-use"),
+        buttons: [this.i18n.translate("okay-try-another")],
         cssClass: "round-alert",
       });
 

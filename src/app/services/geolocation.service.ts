@@ -5,6 +5,7 @@ import { ModalController, ToastController } from "@ionic/angular";
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
 import { ConfigService } from "./config.service";
 import { AuthService } from "./auth.service";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -16,7 +17,8 @@ export class GeolocationService {
     private modalController: ModalController,
     private config: ConfigService,
     private toastController: ToastController,
-    private auth: AuthService
+    private auth: AuthService,
+    private i18n: I18nService
   ) {}
 
   async requestPermission() {
@@ -57,7 +59,7 @@ export class GeolocationService {
     try {
       (
         await this.toastController.create({
-          message: "Obteniendo tu ubicación",
+          message: this.i18n.translate("getting-your-location"),
           position: "middle",
           color: "secondary",
         })

@@ -36,6 +36,7 @@ import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 import { App } from "@capacitor/app";
 import { Meta, Title } from "@angular/platform-browser";
 import { NavService } from "src/app/services/navigation.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "app-chat-modal",
@@ -78,7 +79,8 @@ export class ChatModalComponent implements OnInit {
     private eventSvc: EventService,
     private meta: Meta,
     private title: Title,
-    private nav: NavService
+    private nav: NavService,
+    private i18n: I18nService
   ) {}
 
   @HostListener("window:focus")
@@ -397,7 +399,7 @@ export class ChatModalComponent implements OnInit {
 
       (
         await this.toast.create({
-          message: "Mensaje copiado",
+          message: this.i18n.translate("message-copied"),
           duration: 2000,
           position: "middle",
         })
@@ -405,7 +407,7 @@ export class ChatModalComponent implements OnInit {
     } catch (e) {
       (
         await this.toast.create({
-          message: "Error al copiar el mensaje",
+          message: this.i18n.translate("error-copying-message"),
           duration: 2000,
           position: "middle",
         })
@@ -433,7 +435,7 @@ export class ChatModalComponent implements OnInit {
     } catch (e) {
       (
         await this.toast.create({
-          message: "Error al eliminar el mensaje",
+          message: this.i18n.translate("error-deleting-message"),
           duration: 2000,
           position: "middle",
         })
@@ -501,7 +503,7 @@ export class ChatModalComponent implements OnInit {
   }
 
   async getWriting() {
-    this.toUserWriting = "Escribiendo...";
+    this.toUserWriting = this.i18n.translate("writing") + "...";
     setTimeout(() => {
       this.toUserWriting = "";
     }, 10000);

@@ -4,11 +4,12 @@ import { IonInput, NavController, ToastController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "app-search",
   templateUrl: "./search.page.html",
-  styleUrls: ["./search.page.scss"]
+  styleUrls: ["./search.page.scss"],
 })
 export class SearchPage implements OnInit {
   @ViewChild("searchBar", { static: true })
@@ -25,7 +26,8 @@ export class SearchPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toast: ToastController,
-    private nav: NavController
+    private nav: NavController,
+    private i18n: I18nService
   ) {}
 
   async ngOnInit() {
@@ -53,7 +55,7 @@ export class SearchPage implements OnInit {
         this.page
       );
 
-      users = users.filter(u => !u.hide);
+      users = users.filter((u) => !u.hide);
 
       this.showSkeleton = false;
       this.users =
@@ -75,20 +77,20 @@ export class SearchPage implements OnInit {
 
   async hideProfile(id: User["id"]) {
     const users = this.users;
-    this.users = this.users.filter(u => u.id !== id);
+    this.users = this.users.filter((u) => u.id !== id);
 
     const toast = await this.toast.create({
-      message: "Has ocultado el usuario",
+      message: this.i18n.translate("user-hidden"),
       duration: 3000,
       position: "bottom",
       buttons: [
         {
-          text: "Deshacer",
+          text: this.i18n.translate("undo"),
           handler: () => {
             this.users = users;
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     toast.present();
 

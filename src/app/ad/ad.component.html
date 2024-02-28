@@ -5,7 +5,7 @@
         <ion-chip (click)="close()">
           <ion-label>
             <ng-container *ngIf="!adViewed; else closeLabel"
-              >Recompensa en {{ counter }}</ng-container
+              >{{ "reward" | i18n }} {{ counter }}</ng-container
             >
             <ng-template #closeLabel>{{ "cerrar" | i18n }}</ng-template>
           </ion-label>

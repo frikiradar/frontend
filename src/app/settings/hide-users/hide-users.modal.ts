@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ModalController, ToastController } from "@ionic/angular";
 import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "hide-users-modal",
@@ -14,7 +15,8 @@ export class HideUsersModal implements OnInit {
   constructor(
     private modalController: ModalController,
     private userSvc: UserService,
-    private toast: ToastController
+    private toast: ToastController,
+    private i18n: I18nService
   ) {}
 
   async ngOnInit() {
@@ -25,7 +27,7 @@ export class HideUsersModal implements OnInit {
     this.users = await this.userSvc.unhide(user.id);
     (
       await this.toast.create({
-        message: "Usuario desocultado correctamente",
+        message: this.i18n.translate("user-unhidden-successfully"),
         duration: 2000,
         position: "bottom",
       })

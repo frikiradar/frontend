@@ -2,10 +2,15 @@ import { Injectable } from "@angular/core";
 import { SwUpdate } from "@angular/service-worker";
 import { ToastController } from "@ionic/angular";
 import { tap } from "rxjs";
+import { I18nService } from "./i18n.service";
 
 @Injectable({ providedIn: "root" })
 export class SwService {
-  constructor(private swUpdate: SwUpdate, private toast: ToastController) {}
+  constructor(
+    private swUpdate: SwUpdate,
+    private toast: ToastController,
+    private i18n: I18nService
+  ) {}
 
   async init() {
     if (!this.swUpdate.isEnabled) {
@@ -16,10 +21,10 @@ export class SwService {
         tap(async (update) => {
           if (update.type === "VERSION_DETECTED") {
             const toast = await this.toast.create({
-              message: "¡Nueva actualización disponible!",
+              message: this.i18n.translate("new-update-available"),
               buttons: [
                 {
-                  text: "Instalar",
+                  text: this.i18n.translate("install"),
                   handler: () => {
                     window.location.reload();
                   },

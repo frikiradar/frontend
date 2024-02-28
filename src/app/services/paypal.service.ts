@@ -9,6 +9,7 @@ import { Payment } from "../models/payment";
 import { UrlService } from "./url.service";
 import { LoadingController } from "@ionic/angular";
 import { UserService } from "./user.service";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -22,7 +23,8 @@ export class PaypalService {
     private utils: UtilsService,
     private payment: PaymentService,
     private loading: LoadingController,
-    private userSvc: UserService
+    private userSvc: UserService,
+    private i18n: I18nService
   ) {}
 
   async init() {
@@ -106,8 +108,7 @@ export class PaypalService {
   async purchaseProduct(product: Product) {
     const loading = await this.loading.create({
       translucent: true,
-      message:
-        "Continúa el proceso de pago en la página de PayPal. Regresa aquí cuando hayas terminado.",
+      message: this.i18n.translate("continue-payment-process"),
     });
 
     try {

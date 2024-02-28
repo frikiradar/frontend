@@ -160,10 +160,9 @@ export class LoginPage {
         error.toString().includes("12501")
       ) {
         const alert = await this.alert.create({
-          header: "Error de inicio con Google",
-          message:
-            "El inicio de sesión con Google ha fallado, por favor inicia sesión con email.",
-          buttons: ["Oki doki"],
+          header: this.i18n.translate("google-sign-in-error"),
+          message: this.i18n.translate("google-sign-in-failed"),
+          buttons: [this.i18n.translate("oki-doki")],
           cssClass: "round-alert",
         });
 
@@ -195,35 +194,32 @@ export class LoginPage {
     let header = "";
     if (message.includes("Invalid credentials.")) {
       this.showRegister();
-      header = "Error de autenticación";
-      message =
-        "El nombre/email o contraseña que has introducido no son correctos.";
+      header = this.i18n.translate("authentication-error");
+      message = this.i18n.translate("incorrect-username-or-password");
     } else if (message.includes("Banned account.")) {
-      header = "¡Estás baneado!";
+      header = this.i18n.translate("you-are-banned");
       const data = JSON.parse(message);
       const date = data.end?.date;
 
       message =
-        "Motivo: " +
+        this.i18n.translate("reason") +
         data.reason +
         "." +
         "<br />" +
-        "Fin del baneo: " +
-        (date ? date.split(" ")[0] : "Indefinido");
+        this.i18n.translate("end-of-ban") +
+        (date ? date.split(" ")[0] : this.i18n.translate("indefinite"));
     } else if (message === "Internal Server Error" || message === "OK") {
-      header = "Error del sistema";
-      message =
-        "Escríbenos a hola@frikiradar si te aparece este error para que lo revisemos.";
+      header = this.i18n.translate("system-error");
+      message = this.i18n.translate("write-us-error");
     } else {
-      header = "Error desconocido";
-      message =
-        "Escríbenos a hola@frikiradar si te aparece este error para que lo revisemos.";
+      header = this.i18n.translate("unknown-error");
+      message = this.i18n.translate("write-us-error");
     }
 
     const alert = await this.alert.create({
       header,
       message,
-      buttons: ["Oki doki"],
+      buttons: [this.i18n.translate("oki-doki")],
       cssClass: "round-alert",
     });
 

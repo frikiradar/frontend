@@ -8,7 +8,7 @@
         <ion-label>
           <h2>
             {{ story.user.id !== auth.currentUserValue.id ? story.user?.username
-            : 'Mi historia' }}
+            : ('Mi historia' | i18n) }}
           </h2>
           <p>{{(story?.time_creation | niceDate)}}</p>
         </ion-label>
@@ -104,7 +104,8 @@
                 (click)="$event.stopImmediatePropagation(); showCommentsSheet($event)"
               >
                 <ion-label
-                  >Ver los {{story?.comments.length}} comentarios</ion-label
+                  >{{ "view-comments" | i18n: {comments: story?.comments.length}
+                  }}</ion-label
                 >
               </ion-item>
             </ion-list>

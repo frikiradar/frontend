@@ -26,6 +26,7 @@ import { UtilsService } from "./../services/utils.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
 import { Haptics } from "@capacitor/haptics";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "app-edit-profile",
@@ -88,7 +89,8 @@ export class EditProfilePage {
     private toast: ToastController,
     private nav: NavService,
     private modalController: ModalController,
-    private config: ConfigService
+    private config: ConfigService,
+    private i18n: I18nService
   ) {
     this.profileForm = this.fb.group({
       name: [""],
@@ -204,7 +206,7 @@ export class EditProfilePage {
 
       (
         await this.toast.create({
-          message: "Cambios guardados correctamente.",
+          message: this.i18n.translate("changes-saved-successfully"),
           duration: 5000,
           position: "middle",
         })
@@ -212,7 +214,7 @@ export class EditProfilePage {
     } catch (e) {
       (
         await this.toast.create({
-          message: `Error al guardar los cambios ${e}.`,
+          message: this.i18n.translate("error-saving-changes") + e,
           duration: 5000,
           color: "danger",
           position: "middle",
@@ -300,7 +302,7 @@ export class EditProfilePage {
         } catch (e) {
           (
             await this.toast.create({
-              message: `Error al añadir la etiqueta ${t.name}.`,
+              message: this.i18n.translate("error-adding-tag") + t.name,
               color: "danger",
               duration: 5000,
               position: "middle",
@@ -328,7 +330,7 @@ export class EditProfilePage {
     } catch (e) {
       (
         await this.toast.create({
-          message: `Error al eliminar la etiqueta.`,
+          message: this.i18n.translate("error-removing-tag"),
           color: "danger",
           duration: 5000,
           position: "middle",
@@ -410,7 +412,7 @@ export class EditProfilePage {
 
       (
         await this.toast.create({
-          message: `Imagen actualizada correctamente.`,
+          message: this.i18n.translate("image-updated-successfully"),
           duration: 5000,
           position: "middle",
         })
@@ -418,7 +420,7 @@ export class EditProfilePage {
     } catch (e) {
       (
         await this.toast.create({
-          message: `Error al actualizar la imagen.`,
+          message: this.i18n.translate("error-updating-image"),
           duration: 5000,
           position: "middle",
         })

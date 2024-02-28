@@ -92,11 +92,11 @@ export class SettingsPage implements OnInit {
     });
 
     const alert = await this.alert.create({
-      header: "Eliminado correctamente",
-      message: "Datos de configuración local y cache eliminados.",
+      header: this.i18n.translate("successfully-deleted"),
+      message: this.i18n.translate("local-settings-and-cache-deleted"),
       buttons: [
         {
-          text: "¡Ok!",
+          text: this.i18n.translate("okay"),
           handler: () => {
             window.location.reload();
           },
@@ -160,9 +160,9 @@ export class SettingsPage implements OnInit {
       this.user = await this.userSvc.updateUser(this.user);
     } catch (e) {
       const alert = await this.alert.create({
-        header: "Error al guardar los cambios",
-        message: "Vuelve a intentarlo transcurridos unos minutos.",
-        buttons: ["¡Ok!"],
+        header: this.i18n.translate("error-saving-changes"),
+        message: this.i18n.translate("try-again-in-a-few-minutes"),
+        buttons: [this.i18n.translate("okay")],
         cssClass: "round-alert",
       });
 
@@ -184,11 +184,13 @@ export class SettingsPage implements OnInit {
       this.utils.toggleTheme(theme);
     } else {
       const alert = await this.alert.create({
-        header: "Tema exclusivo para miembros de frikiradar UNLIMITED",
-        message: "Únete a frikiradar UNLIMITED y accede a ventajas exclusivas.",
+        header: this.i18n.translate("exclusive-theme-for-unlimited-members"),
+        message: this.i18n.translate(
+          "join-unlimited-and-get-exclusive-advantages"
+        ),
         buttons: [
           {
-            text: "¡Quiero informarme!",
+            text: this.i18n.translate("i-want-to-know-more"),
             handler: () => {
               this.premium();
             },
@@ -209,9 +211,9 @@ export class SettingsPage implements OnInit {
       this.cd.detectChanges();
     } catch (e) {
       const alert = await this.alert.create({
-        header: "Error al guardar los cambios",
-        message: "Vuelve a intentarlo transcurridos unos minutos.",
-        buttons: ["¡Ok!"],
+        header: this.i18n.translate("error-saving-changes"),
+        message: this.i18n.translate("try-again-in-a-few-minutes"),
+        buttons: [this.i18n.translate("okay")],
         cssClass: "round-alert",
       });
 

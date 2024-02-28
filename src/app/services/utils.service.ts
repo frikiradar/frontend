@@ -22,6 +22,7 @@ import { AuthService } from "./auth.service";
 import { Config, ConfigService } from "./config.service";
 import { NavigationBar } from "@mauricewegner/capacitor-navigation-bar";
 import { SafeAreaController } from "@aashu-dubey/capacitor-statusbar-safe-area";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -33,7 +34,8 @@ export class UtilsService {
     private auth: AuthService,
     private modalController: ModalController,
     private toast: ToastController,
-    private config: ConfigService
+    private config: ConfigService,
+    private i18n: I18nService
   ) {}
 
   async takePicture(
@@ -200,9 +202,9 @@ export class UtilsService {
 
   async test() {
     const alert = await this.alert.create({
-      header: "Función aún no disponible",
-      message: "Esta acción se encuentra aún en desarrollo.",
-      buttons: ["Gracias por avisar"],
+      header: this.i18n.translate("function-not-yet-available"),
+      message: this.i18n.translate("action-in-development"),
+      buttons: [this.i18n.translate("thanks-for-warning")],
       cssClass: "round-alert",
     });
 
@@ -215,8 +217,7 @@ export class UtilsService {
     }
 
     if (!message) {
-      message =
-        "Conoce a personas con tus mismos gustos con frikiradar, la app de citas para frikis";
+      message = this.i18n.translate("meet-people-with-same-tastes");
     }
 
     const referrer = this.auth.currentUserValue
@@ -227,16 +228,16 @@ export class UtilsService {
 
     if (isPlatform("hybrid")) {
       const options = {
-        title: "Compartir",
+        title: this.i18n.translate("share"),
         text: message, // not supported on some apps (Facebook, Instagram)
         url: `${url}?referrer=${referrer}`,
-        dialogTitle: "Elige una app y ayúdanos a seguir creciendo", // Android only, you can override the default share sheet title,
+        dialogTitle: this.i18n.translate("choose-app-and-help-us-grow"), // Android only, you can override the default share sheet title,
       };
 
       await Share.share(options);
     } else if (window.navigator && window.navigator["share"]) {
       window.navigator["share"]({
-        title: "frikiradar, conoce a personas frikis como tú",
+        title: this.i18n.translate("frikiradar-meet-geek-people-like-you"),
         text: message,
         url: `${url}?referrer=${referrer}`,
       })
@@ -252,7 +253,7 @@ export class UtilsService {
         });
         (
           await this.toast.create({
-            message: "Link copiado al portapapeles",
+            message: this.i18n.translate("link-copied-to-clipboard"),
             duration: 2000,
             position: "middle",
           })
@@ -260,7 +261,7 @@ export class UtilsService {
       } catch (e) {
         (
           await this.toast.create({
-            message: "Error al copiar el link",
+            message: this.i18n.translate("error-copying-link"),
             duration: 2000,
             position: "middle",
           })
@@ -283,14 +284,25 @@ export class UtilsService {
 
     return (
       (daydiff === 0 &&
-        ((diff < 300 && "ahora mismo") ||
-          (diff < 3600 && "hace " + Math.floor(diff / 60) + " minutos") ||
-          (diff < 7200 && "hace 1 hora") ||
-          (diff < 86400 && "hace " + Math.floor(diff / 3600) + " horas"))) ||
-      (daydiff === 1 && "ayer a las " + hours + ":" + minutes) ||
-      (daydiff < 14 && "hace " + daydiff + " días") ||
-      (daydiff < 30 && "hace " + Math.ceil(daydiff / 7) + " semanas") ||
-      (daydiff < 60 && "hace 1 mes")
+        ((diff < 300 && this.i18n.translate("just-now")) ||
+          (diff < 3600 &&
+            this.i18n.translate("minutes-ago", {
+              minutes: Math.floor(diff / 60).toString(),
+            })) ||
+          (diff < 7200 && this.i18n.translate("an-hour-ago")) ||
+          (diff < 86400 &&
+            this.i18n.translate("hours-ago", {
+              hours: Math.floor(diff / 3600).toString(),
+            })))) ||
+      (daydiff === 1 &&
+        this.i18n.translate("yesterday-at", { time: hours + ":" + minutes })) ||
+      (daydiff < 14 &&
+        this.i18n.translate("days-ago", { days: daydiff.toString() })) ||
+      (daydiff < 30 &&
+        this.i18n.translate("weeks-ago", {
+          weeks: Math.ceil(daydiff / 7).toString(),
+        })) ||
+      (daydiff < 60 && this.i18n.translate("a-month-ago"))
     );
   }
 

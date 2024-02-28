@@ -18,13 +18,13 @@
           <p>
             <ion-badge
               color="secondary"
-              *ngIf="(user?.last_login | niceDate) === 'Ahora mismo'"
+              *ngIf="(user?.last_login | niceDate) === ('just-now' | i18n)"
               >&nbsp;</ion-badge
             >{{
               toUserWriting
                 ? toUserWriting
-                : (user?.last_login | niceDate) === "Ahora mismo"
-                ? "En línea"
+                : (user?.last_login | niceDate) === ("just-now" | i18n)
+                ? "Online"
                 : (user?.last_login | niceDate)
             }}
           </p>
@@ -370,9 +370,12 @@
                   (click)="$event.stopImmediatePropagation(); openUrl($event)"
                 ></ion-text>
                 <ion-text *ngIf="message.audio && !message.text">
-                  🎤 Mensaje de audio de {{ message.fromuser.name }}
+                  🎤 {{ "audio-message-from" | i18n }}
+                  {{ message.fromuser.name }}
                 </ion-text>
-                <span class="edited" *ngIf="message?.edited"> {{ "-editado" | i18n }}</span>
+                <span class="edited" *ngIf="message?.edited">
+                  · {{ "editado" | i18n }}</span
+                >
                 <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                   <ion-icon *ngIf="message.sending" name="time"></ion-icon>
                   <ion-icon

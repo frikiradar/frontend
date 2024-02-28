@@ -13,6 +13,7 @@ import { AdminService } from "../services/admin.service";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "options-popover",
@@ -32,7 +33,8 @@ export class OptionsPopover {
     private alert: AlertController,
     private toast: ToastController,
     private admin: AdminService,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private i18n: I18nService
   ) {}
 
   close() {
@@ -49,24 +51,24 @@ export class OptionsPopover {
 
   async report(user: User) {
     const alert = await this.alert.create({
-      header: `¿Quieres reportar a ${user.username}?`,
-      message:
-        "Nos llegará un aviso para que revisemos el caso y actuemos en consecuencia. Describe a continuación el motivo del reporte.",
+      header:
+        this.i18n.translate("do-you-want-to-report") + user.username + "?",
+      message: this.i18n.translate("report-description"),
       inputs: [
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del reporte",
+          placeholder: this.i18n.translate("report-reason"),
         },
       ],
       buttons: [
         {
-          text: "Cancelar",
+          text: this.i18n.translate("cancel"),
           role: "cancel",
           cssClass: "secondary",
         },
         {
-          text: "Reportar",
+          text: this.i18n.translate("report"),
           role: "block",
           handler: async (data) => {
             if (data.note.trim().length) {
@@ -74,7 +76,7 @@ export class OptionsPopover {
                 await this.userSvc.report(user.id, data.note);
                 (
                   await this.toast.create({
-                    message: "Usuario reportado correctamente",
+                    message: this.i18n.translate("user-reported-successfully"),
                     duration: 2000,
                     position: "bottom",
                   })
@@ -82,7 +84,7 @@ export class OptionsPopover {
               } catch (e) {
                 (
                   await this.toast.create({
-                    message: `Error al reportar al usuario ${e}`,
+                    message: this.i18n.translate("error-reporting-user") + e,
                     duration: 2000,
                     position: "bottom",
                     color: "danger",
@@ -93,7 +95,9 @@ export class OptionsPopover {
             } else {
               (
                 await this.toast.create({
-                  message: `El mensaje de reporte no puede estar en blanco`,
+                  message: this.i18n.translate(
+                    "report-message-cannot-be-blank"
+                  ),
                   duration: 2000,
                   position: "middle",
                   color: "danger",
@@ -114,31 +118,30 @@ export class OptionsPopover {
 
   async block(user: User) {
     const alert = await this.alert.create({
-      header: `¿Quieres bloquear a ${user.username}?`,
-      message:
-        "Ya no podrá volver a verte, escribirte o interactuar contigo en frikiradar a menos que lo desbloquees. Si lo deseas puedes indicarnos el motivo del bloqueo.",
+      header: this.i18n.translate("do-you-want-to-block") + user.username + "?",
+      message: this.i18n.translate("block-description"),
       inputs: [
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del bloqueo (opcional)",
+          placeholder: this.i18n.translate("block-reason"),
         },
       ],
       buttons: [
         {
-          text: "Cancelar",
+          text: this.i18n.translate("cancel"),
           role: "cancel",
           cssClass: "secondary",
         },
         {
-          text: "Bloquear",
+          text: this.i18n.translate("block"),
           role: "block",
           handler: async (data) => {
             try {
               await this.userSvc.block(user.id, data.note);
               (
                 await this.toast.create({
-                  message: "Usuario bloqueado correctamente",
+                  message: this.i18n.translate("user-blocked-successfully"),
                   duration: 2000,
                   position: "bottom",
                 })
@@ -147,7 +150,7 @@ export class OptionsPopover {
             } catch (e) {
               (
                 await this.toast.create({
-                  message: `Error al bloquear al usuario ${e}`,
+                  message: this.i18n.translate("error-blocking-user") + e,
                   duration: 2000,
                   position: "bottom",
                 })
@@ -177,7 +180,7 @@ export class OptionsPopover {
 
       (
         await this.toast.create({
-          message: "URL copiada correctamente",
+          message: this.i18n.translate("url-copied-successfully"),
           duration: 2000,
           position: "middle",
         })
@@ -185,7 +188,7 @@ export class OptionsPopover {
     } catch (e) {
       (
         await this.toast.create({
-          message: "Error al copiar la URL",
+          message: this.i18n.translate("error-copying-url"),
           duration: 2000,
           position: "middle",
         })
@@ -205,31 +208,30 @@ export class OptionsPopover {
 
   async warn(user: User) {
     const alert = await this.alert.create({
-      header: `¿Quieres enviar una advertencia a ${user.username}?`,
-      message:
-        "Se enviará un mensaje al usuario desde la cuenta de frikiradar advirtiéndole de su falta.",
+      header: this.i18n.translate("do-you-want-to-warn") + user.username + "?",
+      message: this.i18n.translate("warn-description"),
       inputs: [
         {
           name: "note",
           type: "text",
-          placeholder: "Mensaje del moderador",
+          placeholder: this.i18n.translate("moderator-message"),
         },
       ],
       buttons: [
         {
-          text: "Cancelar",
+          text: this.i18n.translate("cancel"),
           role: "cancel",
           cssClass: "secondary",
         },
         {
-          text: "Enviar advertencia",
+          text: this.i18n.translate("send-warning"),
           role: "warn",
           handler: async (data) => {
             try {
               await this.admin.warn(user.id, data.note);
               (
                 await this.toast.create({
-                  message: "Usuario avisado correctamente",
+                  message: this.i18n.translate("user-warned-successfully"),
                   duration: 2000,
                   position: "middle",
                 })
@@ -237,7 +239,7 @@ export class OptionsPopover {
             } catch (e) {
               (
                 await this.toast.create({
-                  message: `Error al avisar al usuario ${e}`,
+                  message: this.i18n.translate("error-warning-user") + e,
                   duration: 2000,
                   position: "middle",
                 })
@@ -256,14 +258,13 @@ export class OptionsPopover {
 
   async ban(user: User) {
     const alert = await this.alert.create({
-      header: `¿Quieres banear al usuario ${user.username}?`,
-      message:
-        "Indícale al usuario el motivo por el cual le baneas. Añade el tiempo (días/horas) si el baneo es temporal o déjalo en blanco si es indefinido.",
+      header: this.i18n.translate("do-you-want-to-ban") + user.username + "?",
+      message: this.i18n.translate("ban-description"),
       inputs: [
         {
           name: "note",
           type: "text",
-          placeholder: "Motivo del baneo",
+          placeholder: this.i18n.translate("ban-reason"),
         },
         {
           name: "hours",
@@ -272,29 +273,29 @@ export class OptionsPopover {
             min: 0,
             max: 24,
           },
-          placeholder: "Horas",
+          placeholder: this.i18n.translate("hours"),
         },
         {
           name: "days",
           type: "number",
-          placeholder: "Dias",
+          placeholder: this.i18n.translate("days"),
         },
       ],
       buttons: [
         {
-          text: "Cancelar",
+          text: this.i18n.translate("cancel"),
           role: "cancel",
           cssClass: "secondary",
         },
         {
-          text: "Banear al usuario",
+          text: this.i18n.translate("ban-user"),
           role: "ban",
           handler: async (data) => {
             try {
               await this.admin.ban(user.id, data.note, data.days, data.hours);
               (
                 await this.toast.create({
-                  message: "Usuario baneado correctamente",
+                  message: this.i18n.translate("user-banned-successfully"),
                   duration: 2000,
                   position: "middle",
                 })
@@ -302,7 +303,7 @@ export class OptionsPopover {
             } catch (e) {
               (
                 await this.toast.create({
-                  message: `Error al banear al usuario ${e}`,
+                  message: this.i18n.translate("error-banning-user") + e,
                   duration: 2000,
                   position: "middle",
                 })

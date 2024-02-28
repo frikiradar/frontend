@@ -14,6 +14,7 @@ import { Product } from "../models/product";
 import { RevenuecatService } from "../services/revenuecat.service";
 import { PaymentService } from "../services/payment.service";
 import { Payment } from "../models/payment";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "unlimited-modal",
@@ -39,7 +40,8 @@ export class UnlimitedModal {
     private paymentSvc: PaymentService,
     public detectorRef: ChangeDetectorRef,
     private nav: NavService,
-    private alert: AlertController
+    private alert: AlertController,
+    private i18n: I18nService
   ) {
     this.user = this.auth.currentUserValue;
   }
@@ -47,7 +49,7 @@ export class UnlimitedModal {
   async ionViewDidEnter() {
     const loading = await this.loading.create({
       translucent: true,
-      message: "Cargando",
+      message: this.i18n.translate("loading"),
     });
 
     await loading.present();
@@ -80,11 +82,11 @@ export class UnlimitedModal {
     try {
       await this.storeSvc.purchaseProduct(this.product);
       const alert = await this.alert.create({
-        header: "¡Enhorabuena!",
-        message: `Has activado tu suscripción a frikiradar UNLIMITED. Muchas gracias por confiar en frikiradar, esperamos que disfrutes de todas los beneficios obtenidos.`,
+        header: this.i18n.translate("congratulations"),
+        message: this.i18n.translate("you-have-activated-your-subscription"),
         buttons: [
           {
-            text: "¡Muchas gracias!",
+            text: this.i18n.translate("thank-you-very-much"),
             handler: () => {
               this.close(true);
               window.location.reload();

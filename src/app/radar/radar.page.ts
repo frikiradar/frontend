@@ -29,6 +29,7 @@ import { NavService } from "../services/navigation.service";
 import { AdService } from "../services/ad.service";
 import { Ad } from "../models/ad";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "app-radar",
@@ -112,7 +113,8 @@ export class RadarPage {
     private nav: NavService,
     private ngZone: NgZone,
     private adService: AdService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private i18n: I18nService
   ) {
     this.notificationSvc.notification.subscribe((notification) => {
       this.counters = notification;
@@ -186,10 +188,9 @@ export class RadarPage {
       } else {
         this.alert
           .create({
-            header: "¡Muy bien!",
-            message:
-              "Así es como se entra al perfil de una persona. ¡Sigue deslizando y que comience la diversión!",
-            buttons: ["¡Vamos!"],
+            header: this.i18n.translate("well-done"),
+            message: this.i18n.translate("how-to-enter-profile"),
+            buttons: [this.i18n.translate("lets-go")],
             cssClass: "round-alert",
           })
           .then((alert) => alert.present());
@@ -497,11 +498,14 @@ export class RadarPage {
 
       let message = "";
       if (this.ratio === 50) {
-        message = "Buscando personas cercanas";
+        message = this.i18n.translate("searching-people-nearby");
       } else if (this.ratio === 25000) {
-        message = "Buscando personas mundialmente";
+        message = this.i18n.translate("searching-people-worldwide");
       } else {
-        message = "Buscando personas a " + this.ratio + "km";
+        message =
+          this.i18n.translate("searching-people-at") +
+          this.ratio +
+          this.i18n.translate("km");
       }
 
       (
@@ -529,12 +533,12 @@ export class RadarPage {
       this.users = this.users.filter((u) => u.id !== id);
 
       const toast = await this.toast.create({
-        message: "Has ocultado el usuario",
+        message: this.i18n.translate("user-hidden"),
         duration: 3000,
         position: "bottom",
         buttons: [
           {
-            text: "Deshacer",
+            text: this.i18n.translate("undo"),
             handler: () => {
               this.users = users;
             },
@@ -634,12 +638,11 @@ export class RadarPage {
 
     if (!radarAdv) {
       const alert = await this.alert.create({
-        header: "¿Pocas personas cerca tuya?",
-        message:
-          "¡Ayúdanos a crecer participando en nuestro nuevo programa 'Recluta y gana', compartiendo con tus amigas y amigos!",
+        header: this.i18n.translate("few-people-nearby"),
+        message: this.i18n.translate("help-us-grow"),
         buttons: [
           {
-            text: "¡Quiero informarme!",
+            text: this.i18n.translate("i-want-to-know-more"),
             handler: async () => {
               this.nav.navigateRoot("/recruit");
             },

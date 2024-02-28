@@ -20,7 +20,6 @@ import { AdService } from "./services/ad.service";
 
 import { StoreService } from "./services/store.service";
 import { GoogleAuthService } from "./services/google-auth.service";
-import { environment } from "src/environments/environment";
 import { I18nService } from "./services/i18n.service";
 
 @Component({
@@ -44,13 +43,12 @@ export class AppComponent {
     private adService: AdService,
     private store: StoreService,
     private googleAuth: GoogleAuthService,
-    private i18nService: I18nService
-  ) {
-    this.initializeApp();
-  }
+    private i18n: I18nService
+  ) {}
 
   async ngAfterViewInit() {
-    await this.i18nService.init();
+    await this.i18n.init();
+    this.initializeApp();
   }
 
   async initializeApp() {
@@ -84,7 +82,7 @@ export class AppComponent {
     if (!network.connected) {
       (
         await this.toast.create({
-          message: "No tienes conexión a internet",
+          message: this.i18n.translate("no-internet-connection"),
           duration: 5000,
           position: "bottom",
           color: "danger",
@@ -98,7 +96,7 @@ export class AppComponent {
         if (!this.internet) {
           (
             await this.toast.create({
-              message: "¡Conexión a internet restablecida!",
+              message: this.i18n.translate("internet-connection-restored"),
               duration: 2000,
               position: "bottom",
               color: "success",
@@ -109,7 +107,7 @@ export class AppComponent {
       } else {
         (
           await this.toast.create({
-            message: "¡Te has quedado sin internet!",
+            message: this.i18n.translate("internet-connection-lost"),
             duration: 5000,
             position: "bottom",
             color: "danger",
@@ -133,12 +131,11 @@ export class AppComponent {
 
     if (openTimes == 7) {
       const alert = await this.alert.create({
-        header: "¡Recluta y gana!",
-        message:
-          "Recluta a tus amigos y conseguirás meses de frikiradar UNLIMITED gratis. ¡Infórmate!",
+        header: this.i18n.translate("recruit-and-win"),
+        message: this.i18n.translate("recruit-friends-message"),
         buttons: [
           {
-            text: "¡Quiero informarme!",
+            text: this.i18n.translate("i-want-to-know"),
             handler: async () => {
               this.nav.navigateRoot("/recruit");
             },
@@ -150,13 +147,12 @@ export class AppComponent {
       await alert.present();
     } else if (openTimes >= 3 && !config.review && isPlatform("capacitor")) {
       const alert = await this.alert.create({
-        header: "¡Únete a la batalla!",
-        message:
-          "¿Qué te parece frikiradar? Déjanos tu valoración de 5 estrellas y una sugerencia para que cada vez más personas formen parte de esta gran comunidad.",
+        header: this.i18n.translate("join-the-battle"),
+        message: this.i18n.translate("rate-frikiradar-message"),
         backdropDismiss: false,
         buttons: [
           {
-            text: "Sí, ¡cuenta conmigo! 🏹",
+            text: this.i18n.translate("yes-count-on-me"),
             handler: () => {
               config.review = true;
               this.config.setConfig(config);
@@ -164,10 +160,10 @@ export class AppComponent {
             },
           },
           {
-            text: "La próxima vez mejor 🙏",
+            text: this.i18n.translate("next-time-better"),
           },
           {
-            text: "Mmm, mejor no 🙈",
+            text: this.i18n.translate("better-not"),
             handler: () => {
               config.review = true;
               this.config.setConfig(config);
@@ -183,12 +179,11 @@ export class AppComponent {
 
   async betaAdvertisement() {
     const alert = await this.alert.create({
-      header: "¡Con tu ayuda seguiremos creciendo!",
-      message:
-        "frikiradar acaba de comenzar su andadura y aún le queda un largo camino por delante. Por eso agradecemos tu ayuda dando a conocer frikiradar y compartiendo con tus amigos.",
+      header: this.i18n.translate("with-your-help-we-grow"),
+      message: this.i18n.translate("frikiradar-start-journey-message"),
       buttons: [
         {
-          text: "¡Compartir!",
+          text: this.i18n.translate("share"),
           handler: () => {
             this.utils.share();
           },
@@ -202,13 +197,12 @@ export class AppComponent {
 
   async loadConfig() {
     const maintenanceAlert = await this.alert.create({
-      header: "En mantenimiento",
-      message:
-        "😅 Ups... Estamos haciendo ajustes en nuestros servidores. Por favor, regresa en unos minutos. No te preocupes, todo continuará tal y como estaba.",
+      header: this.i18n.translate("in-maintenance"),
+      message: this.i18n.translate("maintenance-message"),
       backdropDismiss: false,
       buttons: [
         {
-          text: "Oki doki",
+          text: this.i18n.translate("oki-doki"),
           handler: () => {
             if (isPlatform("capacitor")) {
               navigator["app"].exitApp();
@@ -238,26 +232,19 @@ export class AppComponent {
             result.updateAvailability === AppUpdateAvailability.UPDATE_AVAILABLE
           ) {
             const versionAlert = await this.alert.create({
-              header: "Versión obsoleta",
-              message:
-                "La versión de frikiradar que tienes instalada no soporta las últimas funcionalidades. Es necesario actualizar la app para seguir utilizándola.",
+              header: this.i18n.translate("obsolete-version"),
+              message: this.i18n.translate("obsolete-version-message"),
               backdropDismiss: false,
               buttons: [
                 {
-                  text: "ACTUALIZAR",
+                  text: this.i18n.translate("update"),
                   handler: async () => {
                     if (isPlatform("android")) {
-                      /*this.urlSvc.openUrl(
-                        "market://details?id=com.frikiradar.app"
-                      );*/
                       if (result.immediateUpdateAllowed) {
                         await AppUpdate.performImmediateUpdate();
                       }
                     }
                     if (isPlatform("ios")) {
-                      /*this.urlSvc.openUrl(
-                        "https://apps.apple.com/es/app/frikiradar/id1477838835"
-                      );*/
                       await AppUpdate.openAppStore();
                     }
                   },
