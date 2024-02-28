@@ -45,7 +45,8 @@ export class AuthService {
     meet: string,
     referral: string,
     provider?: string,
-    credential?: any
+    credential?: any,
+    language?: string
   ) {
     try {
       return await firstValueFrom(
@@ -62,6 +63,7 @@ export class AuthService {
             referral,
             provider,
             credential,
+            language,
           },
           httpOptions
         )

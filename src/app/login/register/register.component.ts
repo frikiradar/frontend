@@ -16,6 +16,8 @@ import { UrlService } from "src/app/services/url.service";
 import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
+import { I18nService } from "src/app/services/i18n.service";
+import { Config, ConfigService } from "src/app/services/config.service";
 
 @Component({
   selector: "app-register",
@@ -46,7 +48,8 @@ export class RegisterComponent {
     public userSvc: UserService,
     private ngZone: NgZone,
     public platform: Platform,
-    public urlSvc: UrlService
+    public urlSvc: UrlService,
+    private config: ConfigService
   ) {
     this.registerForm = fb.group({
       username: new UntypedFormControl("", [
@@ -155,6 +158,10 @@ export class RegisterComponent {
               }
 
               try {
+                const language = (await this.config.get(
+                  "language"
+                )) as Config["language"];
+
                 await this.auth.register(
                   this.username,
                   this.email,
@@ -165,7 +172,8 @@ export class RegisterComponent {
                   this.registerForm.get("meet").value,
                   this.registerForm.get("referral").value,
                   this.provider,
-                  this.credential
+                  this.credential,
+                  language
                 );
 
                 let user: User;

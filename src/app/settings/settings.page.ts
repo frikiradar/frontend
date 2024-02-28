@@ -200,8 +200,21 @@ export class SettingsPage implements OnInit {
     }
   }
 
-  changeLanguage(value: "es" | "en") {
-    this.i18n.changeLanguage(value);
+  async changeLanguage(value: "es" | "en") {
+    try {
+      this.user.language = value;
+      this.user = await this.userSvc.updateUser(this.user);
+      this.i18n.changeLanguage(value);
+    } catch (e) {
+      const alert = await this.alert.create({
+        header: "Error al guardar los cambios",
+        message: "Vuelve a intentarlo transcurridos unos minutos.",
+        buttons: ["¡Ok!"],
+        cssClass: "round-alert",
+      });
+
+      alert.present();
+    }
   }
 
   back() {

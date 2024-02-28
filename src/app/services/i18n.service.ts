@@ -50,11 +50,6 @@ export class I18nService {
     }
   }
 
-  async setLanguage(language: string) {
-    const user = (await this.rest.put("language-config", { language })) as User;
-    this.auth.setAuthUser(user);
-  }
-
   changeLanguage(language: string) {
     this.config.set("language", language);
     this.texts = language === "es" ? es : en;
