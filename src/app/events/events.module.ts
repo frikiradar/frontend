@@ -1,20 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { EventsPageRoutingModule } from './events-routing.module';
+import { EventsPageRoutingModule } from "./events-routing.module";
 
-import { EventsPage } from './events.page';
+import { EventsPage } from "./events.page";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EventsPageRoutingModule
+    EventsPageRoutingModule,
+    SharedModule,
   ],
-  declarations: [EventsPage]
+  declarations: [EventsPage],
 })
 export class EventsPageModule {}

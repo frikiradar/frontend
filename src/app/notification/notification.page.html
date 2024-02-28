@@ -5,7 +5,7 @@
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Notificaciones</ion-title>
+    <ion-title>{{ "notificaciones" | i18n }}</ion-title>
     <ion-buttons slot="end">
       <ion-button
         (click)="readNotifications()"
@@ -73,8 +73,8 @@
   <ng-template #noNotifications>
     <div class="full-center ion-padding">
       <ion-icon name="notifications-off"></ion-icon>
-      <h2>Sin notificaciones</h2>
-      <p>No tienes ninguna notificación.</p>
+      <h2>{{ "sin-notificaciones" | i18n }}</h2>
+      <p>{{ "no-tienes-ninguna-notificacin" | i18n }}</p>
     </div>
   </ng-template>
 </ion-content>

@@ -5,67 +5,60 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Normas de la comunidad</ion-title>
+    <ion-title>{{ "normas-comunidad" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
   <p class="ion-text-center">
-    El incumplimiento de estas reglas conllevarán a la expulsión temporal o
-    permanente de la aplicación.
+    {{ "incumplimiento-estas-reglas-conllevarn-expulsin" | i18n }}
+    <ion-list>
+      <ion-item>
+        <ion-icon name="hand-right" slot="start" color="danger"></ion-icon>
+        <ion-label>
+          <p>
+            <strong>{{ "no-spam" | i18n }}</strong> {{
+            "frikiradar-est-diseado-para-conocer" | i18n }}
+            <strong>{{ "links-redes-sociales-estn-permitidos" | i18n }}</strong>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="fish" slot="start" color="tertiary"></ion-icon>
+        <ion-label>
+          <p>
+            <strong
+              >{{ "desnudos-imgenes-explcitas-con-contexto" | i18n }}</strong
+            >
+            {{ "envo-mediante-chat-publicacin-imgenes" | i18n }}
+            <strong>{{ "cuando-sean-propias" | i18n }}</strong> y
+            <strong>{{ "no-sea-actividad-principal-cuenta" | i18n }}</strong>{{
+            "" | i18n }}
+            <strong>{{"no-estn-permitidas-como-foto" | i18n}}</strong>
+            {{ "del-receptor-mediante-chat" | i18n }}
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="body" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <p>
+            <strong>{{ "respeto" | i18n }}</strong> {{ "esta-aplicacin" | i18n
+            }}
+            <strong>{{ "respetamos-todas-personas" | i18n }}</strong>
+            {{ "independientemente-su-nacionalidad-color-etnia" | i18n }}
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </p>
-  <ion-list>
-    <ion-item>
-      <ion-icon name="hand-right" slot="start" color="danger"></ion-icon>
-      <ion-label>
-        <p>
-          <strong>NO SPAM.</strong> frikiradar está diseñado para conocer a
-          personas a través de la propia plataforma. La actividad principal de
-          tu perfil, chat e historias es que las personas te conozcan mejor, no
-          enviarlas a sitios de terceros mediante links a redes sociales.
-          <strong
-            >Los links a redes sociales están permitidos siempre y cuando no
-            sean el objetivo principal de tu perfil</strong
-          >.
-        </p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="fish" slot="start" color="tertiary"></ion-icon>
-      <ion-label>
-        <p>
-          <strong>DESNUDOS O IMÁGENES EXPLÍCITAS CON CONTEXTO.</strong> El envío
-          mediante chat o publicación de imágenes explícitas o desnudos está
-          permitida siempre y <strong>cuando sean propias</strong> y
-          <strong>no sea la actividad principal de la cuenta</strong>.
-          <strong
-            >No están permitidas como foto de perfil ni el envío sin
-            consentimiento</strong
-          >
-          del receptor mediante chat.
-        </p>
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="body" slot="start" color="primary"></ion-icon>
-      <ion-label>
-        <p>
-          <strong>RESPETO.</strong> En esta aplicación
-          <strong>respetamos a todas las personas</strong> independientemente de
-          su nacionalidad, color, etnia, identidad sexual, identidad de género o
-          clase social. Si no te sientes agusto aquí mejor vete.
-        </p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-  <p class="ion-text-center">
-    En caso de dudas con alguna norma consulta con un moderador/administrador.
-  </p>
+
+  <p class="ion-text-center">{{ "caso-dudas-con-alguna-norma" | i18n }}</p>
   <div *ngIf="!accepted">
     <ion-button (click)="accept()" shape="round" expand="block" class="primary"
-      >He leído y acepto las normas
+      >{{ "he-ledo-acepto-normas" | i18n }}
     </ion-button>
     <p class="ion-text-center" id="forgot-password">
-      <a (click)="deny()">No estoy de acuerdo</a>
+      <a (click)="deny()">{{ "no-estoy-acuerdo" | i18n }}</a>
     </p>
   </div>
 </ion-content>

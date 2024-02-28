@@ -31,6 +31,7 @@ import { AuthService } from "./../services/auth.service";
 import { LikesModal } from "./likes-modal/likes.modal";
 import { AdService } from "../services/ad.service";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "app-profile",
@@ -51,6 +52,7 @@ export class ProfilePage {
   public param: "received" | "delivered";
   public slides: Swiper;
   public languages: string[];
+  public connections: string[];
 
   public sliderOpts: SwiperOptions = {
     keyboard: true,
@@ -75,7 +77,8 @@ export class ProfilePage {
     private meta: Meta,
     private title: Title,
     private nav: NavService,
-    private ad: AdService
+    private ad: AdService,
+    private i18n: I18nService
   ) {}
 
   async ngAfterViewInit() {
@@ -130,9 +133,15 @@ export class ProfilePage {
 
       if (this.user.languages) {
         const languages = this.userSvc.getLanguages();
-        this.languages = this.user.languages.map(
-          (l) => languages.find((l2) => l2.value === l).name
+        this.languages = this.user.languages.map((l) =>
+          this.i18n.translate(languages.find((l2) => l2.value === l).name)
         );
+      }
+
+      if (this.user.connection) {
+        this.connections = this.user.connection.map((c) => {
+          return this.i18n.translate(c);
+        });
       }
     } catch (e) {
       this.loading = false;

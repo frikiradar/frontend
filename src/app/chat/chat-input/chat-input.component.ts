@@ -24,6 +24,7 @@ import { AuthService } from "src/app/services/auth.service";
 import { UtilsService } from "src/app/services/utils.service";
 import { UserService } from "src/app/services/user.service";
 import { User } from "src/app/models/user";
+import { Config, ConfigService } from "src/app/services/config.service";
 
 @Component({
   selector: "app-chat-input",
@@ -58,6 +59,7 @@ export class ChatInputComponent {
   public audio: string;
   public audioPreview: SafeUrl;
   public isPictureSheetOpen = false;
+  public i18nEmojiMart = undefined;
 
   @Input() replying: boolean = false;
   @Input() editing = false;
@@ -79,7 +81,8 @@ export class ChatInputComponent {
     public auth: AuthService,
     public utils: UtilsService,
     private userSvc: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private config: ConfigService
   ) {
     this.chatForm = formBuilder.group({
       message: new UntypedFormControl("", [Validators.required]),
@@ -90,6 +93,50 @@ export class ChatInputComponent {
         this.emojis = false;
       });
     }
+  }
+
+  async ngOnInit() {
+    const language = (await this.config.get("language")) as Config["language"];
+    this.i18nEmojiMart =
+      language === "es"
+        ? {
+            search: "Busca el emoji perfecto",
+            emojilist: "Listado de emojis",
+            found: "Emoji no encontrado",
+            clear: "Borrar",
+            categories: {
+              search: "Resultados",
+              recent: "Más usados",
+              people: "Caras y personas",
+              nature: "Animales y naturaleza",
+              foods: "Comida y bebida",
+              activity: "Actividad",
+              places: "Viajes y lugares",
+              objects: "Objetos",
+              symbols: "Símbolos",
+              flags: "Banderas",
+              custom: "frikiradar",
+            },
+          }
+        : {
+            search: "Search the perfect emoji",
+            emojilist: "Emoji list",
+            found: "Emoji not found",
+            clear: "Clear",
+            categories: {
+              search: "Results",
+              recent: "Most used",
+              people: "Faces and people",
+              nature: "Animals and nature",
+              foods: "Food and drink",
+              activity: "Activity",
+              places: "Travel and places",
+              objects: "Objects",
+              symbols: "Symbols",
+              flags: "Flags",
+              custom: "frikiradar",
+            },
+          };
   }
 
   onPaste(event: ClipboardEvent) {

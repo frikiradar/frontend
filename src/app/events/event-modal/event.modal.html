@@ -39,12 +39,12 @@
         ></ion-textarea>
       </ion-item>
       <ion-item lines="none" class="show-more" *ngIf="!user">
-        <ion-label>Fecha y hora de inicio</ion-label>
+        <ion-label>{{ "fecha-hora-inicio" | i18n }}</ion-label>
       </ion-item>
       <ion-item button lines="none" id="open-date">
         <ion-icon name="calendar-outline" slot="start"></ion-icon>
         <ion-label class="ion-text-wrap"
-          >Fecha/hora de inicio:
+          >{{ "fechahora-inicio" | i18n }}
           <ion-text color="primary"
             >{{eventForm.get("date").value | date:'E d MMM y, HH:mm'}}</ion-text
           ></ion-label
@@ -68,7 +68,7 @@
           lines="none"
           class="show-more"
         >
-          <ion-label>+ Fecha y hora de finalización</ion-label>
+          <ion-label>{{ "-fecha-hora-finalizacin" | i18n }}</ion-label>
           <ion-icon
             [name]="endDate ? 'chevron-up' : 'chevron-down'"
             color="light"
@@ -78,7 +78,7 @@
         <ion-item button *ngIf="endDate" lines="none" id="open-end-date">
           <ion-icon name="calendar-outline" slot="start"></ion-icon>
           <ion-label class="ion-text-wrap"
-            >Fecha/hora de fin:
+            >{{ "fechahora-fin" | i18n }}
             <ion-text color="primary"
               >{{eventForm.get("endDate").value | date:'E d MMM y,
               HH:mm'}}</ion-text
@@ -104,10 +104,10 @@
         (ionChange)="changeType($event.detail.value)"
       >
         <ion-segment-button value="online">
-          <ion-label color="light">En línea</ion-label>
+          <ion-label color="light">{{ "lnea" | i18n }}</ion-label>
         </ion-segment-button>
         <ion-segment-button value="offline">
-          <ion-label color="light">En persona</ion-label>
+          <ion-label color="light">{{ "persona" | i18n }}</ion-label>
         </ion-segment-button>
       </ion-segment>
       <ion-item>
@@ -122,8 +122,8 @@
           <ion-select
             label="País"
             interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
+            cancelText="{{ 'cancelar' | i18n }}"
+            placeholder="{{ 'selecciona-uno' | i18n }}"
             formControlName="country"
             [value]="country"
             debounce="2000"
@@ -177,7 +177,7 @@
           lines="none"
           class="show-more"
         >
-          <ion-label>+ Configuración extra</ion-label>
+          <ion-label>{{ "-configuracin-extra" | i18n }}</ion-label>
           <ion-icon
             [name]="showMore ? 'chevron-up' : 'chevron-down'"
             color="light"
@@ -198,7 +198,7 @@
               placeholder="0"
               inputmode="numeric"
             ></ion-input>
-            <ion-label>años</ion-label>
+            <ion-label>{{ "aos" | i18n }}</ion-label>
           </ion-item>
           <ion-item>
             <ion-input
@@ -240,11 +240,11 @@
           shape="round"
           expand="full"
         >
-          Seleccionar imagen
+          {{ "seleccionar-imagen" | i18n }}
         </ion-button>
       </ion-item>
       <ion-item lines="none" *ngIf="auth.isAdmin() && !user && !event?.id">
-        <ion-label>Evento oficial</ion-label>
+        <ion-label>{{ "evento-oficial" | i18n }}</ion-label>
         <ion-checkbox slot="start" formControlName="official"></ion-checkbox>
       </ion-item>
       <ion-button

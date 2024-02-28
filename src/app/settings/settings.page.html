@@ -5,7 +5,7 @@
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Configuración</ion-title>
+    <ion-title>{{ "configuracin" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -15,29 +15,26 @@
       <ion-item-divider color="primary">
         <ion-icon name="lock-closed" slot="start"></ion-icon>
         <ion-label>
-          <h2>Seguridad</h2>
+          <h2>{{ "seguridad" | i18n }}</h2>
         </ion-label>
       </ion-item-divider>
       <ion-item (click)="passwordModal()" button lines="full">
         <ion-icon name="key-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Cambiar contraseña</h2>
+          <h2>{{ "cambiar-contrasea" | i18n }}</h2>
         </ion-label>
       </ion-item>
       <ion-item (click)="devicesSettingsModal()" button lines="full">
         <ion-icon name="notifications-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Dispositivos y notificaciones</h2>
+          <h2>{{ "dispositivos-notificaciones" | i18n }}</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="full">
         <ion-icon name="checkmark-done-circle-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Autenticación en dos pasos</h2>
-          <p>
-            Te enviaremos un email con un código de autenticación cada vez que
-            inicies una nueva sesión.
-          </p>
+          <h2>{{ "autenticacin-dos-pasos" | i18n }}</h2>
+          <p>{{"te-enviaremos-un-email-con" | i18n}}</p>
         </ion-label>
         <ion-checkbox
           slot="end"
@@ -50,12 +47,12 @@
       <ion-item button (click)="verificationModal()" lines="full">
         <ion-icon name="ribbon-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Verificación de la cuenta</h2>
+          <h2>{{ "verificacin-cuenta" | i18n }}</h2>
           <p *ngIf="user?.verified">
-            Comprueba el estado de verificación de tu cuenta.
+            {{ "comprueba-estado-verificacin-tu-cuenta" | i18n }}
           </p>
           <p *ngIf="!user?.verified">
-            Verifica tu cuenta para mejorar la seguridad.
+            {{ "verifica-tu-cuenta-para-mejorar" | i18n }}
           </p>
         </ion-label>
       </ion-item>
@@ -65,14 +62,14 @@
       <ion-item-divider color="primary">
         <ion-icon name="eye" slot="start"></ion-icon>
         <ion-label>
-          <h2>Privacidad</h2>
+          <h2>{{ "privacidad" | i18n }}</h2>
         </ion-label>
       </ion-item-divider>
       <ion-item lines="full">
         <ion-icon name="location-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Localización exacta</h2>
-          <p>Mostrar mi distancia en kilómetros.</p>
+          <h2>{{ "localizacin-exacta" | i18n }}</h2>
+          <p>{{ "mostrar-mi-distancia-kilmetros" | i18n }}</p>
         </ion-label>
         <ion-checkbox
           slot="end"
@@ -84,11 +81,8 @@
       <ion-item lines="full">
         <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Mensajes directos</h2>
-          <p>
-            Poder recibir mensajes de cualquier usuario, aunque no haya indicado
-            que me gusta.
-          </p>
+          <h2>{{ "mensajes-directos" | i18n }}</h2>
+          <p>{{"poder-recibir-mensajes-cualquier-usuario" | i18n}}</p>
         </ion-label>
         <ion-checkbox
           slot="end"
@@ -100,11 +94,8 @@
       <ion-item lines="full">
         <ion-icon name="time-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Última conexión</h2>
-          <p>
-            Mostrar el momento de la última vez que entré a la aplicación o al
-            chat.
-          </p>
+          <h2>{{ "ltima-conexin" | i18n }}</h2>
+          <p>{{"mostrar-momento-ltima-vez-que" | i18n}}</p>
         </ion-label>
         <ion-checkbox
           slot="end"
@@ -116,11 +107,8 @@
       <ion-item lines="full">
         <ion-icon name="heart-dislike-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Ocultar kokoros</h2>
-          <p>
-            No quiero que puedan ver quien me ha dado o a quien le he entregado
-            kokoro.
-          </p>
+          <h2>{{ "ocultar-kokoros" | i18n }}</h2>
+          <p>{{"no-quiero-que-puedan-ver" | i18n}}</p>
         </ion-label>
         <ion-checkbox
           slot="end"
@@ -133,11 +121,8 @@
       <ion-item lines="full">
         <ion-icon name="people-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Perfil público</h2>
-          <p>
-            Mi perfil es visible públicamente desde internet compartiendo una
-            URL (solamente nombre, avatar, descripción y gustos).
-          </p>
+          <h2>{{ "perfil-pblico" | i18n }}</h2>
+          <p>{{"mi-perfil-es-visible-pblicamente" | i18n}}</p>
         </ion-label>
         <ion-checkbox
           slot="end"
@@ -149,11 +134,11 @@
       </ion-item>
       <ion-item (click)="blockUsersModal()" button lines="full">
         <ion-icon name="hand-left-outline" slot="start"></ion-icon>
-        <ion-label>Usuarios bloqueados</ion-label>
+        <ion-label>{{ "usuarios-bloqueados" | i18n }}</ion-label>
       </ion-item>
       <ion-item (click)="hideUsersModal()" button lines="full">
         <ion-icon name="eye-off-outline" slot="start"></ion-icon>
-        <ion-label>Usuarios ocultos</ion-label>
+        <ion-label>{{ "usuarios-ocultos" | i18n }}</ion-label>
       </ion-item>
     </ion-item-group>
 
@@ -161,13 +146,25 @@
       <ion-item-divider color="primary">
         <ion-icon name="apps" slot="start"></ion-icon>
         <ion-label>
-          <h2>Aplicación</h2>
+          <h2>{{ "aplicacin" | i18n }}</h2>
         </ion-label>
       </ion-item-divider>
       <ion-item lines="none">
+        <ion-icon name="language-outline" slot="start"></ion-icon>
+        <ion-select
+          label="{{ 'seleccionar-idioma' | i18n }}"
+          [(ngModel)]="language"
+          (ionChange)="changeLanguage($event.detail.value)"
+          aria-label
+        >
+          <ion-select-option value="es">Español</ion-select-option>
+          <ion-select-option value="en">English</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none">
         <ion-icon name="color-palette-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Seleccionar tema</h2>
+          <h2>{{ "seleccionar-tema" | i18n }}</h2>
         </ion-label>
       </ion-item>
       <ion-item button id="themes">
@@ -179,7 +176,7 @@
                   <img src="/assets/img/layout/theme-dark.png" alt="dark" />
                 </ion-thumbnail>
               </ion-item>
-              <ion-label>Oscuro</ion-label>
+              <ion-label>{{ "oscuro" | i18n }}</ion-label>
             </div>
           </ng-template>
           <ng-template swiperSlide>
@@ -189,7 +186,7 @@
                   <img src="/assets/img/layout/theme-light.png" alt="light" />
                 </ion-thumbnail>
               </ion-item>
-              <ion-label>Claro</ion-label>
+              <ion-label>{{ "claro" | i18n }}</ion-label>
             </div>
           </ng-template>
           <ng-template swiperSlide>
@@ -205,7 +202,7 @@
                   />
                 </ion-thumbnail>
               </ion-item>
-              <ion-label>Cyberpunk</ion-label>
+              <ion-label>{{ "cyberpunk" | i18n }}</ion-label>
             </div>
           </ng-template>
           <ng-template swiperSlide>
@@ -218,7 +215,7 @@
                   <img src="/assets/img/layout/theme-fire.png" alt="fire" />
                 </ion-thumbnail>
               </ion-item>
-              <ion-label>Fuego</ion-label>
+              <ion-label>{{ "fuego" | i18n }}</ion-label>
             </div>
           </ng-template>
           <ng-template swiperSlide>
@@ -231,7 +228,7 @@
                   <img src="/assets/img/layout/theme-black.png" alt="black" />
                 </ion-thumbnail>
               </ion-item>
-              <ion-label>100% Negro</ion-label>
+              <ion-label>{{ "100-negro" | i18n }}</ion-label>
             </div>
           </ng-template>
           <ng-template swiperSlide>
@@ -251,7 +248,7 @@
                   />
                 </ion-thumbnail>
               </ion-item>
-              <ion-label>Fresas con crema</ion-label>
+              <ion-label>{{ "fresas-con-crema" | i18n }}</ion-label>
             </div>
           </ng-template>
         </swiper>
@@ -259,11 +256,8 @@
       <ion-item lines="full" (click)="clearLocalStorage()" button>
         <ion-icon name="refresh-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Restablecer valores predeterminados</h2>
-          <p>
-            Esto eliminará los datos de configuración almacenados en tu
-            dispositivo actual. Úsalo solamente si sabes lo que haces.
-          </p>
+          <h2>{{ "restablecer-valores-predeterminados" | i18n }}</h2>
+          <p>{{"esto-eliminar-datos-configuracin-almacenados" | i18n}}</p>
         </ion-label>
       </ion-item>
     </ion-item-group>
@@ -272,40 +266,40 @@
       <ion-item-divider color="primary">
         <ion-icon name="person-circle" slot="start"></ion-icon>
         <ion-label>
-          <h2>Cuenta</h2>
+          <h2>{{ "cuenta" | i18n }}</h2>
         </ion-label>
       </ion-item-divider>
       <ion-item lines="full" (click)="premiumModal()" button>
         <ion-icon name="infinite" slot="start"></ion-icon>
         <ion-label>
-          <h2>frikiradar UNLIMITED</h2>
-          <p>Configurar mi suscripción</p>
+          <h2>{{ "frikiradar-unlimited" | i18n }}</h2>
+          <p>{{ "configurar-mi-suscripcin" | i18n }}</p>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="paymentsModal()" button>
         <ion-icon name="card-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Historial de pagos</h2>
+          <h2>{{ "historial-pagos" | i18n }}</h2>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="usernameModal()" button>
         <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Cambiar nombre de usuario</h2>
+          <h2>{{ "cambiar-nombre-usuario" | i18n }}</h2>
           <p>{{ user.username }}</p>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="emailModal()" button>
         <ion-icon name="mail-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Cambiar correo electrónico</h2>
+          <h2>{{ "cambiar-correo-electrnico" | i18n }}</h2>
           <p>{{ user.email }}</p>
         </ion-label>
       </ion-item>
       <ion-item lines="full" (click)="disableAccountModal()" button>
         <ion-icon name="close-circle-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Desactivar/eliminar la cuenta</h2>
+          <h2>{{ "desactivareliminar-cuenta" | i18n }}</h2>
         </ion-label>
       </ion-item>
     </ion-item-group>

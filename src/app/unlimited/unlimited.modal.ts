@@ -27,7 +27,7 @@ export class UnlimitedModal {
   public isPlatform = isPlatform;
   public products: Product[] = [];
   public selectedCardIndex: number = 0;
-  private product: Product;
+  public product: Product;
   public lastMethod: Payment["method"] = undefined;
 
   constructor(

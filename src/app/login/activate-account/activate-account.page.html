@@ -5,7 +5,7 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Cuenta inactiva</ion-title>
+    <ion-title>{{ "cuenta-inactiva" | i18n }}</ion-title>
   </ion-toolbar>
   <ion-toolbar *ngIf="changingEmail">
     <ion-buttons slot="start">
@@ -13,7 +13,7 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Cambiar correo electrónico</ion-title>
+    <ion-title>{{ "cambiar-correo-electrnico" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -22,14 +22,14 @@
       Te hemos enviado un código de seguridad a {{ user.email }}. Revisa tu
       carpeta de spam/no deseado si no lo encuentras.
     </h4>
-    <p>Introduce el código de seguridad para activar tu cuenta.</p>
+    <p>{{ "introduce-cdigo-seguridad-para-activar" | i18n }}</p>
     <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
       <ion-item class="code">
         <ion-input
           autocomplete="off"
           formControlName="code"
           maxlength="6"
-          placeholder="Código de seguridad"
+          placeholder="{{ 'codigo-seguridad' | i18n }}"
           type="text"
         ></ion-input>
       </ion-item>
@@ -39,16 +39,16 @@
         type="submit"
         shape="round"
         [disabled]="codeForm.invalid"
-        >Activar la cuenta</ion-button
+        >{{ "activar-cuenta" | i18n }}</ion-button
       >
     </form>
     <p color="primary" class="ion-text-center" (click)="sendCode()">
-      No he recibido mi código/código no válido
+      {{ "no-he-recibido-mi-cdigocdigo" | i18n }}
     </p>
   </div>
   <div *ngIf="changingEmail">
-    <h4>¡Revisa tu dirección de correo!</h4>
-    <p>Asegúrate de introducirla correctamente.</p>
+    <h4>{{ "revisa-tu-direccin-correo" | i18n }}</h4>
+    <p>{{ "asegrate-introducirla-correctamente" | i18n }}</p>
     <form
       (submit)="changeEmail()"
       [formGroup]="emailForm"
@@ -82,7 +82,7 @@
         type="submit"
         [disabled]="emailForm.invalid || emailForm.pristine"
         shape="round"
-        >Confirmar cambio</ion-button
+        >{{ "confirmar-cambio" | i18n }}</ion-button
       >
     </form>
   </div>

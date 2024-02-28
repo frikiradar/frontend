@@ -13,7 +13,7 @@
         <ion-skeleton-text animated *ngIf="!user"></ion-skeleton-text>
       </ion-avatar>
       <ion-label>
-        <h2>Cuenta baneada</h2>
+        <h2>{{ "cuenta-baneada" | i18n }}</h2>
       </ion-label>
     </ion-buttons>
     <ion-label class="ion-padding" slot="end">{{countDownString}}</ion-label>

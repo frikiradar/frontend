@@ -69,7 +69,7 @@
       <ion-item lines="none">
         <ion-textarea
           aria-label
-          placeholder="Escribe un mensaje..."
+          placeholder="{{'escribe-un-mensaje' | i18n}}"
           autocapitalize="on"
           (keydown.enter)="sendMessage($event)"
           formControlName="message"

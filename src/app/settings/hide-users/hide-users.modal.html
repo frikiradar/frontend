@@ -5,7 +5,7 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Usuarios ocultos</ion-title>
+    <ion-title>{{ "usuarios-ocultos" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -29,8 +29,8 @@
   <ng-template #noUsers>
     <div class="full-center ion-padding">
       <ion-icon name="body"></ion-icon>
-      <h2>Sin resultados</h2>
-      <p>No has ocultado a ningún usuario.</p>
+      <h2>{{ "sin-resultados" | i18n }}</h2>
+      <p>{{ "no-has-ocultado-ningn-usuario" | i18n }}</p>
     </div>
   </ng-template>
 </ion-content>

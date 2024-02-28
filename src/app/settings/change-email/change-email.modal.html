@@ -5,17 +5,17 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Cambiar correo electrónico</ion-title>
+    <ion-title>{{ "cambiar-correo-electrnico" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <h4>¿Quieres cambiar tu correo electrónico?</h4>
-  <p>Asegúrate de introducir una nueva dirección correo electrónico válida.</p>
+  <h4>{{ "quieres-cambiar-tu-correo-electrnico" | i18n }}</h4>
+  <p>{{ "asegrate-introducir-una-nueva-direccin" | i18n }}</p>
 
   <form (submit)="submitForm()" [formGroup]="emailForm" autocomplete="off">
     <ion-item>
       <ion-input
-        label="Correo electrónico"
+        label="{{ 'email' | i18n}}"
         labelPlacement="floating"
         required
         type="email"
@@ -31,8 +31,8 @@
       class="error-message"
       *ngIf="emailForm.get('email').invalid && emailForm.get('email').value"
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Introduce una
-      dirección de correo electrónico válida.
+      <ion-icon name="information-circle-outline"></ion-icon>{{
+      "introduce-una-direccin-correo-electrnico" | i18n }}
     </div>
     <ion-button
       color="primary"
@@ -40,7 +40,7 @@
       type="submit"
       [disabled]="emailForm.invalid || emailForm.pristine"
       shape="round"
-      >Confirmar cambio</ion-button
+      >{{ "confirmar-cambio" | i18n }}</ion-button
     >
   </form>
 </ion-content>

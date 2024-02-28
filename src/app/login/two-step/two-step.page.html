@@ -5,7 +5,7 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Verificación en dos pasos</ion-title>
+    <ion-title>{{ "verificacin-dos-pasos" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -13,7 +13,7 @@
     ¡Te hemos enviado un código de seguridad al email! Revisa tu carpeta de
     spam/no deseado si no lo encuentras.
   </h4>
-  <p>Introduce el código de seguridad para verificar tu inicio de sesión.</p>
+  <p>{{ "introduce-cdigo-seguridad-para-verificar" | i18n }}</p>
   <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
     <ion-item class="code">
       <ion-input
@@ -22,7 +22,7 @@
         formControlName="code"
         maxlength="6"
         name="code"
-        placeholder="Código de seguridad"
+        placeholder="{{ 'codigo-seguridad' | i18n }}"
         required
         type="text"
       ></ion-input>
@@ -33,7 +33,7 @@
       expand="block"
       type="submit"
       shape="round"
-      >Verificar
+      >{{ "verificar" | i18n }}
     </ion-button>
   </form>
 </ion-content>

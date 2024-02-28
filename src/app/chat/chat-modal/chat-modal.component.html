@@ -217,7 +217,7 @@
                         name="close-circle-outline"
                         slot="start"
                       ></ion-icon>
-                      Cita cancelada/rechazada
+                      {{ "cita-canceladarechazada" | i18n }}
                     </ion-button>
                     <ion-button
                       shape="round"
@@ -229,7 +229,7 @@
                       disabled
                     >
                       <ion-icon name="timer-outline" slot="start"></ion-icon>
-                      Cita pasada
+                      {{ "cita-pasada" | i18n }}
                     </ion-button>
                   </ion-col>
 
@@ -247,7 +247,7 @@
                       disabled
                     >
                       <ion-icon name="timer-outline" slot="start"></ion-icon>
-                      En espera de confirmación
+                      {{ "espera-confirmacin" | i18n }}
                     </ion-button>
                     <ion-button
                       shape="round"
@@ -256,7 +256,7 @@
                       (click)="$event.stopPropagation(); confirmDate(message)"
                     >
                       <ion-icon name="calendar-outline" slot="start"></ion-icon>
-                      Confirmar cita
+                      {{ "confirmar-cita" | i18n }}
                     </ion-button>
                   </ion-col>
                   <ion-col
@@ -277,7 +277,7 @@
                         name="close-circle-outline"
                         slot="start"
                       ></ion-icon>
-                      Rechazar cita
+                      {{ "rechazar-cita" | i18n }}
                     </ion-button>
                   </ion-col>
                   <ion-col
@@ -292,14 +292,14 @@
                         name="checkmark-circle-outline"
                         slot="start"
                       ></ion-icon>
-                      Cita confirmada
+                      {{ "cita-confirmada" | i18n }}
                     </ion-button>
                   </ion-col>
                 </ion-row>
               </ion-grid>
               <ion-button shape="round" expand="full" color="dark" disabled>
                 <ion-icon name="add" slot="start"></ion-icon>
-                <ion-label>Ver detalles</ion-label>
+                <ion-label>{{ "ver-detalles" | i18n }}</ion-label>
               </ion-button>
             </ion-card-content>
           </ion-card>
@@ -308,7 +308,7 @@
             <div *ngIf="message.image">
               <img (click)="openViewer(message)" [src]="message.image" />
               <ion-note class="note-image" *ngIf="!message?.text">
-                <span *ngIf="message?.edited">Editado</span>
+                <span *ngIf="message?.edited">{{ "editado" | i18n }}</span>
                 {{ message.time_creation | chatDate }}
                 <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                   <ion-icon *ngIf="message.sending" name="time"></ion-icon>
@@ -372,7 +372,7 @@
                 <ion-text *ngIf="message.audio && !message.text">
                   🎤 Mensaje de audio de {{ message.fromuser.name }}
                 </ion-text>
-                <span class="edited" *ngIf="message?.edited"> · Editado</span>
+                <span class="edited" *ngIf="message?.edited"> {{ "-editado" | i18n }}</span>
                 <span *ngIf="message.fromuser?.id == auth.currentUserValue?.id">
                   <ion-icon *ngIf="message.sending" name="time"></ion-icon>
                   <ion-icon

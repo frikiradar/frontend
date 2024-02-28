@@ -5,84 +5,43 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Desactivar/eliminar cuenta</ion-title>
+    <ion-title>{{ "desactivareliminar-cuenta" | i18n }}</ion-title>
   </ion-toolbar>
   <ion-segment (ionChange)="changeType($event.detail.value)" value="disable">
     <ion-segment-button layout="icon-start" value="disable">
-      <ion-label>Desactivar cuenta</ion-label>
+      <ion-label>{{ "desactivar-cuenta" | i18n }}</ion-label>
       <ion-icon name="close-circle-outline"></ion-icon>
     </ion-segment-button>
     <ion-segment-button layout="icon-start" value="remove">
-      <ion-label>Eliminar cuenta</ion-label>
+      <ion-label>{{ "eliminar-cuenta" | i18n }}</ion-label>
       <ion-icon name="skull-outline"></ion-icon>
     </ion-segment-button>
   </ion-segment>
 </ion-header>
 <ion-content class="ion-padding">
   <div *ngIf="type === 'disable' && !codeSent">
-    <h4>¿Quieres desactivar tu cuenta?</h4>
-    <p>Antes de desactivar la cuenta lee estos puntos:</p>
+    <h4>{{ "quieres-desactivar-tu-cuenta" | i18n }}</h4>
+    <p>{{ "antes-desactivar-cuenta-lee-estos" | i18n }}</p>
     <ul>
-      <li>
-        Recuerda que la aplicación sigue desarrollándose y aún no hemos llegado
-        a todos los lugares. Gracias a tu ayuda podremos llegar a más personas.
-        ¡Háblale a todo el mundo de frikiradar!
-      </li>
-      <li>
-        Si un usuario es molesto puedes bloquearlo entrando en las opciones de
-        su perfil.
-      </li>
-      <li>
-        Puedes realizar ajustes en tu privacidad para evitar sentirte
-        espiado/acosado.
-      </li>
-      <li>
-        Si quieres cambiar tu nombre de usuario puedes hacerlo con la opción
-        correspondiente.
-      </li>
+      <li>{{ "recuerda-que-aplicacin-sigue-desarrollndose" | i18n}}</li>
+      <li>{{ "si-un-usuario-es-molesto" | i18n}}</li>
+      <li>{{ "puedes-realizar-ajustes-tu-privacidad" | i18n}}</li>
+      <li>{{ "si-quieres-cambiar-tu-nombre" | i18n}}</li>
     </ul>
-    <p>
-      Si aún así sigues queriendo desactivar tu cuenta, solicita un código de
-      verificación a tu email como medida de seguridad adicional para desactivar
-      la cuenta.
-    </p>
+    <p>{{ "sigues-queriendo-desactivar" | i18n}}</p>
   </div>
   <div *ngIf="type === 'remove' && !codeSent">
-    <h4>¿Quieres eliminar tu cuenta?</h4>
-    <p>Antes de eliminar la cuenta lee estos puntos:</p>
+    <h4>{{ "quieres-eliminar-tu-cuenta" | i18n }}</h4>
+    <p>{{ "antes-eliminar-cuenta-lee-estos" | i18n }}</p>
     <ul>
-      <li>
-        Recuerda que la aplicación sigue desarrollándose y aún no hemos llegado
-        a todos los lugares. Gracias a tu ayuda podremos llegar a más personas.
-        ¡Háblale a todo el mundo de frikiradar!
-      </li>
-      <li>
-        Si un usuario es molesto puedes bloquearlo entrando en las opciones de
-        su perfil.
-      </li>
-      <li>
-        Puedes realizar ajustes en tu privacidad para evitar sentirte
-        espiado/acosado.
-      </li>
-      <li>
-        Si quieres cambiar tu nombre de usuario puedes hacerlo con la opción
-        correspondiente.
-      </li>
-      <li>
-        También tienes la opción de desactivar la cuenta si es posible que
-        vuelvas más adelante.
-      </li>
-      <li>
-        Una vez eliminada tu cuenta todo registro en nuestra base de datos y tus
-        archivos multimedia serán borrados completamente y no habrá opción de
-        recuperarlos.
-      </li>
+      <li>{{ "recuerda-que-aplicacin-sigue-desarrollndose" | i18n}}</li>
+      <li>{{ "si-un-usuario-es-molesto" | i18n}}</li>
+      <li>{{ "puedes-realizar-ajustes-tu-privacidad" | i18n}}</li>
+      <li>{{ "si-quieres-cambiar-tu-nombre" | i18n}}</li>
+      <li>{{ "tambin-tienes-opcin-desactivar-cuenta" | i18n}}</li>
+      <li>{{ "una-vez-eliminada-tu-cuenta" | i18n}}</li>
     </ul>
-    <p>
-      Si aún así sigues queriendo eliminar tu cuenta, solicita un código de
-      verificación a tu email como medida de seguridad adicional para eliminar
-      la cuenta.
-    </p>
+    <p>{{ "sigues-queriendo-eliminar" | i18n}}</p>
   </div>
 
   <ion-button
@@ -92,19 +51,16 @@
     shape="round"
     (click)="sendCode()"
   >
-    Envíar código de verificación
+    {{ "envar-cdigo-verificacin" | i18n }}
   </ion-button>
 
   <div *ngIf="type === 'disable' && codeSent">
-    <p>
-      Te hemos enviado un código de seguridad a {{ user.email }}. Revisa tu
-      carpeta de spam/no deseado si no lo encuentras.
-    </p>
-    <p>Introduce el código de seguridad para desactivar tu cuenta.</p>
+    <p>{{ "te-hemos-enviado-email-code" | i18n: {email: user.email} }}</p>
+    <p>{{ "introduce-cdigo-seguridad-para-desactivar" | i18n }}</p>
     <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
       <ion-item class="code">
         <ion-input
-          placeholder="Código de seguridad"
+          placeholder="{{ 'codigo-seguridad' | i18n }}"
           autocomplete="off"
           formControlName="code"
           maxlength="6"
@@ -115,7 +71,7 @@
       </ion-item>
       <ion-item>
         <ion-textarea
-          label="Motivo de la desactivación"
+          label="{{ 'motivo-desactivacion' | i18n }}"
           labelPlacement="floating"
           formControlName="note"
           autocapitalize="on"
@@ -128,20 +84,17 @@
         [disabled]="disableForm.invalid"
         shape="round"
       >
-        Desactivar cuenta</ion-button
+        {{ "desactivar-cuenta" | i18n }}</ion-button
       >
     </form>
   </div>
   <div *ngIf="type === 'remove' && codeSent">
-    <p>
-      Te hemos enviado un código de seguridad a {{ user.email }}. Revisa tu
-      carpeta de spam/no deseado si no lo encuentras.
-    </p>
-    <p>Introduce el código de seguridad para eliminar tu cuenta.</p>
+    <p>{{ "te-hemos-enviado-email-code" | i18n: {email: user.email} }}</p>
+    <p>{{ "introduce-cdigo-seguridad-para-eliminar" | i18n }}</p>
     <form (submit)="submitForm()" [formGroup]="disableForm" autocomplete="off">
       <ion-item class="code">
         <ion-input
-          placeholder="Código de seguridad"
+          placeholder="{{ 'codigo-seguridad' | i18n }}"
           autocomplete="off"
           formControlName="code"
           maxlength="6"
@@ -153,7 +106,7 @@
 
       <ion-item>
         <ion-textarea
-          label="Motivo de la eliminación"
+          label="{{ 'motivo-eliminacion' | i18n }}"
           labelPlacement="floating"
           formControlName="note"
           autocapitalize="on"
@@ -166,7 +119,7 @@
         [disabled]="disableForm.invalid"
         shape="round"
       >
-        Eliminar cuenta</ion-button
+        {{ "eliminar-cuenta" | i18n }}</ion-button
       >
     </form>
   </div>
@@ -176,7 +129,7 @@
     class="ion-text-center"
     (click)="sendCode()"
   >
-    No he recibido mi código/código no válido
+    {{ "no-he-recibido-mi-cdigocdigo" | i18n }}
   </p>
 </ion-content>
 <ion-backdrop visible="true" *ngIf="showBackdrop"></ion-backdrop>

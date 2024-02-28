@@ -12,6 +12,6 @@
 ></app-chat-modal>
 <div class="full-center ion-padding" *ngIf="!userId && desktop">
   <ion-icon name="chatbubbles"></ion-icon>
-  <h2>No hay mensajes</h2>
-  <p>Selecciona un chat</p>
+  <h2>{{ "no-hay-mensajes" | i18n }}</h2>
+  <p>{{ "selecciona-un-chat" | i18n }}</p>
 </div>

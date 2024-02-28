@@ -34,11 +34,11 @@
         slot="start"
         color="light"
       ></ion-icon>
-      <ion-label color="light"> Mi perfil </ion-label>
+      <ion-label color="light"> {{ "mi-perfil" | i18n }} </ion-label>
     </ion-item>
     <ion-item color="dark" button (click)="settings()">
       <ion-icon color="light" name="settings-outline" slot="start"></ion-icon>
-      <ion-label color="light"> Configuración y privacidad </ion-label>
+      <ion-label color="light"> {{ "configuracin-privacidad" | i18n }} </ion-label>
     </ion-item>
 
     <ion-item
@@ -48,44 +48,44 @@
       *ngIf="!auth.isPremium()"
     >
       <ion-icon name="infinite" slot="start"></ion-icon>
-      <ion-label>frikiradar UNLIMITED</ion-label>
+      <ion-label>{{ "frikiradar-unlimited" | i18n }}</ion-label>
     </ion-item>
 
     <ion-item button lines="none" (click)="showRecruit()">
       <ion-icon name="people-outline" slot="start"></ion-icon>
       <ion-label>
-        <h2>Recluta y gana</h2>
-        <p>Obtén recomensas invitando a tus amigos</p>
+        <h2>{{ "recluta-gana" | i18n }}</h2>
+        <p>{{ "obtn-recomensas-invitando-tus-amigos" | i18n }}</p>
       </ion-label>
     </ion-item>
 
     <ion-item lines="full" color="dark" button (click)="rules()">
       <ion-icon name="receipt-outline" slot="start"></ion-icon>
       <ion-label>
-        <h2>Normas de la comunidad</h2>
+        <h2>{{ "normas-comunidad" | i18n }}</h2>
       </ion-label>
     </ion-item>
     <!--<ion-item color="dark" button lines="full" (click)="bugs()">
       <ion-icon name="bug-outline" slot="start"></ion-icon>
       <ion-label>
-        <h2>Reporte de errores</h2>
-        <p>Si encuentras cualquier problema escríbenos por aquí</p>
+        <h2>{{ "reporte-errores" | i18n }}</h2>
+        <p>{{ "si-encuentras-cualquier-problema-escrbenos" | i18n }}</p>
       </ion-label>
     </ion-item>-->
     <!--<ion-item color="dark" button lines="none" (click)="credits()">
       <ion-icon color="light" name="rocket-outline" slot="start"></ion-icon>
       <ion-label>
-        <h2>Créditos</h2>
-        <p>Las personas que hacemos posible frikiradar</p>
+        <h2>{{ "crditos" | i18n }}</h2>
+        <p>{{ "personas-que-hacemos-posible-frikiradar" | i18n }}</p>
       </ion-label>
     </ion-item>-->
     <ion-item lines="none" button (click)="admin()" *ngIf="auth.isMaster()">
       <ion-icon name="bonfire-outline" color="danger" slot="start"></ion-icon>
-      <ion-label color="danger">Administración</ion-label>
+      <ion-label color="danger">{{ "administracin" | i18n }}</ion-label>
     </ion-item>
     <ion-item button lines="none" (click)="logout()">
       <ion-icon name="log-out-outline" color="danger" slot="start"></ion-icon>
-      <ion-label color="danger">Cerrar sesión</ion-label>
+      <ion-label color="danger">{{ "cerrar-sesin" | i18n }}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

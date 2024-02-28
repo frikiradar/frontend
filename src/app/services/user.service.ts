@@ -9,6 +9,7 @@ import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { firstValueFrom } from "rxjs";
+import { I18nService } from "./i18n.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -21,7 +22,8 @@ export class UserService {
     private uploadSvc: UploadService,
     private auth: AuthService,
     private toast: ToastController,
-    private http: HttpClient
+    private http: HttpClient,
+    private i18n: I18nService
   ) {}
 
   async getUser(id: User["id"] | User["username"]): Promise<User> {
@@ -211,15 +213,15 @@ export class UserService {
   async showRole(user: User) {
     let message = "";
     if (user.roles?.includes("ROLE_ADMIN")) {
-      message = "Administrador";
+      message = this.i18n.translate("administrador");
     } else if (user.roles?.includes("ROLE_MASTER")) {
-      message = "Moderador";
+      message = this.i18n.translate("moderador");
     } else if (user.roles?.includes("ROLE_PATREON")) {
       message = "Patreon";
     } else if (user.roles.includes("ROLE_DEMO")) {
       message = "FrikiBot";
     } else if (user.verified) {
-      message = "Usuario verificado";
+      message = this.i18n.translate("cuenta-verificada");
     }
 
     (
@@ -298,79 +300,79 @@ export class UserService {
 
   getOrientations() {
     return [
-      "Heterosexual",
-      "Homosexual",
-      "Bisexual",
-      "Pansexual",
-      "Queer",
-      "Demisexual",
-      "Sapiosexual",
-      "Asexual",
+      "heterosexual",
+      "homosexual",
+      "bisexual",
+      "pansexual",
+      "queer",
+      "demisexual",
+      "sapiosexual",
+      "asexual",
     ];
   }
 
   getPronouns() {
-    return ["El", "Ella", "Elle", "Elli"];
+    return ["hehim", "sheher", "theythem"];
   }
 
   getRelationships() {
-    return ["Monógama", "No-monógama"];
+    return ["monogamy", "non-monogamy"];
   }
 
   getStatus() {
-    return ["Soltero", "Saliendo con alguien", "Pareja estable", "Casado"];
+    return ["single", "in-a-relationship", "stable-couple", "married"];
   }
 
   getGenders() {
     return [
-      "Mujer",
-      "Hombre",
-      "Mujer transgénero",
-      "Hombre transgénero",
-      "Agénero",
-      "Andrógino",
-      "Género fluido",
-      "Bigénero",
-      "No-binario",
-      "No conforme",
-      "Pangénero",
-      "Poligénero",
-      "Intergénero",
+      "woman",
+      "man",
+      "transgender-woman",
+      "transgender-man",
+      "agender",
+      "androgynous",
+      "gender-fluid",
+      "bigender",
+      "non-binary",
+      "non-conforming",
+      "pangender",
+      "polygender",
+      "intergender",
     ];
   }
 
   getConnections() {
     return [
-      "Amistad",
-      "Sexo ocasional",
-      "Amistad con derechos",
-      "Pareja formal",
+      "friends",
+      "casual-sex",
+      "friends-with-benefits",
+      "formal-relationship",
     ];
   }
 
   getLanguages() {
     // Listado de idiomas principales para la aplicación
     return [
-      { value: "es", name: "Español" },
-      { value: "en", name: "Inglés" },
-      { value: "ja", name: "Japonés" },
-      { value: "ko", name: "Coreano" },
-      { value: "zh", name: "Chino" },
-      { value: "pt", name: "Portugués" },
-      { value: "fr", name: "Francés" },
-      { value: "de", name: "Alemán" },
-      { value: "it", name: "Italiano" },
-      { value: "ru", name: "Ruso" },
-      { value: "ca", name: "Catalán" },
-      { value: "eu", name: "Euskera" },
-      { value: "gl", name: "Gallego" },
-      { value: "sv", name: "Sueco" },
-      { value: "no", name: "Noruego" },
-      { value: "da", name: "Danés" },
-      { value: "fi", name: "Finés" },
-      { value: "pl", name: "Polaco" },
-      { value: "ro", name: "Rumano" },
-      { value: "ar", name: "Árabe" },
+      { value: "es", name: "spanish" },
+      { value: "en", name: "english" },
+      { value: "ja", name: "japanese" },
+      { value: "ko", name: "korean" },
+      { value: "zh", name: "chinese" },
+      { value: "pt", name: "portuguese" },
+      { value: "fr", name: "french" },
+      { value: "de", name: "german" },
+      { value: "it", name: "italian" },
+      { value: "ru", name: "russian" },
+      { value: "ca", name: "catalan" },
+      { value: "eu", name: "basque" },
+      { value: "gl", name: "galician" },
+      { value: "sv", name: "swedish" },
+      { value: "no", name: "norwegian" },
+      { value: "da", name: "danish" },
+      { value: "fi", name: "finish" },
+      { value: "pl", name: "polish" },
+      { value: "ro", name: "romanian" },
+      { value: "ar", name: "arabic" },
     ];
   }
 }

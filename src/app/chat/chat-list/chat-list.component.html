@@ -25,11 +25,11 @@
     </ion-buttons>
     <ion-title *ngIf="!showOptions && !showingArchived">
       <ion-icon name="chatbubbles"></ion-icon>
-      <ion-label>Chat</ion-label>
+      <ion-label>{{ "chat" | i18n }}</ion-label>
     </ion-title>
-    <ion-title *ngIf="showingArchived && !showOptions"
-      >Chats archivados</ion-title
-    >
+    <ion-title *ngIf="showingArchived && !showOptions">{{
+      "chats-archivados" | i18n
+    }}</ion-title>
     <ion-buttons slot="end" *ngIf="showOptions">
       <ion-button (click)="deleteChat(selectedChat)">
         <ion-icon slot="icon-only" name="trash"></ion-icon>
@@ -147,7 +147,7 @@
   <div *ngIf="allChats?.length === 0">
     <div class="full-center ion-padding">
       <ion-icon name="chatbubbles"></ion-icon>
-      <h2>Sin conversaciones</h2>
+      <h2>{{ "sin-conversaciones" | i18n }}</h2>
       <p>
         Aún no le has escrito a ningún usuario. Vuelve por aquí cuando lo hayas
         hecho.
@@ -165,7 +165,9 @@
   >
     <ion-icon slot="start" name="archive-outline" color="light"></ion-icon>
     <ion-label
-      ><p>Chats archivados ({{ archivedChats?.length }})</p></ion-label
+      ><p>
+        {{ "chats-archivados" | i18n }} ({{ archivedChats?.length }})
+      </p></ion-label
     >
   </ion-item>
 </ion-footer>

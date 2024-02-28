@@ -5,7 +5,7 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Usuarios baneados</ion-title>
+    <ion-title>{{ "usuarios-baneados" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -45,8 +45,8 @@
   <ng-template #noUsers>
     <div class="full-center ion-padding">
       <ion-icon name="body"></ion-icon>
-      <h2>Sin resultados</h2>
-      <p>No hay ningún usuario baneado.</p>
+      <h2>{{ "sin-resultados" | i18n }}</h2>
+      <p>{{ "no-hay-ningn-usuario-baneado" | i18n }}</p>
     </div>
   </ng-template>
 </ion-content>

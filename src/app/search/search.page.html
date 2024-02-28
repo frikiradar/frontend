@@ -10,7 +10,7 @@
       aria-label
       type="search"
       debounce="500"
-      placeholder="Busca por gustos/nombre de usuario..."
+      placeholder="{{ 'busca-gustos-username' | i18n}}"
       (keyup.enter)="newSearch($event.target.value)"
       spellcheck="false"
       color="light"
@@ -20,11 +20,11 @@
   </ion-toolbar>
   <ion-segment (ionChange)="changeOrder($event.detail.value)" value="distance">
     <ion-segment-button layout="icon-start" value="distance">
-      <ion-label>Distancia</ion-label>
+      <ion-label>{{ "distancia" | i18n }}</ion-label>
       <ion-icon name="navigate-outline"></ion-icon>
     </ion-segment-button>
     <ion-segment-button layout="icon-start" value="match">
-      <ion-label>Afinidad</ion-label>
+      <ion-label>{{ "afinidad" | i18n }}</ion-label>
       <ion-icon name="heart-outline"></ion-icon>
     </ion-segment-button>
   </ion-segment>
@@ -106,8 +106,8 @@
   <ng-template #noUsers>
     <div class="full-center ion-padding">
       <ion-icon name="search-outline"></ion-icon>
-      <h2>Sin resultados</h2>
-      <p>Cambia las palabras de búsqueda para mejorar los resultados.</p>
+      <h2>{{ "sin-resultados" | i18n }}</h2>
+      <p>{{ "cambia-palabras-bsqueda-para-mejorar" | i18n }}</p>
     </div>
   </ng-template>
 </ion-content>

@@ -1,41 +1,37 @@
 <ion-content>
   <div class="full-center ion-padding" *ngIf="view === 'request'">
     <ion-icon name="location-sharp"></ion-icon>
-    <h2>Permisos de ubicación</h2>
-    <p>
-      Para que el frikiradar pueda sugerirte a personas que están cerca de ti es
-      necesario que aceptes el permiso para ver tu ubicación.
-    </p>
+    <h2>{{ "permisos-ubicacin" | i18n }}</h2>
+    <p>{{"para-que-frikiradar-pueda-sugerirte" | i18n}}</p>
     <ion-button shape="round" fill="outline" (click)="close(true)"
-      >PERMITIR</ion-button
+      >{{ "permitir" | i18n }}</ion-button
     >
   </div>
 
   <div class="full-center ion-padding" *ngIf="view === 'force'">
     <ion-icon name="location-sharp"></ion-icon>
-    <h2>Ups!</h2>
-    <p>
-      Para que el frikiradar pueda encontrar personas que están cerca de ti es
-      necesario que aceptes el permiso para ver tu ubicación.
-    </p>
+    <h2>{{ "ups" | i18n }}</h2>
+    <p>{{ "para-que-frikiradar-pueda-encontrar" | i18n}}</p>
     <div *ngIf="isPlatform('capacitor'); else noCapacitor">
-      <p>Verifica los permisos de ubicación en los ajustes de la aplicación.</p>
+      <p>{{ "verifica-permisos-ubicacin-ajustes-aplicacin" | i18n }}</p>
       <ion-button shape="round" fill="outline" (click)="changeSettings()"
-        >CAMBIAR AJUSTES</ion-button
+        >{{ "cambiar-ajustes" | i18n }}</ion-button
       >
     </div>
     <ng-template #noCapacitor>
-      <p>Verifica los permisos de ubicación en los ajustes del navegador.</p>
+      <p>{{ "verifica-permisos-ubicacin-ajustes-del" | i18n }}</p>
       <ion-button
         shape="round"
         fill="outline"
         href="https://support.google.com/chrome/answer/142065?co=GENIE.Platform%3DDesktop&hl=es&oco=1"
         target="_blank"
-        >MÁS INFORMACIÓN</ion-button
+        >{{ "ms-informacin" | i18n }}</ion-button
       >
     </ng-template>
     <ion-item lines="none" button (click)="showManualGeolocation()">
-      <ion-text color="secondary">Introducir manualmente</ion-text>
+      <ion-text color="secondary"
+        >{{ "introducir-manualmente" | i18n }}</ion-text
+      >
     </ion-item>
   </div>
 </ion-content>
@@ -52,7 +48,9 @@
   <ng-template>
     <ion-content class="ion-padding">
       <ion-item lines="full">
-        <ion-label class="ion-text-center">Introducir manualmente</ion-label>
+        <ion-label class="ion-text-center"
+          >{{ "introducir-manualmente" | i18n }}</ion-label
+        >
       </ion-item>
       <ion-list>
         <ion-item color="dark">
@@ -61,8 +59,8 @@
             label="Tu país"
             labelPlacement="floating"
             interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
+            cancelText="{{ 'cancelar' | i18n }}"
+            placeholder="{{ 'selecciona-uno' | i18n }}"
             [value]="user?.country"
             debounce="2000"
             (ionChange)="changePreferences('country', $event.detail.value)"
@@ -89,7 +87,7 @@
           shape="round"
           fill="outline"
           (click)="savePreferences()"
-          >GUARDAR CAMBIOS</ion-button
+          >{{ "guardar-cambios" | i18n }}</ion-button
         >
       </ion-list>
     </ion-content>

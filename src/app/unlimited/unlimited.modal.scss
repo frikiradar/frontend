@@ -89,4 +89,15 @@ ion-footer {
   ion-icon {
     width: 60px;
   }
+  ion-label {
+    color: #111;
+  }
+}
+
+#card-purchase {
+  --background: #111;
+  ion-label,
+  ion-icon {
+    color: white;
+  }
 }

@@ -8,7 +8,7 @@
   <ion-toolbar>
     <ion-title mode="md">
       <ion-icon src="/assets/icon/icon.svg"></ion-icon>
-      <ion-label>frikiradar</ion-label>
+      <ion-label>{{ "frikiradar" | i18n }}</ion-label>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="changeView()" *ngIf="users">
@@ -123,7 +123,10 @@
                   class="ion-margin-end"
                 ></ion-icon>
                 <ion-label>
-                  <ion-text>A {{ user.distance }}km de distancia</ion-text>
+                  <ion-text
+                    >{{"km-distancia" | i18n: {distance: user.distance}
+                    }}</ion-text
+                  >
                 </ion-label>
               </ion-item>
               <ion-text class="description">{{user.description}}</ion-text>
@@ -148,26 +151,25 @@
       <swiper-slide *ngIf="!loading">
         <div class="full-center ion-padding">
           <ion-icon name="location"></ion-icon>
-          <h2 *ngIf="users && users.length === 0">Sin resultados</h2>
-          <h2 *ngIf="users && users.length > 0">No hay más resultados</h2>
-          <p>
-            Modifica tus filtros de búsqueda o suscríbete a frikiradar UNLIMITED
-            para encontrar personas de todo el mundo.
-          </p>
+          <h2 *ngIf="users && users.length === 0">
+            {{ "sin-resultados" | i18n }}
+          </h2>
+          <h2 *ngIf="users && users.length > 0">
+            {{"no-hay-ms-resultados" | i18n }}
+          </h2>
+          <p>{{"modifica-tus-filtros-bsqueda-suscrbete" | i18n}}</p>
           <ion-button
             class="ion-padding"
             shape="round"
             (click)="filterOptions = true"
-            ><ion-icon name="filter" slot="start" size="small"></ion-icon
-            >Modificar filtros de búsqueda</ion-button
+            ><ion-icon name="filter" slot="start" size="small"></ion-icon>{{
+            "modificar-filtros-bsqueda" | i18n }}</ion-button
           >
           <br />
-          <p>
-            También puedes probar suerte cambiando a la vista por kilómetros
-          </p>
+          <p>{{ "tambin-puedes-probar-suerte-cambiando" | i18n }}</p>
           <ion-button class="ion-padding" shape="round" (click)="changeView()"
-            ><ion-icon name="list" slot="start" size="small"></ion-icon>Cambiar
-            a vista por kilómetros</ion-button
+            ><ion-icon name="list" slot="start" size="small"></ion-icon
+            >{{"cambiar-vista-por-kilmetros" | i18n}}</ion-button
           >
         </div>
       </swiper-slide>
@@ -247,19 +249,16 @@
       *ngIf="users?.length === 0 && (!automatic || ratio === 25000)"
     >
       <ion-icon name="location"></ion-icon>
-      <h2 *ngIf="users.length === 0">Sin resultados</h2>
-      <h2 *ngIf="users.length > 0">No hay más resultados</h2>
-      <p>
-        Modifica tus filtros de búsqueda o suscríbete a frikiradar UNLIMITED
-        para encontrar de todo el mundo.
-      </p>
+      <h2 *ngIf="users.length === 0">{{ "sin-resultados" | i18n }}</h2>
+      <h2 *ngIf="users.length > 0">{{ "no-hay-ms-resultados" | i18n }}</h2>
+      <p>{{"modifica-tus-filtros-bsqueda-suscrbete" | i18n}}</p>
       <ion-button
         class="ion-padding"
         shape="round"
         (click)="filterOptions = true"
-        ><ion-icon name="filter" slot="start" size="small"></ion-icon>Modificar
-        filtros de búsqueda</ion-button
-      >
+        ><ion-icon name="filter" slot="start" size="small"></ion-icon>
+        {{"modificar-filtros-bsqueda" | i18n}}
+      </ion-button>
     </div>
   </div>
 </ion-content>
@@ -308,7 +307,9 @@
   <ng-template>
     <ion-content class="ion-padding">
       <ion-item lines="full">
-        <ion-label class="ion-text-center">Filtros de radar</ion-label>
+        <ion-label class="ion-text-center"
+          >{{ "filtros-radar" | i18n }}</ion-label
+        >
       </ion-item>
       <ion-list>
         <ion-item lines="none">
@@ -316,22 +317,16 @@
             [ngModel]="extended"
             (ngModelChange)="radarSearchChange($event)"
           >
-            <h2 *ngIf="extended">Búsqueda ampliada</h2>
-            <h2 *ngIf="!extended">Búsqueda estricta</h2>
+            <h2 *ngIf="extended">{{ "bsqueda-ampliada" | i18n }}</h2>
+            <h2 *ngIf="!extended">{{ "bsqueda-estricta" | i18n }}</h2>
           </ion-toggle>
         </ion-item>
         <ion-item color="dark">
           <ion-label class="ion-text-wrap" *ngIf="!extended">
-            <p>
-              Se tiene en cuenta tu configuración del perfil en la búsqueda
-              (identidad de género, rango de edad y tipo de conexión).
-            </p>
+            <p>{{"se-tiene-cuenta-tu-configuracin" | i18n}}</p>
           </ion-label>
           <ion-label class="ion-text-wrap" *ngIf="extended">
-            <p>
-              No se tiene en cuenta tu configuración del perfil en la búsqueda.
-              Se obtienen todos los resultados posibles.
-            </p>
+            <p>{{"no-se-tiene-cuenta-tu" | i18n}}</p>
           </ion-label>
         </ion-item>
         <ion-item-group *ngIf="extended">
@@ -340,7 +335,7 @@
               [ngModel]="searchOptions?.identity"
               (ngModelChange)="radarSearchOptions('identity', $event)"
             >
-              <h2>Identidad de género</h2>
+              <h2>{{ "identidad-gnero" | i18n }}</h2>
               <p>{{auth.currentUserValue?.lovegender}}</p>
             </ion-toggle>
           </ion-item>
@@ -352,7 +347,7 @@
               [ngModel]="searchOptions?.range"
               (ngModelChange)="radarSearchOptions('range', $event)"
             >
-              <h2>Rango de edad</h2>
+              <h2>{{ "rango-edad" | i18n }}</h2>
               <p>
                 {{auth.currentUserValue?.minage}} -
                 {{auth.currentUserValue?.maxage}}
@@ -368,7 +363,7 @@
               (ngModelChange)="radarSearchOptions('connection', $event)"
               aria-label="Tipo de conexión"
             >
-              <h2>Tipo de conexión</h2>
+              <h2>{{"tipo-conexin" | i18n}}</h2>
               <p>{{auth.currentUserValue?.connection}}</p>
             </ion-toggle>
           </ion-item>
@@ -382,8 +377,8 @@
               aria-label="Solo personas en línea"
               (click)="!auth.isPremium() ? showPremium('filter') : ''"
             >
-              <h2>Solo personas en línea</h2>
-              <p>Mostrar solamente las personas conectadas</p>
+              <h2>{{"solo-personas-lnea" | i18n}}</h2>
+              <p>{{ "mostrar-solamente-personas-conectadas" | i18n }}</p>
             </ion-toggle>
           </ion-item>
           <ion-item lines="none">
@@ -395,12 +390,14 @@
               (click)="!auth.isPremium() ? showPremium('radar') : ''"
             >
               <ion-label *ngIf="searchOptions?.worldwide">
-                <h2>Búsqueda mundial</h2>
-                <p>Muestra personas de todo el mundo</p>
+                <h2>{{"bsqueda-mundial" | i18n}}</h2>
+                <p>{{ "muestra-personas-todo-mundo" | i18n }}</p>
               </ion-label>
               <ion-label *ngIf="!searchOptions?.worldwide">
-                <h2 *ngIf="!searchOptions?.worldwide">Búsqueda local</h2>
-                <p>Muestra personas cercanas</p>
+                <h2 *ngIf="!searchOptions?.worldwide">
+                  {{ "bsqueda-local" | i18n }}
+                </h2>
+                <p>{{ "muestra-personas-cercanas" | i18n }}</p>
               </ion-label>
             </ion-toggle>
           </ion-item>
@@ -413,14 +410,14 @@
               (click)="!auth.isPremium() ? showPremium('location') : ''"
             >
               <ion-label *ngIf="searchOptions?.fake_location">
-                <h2>Ubicación manual</h2>
-                <p>Te aparecen personas cercanas al lugar elegido</p>
+                <h2>{{"ubicacin-manual" | i18n}}</h2>
+                <p>{{ "te-aparecen-personas-cercanas-al" | i18n }}</p>
               </ion-label>
               <ion-label *ngIf="!searchOptions?.fake_location">
                 <h2 *ngIf="!searchOptions?.fake_location">
-                  Ubicación automática
+                  {{ "ubicacin-automtica" | i18n }}
                 </h2>
-                <p>Te aparecen personas cercanas a tu posición real</p>
+                <p>{{ "te-aparecen-personas-cercanas-tu" | i18n }}</p>
               </ion-label>
             </ion-toggle>
           </ion-item>
@@ -431,8 +428,8 @@
                 label="País"
                 labelPlacement="floating"
                 interface="action-sheet"
-                cancel-text="Cancelar"
-                placeholder="Selecciona uno"
+                cancelText="{{ 'cancelar' | i18n }}"
+                placeholder="{{ 'selecciona-uno' | i18n }}"
                 [value]="location?.country"
                 debounce="2000"
                 (ionChange)="changeLocation('country', $event.detail.value)"

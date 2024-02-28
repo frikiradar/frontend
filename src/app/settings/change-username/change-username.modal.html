@@ -5,20 +5,17 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Cambiar nombre de usuario</ion-title>
+    <ion-title>{{ "cambiar-nombre-usuario" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <h4>¿Quieres cambiar tu correo nombre de usuario?</h4>
-  <p>
-    Indica a continuación el nuevo nombre que deseas y te confirmaremos el
-    cambio si está disponible.
-  </p>
+  <h4>{{ "quieres-cambiar-tu-correo-nombre" | i18n }}</h4>
+  <p>{{ "indica-continuacin-nuevo-nombre-que" | i18n}}</p>
 
   <form (submit)="submitForm()" [formGroup]="usernameForm" autocomplete="off">
     <ion-item>
       <ion-input
-        label="Nombre de usuario"
+        label="{{ 'username' | i18n}}"
         labelPlacement="floating"
         required
         type="text"
@@ -37,8 +34,8 @@
         usernameForm.get('username').value
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3
-      caracteres y máximo de 15.
+      <ion-icon name="information-circle-outline"></ion-icon>{{
+      "mnimo-3-caracteres-mximo-15" | i18n }}
     </div>
     <div
       class="error-message"
@@ -47,8 +44,8 @@
         usernameForm.get('username').value
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Letras, números,
-      guiones (-_) y puntos(.).
+      <ion-icon name="information-circle-outline"></ion-icon>{{
+      "letras-nmeros-guiones-puntos" | i18n }}
     </div>
     <ion-button
       color="primary"
@@ -56,7 +53,7 @@
       type="submit"
       [disabled]="usernameForm.invalid || usernameForm.pristine"
       shape="round"
-      >Confirmar cambio</ion-button
+      >{{ "confirmar-cambio" | i18n }}</ion-button
     >
   </form>
 </ion-content>

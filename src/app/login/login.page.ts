@@ -14,11 +14,12 @@ import {
 } from "@ionic/angular";
 
 import { User } from "../models/user";
-import { ConfigService } from "../services/config.service";
+import { Config, ConfigService } from "../services/config.service";
 import { NavService } from "../services/navigation.service";
 import { AuthService } from "./../services/auth.service";
 import { ForgotPasswordModal } from "./forgot-password/forgot-password.modal";
 import { GoogleAuthService } from "../services/google-auth.service";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "app-login",
@@ -43,6 +44,7 @@ export class LoginPage {
   public email: string;
   public provider: "google";
   public credential: string;
+  public language: string;
 
   constructor(
     private router: Router,
@@ -55,7 +57,8 @@ export class LoginPage {
     private nav: NavService,
     public platform: Platform,
     private config: ConfigService,
-    private googleAuth: GoogleAuthService
+    private googleAuth: GoogleAuthService,
+    private i18n: I18nService
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -73,8 +76,9 @@ export class LoginPage {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+    this.language = (await this.config.get("language")) as Config["language"];
   }
 
   async checkLogin() {
@@ -240,5 +244,14 @@ export class LoginPage {
 
   showRegister() {
     this.activeView = "register";
+  }
+
+  changeLanguage() {
+    if (this.language === "es") {
+      this.language = "en";
+    } else {
+      this.language = "es";
+    }
+    this.i18n.changeLanguage(this.language);
   }
 }

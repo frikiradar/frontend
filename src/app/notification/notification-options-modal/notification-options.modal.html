@@ -20,7 +20,7 @@
       lines="none"
     >
       <ion-icon slot="start" name="close-outline" color="light"></ion-icon>
-      <ion-label>Eliminar la notificación</ion-label>
+      <ion-label>{{ "eliminar-notificacin" | i18n }}</ion-label>
     </ion-item>
     <ion-item
       button
@@ -30,7 +30,7 @@
       *ngIf="!notification?.time_read"
     >
       <ion-icon slot="start" name="mail-open-outline" color="light"></ion-icon>
-      <ion-label>Marcar como leída</ion-label>
+      <ion-label>{{ "marcar-como-leda" | i18n }}</ion-label>
     </ion-item>
     <ion-item
       button
@@ -44,7 +44,7 @@
         name="mail-unread-outline"
         color="light"
       ></ion-icon>
-      <ion-label>Marcar como no leída</ion-label>
+      <ion-label>{{ "marcar-como-no-leda" | i18n }}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

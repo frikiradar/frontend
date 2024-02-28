@@ -567,7 +567,7 @@ export class RadarPage {
       index = index - 2;
     }
 
-    const user = this.users[index];
+    const user = this.users[index] ?? this.users[index];
     if (user && "username" in user && this.tutorial) {
       this.detectorRef.detectChanges();
       let radar_config = (await this.config.get(

@@ -65,7 +65,7 @@
     <img [src]="selectedMessage?.image" />
   </ion-thumbnail>
   <ion-label>
-    <p class="reply-to-name">Editar mensaje</p>
+    <p class="reply-to-name">{{ "editar-mensaje" | i18n }}</p>
     <p class="reply-to-text">{{ selectedMessage?.text }}</p>
   </ion-label>
   <ion-icon button (click)="closeEdit()" name="close" slot="end"></ion-icon>
@@ -83,7 +83,7 @@
         </ion-button>
       </ion-buttons>
       <ion-textarea
-        placeholder="Escribe un mensaje..."
+        placeholder="{{ 'escribe-un-mensaje' | i18n }}"
         autocapitalize="on"
         (keydown.enter)="keydownEnter($event)"
         formControlName="message"
@@ -126,7 +126,7 @@
   </form>
   <ion-item *ngIf="recording" lines="none">
     <ion-text class="ion-text-center" color="medium">
-      Grabando audio... {{ countRecordingString }}</ion-text
+      {{ "grabando-audio" | i18n }} {{ countRecordingString }}</ion-text
     >
   </ion-item>
   <ion-buttons ion-activatable slot="end">
@@ -157,25 +157,7 @@
   [style]="{ width: '100%' }"
   (emojiSelect)="addEmoji($event)"
   title="Elige un emoji"
-  [i18n]="{
-    search: 'Busca el emoji perfecto',
-    emojilist: 'Listado de emojis',
-    found: 'Emoji no encontrado',
-    clear: 'Borrar',
-    categories: {
-      search: 'Resultados',
-      recent: 'Más usados',
-      people: 'Caras y personas',
-      nature: 'Animales y naturaleza',
-      foods: 'Comida y bebida',
-      activity: 'Actividad',
-      places: 'Viajes y lugares',
-      objects: 'Objetos',
-      symbols: 'Símbolos',
-      flags: 'Banderas',
-      custom: 'frikiradar'
-    }
-  }"
+  [i18n]="i18nEmojiMart"
 ></emoji-mart>
 
 <!-- modals -->
@@ -189,10 +171,7 @@
 >
   <ng-template>
     <ion-content class="ion-padding">
-      <p>
-        Enviar contenido explícito sin el consentimiento del receptor puede ser
-        motivo de expulsión.
-      </p>
+      <p>{{ "enviar-contenido-explcito-sin-consentimiento" | i18n }}</p>
       <ion-list>
         <ion-item
           button
@@ -201,7 +180,7 @@
           lines="none"
         >
           <ion-icon slot="start" name="camera" color="light"></ion-icon>
-          <ion-label>Desde la cámara</ion-label>
+          <ion-label>{{ "desde-cmara" | i18n }}</ion-label>
         </ion-item>
         <ion-item
           lines="none"
@@ -210,7 +189,7 @@
           (click)="selectPictureFromGallery()"
         >
           <ion-icon slot="start" name="images" color="light"></ion-icon>
-          <ion-label>Desde la galería</ion-label>
+          <ion-label>{{ "desde-galera" | i18n }}</ion-label>
         </ion-item>
       </ion-list>
     </ion-content>

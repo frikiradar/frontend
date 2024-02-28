@@ -7,14 +7,14 @@
       <ion-col class="login">
         <div *ngIf="activeView == 'login'" class="ion-padding">
           <ion-img alt="frikiradar" src="/assets/icon/icon.svg"></ion-img>
-          <h2>Hola,</h2>
-          <h3>Te doy la bienvenida a frikiradar</h3>
+          <h2>{{ "hola" | i18n }}</h2>
+          <h3>{{ "te-doy-bienvenida-frikiradar" | i18n }}</h3>
           <div id="login-content">
             <form [formGroup]="loginForm" autocomplete="off">
               <ion-item lines="full" class="login-input">
                 <ion-icon name="person-outline" slot="start"></ion-icon>
                 <ion-input
-                  label="Nombre de usuario o correo electrónico"
+                  label="{{ 'nombre-usuario-o-email' | i18n }}"
                   labelPlacement="floating"
                   outline
                   required
@@ -30,7 +30,7 @@
               <ion-item lines="full" *ngIf="insertPassword" class="login-input">
                 <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
                 <ion-input
-                  label="Contraseña"
+                  label="{{ 'password' | i18n }}"
                   labelPlacement="floating"
                   required
                   [type]="clearPassword ? 'text' : 'password'"
@@ -62,7 +62,9 @@
                 *ngIf="!insertPassword"
               >
                 <ion-icon slot="start" name="mail"></ion-icon>
-                <ion-label>Continuar con email</ion-label></ion-button
+                <ion-label
+                  >{{ "continuar-con-email" | i18n }}</ion-label
+                ></ion-button
               >
               <ion-button
                 color="primary"
@@ -74,7 +76,7 @@
                 *ngIf="insertPassword"
               >
                 <ion-icon slot="start" name="log-in-outline"></ion-icon>
-                <ion-label>Iniciar sesión</ion-label></ion-button
+                <ion-label>{{ "iniciar-sesin" | i18n }}</ion-label></ion-button
               >
               <ion-button
                 color="light"
@@ -86,7 +88,9 @@
                 *ngIf="insertPassword"
               >
                 <ion-icon color="dark" name="arrow-back-outline"></ion-icon>
-                <ion-label color="dark">Volver</ion-label></ion-button
+                <ion-label color="dark"
+                  >{{ "volver" | i18n }}</ion-label
+                ></ion-button
               >
             </form>
             <ion-button
@@ -100,11 +104,13 @@
             >
               <ion-icon src="/assets/icon/google.svg" slot="start"></ion-icon>
               <ion-label color="dark"
-                >Iniciar sesión con Google</ion-label
+                >{{ "iniciar-sesin-con-google" | i18n }}</ion-label
               ></ion-button
             >
             <p class="ion-text-center" id="forgot-password">
-              <a (click)="forgotPassword()">No puedo iniciar sesión</a>
+              <a (click)="forgotPassword()"
+                >{{ "no-puedo-iniciar-sesin" | i18n }}</a
+              >
             </p>
           </div>
         </div>
@@ -116,7 +122,7 @@
                   <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
                 </ion-button>
               </ion-buttons>
-              <ion-title>Registro</ion-title>
+              <ion-title>{{ "registro" | i18n }}</ion-title>
             </ion-toolbar>
           </ion-header>
           <app-register
@@ -130,3 +136,10 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+<!-- cambiar idioma-->
+<ion-footer class="ion-no-border">
+  <ion-item button (click)="changeLanguage()" lines="none">
+    <ion-icon name="language"></ion-icon>
+    <ion-label> {{ "change-login-language" | i18n }} </ion-label>
+  </ion-item>
+</ion-footer>

@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>¡Sonríe al pajarito!</ion-title>
+    <ion-title>{{ "sonre-al-pajarito" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -34,7 +34,7 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="cancel()">CANCELAR</ion-button>
+      <ion-button (click)="cancel()">{{ "cancelar" | i18n }}</ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="triggerSwitchCamera()">

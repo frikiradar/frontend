@@ -49,6 +49,7 @@ export interface Config {
     | "strawberries-and-cream"
     | "transparent";
   rules?: boolean;
+  language?: "es" | "en";
 }
 @Injectable({
   providedIn: "root",

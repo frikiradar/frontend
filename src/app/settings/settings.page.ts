@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AlertController, ModalController, Platform } from "@ionic/angular";
+import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
@@ -16,7 +16,8 @@ import { NavService } from "../services/navigation.service";
 import { UtilsService } from "../services/utils.service";
 import { PaymentsModal } from "./payments/payments.modal";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
-import { Config } from "../services/config.service";
+import { ConfigService, Config } from "../services/config.service";
+import { I18nService } from "../services/i18n.service";
 
 @Component({
   selector: "app-settings",
@@ -25,6 +26,7 @@ import { Config } from "../services/config.service";
 })
 export class SettingsPage implements OnInit {
   public user: User;
+  public language: "es" | "en";
 
   public themesOpts = {
     slidesPerView: 3.5,
@@ -42,11 +44,14 @@ export class SettingsPage implements OnInit {
     private userSvc: UserService,
     private alert: AlertController,
     private nav: NavService,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private config: ConfigService,
+    private i18n: I18nService
   ) {}
 
   async ngOnInit() {
     this.user = this.auth.currentUserValue;
+    this.language = (await this.config.get("language")) as Config["language"];
   }
 
   async passwordModal() {
@@ -193,6 +198,10 @@ export class SettingsPage implements OnInit {
 
       alert.present();
     }
+  }
+
+  changeLanguage(value: "es" | "en") {
+    this.i18n.changeLanguage(value);
   }
 
   back() {

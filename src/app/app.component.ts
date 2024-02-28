@@ -21,6 +21,7 @@ import { AdService } from "./services/ad.service";
 import { StoreService } from "./services/store.service";
 import { GoogleAuthService } from "./services/google-auth.service";
 import { environment } from "src/environments/environment";
+import { I18nService } from "./services/i18n.service";
 
 @Component({
   selector: "app-root",
@@ -42,13 +43,15 @@ export class AppComponent {
     private toast: ToastController,
     private adService: AdService,
     private store: StoreService,
-    private googleAuth: GoogleAuthService
+    private googleAuth: GoogleAuthService,
+    private i18nService: I18nService
   ) {
     this.initializeApp();
   }
 
   async initializeApp() {
     await this.utils.toggleTheme(undefined, true);
+    await this.i18nService.init();
 
     this.auth.currentUser
       .pipe(first((u) => !!u?.id))

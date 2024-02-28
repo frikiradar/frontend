@@ -13,7 +13,7 @@
         shape="round"
       >
         <ion-icon name="create-outline"></ion-icon>
-        <ion-label>Editar perfil</ion-label>
+        <ion-label>{{ "editar-perfil" | i18n }}</ion-label>
       </ion-button>
       <ion-button
         (click)="showOptions($event)"
@@ -116,11 +116,13 @@
             <ion-icon name="heart" slot="start" color="primary"></ion-icon>
             <ion-label>
               <span class="likes" (click)="showLikes('received')"
-                ><strong>{{user.likes.received}}</strong> recibidos</span
+                ><strong>{{user.likes.received}}</strong> {{ "recibidos" | i18n
+                }}</span
               >
               &nbsp;&nbsp;&nbsp;&nbsp;
               <span class="likes" (click)="showLikes('delivered')"
-                ><strong>{{user.likes.delivered}}</strong> entregados</span
+                ><strong>{{user.likes.delivered}}</strong> {{ "entregados" |
+                i18n }}</span
               >
             </ion-label>
           </ion-item>
@@ -136,7 +138,7 @@
             ></ion-icon>
             <ion-label>
               <span *ngIf="user?.distance !== undefined"
-                >A {{ user?.distance }}km de distancia
+                >{{"km-distancia" | i18n: {distance: user?.distance} }}
               </span>
               <span *ngIf="user?.ip"> ({{user?.ip}})</span>
             </ion-label>
@@ -152,21 +154,23 @@
           </ion-item>
           <ion-item lines="none" *ngIf="user?.block">
             <ion-label>
-              <h1><strong>Usuario bloqueado</strong></h1>
-              <p>No puedes interactuar con esta persona.</p>
+              <h1><strong>{{ "usuario-bloqueado" | i18n }}</strong></h1>
+              <p>{{ "no-puedes-interactuar-con-esta" | i18n }}</p>
             </ion-label>
           </ion-item>
           <ion-item lines="none" *ngIf="user?.last_login">
             <ion-icon name="time"></ion-icon>
             <ion-label
-              >Última conexión: {{ (user?.last_login | niceDate) === 'Ahora
-              mismo' ? 'En línea' : (user?.last_login | niceDate) }}</ion-label
+              >{{"ltima-conexin" | i18n}}: {{ (user?.last_login | niceDate) ===
+              'Ahora mismo' ? 'En línea' : (user?.last_login | niceDate)
+              }}</ion-label
             >
           </ion-item>
           <ion-item lines="none" *ngIf="user?.register_date">
             <ion-icon name="calendar"></ion-icon>
             <ion-label
-              >Fecha de registro: {{user?.register_date | niceDate }}</ion-label
+              >{{"fecha-registro" | i18n}}: {{user?.register_date | niceDate
+              }}</ion-label
             >
           </ion-item>
           <ion-item lines="none" *ngIf="user?.location">
@@ -183,16 +187,18 @@
           >
             <ion-icon name="body"></ion-icon>
             <ion-label
-              >{{user?.orientation ? user.orientation + ' | ' : ''}} {{
-              user?.gender ? user.gender : '' }} {{ user?.pronoun ? '(' +
-              user.pronoun.toLowerCase() + ') | ' : '|'}} {{ user?.status ?
-              user.status + ' | ' : ''}} {{ user?.relationship ?
-              user.relationship : ''}}
+              >{{user?.orientation ? (user.orientation | i18n) + ' | ' : ''}} {{
+              user?.gender ? (user.gender | i18n) : '' }} {{ user?.pronoun ? '('
+              + (user.pronoun | i18n).toLowerCase() + ') | ' : '|'}} {{
+              user?.status ? (user.status | i18n) + ' | ' : ''}} {{
+              user?.relationship ? (user.relationship | i18n) : ''}}
             </ion-label>
           </ion-item>
           <ion-item *ngIf="user?.connection?.length">
             <ion-icon name="search-outline"></ion-icon>
-            <ion-label>Buscando: {{ user?.connection?.join(", ") }}</ion-label>
+            <ion-label
+              >{{ "buscando" | i18n }}: {{ connections?.join(", ") }}</ion-label
+            >
           </ion-item>
         </ion-list>
         <ion-list class="tags">
@@ -258,10 +264,8 @@
   <ng-template #noUser>
     <div class="full-center ion-padding">
       <ion-icon name="body"></ion-icon>
-      <h2>No encontrado</h2>
-      <p>
-        El perfil de usuario que intentas ver no existe o se encuentra inactivo.
-      </p>
+      <h2>{{ "no-encontrado" | i18n }}</h2>
+      <p>{{ "perfil-usuario-que-intentas-ver" | i18n }}</p>
     </div>
   </ng-template>
 </ion-content>

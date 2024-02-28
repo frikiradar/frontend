@@ -5,7 +5,7 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Dispositivos y notificaciones</ion-title>
+    <ion-title>{{ "dispositivos-notificaciones" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -19,17 +19,13 @@
     >
     </ion-checkbox>
     <ion-label>
-      <h2>Notificaciones promocionales</h2>
+      <h2>{{ "notificaciones-promocionales" | i18n}}</h2>
       <p class="ion-text-wrap">
-        Me gustaría recibir información por correo electrónico sobre promociones
-        y descuentos exclusivos de frikiradar.
+        {{ "me-gustara-recibir-informacin-por" | i18n }}
       </p>
     </ion-label>
   </ion-item>
-  <p class="ion-padding">
-    Estos son los dispositivos con los que has iniciado sesión alguna vez en
-    frikiradar. Puedes eliminarlos o pausar las notificaciones.
-  </p>
+  <p class="ion-padding">{{ "estos-son-dispositivos-con-que" | i18n }}</p>
   <ion-list>
     <ion-item *ngFor="let device of devices" lines="full">
       <ion-buttons>

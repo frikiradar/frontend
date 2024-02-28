@@ -156,7 +156,7 @@
       <ion-item lines="none">
         <ion-textarea
           id="trigger-comment"
-          placeholder="Comenta la historia"
+          placeholder="{{ 'comment-story' | i18n }}"
           autocapitalize="on"
           (ionFocus)="commentFocus($event);"
           rows="1"
@@ -184,7 +184,7 @@
 >
   <ng-template>
     <ion-content class="ion-padding">
-      <p>Visualizaciones y kokoros</p>
+      <p>{{ "visualizaciones-kokoros" | i18n }}</p>
       <ion-list *ngIf="story?.viewStories?.length > 0">
         <ion-item
           *ngFor="let view of story?.viewStories"
@@ -203,7 +203,7 @@
         </ion-item>
       </ion-list>
       <ion-item *ngIf="story?.viewStories?.length == 0" color="dark">
-        <p>No hay visualizaciones</p>
+        <p>{{ "no-hay-visualizaciones" | i18n }}</p>
       </ion-item>
     </ion-content>
   </ng-template>
@@ -220,7 +220,7 @@
 >
   <ng-template>
     <ion-content class="comments-modal">
-      <p class="ion-padding">Comentarios</p>
+      <p class="ion-padding">{{ "comentarios" | i18n }}</p>
       <ion-list
         id="usernames"
         *ngIf="usernames?.length && comment?.value?.length > 3"
@@ -275,14 +275,14 @@
                 *ngIf="auth.currentUserValue.id !== comment.user.id"
                 button
                 (click)="reply(comment)"
-                >Responder</span
+                >{{ "responder" | i18n }}</span
               >
               &nbsp;&nbsp;&nbsp;
               <span
                 *ngIf="auth.currentUserValue.id === comment.user.id || auth.isMaster()"
                 button
                 (click)="deleteComment(comment)"
-                >Eliminar</span
+                >{{ "eliminar" | i18n }}</span
               >
             </ion-note>
           </ion-label>
@@ -302,7 +302,7 @@
         </ion-item>
       </ion-list>
       <ion-item *ngIf="story?.comments.length == 0" color="dark">
-        <p>No hay comentarios</p>
+        <p>{{ "no-hay-comentarios" | i18n }}</p>
       </ion-item>
     </ion-content>
     <ion-footer>
@@ -316,7 +316,7 @@
         <form [formGroup]="commentForm" autocomplete="off">
           <ion-item lines="none">
             <ion-textarea
-              placeholder="Comenta la historia"
+              placeholder="{{ 'comment-story' | i18n }}"
               autocapitalize="on"
               (keydown.enter)="sendComment($event)"
               (ionInput)="setWriting($event.detail.value)"
@@ -356,7 +356,7 @@
           *ngIf="story.user.id === auth.currentUserValue.id || auth.isMaster()"
         >
           <ion-icon slot="start" name="trash-outline" color="light"></ion-icon>
-          <ion-label>Eliminar la historia</ion-label>
+          <ion-label>{{ "eliminar-historia" | i18n }}</ion-label>
         </ion-item>
         <ion-item
           lines="none"
@@ -369,7 +369,7 @@
             name="warning-outline"
             color="light"
           ></ion-icon>
-          <ion-label>Reportar la historia</ion-label>
+          <ion-label>{{ "reportar-historia" | i18n }}</ion-label>
         </ion-item>
       </ion-list>
     </ion-content>

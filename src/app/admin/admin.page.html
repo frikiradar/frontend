@@ -7,7 +7,7 @@
         </ion-button>
       </ion-button>
     </ion-buttons>
-    <ion-title>Administración</ion-title>
+    <ion-title>{{ "administracin" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,12 +16,12 @@
     <ion-item-group>
       <ion-item-divider color="primary">
         <ion-icon name="people" slot="start"></ion-icon>
-        <ion-label><h2>Usuarios</h2></ion-label>
+        <ion-label><h2>{{ "usuarios" | i18n }}</h2></ion-label>
       </ion-item-divider>
       <ion-item (click)="bannedUsersModal()" button lines="full">
         <ion-icon name="skull-outline" slot="start"></ion-icon>
         <ion-label>
-          <h2>Usuarios baneados</h2>
+          <h2>{{ "usuarios-baneados" | i18n }}</h2>
         </ion-label>
       </ion-item>
     </ion-item-group>
@@ -29,11 +29,11 @@
     <ion-item-group>
       <ion-item-divider color="primary">
         <ion-icon name="megaphone" slot="start"></ion-icon>
-        <ion-label><h2>Marketing</h2></ion-label>
+        <ion-label><h2>{{ "marketing" | i18n }}</h2></ion-label>
       </ion-item-divider>
       <ion-item (click)="globalNotificationsModal()" button lines="full">
         <ion-icon name="notifications-outline" slot="start"></ion-icon>
-        <ion-label>Notificaciones globales</ion-label>
+        <ion-label>{{ "notificaciones-globales" | i18n }}</ion-label>
       </ion-item>
     </ion-item-group>
   </ion-list>

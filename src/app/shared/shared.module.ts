@@ -35,6 +35,7 @@ import { AdComponent } from "../ad/ad.component";
 import { DisableAccountPage } from "../settings/disable-account/disable-account.page";
 import { PaymentsModal } from "../settings/payments/payments.modal";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
+import { I18nPipe } from "../i18n.pipe";
 
 // install Swiper modules
 register();
@@ -46,6 +47,7 @@ register();
     ChatDatePipe,
     MentionsPipe,
     HashtagPipe,
+    I18nPipe,
     CreditsModal,
     RequestGeolocationModal,
     CropperModal,
@@ -85,6 +87,7 @@ register();
     ChatDatePipe,
     MentionsPipe,
     HashtagPipe,
+    I18nPipe,
     ChatInputComponent,
     AdComponent,
     ChatListComponent,

@@ -5,7 +5,7 @@
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Historial de pagos</ion-title>
+    <ion-title>{{ "historial-pagos" | i18n }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -44,8 +44,8 @@
   <ng-template #noPayments>
     <div class="full-center ion-padding">
       <ion-icon name="close-circle-outline"></ion-icon>
-      <h2>Sin resultados</h2>
-      <p>No has efectuado ningún pago.</p>
+      <h2>{{ "sin-resultados" | i18n }}</h2>
+      <p>{{ "no-has-efectuado-ningn-pago" | i18n }}</p>
     </div>
   </ng-template>
 </ion-content>

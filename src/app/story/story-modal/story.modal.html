@@ -11,7 +11,7 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="publish()" [disabled]="!imageFile || showBackdrop">
-        <ion-label color="primary">Publicar historia</ion-label>
+        <ion-label color="primary">{{ "publicar-historia" | i18n }}</ion-label>
         <ion-icon color="primary" name="arrow-up-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -55,11 +55,8 @@
   </form>
   <div *ngIf="!image" class="full-center ion-padding">
     <ion-icon name="camera-outline"></ion-icon>
-    <h2>Añade una imagen</h2>
-    <p>
-      Haz una foto o selecciona una imagen de tu galería para mostrar tu
-      historia.
-    </p>
+    <h2>{{ "aade-una-imagen" | i18n }}</h2>
+    <p>{{ "haz-una-foto-selecciona-una" | i18n }}</p>
   </div>
   <input
     type="file"
@@ -75,21 +72,21 @@
     <ion-buttons slot="start">
       <ion-button (click)="selectPicture('gallery')">
         <ion-icon name="image-outline"></ion-icon>
-        <ion-label>Galería</ion-label>
+        <ion-label>{{ "galera" | i18n }}</ion-label>
       </ion-button>
       <!--<ion-button (click)="selectPicture('camera')">
         <ion-icon name="camera-outline"></ion-icon>
-        <ion-label>Cámara</ion-label>
+        <ion-label>{{ "cmara" | i18n }}</ion-label>
       </ion-button>-->
     </ion-buttons>
     <ion-buttons slot="end">
       <!--<ion-button (click)="selectText()">
         <ion-icon name="document-text-outline"></ion-icon>
-        <ion-label>Texto</ion-label>
+        <ion-label>{{ "texto" | i18n }}</ion-label>
       </ion-button>-->
       <ion-button (click)="selectPicture('camera')">
         <ion-icon name="camera-outline"></ion-icon>
-        <ion-label>Cámara</ion-label>
+        <ion-label>{{ "cmara" | i18n }}</ion-label>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

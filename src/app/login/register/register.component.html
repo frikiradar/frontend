@@ -1,14 +1,14 @@
 <div class="ion-padding">
   <form (submit)="submitRegister()" [formGroup]="registerForm">
-    <h2>¿Cómo? ¿Aún no tienes una cuenta?</h2>
+    <h2>{{ "cmo-an-no-tienes-una" | i18n }}</h2>
     <p>
-      Pasa, ¡ya te queda muy muy poco para comenzar a conocer frikis en tu zona!
+      {{ "pasa-ya-te-queda-muy" | i18n }}
     </p>
 
     <ion-item>
       <ion-icon name="person-outline" slot="start"></ion-icon>
       <ion-input
-        label="Nombre de usuario"
+        label="{{ 'username' | i18n }}"
         labelPlacement="floating"
         required
         type="text"
@@ -20,8 +20,8 @@
       </ion-input>
     </ion-item>
     <div class="error-message" *ngIf="usernameSuggestion">
-      <ion-icon name="information-circle-outline"></ion-icon>Ups! Nombre de
-      usuario no disponible. Sugerencia {{ usernameSuggestion }}
+      <ion-icon name="information-circle-outline"></ion-icon>
+      {{ "oops-username-not-available" | i18n }} {{ usernameSuggestion }}
     </div>
     <div
       class="error-message"
@@ -31,8 +31,8 @@
         !usernameSuggestion
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Mínimo de 3
-      caracteres y máximo de 15.
+      <ion-icon name="information-circle-outline"></ion-icon
+      >{{ "mnimo-3-caracteres-mximo-15" | i18n }}
     </div>
     <div
       class="error-message"
@@ -42,13 +42,13 @@
         !usernameSuggestion
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Letras, números,
-      guiones (-_) y puntos(.).
+      <ion-icon name="information-circle-outline"></ion-icon
+      >{{ "letras-nmeros-guiones-puntos" | i18n }}
     </div>
     <ion-item *ngIf="!credential">
       <ion-icon name="mail-outline" slot="start"></ion-icon>
       <ion-input
-        label="Correo electrónico"
+        label="{{ 'email' | i18n }}"
         labelPlacement="floating"
         required
         type="email"
@@ -65,13 +65,13 @@
         registerForm.get('email').invalid && registerForm.get('email').value
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Introduce una
-      dirección de correo electrónico válida.
+      <ion-icon name="information-circle-outline"></ion-icon
+      >{{ "introduce-una-direccin-correo-electrnico" | i18n }}
     </div>
     <ion-item *ngIf="!credential">
       <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
       <ion-input
-        label="Contraseña"
+        label="{{ 'password' | i18n }}"
         labelPlacement="floating"
         required
         [type]="clearPassword ? 'text' : 'password'"
@@ -95,13 +95,13 @@
         registerForm.get('password').value
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Introduce un mínimo
-      de 8 caracteres.
+      <ion-icon name="information-circle-outline"></ion-icon
+      >{{ "introduce-un-mnimo-8-caracteres" | i18n }}
     </div>
     <ion-item button id="open-calendar">
       <ion-icon name="calendar-outline" slot="start"></ion-icon>
       <ion-label class="ion-text-wrap"
-        >Fecha de nacimiento
+        >{{ "fecha-nacimiento" | i18n }}
         <ion-text color="primary">{{
           registerForm.get("birthday").value | niceDate
         }}</ion-text></ion-label
@@ -126,10 +126,10 @@
       <ion-icon name="body-outline" slot="start"></ion-icon>
       <ion-select
         labelPlacement="floating"
-        label="Mi identidad de género (opcional)"
+        label="{{ 'gender' | i18n }}"
         interface="action-sheet"
-        cancel-text="Cancelar"
-        placeholder="Selecciona uno"
+        cancelText="{{ 'cancelar' | i18n }}"
+        placeholder="{{ 'selecciona-uno' | i18n }}"
         formControlName="gender"
       >
         <ion-select-option
@@ -146,15 +146,15 @@
         registerForm.get('password').value
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
-      una opción
+      <ion-icon name="information-circle-outline"></ion-icon
+      >{{ "debes-seleccionar-una-opcin" | i18n }}
     </div>
     <ion-item>
       <ion-icon name="search-outline" slot="start"></ion-icon>
       <ion-select
-        label="Estoy buscando (opcional)"
+        label="{{ 'looking-for' | i18n }}"
         labelPlacement="floating"
-        cancel-text="Cancelar"
+        cancelText="{{ 'cancelar' | i18n }}"
         placeholder="Selecciona"
         formControlName="lovegender"
         multiple
@@ -169,33 +169,37 @@
     <ion-item>
       <ion-icon name="people-outline" slot="start"></ion-icon>
       <ion-select
-        label="¿Cómo nos has conocido?"
+        label="{{ 'how-did-you-find-us' | i18n }}"
         labelPlacement="floating"
         interface="action-sheet"
-        cancel-text="Cancelar"
-        placeholder="Selecciona uno"
+        cancelText="{{ 'cancelar' | i18n }}"
+        placeholder="{{ 'selecciona-uno' | i18n }}"
         formControlName="meet"
       >
-        <ion-select-option value="friend"
-          >A través de un amigo</ion-select-option
-        >
-        <ion-select-option value="youtube">Por un youtuber</ion-select-option>
-        <ion-select-option value="blog"
-          >En un blog o web de noticias</ion-select-option
-        >
-        <ion-select-option value="social">En una red social</ion-select-option>
-        <ion-select-option value="store"
-          >En un buscador o tienda de aplicaciones</ion-select-option
-        >
-        <ion-select-option value="event"
-          >En un evento/convención</ion-select-option
-        >
-        <ion-select-option value="contest"
-          >Participando en un sorteo o concurso</ion-select-option
-        >
-        <ion-select-option [value]="false"
-          >Otro, no se o no quiero decirlo</ion-select-option
-        >
+        <ion-select-option value="friend">{{
+          "travs-un-amigo" | i18n
+        }}</ion-select-option>
+        <ion-select-option value="youtube">{{
+          "por-un-youtuber" | i18n
+        }}</ion-select-option>
+        <ion-select-option value="blog">{{
+          "un-blog-web-noticias" | i18n
+        }}</ion-select-option>
+        <ion-select-option value="social">{{
+          "una-red-social" | i18n
+        }}</ion-select-option>
+        <ion-select-option value="store">{{
+          "un-buscador-tienda-aplicaciones" | i18n
+        }}</ion-select-option>
+        <ion-select-option value="event">{{
+          "un-eventoconvencin" | i18n
+        }}</ion-select-option>
+        <ion-select-option value="contest">{{
+          "participando-un-sorteo-concurso" | i18n
+        }}</ion-select-option>
+        <ion-select-option [value]="false">{{
+          "otro-no-se-no-quiero" | i18n
+        }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item *ngIf="registerForm.get('meet').value">
@@ -247,8 +251,8 @@
       </ion-input>
     </ion-item>
     <div class="error-message" *ngIf="referralFailed">
-      <ion-icon name="information-circle-outline"></ion-icon>No encontramos el
-      usuario. ¿Está bien escrito?
+      <ion-icon name="information-circle-outline"></ion-icon>
+      {{ "no-encontramos-usuario-est-bien" | i18n }}
     </div>
     <div
       class="error-message"
@@ -257,24 +261,24 @@
         registerForm.get('password').value
       "
     >
-      <ion-icon name="information-circle-outline"></ion-icon>Debes seleccionar
-      una opción
+      <ion-icon name="information-circle-outline"></ion-icon
+      >{{ "debes-seleccionar-una-opcin" | i18n }}
     </div>
     <ion-item lines="none">
       <ion-label
         ><p>
-          Acepto el
-          <a (click)="urlSvc.openUrl('https://frikiradar.com/tos')"
-            >Aviso legal</a
-          >
-          y la
+          {{ "acepto" | i18n }}
+          <a (click)="urlSvc.openUrl('https://frikiradar.com/tos')">{{
+            "aviso-legal" | i18n
+          }}</a>
+          {{ "" | i18n }}
           <a
             (click)="
               urlSvc.openUrl('https://frikiradar.com/politica-de-privacidad/')
             "
-            >Política de privacidad</a
+            >{{ "poltica-privacidad" | i18n }}</a
           >
-          de frikiradar.
+          {{ "frikiradar" | i18n }}
         </p></ion-label
       >
       <ion-checkbox
@@ -284,15 +288,17 @@
       ></ion-checkbox>
     </ion-item>
     <ion-item lines="none">
-      <ion-label><p>La fecha de nacimiento indicada es correcta.</p></ion-label>
+      <ion-label
+        ><p>{{ "fecha-nacimiento-indicada-es-correcta" | i18n }}</p></ion-label
+      >
       <ion-checkbox
         aria-label
         slot="start"
         formControlName="age"
       ></ion-checkbox>
     </ion-item>
-    <ion-button color="primary" type="submit" expand="block" shape="round"
-      >Registrarme</ion-button
-    >
+    <ion-button color="primary" type="submit" expand="block" shape="round">{{
+      "registrarme" | i18n
+    }}</ion-button>
   </form>
 </div>

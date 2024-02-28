@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Eventos (beta)</ion-title>
+    <ion-title>{{ "eventos-beta" | i18n }}</ion-title>
     <ion-buttons slot="end">
       <ion-button id="show-options">
         <ion-icon slot="icon-only" name="location-outline"></ion-icon>
@@ -18,11 +18,11 @@
       *ngIf="my === false"
     >
       <ion-icon name="add-circle"></ion-icon>
-      <ion-label>Crear evento</ion-label>
+      <ion-label>{{ "crear-evento" | i18n }}</ion-label>
     </ion-chip>
     <ion-chip color="secondary" (click)="myEvents()" button [disabled]="my">
       <ion-icon name="calendar"></ion-icon>
-      <ion-label>Mis eventos y citas</ion-label>
+      <ion-label>{{ "mis-eventos-citas" | i18n }}</ion-label>
     </ion-chip>
   </ion-item>
 
@@ -32,21 +32,20 @@
     *ngIf="my === false"
   >
     <ion-segment-button value="suggested">
-      <ion-label color="light">Eventos sugeridos</ion-label>
+      <ion-label color="light">{{ "eventos-sugeridos" | i18n }}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="online">
-      <ion-label color="light">Online destacados</ion-label>
+      <ion-label color="light">{{ "online-destacados" | i18n }}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="near">
-      <ion-label color="light">Cerca de ti</ion-label>
+      <ion-label color="light">{{ "cerca-ti" | i18n }}</ion-label>
     </ion-segment-button>
   </ion-segment>
 </ion-header>
 <ion-content>
   <ion-item *ngIf="my === true">
     <ion-label color="light" class="ion-text-wrap"
-      >Aquí se muestran los eventos que has creado y a los que quieres
-      asistir.</ion-label
+      >{{"aqu-se-muestran-eventos-que" | i18n}}</ion-label
     >
   </ion-item>
   <ion-grid *ngIf="events?.length > 0 && !loading">
@@ -81,7 +80,7 @@
               *ngIf="!event?.past && !event?.participate"
             >
               <ion-icon name="calendar" slot="start"></ion-icon>
-              Quiero asistir
+              {{ "quiero-asistir" | i18n }}
             </ion-button>
             <ion-button
               shape="round"
@@ -89,7 +88,7 @@
               *ngIf="!event?.past && event?.participate && event.status == 'active'"
             >
               <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-              Asistiré
+              {{ "asistir" | i18n }}
             </ion-button>
             <ion-button
               shape="round"
@@ -98,7 +97,7 @@
               *ngIf="!event?.past && event?.participate && event.status == 'cancelled'"
             >
               <ion-icon name="close-circle-outline" slot="start"></ion-icon>
-              Evento cancelado
+              {{ "evento-cancelado" | i18n }}
             </ion-button>
             <ion-button
               shape="round"
@@ -107,7 +106,7 @@
               disabled
             >
               <ion-icon name="timer-outline" slot="start"></ion-icon>
-              Evento pasado
+              {{ "evento-pasado" | i18n }}
             </ion-button>
           </ion-card-content>
         </ion-card>
@@ -116,14 +115,11 @@
   </ion-grid>
   <div class="full-center ion-padding" *ngIf="!events?.length && !loading">
     <ion-icon name="calendar-clear-outline"></ion-icon>
-    <h2>Sin resultados</h2>
+    <h2>{{ "sin-resultados" | i18n }}</h2>
     <div *ngIf="type === 'near'">
-      <p>
-        Puedes ajustar tus opciones de eventos cercanos cambiando tu país y
-        municipio para recomendarte eventos en tu zona.
-      </p>
+      <p>{{"puedes-ajustar-tus-opciones-eventos" | i18n}}</p>
       <ion-button shape="round" (click)="showOptions()"
-        >Mostrar opciones</ion-button
+        >{{ "mostrar-opciones" | i18n }}</ion-button
       >
     </div>
   </div>
@@ -143,10 +139,9 @@
       <ion-header class="ion-no-border">
         <ion-item lines="full">
           <ion-label class="ion-text-center">
-            <h2>Configuración de eventos cercanos</h2>
+            <h2>{{ "configuracin-eventos-cercanos" | i18n }}</h2>
             <p class="ion-text-wrap">
-              Selecciona tu país y municipio para poder recomendarte eventos
-              presenciales en tu zona.
+              {{"selecciona-tu-pas-municipio-para" | i18n}}
             </p>
           </ion-label>
         </ion-item>
@@ -157,8 +152,8 @@
           <ion-select
             label="Tu país"
             interface="action-sheet"
-            cancel-text="Cancelar"
-            placeholder="Selecciona uno"
+            cancelText="{{ 'cancelar' | i18n }}"
+            placeholder="{{ 'selecciona-uno' | i18n }}"
             [value]="user?.country"
             debounce="2000"
             (ionChange)="changePreferences('country', $event.detail.value)"

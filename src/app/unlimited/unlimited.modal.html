@@ -7,32 +7,39 @@
     </ion-buttons>
     <ion-title>
       <ion-icon src="/assets/icon/icon.svg"></ion-icon>
-      <ion-label>frikiradar UNLIMITED</ion-label>
+      <ion-label>{{ "frikiradar-unlimited" | i18n }}</ion-label>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
   <h3 *ngIf="!auth.isPremium()" class="ion-padding">
-    <span *ngIf="topic == 'ad'">¿No quieres publicidad?<br /></span>
+    <span *ngIf="topic == 'ad'"
+      >{{ "no-quieres-publicidad" | i18n }}<br
+    /></span>
     <span *ngIf="topic == 'location'"
-      >¿Quieres cambiar tu ubicación?<br
+      >{{ "quieres-cambiar-tu-ubicacin" | i18n }}<br
     /></span>
     <span *ngIf="topic == 'radar'"
-      >¿Quieres ver personas de todo el mundo?<br
+      >{{ "quieres-ver-personas-todo-mundo" | i18n }}<br
     /></span>
-    <span *ngIf="topic == 'filter'">¿Te gustaría usar este filtro?<br /></span>
-    <span *ngIf="topic == 'theme'">¿Quieres usar este tema?<br /></span>
-    ¡Disfruta del poder ILIMITADO!
+    <span *ngIf="topic == 'filter'"
+      >{{ "te-gustara-usar-este-filtro" | i18n }}<br
+    /></span>
+    <span *ngIf="topic == 'theme'"
+      >{{ "quieres-usar-este-tema" | i18n }}<br
+    /></span>
+    {{ "disfruta-del-poder-ilimitado" | i18n }}
   </h3>
   <div *ngIf="auth.isPremium()">
     <p class="ion-text-center" *ngIf="user?.premium_expiration">
-      ESTADO: Activo hasta el {{ user?.premium_expiration | date: "medium" }}
+      {{ "estado-activo-hasta" | i18n }} {{ user?.premium_expiration | date:
+      "medium" }}
     </p>
     <p class="ion-text-center" *ngIf="!user?.premium_expiration">
-      ESTADO: Activo indefinidamente
+      {{ "estado-activo-indefinidamente" | i18n }}
     </p>
     <p *ngIf="isPlatform('capacitor') && lastMethod == 'PLAY_STORE'">
-      Puedes modificar tu plan de suscripción por el tiempo que desees.
+      {{ "puedes-modificar-tu-plan-suscripcin" | i18n }}
     </p>
   </div>
   <ion-grid *ngIf="products.length">
@@ -68,7 +75,7 @@
               class="price_per_month"
             >
               <ion-label class="ion-text-center">
-                {{ product.price_per_month }}/mes
+                {{ product.price_per_month }}/{{ "mes" | i18n }}
               </ion-label>
             </ion-item>
           </ion-card-content>
@@ -78,21 +85,18 @@
   </ion-grid>
 
   <div *ngIf="auth.isPremium() && lastMethod == 'PLAY_STORE'">
-    <p>
-      También puedes gestionar tu suscripción desde la página de ajustes de Play
-      Store.
-    </p>
+    <p>{{"tambin-puedes-gestionar-tu-suscripcin" | i18n}}</p>
     <ion-item button lines="full" (click)="cancelSubscription()">
       <ion-icon name="logo-google-playstore" slot="start"></ion-icon>
-      <ion-label>Ir a Play Store</ion-label>
+      <ion-label>{{ "ir-play-store" | i18n }}</ion-label>
     </ion-item>
   </div>
 
   <div *ngIf="auth.isPremium() && lastMethod == 'PAYPAL'">
-    <p>Puedes gestionar tu suscripción desde la página de ajustes de PayPal.</p>
+    <p>{{ "puedes-gestionar-tu-suscripcin-desde" | i18n }}</p>
     <ion-item button lines="full" (click)="cancelSubscription()">
       <ion-icon name="logo-paypal" slot="start"></ion-icon>
-      <ion-label>Gestionar suscripción</ion-label>
+      <ion-label>{{ "gestionar-suscripcin" | i18n }}</ion-label>
     </ion-item>
   </div>
 
@@ -101,8 +105,8 @@
       <ion-icon name="hand-left" color="danger" slot="start"></ion-icon>
       <ion-label
         ><p>
-          <strong>CERO PUBLICIDAD.</strong> Utiliza la aplicación libremente. No
-          te aparecerán anuncios publicitarios de ningún tipo.
+          <strong>{{ "cero-publicidad" | i18n }}</strong>
+          {{"utiliza-aplicacin-libremente-no-te" | i18n}}
         </p></ion-label
       >
     </ion-item>
@@ -110,8 +114,8 @@
       <ion-icon name="location-sharp" slot="start" color="success"></ion-icon>
       <ion-label>
         <p>
-          <strong>CAMBIA TU UBICACIÓN.</strong> Elige una ubicación distinta
-          para encontrar personas cerca de ese lugar, ideal si planeas viajar.
+          <strong>{{ "cambia-tu-ubicacin" | i18n }}</strong>
+          {{"elige-una-ubicacin-distinta-para" | i18n}}
         </p>
       </ion-label>
     </ion-item>
@@ -119,8 +123,8 @@
       <ion-icon name="earth" slot="start" color="tertiary"></ion-icon>
       <ion-label>
         <p>
-          <strong>RADAR MUNDIAL.</strong> Expande tu radar, conecta con personas
-          de todas partes. Descubre nuevas amistades sin fronteras.
+          <strong>{{ "radar-mundial" | i18n }}</strong>
+          {{"expande-tu-radar-conecta-con" | i18n}}
         </p>
       </ion-label>
     </ion-item>
@@ -128,9 +132,8 @@
       <ion-icon name="notifications" slot="start" color="warning"></ion-icon>
       <ion-label>
         <p>
-          <strong>NOTIFICACIONES DE RADAR.</strong> Recibe una notificación
-          "Doki doki" cuando el radar encuentre alguien cercano compatible
-          contigo.
+          <strong>{{ "notificaciones-radar" | i18n }}</strong>
+          {{"recibe-una-notificacin-doki-doki" | i18n}}
         </p>
       </ion-label>
     </ion-item>
@@ -138,8 +141,8 @@
       <ion-icon name="color-palette" slot="start" color="primary"></ion-icon>
       <ion-label
         ><p>
-          <strong>TEMAS EXCLUSIVOS.</strong> Cambia el estilo de frikiradar con
-          los temas exclusivos para miembros de frikiradar UNLIMITED.
+          <strong>{{ "temas-exclusivos" | i18n }}</strong>
+          {{"cambia-estilo-frikiradar-con-temas" | i18n}}
         </p></ion-label
       >
     </ion-item>
@@ -151,9 +154,8 @@
       ></ion-icon>
       <ion-label>
         <p>
-          <strong>VERIFICA TU CUENTA.</strong> Un pago en frikiradar permite
-          verificar tu cuenta, mostrando una marca de verificación junto a tu
-          nombre.
+          <strong>{{ "verifica-tu-cuenta" | i18n }}</strong>
+          {{"un-pago-frikiradar-permite-verificar" | i18n}}
         </p>
       </ion-label>
     </ion-item>
@@ -162,10 +164,7 @@
 <ion-footer class="ion-padding" *ngIf="isPlatform('capacitor')">
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
-      Al pulsar "Continuar", se te cobrará automáticamente la suscripción que
-      elijas. Este cargo se realizará de manera recurrente hasta que decidas
-      cancelar la suscripción. Puedes cancelar tu suscripción en cualquier
-      momento desde los ajustes de Play Store.
+      {{"al-pulsar-suscribirse-se-te" | i18n}}
     </ion-label>
   </ion-item>
   <ion-button
@@ -174,18 +173,17 @@
     shape="round"
     (click)="purchaseProduct()"
     [disabled]="product?.active"
-    >Continuar</ion-button
+    >{{ "suscribirse" | i18n }}</ion-button
   >
 </ion-footer>
 <ion-footer
+  id="paypal"
   class="ion-padding"
   *ngIf="!isPlatform('capacitor') && !auth.isPremium()"
 >
   <ion-item lines="none">
     <ion-label class="ion-text-wrap">
-      Al pulsar "Continuar", se te cobrará automáticamente la suscripción que
-      elijas. Este cargo se realizará de manera recurrente hasta que decidas
-      cancelar la suscripción.
+      {{"al-pulsar-suscribirse-se-te" | i18n}}
     </ion-label>
   </ion-item>
   <ion-button
@@ -195,15 +193,15 @@
     (click)="purchaseProduct()"
   >
     <ion-icon slot="start" src="/assets/icon/paypal.svg"></ion-icon>
-    <ion-label color="dark">Suscribirse</ion-label>
+    <ion-label>{{ "suscribirse" | i18n }}</ion-label>
   </ion-button>
   <ion-button
-    color="dark"
+    id="card-purchase"
     expand="block"
     shape="round"
     (click)="purchaseProduct()"
   >
-    <ion-icon color="light" slot="start" name="card-outline"></ion-icon>
-    <ion-label color="light">Tarjeta de débito o crédito</ion-label>
+    <ion-icon slot="start" name="card-outline"></ion-icon>
+    <ion-label>{{ "tarjeta-dbito-crdito" | i18n }}</ion-label>
   </ion-button>
 </ion-footer>

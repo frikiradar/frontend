@@ -2,7 +2,7 @@ import { DatePipe } from "@angular/common";
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "chatDate"
+  name: "chatDate",
 })
 export class ChatDatePipe implements PipeTransform {
   transform(value: string) {
