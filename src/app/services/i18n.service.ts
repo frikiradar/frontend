@@ -1,40 +1,46 @@
 import { Injectable } from "@angular/core";
-import es from "../i18n/es.json";
-import en from "../i18n/en.json";
+import { HttpClient } from "@angular/common/http";
+import { firstValueFrom } from "rxjs";
 import { Config, ConfigService } from "./config.service";
-import { RestService } from "./rest.service";
-import { User } from "../models/user";
 import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class I18nService {
-  private texts: { [key: string]: string } = {};
+  private texts: { [key: string]: { [key: string]: string } } = {};
+  private currentLanguage: string;
 
   constructor(
-    private rest: RestService,
     private config: ConfigService,
-    private auth: AuthService
+    private auth: AuthService,
+    private http: HttpClient
   ) {}
 
   async init() {
-    this.texts = await this.getLanguage();
+    this.texts["es"] = await this.loadTranslations("es");
+    this.texts["en"] = await this.loadTranslations("en");
+    this.currentLanguage = await this.getLanguage();
   }
 
-  async getLanguage(): Promise<{ [key: string]: string }> {
+  async loadTranslations(language: string): Promise<{ [key: string]: string }> {
+    const translations = await firstValueFrom(
+      this.http.get<{ [key: string]: string }>(`./assets/i18n/${language}.json`)
+    );
+    return translations;
+  }
+
+  async getLanguage(): Promise<string> {
     let configLanguage = undefined;
     if (this.auth.currentUserValue) {
       configLanguage = this.auth.currentUserValue.config["language"];
-    }
-    if (!configLanguage) {
+    } else {
       configLanguage = (await this.config.get(
         "language"
       )) as Config["language"];
     }
-    if (configLanguage) {
-      return configLanguage === "es" ? es : en;
-    } else {
+
+    if (!configLanguage) {
       const navigatorLanguage = navigator.language;
 
       const spanishVariants = ["es", "ca", "eu", "gl", "val"];
@@ -45,19 +51,19 @@ export class I18nService {
         configLanguage = "en";
       }
 
-      this.config.set("language", configLanguage);
-      return configLanguage === "es" ? es : en;
+      await this.config.set("language", configLanguage);
     }
+
+    return configLanguage;
   }
 
-  changeLanguage(language: string) {
+  async setLanguage(language: string) {
+    this.currentLanguage = language;
     this.config.set("language", language);
-    this.texts = language === "es" ? es : en;
-    window.location.reload();
   }
 
   translate(key: string, variables: { [key: string]: string } = {}): string {
-    let text = this.texts[key] || key;
+    let text = this.texts[this.currentLanguage][key] || key;
     for (let variableKey in variables) {
       text = text.replace(`%{${variableKey}}%`, variables[variableKey]);
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { AlertController, ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
@@ -46,7 +46,8 @@ export class SettingsPage implements OnInit {
     private nav: NavService,
     private utils: UtilsService,
     private config: ConfigService,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private cd: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -204,7 +205,8 @@ export class SettingsPage implements OnInit {
     try {
       this.user.language = value;
       this.user = await this.userSvc.updateUser(this.user);
-      this.i18n.changeLanguage(value);
+      this.i18n.setLanguage(value);
+      this.cd.detectChanges();
     } catch (e) {
       const alert = await this.alert.create({
         header: "Error al guardar los cambios",

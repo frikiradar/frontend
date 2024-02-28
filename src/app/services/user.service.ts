@@ -213,15 +213,15 @@ export class UserService {
   async showRole(user: User) {
     let message = "";
     if (user.roles?.includes("ROLE_ADMIN")) {
-      message = this.i18n.translate("administrador");
+      message = await this.i18n.translate("administrador");
     } else if (user.roles?.includes("ROLE_MASTER")) {
-      message = this.i18n.translate("moderador");
+      message = await this.i18n.translate("moderador");
     } else if (user.roles?.includes("ROLE_PATREON")) {
       message = "Patreon";
     } else if (user.roles.includes("ROLE_DEMO")) {
       message = "FrikiBot";
     } else if (user.verified) {
-      message = this.i18n.translate("cuenta-verificada");
+      message = await this.i18n.translate("cuenta-verificada");
     }
 
     (

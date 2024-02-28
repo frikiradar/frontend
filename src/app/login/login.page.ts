@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -58,7 +58,8 @@ export class LoginPage {
     public platform: Platform,
     private config: ConfigService,
     private googleAuth: GoogleAuthService,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private cd: ChangeDetectorRef
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -246,12 +247,12 @@ export class LoginPage {
     this.activeView = "register";
   }
 
-  changeLanguage() {
+  async changeLanguage() {
     if (this.language === "es") {
       this.language = "en";
     } else {
       this.language = "es";
     }
-    this.i18n.changeLanguage(this.language);
+    await this.i18n.setLanguage(this.language);
   }
 }

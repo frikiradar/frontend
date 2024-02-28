@@ -49,9 +49,12 @@ export class AppComponent {
     this.initializeApp();
   }
 
+  async ngAfterViewInit() {
+    await this.i18nService.init();
+  }
+
   async initializeApp() {
     await this.utils.toggleTheme(undefined, true);
-    await this.i18nService.init();
 
     this.auth.currentUser
       .pipe(first((u) => !!u?.id))
