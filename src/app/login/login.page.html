@@ -137,7 +137,7 @@
   </ion-grid>
 </ion-content>
 <!-- cambiar idioma-->
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border" *ngIf="activeView == 'login'">
   <ion-item button (click)="changeLanguage()" lines="none">
     <ion-icon name="language"></ion-icon>
     <ion-label> {{ "change-login-language" | i18n }} </ion-label>

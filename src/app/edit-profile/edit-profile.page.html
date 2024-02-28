@@ -152,7 +152,7 @@
               <ion-select-option
                 *ngFor="let language of languages"
                 [value]="language.value"
-                >{{ language.name }}</ion-select-option
+                >{{ language.name | i18n }}</ion-select-option
               >
             </ion-select>
           </ion-item>

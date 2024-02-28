@@ -135,7 +135,7 @@
         <ion-select-option
           *ngFor="let gender of userSvc.getGenders()"
           [value]="gender"
-          >{{ gender }}
+          >{{ gender | i18n }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -162,7 +162,7 @@
         <ion-select-option
           *ngFor="let likegender of userSvc.getGenders()"
           [value]="likegender"
-          >{{ likegender }}
+          >{{ likegender | i18n }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -206,37 +206,37 @@
       <ion-label position="floating">
         {{
           registerForm.get("meet").value === "friend"
-            ? "Nombre de usuario o email de tu amigo"
+            ? ("nombre-o-email-amigo" | i18n)
             : ""
         }}
         {{
           registerForm.get("meet").value === "youtube"
-            ? "¿Cuál es el nombre del youtuber?"
+            ? ("nombre-youtuber" | i18n)
             : ""
         }}
         {{
           registerForm.get("meet").value === "blog"
-            ? "¿Cómo se llama el blog o la web?"
+            ? ("nombre-blog" | i18n)
             : ""
         }}
         {{
           registerForm.get("meet").value === "social"
-            ? "¿En cuál red social, página o perfil?"
+            ? ("nombre-red-social" | i18n)
             : ""
         }}
         {{
           registerForm.get("meet").value === "event"
-            ? "Nombre del evento o convención"
+            ? ("nombre-evento" | i18n)
             : ""
         }}
         {{
           registerForm.get("meet").value === "contest"
-            ? "Nombre del organizador"
+            ? ("nombre-organizador" | i18n)
             : ""
         }}
         {{
           registerForm.get("meet").value === "store"
-            ? "Nombre del buscador o tienda"
+            ? ("nombre-tienda" | i18n)
             : ""
         }}
       </ion-label>

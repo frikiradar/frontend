@@ -101,6 +101,7 @@
     "revisa-tu-direccin-correo": "Check your email address!",
     "asegrate-introducirla-correctamente": "Make sure to enter it correctly.",
     "introduce-una-direccin-correo-electrnico": "Enter a valid email address.",
+    "tu-email-no-es": "Your email is not %{email}%?",
     "confirmar-cambio": "Confirm change",
     "cuenta-baneada": "Banned account",
     "generar-nueva-contrasea": "Generate new password",
@@ -457,5 +458,12 @@
     "finnish": "Finnish",
     "polish": "Polish",
     "romanian": "Romanian",
-    "arabic": "Arabic"
+    "arabic": "Arabic",
+    "nombre-o-email-amigo": "Friend's username or email",
+    "nombre-youtuber": "What is the name of the YouTuber?",
+    "nombre-blog": "What is the name of the blog or website?",
+    "nombre-red-social": "Which social network, page or profile?",
+    "nombre-evento": "Name of the event or convention",
+    "nombre-organizador": "Name of the organizer",
+    "nombre-tienda": "Name of the search engine or store"
 }

@@ -18,10 +18,7 @@
 </ion-header>
 <ion-content class="ion-padding">
   <div *ngIf="!changingEmail">
-    <h4>
-      Te hemos enviado un código de seguridad a {{ user.email }}. Revisa tu
-      carpeta de spam/no deseado si no lo encuentras.
-    </h4>
+    <h4>{{ "te-hemos-enviado-email-code" | i18n}}</h4>
     <p>{{ "introduce-cdigo-seguridad-para-activar" | i18n }}</p>
     <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
       <ion-item class="code">
@@ -73,8 +70,8 @@
         class="error-message"
         *ngIf="emailForm.get('email').invalid && emailForm.get('email').value"
       >
-        <ion-icon name="information-circle-outline"></ion-icon>Introduce una
-        dirección de correo electrónico válida.
+        <ion-icon name="information-circle-outline"></ion-icon>
+        {{ "introduce-una-direccin-correo-electrnico" | i18n }}
       </div>
       <ion-button
         color="primary"
@@ -89,6 +86,6 @@
 </ion-content>
 <ion-footer *ngIf="!changingEmail">
   <p color="primary" class="ion-text-center" (click)="changingEmail = true">
-    ¿Tu email no es {{user.email}}?
+    {{ "tu-email-no-es" | i18n: {email: user.email} }}
   </p>
 </ion-footer>

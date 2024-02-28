@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -58,8 +58,7 @@ export class LoginPage {
     public platform: Platform,
     private config: ConfigService,
     private googleAuth: GoogleAuthService,
-    private i18n: I18nService,
-    private cd: ChangeDetectorRef
+    private i18n: I18nService
   ) {
     if (localStorage.getItem("currentUser")) {
       this.router.navigate(["/"]);
@@ -108,7 +107,7 @@ export class LoginPage {
           this.usernameInput.value,
           this.passwordInput.value
         );
-
+        this.i18n.setLanguage(user.language);
         this.loginSuccess(user);
         this.loginForm.reset();
       } catch (e) {

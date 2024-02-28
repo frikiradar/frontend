@@ -16,7 +16,6 @@ import { UrlService } from "src/app/services/url.service";
 import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
-import { I18nService } from "src/app/services/i18n.service";
 import { Config, ConfigService } from "src/app/services/config.service";
 
 @Component({

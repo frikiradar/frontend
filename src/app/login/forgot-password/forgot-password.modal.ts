@@ -15,6 +15,7 @@ import {
 
 import { User } from "../../models/user";
 import { AuthService } from "./../../services/auth.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "forgot-password-modal",
@@ -35,7 +36,8 @@ export class ForgotPasswordModal {
     private alert: AlertController,
     private auth: AuthService,
     private router: Router,
-    private toast: ToastController
+    private toast: ToastController,
+    private i18n: I18nService
   ) {
     this.requestForm = fb.group({
       username: new UntypedFormControl("", [
@@ -91,6 +93,8 @@ export class ForgotPasswordModal {
         this.requestForm.get("username").value,
         this.passwordForm.get("password").value
       );
+
+      this.i18n.setLanguage(user.language);
 
       this.recoverSuccess(user);
       this.passwordForm.reset();

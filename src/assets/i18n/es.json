@@ -101,6 +101,7 @@
   "revisa-tu-direccin-correo": "¡Revisa tu dirección de correo!",
   "asegrate-introducirla-correctamente": "Asegúrate de introducirla correctamente.",
   "introduce-una-direccin-correo-electrnico": "Introduce una dirección de correo electrónico válida.",
+  "tu-email-no-es": "¿Tu email no es %{email}%?",
   "confirmar-cambio": "Confirmar cambio",
   "cuenta-baneada": "Cuenta baneada",
   "generar-nueva-contrasea": "Generar nueva contraseña",
@@ -453,5 +454,12 @@
   "finnish": "Finés",
   "polish": "Polaco",
   "romanian": "Rumano",
-  "arabic": "Árabe"
+  "arabic": "Árabe",
+  "nombre-o-email-amigo": "Nombre de usuario o email de tu amigo",
+  "nombre-youtuber": "¿Cuál es el nombre del youtuber?",
+  "nombre-blog": "¿Cómo se llama el blog o web?",
+  "nombre-red-social": "¿En cuál red social, página o perfil?",
+  "nombre-evento": "Nombre del evento o convención",
+  "nombre-organizador": "Nombre del organizador",
+  "nombre-tienda": "Nombre del buscador o tienda"
 }
