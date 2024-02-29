@@ -9,10 +9,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <h4>
-    ¡Te hemos enviado un código de seguridad al email! Revisa tu carpeta de
-    spam/no deseado si no lo encuentras.
-  </h4>
+  <h4>{{ "te-hemos-enviado-un-cdigo" | i18n }}</h4>
   <p>{{ "introduce-cdigo-seguridad-para-verificar" | i18n }}</p>
   <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
     <ion-item class="code">

@@ -850,5 +850,15 @@
     "yemen": "Yemen",
     "yibuti": "Djibouti",
     "zambia": "Zambia",
-    "zimbabue": "Zimbabwe"
+    "zimbabue": "Zimbabwe",
+    "account-activated-successfully": "Account activated successfully!",
+    "what-would-you-like-to-do-now": "What would you like to do now? Set up your profile (photos, description, likes and hobbies...) or start looking for people?",
+    "start": "Start!",
+    "configure-my-profile": "Configure my profile",
+    "invalid-security-code": "Invalid security code",
+    "check-the-code-and-try-again": "Check the entered code and try again.",
+    "ok-thanks": "Ok, thanks",
+    "verification-code-sent-to-email": "We have sent a verification code to your email",
+    "error-changing-email": "Error changing the email",
+    "check-the-introduced-email-and-try-again": "Check the introduced email and try again."
 }

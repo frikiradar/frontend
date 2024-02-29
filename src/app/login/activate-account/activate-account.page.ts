@@ -68,19 +68,18 @@ export class ActivateAccountPage {
       this.auth.setAuthUser(this.user);
       this.config.getConfig(true);
       const alert = await this.alert.create({
-        header: `¡Cuenta activada correctamente!`,
-        message:
-          "¿Qué te gustaría hacer ahora? ¿Configurar tu perfil (fotos, descripción, gustos y pasatiempos...) o comenzar a buscar personas?",
+        header: `account-activated-successfully`,
+        message: "what-would-you-like-to-do-now",
         backdropDismiss: false,
         buttons: [
           {
-            text: "¡Comenzar!",
+            text: "start",
             handler: () => {
               this.nav.navigateRoot(["/"]);
             },
           },
           {
-            text: "Configurar mi perfil",
+            text: "configure-my-profile",
             handler: () => {
               this.nav.navigateRoot(["/edit-profile"]);
             },
@@ -94,9 +93,9 @@ export class ActivateAccountPage {
       this.codeForm.get("code").setValue("");
 
       const alert = await this.alert.create({
-        header: "Código de seguridad no válido",
-        message: "Revisa el código introducido y vuelve a intentarlo.",
-        buttons: ["Ok, gracias"],
+        header: "invalid-security-code",
+        message: "check-the-code-and-try-again",
+        buttons: ["ok-thanks"],
         cssClass: "round-alert",
       });
 
@@ -108,7 +107,7 @@ export class ActivateAccountPage {
     await this.auth.sendVerification();
     (
       await this.toast.create({
-        message: "Te hemos enviado un código de verificación al email",
+        message: "verification-code-sent-to-email",
         duration: 2000,
         position: "bottom",
       })
@@ -126,9 +125,9 @@ export class ActivateAccountPage {
       this.changingEmail = false;
     } catch (e) {
       const alert = await this.alert.create({
-        header: "Error al cambiar el email",
-        message: "Revisa el email introducido y vuelve a intentarlo.",
-        buttons: ["Ok, gracias"],
+        header: "error-changing-email",
+        message: "check-the-introduced-email-and-try-again",
+        buttons: ["ok-thanks"],
         cssClass: "round-alert",
       });
 
