@@ -339,7 +339,7 @@ export class UserService {
       "transgender-man",
       "agender",
       "androgynous",
-      "gender-fluid",
+      "genderfluid",
       "bigender",
       "non-binary",
       "non-conforming",

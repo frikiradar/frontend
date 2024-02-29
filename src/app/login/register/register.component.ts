@@ -17,6 +17,7 @@ import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
 import { Config, ConfigService } from "src/app/services/config.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "app-register",
@@ -48,7 +49,8 @@ export class RegisterComponent {
     private ngZone: NgZone,
     public platform: Platform,
     public urlSvc: UrlService,
-    private config: ConfigService
+    private config: ConfigService,
+    private i18n: I18nService
   ) {
     this.registerForm = fb.group({
       username: new UntypedFormControl("", [
@@ -136,18 +138,19 @@ export class RegisterComponent {
   async submitRegister() {
     if (this.registerForm.valid) {
       const alert = await this.alert.create({
-        header: `Aviso`,
-        message: `Te llegará un email con un código de confirmación a la dirección ${this.registerForm
-          .get("email")
-          .value?.trim()} ¿Es correcta?`,
+        header: this.i18n.translate(`notice`),
+        message: this.i18n.translate(
+          `confirmation-code-will-be-sent-to-email`,
+          { email: this.registerForm.get("email").value }
+        ),
         buttons: [
           {
-            text: "Ups, me confundí",
+            text: this.i18n.translate("oops-i-made-a-mistake"),
             role: "cancel",
             cssClass: "secondary",
           },
           {
-            text: "¡Es correcta!",
+            text: this.i18n.translate("it-is-correct"),
             handler: async () => {
               if (this.registerForm.get("email").value?.trim()) {
                 this.email = this.registerForm.get("email").value?.trim();

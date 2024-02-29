@@ -12,6 +12,7 @@ import { ConfigService } from "src/app/services/config.service";
 import { NavService } from "src/app/services/navigation.service";
 import { AuthService } from "../../services/auth.service";
 import { UserService } from "../../services/user.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "activate-account-app",
@@ -31,7 +32,8 @@ export class ActivateAccountPage {
     private alert: AlertController,
     private nav: NavService,
     private toast: ToastController,
-    private config: ConfigService
+    private config: ConfigService,
+    private i18n: I18nService
   ) {
     this.user = this.auth.currentUserValue;
     if (this.user.active) {
@@ -68,18 +70,18 @@ export class ActivateAccountPage {
       this.auth.setAuthUser(this.user);
       this.config.getConfig(true);
       const alert = await this.alert.create({
-        header: `account-activated-successfully`,
-        message: "what-would-you-like-to-do-now",
+        header: this.i18n.translate(`account-activated-successfully`),
+        message: this.i18n.translate("what-would-you-like-to-do-now"),
         backdropDismiss: false,
         buttons: [
           {
-            text: "start",
+            text: this.i18n.translate("start"),
             handler: () => {
               this.nav.navigateRoot(["/"]);
             },
           },
           {
-            text: "configure-my-profile",
+            text: this.i18n.translate("configure-my-profile"),
             handler: () => {
               this.nav.navigateRoot(["/edit-profile"]);
             },
@@ -93,9 +95,9 @@ export class ActivateAccountPage {
       this.codeForm.get("code").setValue("");
 
       const alert = await this.alert.create({
-        header: "invalid-security-code",
-        message: "check-the-code-and-try-again",
-        buttons: ["ok-thanks"],
+        header: this.i18n.translate("invalid-security-code"),
+        message: this.i18n.translate("check-the-code-and-try-again"),
+        buttons: [this.i18n.translate("ok-thanks")],
         cssClass: "round-alert",
       });
 
@@ -107,7 +109,7 @@ export class ActivateAccountPage {
     await this.auth.sendVerification();
     (
       await this.toast.create({
-        message: "verification-code-sent-to-email",
+        message: this.i18n.translate("verification-code-sent-to-email"),
         duration: 2000,
         position: "bottom",
       })
@@ -125,9 +127,11 @@ export class ActivateAccountPage {
       this.changingEmail = false;
     } catch (e) {
       const alert = await this.alert.create({
-        header: "error-changing-email",
-        message: "check-the-introduced-email-and-try-again",
-        buttons: ["ok-thanks"],
+        header: this.i18n.translate("error-changing-email"),
+        message: this.i18n.translate(
+          "check-the-introduced-email-and-try-again"
+        ),
+        buttons: [this.i18n.translate("ok-thanks")],
         cssClass: "round-alert",
       });
 

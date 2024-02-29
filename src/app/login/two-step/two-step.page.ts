@@ -8,6 +8,7 @@ import {
 import { AlertController, NavController } from "@ionic/angular";
 
 import { AuthService } from "../../services/auth.service";
+import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
   selector: "two-step-app",
@@ -21,7 +22,8 @@ export class TwoStepPage implements OnInit {
     public fb: UntypedFormBuilder,
     private auth: AuthService,
     private alert: AlertController,
-    private nav: NavController
+    private nav: NavController,
+    private i18n: I18nService
   ) {
     this.codeForm = fb.group({
       code: new UntypedFormControl("", [
@@ -48,9 +50,9 @@ export class TwoStepPage implements OnInit {
       this.codeForm.get("code").setValue("");
 
       const alert = await this.alert.create({
-        header: "Código de seguridad no válido",
-        message: "Revisa el código introducido y vuelve a intentarlo.",
-        buttons: ["Ok, gracias"],
+        header: this.i18n.translate("invalid-security-code"),
+        message: this.i18n.translate("check-the-introduced-code-and-try-again"),
+        buttons: [this.i18n.translate("ok-thanks")],
         cssClass: "round-alert",
       });
 

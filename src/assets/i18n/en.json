@@ -860,5 +860,10 @@
     "ok-thanks": "Ok, thanks",
     "verification-code-sent-to-email": "We have sent a verification code to your email",
     "error-changing-email": "Error changing the email",
-    "check-the-introduced-email-and-try-again": "Check the introduced email and try again."
+    "check-the-introduced-email-and-try-again": "Check the introduced email and try again.",
+    "notice": "Notice",
+    "confirmation-code-will-be-sent-to-email": "A confirmation code will be sent to the email address %{email}% Is it correct?",
+    "oops-i-made-a-mistake": "Oops, I made a mistake",
+    "it-is-correct": "It is correct!",
+    "check-the-introduced-code-and-try-again": "Check the introduced code and try again."
 }
