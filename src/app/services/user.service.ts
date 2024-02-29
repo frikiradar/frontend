@@ -10,6 +10,7 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { firstValueFrom } from "rxjs";
 import { I18nService } from "./i18n.service";
+import { Config } from "./config.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -296,6 +297,13 @@ export class UserService {
 
   subscribePremium(premium_expiration: string) {
     return this.rest.put("premium", { premium_expiration }) as Promise<User>;
+  }
+
+  async setTutorialConfig(tutorial_config: Config["tutorial"]) {
+    const user = (await this.rest.put("tutorial-config", {
+      tutorial_config,
+    })) as User;
+    this.auth.setAuthUser(user);
   }
 
   getOrientations() {

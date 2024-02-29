@@ -46,6 +46,7 @@ export class RadarPage {
   public slides: Swiper;
   public allUsersLoaded = false;
   public filterOptions = false;
+  public language = this.i18n.currentLanguage;
 
   public slideOpts: SwiperOptions = {
     modules: [EffectCoverflow],
@@ -307,7 +308,7 @@ export class RadarPage {
       }
     } else {
       this.view = "cards";
-      this.tutorial = radar_config?.tutorial ?? true;
+      this.tutorial = this.auth.currentUserValue?.config.tutorial ?? true;
       this.ratio = -1;
       await this.utils.delay(500);
       this.slides?.slideTo(0);
@@ -574,14 +575,7 @@ export class RadarPage {
     const user = this.users[index] ?? this.users[index];
     if (user && "username" in user && this.tutorial) {
       this.detectorRef.detectChanges();
-      let radar_config = (await this.config.get(
-        "radar_config"
-      )) as Config["radar_config"];
-      if (!radar_config) {
-        radar_config = {};
-      }
-      radar_config.tutorial = false;
-      this.config.set("radar_config", radar_config);
+      this.userSvc.setTutorialConfig(false);
     }
 
     if (user && "username" in user) {

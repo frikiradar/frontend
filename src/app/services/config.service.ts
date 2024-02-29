@@ -11,9 +11,9 @@ import { firstValueFrom } from "rxjs";
 export interface Config {
   openTimes?: number;
   review?: boolean;
+  tutorial?: boolean;
   radar_config?: {
     view?: "cards" | "list";
-    tutorial?: boolean;
     range?: number;
     extended?: boolean;
     options?: {

@@ -36,7 +36,10 @@
       <swiper-slide *ngIf="tutorial">
         <ion-card button class="no-scroll">
           <div class="background-image">
-            <img src="/assets/img/layout/tutorial-1.svg" alt="tutorial-1" />
+            <img
+              [src]="'/assets/img/layout/tutorial/tutorial-' + language + '-1.svg'"
+              alt="tutorial-1"
+            />
           </div>
         </ion-card>
       </swiper-slide>
@@ -51,12 +54,18 @@
           >
             <swiper-slide>
               <div class="background-image">
-                <img src="/assets/img/layout/tutorial-2.svg" alt="tutorial-2" />
+                <img
+                  [src]="'/assets/img/layout/tutorial/tutorial-' + language + '-2.svg'"
+                  alt="tutorial-2"
+                />
               </div>
             </swiper-slide>
             <swiper-slide>
               <div class="background-image">
-                <img src="/assets/img/layout/tutorial-3.svg" alt="tutorial-3" />
+                <img
+                  [src]="'/assets/img/layout/tutorial/tutorial-' + language + '-3.svg'"
+                  alt="tutorial-3"
+                />
               </div>
             </swiper-slide>
           </swiper-container>

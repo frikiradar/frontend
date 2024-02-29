@@ -107,9 +107,7 @@ export class LoginPage {
           this.usernameInput.value,
           this.passwordInput.value
         );
-        this.i18n.setLanguage(user.language);
         this.loginSuccess(user);
-        this.loginForm.reset();
       } catch (e) {
         if (e.message) {
           this.loginError(e.message);
@@ -172,6 +170,7 @@ export class LoginPage {
   }
 
   async loginSuccess(user: User) {
+    this.loginForm.reset();
     this.config.getConfig(true);
     if (user && user.two_step) {
       this.nav.navigateRoot(["/login/two-step"], {
@@ -188,6 +187,7 @@ export class LoginPage {
       ).present();
       this.nav.navigateRoot(this.returnUrl);
     }
+    await this.i18n.setLanguage(user.language);
   }
 
   async loginError(message: string) {

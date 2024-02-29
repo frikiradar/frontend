@@ -100,7 +100,7 @@ export class RevenuecatService {
           return {
             product: product,
             price: product.priceString,
-            period: this.utils.convertISO8601ToSpanish(
+            period: this.utils.convertISO8601ToHuman(
               product.subscriptionPeriod
             ),
             price_per_month: `${pricePerMonth.toFixed(
