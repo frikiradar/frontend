@@ -54,8 +54,8 @@
             <ion-datetime
               presentation="date-time"
               formControlName="date"
-              locale="es-ES"
-              first-day-of-week="1"
+              [locale]="language"
+              [first-day-of-week]="language == 'es' ? 1 : 0"
               max="2030-12-31"
             ></ion-datetime>
           </ng-template>
@@ -89,8 +89,8 @@
               <ion-datetime
                 presentation="date-time"
                 formControlName="endDate"
-                locale="es-ES"
-                first-day-of-week="1"
+                [locale]="user.language"
+                [first-day-of-week]="user.language == 'es' ? 1 : 0"
                 [min]="eventForm.get('date').value"
                 max="2030-12-31"
               ></ion-datetime>
@@ -104,7 +104,7 @@
         (ionChange)="changeType($event.detail.value)"
       >
         <ion-segment-button value="online">
-          <ion-label color="light">{{ "lnea" | i18n }}</ion-label>
+          <ion-label color="light">{{ "online" | i18n }}</ion-label>
         </ion-segment-button>
         <ion-segment-button value="offline">
           <ion-label color="light">{{ "persona" | i18n }}</ion-label>

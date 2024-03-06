@@ -129,8 +129,8 @@
               <ion-datetime
                 formControlName="birthday"
                 presentation="date"
-                locale="es-ES"
-                first-day-of-week="1"
+                [locale]="user.language"
+                [first-day-of-week]="user.language == 'es' ? 1 : 0"
                 min="1900-01-01"
                 max="{{ (today | date: 'y') - 18 }}-{{ today | date: 'MM' }}-{{
             today | date: 'dd'

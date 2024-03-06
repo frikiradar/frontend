@@ -38,6 +38,7 @@ export class RegisterComponent {
   public usernameSuggestion = "";
   public referralFailed = false;
   public birthdayValue = "";
+  public language = "es";
 
   constructor(
     private alert: AlertController,
@@ -120,7 +121,9 @@ export class RegisterComponent {
       });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.language = (await this.config.get("language")) as Config["language"];
+
     if (this.username) {
       this.registerForm.get("username").setValue(this.username);
     }
@@ -160,10 +163,6 @@ export class RegisterComponent {
               }
 
               try {
-                const language = (await this.config.get(
-                  "language"
-                )) as Config["language"];
-
                 await this.auth.register(
                   this.username,
                   this.email,
@@ -175,7 +174,7 @@ export class RegisterComponent {
                   this.registerForm.get("referral").value,
                   this.provider,
                   this.credential,
-                  language
+                  this.language
                 );
 
                 let user: User;
