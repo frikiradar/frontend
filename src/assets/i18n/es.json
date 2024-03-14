@@ -865,5 +865,6 @@
   "confirmation-code-will-be-sent-to-email": "Te llegará un email con un código de confirmación a la dirección %{email}% ¿Es correcta?",
   "oops-i-made-a-mistake": "Ups, me confundí",
   "it-is-correct": "¡Es correcta!",
-  "check-the-introduced-code-and-try-again": "Revisa el código introducido y vuelve a intentarlo."
+  "check-the-introduced-code-and-try-again": "Revisa el código introducido y vuelve a intentarlo.",
+  "likes": "me gusta"
 }

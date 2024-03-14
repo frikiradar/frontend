@@ -26,14 +26,14 @@
   </ion-thumbnail>
   <div id="add-tag" *ngIf="!tag" (click)="addTag()">
     <ion-chip color="secondary">
-      <ion-label>{{page?.likes}} me gusta</ion-label>
+      <ion-label>{{page?.likes}} {{ 'likes' | i18n }}</ion-label>
       <ion-icon name="heart-outline"></ion-icon>
     </ion-chip>
   </div>
   <div id="add-tag" *ngIf="tag" (click)="search()">
     <ion-chip color="secondary">
       <ion-icon name="search"></ion-icon>
-      <ion-label>{{page?.likes}} me gusta</ion-label>
+      <ion-label>{{page?.likes}} {{ 'likes' | i18n }}</ion-label>
       <ion-icon name="heart"></ion-icon>
     </ion-chip>
   </div>
@@ -60,7 +60,9 @@
         >
         <ion-text *ngIf="page?.category === 'films'">
           {{ "informacin-obtenida" | i18n }}
-          <a href="https://www.themoviedb.org/">{{ "tmdb" | i18n }}</a></ion-text
+          <a href="https://www.themoviedb.org/"
+            >{{ "tmdb" | i18n }}</a
+          ></ion-text
         >
       </p>
     </ion-label>
@@ -166,7 +168,7 @@
             </h2>
             <h3>
               <span *ngIf="user.distance !== undefined"
-                >A {{ user.distance }}km de distancia</span
+                >{{"km-distancia" | i18n: {distance: user?.distance} }}</span
               >
             </h3>
             <p class="description">{{ user.description }}</p>
