@@ -123,17 +123,6 @@ export class PushService {
   }
 
   async localNotification(notification: any) {
-    /*let actions = null;
-    if (notification.topic == "chat") {
-      actions = [
-        {
-          id: "reply",
-          type: "input",
-          title: "Responder",
-          emptyText: "Escribe tu mensaje"
-        }
-      ] as any[];
-    }*/
     if (isPlatform("capacitor")) {
       if (this.router.url !== notification.data.url) {
         LocalNotifications.schedule({

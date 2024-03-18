@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { SafeResourceUrl } from "@angular/platform-browser";
-import { ToastController } from "@ionic/angular";
+import { AlertController, ToastController } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 
 import { User } from "./../models/user";
@@ -24,7 +24,8 @@ export class UserService {
     private auth: AuthService,
     private toast: ToastController,
     private http: HttpClient,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private alertCtrl: AlertController
   ) {}
 
   async getUser(id: User["id"] | User["username"]): Promise<User> {
@@ -181,10 +182,6 @@ export class UserService {
 
   getBlocks() {
     return this.rest.get("blocks") as Promise<User[]>;
-  }
-
-  block(id: User["id"], note?: string) {
-    return this.rest.put("block", { user: id, note });
   }
 
   unblock(id: User["id"]) {
@@ -382,5 +379,55 @@ export class UserService {
       { value: "ro", name: "romanian" },
       { value: "ar", name: "arabic" },
     ];
+  }
+
+  async block(user: User) {
+    const alert = await this.alertCtrl.create({
+      header: this.i18n.translate("do-you-want-to-block") + user.username + "?",
+      message: this.i18n.translate("block-description"),
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: this.i18n.translate("block-reason"),
+        },
+      ],
+      buttons: [
+        {
+          text: this.i18n.translate("cancel"),
+          role: "cancel",
+          cssClass: "secondary",
+        },
+        {
+          text: this.i18n.translate("block-user"),
+          role: "block",
+          handler: async (data) => {
+            try {
+              await this.rest.put("block", { user: user.id, note: data.note });
+              (
+                await this.toast.create({
+                  message: this.i18n.translate("user-blocked-successfully"),
+                  duration: 2000,
+                  position: "bottom",
+                })
+              ).present();
+            } catch (e) {
+              (
+                await this.toast.create({
+                  message: this.i18n.translate("error-blocking-user") + e,
+                  duration: 2000,
+                  position: "bottom",
+                })
+              ).present();
+              await alert.present();
+            }
+          },
+        },
+      ],
+      cssClass: "round-alert",
+    });
+
+    await alert.present();
+    await alert.onDidDismiss();
   }
 }

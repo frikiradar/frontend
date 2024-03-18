@@ -160,4 +160,8 @@ export class StoryService {
   deleteComment(id: Story["id"]) {
     return this.rest.delete(`delete-comment/${id}`);
   }
+
+  reportComment(comment: Story["comments"][0]["id"], note: string) {
+    return this.rest.put("report-comment", { comment, note });
+  }
 }

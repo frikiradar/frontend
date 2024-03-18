@@ -57,6 +57,8 @@ export class ViewStoriesModal implements OnInit {
   public slides: SwiperCore;
   public story: Story;
   public showComments = false;
+  public showCommentOptions = false;
+  public selectedComment: Story["comments"][0];
   public showViews = false;
   public pulse: any;
 
@@ -169,6 +171,15 @@ export class ViewStoriesModal implements OnInit {
 
   closeCommentsSheet() {
     this.showComments = false;
+  }
+
+  showCommentOptionsSheet(comment: Story["comments"][0]) {
+    this.selectedComment = comment;
+    this.showCommentOptions = true;
+  }
+
+  closeCommentOptionsSheet() {
+    this.showCommentOptions = false;
   }
 
   commentFocus(event?: CustomEvent) {
@@ -425,6 +436,89 @@ export class ViewStoriesModal implements OnInit {
     });
   }
 
+  async reportComment(comment: Story["comments"][0]) {
+    await this.modalCreate.dismiss();
+    const alert = await this.alertCtrl.create({
+      header: this.i18n.translate("do-you-want-to-report-comment", {
+        username: comment.user.username,
+      }),
+      message: this.i18n.translate("we-will-review-the-case"),
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: this.i18n.translate("report-reason"),
+        },
+      ],
+      buttons: [
+        {
+          text: this.i18n.translate("cancel"),
+          role: "cancel",
+          cssClass: "secondary",
+        },
+        {
+          text: this.i18n.translate("report"),
+          role: "block",
+          handler: async (data: any) => {
+            if (data.note.trim().length) {
+              try {
+                await this.storySvc.reportComment(comment.id, data.note);
+                (
+                  await this.toast.create({
+                    message: this.i18n.translate(
+                      "comment-reported-successfully"
+                    ),
+                    duration: 2000,
+                    position: "bottom",
+                  })
+                ).present();
+              } catch (e) {
+                (
+                  await this.toast.create({
+                    message: this.i18n.translate("error-reporting-comment", {
+                      error: e,
+                    }),
+                    duration: 2000,
+                    position: "bottom",
+                    color: "danger",
+                  })
+                ).present();
+                alert.present();
+              }
+            } else {
+              (
+                await this.toast.create({
+                  message: this.i18n.translate(
+                    "report-message-cannot-be-blank"
+                  ),
+                  duration: 2000,
+                  position: "middle",
+                  color: "danger",
+                })
+              ).present();
+
+              this.reportComment(comment);
+            }
+          },
+        },
+      ],
+      cssClass: "round-alert",
+    });
+
+    await alert.present();
+    await alert.onDidDismiss();
+  }
+
+  async blockUser(user: User) {
+    try {
+      await this.userSvc.block(user);
+      this.router.navigate(["/"]);
+    } catch (e) {
+      // No hacer nada
+    }
+    this.close();
+  }
+
   async viewCommentLikes(likes: Story["comments"][0]["likes"]) {
     const modal = await this.likeModal.create({
       component: CommentLikesModal,
@@ -509,8 +603,9 @@ export class ViewStoriesModal implements OnInit {
       })
     ).present();
     try {
-      this.stories = this.stories.map((s) =>
-        s.id === this.story.id ? this.story : s
+      await this.storySvc.deleteComment(comment.id);
+      this.story.comments = this.story.comments.filter(
+        (c) => c.id !== comment.id
       );
 
       (
@@ -520,6 +615,7 @@ export class ViewStoriesModal implements OnInit {
           duration: 2000,
         })
       ).present();
+      this.showCommentOptions = false;
     } catch (e) {
       (
         await this.toast.create({

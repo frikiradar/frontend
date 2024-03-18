@@ -117,53 +117,12 @@ export class OptionsPopover {
   }
 
   async block(user: User) {
-    const alert = await this.alert.create({
-      header: this.i18n.translate("do-you-want-to-block") + user.username + "?",
-      message: this.i18n.translate("block-description"),
-      inputs: [
-        {
-          name: "note",
-          type: "text",
-          placeholder: this.i18n.translate("block-reason"),
-        },
-      ],
-      buttons: [
-        {
-          text: this.i18n.translate("cancel"),
-          role: "cancel",
-          cssClass: "secondary",
-        },
-        {
-          text: this.i18n.translate("block"),
-          role: "block",
-          handler: async (data) => {
-            try {
-              await this.userSvc.block(user.id, data.note);
-              (
-                await this.toast.create({
-                  message: this.i18n.translate("user-blocked-successfully"),
-                  duration: 2000,
-                  position: "bottom",
-                })
-              ).present();
-              this.router.navigate(["/"]);
-            } catch (e) {
-              (
-                await this.toast.create({
-                  message: this.i18n.translate("error-blocking-user") + e,
-                  duration: 2000,
-                  position: "bottom",
-                })
-              ).present();
-              alert.present();
-            }
-          },
-        },
-      ],
-      cssClass: "round-alert",
-    });
-
-    await alert.present();
+    try {
+      await this.userSvc.block(user);
+      this.router.navigate(["/"]);
+    } catch (e) {
+      // No hacer nada
+    }
     this.close();
   }
 

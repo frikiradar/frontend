@@ -246,6 +246,7 @@
           detail="false"
           lines="none"
           color="dark"
+          (press)="showCommentOptionsSheet(comment)"
         >
           <ion-avatar (click)="showProfile(comment.user.id)">
             <img [src]="comment.user.thumbnail" />
@@ -276,14 +277,7 @@
                 *ngIf="auth.currentUserValue.id !== comment.user.id"
                 button
                 (click)="reply(comment)"
-                >{{ "responder" | i18n }}</span
-              >
-              &nbsp;&nbsp;&nbsp;
-              <span
-                *ngIf="auth.currentUserValue.id === comment.user.id || auth.isMaster()"
-                button
-                (click)="deleteComment(comment)"
-                >{{ "eliminar" | i18n }}</span
+                >{{ "reply" | i18n }}</span
               >
             </ion-note>
           </ion-label>
@@ -371,6 +365,65 @@
             color="light"
           ></ion-icon>
           <ion-label>{{ "reportar-historia" | i18n }}</ion-label>
+        </ion-item>
+        <ion-item
+          lines="none"
+          button
+          detail="false"
+          (click)="blockUser(story.user)"
+          *ngIf="story.user.id !== auth.currentUserValue.id"
+        >
+          <ion-icon slot="start" name="ban" color="light"></ion-icon>
+          <ion-label>{{ "block-user" | i18n }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  [initialBreakpoint]="0.4"
+  [breakpoints]="[0, 0.4, 0.6]"
+  cssClass="sheet-modal"
+  [isOpen]="showCommentOptions"
+  (ionModalDidDismiss)="closeCommentOptionsSheet()"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-list>
+        <ion-item
+          button
+          detail="false"
+          (click)="deleteComment(selectedComment)"
+          lines="none"
+          *ngIf="selectedComment.user.id === auth.currentUserValue.id || auth.isMaster()"
+        >
+          <ion-icon slot="start" name="trash-outline" color="light"></ion-icon>
+          <ion-label>{{ "delete" | i18n }}</ion-label>
+        </ion-item>
+        <ion-item
+          lines="none"
+          button
+          detail="false"
+          (click)="reportComment(selectedComment)"
+          *ngIf="selectedComment.user.id !== auth.currentUserValue.id"
+        >
+          <ion-icon
+            slot="start"
+            name="warning-outline"
+            color="light"
+          ></ion-icon>
+          <ion-label>{{ "report-comment" | i18n }}</ion-label>
+        </ion-item>
+        <ion-item
+          lines="none"
+          button
+          detail="false"
+          (click)="blockUser(selectedComment.user)"
+          *ngIf="selectedComment.user.id !== auth.currentUserValue.id"
+        >
+          <ion-icon slot="start" name="ban" color="light"></ion-icon>
+          <ion-label>{{ "block-user" | i18n }}</ion-label>
         </ion-item>
       </ion-list>
     </ion-content>
