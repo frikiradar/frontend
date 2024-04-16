@@ -651,7 +651,7 @@
     "a-month-ago": "A month ago",
     "today-at": "Today, %{time}%",
     "yesterday-at": "Yesterday, %{time}%",
-    "days-ago-at": "%{days} days ago, %{time}%",
+    "days-ago-at": "%{days}% days ago, %{time}%",
     "date-format-month-at": "MMMM d', at '%{time}%",
     "date-format-year-at": "MMM d, yyyy', at '%{time}%",
     "years": "years",

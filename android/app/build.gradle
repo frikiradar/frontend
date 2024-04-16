@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     namespace("com.frikiradar.app")
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.frikiradar.app"
         minSdkVersion rootProject.ext.minSdkVersion

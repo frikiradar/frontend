@@ -345,7 +345,7 @@
               (ngModelChange)="radarSearchOptions('identity', $event)"
             >
               <h2>{{ "identidad-gnero" | i18n }}</h2>
-              <p>{{auth.currentUserValue?.lovegender}}</p>
+              <p>{{auth.currentUserValue?.lovegender | i18n}}</p>
             </ion-toggle>
           </ion-item>
           <ion-item
@@ -373,7 +373,7 @@
               aria-label="Tipo de conexión"
             >
               <h2>{{"tipo-conexin" | i18n}}</h2>
-              <p>{{auth.currentUserValue?.connection}}</p>
+              <p>{{ connections?.join(", ") }}</p>
             </ion-toggle>
           </ion-item>
         </ion-item-group>

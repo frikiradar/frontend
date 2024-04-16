@@ -91,6 +91,7 @@ export class RadarPage {
     worldwide: this.auth.isPremium() ? true : false,
     fake_location: false,
   };
+  public connections: string[];
 
   public location = {
     country: "",
@@ -201,6 +202,12 @@ export class RadarPage {
 
   async ngAfterViewInit() {
     this.users = (await this.config.get("radar")) as Config["radar"];
+
+    if (this.auth.currentUserValue.connection) {
+      this.connections = this.auth.currentUserValue.connection.map((c) => {
+        return this.i18n.translate(c);
+      });
+    }
   }
 
   async ngOnInit() {
