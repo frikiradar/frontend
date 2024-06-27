@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   root: "https://api.frikiradar.com/",
   apiUrl: "https://api.frikiradar.com/api/v1/",
+  socketUrl: "https://frikiradar.com:3000",
   firebase: {
     apiKey: "AIzaSyDReeVhoLFIdlWdiklj90hDiXRN8RWwGVk",
     authDomain: "frikiradar-1551914200548.firebaseapp.com",

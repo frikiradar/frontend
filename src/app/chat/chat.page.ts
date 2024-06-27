@@ -1,18 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { EventEmitter } from "@angular/core";
-import { ModalController, isPlatform } from "@ionic/angular";
-import { getMessaging, onMessage } from "firebase/messaging";
-import { FirebaseMessaging } from "@capacitor-firebase/messaging";
+import { Component, EventEmitter, Input, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
-import { Chat } from "./../models/chat";
 import { AuthService } from "./../services/auth.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
-import { initializeApp } from "firebase/app";
-import { environment } from "src/environments/environment";
-import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-chat",
@@ -20,23 +13,21 @@ import { NavService } from "../services/navigation.service";
   styleUrls: ["./chat.page.scss"],
 })
 export class ChatPage implements OnInit {
-  userId: User["id"];
-  chats: Chat[];
+  @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
   public desktop = false;
-  public messageEvent: EventEmitter<Chat> = new EventEmitter();
+  public userId: User["id"];
 
   constructor(
     private route: ActivatedRoute,
     public auth: AuthService,
     private modalController: ModalController,
-    private config: ConfigService,
-    private router: Router,
-    private nav: NavService
+    private config: ConfigService
   ) {}
 
   async ngOnInit() {
     if (this.route.snapshot.paramMap.get("id")) {
-      this.userId = +this.route.snapshot.paramMap.get("id");
+      const id = +this.route.snapshot.paramMap.get("id");
+      this.showChat(id);
     }
 
     if (window.innerWidth > 991) {
@@ -55,42 +46,19 @@ export class ChatPage implements OnInit {
       });
       return await modal.present();
     }
-
-    this.firebaseListener();
   }
 
   async showChat(id: User["id"]) {
-    this.nav.navigateRoot("/chat/" + id);
+    // this.nav.navigateRoot("/chat/" + id);
+    // this.router.navigate(["/chat/" + id]);
+
+    history.pushState(null, "", "/chat/" + id);
+    this.userId = id;
+    setTimeout(() => this.userChangeEvent.emit(id), 0);
   }
 
-  async firebaseListener() {
-    if (isPlatform("capacitor")) {
-      FirebaseMessaging.addListener("notificationReceived", (payload) => {
-        const notification = payload.notification;
-        const data = notification.data as {
-          message: string;
-          topic: string;
-        };
-        if (data?.message && data?.topic === "chat") {
-          const message = JSON.parse(data.message) as Chat;
-          console.log("message", message);
-          this.messageEvent.emit(message);
-        }
-      });
-    } else {
-      const app = initializeApp(environment.firebase, "chat");
-      const messaging = getMessaging(app);
-      onMessage(messaging, (payload) => {
-        if (payload?.data?.message && payload?.data?.topic === "chat") {
-          const message = JSON.parse(payload.data.message) as Chat;
-          console.log("message", message);
-          this.messageEvent.emit(message);
-        }
-      });
-    }
-  }
-
-  messageChange(message: Chat) {
-    this.messageEvent.emit(message);
+  backToList() {
+    this.userId = null;
+    history.pushState(null, "", "/chat");
   }
 }

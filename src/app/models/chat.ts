@@ -25,4 +25,5 @@ export interface Chat {
   unread?: boolean;
   pinned?: boolean;
   event?: Event;
+  status?: "online" | "offline";
 }

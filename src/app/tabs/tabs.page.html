@@ -24,7 +24,7 @@
       ></ion-icon>
     </ion-tab-button>-->
 
-    <ion-tab-button tab="chat">
+    <ion-tab-button (click)="openChat()">
       <ion-icon
         [color]="selected === 'chat' ? 'primary' : 'light'"
         [name]="'chatbubbles' + (selected === 'chat' ? '' : '-outline')"

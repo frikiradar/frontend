@@ -25,9 +25,9 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./chat-list.component.scss"],
 })
 export class ChatListComponent {
-  @Output() userChange: EventEmitter<User["id"]> = new EventEmitter();
+  @Output() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
   @Input() selected: User["id"];
-  @Input() messageEvent: EventEmitter<Chat>;
+  @Input() message: Chat;
 
   public loading: boolean;
   public showOptions = false;
@@ -51,54 +51,71 @@ export class ChatListComponent {
 
   @HostListener("window:focus")
   async onFocus() {
-    await this.getLastMessages();
+    // await this.getLastMessages();
   }
 
   async ngAfterViewInit() {
-    if (this.router.url === "/tabs/chat") {
-      await this.getLastMessages();
-    } else if (window.innerWidth > 991) {
+    if (window.innerWidth > 991) {
       await this.getLastMessages(false);
+    } else {
+      await this.getLastMessages();
     }
-  }
 
-  async ngOnInit() {
-    this.messageEvent.subscribe((message) => {
+    this.chatSvc.currentMessage.subscribe(async (message) => {
       if (!message) {
         return;
       }
       if (
         this.chats?.some((m) => m.conversationId === message?.conversationId)
       ) {
-        this.chats.map((m) => {
-          if (m.conversationId === message.conversationId) {
-            if (m.writing && !message.writing) {
-              m.writing = false;
+        const chatIndex = this.chats.findIndex(
+          (m) => m.conversationId === message.conversationId
+        );
+        if (this.chats[chatIndex].writing && !message.writing) {
+          this.chats[chatIndex].writing = false;
+        }
+        if (message.writing) {
+          this.chats[chatIndex].writing = true;
+          this.cd.detectChanges();
+          setTimeout(() => {
+            this.chats[chatIndex].writing = false;
+            this.cd.detectChanges();
+          }, 10000);
+        }
+        if (message.status == "online") {
+          this.chats[chatIndex].user.last_login = new Date();
+        } else if (message.status == "offline") {
+          // this.chats[chatIndex].user.last_login = new Date(0);
+        }
+        if (
+          message.id > this.chats[chatIndex].id ||
+          message.tmp_id !== undefined
+        ) {
+          if (message.deleted) {
+            this.chats[chatIndex].text = "";
+          } else if (message.edited) {
+            if (
+              this.chats[chatIndex].id === message.id ||
+              this.chats[chatIndex].tmp_id === message.tmp_id
+            ) {
+              this.chats[chatIndex].text = message.text;
             }
-            if (message.writing) {
-              m.writing = true;
-              this.cd.detectChanges();
-              setTimeout(() => {
-                m.writing = false;
-                this.cd.detectChanges();
-              }, 10000);
-            } else if (message.id > m.id) {
-              m.text = message.text;
-              m.time_creation = message.time_creation;
-              m.time_read = message.time_read;
-              if (message.time_read) {
-                if (m.count > 0) {
-                  m.count--;
-                }
-              } else if (
-                message.fromuser.id !== this.auth.currentUserValue.id
-              ) {
-                m.count++;
-              }
-            }
+          } else {
+            this.chats[chatIndex].text = message.text;
           }
-        });
-      } else if (!message.writing) {
+          this.chats[chatIndex].time_creation = message.time_creation;
+          this.chats[chatIndex].time_read = message.time_read;
+          if (message.time_read) {
+            if (this.chats[chatIndex].count > 0) {
+              this.chats[chatIndex].count--;
+            }
+          } else if (message.fromuser.id !== this.auth.currentUserValue.id) {
+            this.chats[chatIndex].count++;
+          }
+        }
+
+        this.cd.detectChanges();
+      } else {
         message.user =
           message.fromuser.id === this.auth.currentUserValue.id
             ? message.touser
@@ -107,15 +124,13 @@ export class ChatListComponent {
           this.chats = [message, ...this.chats];
         }
       }
-      if (!message.writing) {
-        this.chats?.sort((a, b) => {
-          return (
-            new Date(b.time_creation).getTime() -
-            new Date(a.time_creation).getTime()
-          );
-        });
-        this.setChats();
-      }
+      this.chats?.sort((a, b) => {
+        return (
+          new Date(b.time_creation).getTime() -
+          new Date(a.time_creation).getTime()
+        );
+      });
+      this.setChats();
     });
   }
 
@@ -170,7 +185,7 @@ export class ChatListComponent {
   }
 
   async showChat(id: User["id"]) {
-    this.userChange.emit(id);
+    this.userChangeEvent.emit(id);
   }
 
   async deleteChat(chat: Chat) {
@@ -303,6 +318,6 @@ export class ChatListComponent {
   }
 
   back() {
-    this.nav.navigateRoot("/tabs/chat");
+    this.nav.navigateRoot("/");
   }
 }

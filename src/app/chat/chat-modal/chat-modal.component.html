@@ -57,13 +57,6 @@
       <ion-button (click)="showOptions($event)">
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
-      <ion-button (click)="chatSvc.realtimeChatInfo()" *ngIf="!realtimeChat">
-        <ion-icon
-          slot="icon-only"
-          name="timer-outline"
-          color="danger"
-        ></ion-icon>
-      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="pressOptions">
       <ion-button
@@ -104,7 +97,7 @@
           ? ''
           : 'same-user'
       "
-      *ngFor="let message of messages; let i = index"
+      *ngFor="let message of messages; let i = index; trackBy: trackByFn"
     >
       <ion-chip
         color="primary"

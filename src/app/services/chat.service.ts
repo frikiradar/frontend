@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { AlertController } from "@ionic/angular";
+import io, { Socket } from "socket.io-client";
+import { BehaviorSubject, Subject } from "rxjs";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
@@ -7,21 +8,71 @@ import { AuthService } from "./auth.service";
 import { Config } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
-import { I18nService } from "./i18n.service";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class ChatService {
   public source: EventSource;
+  public socket: Socket;
+  public socketReady = new Subject<Socket>();
+  private messageSource = new BehaviorSubject<Chat>(null);
+  currentMessage = this.messageSource.asObservable();
 
   constructor(
     private rest: RestService,
     private uploadSvc: UploadService,
-    private auth: AuthService,
-    private alert: AlertController,
-    private i18n: I18nService
+    private auth: AuthService
   ) {}
+
+  async init() {
+    this.socket = io(environment.socketUrl, {
+      secure: true,
+    });
+    this.socket.emit("register", this.auth.currentUserValue.id);
+
+    this.socket.onAny((event, ...args) => {
+      // console.log(event, args);
+    });
+
+    this.socket.on("connect", () => {
+      console.log("Conectado al servidor");
+    });
+
+    this.socket.on("connect_error", (err) => {
+      console.log("Error de conexión: ", err);
+    });
+
+    this.socket.on("error", (error) => {
+      console.log("Error recibido:", error);
+    });
+
+    this.socket.on("message", (message: Chat) => {
+      console.log("Mensaje recibido", message);
+      this.setMessage(message);
+    });
+
+    this.socket.on("writing", (fromuser: number, touser: number) => {
+      this.setMessage;
+    });
+
+    this.socket.on("typing", (userId) => {
+      const conversationId = this.getConversationId(
+        this.auth.currentUserValue.id,
+        userId
+      );
+      const message: Chat = {
+        fromuser: {
+          id: userId,
+        },
+        conversationId,
+        writing: true,
+        status: "online",
+      };
+      this.setMessage(message);
+    });
+  }
 
   async getChats() {
     const chats = (await this.rest.get(`chats`)) as Chat[];
@@ -49,6 +100,14 @@ export class ChatService {
     })) as Chat;
   }
 
+  async emitMessage(message: Chat) {
+    this.socket.emit("message", message);
+  }
+
+  setMessage(message: Chat) {
+    this.messageSource.next(message);
+  }
+
   async sendImage(
     id: number,
     image: Blob,
@@ -71,16 +130,37 @@ export class ChatService {
     return (await this.uploadSvc.upload("chat-upload", formData)) as Chat;
   }
 
-  async writing(fromuser: number, touser: number) {
-    return (await this.rest.put("writing-chat", { fromuser, touser })) as Chat;
+  async typing(fromuser: number, touser: number) {
+    // return (await this.rest.put("typing-chat", { fromuser, touser })) as Chat;
+    this.socket.emit("typing", fromuser, touser);
   }
 
   async updateMessage(id: Chat["id"], text: Chat["text"]) {
     return (await this.rest.put("update-message", { id, text })) as Chat;
   }
 
-  async readChat(id: number) {
-    return (await this.rest.get(`read-chat/${id}`)) as Chat;
+  async readChat(message: Chat) {
+    console.log("read", message);
+    this.socket.emit("read", message);
+  }
+
+  async userOnline(fromuserid: number, touserid: number) {
+    this.socket.emit("online", fromuserid, touserid);
+  }
+
+  async userOffline(fromuserid: number, touserid: number) {
+    this.socket.emit("offline", fromuserid, touserid);
+  }
+
+  async readLastMessages(messages: Chat[], userId: number) {
+    messages
+      .filter((m) => !m.time_read)
+      .forEach((m) => {
+        m.time_read = new Date();
+        if (m.fromuser.id === userId) {
+          this.readChat(m);
+        }
+      });
   }
 
   async deleteMessage(id: number) {
@@ -147,21 +227,7 @@ export class ChatService {
     return await this.rest.put("report-chat", { message, note });
   }
 
-  async realtimeChatInfo() {
-    (
-      await this.alert.create({
-        header: this.i18n.translate("notifications-disabled"),
-        message: this.i18n.translate("realtime-chat-requirement"),
-        buttons: [
-          {
-            text: this.i18n.translate("understood"),
-            handler: async () => {
-              await Notification.requestPermission();
-            },
-          },
-        ],
-        cssClass: "round-alert",
-      })
-    ).present();
+  getConversationId(fromuser: number, touser: number) {
+    return `${Math.min(fromuser, touser)}_${Math.max(fromuser, touser)}`;
   }
 }

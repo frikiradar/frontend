@@ -21,6 +21,7 @@ import { AdService } from "./services/ad.service";
 import { StoreService } from "./services/store.service";
 import { GoogleAuthService } from "./services/google-auth.service";
 import { I18nService } from "./services/i18n.service";
+import { ChatService } from "./services/chat.service";
 
 @Component({
   selector: "app-root",
@@ -43,7 +44,8 @@ export class AppComponent {
     private adService: AdService,
     private store: StoreService,
     private googleAuth: GoogleAuthService,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private chatSvc: ChatService
   ) {}
 
   async ngAfterViewInit() {
@@ -60,6 +62,8 @@ export class AppComponent {
         if (authUser) {
           const user = await this.auth.getAuthUser();
           this.auth.setAuthUser(user);
+          // Init chat
+          this.chatSvc.init();
           // Iniciar notificaciones
           this.initNotifications();
           // Contar veces abierto

@@ -1,14 +1,12 @@
 <app-chat-list
   [ngClass]="!userId || desktop ? '' : 'hide'"
-  (userChange)="showChat($event)"
+  (userChangeEvent)="showChat($event)"
   [selected]="userId"
-  [messageEvent]="messageEvent"
 ></app-chat-list>
 <app-chat-modal
   [ngClass]="userId ? '' : 'hide'"
-  [userId]="userId"
-  [messageEvent]="messageEvent"
-  (messageChange)="messageChange($event)"
+  [userChangeEvent]="userChangeEvent"
+  (backToList)="backToList()"
 ></app-chat-modal>
 <div class="full-center ion-padding" *ngIf="!userId && desktop">
   <ion-icon name="chatbubbles"></ion-icon>

@@ -3,11 +3,11 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  HostListener,
   Input,
   OnInit,
   Output,
   ViewChild,
+  SimpleChanges,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { Clipboard } from "@capacitor/clipboard";
@@ -35,7 +35,6 @@ import { Event } from "src/app/models/event";
 import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 import { App } from "@capacitor/app";
 import { Meta, Title } from "@angular/platform-browser";
-import { NavService } from "src/app/services/navigation.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
@@ -44,9 +43,8 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./chat-modal.component.scss"],
 })
 export class ChatModalComponent implements OnInit {
-  @Input() userId: User["id"];
-  @Input() messageEvent: EventEmitter<Chat>;
-  @Output() messageChange: EventEmitter<Chat> = new EventEmitter();
+  @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
+  @Output() backToList: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild(IonContent)
   chatlist: IonContent;
@@ -63,7 +61,7 @@ export class ChatModalComponent implements OnInit {
   public editing = false;
   public writing = false;
   public toUserWriting = "";
-  public realtimeChat = true;
+  private userId: User["id"];
 
   constructor(
     public auth: AuthService,
@@ -75,18 +73,12 @@ export class ChatModalComponent implements OnInit {
     public utils: UtilsService,
     public modalController: ModalController,
     private popoverController: PopoverController,
-    private dc: ChangeDetectorRef,
+    private cd: ChangeDetectorRef,
     private eventSvc: EventService,
     private meta: Meta,
     private title: Title,
-    private nav: NavService,
     private i18n: I18nService
   ) {}
-
-  @HostListener("window:focus")
-  async onFocus() {
-    await this.getLastMessages();
-  }
 
   async ngOnInit() {
     this.meta.addTags([
@@ -99,45 +91,45 @@ export class ChatModalComponent implements OnInit {
       { charset: "UTF-8" },
     ]);
 
-    if (this.userId) {
-      const min = Math.min(this.auth.currentUserValue.id, this.userId);
-      const max = Math.max(this.auth.currentUserValue.id, this.userId);
-      this.conversationId = `${min}_${max}`;
+    App.addListener("appStateChange", ({ isActive }) => {
+      if (isActive) {
+        this.getLastMessages();
+      }
+    });
 
-      this.getLastMessages();
-
-      App.addListener("appStateChange", ({ isActive }) => {
-        if (isActive) {
-          this.getLastMessages();
-        }
-      });
-    }
-
-    this.messageEvent.subscribe(async (message) => {
+    this.chatSvc.currentMessage.subscribe(async (message) => {
       if (!message) {
         return;
       }
 
       if (message.conversationId === this.conversationId) {
+        if (message.status == "online") {
+          this.user.last_login = new Date();
+        } else if (message.status == "offline") {
+          // this.user.last_login = new Date(0);
+        }
+
         if (message.writing && message.fromuser?.id === this.user?.id) {
           this.getWriting();
-        } else if (!message.writing) {
+        } else if (message.text || message.image || message.audio) {
           this.toUserWriting = "";
           await this.newMessage(message);
         }
       }
     });
 
-    if (!isPlatform("capacitor")) {
-      try {
-        const permission = await Notification.requestPermission();
-        if (permission === "denied") {
-          this.realtimeChat = false;
-        }
-      } catch (e) {
-        this.realtimeChat = false;
-      }
-    }
+    this.userChangeEvent.subscribe(async (id) => {
+      this.userId = id;
+      this.messages = [];
+      this.user = null;
+      this.conversationId = this.chatSvc.getConversationId(
+        this.auth.currentUserValue.id,
+        this.userId
+      );
+      await this.getLastMessages();
+
+      this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
+    });
   }
 
   async getLastMessages() {
@@ -146,10 +138,9 @@ export class ChatModalComponent implements OnInit {
     }
 
     try {
-      let messages = (await this.chatSvc.getMessages(this.userId, true, 1))
+      let messages = (await this.chatSvc.getMessages(this.userId, false, 1))
         .filter((m) => m.text || m.image || m.audio)
         .reverse();
-
       messages = messages.filter((m) => {
         if (!this.messages.some((me) => me.id === m.id)) {
           return m;
@@ -199,6 +190,7 @@ export class ChatModalComponent implements OnInit {
           console.error(e);
         }
       }
+
       if (isPlatform("capacitor")) {
         Keyboard.addListener("keyboardWillShow", () => {
           this.scrollDown(0, true, false);
@@ -216,43 +208,40 @@ export class ChatModalComponent implements OnInit {
   }
 
   async newMessage(message: Chat) {
-    // Verificar si el mensaje ya existe
-    const existingMessage = this.messages.find(
-      (m) =>
-        (m.id === message.id && !!m.id) ||
-        (m.tmp_id === message.tmp_id && !!m.tmp_id)
-    );
-
-    if (existingMessage) {
-      // Si ya existe el mensaje lo actualizamos
-      Object.assign(existingMessage, message);
-      existingMessage.sending = false;
-    } else {
-      // Si el mensaje no existe, lo añadimos a la lista
-      this.messages = [...this.messages, message];
-    }
-
-    // Marcamos como leído si el mensaje es del usuario actual y tiene contenido
-    if (
-      message.fromuser?.id === this.user?.id &&
-      (message.text || message.image || message.audio)
-    ) {
-      try {
-        if (this.user?.id !== this.auth.currentUserValue.id) {
-          message = await this.chatSvc.readChat(message.id);
+    console.log("new message", message);
+    // Si el mensaje es mio, lo actualizo
+    if (message.fromuser?.id === this.auth.currentUserValue.id) {
+      this.messages.map((m) => {
+        if (m.tmp_id === message.tmp_id) {
+          m.id = message.id;
+          m.sending = false;
+          m.time_creation = message.time_creation;
+          m.time_read = message.time_read;
         }
-      } catch (e) {
-        console.error(e);
+      });
+    } else if (message.deleted) {
+      // Si el mensaje ha sido eliminado
+      console.log("mensaje eliminado", message);
+      this.messages = this.messages.filter((m) =>
+        message.tmp_id ? m.tmp_id !== message.tmp_id : m.id !== message.id
+      );
+    } else if (message.edited) {
+      console.log("mensaje editado", message);
+      // Si el mensaje ha sido editado
+      const index = this.messages.findIndex(
+        (m) => m.id === message.id || m.tmp_id === message.tmp_id
+      );
+      if (index !== -1) {
+        this.messages[index] = message;
+      }
+    } else if (!message.writing) {
+      // Si el mensaje no es mio, lo añado a la lista y lo marco como leído
+      this.messages = [...this.messages, message];
+      if (message.time_read === undefined) {
+        message.time_read = new Date();
+        this.chatSvc.readChat(message);
       }
     }
-
-    // Actualizamos el usuario si el mensaje es del usuario actual
-    if (message.fromuser?.id === this.user?.id) {
-      this.user = message.fromuser;
-    }
-
-    // Filtramos los mensajes eliminados
-    this.messages = this.messages.filter((m) => !m.deleted);
 
     // Marcamos los mensajes pasados
     this.messages.forEach((m) => {
@@ -261,7 +250,7 @@ export class ChatModalComponent implements OnInit {
       }
     });
 
-    this.dc.detectChanges();
+    this.cd.detectChanges();
     this.scrollDown();
   }
 
@@ -270,7 +259,37 @@ export class ChatModalComponent implements OnInit {
     const image = message.image;
     const audio = message.audio;
 
+    const tmpId = this.utils.makeId(12);
+
+    message = {
+      conversationId: this.conversationId,
+      tmp_id: tmpId,
+      touser: this.user,
+      fromuser: {
+        id: this.auth.currentUserValue.id,
+        username: this.auth.currentUserValue.username,
+        name: this.auth.currentUserValue.name,
+        avatar: this.auth.currentUserValue.avatar,
+        thumbnail: this.auth.currentUserValue.thumbnail,
+        roles: this.auth.currentUserValue.roles,
+        last_login: this.auth.currentUserValue.last_login,
+        verified: this.auth.currentUserValue.verified,
+        block: this.auth.currentUserValue.block,
+        banned: this.auth.currentUserValue.banned,
+        active: this.auth.currentUserValue.active,
+      },
+      text,
+      image,
+      audio,
+      time_creation: new Date(),
+      sending: true,
+      status: "online",
+      edited: this.editing,
+    } as Chat;
+    console.log("mensaje a enviar", message);
+
     if (this.editing) {
+      await this.chatSvc.emitMessage(message);
       const chat = await this.chatSvc
         .updateMessage(this.selectedMessage.id, text)
         .then();
@@ -281,19 +300,6 @@ export class ChatModalComponent implements OnInit {
       });
       this.editing = false;
     } else {
-      const tmpId = this.utils.makeId(6);
-
-      const message = {
-        tmp_id: tmpId,
-        touser: this.user,
-        fromuser: this.auth.currentUserValue,
-        text,
-        image,
-        audio,
-        time_creation: new Date(),
-        sending: true,
-      } as Chat;
-
       this.messages = [...this.messages, ...[message]].filter(
         (m: Chat) => m.text || m.image || m.audio
       );
@@ -306,6 +312,7 @@ export class ChatModalComponent implements OnInit {
       try {
         let chat = null;
         if (!image && !audio) {
+          await this.chatSvc.emitMessage(message);
           chat = await this.chatSvc
             .sendMessage(this.user.id, text, replyToId, tmpId)
             .then();
@@ -314,16 +321,22 @@ export class ChatModalComponent implements OnInit {
           chat = await this.chatSvc
             .sendImage(this.user.id, imageFile, text, tmpId)
             .then();
+          await this.chatSvc.emitMessage(chat);
         } else if (audio) {
           const audioFile = await this.utils.urltoBlob(audio);
           chat = await this.chatSvc
             .sendAudio(this.user.id, audioFile, tmpId)
             .then();
+          await this.chatSvc.emitMessage(chat);
         }
 
-        await this.newMessage(chat);
-
-        // this.messageChange.emit(chat);
+        // añadele el id al mensaje
+        this.messages.map((m) => {
+          if (m.tmp_id === tmpId) {
+            m.id = chat.id;
+            m.sending = false;
+          }
+        });
 
         replyToId = null;
       } catch (e) {
@@ -432,6 +445,8 @@ export class ChatModalComponent implements OnInit {
       this.messages = this.messages.filter(
         (m) => m.id !== this.selectedMessage.id
       );
+      this.selectedMessage.deleted = true;
+      this.chatSvc.emitMessage(this.selectedMessage);
     } catch (e) {
       (
         await this.toast.create({
@@ -496,14 +511,14 @@ export class ChatModalComponent implements OnInit {
       return;
     }
     this.writing = true;
-    await this.chatSvc.writing(this.auth.currentUserValue.id, this.userId);
+    await this.chatSvc.typing(this.auth.currentUserValue.id, this.userId);
     setTimeout(async () => {
       this.writing = false;
     }, 15000);
   }
 
   async getWriting() {
-    this.toUserWriting = this.i18n.translate("writing") + "...";
+    this.toUserWriting = this.i18n.translate("typing") + "...";
     setTimeout(() => {
       this.toUserWriting = "";
     }, 10000);
@@ -547,7 +562,12 @@ export class ChatModalComponent implements OnInit {
     this.router.navigate(["/event", event.id]);
   }
 
+  trackByFn(index, item) {
+    return item.time_creation; // o cualquier propiedad única en tus objetos de mensaje
+  }
+
   back() {
-    this.nav.back();
+    this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
+    this.backToList.emit(true);
   }
 }

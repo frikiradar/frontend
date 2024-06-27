@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   root: "https://localhost:8000/",
   apiUrl: "https://localhost:8000/api/v1/",
+  socketUrl: "https://localhost:3000",
   firebase: {
     apiKey: "AIzaSyDReeVhoLFIdlWdiklj90hDiXRN8RWwGVk",
     authDomain: "frikiradar-1551914200548.firebaseapp.com",
