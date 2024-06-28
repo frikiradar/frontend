@@ -30,7 +30,7 @@ export class ChatService {
     this.socket = io(environment.socketUrl, {
       secure: true,
     });
-    this.socket.emit("register", this.auth.currentUserValue.id);
+    this.socket.emit("join", this.auth.currentUserValue.id);
 
     this.socket.onAny((event, ...args) => {
       // console.log(event, args);

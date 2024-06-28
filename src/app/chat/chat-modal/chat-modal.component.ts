@@ -91,11 +91,11 @@ export class ChatModalComponent implements OnInit {
       { charset: "UTF-8" },
     ]);
 
-    App.addListener("appStateChange", ({ isActive }) => {
+    /*App.addListener("appStateChange", ({ isActive }) => {
       if (isActive) {
         this.getLastMessages();
       }
-    });
+    });*/
 
     this.chatSvc.currentMessage.subscribe(async (message) => {
       if (!message) {
@@ -286,7 +286,6 @@ export class ChatModalComponent implements OnInit {
       status: "online",
       edited: this.editing,
     } as Chat;
-    console.log("mensaje a enviar", message);
 
     if (this.editing) {
       await this.chatSvc.emitMessage(message);
