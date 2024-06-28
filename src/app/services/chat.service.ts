@@ -40,6 +40,10 @@ export class ChatService {
       console.log("Conectado al servidor");
     });
 
+    this.socket.on("disconnect", () => {
+      console.log("Desconectado del servidor");
+    });
+
     this.socket.on("connect_error", (err) => {
       console.log("Error de conexión: ", err);
     });

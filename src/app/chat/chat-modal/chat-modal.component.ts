@@ -91,11 +91,14 @@ export class ChatModalComponent implements OnInit {
       { charset: "UTF-8" },
     ]);
 
-    /*App.addListener("appStateChange", ({ isActive }) => {
+    App.addListener("appStateChange", ({ isActive }) => {
       if (isActive) {
+        if (this.chatSvc.socket && this.chatSvc.socket.disconnected) {
+          this.chatSvc.init();
+        }
         this.getLastMessages();
       }
-    });*/
+    });
 
     this.chatSvc.currentMessage.subscribe(async (message) => {
       if (!message) {
@@ -142,7 +145,9 @@ export class ChatModalComponent implements OnInit {
         .filter((m) => m.text || m.image || m.audio)
         .reverse();
       messages = messages.filter((m) => {
-        if (!this.messages.some((me) => me.id === m.id)) {
+        if (
+          !this.messages.some((me) => me.id === m.id || me.tmp_id === m.tmp_id)
+        ) {
           return m;
         }
       });
