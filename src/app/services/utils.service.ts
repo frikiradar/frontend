@@ -20,9 +20,9 @@ import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { AuthService } from "./auth.service";
 import { Config, ConfigService } from "./config.service";
-import { NavigationBar } from "@mauricewegner/capacitor-navigation-bar";
 import { SafeAreaController } from "@aashu-dubey/capacitor-statusbar-safe-area";
 import { I18nService } from "./i18n.service";
+import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 
 @Injectable({
   providedIn: "root",

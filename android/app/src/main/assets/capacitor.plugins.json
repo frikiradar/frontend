@@ -4,6 +4,10 @@
 		"classpath": "dev.ashu.capacitor.statusbar.safearea.SafeAreaPlugin"
 	},
 	{
+		"pkg": "@capacitor-community/in-app-review",
+		"classpath": "com.getcapacitor.community.inappreview.InAppReviewPlugin"
+	},
+	{
 		"pkg": "@capacitor-firebase/analytics",
 		"classpath": "io.capawesome.capacitorjs.plugins.firebase.analytics.FirebaseAnalyticsPlugin"
 	},
@@ -72,8 +76,12 @@
 		"classpath": "com.codetrixstudio.capacitor.GoogleAuth.GoogleAuth"
 	},
 	{
-		"pkg": "@mauricewegner/capacitor-navigation-bar",
+		"pkg": "@hugotomazi/capacitor-navigation-bar",
 		"classpath": "br.com.tombus.capacitor.plugin.navigationbar.NavigationBarPlugin"
+	},
+	{
+		"pkg": "@mozartec/capacitor-microphone",
+		"classpath": "com.mozartec.capacitor.microphone.MicrophonePlugin"
 	},
 	{
 		"pkg": "@revenuecat/purchases-capacitor",
@@ -82,14 +90,6 @@
 	{
 		"pkg": "capacitor-native-settings",
 		"classpath": "nl.raphael.settings.NativeSettingsPlugin"
-	},
-	{
-		"pkg": "capacitor-rate-app",
-		"classpath": "com.capacitor.rateApp.CapacitorRateAppPlugin"
-	},
-	{
-		"pkg": "capacitor-voice-recorder",
-		"classpath": "com.tchvu3.capacitorvoicerecorder.VoiceRecorder"
 	},
 	{
 		"pkg": "@capacitor/device",

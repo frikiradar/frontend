@@ -16,7 +16,6 @@ import {
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
 import { IonTextarea, isPlatform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { VoiceRecorder } from "capacitor-voice-recorder";
 import runes from "runes";
 
 import { Chat } from "src/app/models/chat";
@@ -25,6 +24,7 @@ import { UtilsService } from "src/app/services/utils.service";
 import { UserService } from "src/app/services/user.service";
 import { User } from "src/app/models/user";
 import { Config, ConfigService } from "src/app/services/config.service";
+import { Microphone } from "@mozartec/capacitor-microphone";
 
 @Component({
   selector: "app-chat-input",
@@ -280,10 +280,8 @@ export class ChatInputComponent {
   async openMic() {
     if (await this.requestAudioPermissions()) {
       try {
-        const result = await VoiceRecorder.startRecording();
-        if (result) {
-          this.recording = true;
-        }
+        await Microphone.startRecording();
+        this.recording = true;
       } catch (e) {
         console.error(e);
       }
@@ -294,12 +292,12 @@ export class ChatInputComponent {
 
   async stopMic() {
     try {
-      const result = await VoiceRecorder.stopRecording();
+      const result = await Microphone.stopRecording();
       this.recording = false;
       this.recorded = true;
 
-      const base64Sound = result.value.recordDataBase64;
-      const mimeType = result.value.mimeType;
+      const base64Sound = result.base64String;
+      const mimeType = result.mimeType;
       const blob = this.utils.base64toBlob(base64Sound, mimeType);
       this.audio = URL.createObjectURL(blob);
       this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
@@ -311,8 +309,8 @@ export class ChatInputComponent {
   }
 
   async requestAudioPermissions() {
-    if (await VoiceRecorder.canDeviceVoiceRecord()) {
-      const granted = await VoiceRecorder.requestAudioRecordingPermission();
+    if (await Microphone.checkPermissions()) {
+      const granted = await Microphone.requestPermissions();
       if (granted) {
         return true;
       } else {

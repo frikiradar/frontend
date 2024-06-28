@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Network } from "@capacitor/network";
 import { AlertController, ToastController, isPlatform } from "@ionic/angular";
 import { App } from "@capacitor/app";
-import { RateApp } from "capacitor-rate-app";
+import { InAppReview } from "@capacitor-community/in-app-review";
 import {
   AppUpdate,
   AppUpdateAvailability,
@@ -160,7 +160,7 @@ export class AppComponent {
             handler: () => {
               config.review = true;
               this.config.setConfig(config);
-              RateApp.requestReview();
+              InAppReview.requestReview();
             },
           },
           {

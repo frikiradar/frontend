@@ -5,6 +5,9 @@ project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/
 include ':aashu-dubey-capacitor-statusbar-safe-area'
 project(':aashu-dubey-capacitor-statusbar-safe-area').projectDir = new File('../node_modules/@aashu-dubey/capacitor-statusbar-safe-area/android')
 
+include ':capacitor-community-in-app-review'
+project(':capacitor-community-in-app-review').projectDir = new File('../node_modules/@capacitor-community/in-app-review/android')
+
 include ':capacitor-firebase-analytics'
 project(':capacitor-firebase-analytics').projectDir = new File('../node_modules/@capacitor-firebase/analytics/android')
 
@@ -56,20 +59,17 @@ project(':capawesome-capacitor-app-update').projectDir = new File('../node_modul
 include ':codetrix-studio-capacitor-google-auth'
 project(':codetrix-studio-capacitor-google-auth').projectDir = new File('../node_modules/@codetrix-studio/capacitor-google-auth/android')
 
-include ':mauricewegner-capacitor-navigation-bar'
-project(':mauricewegner-capacitor-navigation-bar').projectDir = new File('../node_modules/@mauricewegner/capacitor-navigation-bar/android')
+include ':hugotomazi-capacitor-navigation-bar'
+project(':hugotomazi-capacitor-navigation-bar').projectDir = new File('../node_modules/@hugotomazi/capacitor-navigation-bar/android')
+
+include ':mozartec-capacitor-microphone'
+project(':mozartec-capacitor-microphone').projectDir = new File('../node_modules/@mozartec/capacitor-microphone/android')
 
 include ':revenuecat-purchases-capacitor'
 project(':revenuecat-purchases-capacitor').projectDir = new File('../node_modules/@revenuecat/purchases-capacitor/android')
 
 include ':capacitor-native-settings'
 project(':capacitor-native-settings').projectDir = new File('../node_modules/capacitor-native-settings/android')
-
-include ':capacitor-rate-app'
-project(':capacitor-rate-app').projectDir = new File('../node_modules/capacitor-rate-app/android')
-
-include ':capacitor-voice-recorder'
-project(':capacitor-voice-recorder').projectDir = new File('../node_modules/capacitor-voice-recorder/android')
 
 include ':capacitor-device'
 project(':capacitor-device').projectDir = new File('../node_modules/@capacitor/device/android')

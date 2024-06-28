@@ -1,4 +1,4 @@
-import { PurchasesStoreProduct } from "@revenuecat/purchases-capacitor";
+import { PurchasesStoreProduct } from "@revenuecat/purchases-capacitor/src";
 
 export interface Product {
   price: string;
