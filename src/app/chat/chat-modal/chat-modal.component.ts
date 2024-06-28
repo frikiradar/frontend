@@ -43,8 +43,7 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./chat-modal.component.scss"],
 })
 export class ChatModalComponent implements OnInit {
-  @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
-  @Output() backToList: EventEmitter<boolean> = new EventEmitter();
+  @Input() userId: User["id"];
 
   @ViewChild(IonContent)
   chatlist: IonContent;
@@ -61,7 +60,6 @@ export class ChatModalComponent implements OnInit {
   public editing = false;
   public writing = false;
   public toUserWriting = "";
-  private userId: User["id"];
 
   constructor(
     public auth: AuthService,
@@ -79,6 +77,14 @@ export class ChatModalComponent implements OnInit {
     private title: Title,
     private i18n: I18nService
   ) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.userId.currentValue) {
+      this.page = 1;
+      this.messages = [];
+      this.getLastMessages();
+    }
+  }
 
   async ngOnInit() {
     this.meta.addTags([
@@ -121,18 +127,13 @@ export class ChatModalComponent implements OnInit {
       }
     });
 
-    this.userChangeEvent.subscribe(async (id) => {
-      this.userId = id;
-      this.messages = [];
-      this.user = null;
-      this.conversationId = this.chatSvc.getConversationId(
-        this.auth.currentUserValue.id,
-        this.userId
-      );
-      await this.getLastMessages();
+    this.conversationId = this.chatSvc.getConversationId(
+      this.auth.currentUserValue.id,
+      this.userId
+    );
+    await this.getLastMessages();
 
-      this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
-    });
+    this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
   }
 
   async getLastMessages() {
@@ -579,6 +580,6 @@ export class ChatModalComponent implements OnInit {
 
   back() {
     this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
-    this.backToList.emit(true);
+    this.modalController.dismiss();
   }
 }

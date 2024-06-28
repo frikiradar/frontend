@@ -6,6 +6,9 @@ import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
+import { Subscription } from "rxjs";
+import { NavService } from "../services/navigation.service";
+import { ChatModalComponent } from "./chat-modal/chat-modal.component";
 
 @Component({
   selector: "app-chat",
@@ -16,16 +19,14 @@ export class ChatPage implements OnInit {
   @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
   public desktop = false;
   public userId: User["id"];
-  public hideModal = true;
-  public hideList = false;
+  private backButtonSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     public auth: AuthService,
     private modalController: ModalController,
     private config: ConfigService,
-    private platform: Platform
+    private navService: NavService
   ) {}
 
   async ngOnInit() {
@@ -38,6 +39,7 @@ export class ChatPage implements OnInit {
       this.desktop = true;
     }
     window.onresize = async () => {
+      console.log(window.innerWidth);
       this.desktop = window.innerWidth > 991;
     };
 
@@ -50,33 +52,30 @@ export class ChatPage implements OnInit {
       });
       return await modal.present();
     }
-
-    this.platform.backButton.subscribeWithPriority(1, async () => {
-      console.log("back");
-      console.log(location.pathname);
-      if (location.pathname === "/chat/" + this.userId) {
-        this.backToList();
-      } else {
-        this.router.navigate(["/"]);
-      }
-    });
   }
 
   async showChat(id: User["id"]) {
-    // this.nav.navigateRoot("/chat/" + id);
-    // this.router.navigate(["/chat/" + id]);
-
-    history.pushState(null, "", "/chat/" + id);
-    this.userId = id;
-    setTimeout(() => this.userChangeEvent.emit(id), 0);
-
-    this.hideModal = false;
-    this.hideList = true;
+    if (this.desktop) {
+      this.userId = id;
+      setTimeout(() => this.userChangeEvent.emit(id), 0);
+    } else {
+      const modal = await this.modalController
+        .create({
+          component: ChatModalComponent,
+          componentProps: { userId: id },
+        })
+        .then((modal) => {
+          modal.present();
+        });
+    }
   }
 
   backToList() {
-    this.hideModal = true;
-    this.hideList = false;
-    history.pushState(null, "", "/chat");
+    this.userId = null;
+  }
+
+  async ngOnDestroy() {
+    this.backButtonSubscription.unsubscribe();
+    this.navService.backButtonStatus();
   }
 }

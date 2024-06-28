@@ -7,7 +7,7 @@
   ></ion-progress-bar>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="!showOptions && !showingArchived">
-      <ion-button [ngClass]="router.url == '/tabs/chat' ? 'hide' : ''">
+      <ion-button [ngClass]="router.url.includes('/chat/') ? '' : 'hide'">
         <ion-button (click)="back()">
           <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
         </ion-button>

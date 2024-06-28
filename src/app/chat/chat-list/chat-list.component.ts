@@ -37,6 +37,7 @@ export class ChatListComponent {
   public showingArchived = false;
   public chats: Chat[] = null;
   source: EventSource;
+  public desktop = false;
 
   constructor(
     private chatSvc: ChatService,
@@ -55,7 +56,12 @@ export class ChatListComponent {
   }
 
   async ngAfterViewInit() {
+    window.onresize = async () => {
+      this.desktop = window.innerWidth > 991;
+    };
+
     if (window.innerWidth > 991) {
+      this.desktop = true;
       await this.getLastMessages(false);
     } else {
       await this.getLastMessages();

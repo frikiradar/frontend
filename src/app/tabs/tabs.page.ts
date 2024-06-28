@@ -19,6 +19,7 @@ import { I18nService } from "../services/i18n.service";
 export class TabsPage implements OnInit {
   public counters: NotificationCounters;
   public selected: string;
+  public showTabs: boolean = true;
 
   constructor(
     private notificationSvc: NotificationService,
@@ -71,10 +72,6 @@ export class TabsPage implements OnInit {
     this.counters =
       (await this.notificationSvc.getUnread()) as NotificationCounters;
     this.notificationSvc.setNotification(this.counters);
-  }
-
-  openChat() {
-    this.router.navigate(["/chat"]);
   }
 
   async menu() {

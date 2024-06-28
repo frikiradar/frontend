@@ -1,5 +1,5 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" *ngIf="showTabs">
     <ion-tab-button tab="radar">
       <ion-icon
         [color]="selected === 'radar' ? 'primary' : 'light'"
@@ -24,7 +24,7 @@
       ></ion-icon>
     </ion-tab-button>-->
 
-    <ion-tab-button (click)="openChat()">
+    <ion-tab-button tab="chat">
       <ion-icon
         [color]="selected === 'chat' ? 'primary' : 'light'"
         [name]="'chatbubbles' + (selected === 'chat' ? '' : '-outline')"
