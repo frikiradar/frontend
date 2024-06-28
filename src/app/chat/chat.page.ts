@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { ModalController } from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ModalController, Platform } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
@@ -16,12 +16,16 @@ export class ChatPage implements OnInit {
   @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
   public desktop = false;
   public userId: User["id"];
+  public hideModal = true;
+  public hideList = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     public auth: AuthService,
     private modalController: ModalController,
-    private config: ConfigService
+    private config: ConfigService,
+    private platform: Platform
   ) {}
 
   async ngOnInit() {
@@ -46,6 +50,16 @@ export class ChatPage implements OnInit {
       });
       return await modal.present();
     }
+
+    this.platform.backButton.subscribeWithPriority(1, async () => {
+      console.log("back");
+      console.log(location.pathname);
+      if (location.pathname === "/chat/" + this.userId) {
+        this.backToList();
+      } else {
+        this.router.navigate(["/"]);
+      }
+    });
   }
 
   async showChat(id: User["id"]) {
@@ -53,12 +67,18 @@ export class ChatPage implements OnInit {
     // this.router.navigate(["/chat/" + id]);
 
     history.pushState(null, "", "/chat/" + id);
-    this.userId = id;
-    setTimeout(() => this.userChangeEvent.emit(id), 0);
+    if (this.userId !== id) {
+      this.userId = id;
+      setTimeout(() => this.userChangeEvent.emit(id), 0);
+    }
+
+    this.hideModal = false;
+    this.hideList = true;
   }
 
   backToList() {
-    this.userId = null;
+    this.hideModal = true;
+    this.hideList = false;
     history.pushState(null, "", "/chat");
   }
 }

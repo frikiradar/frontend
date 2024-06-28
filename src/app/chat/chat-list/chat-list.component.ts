@@ -115,7 +115,7 @@ export class ChatListComponent {
         }
 
         this.cd.detectChanges();
-      } else {
+      } else if (!message.writing) {
         message.user =
           message.fromuser.id === this.auth.currentUserValue.id
             ? message.touser
@@ -130,7 +130,13 @@ export class ChatListComponent {
           new Date(a.time_creation).getTime()
         );
       });
-      this.setChats();
+
+      if (
+        this.chats.some((c) => c.conversationId === message.conversationId) ||
+        !message.writing
+      ) {
+        this.setChats();
+      }
     });
   }
 
@@ -149,6 +155,7 @@ export class ChatListComponent {
   }
 
   async setChats() {
+    console.log("setChats");
     this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
     let chats = this.allChats?.filter((c) => {
@@ -164,8 +171,26 @@ export class ChatListComponent {
           this.chats[0].user.last_login = chats[0].user.last_login;
         }
       } else {
-        // TODO: Actualizar cada user del listado, comprobando si algún user nuevo y añadiendolo
-        this.chats = chats;
+        // Actualizar cada user del listado, comprobando si algún user nuevo y añadiéndolo
+        chats.forEach((chat) => {
+          const existingChatIndex = this.chats.findIndex(
+            (c) => c.conversationId === chat.conversationId
+          );
+          if (existingChatIndex !== -1) {
+            // Actualiza la información del chat existente sin cambiar su posición
+            this.chats[existingChatIndex] = {
+              ...this.chats[existingChatIndex],
+              ...chat,
+            };
+          } else {
+            // Si el chat es nuevo y no está escribiendo, añádelo al final de la lista
+            if (!chat.writing) {
+              this.chats.push(chat);
+            }
+            // Si el chat es nuevo y está escribiendo, simplemente no lo añadas al principio
+            // Esto evita interrumpir la lista de chats cuando un usuario está escribiendo
+          }
+        });
       }
     } else {
       this.chats = chats;
@@ -175,7 +200,6 @@ export class ChatListComponent {
     this.selectedChat = this.chats?.find((c) => +c.user?.id === this.selected);
     this.cd.detectChanges();
   }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes?.selected?.currentValue) {
       this.selectedChat = this.chats?.find(

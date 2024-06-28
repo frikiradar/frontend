@@ -1,10 +1,10 @@
 <app-chat-list
-  [ngClass]="!userId || desktop ? '' : 'hide'"
+  [ngClass]="hideList && !desktop ? 'hide' : ''"
   (userChangeEvent)="showChat($event)"
   [selected]="userId"
 ></app-chat-list>
 <app-chat-modal
-  [ngClass]="userId ? '' : 'hide'"
+  [ngClass]="hideModal ? 'hide' : ''"
   [userChangeEvent]="userChangeEvent"
   (backToList)="backToList()"
 ></app-chat-modal>

@@ -18,7 +18,7 @@
 </ion-header>
 <ion-content class="ion-padding">
   <div *ngIf="!changingEmail">
-    <h4>{{ "te-hemos-enviado-email-code" | i18n}}</h4>
+    <h4>{{ "te-hemos-enviado-email-code" | i18n: {email: user.email} }}</h4>
     <p>{{ "introduce-cdigo-seguridad-para-activar" | i18n }}</p>
     <form (submit)="submitCode()" [formGroup]="codeForm" autocomplete="off">
       <ion-item class="code">
