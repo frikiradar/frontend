@@ -1,5 +1,5 @@
 import { registerLocaleData } from "@angular/common";
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import localeEs from "@angular/common/locales/es";
 import { LOCALE_ID, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -35,36 +35,30 @@ registerLocaleData(localeEs, "es");
 // install Swiper modules
 register();
 
-@NgModule({
-  declarations: [AppComponent, OptionsPopover],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot({ animated: true }),
-    PickerModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-    BrowserAnimationsModule,
-    LinkyModule,
-    HammerModule,
-    ImageCropperModule,
-    ServiceWorkerModule.register("ngsw-worker.js"),
-    WebcamModule,
-  ],
-  providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: "es" },
-    { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
-    {
-      provide: SwRegistrationOptions,
-      useFactory: () => ({ enabled: environment.production }),
-    },
-    { provide: WebcamImage, useValue: WebcamImage },
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [AppComponent, OptionsPopover],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        IonicModule.forRoot({ animated: true }),
+        PickerModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        BrowserAnimationsModule,
+        LinkyModule,
+        HammerModule,
+        ImageCropperModule,
+        ServiceWorkerModule.register("ngsw-worker.js"),
+        WebcamModule], providers: [
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: LOCALE_ID, useValue: "es" },
+        { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig },
+        {
+            provide: SwRegistrationOptions,
+            useFactory: () => ({ enabled: environment.production }),
+        },
+        { provide: WebcamImage, useValue: WebcamImage },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}

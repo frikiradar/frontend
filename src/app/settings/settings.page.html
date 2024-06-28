@@ -74,7 +74,7 @@
         <ion-checkbox
           slot="end"
           aria-label="Localización exacta"
-          [(ngModel)]="!user.hide_location"
+          [(ngModel)]="showLocation"
           (ngModelChange)="onChangeCheck('hide_location', $event)"
         ></ion-checkbox>
       </ion-item>
@@ -87,7 +87,7 @@
         <ion-checkbox
           slot="end"
           aria-label="Mensajes directos"
-          [(ngModel)]="!user.block_messages"
+          [(ngModel)]="allowMessages"
           (ngModelChange)="onChangeCheck('block_messages', $event)"
         ></ion-checkbox>
       </ion-item>
@@ -100,7 +100,7 @@
         <ion-checkbox
           slot="end"
           aria-label="Última conexión"
-          [(ngModel)]="!user.hide_connection"
+          [(ngModel)]="showConnection"
           (ngModelChange)="onChangeCheck('hide_connection', $event)"
         ></ion-checkbox>
       </ion-item>

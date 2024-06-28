@@ -83,6 +83,30 @@ export class SettingsPage implements OnInit {
     return await modal.present();
   }
 
+  get showConnection() {
+    return !this.user.hide_connection;
+  }
+
+  set showConnection(value: boolean) {
+    this.user.hide_connection = !value;
+  }
+
+  get showLocation() {
+    return !this.user.hide_location;
+  }
+
+  set showLocation(value: boolean) {
+    this.user.hide_location = !value;
+  }
+
+  get allowMessages() {
+    return !this.user.block_messages;
+  }
+
+  set allowMessages(value: boolean) {
+    this.user.block_messages = !value;
+  }
+
   async clearLocalStorage() {
     localStorage.removeItem("config");
     await caches.keys().then((keyList) => {
