@@ -49,8 +49,16 @@ export class ChatService {
     });
 
     this.socket.on("message", (message: Chat) => {
-      console.log("Mensaje recibido", message);
+      // console.log("Mensaje recibido", message);
       this.setMessage(message);
+    });
+
+    this.socket.on("read", async (message: Chat) => {
+      // console.log("Mensaje leído", message);
+      this.setMessage(message);
+      if (message.id) {
+        // this.rest.get(`read-chat/${message.id}`);
+      }
     });
 
     this.socket.on("writing", (fromuser: number, touser: number) => {
@@ -140,7 +148,7 @@ export class ChatService {
   }
 
   async readChat(message: Chat) {
-    console.log("read", message);
+    // console.log("read", message);
     this.socket.emit("read", message);
   }
 
@@ -154,7 +162,7 @@ export class ChatService {
 
   async readLastMessages(messages: Chat[], userId: number) {
     messages
-      .filter((m) => !m.time_read)
+      .filter((m) => !m.time_read && m.fromuser.id !== userId)
       .forEach((m) => {
         m.time_read = new Date();
         if (m.fromuser.id === userId) {

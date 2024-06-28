@@ -155,7 +155,6 @@ export class ChatListComponent {
   }
 
   async setChats() {
-    console.log("setChats");
     this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
     let chats = this.allChats?.filter((c) => {

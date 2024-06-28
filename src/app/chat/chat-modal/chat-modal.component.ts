@@ -202,17 +202,21 @@ export class ChatModalComponent implements OnInit {
       }
 
       this.scrollDown(300, true, false);
+
+      this.chatSvc.readLastMessages(
+        this.messages,
+        this.auth.currentUserValue.id
+      );
     } catch (e) {
       console.error(e);
     }
   }
 
   async newMessage(message: Chat) {
-    console.log("new message", message);
     // Si el mensaje es mio, lo actualizo
     if (message.fromuser?.id === this.auth.currentUserValue.id) {
       this.messages.map((m) => {
-        if (m.tmp_id === message.tmp_id) {
+        if (m.tmp_id === message.tmp_id || m.id === message.id) {
           m.id = message.id;
           m.sending = false;
           m.time_creation = message.time_creation;
@@ -221,12 +225,12 @@ export class ChatModalComponent implements OnInit {
       });
     } else if (message.deleted) {
       // Si el mensaje ha sido eliminado
-      console.log("mensaje eliminado", message);
+      // console.log("mensaje eliminado", message);
       this.messages = this.messages.filter((m) =>
         message.tmp_id ? m.tmp_id !== message.tmp_id : m.id !== message.id
       );
     } else if (message.edited) {
-      console.log("mensaje editado", message);
+      // console.log("mensaje editado", message);
       // Si el mensaje ha sido editado
       const index = this.messages.findIndex(
         (m) => m.id === message.id || m.tmp_id === message.tmp_id
