@@ -241,7 +241,10 @@ export class ChatModalComponent implements OnInit {
     } else if (!message.writing) {
       // Si el mensaje no es mio, lo añado a la lista y lo marco como leído
       this.messages = [...this.messages, message];
-      if (message.time_read === undefined) {
+      if (
+        message.time_read === undefined &&
+        location.pathname === "/chat/" + this.userId
+      ) {
         message.time_read = new Date();
         this.chatSvc.readChat(message);
       }
