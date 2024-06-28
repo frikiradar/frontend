@@ -165,9 +165,7 @@ export class ChatService {
       .filter((m) => !m.time_read && m.fromuser.id !== userId)
       .forEach((m) => {
         m.time_read = new Date();
-        if (m.fromuser.id === userId) {
-          this.readChat(m);
-        }
+        this.readChat(m);
       });
   }
 

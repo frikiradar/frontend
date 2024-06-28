@@ -67,10 +67,8 @@ export class ChatPage implements OnInit {
     // this.router.navigate(["/chat/" + id]);
 
     history.pushState(null, "", "/chat/" + id);
-    if (this.userId !== id) {
-      this.userId = id;
-      setTimeout(() => this.userChangeEvent.emit(id), 0);
-    }
+    this.userId = id;
+    setTimeout(() => this.userChangeEvent.emit(id), 0);
 
     this.hideModal = false;
     this.hideList = true;

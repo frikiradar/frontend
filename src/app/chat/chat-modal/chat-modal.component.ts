@@ -201,12 +201,12 @@ export class ChatModalComponent implements OnInit {
         });
       }
 
-      this.scrollDown(300, true, false);
-
-      this.chatSvc.readLastMessages(
+      await this.chatSvc.readLastMessages(
         this.messages,
         this.auth.currentUserValue.id
       );
+
+      this.scrollDown(300, true, false);
     } catch (e) {
       console.error(e);
     }
