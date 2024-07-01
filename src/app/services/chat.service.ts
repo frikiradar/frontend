@@ -60,8 +60,9 @@ export class ChatService {
     this.socket.on("read", async (message: Chat) => {
       // console.log("Mensaje leído", message);
       this.setMessage(message);
+      const id = message.id ?? message.tmp_id;
       if (message.id) {
-        // this.rest.get(`read-chat/${message.id}`);
+        this.rest.get(`read-chat/${id}`);
       }
     });
 
