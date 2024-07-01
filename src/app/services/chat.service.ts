@@ -60,10 +60,6 @@ export class ChatService {
     this.socket.on("read", async (message: Chat) => {
       // console.log("Mensaje leído", message);
       this.setMessage(message);
-      const id = message.id ?? message.tmp_id;
-      if (message.id) {
-        this.rest.get(`read-chat/${id}`);
-      }
     });
 
     this.socket.on("writing", (fromuser: number, touser: number) => {
@@ -155,6 +151,10 @@ export class ChatService {
   async readChat(message: Chat) {
     // console.log("read", message);
     this.socket.emit("read", message);
+    const id = message.id ?? message.tmp_id;
+    if (id) {
+      this.rest.get(`read-chat/${id}`);
+    }
   }
 
   async userOnline(fromuserid: number, touserid: number) {

@@ -1,13 +1,11 @@
 import { Component, EventEmitter, Input, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ModalController, Platform } from "@ionic/angular";
+import { ActivatedRoute } from "@angular/router";
+import { ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
 import { AuthService } from "./../services/auth.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
-import { Subscription } from "rxjs";
-import { NavService } from "../services/navigation.service";
 import { ChatModalComponent } from "./chat-modal/chat-modal.component";
 
 @Component({
@@ -19,14 +17,12 @@ export class ChatPage implements OnInit {
   @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
   public desktop = false;
   public userId: User["id"];
-  private backButtonSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     public auth: AuthService,
     private modalController: ModalController,
-    private config: ConfigService,
-    private navService: NavService
+    private config: ConfigService
   ) {}
 
   async ngOnInit() {
@@ -73,10 +69,5 @@ export class ChatPage implements OnInit {
 
   backToList() {
     this.userId = null;
-  }
-
-  async ngOnDestroy() {
-    this.backButtonSubscription.unsubscribe();
-    this.navService.backButtonStatus();
   }
 }
