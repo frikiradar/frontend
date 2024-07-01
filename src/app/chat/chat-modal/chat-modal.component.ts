@@ -227,7 +227,7 @@ export class ChatModalComponent implements OnInit {
           m.id = message.id;
           m.sending = false;
           m.time_creation = message.time_creation;
-          m.time_read = message.time_read;
+          m.time_read = message.time_read ?? message.time_read;
         }
       });
     } else if (message.deleted) {
