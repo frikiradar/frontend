@@ -168,6 +168,15 @@ export class ChatListComponent {
         (cc) => cc.conversationId === c.conversationId && cc.archived
       );
     });
+
+    // Ordenamos los chats por fecha de creación
+    chats = chats.sort((a, b) => {
+      return (
+        new Date(b.time_creation).getTime() -
+        new Date(a.time_creation).getTime()
+      );
+    });
+
     if (this.chats) {
       if (this.chats[0].id === chats[0].id) {
         this.chats[0].time_read = chats[0].time_read;
