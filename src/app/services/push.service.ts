@@ -124,7 +124,7 @@ export class PushService {
 
   async localNotification(notification: any) {
     if (isPlatform("capacitor")) {
-      if (location.pathname !== notification.data.url) {
+      if (!this.router.url.includes("chat")) {
         LocalNotifications.schedule({
           notifications: [
             {
@@ -143,7 +143,7 @@ export class PushService {
         });
       }
     } else {
-      if (location.pathname !== notification.data.url) {
+      if (!this.router.url.includes("chat")) {
         try {
           const registration = await navigator.serviceWorker.ready;
           // Customize notification here
