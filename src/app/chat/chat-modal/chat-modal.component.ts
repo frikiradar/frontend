@@ -351,7 +351,7 @@ export class ChatModalComponent implements OnInit {
           chat = await this.chatSvc
             .sendAudio(this.user.id, audioFile, tmpId)
             .then();
-          await this.chatSvc.emitMessage(chat);
+          // await this.chatSvc.emitMessage(chat);
         }
 
         // añadele el id al mensaje
