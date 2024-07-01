@@ -258,10 +258,7 @@ export class ChatModalComponent implements OnInit {
         this.messages = [...this.messages, message];
       }
 
-      if (
-        message.time_read === undefined &&
-        location.pathname === "/chat/" + this.userId
-      ) {
+      if (message.time_read === undefined) {
         message.time_read = new Date();
         this.chatSvc.readChat(message);
       }
