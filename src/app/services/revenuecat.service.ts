@@ -4,7 +4,7 @@ import {
   PURCHASES_ERROR_CODE,
   Purchases,
   PurchasesStoreProduct,
-} from "@revenuecat/purchases-capacitor/src";
+} from "@revenuecat/purchases-capacitor";
 import { environment } from "src/environments/environment";
 import { AuthService } from "./auth.service";
 import { UserService } from "./user.service";

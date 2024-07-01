@@ -44,6 +44,7 @@ import { I18nService } from "src/app/services/i18n.service";
 })
 export class ChatModalComponent implements OnInit {
   @Input() userId: User["id"];
+  @Output() backToList = new EventEmitter();
 
   @ViewChild(IonContent)
   chatlist: IonContent;
@@ -578,8 +579,12 @@ export class ChatModalComponent implements OnInit {
     return item.time_creation; // o cualquier propiedad única en tus objetos de mensaje
   }
 
-  back() {
+  async back() {
     this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
-    this.modalController.dismiss();
+    if (await this.modalController.getTop()) {
+      this.modalController.dismiss();
+    } else {
+      this.backToList.emit();
+    }
   }
 }

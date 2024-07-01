@@ -63,6 +63,7 @@ export class ChatPage implements OnInit {
         .create({
           component: ChatModalComponent,
           componentProps: { userId: id },
+          cssClass: "vertical-modal",
         })
         .then((modal) => {
           modal.present();

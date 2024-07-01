@@ -33,7 +33,7 @@ export class ChatService {
     this.socket.emit("join", this.auth.currentUserValue.id);
 
     this.socket.onAny((event, ...args) => {
-      // console.log(event, args);
+      console.log(event, args);
     });
 
     this.socket.on("connect", () => {
