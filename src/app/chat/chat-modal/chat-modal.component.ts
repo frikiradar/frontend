@@ -247,7 +247,17 @@ export class ChatModalComponent implements OnInit {
       }
     } else if (!message.writing) {
       // Si el mensaje no es mio, lo añado a la lista y lo marco como leído
-      this.messages = [...this.messages, message];
+      // Si ya existe el mensaje, lo actualizo
+      const index = this.messages.findIndex(
+        (m) => m.id === message.id || m.tmp_id === message.tmp_id
+      );
+
+      if (index !== -1) {
+        this.messages[index] = message;
+      } else {
+        this.messages = [...this.messages, message];
+      }
+
       if (
         message.time_read === undefined &&
         location.pathname === "/chat/" + this.userId
@@ -329,6 +339,7 @@ export class ChatModalComponent implements OnInit {
           chat = await this.chatSvc
             .sendMessage(this.user.id, text, replyToId, tmpId)
             .then();
+          await this.chatSvc.emitMessage(chat);
         } else if (image) {
           const imageFile = await this.utils.urltoBlob(image);
           chat = await this.chatSvc
