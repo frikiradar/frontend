@@ -28,10 +28,12 @@ export class NavService {
     } else {
       currentUrl = this.router.url;
     }
-
+    console.log(currentUrl);
     if (this.router.url == "/edit-profile") {
       this.router.navigateByUrl("/profile");
     } else if (this.router.url == "/profile") {
+      this.router.navigateByUrl("/");
+    } else if (currentUrl == "/tabs/chat") {
       this.router.navigateByUrl("/");
     } else if (
       currentUrl.startsWith("/tabs/radar") ||

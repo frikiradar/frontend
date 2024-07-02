@@ -68,75 +68,67 @@ export class ChatListComponent {
     }
 
     this.chatSvc.currentMessage.subscribe(async (message) => {
-      if (!message) {
-        return;
-      }
-      if (
-        this.chats?.some((m) => m.conversationId === message?.conversationId)
-      ) {
-        const chatIndex = this.chats.findIndex(
-          (m) => m.conversationId === message.conversationId
-        );
-        if (this.chats[chatIndex].writing && !message.writing) {
-          this.chats[chatIndex].writing = false;
-        }
+      if (!message) return;
+
+      const chatIndex = this.chats?.findIndex(
+        (m) => m.conversationId === message.conversationId
+      );
+      if (chatIndex !== -1) {
+        // Actualizar estado de escritura
+        this.chats[chatIndex].writing = message.writing;
         if (message.writing) {
-          this.chats[chatIndex].writing = true;
           this.cd.detectChanges();
           setTimeout(() => {
             this.chats[chatIndex].writing = false;
             this.cd.detectChanges();
           }, 10000);
         }
-        if (message.status == "online") {
+
+        // Actualizar último login basado en el estado
+        if (message.status === "online") {
           this.chats[chatIndex].user.last_login = new Date();
-        } else if (message.status == "offline") {
-          // this.chats[chatIndex].user.last_login = new Date(0);
         }
-        if (
+
+        // Actualizar mensaje si es necesario
+        const shouldUpdateMessage =
           message.id > this.chats[chatIndex].id ||
-          message.tmp_id !== undefined
-        ) {
-          if (message.deleted) {
-            this.chats[chatIndex].text = "";
-          } else if (message.edited) {
-            if (
-              this.chats[chatIndex].id === message.id ||
-              this.chats[chatIndex].tmp_id === message.tmp_id
-            ) {
-              this.chats[chatIndex].text = message.text;
-            }
-          } else {
-            this.chats[chatIndex].text = message.text;
-          }
+          message.tmp_id !== this.chats[chatIndex].tmp_id;
+        if (shouldUpdateMessage) {
+          this.chats[chatIndex].text = message.deleted ? "" : message.text;
           this.chats[chatIndex].time_creation = message.time_creation;
           this.chats[chatIndex].time_read = message.time_read;
-          if (message.time_read) {
-            if (this.chats[chatIndex].count > 0) {
-              this.chats[chatIndex].count--;
-            }
-          } else if (message.fromuser.id !== this.auth.currentUserValue.id) {
+
+          // Verificar si el mensaje es nuevo y no leído, y el destinatario es el usuario actual
+          if (
+            !message.time_read &&
+            message.fromuser.id !== this.auth.currentUserValue.id
+          ) {
             this.chats[chatIndex].count++;
           }
         }
 
         this.cd.detectChanges();
       } else if (!message.writing) {
+        // Añadir nuevo chat si no existe y el mensaje no es de escritura
         message.user =
           message.fromuser.id === this.auth.currentUserValue.id
             ? message.touser
             : message.fromuser;
-        if (this.chats) {
-          this.chats = [message, ...this.chats];
+        this.chats = [message, ...this.chats];
+        // Inicializar el contador para el nuevo chat
+        if (message.fromuser.id !== this.auth.currentUserValue.id) {
+          message.count = 1;
         }
       }
-      this.chats?.sort((a, b) => {
-        return (
+
+      // Ordenar chats por fecha de creación
+      this.chats?.sort(
+        (a, b) =>
           new Date(b.time_creation).getTime() -
           new Date(a.time_creation).getTime()
-        );
-      });
+      );
 
+      // Actualizar la lista de chats si es necesario
       if (
         this.chats.some((c) => c.conversationId === message.conversationId) ||
         !message.writing

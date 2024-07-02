@@ -33,7 +33,7 @@ export class ChatService {
     this.socket.emit("join", this.auth.currentUserValue.id);
 
     this.socket.onAny((event, ...args) => {
-      console.log(event, args);
+      console.log("onAny", event, args);
     });
 
     this.socket.on("connect", () => {
@@ -149,12 +149,9 @@ export class ChatService {
   }
 
   async readChat(message: Chat) {
-    // console.log("read", message);
+    console.log("readChat", message);
     this.socket.emit("read", message);
-    const id = message.id ?? message.tmp_id;
-    if (id) {
-      this.rest.get(`read-chat/${id}`);
-    }
+    await this.rest.get(`read-chat/${message.id}`);
   }
 
   async userOnline(fromuserid: number, touserid: number) {
@@ -166,12 +163,14 @@ export class ChatService {
   }
 
   async readLastMessages(messages: Chat[], userId: number) {
-    messages
-      .filter((m) => !m.time_read && m.fromuser.id !== userId)
-      .forEach((m) => {
-        m.time_read = new Date();
-        this.readChat(m);
-      });
+    const unreadMessages = messages.filter(
+      (m) => !m.time_read && m.fromuser.id !== userId
+    );
+
+    unreadMessages.forEach(async (m) => {
+      m.time_read = new Date();
+      await this.readChat(m);
+    });
   }
 
   async deleteMessage(id: number) {

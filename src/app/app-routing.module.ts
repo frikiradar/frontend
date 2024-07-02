@@ -45,18 +45,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "chat",
-    loadChildren: () =>
-      import("./chat/chat.module").then((m) => m.ChatPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: "chat/:id",
-    loadChildren: () =>
-      import("./chat/chat.module").then((m) => m.ChatPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
     path: "search",
     loadChildren: () =>
       import("./search/search.module").then((m) => m.SearchPageModule),

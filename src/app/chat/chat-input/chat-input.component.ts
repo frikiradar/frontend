@@ -14,7 +14,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
-import { IonTextarea, isPlatform } from "@ionic/angular";
+import { IonTextarea, Platform, isPlatform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import runes from "runes";
 
@@ -60,6 +60,8 @@ export class ChatInputComponent {
   public audioPreview: SafeUrl;
   public isPictureSheetOpen = false;
   public i18nEmojiMart = undefined;
+  private mediaRecorder: MediaRecorder | null = null;
+  private audioChunks: BlobPart[] = [];
 
   @Input() replying: boolean = false;
   @Input() editing = false;
@@ -278,34 +280,77 @@ export class ChatInputComponent {
   }
 
   async openMic() {
-    if (await this.requestAudioPermissions()) {
-      try {
-        await Microphone.startRecording();
-        this.recording = true;
-      } catch (e) {
-        console.error(e);
-      }
+    try {
+      this.startRecording();
+      this.recording = true;
+    } catch (e) {
+      console.error(e);
     }
 
     this.countRecording();
   }
 
+  async startRecording() {
+    // Detecta si estamos en un entorno web
+    if (!isPlatform("capacitor")) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        this.mediaRecorder = new MediaRecorder(stream);
+        this.audioChunks = []; // Inicializa audioChunks
+        this.mediaRecorder.ondataavailable = (event) => {
+          this.audioChunks.push(event.data); // Agrega datos de audio a audioChunks
+        };
+        this.mediaRecorder.onstop = () => {
+          // Procesa audioChunks cuando la grabación se detiene
+          const blob = new Blob(this.audioChunks, { type: "audio/webm" });
+          this.audio = URL.createObjectURL(blob);
+          this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
+          this.audioChunks = []; // Limpia para la próxima grabación
+        };
+        this.mediaRecorder.start();
+        console.log("Grabación iniciada en la web");
+      } catch (error) {
+        console.error("Error al iniciar la grabación en la web: ", error);
+      }
+    } else {
+      // Aquí, utiliza la API existente para entornos nativos
+      if (await this.requestAudioPermissions()) {
+        try {
+          await Microphone.startRecording();
+          console.log("Grabación iniciada en entorno nativo");
+        } catch (error) {
+          console.error(
+            "Error al iniciar la grabación en entorno nativo: ",
+            error
+          );
+        }
+      }
+    }
+  }
+
   async stopMic() {
     try {
-      const result = await Microphone.stopRecording();
+      if (!isPlatform("capacitor")) {
+        this.mediaRecorder.stop();
+      } else {
+        // Entornos nativos
+        const result = await Microphone.stopRecording();
+        const base64Sound = result.base64String;
+        const mimeType = result.mimeType;
+        const blob = this.utils.base64toBlob(base64Sound, mimeType);
+        this.audio = URL.createObjectURL(blob);
+        this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
+      }
       this.recording = false;
       this.recorded = true;
-
-      const base64Sound = result.base64String;
-      const mimeType = result.mimeType;
-      const blob = this.utils.base64toBlob(base64Sound, mimeType);
-      this.audio = URL.createObjectURL(blob);
-      this.audioPreview = this.sanitizer.bypassSecurityTrustUrl(this.audio);
     } catch (e) {
       console.error(e);
+    } finally {
+      // Limpia o reinicia variables según sea necesario
+      this.mediaRecorder = null;
     }
-
-    this.stopCountRecording();
   }
 
   async requestAudioPermissions() {

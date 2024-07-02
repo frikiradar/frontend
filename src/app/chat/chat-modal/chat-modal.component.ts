@@ -36,6 +36,7 @@ import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 import { App } from "@capacitor/app";
 import { Meta, Title } from "@angular/platform-browser";
 import { I18nService } from "src/app/services/i18n.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-chat-modal",
@@ -61,6 +62,7 @@ export class ChatModalComponent implements OnInit {
   public editing = false;
   public writing = false;
   public toUserWriting = "";
+  private chatSubscription: Subscription;
 
   constructor(
     public auth: AuthService,
@@ -104,29 +106,33 @@ export class ChatModalComponent implements OnInit {
           this.chatSvc.init();
         }
         this.getLastMessages();
+        this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
       }
     });
 
-    this.chatSvc.currentMessage.subscribe(async (message) => {
-      if (!message) {
-        return;
-      }
-
-      if (message.conversationId === this.conversationId) {
-        if (message.status == "online") {
-          this.user.last_login = new Date();
-        } else if (message.status == "offline") {
-          // this.user.last_login = new Date(0);
+    this.chatSubscription = this.chatSvc.currentMessage.subscribe(
+      async (message) => {
+        console.log("mensaje recibido subscription modal", message);
+        if (!message) {
+          return;
         }
 
-        if (message.writing && message.fromuser?.id === this.user?.id) {
-          this.getWriting();
-        } else if (message.text || message.image || message.audio) {
-          this.toUserWriting = "";
-          await this.newMessage(message);
+        if (message.conversationId === this.conversationId) {
+          if (message.status == "online") {
+            this.user.last_login = new Date();
+          } else if (message.status == "offline") {
+            // this.user.last_login = new Date(0);
+          }
+
+          if (message.writing && message.fromuser?.id === this.user?.id) {
+            this.getWriting();
+          } else if (message.text || message.image || message.audio) {
+            this.toUserWriting = "";
+            await this.newMessage(message);
+          }
         }
       }
-    });
+    );
 
     this.conversationId = this.chatSvc.getConversationId(
       this.auth.currentUserValue.id,
@@ -258,7 +264,8 @@ export class ChatModalComponent implements OnInit {
         this.messages = [...this.messages, message];
       }
 
-      if (message.time_read === undefined) {
+      if (!message.time_read) {
+        console.log("marcando como leído", message);
         message.time_read = new Date();
         this.chatSvc.readChat(message);
       }
@@ -332,7 +339,7 @@ export class ChatModalComponent implements OnInit {
       try {
         let chat = null;
         if (!image && !audio) {
-          await this.chatSvc.emitMessage(message);
+          // await this.chatSvc.emitMessage(message);
           chat = await this.chatSvc
             .sendMessage(this.user.id, text, replyToId, tmpId)
             .then();
@@ -348,7 +355,7 @@ export class ChatModalComponent implements OnInit {
           chat = await this.chatSvc
             .sendAudio(this.user.id, audioFile, tmpId)
             .then();
-          // await this.chatSvc.emitMessage(chat);
+          await this.chatSvc.emitMessage(chat);
         }
 
         // añadele el id al mensaje
@@ -588,11 +595,15 @@ export class ChatModalComponent implements OnInit {
   }
 
   async back() {
-    this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
     if (await this.modalController.getTop()) {
       this.modalController.dismiss();
     } else {
       this.backToList.emit();
     }
+  }
+
+  ngOnDestroy() {
+    this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
+    this.chatSubscription.unsubscribe();
   }
 }

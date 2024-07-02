@@ -102,7 +102,9 @@
 
         <ion-note slot="end">
           <span
-            *ngIf="chat.fromuser == auth.currentUserValue?.id && !chat.writing"
+            *ngIf="
+              chat.fromuser.id == auth.currentUserValue?.id && !chat.writing
+            "
           >
             <ion-icon *ngIf="!chat.time_read" name="checkmark"></ion-icon>
             <ion-icon
