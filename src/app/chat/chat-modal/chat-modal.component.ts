@@ -112,7 +112,6 @@ export class ChatModalComponent implements OnInit {
 
     this.chatSubscription = this.chatSvc.currentMessage.subscribe(
       async (message) => {
-        console.log("mensaje recibido subscription modal", message);
         if (!message) {
           return;
         }
@@ -265,7 +264,6 @@ export class ChatModalComponent implements OnInit {
       }
 
       if (!message.time_read) {
-        console.log("marcando como leído", message);
         message.time_read = new Date();
         this.chatSvc.readChat(message);
       }

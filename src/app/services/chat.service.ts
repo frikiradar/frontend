@@ -149,7 +149,6 @@ export class ChatService {
   }
 
   async readChat(message: Chat) {
-    console.log("readChat", message);
     this.socket.emit("read", message);
     await this.rest.get(`read-chat/${message.id}`);
   }

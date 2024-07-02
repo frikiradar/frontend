@@ -73,52 +73,54 @@ export class ChatListComponent {
       const chatIndex = this.chats?.findIndex(
         (m) => m.conversationId === message.conversationId
       );
+
       if (chatIndex !== -1) {
-        // Actualizar estado de escritura
-        this.chats[chatIndex].writing = message.writing;
+        const chat = this.chats[chatIndex];
+        // Actualizar estado de escritura y programar su reinicio
+        chat.writing = message.writing;
         if (message.writing) {
           this.cd.detectChanges();
           setTimeout(() => {
-            this.chats[chatIndex].writing = false;
+            chat.writing = false;
             this.cd.detectChanges();
           }, 10000);
         }
 
-        // Actualizar último login basado en el estado
+        // Actualizar último login si el usuario está en línea
         if (message.status === "online") {
-          this.chats[chatIndex].user.last_login = new Date();
+          chat.user.last_login = new Date();
         }
 
-        // Actualizar mensaje si es necesario
-        const shouldUpdateMessage =
-          message.id > this.chats[chatIndex].id ||
-          message.tmp_id !== this.chats[chatIndex].tmp_id;
-        if (shouldUpdateMessage) {
-          this.chats[chatIndex].text = message.deleted ? "" : message.text;
-          this.chats[chatIndex].time_creation = message.time_creation;
-          this.chats[chatIndex].time_read = message.time_read;
+        // Actualizar mensaje si es más reciente
+        if (message.id > chat.id) {
+          chat.text = message.deleted ? "" : message.text;
+          chat.time_creation = message.time_creation;
+          chat.time_read = message.time_read;
 
-          // Verificar si el mensaje es nuevo y no leído, y el destinatario es el usuario actual
+          // Incrementar contador si el mensaje es nuevo, no leído y para el usuario actual
           if (
             !message.time_read &&
             message.fromuser.id !== this.auth.currentUserValue.id
           ) {
-            this.chats[chatIndex].count++;
+            chat.count = (chat.count || 0) + 1;
           }
+        } else if (message.edited) {
+          // Actualizar mensaje si ha sido editado
+          chat.text = message.text;
         }
-
-        this.cd.detectChanges();
+        this.chats[chatIndex] = chat;
       } else if (!message.writing) {
         // Añadir nuevo chat si no existe y el mensaje no es de escritura
-        message.user =
+        const newUser =
           message.fromuser.id === this.auth.currentUserValue.id
             ? message.touser
             : message.fromuser;
-        this.chats = [message, ...this.chats];
-        // Inicializar el contador para el nuevo chat
-        if (message.fromuser.id !== this.auth.currentUserValue.id) {
-          message.count = 1;
-        }
+        const newChat = {
+          ...message,
+          user: newUser,
+          count: message.fromuser.id !== this.auth.currentUserValue.id ? 1 : 0,
+        };
+        this.chats = [newChat, ...this.chats];
       }
 
       // Ordenar chats por fecha de creación
@@ -128,13 +130,7 @@ export class ChatListComponent {
           new Date(a.time_creation).getTime()
       );
 
-      // Actualizar la lista de chats si es necesario
-      if (
-        this.chats.some((c) => c.conversationId === message.conversationId) ||
-        !message.writing
-      ) {
-        this.setChats();
-      }
+      this.cd.detectChanges();
     });
   }
 
