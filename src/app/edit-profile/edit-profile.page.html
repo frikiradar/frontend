@@ -528,6 +528,43 @@
         </ion-label>
       </ion-item>
     </ion-item-group>
+
+    <ion-item-group>
+      <ion-item class="category-header" lines="full">
+        <ion-icon src="/assets/icon/ramen_dining.svg"></ion-icon>
+        <ion-input
+          aria-label="Comida, bebida o restaurantes favoritos"
+          #food
+          placeholder="{{ 'food' | i18n }}"
+          clearInput="true"
+          autocapitalize="words"
+          (ionInput)="searchTag($event.detail.value, 'food')"
+          [debounce]="500"
+          (keyup.enter)="
+                        addTag($event.target.value, 'food'); food.value = ''
+                      "
+        ></ion-input>
+        <ion-icon
+          name="add-circle"
+          slot="end"
+          (click)="addTag(food.value, 'food')"
+        ></ion-icon>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap">
+          <ion-chip
+            *ngFor="let tag of getTagsCategory('food')"
+            color="secondary"
+          >
+            <ion-icon
+              name="close-circle"
+              (click)="removeTag(tag.id)"
+            ></ion-icon>
+            <ion-label>{{ tag.name }}</ion-label>
+          </ion-chip>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
   </ion-list>
 </ion-content>
 <ion-footer *ngIf="showFooter">

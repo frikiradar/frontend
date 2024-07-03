@@ -197,7 +197,7 @@ export class ProfilePage {
     if (this.user.chat && !this.user.block) {
       const data = await this.doAction();
       if (data) {
-        this.router.navigate(["/chat", this.user.id]);
+        this.router.navigate(["/tabs/chat", this.user.id]);
       }
     } else {
       if (
@@ -208,7 +208,7 @@ export class ProfilePage {
       ) {
         const data = await this.doAction();
         if (data) {
-          this.router.navigate(["/chat", this.user.id]);
+          this.router.navigate(["/tabs/chat", this.user.id]);
         }
       } else {
         const alert = await this.alert.create({

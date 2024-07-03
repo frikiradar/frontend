@@ -28,7 +28,6 @@ import { App } from "@capacitor/app";
 export class ChatListComponent {
   @Output() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
   @Input() selected: User["id"];
-  @Input() message: Chat;
 
   public loading: boolean;
   public showOptions = false;
@@ -128,14 +127,22 @@ export class ChatListComponent {
         this.chats = [newChat, ...this.chats];
       }
 
+      if (!this.chats) return;
       // Ordenar chats por fecha de creación
-      this.chats?.sort(
-        (a, b) =>
-          new Date(b.time_creation).getTime() -
-          new Date(a.time_creation).getTime()
-      );
+      this.chats = this.sortChats(this.chats);
 
       this.cd.detectChanges();
+    });
+
+    this.chatSvc.selectedUserId$.subscribe(async (id) => {
+      if (id) {
+        this.selected = id;
+        this.selectedChat = this.chats?.find((c) => c.user.id === id);
+      } else {
+        this.selected = undefined;
+        this.selectedChat = undefined;
+        await this.getLastMessages(false);
+      }
     });
   }
 
@@ -154,19 +161,12 @@ export class ChatListComponent {
   }
 
   async setChats() {
+    this.allChats = this.sortChats(this.allChats);
     this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
     let chats = this.allChats?.filter((c) => {
       return !config?.some(
         (cc) => cc.conversationId === c.conversationId && cc.archived
-      );
-    });
-
-    // Ordenamos los chats por fecha de creación
-    chats = chats.sort((a, b) => {
-      return (
-        new Date(b.time_creation).getTime() -
-        new Date(a.time_creation).getTime()
       );
     });
 
@@ -206,13 +206,6 @@ export class ChatListComponent {
     this.setArchivedChats();
     this.selectedChat = this.chats?.find((c) => +c.user?.id === this.selected);
     this.cd.detectChanges();
-  }
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes?.selected?.currentValue) {
-      this.selectedChat = this.chats?.find(
-        (c) => +c.user.id === +changes?.selected?.currentValue
-      );
-    }
   }
 
   async showChat(id: User["id"]) {
@@ -296,6 +289,17 @@ export class ChatListComponent {
       await event.target.close();
       this.showChat(id);
     }
+  }
+
+  sortChats(chats: Chat[]) {
+    chats = chats.sort((a, b) => {
+      return (
+        new Date(b.time_creation).getTime() -
+        new Date(a.time_creation).getTime()
+      );
+    });
+
+    return chats;
   }
 
   async openItem(event: any, id: number) {

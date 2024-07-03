@@ -7,6 +7,7 @@ import { AuthService } from "./../services/auth.service";
 import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
 import { ChatModalComponent } from "./chat-modal/chat-modal.component";
+import { ChatService } from "../services/chat.service";
 
 @Component({
   selector: "app-chat",
@@ -22,7 +23,8 @@ export class ChatPage implements OnInit {
     private route: ActivatedRoute,
     public auth: AuthService,
     private modalController: ModalController,
-    private config: ConfigService
+    private config: ConfigService,
+    private chatSvc: ChatService
   ) {}
 
   async ngOnInit() {
@@ -52,7 +54,7 @@ export class ChatPage implements OnInit {
   async showChat(id: User["id"]) {
     if (this.desktop) {
       this.userId = id;
-      setTimeout(() => this.userChangeEvent.emit(id), 0);
+      this.chatSvc.selectUser(id);
     } else {
       const modal = await this.modalController.create({
         component: ChatModalComponent,
@@ -63,12 +65,13 @@ export class ChatPage implements OnInit {
       await modal.present();
 
       await modal.onDidDismiss().then((data) => {
-        this.userId = null;
+        this.backToList();
       });
     }
   }
 
   backToList() {
     this.userId = null;
+    this.chatSvc.selectUser(null);
   }
 }

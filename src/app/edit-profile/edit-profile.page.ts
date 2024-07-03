@@ -52,6 +52,8 @@ export class EditProfilePage {
   books: IonInput;
   @ViewChild("music", { static: true })
   music: IonInput;
+  @ViewChild("food", { static: true })
+  food: IonInput;
   @ViewChild("role", { static: true })
   role: IonInput;
   @ViewChild("imageInput", { static: true })
@@ -317,6 +319,7 @@ export class EditProfilePage {
       this.games.value =
       this.films.value =
       this.books.value =
+      this.food.value =
         "";
   }
 

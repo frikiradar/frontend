@@ -44,8 +44,8 @@ import { Subscription } from "rxjs";
   styleUrls: ["./chat-modal.component.scss"],
 })
 export class ChatModalComponent implements OnInit {
-  @Input() userId: User["id"];
   @Output() backToList = new EventEmitter();
+  @Input() userId: User["id"];
 
   @ViewChild(IonContent)
   chatlist: IonContent;
@@ -63,6 +63,8 @@ export class ChatModalComponent implements OnInit {
   public writing = false;
   public toUserWriting = "";
   private chatSubscription: Subscription;
+  private userSubscription: Subscription;
+  private desktop = false;
 
   constructor(
     public auth: AuthService,
@@ -81,11 +83,9 @@ export class ChatModalComponent implements OnInit {
     private i18n: I18nService
   ) {}
 
-  ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges(changes: SimpleChanges) {
     if (changes.userId.currentValue) {
-      this.page = 1;
-      this.messages = [];
-      this.getLastMessages();
+      await this.initUser();
     }
   }
 
@@ -133,6 +133,16 @@ export class ChatModalComponent implements OnInit {
       }
     );
 
+    if (window.innerWidth > 991) {
+      this.desktop = true;
+    } else if (this.userId) {
+      await this.initUser();
+    }
+  }
+
+  async initUser() {
+    this.page = 1;
+    this.messages = [];
     this.conversationId = this.chatSvc.getConversationId(
       this.auth.currentUserValue.id,
       this.userId
@@ -213,10 +223,12 @@ export class ChatModalComponent implements OnInit {
         });
       }
 
-      await this.chatSvc.readLastMessages(
-        this.messages,
-        this.auth.currentUserValue.id
-      );
+      if (this.userId !== 1) {
+        await this.chatSvc.readLastMessages(
+          this.messages,
+          this.auth.currentUserValue.id
+        );
+      }
 
       this.scrollDown(300, true, false);
     } catch (e) {
@@ -602,6 +614,11 @@ export class ChatModalComponent implements OnInit {
 
   ngOnDestroy() {
     this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
-    this.chatSubscription.unsubscribe();
+    if (this.chatSubscription) {
+      this.chatSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 }

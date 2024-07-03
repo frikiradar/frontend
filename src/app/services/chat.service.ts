@@ -19,6 +19,8 @@ export class ChatService {
   public socketReady = new Subject<Socket>();
   private messageSource = new BehaviorSubject<Chat>(null);
   currentMessage = this.messageSource.asObservable();
+  private selectedUserId = new BehaviorSubject<User["id"] | null>(null);
+  selectedUserId$ = this.selectedUserId.asObservable();
 
   constructor(
     private rest: RestService,
@@ -234,6 +236,10 @@ export class ChatService {
 
   async report(message: Chat, note: string) {
     return await this.rest.put("report-chat", { message, note });
+  }
+
+  selectUser(userId: number) {
+    this.selectedUserId.next(userId);
   }
 
   getConversationId(fromuser: number, touser: number) {

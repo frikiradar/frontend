@@ -75,7 +75,9 @@
         button
         (click)="showChat(chat.user?.id)"
         [ngClass]="
-          selectedChat?.conversationId == chat?.conversationId ? 'selected' : ''
+          selectedChat?.conversationId == chat?.conversationId && desktop
+            ? 'selected'
+            : ''
         "
       >
         <ion-avatar slot="start">
