@@ -33,11 +33,6 @@ export class ChatPage implements OnInit {
       this.desktop = window.innerWidth > 991;
     };
 
-    if (this.route.snapshot.paramMap.get("id")) {
-      const id = +this.route.snapshot.paramMap.get("id");
-      this.showChat(id);
-    }
-
     const rules = await this.config.get("rules");
     if (!rules) {
       const modal = await this.modalController.create({
@@ -47,10 +42,14 @@ export class ChatPage implements OnInit {
       });
       return await modal.present();
     }
+
+    if (this.route.snapshot.paramMap.get("id")) {
+      const id = +this.route.snapshot.paramMap.get("id");
+      this.showChat(id);
+    }
   }
 
   async showChat(id: User["id"]) {
-    history.pushState(null, null, "/tabs/chat/" + id);
     if (this.desktop) {
       this.userId = id;
       setTimeout(() => this.userChangeEvent.emit(id), 0);
@@ -64,7 +63,6 @@ export class ChatPage implements OnInit {
       await modal.present();
 
       await modal.onDidDismiss().then((data) => {
-        history.pushState(null, null, "/tabs/chat");
         this.userId = null;
       });
     }

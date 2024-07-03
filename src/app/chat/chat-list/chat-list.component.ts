@@ -18,6 +18,7 @@ import { AuthService } from "./../../services/auth.service";
 import { ChatService } from "./../../services/chat.service";
 import { NavService } from "src/app/services/navigation.service";
 import { I18nService } from "src/app/services/i18n.service";
+import { App } from "@capacitor/app";
 
 @Component({
   selector: "app-chat-list",
@@ -50,15 +51,19 @@ export class ChatListComponent {
     private i18n: I18nService
   ) {}
 
-  @HostListener("window:focus")
-  async onFocus() {
-    // await this.getLastMessages();
-  }
-
-  async ngAfterViewInit() {
+  async ngOnInit() {
     window.onresize = async () => {
       this.desktop = window.innerWidth > 991;
     };
+
+    App.addListener("appStateChange", ({ isActive }) => {
+      if (isActive) {
+        if (this.chatSvc.socket && this.chatSvc.socket.disconnected) {
+          this.chatSvc.init();
+        }
+        this.getLastMessages();
+      }
+    });
 
     if (window.innerWidth > 991) {
       this.desktop = true;

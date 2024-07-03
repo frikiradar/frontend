@@ -28,7 +28,7 @@ export class NavService {
     } else {
       currentUrl = this.router.url;
     }
-    console.log(currentUrl);
+    console.log(currentUrl, this.history.length);
     if (this.router.url == "/edit-profile") {
       this.router.navigateByUrl("/profile");
     } else if (this.router.url == "/profile") {
