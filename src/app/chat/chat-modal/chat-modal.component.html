@@ -82,10 +82,6 @@
 </ion-header>
 
 <ion-content [scrollEvents]="true" (tap)="pressOptions = false">
-  <ion-infinite-scroll (ionInfinite)="loadChats($event)" position="top">
-    <ion-infinite-scroll-content loadingSpinner="dots">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
   <ion-list>
     <span
       class="bubble"
@@ -391,6 +387,10 @@
       </ion-item-sliding>
     </span>
   </ion-list>
+  <ion-infinite-scroll (ionInfinite)="loadChats($event)" position="top">
+    <ion-infinite-scroll-content loadingSpinner="dots">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
 <ion-footer
   *ngIf="

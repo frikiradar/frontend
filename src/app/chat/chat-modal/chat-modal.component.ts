@@ -64,7 +64,6 @@ export class ChatModalComponent implements OnInit {
   public toUserWriting = "";
   private chatSubscription: Subscription;
   private userSubscription: Subscription;
-  private desktop = false;
 
   constructor(
     public auth: AuthService,
@@ -81,7 +80,16 @@ export class ChatModalComponent implements OnInit {
     private meta: Meta,
     private title: Title,
     private i18n: I18nService
-  ) {}
+  ) {
+    App.addListener("appStateChange", ({ isActive }) => {
+      if (isActive) {
+        this.getLastMessages();
+        this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
+      } else {
+        this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
+      }
+    });
+  }
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes.userId.currentValue) {
@@ -99,16 +107,6 @@ export class ChatModalComponent implements OnInit {
       { name: "author", content: "frikiradar" },
       { charset: "UTF-8" },
     ]);
-
-    App.addListener("appStateChange", ({ isActive }) => {
-      if (isActive) {
-        if (this.chatSvc.socket && this.chatSvc.socket.disconnected) {
-          this.chatSvc.init();
-        }
-        this.getLastMessages();
-        this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
-      }
-    });
 
     this.chatSubscription = this.chatSvc.currentMessage.subscribe(
       async (message) => {
@@ -134,7 +132,7 @@ export class ChatModalComponent implements OnInit {
     );
 
     if (window.innerWidth > 991) {
-      this.desktop = true;
+      // this.desktop = true;
     } else if (this.userId) {
       await this.initUser();
     }
@@ -230,7 +228,7 @@ export class ChatModalComponent implements OnInit {
         );
       }
 
-      this.scrollDown(300, true, false);
+      this.cd.detectChanges();
     } catch (e) {
       console.error(e);
     }

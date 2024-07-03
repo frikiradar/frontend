@@ -48,27 +48,24 @@ export class ChatListComponent {
     public router: Router,
     private nav: NavService,
     private i18n: I18nService
-  ) {}
-
-  async ngOnInit() {
+  ) {
     window.onresize = async () => {
       this.desktop = window.innerWidth > 991;
     };
 
     App.addListener("appStateChange", ({ isActive }) => {
       if (isActive) {
-        if (this.chatSvc.socket && this.chatSvc.socket.disconnected) {
-          this.chatSvc.init();
-        }
-        this.getLastMessages();
+        this.getLastMessages(false);
       }
     });
+  }
 
+  async ngOnInit() {
     if (window.innerWidth > 991) {
       this.desktop = true;
-      await this.getLastMessages(false);
+      await this.getLastMessages(true, false);
     } else {
-      await this.getLastMessages();
+      await this.getLastMessages(true);
     }
 
     this.chatSvc.currentMessage.subscribe(async (message) => {
@@ -141,7 +138,7 @@ export class ChatListComponent {
       } else {
         this.selected = undefined;
         this.selectedChat = undefined;
-        await this.getLastMessages(false);
+        await this.getLastMessages(false, false);
       }
     });
   }
@@ -151,17 +148,24 @@ export class ChatListComponent {
     await this.setChats();
   }
 
-  async getLastMessages(loading = true) {
+  async getLastMessages(cache = true, loading = true) {
     this.loading = loading;
-    this.getCachedMessages();
+    if (cache) {
+      await this.getCachedMessages();
+    }
     const allChats = await this.chatSvc.getChats();
-    this.allChats = allChats;
-    await this.setChats();
+    if (
+      !this.allChats ||
+      allChats[0].id !== this.allChats[0].id ||
+      allChats[0].time_read !== this.allChats[0].time_read
+    ) {
+      this.allChats = this.sortChats(allChats);
+      await this.setChats();
+    }
     this.loading = false;
   }
 
   async setChats() {
-    this.allChats = this.sortChats(this.allChats);
     this.config.set("chats", this.allChats);
     const config = await this.chatSvc.getChatsConfig();
     let chats = this.allChats?.filter((c) => {
@@ -199,6 +203,8 @@ export class ChatListComponent {
           }
         });
       }
+
+      this.chats = this.sortChats(this.chats);
     } else {
       this.chats = chats;
     }

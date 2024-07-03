@@ -9,6 +9,7 @@ import { Config } from "./config.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { environment } from "src/environments/environment";
+import { App } from "@capacitor/app";
 
 @Injectable({
   providedIn: "root",
@@ -26,7 +27,15 @@ export class ChatService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService
-  ) {}
+  ) {
+    App.addListener("appStateChange", ({ isActive }) => {
+      if (isActive) {
+        if (this.socket && this.socket.disconnected) {
+          this.reconnect();
+        }
+      }
+    });
+  }
 
   async init() {
     this.socket = io(environment.socketUrl, {
@@ -43,11 +52,15 @@ export class ChatService {
     });
 
     this.socket.on("disconnect", () => {
-      console.log("Desconectado del servidor");
+      console.log("Desconectado del servidor.");
+      this.reconnect();
     });
 
     this.socket.on("connect_error", (err) => {
       console.log("Error de conexión: ", err);
+      if (this.socket.disconnected) {
+        this.reconnect();
+      }
     });
 
     this.socket.on("error", (error) => {
@@ -161,6 +174,20 @@ export class ChatService {
 
   async userOffline(fromuserid: number, touserid: number) {
     this.socket.emit("offline", fromuserid, touserid);
+  }
+
+  reconnect(tries = 0) {
+    if (tries > 5) {
+      return;
+    }
+
+    setTimeout(() => {
+      if (this.socket.disconnected) {
+        console.log("Reconectando... Intento", tries + 1, "de 5.");
+        this.socket.connect();
+        this.reconnect(tries + 1);
+      }
+    }, 1000);
   }
 
   async readLastMessages(messages: Chat[], userId: number) {
