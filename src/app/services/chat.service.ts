@@ -10,6 +10,7 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { environment } from "src/environments/environment";
 import { App } from "@capacitor/app";
+import { ToastController } from "@ionic/angular";
 
 @Injectable({
   providedIn: "root",
@@ -22,11 +23,14 @@ export class ChatService {
   currentMessage = this.messageSource.asObservable();
   private selectedUserId = new BehaviorSubject<User["id"] | null>(null);
   selectedUserId$ = this.selectedUserId.asObservable();
+  private connectionError = false;
+  private showConnectionError = false;
 
   constructor(
     private rest: RestService,
     private uploadSvc: UploadService,
-    private auth: AuthService
+    private auth: AuthService,
+    private toastController: ToastController
   ) {
     App.addListener("appStateChange", async ({ isActive }) => {
       if (isActive) {
@@ -58,10 +62,18 @@ export class ChatService {
 
     this.socket.on("connect", () => {
       // console.log("Conectado al servidor");
-    });
+      this.connectionError = false;
 
-    this.socket.on("reconnect", () => {
-      // console.log("Reconectado al servidor");
+      if (this.showConnectionError) {
+        this.toastController
+          .create({
+            message: "Conectado al servidor de chat.",
+            color: "success",
+            duration: 2000,
+          })
+          .then((toast) => toast.present());
+        this.showConnectionError = false;
+      }
     });
 
     this.socket.on("disconnect", () => {
@@ -71,6 +83,10 @@ export class ChatService {
 
     this.socket.on("connect_error", (err) => {
       console.log("Error de conexión: ", err);
+      if (this.socket.disconnected && !this.connectionError) {
+        this.connectionError = true;
+        this.reconnect();
+      }
     });
 
     this.socket.on("error", (error) => {
@@ -140,6 +156,28 @@ export class ChatService {
 
   setMessage(message: Chat) {
     this.messageSource.next(message);
+  }
+
+  reconnect(tries = 0) {
+    if (tries >= 10) {
+      this.showConnectionError = true;
+      this.toastController
+        .create({
+          message: "Error de conexión con el servidor de chat.",
+          color: "danger",
+          duration: 2000,
+        })
+        .then((toast) => toast.present());
+      return;
+    }
+
+    setTimeout(() => {
+      if (this.socket.disconnected) {
+        console.log("Reconectando... Intento", tries + 1, "de 10.");
+        this.socket.connect();
+        this.reconnect(tries + 1);
+      }
+    }, 2500);
   }
 
   async sendImage(

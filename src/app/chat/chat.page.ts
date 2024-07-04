@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ModalController } from "@ionic/angular";
 
 import { User } from "../models/user";
@@ -8,6 +8,7 @@ import { RulesPage } from "../rules/rules.page";
 import { ConfigService } from "../services/config.service";
 import { ChatModalComponent } from "./chat-modal/chat-modal.component";
 import { ChatService } from "../services/chat.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-chat",
@@ -18,6 +19,7 @@ export class ChatPage implements OnInit {
   @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
   public desktop = false;
   public userId: User["id"];
+  private routeSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +37,7 @@ export class ChatPage implements OnInit {
       this.desktop = window.innerWidth > 991;
     };
 
-    this.route.paramMap.subscribe((params) => {
+    this.routeSub = this.route.paramMap.subscribe((params) => {
       const id = +params.get("id");
       if (id) {
         this.showChat(id);
@@ -76,5 +78,8 @@ export class ChatPage implements OnInit {
     this.userId = null;
     this.chatSvc.selectUser(null);
     history.pushState(null, null, "/tabs/chat");
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
   }
 }

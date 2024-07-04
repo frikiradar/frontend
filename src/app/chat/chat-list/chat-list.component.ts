@@ -356,6 +356,8 @@ export class ChatListComponent {
   }
 
   back() {
+    this.selected = undefined;
+    this.selectedChat = undefined;
     this.nav.navigateRoot("/");
   }
 }
