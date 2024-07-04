@@ -2,10 +2,8 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  HostListener,
   Input,
   Output,
-  SimpleChanges,
 } from "@angular/core";
 import { ToastController } from "@ionic/angular";
 import { Router } from "@angular/router";
@@ -48,20 +46,14 @@ export class ChatListComponent {
     private nav: NavService,
     private i18n: I18nService
   ) {
-    App.addListener("appStateChange", ({ isActive }) => {
+    App.addListener("appStateChange", async ({ isActive }) => {
       if (isActive) {
-        this.getLastMessages(false);
+        await this.getLastMessages(false);
       }
     });
   }
 
   async ngOnInit() {
-    if (window.innerWidth > 991) {
-      await this.getLastMessages(true, false);
-    } else {
-      await this.getLastMessages(true);
-    }
-
     this.chatSvc.currentMessage.subscribe(async (message) => {
       if (!message) return;
 
@@ -133,7 +125,12 @@ export class ChatListComponent {
       } else {
         this.selected = undefined;
         this.selectedChat = undefined;
-        await this.getLastMessages(false, false);
+
+        if (window.innerWidth > 991) {
+          await this.getLastMessages(!this.chats, false);
+        } else {
+          await this.getLastMessages(!this.chats, !this.chats);
+        }
       }
     });
   }
@@ -149,6 +146,7 @@ export class ChatListComponent {
       await this.getCachedMessages();
     }
     const allChats = await this.chatSvc.getChats();
+    this.loading = false;
     if (
       !this.allChats ||
       allChats[0].id !== this.allChats[0].id ||
@@ -158,9 +156,9 @@ export class ChatListComponent {
       await this.setChats(chats);
     } else {
       // Se ha desincronizado, reiniciamos conexión con servidor de chat
-      this.chatSvc.reconnect();
+      this.chatSvc.socket.disconnect();
+      await this.chatSvc.init();
     }
-    this.loading = false;
   }
 
   async setChats(chats: Chat[]) {

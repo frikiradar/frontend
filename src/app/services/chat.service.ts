@@ -28,10 +28,15 @@ export class ChatService {
     private uploadSvc: UploadService,
     private auth: AuthService
   ) {
-    App.addListener("appStateChange", ({ isActive }) => {
+    App.addListener("appStateChange", async ({ isActive }) => {
       if (isActive) {
-        if (this.socket && this.socket.disconnected) {
-          this.reconnect();
+        if (this.socket && !this.socket.connected) {
+          await this.init();
+        }
+      } else {
+        // Desconectamos el socket
+        if (this.socket && this.socket.connected) {
+          this.socket.disconnect();
         }
       }
     });
@@ -40,6 +45,10 @@ export class ChatService {
   async init() {
     this.socket = io(environment.socketUrl, {
       secure: true,
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: Infinity,
     });
     this.socket.emit("join", this.auth.currentUserValue.id);
 
@@ -48,19 +57,20 @@ export class ChatService {
     });
 
     this.socket.on("connect", () => {
-      console.log("Conectado al servidor");
+      // console.log("Conectado al servidor");
+    });
+
+    this.socket.on("reconnect", () => {
+      // console.log("Reconectado al servidor");
     });
 
     this.socket.on("disconnect", () => {
-      console.log("Desconectado del servidor.");
-      this.reconnect();
+      // console.log("Desconectado del servidor.");
+      // this.reconnect();
     });
 
     this.socket.on("connect_error", (err) => {
       console.log("Error de conexión: ", err);
-      if (this.socket.disconnected) {
-        this.reconnect();
-      }
     });
 
     this.socket.on("error", (error) => {
@@ -174,20 +184,6 @@ export class ChatService {
 
   async userOffline(fromuserid: number, touserid: number) {
     this.socket.emit("offline", fromuserid, touserid);
-  }
-
-  reconnect(tries = 0) {
-    if (tries > 5) {
-      return;
-    }
-
-    setTimeout(() => {
-      if (this.socket.disconnected) {
-        console.log("Reconectando... Intento", tries + 1, "de 5.");
-        this.socket.connect();
-        this.reconnect(tries + 1);
-      }
-    }, 1000);
   }
 
   async readLastMessages(messages: Chat[], userId: number) {

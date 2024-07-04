@@ -80,12 +80,11 @@ export class ChatModalComponent implements OnInit {
     private eventSvc: EventService,
     private meta: Meta,
     private title: Title,
-    private i18n: I18nService,
-    private nav: NavService
+    private i18n: I18nService
   ) {
-    App.addListener("appStateChange", ({ isActive }) => {
+    App.addListener("appStateChange", async ({ isActive }) => {
       if (isActive) {
-        this.getLastMessages();
+        await this.getLastMessages();
         this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
       } else {
         this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
