@@ -132,9 +132,7 @@ export class ChatModalComponent implements OnInit {
       }
     );
 
-    if (window.innerWidth > 991) {
-      // this.desktop = true;
-    } else if (this.userId) {
+    if (this.userId) {
       await this.initUser();
     }
   }

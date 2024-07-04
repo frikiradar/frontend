@@ -33,7 +33,7 @@ export class NavService {
       this.router.navigateByUrl("/profile");
     } else if (this.router.url == "/profile") {
       this.router.navigateByUrl("/");
-    } else if (currentUrl == "/tabs/chat") {
+    } else if (this.router.url == "/tabs/chat") {
       this.router.navigateByUrl("/");
     } else if (
       currentUrl.startsWith("/tabs/radar") ||

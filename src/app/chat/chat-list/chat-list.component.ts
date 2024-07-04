@@ -122,6 +122,7 @@ export class ChatListComponent {
       if (id) {
         this.selected = id;
         this.selectedChat = this.chats?.find((c) => c.user.id === id);
+        await this.getLastMessages(!this.chats, false);
       } else {
         this.selected = undefined;
         this.selectedChat = undefined;

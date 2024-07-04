@@ -32,6 +32,7 @@ import { LikesModal } from "./likes-modal/likes.modal";
 import { AdService } from "../services/ad.service";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 import { I18nService } from "../services/i18n.service";
+import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
 
 @Component({
   selector: "app-profile",
@@ -193,11 +194,11 @@ export class ProfilePage {
       });
       return;
     }
-
+    let showChat = false;
     if (this.user.chat && !this.user.block) {
       const data = await this.doAction();
       if (data) {
-        this.router.navigate(["/tabs/chat", this.user.id]);
+        showChat = true;
       }
     } else {
       if (
@@ -208,7 +209,7 @@ export class ProfilePage {
       ) {
         const data = await this.doAction();
         if (data) {
-          this.router.navigate(["/tabs/chat", this.user.id]);
+          showChat = true;
         }
       } else {
         const alert = await this.alert.create({
@@ -221,6 +222,16 @@ export class ProfilePage {
         await alert.present();
       }
     }
+
+    this.modalController
+      .create({
+        component: ChatModalComponent,
+        componentProps: { userId: this.user.id },
+        cssClass: "vertical-modal",
+      })
+      .then((modal) => {
+        modal.present();
+      });
   }
 
   async switchLike() {
