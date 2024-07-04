@@ -37,7 +37,6 @@ export class ChatListComponent {
   public showingArchived = false;
   public chats: Chat[] = null;
   source: EventSource;
-  public desktop = false;
 
   constructor(
     private chatSvc: ChatService,
@@ -49,10 +48,6 @@ export class ChatListComponent {
     private nav: NavService,
     private i18n: I18nService
   ) {
-    window.onresize = async () => {
-      this.desktop = window.innerWidth > 991;
-    };
-
     App.addListener("appStateChange", ({ isActive }) => {
       if (isActive) {
         this.getLastMessages(false);
@@ -62,7 +57,6 @@ export class ChatListComponent {
 
   async ngOnInit() {
     if (window.innerWidth > 991) {
-      this.desktop = true;
       await this.getLastMessages(true, false);
     } else {
       await this.getLastMessages(true);
@@ -94,6 +88,7 @@ export class ChatListComponent {
 
         // Actualizar mensaje si es más reciente
         if (message.id > chat.id) {
+          chat.id = message.id;
           chat.text = message.deleted ? "" : message.text;
           chat.time_creation = message.time_creation;
           chat.time_read = message.time_read;
@@ -144,8 +139,8 @@ export class ChatListComponent {
   }
 
   async getCachedMessages() {
-    this.allChats = (await this.config.get("chats")) as Config["chats"];
-    await this.setChats();
+    const chats = (await this.config.get("chats")) as Config["chats"];
+    await this.setChats(chats);
   }
 
   async getLastMessages(cache = true, loading = true) {
@@ -159,16 +154,20 @@ export class ChatListComponent {
       allChats[0].id !== this.allChats[0].id ||
       allChats[0].time_read !== this.allChats[0].time_read
     ) {
-      this.allChats = this.sortChats(allChats);
-      await this.setChats();
+      const chats = this.sortChats(allChats);
+      await this.setChats(chats);
+    } else {
+      // Se ha desincronizado, reiniciamos conexión con servidor de chat
+      this.chatSvc.reconnect();
     }
     this.loading = false;
   }
 
-  async setChats() {
-    this.config.set("chats", this.allChats);
+  async setChats(chats: Chat[]) {
+    this.config.set("chats", chats);
+    this.allChats = chats;
     const config = await this.chatSvc.getChatsConfig();
-    let chats = this.allChats?.filter((c) => {
+    this.chats = this.allChats?.filter((c) => {
       return !config?.some(
         (cc) => cc.conversationId === c.conversationId && cc.archived
       );

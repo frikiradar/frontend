@@ -35,6 +35,13 @@ export class ChatPage implements OnInit {
       this.desktop = window.innerWidth > 991;
     };
 
+    this.route.paramMap.subscribe((params) => {
+      const id = +params.get("id");
+      if (id) {
+        this.showChat(id);
+      }
+    });
+
     const rules = await this.config.get("rules");
     if (!rules) {
       const modal = await this.modalController.create({
@@ -43,11 +50,6 @@ export class ChatPage implements OnInit {
         backdropDismiss: false,
       });
       return await modal.present();
-    }
-
-    if (this.route.snapshot.paramMap.get("id")) {
-      const id = +this.route.snapshot.paramMap.get("id");
-      this.showChat(id);
     }
   }
 
@@ -73,5 +75,6 @@ export class ChatPage implements OnInit {
   backToList() {
     this.userId = null;
     this.chatSvc.selectUser(null);
+    history.pushState(null, null, "/tabs/chat");
   }
 }

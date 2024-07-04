@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   AlertController,
+  ModalController,
   PopoverController,
   ToastController,
   isPlatform,
@@ -34,16 +35,20 @@ export class OptionsPopover {
     private toast: ToastController,
     private admin: AdminService,
     private utils: UtilsService,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private modalController: ModalController
   ) {}
 
   close() {
     this.popoverController.dismiss();
   }
 
-  showProfile(id: User["id"]) {
+  async showProfile(id: User["id"]) {
     if (id !== 1) {
       this.router.navigate(["/profile", id]);
+      if (await this.modalController.getTop()) {
+        this.modalController.dismiss();
+      }
     }
 
     this.close();

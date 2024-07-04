@@ -37,6 +37,7 @@ import { App } from "@capacitor/app";
 import { Meta, Title } from "@angular/platform-browser";
 import { I18nService } from "src/app/services/i18n.service";
 import { Subscription } from "rxjs";
+import { NavService } from "src/app/services/navigation.service";
 
 @Component({
   selector: "app-chat-modal",
@@ -79,7 +80,8 @@ export class ChatModalComponent implements OnInit {
     private eventSvc: EventService,
     private meta: Meta,
     private title: Title,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private nav: NavService
   ) {
     App.addListener("appStateChange", ({ isActive }) => {
       if (isActive) {
@@ -605,6 +607,7 @@ export class ChatModalComponent implements OnInit {
   async back() {
     if (await this.modalController.getTop()) {
       this.modalController.dismiss();
+      // this.nav.back();
     } else {
       this.backToList.emit();
     }
