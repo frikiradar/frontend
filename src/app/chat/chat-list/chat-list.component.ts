@@ -25,7 +25,6 @@ import { App } from "@capacitor/app";
 })
 export class ChatListComponent {
   @Output() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
-  @Input() selected: User["id"];
 
   public loading: boolean;
   public showOptions = false;
@@ -57,12 +56,13 @@ export class ChatListComponent {
     this.chatSvc.currentMessage.subscribe(async (message) => {
       if (!message) return;
 
-      const chatIndex = this.chats?.findIndex(
+      const chats = this.chats;
+      const chatIndex = chats?.findIndex(
         (m) => m.conversationId === message.conversationId
       );
 
-      if (chatIndex !== -1) {
-        const chat = this.chats[chatIndex];
+      if (chats && chatIndex !== -1) {
+        const chat = chats[chatIndex];
         // Actualizar estado de escritura y programar su reinicio
         chat.writing = message.writing;
         if (message.writing) {
@@ -96,7 +96,8 @@ export class ChatListComponent {
           // Actualizar mensaje si ha sido editado
           chat.text = message.text;
         }
-        this.chats[chatIndex] = chat;
+        chats[chatIndex] = chat;
+        await this.setChats(chats);
       } else if (!message.writing) {
         // Añadir nuevo chat si no existe y el mensaje no es de escritura
         const newUser =
@@ -108,23 +109,14 @@ export class ChatListComponent {
           user: newUser,
           count: message.fromuser.id !== this.auth.currentUserValue.id ? 1 : 0,
         };
-        this.chats = [newChat, ...this.chats];
+        await this.setChats([newChat, ...chats]);
       }
-
-      if (!this.chats) return;
-      // Ordenar chats por fecha de creación
-      this.chats = this.sortChats(this.chats);
-
-      this.cd.detectChanges();
     });
 
     this.chatSvc.selectedUserId$.subscribe(async (id) => {
-      if (id) {
-        this.selected = id;
+      if (id && window.innerWidth > 991) {
         this.selectedChat = this.chats?.find((c) => c.user.id === id);
-        await this.getLastMessages(!this.chats, false);
       } else {
-        this.selected = undefined;
         this.selectedChat = undefined;
 
         if (window.innerWidth > 991) {
@@ -148,17 +140,21 @@ export class ChatListComponent {
     }
     const allChats = await this.chatSvc.getChats();
     this.loading = false;
+    this.cd.detectChanges();
     if (
       !this.allChats ||
       allChats[0].id !== this.allChats[0].id ||
-      allChats[0].time_read !== this.allChats[0].time_read
+      allChats[0].time_read !== this.allChats[0].time_read ||
+      allChats[0].count !== this.allChats[0].count ||
+      allChats[0].user?.last_login !== this.allChats[0].user?.last_login
     ) {
       const chats = this.sortChats(allChats);
       await this.setChats(chats);
-    } else {
       // Se ha desincronizado, reiniciamos conexión con servidor de chat
       this.chatSvc.socket.disconnect();
       await this.chatSvc.init();
+    } else {
+      // console.log(this.allChats[0], allChats[0]);
     }
   }
 
@@ -208,7 +204,9 @@ export class ChatListComponent {
     }
 
     this.setArchivedChats();
-    this.selectedChat = this.chats?.find((c) => +c.user?.id === this.selected);
+    this.selectedChat = this.chats?.find(
+      (c) => +c.user?.id === this.chatSvc.selectedUserId.value
+    );
     this.cd.detectChanges();
   }
 
@@ -217,7 +215,6 @@ export class ChatListComponent {
   }
 
   async deleteChat(chat: Chat) {
-    this.selected = undefined;
     this.selectedChat = undefined;
     this.showOptions = false;
     const chats = this.chats;
@@ -244,7 +241,6 @@ export class ChatListComponent {
   }
 
   async archiveChat(chat: Chat) {
-    this.selected = undefined;
     this.selectedChat = undefined;
     this.showOptions = false;
 
@@ -264,7 +260,6 @@ export class ChatListComponent {
   }
 
   async unarchiveChat(chat: Chat) {
-    this.selected = undefined;
     this.selectedChat = undefined;
     this.showOptions = false;
 
@@ -314,7 +309,6 @@ export class ChatListComponent {
 
   async selectChat(chat: Chat) {
     if (chat.user.username !== "frikiradar") {
-      this.selected = chat.user.id;
       this.selectedChat = chat;
       this.showOptions = true;
       await Haptics.vibrate({ duration: 1 });
@@ -357,7 +351,6 @@ export class ChatListComponent {
   }
 
   back() {
-    this.selected = undefined;
     this.selectedChat = undefined;
     this.nav.navigateRoot("/");
   }

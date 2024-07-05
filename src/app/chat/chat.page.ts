@@ -17,7 +17,7 @@ import { Subscription } from "rxjs";
 })
 export class ChatPage implements OnInit {
   @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();
-  public desktop = false;
+  public desktop = window.innerWidth > 991;
   public userId: User["id"];
   private routeSub: Subscription;
 
@@ -30,9 +30,6 @@ export class ChatPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    if (window.innerWidth > 991) {
-      this.desktop = true;
-    }
     window.onresize = async () => {
       this.desktop = window.innerWidth > 991;
     };
@@ -40,6 +37,7 @@ export class ChatPage implements OnInit {
     this.routeSub = this.route.paramMap.subscribe((params) => {
       const id = +params.get("id");
       if (id) {
+        history.pushState(null, null, "/tabs/chat");
         this.showChat(id);
       }
     });
@@ -56,9 +54,9 @@ export class ChatPage implements OnInit {
   }
 
   async showChat(id: User["id"]) {
+    this.chatSvc.selectUser(id);
     if (this.desktop) {
       this.userId = id;
-      this.chatSvc.selectUser(id);
     } else {
       const modal = await this.modalController.create({
         component: ChatModalComponent,
@@ -77,7 +75,6 @@ export class ChatPage implements OnInit {
   backToList() {
     this.userId = null;
     this.chatSvc.selectUser(null);
-    history.pushState(null, null, "/tabs/chat");
     if (this.routeSub) {
       this.routeSub.unsubscribe();
     }

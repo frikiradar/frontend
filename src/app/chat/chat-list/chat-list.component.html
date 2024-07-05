@@ -97,7 +97,10 @@
 
         <ion-label class="ion-text-nowrap">
           <h2>{{ chat.user?.name }}</h2>
-          <p>{{ chat.text }}</p>
+          <p *ngIf="!chat.writing">{{ chat.text }}</p>
+          <p *ngIf="chat.writing">
+            <ion-text color="secondary"> {{ "typing" | i18n }}... </ion-text>
+          </p>
         </ion-label>
 
         <ion-note slot="end">
@@ -113,11 +116,8 @@
               name="checkmark-done"
             ></ion-icon>
           </span>
-          {{
-            chat.writing
-              ? "⌨ " + ("typing" | i18n) + "..."
-              : (chat.time_creation | niceDate)
-          }}
+          {{ chat.time_creation | niceDate }}
+
           <ion-text class="chat-count ion-text-right">
             <ion-badge color="primary" *ngIf="chat?.count > 0">{{
               chat?.count

@@ -18,6 +18,7 @@ import { FirebaseMessaging, Visibility } from "@capacitor-firebase/messaging";
 import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
 import { getAnalytics } from "firebase/analytics";
 import { I18nService } from "./i18n.service";
+import { ChatService } from "./chat.service";
 
 @Injectable({
   providedIn: "root",
@@ -32,7 +33,8 @@ export class PushService {
     private notificationSvc: NotificationService,
     private auth: AuthService,
     private swPush: SwPush,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private chatSvc: ChatService
   ) {}
 
   async ngOnInit() {
@@ -123,8 +125,13 @@ export class PushService {
   }
 
   async localNotification(notification: any) {
-    if (isPlatform("capacitor")) {
-      if (!this.router.url.includes("chat")) {
+    const userId = +notification?.data?.fromUser;
+    if (
+      !this.router.url.includes("chat") ||
+      (this.chatSvc.selectedUserId.value !== null &&
+        userId !== this.chatSvc.selectedUserId.value)
+    ) {
+      if (isPlatform("capacitor")) {
         LocalNotifications.schedule({
           notifications: [
             {
@@ -141,9 +148,7 @@ export class PushService {
             },
           ],
         });
-      }
-    } else {
-      if (!this.router.url.includes("chat")) {
+      } else {
         try {
           const registration = await navigator.serviceWorker.ready;
           // Customize notification here

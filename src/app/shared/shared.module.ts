@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ImageCropperModule } from "ngx-image-cropper";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { WebcamModule } from "ngx-webcam";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
@@ -11,7 +10,6 @@ import { LinkyModule } from "ngx-linky";
 import { SwiperModule } from "swiper/angular";
 import { register } from "swiper-new/element/bundle";
 
-import { CropperModal } from "../cropper/cropper.modal";
 import { CreditsModal } from "../credits/credits.modal";
 import { NiceDatePipe } from "../nice-date.pipe";
 import { RequestGeolocationModal } from "../radar/request-geolocation-modal/request-geolocation.modal";
@@ -50,7 +48,6 @@ register();
     I18nPipe,
     CreditsModal,
     RequestGeolocationModal,
-    CropperModal,
     WebcamModal,
     ChatInputComponent,
     AudioPlayerComponent,
@@ -75,7 +72,6 @@ register();
     ReactiveFormsModule,
     IonicModule,
     CommonModule,
-    ImageCropperModule,
     WebcamModule,
     PickerModule,
     LinkyModule,

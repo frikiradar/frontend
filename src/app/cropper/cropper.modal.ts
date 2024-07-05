@@ -1,11 +1,18 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { ModalController } from "@ionic/angular";
-import { ImageCroppedEvent, ImageTransform } from "ngx-image-cropper";
+import { IonicModule, ModalController } from "@ionic/angular";
+import {
+  ImageCroppedEvent,
+  ImageCropperComponent,
+  ImageTransform,
+} from "ngx-image-cropper";
+import { SharedModule } from "../shared/shared.module";
 
 @Component({
   selector: "cropper-modal",
   templateUrl: "./cropper.modal.html",
   styleUrls: ["./cropper.modal.scss"],
+  imports: [ImageCropperComponent, SharedModule, IonicModule],
+  standalone: true,
 })
 export class CropperModal implements OnInit {
   @Input() src: string;

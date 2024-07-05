@@ -21,7 +21,7 @@ export class ChatService {
   public socketReady = new Subject<Socket>();
   private messageSource = new BehaviorSubject<Chat>(null);
   currentMessage = this.messageSource.asObservable();
-  private selectedUserId = new BehaviorSubject<User["id"] | null>(null);
+  public selectedUserId = new BehaviorSubject<User["id"] | null>(null);
   selectedUserId$ = this.selectedUserId.asObservable();
   private connectionError = false;
   private showConnectionError = false;
