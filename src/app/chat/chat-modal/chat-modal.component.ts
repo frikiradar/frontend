@@ -68,6 +68,7 @@ export class ChatModalComponent implements OnInit {
   private userSubscription: Subscription;
   public showBackButton = window.innerWidth < 992;
   public isChatModalPage = false;
+  private canRead = true;
 
   constructor(
     public auth: AuthService,
@@ -89,9 +90,11 @@ export class ChatModalComponent implements OnInit {
   ) {
     App.addListener("appStateChange", async ({ isActive }) => {
       if (isActive) {
+        this.canRead = true;
         await this.getLastMessages();
         this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
       } else {
+        this.canRead = false;
         this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
       }
     });
@@ -285,7 +288,7 @@ export class ChatModalComponent implements OnInit {
         this.messages = [...this.messages, message];
       }
 
-      if (!message.time_read) {
+      if (!message.time_read && this.canRead) {
         message.time_read = new Date();
         this.chatSvc.readChat(message);
       }

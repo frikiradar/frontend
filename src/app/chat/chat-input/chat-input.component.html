@@ -90,7 +90,7 @@
         #textarea
         [autoGrow]="true"
         rows="1"
-        (ionFocus)="emojis = false"
+        (ionFocus)="closeEmojis()"
         (ionInput)="setWriting($event.detail.value)"
         (paste)="onPaste($event)"
       >
@@ -148,17 +148,7 @@
     </ion-button>
   </ion-buttons>
 </ion-toolbar>
-<emoji-mart
-  *ngIf="emojis"
-  isNative="true"
-  emoji="point_up"
-  darkMode="true"
-  showPreview="false"
-  [style]="{ width: '100%' }"
-  (emojiSelect)="addEmoji($event)"
-  title="Elige un emoji"
-  [i18n]="i18nEmojiMart"
-></emoji-mart>
+<div id="emoji-picker-container"></div>
 
 <!-- modals -->
 

@@ -17,6 +17,7 @@ import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
 import { IonTextarea, Platform, isPlatform } from "@ionic/angular";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import runes from "runes";
+declare var EmojiMart: any; // Esto declara EmojiMart para TypeScript
 
 import { Chat } from "src/app/models/chat";
 import { AuthService } from "src/app/services/auth.service";
@@ -92,54 +93,12 @@ export class ChatInputComponent {
 
     if (isPlatform("capacitor")) {
       Keyboard.addListener("keyboardWillShow", () => {
-        this.emojis = false;
+        this.closeEmojis();
       });
     }
   }
 
-  async ngOnInit() {
-    const language = (await this.config.get("language")) as Config["language"];
-    this.i18nEmojiMart =
-      language === "es"
-        ? {
-            search: "Busca el emoji perfecto",
-            emojilist: "Listado de emojis",
-            found: "Emoji no encontrado",
-            clear: "Borrar",
-            categories: {
-              search: "Resultados",
-              recent: "Más usados",
-              people: "Caras y personas",
-              nature: "Animales y naturaleza",
-              foods: "Comida y bebida",
-              activity: "Actividad",
-              places: "Viajes y lugares",
-              objects: "Objetos",
-              symbols: "Símbolos",
-              flags: "Banderas",
-              custom: "frikiradar",
-            },
-          }
-        : {
-            search: "Search the perfect emoji",
-            emojilist: "Emoji list",
-            found: "Emoji not found",
-            clear: "Clear",
-            categories: {
-              search: "Results",
-              recent: "Most used",
-              people: "Faces and people",
-              nature: "Animals and nature",
-              foods: "Food and drink",
-              activity: "Activity",
-              places: "Travel and places",
-              objects: "Objects",
-              symbols: "Symbols",
-              flags: "Flags",
-              custom: "frikiradar",
-            },
-          };
-  }
+  async ngOnInit() {}
 
   onPaste(event: ClipboardEvent) {
     console.log(event);
@@ -180,25 +139,59 @@ export class ChatInputComponent {
   }
 
   async openEmojis() {
-    if (isPlatform("capacitor")) {
-      Keyboard.setStyle({ style: KeyboardStyle.Dark });
-      if (!this.emojis) {
-        await Keyboard.hide();
-        setTimeout(() => {
-          this.emojis = !this.emojis;
-        }, 0); // Puedes ajustar este valor según sea necesario
+    if (typeof EmojiMart !== "undefined") {
+      this.emojis = !this.emojis;
+
+      if (this.emojis) {
+        if (isPlatform("capacitor")) {
+          await Keyboard.hide();
+        }
+        const language = (await this.config.get(
+          "language"
+        )) as Config["language"];
+
+        const picker = new EmojiMart.Picker({
+          onEmojiSelect: (emoji) => {
+            // console.log(emoji);
+            this.addEmoji(emoji);
+          },
+          theme: "dark",
+          locale: language === "es" ? "es" : "en",
+          set: "native",
+          dynamicWidth: true,
+        });
+
+        const container = document.getElementById("emoji-picker-container");
+        if (container) {
+          container.appendChild(picker);
+          picker.style.width = "100%";
+        }
       } else {
-        this.emojis = !this.emojis;
-        Keyboard.show();
+        this.closeEmojis();
       }
     } else {
-      this.emojis = !this.emojis;
+      console.error("EmojiMart no está definido.");
     }
   }
 
-  addEmoji(event: any) {
+  closeEmojis() {
+    if (typeof EmojiMart !== "undefined") {
+      this.emojis = false;
+      if (isPlatform("capacitor")) {
+        Keyboard.show();
+      }
+      const container = document.getElementById("emoji-picker-container");
+      if (container) {
+        container.innerHTML = "";
+      }
+
+      this.textarea.setFocus();
+    }
+  }
+
+  addEmoji(emoji: any) {
     this.message.setValue(
-      (this.message.value ? this.message.value : "") + event.emoji.native
+      (this.message.value ? this.message.value : "") + emoji.native
     );
   }
 

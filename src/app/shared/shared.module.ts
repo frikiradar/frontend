@@ -5,7 +5,6 @@ import { IonicModule } from "@ionic/angular";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { WebcamModule } from "ngx-webcam";
-import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { LinkyModule } from "ngx-linky";
 import { SwiperModule } from "swiper/angular";
 import { register } from "swiper-new/element/bundle";
@@ -73,7 +72,6 @@ register();
     IonicModule,
     CommonModule,
     WebcamModule,
-    PickerModule,
     LinkyModule,
     SwiperModule,
   ],

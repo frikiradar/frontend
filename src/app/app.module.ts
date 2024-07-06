@@ -16,7 +16,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouteReuseStrategy } from "@angular/router";
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { LinkyModule } from "ngx-linky";
-import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { WebcamImage, WebcamModule } from "ngx-webcam";
 import {
   ServiceWorkerModule,
@@ -44,7 +43,6 @@ register();
   imports: [
     BrowserModule,
     IonicModule.forRoot({ animated: true }),
-    PickerModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
