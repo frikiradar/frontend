@@ -95,6 +95,10 @@ export class ChatListComponent {
         } else if (message.edited) {
           // Actualizar mensaje si ha sido editado
           chat.text = message.text;
+        } else if (message.time_read) {
+          // Actualizar mensaje si ha sido leído
+          chat.time_read = message.time_read;
+          chat.count = 0;
         }
         chats[chatIndex] = chat;
         await this.setChats(chats);
@@ -122,7 +126,7 @@ export class ChatListComponent {
 
         if (window.innerWidth > 991) {
           await this.getLastMessages(!this.chats, false);
-        } else {
+        } else if (!this.chats) {
           await this.getLastMessages(!this.chats, !this.chats);
         }
       }
@@ -168,6 +172,8 @@ export class ChatListComponent {
         (cc) => cc.conversationId === c.conversationId && cc.archived
       );
     });
+
+    this.cd.detectChanges();
 
     if (this.chats) {
       if (this.chats[0].id === chats[0].id) {
