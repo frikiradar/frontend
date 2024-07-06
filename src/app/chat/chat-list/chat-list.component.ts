@@ -218,6 +218,10 @@ export class ChatListComponent {
   }
 
   async showChat(id: User["id"]) {
+    if (this.showOptions) {
+      return;
+    }
+    this.hideOptions();
     this.userChangeEvent.emit(id);
   }
 
@@ -267,8 +271,7 @@ export class ChatListComponent {
   }
 
   async unarchiveChat(chat: Chat) {
-    this.selectedChat = undefined;
-    this.showOptions = false;
+    this.hideOptions();
 
     try {
       await this.chatSvc.unarchiveChat(chat, this.allChats);
