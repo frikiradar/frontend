@@ -9,7 +9,7 @@ import {
   ViewChild,
   SimpleChanges,
 } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Clipboard } from "@capacitor/clipboard";
 import { Keyboard } from "@capacitor/keyboard";
 import {
@@ -38,6 +38,7 @@ import { Meta, Title } from "@angular/platform-browser";
 import { I18nService } from "src/app/services/i18n.service";
 import { Subscription } from "rxjs";
 import { NavService } from "src/app/services/navigation.service";
+import { PushService } from "src/app/services/push.service";
 
 @Component({
   selector: "app-chat-modal",
@@ -65,11 +66,14 @@ export class ChatModalComponent implements OnInit {
   public toUserWriting = "";
   private chatSubscription: Subscription;
   private userSubscription: Subscription;
+  public showBackButton = window.innerWidth < 992;
+  public isChatModalPage = false;
 
   constructor(
     public auth: AuthService,
     public userSvc: UserService,
     private router: Router,
+    private route: ActivatedRoute,
     public chatSvc: ChatService,
     private toast: ToastController,
     private urlSvc: UrlService,
@@ -80,7 +84,8 @@ export class ChatModalComponent implements OnInit {
     private eventSvc: EventService,
     private meta: Meta,
     private title: Title,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private push: PushService
   ) {
     App.addListener("appStateChange", async ({ isActive }) => {
       if (isActive) {
@@ -99,6 +104,13 @@ export class ChatModalComponent implements OnInit {
   }
 
   async ngOnInit() {
+    const param = this.route.snapshot.paramMap.get("id");
+    if (param) {
+      this.userId = +param;
+      this.showBackButton = true;
+      this.isChatModalPage = true;
+    }
+
     this.meta.addTags([
       {
         name: "keywords",
@@ -221,6 +233,7 @@ export class ChatModalComponent implements OnInit {
       }
 
       if (this.userId !== 1) {
+        this.push.removeChatNotifications(this.user.id, this.user.username);
         await this.chatSvc.readLastMessages(
           this.messages,
           this.auth.currentUserValue.id
@@ -320,6 +333,7 @@ export class ChatModalComponent implements OnInit {
       sending: true,
       status: "online",
       edited: this.editing,
+      reply_to: this.replying ? this.selectedMessage : null,
     } as Chat;
 
     if (this.editing) {
@@ -604,7 +618,8 @@ export class ChatModalComponent implements OnInit {
   async back() {
     if (await this.modalController.getTop()) {
       this.modalController.dismiss();
-      // this.nav.back();
+    } else if (this.isChatModalPage) {
+      this.router.navigate(["/tabs/chat"]);
     } else {
       this.backToList.emit();
     }

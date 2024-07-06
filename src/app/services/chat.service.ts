@@ -212,6 +212,7 @@ export class ChatService {
   }
 
   async readChat(message: Chat) {
+    // Eliminar la notificación
     this.socket.emit("read", message);
     await this.rest.get(`read-chat/${message.id}`);
   }

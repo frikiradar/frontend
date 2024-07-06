@@ -120,6 +120,13 @@ const routes: Routes = [
       import("./events/event/event.module").then((m) => m.EventPageModule),
   },
   {
+    path: "chat/:id",
+    loadChildren: () =>
+      import("./chat/chat-modal/chat-modal.module").then(
+        (m) => m.ChatModalModule
+      ),
+  },
+  {
     path: ":id",
     loadChildren: () =>
       import("./profile/profile.module").then((m) => m.ProfilePageModule),

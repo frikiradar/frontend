@@ -116,6 +116,7 @@ export class ChatListComponent {
     this.chatSvc.selectedUserId$.subscribe(async (id) => {
       if (id && window.innerWidth > 991) {
         this.selectedChat = this.chats?.find((c) => c.user.id === id);
+        await this.getLastMessages(!this.chats, false);
       } else {
         this.selectedChat = undefined;
 
@@ -204,9 +205,9 @@ export class ChatListComponent {
     }
 
     this.setArchivedChats();
-    this.selectedChat = this.chats?.find(
+    /*this.selectedChat = this.chats?.find(
       (c) => +c.user?.id === this.chatSvc.selectedUserId.value
-    );
+    );*/
     this.cd.detectChanges();
   }
 

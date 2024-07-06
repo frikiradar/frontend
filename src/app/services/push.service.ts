@@ -135,7 +135,9 @@ export class PushService {
         LocalNotifications.schedule({
           notifications: [
             {
-              id: Math.random() * (1000000 - 1) + 1,
+              id: +`${notification.data.fromUser}${Math.floor(
+                Math.random() * (10000 - 1000) + 1000
+              )}`,
               title: notification?.title,
               body: notification?.body,
               smallIcon: "ic_stat_notification",
@@ -144,6 +146,9 @@ export class PushService {
               // attachments: notification?.attachments,
               channelId: notification?.data.topic,
               extra: notification?.data,
+              threadIdentifier: notification?.data.topic,
+              group:
+                notification?.data.topic + "_" + notification?.data.fromUser,
               // actions
             },
           ],
@@ -201,6 +206,7 @@ export class PushService {
 
     FirebaseMessaging.addListener("notificationReceived", (payload) => {
       const notification = payload.notification;
+      console.log("Notification received", notification);
       const data = notification.data as {
         message: string;
         topic: string;
@@ -228,7 +234,12 @@ export class PushService {
         url: string;
       };
       if (payload.actionId == "tap") {
-        this.router.navigate([data.url]);
+        let url = data.url;
+        if (url.includes("/tabs/chat")) {
+          // en lugar de /tabs/chat/id debe ser /chat/id, remplazamos
+          url = url.replace("/tabs", "");
+        }
+        this.router.navigate([url]);
 
         FirebaseMessaging.removeDeliveredNotifications({
           notifications: [notification],
@@ -240,7 +251,12 @@ export class PushService {
       "localNotificationActionPerformed",
       (payload) => {
         if (payload.actionId == "tap") {
-          this.router.navigate([payload.notification.extra.url]);
+          let url = payload.notification.extra.url;
+          if (url.includes("/tabs/chat")) {
+            // en lugar de /tabs/chat/id debe ser /chat/id, remplazamos
+            url = url.replace("/tabs", "");
+          }
+          this.router.navigate([url]);
 
           LocalNotifications.cancel({
             notifications: [payload.notification],
@@ -248,5 +264,42 @@ export class PushService {
         }
       }
     );
+  }
+
+  removeChatNotifications(fromUserid: number, username: string) {
+    if (isPlatform("capacitor")) {
+      LocalNotifications.getDeliveredNotifications().then((payload) => {
+        const notifications = payload.notifications;
+        notifications.forEach((notification) => {
+          const findNotification = notification?.group == `chat_${fromUserid}`;
+          if (findNotification) {
+            LocalNotifications.cancel({
+              notifications: [notification],
+            });
+          }
+        });
+      });
+
+      FirebaseMessaging.getDeliveredNotifications().then((payload) => {
+        const notifications = payload.notifications;
+        notifications.forEach((notification) => {
+          const findNotification = notification?.tag == `chat_${username}`;
+          if (findNotification) {
+            FirebaseMessaging.removeDeliveredNotifications({
+              notifications: [notification],
+            });
+          }
+        });
+      });
+    } else {
+      /*navigator.serviceWorker.getRegistration().then((registration) => {
+        registration.getNotifications().then((notifications) => {
+          console.log("Notifications", notifications);
+          notifications.forEach((notification) => {
+            // notification.close();
+          });
+        });
+      });*/
+    }
   }
 }
