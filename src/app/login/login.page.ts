@@ -122,7 +122,7 @@ export class LoginPage {
 
   async loginWithGoogle() {
     try {
-      this.googleAuth.logout();
+      await this.googleAuth.logout();
     } catch (e) {
       console.error(e);
     }

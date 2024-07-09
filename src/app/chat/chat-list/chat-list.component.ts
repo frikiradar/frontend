@@ -149,10 +149,9 @@ export class ChatListComponent {
     if (
       !this.allChats ||
       allChats[0].id !== this.allChats[0].id ||
-      allChats[0].time_read !== this.allChats[0].time_read ||
-      allChats[0].count !== this.allChats[0].count ||
-      allChats[0].user?.last_login !== this.allChats[0].user?.last_login
+      allChats[0].count !== this.allChats[0].count
     ) {
+      console.log("Chats have changed", allChats[0], this.allChats[0]);
       const chats = this.sortChats(allChats);
       await this.setChats(chats);
       // Se ha desincronizado, reiniciamos conexión con servidor de chat
