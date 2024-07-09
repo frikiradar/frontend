@@ -302,7 +302,7 @@ export class ChatModalComponent implements OnInit {
     });
 
     this.cd.detectChanges();
-    this.scrollDown();
+    this.scrollDown(1000);
   }
 
   async sendMessage(message?: Chat) {

@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import io, { Socket } from "socket.io-client";
 import { BehaviorSubject, Subject } from "rxjs";
+import { FirebaseMessaging } from "@capacitor-firebase/messaging";
+import { initializeApp } from "firebase/app";
+import { getMessaging, onMessage } from "firebase/messaging";
 
 import { Chat } from "../models/chat";
 import { User } from "../models/user";
@@ -10,7 +13,8 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { environment } from "src/environments/environment";
 import { App } from "@capacitor/app";
-import { ToastController } from "@ionic/angular";
+import { isPlatform, ToastController } from "@ionic/angular";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -23,6 +27,7 @@ export class ChatService {
   currentMessage = this.messageSource.asObservable();
   public selectedUserId = new BehaviorSubject<User["id"] | null>(null);
   selectedUserId$ = this.selectedUserId.asObservable();
+  private chatServerOnline = false;
   private connectionError = false;
   private showConnectionError = false;
 
@@ -30,18 +35,19 @@ export class ChatService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private i18n: I18nService
   ) {
     App.addListener("appStateChange", async ({ isActive }) => {
       if (isActive) {
-        if (this.socket && !this.socket.connected) {
-          await this.init();
-        }
+        await this.init();
       } else {
         // Desconectamos el socket
         if (this.socket && this.socket.connected) {
           this.socket.disconnect();
         }
+        // desconectamos el firebaselistener
+        FirebaseMessaging.removeAllListeners();
       }
     });
   }
@@ -56,6 +62,9 @@ export class ChatService {
     });
     this.socket.emit("join", this.auth.currentUserValue.id);
 
+    // Modo fallback
+    this.firebaseListener();
+
     this.socket.onAny((event, ...args) => {
       console.log("onAny", event, args);
     });
@@ -63,11 +72,12 @@ export class ChatService {
     this.socket.on("connect", () => {
       // console.log("Conectado al servidor");
       this.connectionError = false;
+      this.chatServerOnline = true;
 
       if (this.showConnectionError) {
         this.toastController
           .create({
-            message: "Conectado al servidor de chat.",
+            message: this.i18n.translate("chat-connection-restored"),
             color: "success",
             duration: 2000,
           })
@@ -83,6 +93,12 @@ export class ChatService {
 
     this.socket.on("connect_error", (err) => {
       console.log("Error de conexión: ", err);
+      if (!this.chatServerOnline) {
+        this.socket.disconnect();
+        console.log("Imposible conectar con el servidor.");
+        return;
+      }
+
       if (this.socket.disconnected && !this.connectionError) {
         this.connectionError = true;
         this.reconnect();
@@ -124,6 +140,33 @@ export class ChatService {
     });
   }
 
+  async firebaseListener() {
+    if (isPlatform("capacitor")) {
+      FirebaseMessaging.addListener("notificationReceived", (payload) => {
+        const notification = payload.notification;
+        const data = notification.data as {
+          message: string;
+          topic: string;
+        };
+        if (data?.message && data?.topic === "chat") {
+          const message = JSON.parse(data.message) as Chat;
+          // console.log("message", message);
+          this.setMessage(message);
+        }
+      });
+    } else {
+      const app = initializeApp(environment.firebase, "chat");
+      const messaging = getMessaging(app);
+      onMessage(messaging, (payload) => {
+        if (payload?.data?.message && payload?.data?.topic === "chat") {
+          const message = JSON.parse(payload.data.message) as Chat;
+          // console.log("message", message);
+          this.setMessage(message);
+        }
+      });
+    }
+  }
+
   async getChats() {
     const chats = (await this.rest.get(`chats`)) as Chat[];
 
@@ -163,7 +206,7 @@ export class ChatService {
       this.showConnectionError = true;
       this.toastController
         .create({
-          message: "Error de conexión con el servidor de chat.",
+          message: this.i18n.translate("chat-connection-error"),
           color: "danger",
           duration: 2000,
         })

@@ -121,12 +121,12 @@ export class ChatListComponent {
       if (id && window.innerWidth > 991) {
         this.selectedChat = this.chats?.find((c) => c.user.id === id);
         await this.getLastMessages(!this.chats, false);
-      } else {
+      } else if (!id) {
         this.selectedChat = undefined;
 
         if (window.innerWidth > 991) {
           await this.getLastMessages(!this.chats, false);
-        } else if (!this.chats) {
+        } else {
           await this.getLastMessages(!this.chats, !this.chats);
         }
       }

@@ -869,5 +869,7 @@
     "it-is-correct": "It is correct!",
     "check-the-introduced-code-and-try-again": "Check the introduced code and try again.",
     "likes": "likes",
-    "food": "Food"
+    "food": "Food",
+    "chat-connection-error": "Chat server connection error",
+    "chat-connection-restored": "Chat server connection restored!"
 }

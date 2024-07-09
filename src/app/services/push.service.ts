@@ -206,7 +206,6 @@ export class PushService {
 
     FirebaseMessaging.addListener("notificationReceived", (payload) => {
       const notification = payload.notification;
-      console.log("Notification received", notification);
       const data = notification.data as {
         message: string;
         topic: string;
@@ -235,10 +234,6 @@ export class PushService {
       };
       if (payload.actionId == "tap") {
         let url = data.url;
-        if (url.includes("/tabs/chat")) {
-          // en lugar de /tabs/chat/id debe ser /chat/id, remplazamos
-          url = url.replace("/tabs", "");
-        }
         this.router.navigate([url]);
 
         FirebaseMessaging.removeDeliveredNotifications({
@@ -252,10 +247,6 @@ export class PushService {
       (payload) => {
         if (payload.actionId == "tap") {
           let url = payload.notification.extra.url;
-          if (url.includes("/tabs/chat")) {
-            // en lugar de /tabs/chat/id debe ser /chat/id, remplazamos
-            url = url.replace("/tabs", "");
-          }
           this.router.navigate([url]);
 
           LocalNotifications.cancel({

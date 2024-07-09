@@ -869,5 +869,7 @@
   "it-is-correct": "¡Es correcta!",
   "check-the-introduced-code-and-try-again": "Revisa el código introducido y vuelve a intentarlo.",
   "likes": "me gusta",
-  "food": "Comida"
+  "food": "Comida",
+  "chat-connection-error": "Error de conexión con el servidor de chat.",
+  "chat-connection-restored": "¡Conexión con el servidor de chat restablecida!"
 }

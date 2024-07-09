@@ -91,11 +91,12 @@ export class ChatInputComponent {
       message: new UntypedFormControl("", [Validators.required]),
     });
 
-    if (isPlatform("capacitor")) {
+    // Deshabilito porque al buscar emoji se cierran los emojis
+    /*if (isPlatform("capacitor")) {
       Keyboard.addListener("keyboardWillShow", () => {
         this.closeEmojis();
       });
-    }
+    }*/
   }
 
   async ngOnInit() {}
