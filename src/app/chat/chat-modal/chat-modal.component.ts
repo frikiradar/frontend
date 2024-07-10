@@ -37,7 +37,6 @@ import { App } from "@capacitor/app";
 import { Meta, Title } from "@angular/platform-browser";
 import { I18nService } from "src/app/services/i18n.service";
 import { Subscription } from "rxjs";
-import { NavService } from "src/app/services/navigation.service";
 import { PushService } from "src/app/services/push.service";
 
 @Component({
@@ -160,6 +159,8 @@ export class ChatModalComponent implements OnInit {
       this.userId
     );
     await this.getLastMessages();
+    await this.scrollDown(0, true, false);
+    await this.scrollDown(100, true, false);
 
     this.chatSvc.userOnline(this.auth.currentUserValue.id, this.userId);
   }
