@@ -75,13 +75,14 @@ export class ChatService {
       this.chatServerOnline = true;
 
       if (this.showConnectionError) {
-        this.toastController
+        console.log(this.i18n.translate("chat-connection-restored"));
+        /*this.toastController
           .create({
             message: this.i18n.translate("chat-connection-restored"),
             color: "success",
             duration: 2000,
           })
-          .then((toast) => toast.present());
+          .then((toast) => toast.present());*/
         this.showConnectionError = false;
       }
     });
@@ -204,13 +205,14 @@ export class ChatService {
   reconnect(tries = 0) {
     if (tries >= 10) {
       this.showConnectionError = true;
-      this.toastController
+      console.log(this.i18n.translate("chat-connection-error"));
+      /*this.toastController
         .create({
           message: this.i18n.translate("chat-connection-error"),
           color: "danger",
           duration: 2000,
         })
-        .then((toast) => toast.present());
+        .then((toast) => toast.present());*/
       return;
     }
 

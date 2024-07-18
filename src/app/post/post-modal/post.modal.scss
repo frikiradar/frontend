@@ -1,0 +1,123 @@
+ion-toolbar {
+  --background: #00000060;
+
+  ion-icon,
+  ion-label {
+    color: white !important;
+  }
+}
+
+ion-content {
+  --background: black;
+}
+
+ion-header {
+  --background: transparent;
+}
+
+ion-footer {
+  --background: transparent;
+
+  ion-icon {
+    margin-right: 5px;
+  }
+}
+
+ion-content {
+  --background: black;
+  --offset-bottom: 60px !important;
+  --offset-top: 60px !important;
+}
+
+#image-textarea {
+  --color: white !important;
+  color: white !important;
+}
+
+ion-thumbnail {
+  width: auto;
+  height: auto;
+  --border-radius: 15px;
+}
+
+.publish-button ion-label {
+  font-weight: bold;
+}
+
+#image-preview {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  ion-button {
+    position: absolute;
+    right: 25px;
+    margin-top: 10px;
+
+    ion-icon {
+      color: white;
+    }
+  }
+
+  ion-thumbnail {
+    padding: 20px;
+  }
+}
+
+.interests {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: block;
+}
+
+ion-chip.slug {
+  background: transparent;
+  border: 1px solid white;
+  ion-label {
+    color: white !important;
+    min-height: 15px;
+  }
+
+  ion-note {
+    margin-left: 5px;
+  }
+}
+
+#interests {
+  color: white;
+
+  ion-label h2 {
+    color: white;
+  }
+}
+
+#search-input {
+  border: 1px solid white;
+  border-radius: 50px;
+  margin: 20px;
+
+  ion-input {
+    --color: white !important;
+    color: white !important;
+  }
+
+  ion-icon {
+    margin-right: 15px;
+    color: white;
+  }
+}
+
+#search-input,
+#my-interests,
+#other-interests {
+  ion-icon {
+    color: white;
+  }
+}
+
+ion-icon {
+  color: white;
+}

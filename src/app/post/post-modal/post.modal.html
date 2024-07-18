@@ -1,0 +1,170 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon
+          slot="icon-only"
+          md="arrow-back"
+          ios="chevron-back"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="selectPicture('gallery')">
+        <ion-icon slot="icon-only" name="image-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="selectPicture('camera')">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!emojis" (click)="emojiPicker()">
+        <ion-icon slot="icon-only" name="happy-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="emojis" (click)="closeEmojis()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-item lines="none" class="ion-padding">
+    <ion-avatar slot="start">
+      <ion-img [src]="user?.avatar"></ion-img>
+    </ion-avatar>
+    <ion-textarea
+      placeholder="{{ 'write-your-post' | i18n }}"
+      id="image-textarea"
+      #textarea
+      autoGrow="true"
+      rows="2"
+      maxlength="300"
+      [counter]="true"
+      (ionFocus)="closeEmojis()"
+      (ionInput)="inputTextarea($event)"
+    ></ion-textarea>
+  </ion-item>
+
+  <div id="image-preview" *ngIf="image">
+    <ion-thumbnail>
+      <ion-button size="small" shape="round" (click)="removePicture()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      <img [src]="image" />
+    </ion-thumbnail>
+  </div>
+  <input
+    type="file"
+    accept="image/*"
+    #imageInput
+    style="display: none"
+    name="avatar"
+    (change)="cropImagebyEvent($event)"
+  />
+
+  <div class="ion-padding" id="interests">
+    <ion-item lines="none">
+      <ion-label>
+        <h2>
+          {{ "publish-in" | i18n }}
+          <ion-chip class="slug" *ngIf="slug"
+            ><ion-label>#{{slug}}</ion-label>
+            <ion-icon
+              name="close-circle"
+              (click)="slug = undefined; getPages(); setFocus()"
+            ></ion-icon
+          ></ion-chip>
+          <span *ngIf="!slug">general</span>
+        </h2>
+      </ion-label>
+    </ion-item>
+
+    <ion-item id="search-input" lines="none" *ngIf="!slug">
+      <ion-icon slot="start" name="search-outline"></ion-icon>
+      <ion-input
+        aria-label
+        type="search"
+        placeholder="{{ 'busca-intereses' | i18n}}"
+        (ionInput)="filterPages($event.target.value)"
+        spellcheck="false"
+        color="light"
+        clearInput
+      ></ion-input>
+    </ion-item>
+
+    <div id="my-interests" *ngIf="pages?.length && !slug">
+      <ion-item lines="none">
+        <ion-label>
+          <h2>{{ "my-interests" | i18n }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-label class="interests ion-text-wrap">
+        <ion-chip class="slug" *ngFor="let page of pages" color="secondary">
+          <ion-avatar>
+            <img
+              [src]="page.cover"
+              [alt]="page.name"
+              default="/assets/img/pages/default-games-page.jpg"
+            />
+          </ion-avatar>
+          <ion-label (click)="slug = page.slug; setFocus()"
+            >{{ page.name }}</ion-label
+          >
+          <ion-note>{{ page.likes }}</ion-note>
+        </ion-chip>
+      </ion-label>
+    </div>
+
+    <div id="other-interests" *ngIf="otherPages?.length && !slug">
+      <ion-item lines="none">
+        <ion-label>
+          <h2>{{ "explore-interests" | i18n }}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-label class="interests ion-text-wrap">
+        <ion-chip
+          class="slug"
+          *ngFor="let page of otherPages"
+          color="secondary"
+        >
+          <ion-avatar>
+            <img
+              [src]="page.cover"
+              [alt]="page.name"
+              default="/assets/img/pages/default-games-page.jpg"
+            />
+          </ion-avatar>
+          <ion-label (click)="slug = page.slug; setFocus()"
+            >{{ page.name }}</ion-label
+          >
+          <ion-note>{{ page.likes }}</ion-note>
+        </ion-chip>
+        <ion-infinite-scroll
+          threshold="50%"
+          (ionInfinite)="addOtherPages($event)"
+          position="bottom"
+        >
+          <ion-infinite-scroll-content loadingSpinner="dots">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-label>
+    </div>
+  </div>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button
+        class="publish-button"
+        fill="solid"
+        shape="round"
+        color="primary"
+        (click)="publish()"
+        [disabled]="(!imageFile && !text) || showBackdrop "
+      >
+        <ion-label>{{ "post" | i18n }}</ion-label>
+        <ion-icon slot="end" name="send"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div id="emoji-picker-container"></div>
+</ion-footer>
+<ion-backdrop visible="true" *ngIf="showBackdrop"></ion-backdrop>

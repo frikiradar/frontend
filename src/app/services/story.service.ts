@@ -5,6 +5,9 @@ import { User } from "../models/user";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
+import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { ModalController } from "@ionic/angular";
+import { ViewPostModal } from "../post/view-post/view-post.modal";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +16,8 @@ export class StoryService {
   constructor(
     private rest: RestService,
     private uploadSvc: UploadService,
-    private auth: AuthService
+    private auth: AuthService,
+    private modalController: ModalController
   ) {}
 
   async getStory(id: Story["id"]) {
@@ -21,39 +25,23 @@ export class StoryService {
   }
 
   async getUserStories(id: User["id"]) {
-    const stories = (await this.rest.get(`user-stories/${id}`)) as Story[];
-    stories.map((s) => {
-      s = this.setLikesStory(s);
-    });
-
-    return stories;
-  }
-
-  async getStories() {
-    const stories = (await this.rest.get("stories")) as Story[];
-    stories.map((s) => {
-      s = this.setLikesStory(s);
-    });
-
-    return stories;
+    return (await this.rest.get(`user-stories/${id}`)) as Story[];
   }
 
   async getStoriesSlug(slug: string) {
-    const stories = (await this.rest.get(`stories-slug/${slug}`)) as Story[];
-    stories.map((s) => {
-      s = this.setLikesStory(s);
-    });
-
-    return stories;
+    return (await this.rest.get(`stories-slug/${slug}`)) as Story[];
   }
 
-  async getAllStories() {
-    const stories = (await this.rest.get("all-stories")) as Story[];
-    stories.map((s) => {
-      s = this.setLikesStory(s);
-    });
+  async getStories() {
+    return (await this.rest.get("stories")) as Story[];
+  }
 
-    return stories;
+  async getPosts(page = 1) {
+    return (await this.rest.get(`posts?page=${page}`)) as Story[];
+  }
+
+  async getPostsSlug(slug: string, page = 1) {
+    return (await this.rest.get(`posts-slug/${slug}?page=${page}`)) as Story[];
   }
 
   orderStories(stories: Story[]) {
@@ -68,8 +56,8 @@ export class StoryService {
 
   groupStories(stories: Story[]) {
     const groupedStories = [];
-    stories = stories.reverse();
-    stories.forEach((s) => {
+    stories = stories?.reverse();
+    stories?.forEach((s) => {
       if (!groupedStories.some((g) => g.user.id === s.user.id)) {
         const filterStories = stories.filter((sf) => sf.user.id === s.user.id);
         groupedStories.push(filterStories[0]);
@@ -86,11 +74,31 @@ export class StoryService {
     ];
   }
 
-  async sendStory(image: Blob, text: string, mentions?: Story["mentions"]) {
+  async sendStory(
+    image?: Blob,
+    text?: string,
+    color?: string,
+    slug?: string,
+    type: "story" | "post" = "story"
+  ) {
     const formData: FormData = new FormData();
-    formData.set("image", image);
-    formData.set("text", text);
-    formData.set("mentions", JSON.stringify(mentions));
+    if (image) {
+      formData.set("image", image);
+    }
+
+    if (text) {
+      formData.set("text", text);
+    }
+
+    if (color) {
+      formData.set("color", color);
+    }
+
+    if (slug) {
+      formData.set("slug", slug);
+    }
+
+    formData.set("type", type);
     return (await this.uploadSvc.upload("story-upload", formData)) as Story;
   }
 
@@ -107,34 +115,11 @@ export class StoryService {
   }
 
   async like(id: Story["id"]) {
-    const story = (await this.rest.put("like-story", { story: id })) as Story;
-    return this.setLikesStory(story);
+    return (await this.rest.put("like-story", { story: id })) as Story;
   }
 
   async unlike(id: Story["id"]) {
-    const story = (await this.rest.delete(`like-story/${id}`)) as Story;
-    return this.setLikesStory(story);
-  }
-
-  setLikesStory(story: Story) {
-    story.viewed = story.viewStories.some(
-      (s) => s.user.id === this.auth.currentUserValue.id
-    );
-    story.viewStories.map(
-      (v) =>
-        (v.user.like = story.likeStories.some((l) => l.user.id === v.user.id))
-    );
-    story.like = story.likeStories.some(
-      (l) => l.user.id === this.auth.currentUserValue.id
-    );
-
-    story.comments.map((c) => {
-      if (c.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
-        c.like = true;
-      }
-    });
-
-    return story;
+    return (await this.rest.delete(`like-story/${id}`)) as Story;
   }
 
   async commentStory(
@@ -163,5 +148,31 @@ export class StoryService {
 
   reportComment(comment: Story["comments"][0]["id"], note: string) {
     return this.rest.put("report-comment", { comment, note });
+  }
+
+  async showStoriesModal(stories: Story[]) {
+    const modal = await this.modalController.create({
+      component: ViewStoriesModal,
+      componentProps: { stories },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "vertical-modal",
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+  async showPostModal(post: Story) {
+    const modal = await this.modalController.create({
+      component: ViewPostModal,
+      componentProps: { post },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "vertical-modal",
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
   }
 }

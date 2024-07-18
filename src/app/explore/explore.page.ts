@@ -1,20 +1,18 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SwiperOptions } from "swiper";
 
-import { Config, ConfigService } from "../services/config.service";
+import { ConfigService } from "../services/config.service";
 import { AuthService } from "../services/auth.service";
 import { Story } from "../models/story";
-import { Page } from "../models/page";
-import { PageService } from "../services/page.service";
 import { AnimateService } from "../services/animate.service";
-import { User } from "../models/user";
 import { StoryModal } from "../story/story-modal/story.modal";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { ModalController } from "@ionic/angular";
 import { StoryService } from "../services/story.service";
 import { RulesPage } from "../rules/rules.page";
 import { NavService } from "../services/navigation.service";
+import { PostModal } from "../post/post-modal/post.modal";
+import { PageService } from "../services/page.service";
+import { Page } from "../models/page";
 
 @Component({
   selector: "app-explore",
@@ -23,19 +21,10 @@ import { NavService } from "../services/navigation.service";
 })
 export class ExplorePage {
   public stories: Story[];
+  public posts: Story[];
   public pages: Page[];
-  public groupedStories: Story[] = [];
   public loading = true;
-
-  public storiesOpts: SwiperOptions = {
-    slidesPerView: 4.5,
-    breakpoints: {
-      1024: {
-        slidesPerView: 14.5,
-      },
-    },
-    grabCursor: true,
-  };
+  private page = 1;
 
   constructor(
     private router: Router,
@@ -45,13 +34,12 @@ export class ExplorePage {
     private animate: AnimateService,
     private storySvc: StoryService,
     private modalController: ModalController,
-    private pageSvc: PageService,
-    private nav: NavService
+    private nav: NavService,
+    private pageSvc: PageService
   ) {}
 
   async ngAfterViewInit() {
     this.animate.animateSections("section", 600, 500);
-    this.pages = (await this.config.get("pages")) as Config["pages"];
 
     const rules = await this.config.get("rules");
     if (!rules) {
@@ -66,23 +54,51 @@ export class ExplorePage {
 
   async ngOnInit() {
     await this.getStories();
-    this.getPages();
+    await this.getPages();
+    await this.getPosts();
 
     const id = this.route.snapshot.paramMap.get("id");
     if (id) {
       try {
         const story = await this.storySvc.getStory(+id);
-        this.showStory(story);
+
+        if (story.type === "story") {
+          this.storySvc.showStoriesModal([story]);
+        } else {
+          this.storySvc.showPostModal(story);
+        }
       } catch (e) {
         console.error("Historia no encontrada");
       }
     }
+
+    this.loading = false;
   }
 
   async getStories() {
-    let stories = await this.storySvc.getAllStories();
+    let stories = await this.storySvc.getStories();
     this.stories = this.storySvc.orderStories(stories);
-    this.groupedStories = this.storySvc.groupStories(this.stories);
+  }
+
+  async getPages() {
+    this.pages = await this.pageSvc.getPages(2);
+  }
+
+  async getPosts() {
+    this.posts = await this.storySvc.getPosts();
+  }
+
+  async getMorePosts(event) {
+    this.page++;
+    const posts = await this.storySvc.getPosts(this.page);
+    this.posts = [...this.posts, ...posts];
+
+    event.target.complete();
+
+    if (posts.length === 0) {
+      event.target.disabled = true;
+      return;
+    }
   }
 
   async newStory() {
@@ -98,26 +114,9 @@ export class ExplorePage {
     await this.getStories();
   }
 
-  async showStories(id: User["id"]) {
-    let stories = this.stories.reverse().filter((s) => s.user.id === id);
-    stories = [
-      ...stories,
-      ...this.stories.reverse().filter((s) => s.user.id !== id),
-    ];
-    await this.showStoriesModal(stories);
-    await this.getStories();
-  }
-
-  async showStory(story: Story) {
-    const stories = [story];
-    await this.showStoriesModal(stories);
-    await this.getStories();
-  }
-
-  async showStoriesModal(stories: Story[]) {
+  async newPost() {
     const modal = await this.modalController.create({
-      component: ViewStoriesModal,
-      componentProps: { stories },
+      component: PostModal,
       keyboardClose: true,
       showBackdrop: true,
       cssClass: "vertical-modal",
@@ -125,26 +124,15 @@ export class ExplorePage {
 
     await modal.present();
     await modal.onDidDismiss();
-  }
-
-  async showAllStories() {
-    this.router.navigate(["/story"]);
-  }
-
-  async getPages() {
-    const pages = await this.pageSvc.getPages(12);
-    this.pages = pages.slice(0, 12);
-    this.config.set("pages", this.pages);
-
-    this.loading = false;
-  }
-
-  async showPage(slug: Page["slug"]) {
-    this.router.navigate(["/page", slug]);
+    await this.getPosts();
   }
 
   showPages() {
     this.router.navigate(["/pages"]);
+  }
+
+  showPage(id: number) {
+    this.router.navigate(["/page", id]);
   }
 
   search() {
@@ -153,5 +141,9 @@ export class ExplorePage {
 
   editProfile() {
     this.nav.navigateRoot("/edit-profile");
+  }
+
+  removePost(post: Story) {
+    this.posts = this.posts.filter((p) => p.id !== post.id);
   }
 }

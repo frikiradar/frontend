@@ -8,9 +8,9 @@ import {
   ElementRef,
 } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import { Keyboard, KeyboardStyle } from "@capacitor/keyboard";
@@ -39,7 +39,7 @@ export class ChatInputComponent {
   @Output() replyingChange: EventEmitter<boolean> = new EventEmitter(true);
   @Output() onCreateEvent: EventEmitter<void> = new EventEmitter();
 
-  public chatForm: UntypedFormGroup;
+  public chatForm: FormGroup;
   get message() {
     return this.chatForm.get("message");
   }
@@ -80,7 +80,7 @@ export class ChatInputComponent {
   private writing = false;
 
   constructor(
-    public formBuilder: UntypedFormBuilder,
+    public formBuilder: FormBuilder,
     public auth: AuthService,
     public utils: UtilsService,
     private userSvc: UserService,
@@ -88,7 +88,7 @@ export class ChatInputComponent {
     private config: ConfigService
   ) {
     this.chatForm = formBuilder.group({
-      message: new UntypedFormControl("", [Validators.required]),
+      message: new FormControl("", [Validators.required]),
     });
 
     // Deshabilito porque al buscar emoji se cierran los emojis

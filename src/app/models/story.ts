@@ -24,5 +24,7 @@ export interface Story {
     likes?: User[];
     time_creation?: Date;
   }[];
-  mentions?: string[];
+  slug?: string;
+  color?: string;
+  type?: "story" | "post";
 }

@@ -10,131 +10,100 @@
       <ion-icon name="compass"></ion-icon>
       <ion-label>{{ "explorar" | i18n }}</ion-label>
     </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="search()">
-        <ion-icon slot="icon-only" name="search"></ion-icon>
+    <ion-buttons slot="end" id="search">
+      <ion-button shape="round" (click)="search()">
+        <ion-label>{{ "search" | i18n }}</ion-label>
+        <ion-icon slot="end" name="search"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-item
-    lines="none"
-    (click)="showAllStories()"
-    button
-    detail="false"
-    class="section-header"
-  >
+  <ion-item lines="none" detail="false" class="section-header">
     <ion-label color="light">
       <h2 class="section">
         <ion-text color="ligth">{{ "historias-frikis" | i18n }}</ion-text>
       </h2>
     </ion-label>
-    <ion-icon
-      md="arrow-forward"
-      ios="chevron-forward"
-      slot="end"
-      color="light"
-    ></ion-icon>
   </ion-item>
-
-  <section>
-    <swiper id="stories" [config]="storiesOpts" mode="md">
-      <ng-template swiperSlide>
-        <div>
-          <ion-item button lines="none" (click)="newStory()">
-            <ion-avatar>
-              <img
-                [src]="auth.currentUserValue?.thumbnail"
-                alt="auth.currentUserValue?.name"
-              />
-            </ion-avatar>
-            <ion-badge color="primary"
-              ><ion-icon name="add"></ion-icon
-            ></ion-badge>
-          </ion-item>
-          <ion-label>{{ "aadir" | i18n }}</ion-label>
-        </div>
-      </ng-template>
-      <ng-template
-        swiperSlide
-        *ngFor="let story of groupedStories; let i = index"
-      >
-        <div>
-          <ion-item button lines="none" (click)="showStories(story?.user?.id)">
-            <ion-avatar
-              [ngClass]="story?.viewed || story?.user?.id === auth.currentUserValue?.id ? '' : 'not-view'"
-            >
-              <img [src]="story?.image" [alt]="story?.text" />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>{{story?.user?.username}}</ion-label>
-        </div>
-      </ng-template>
-      <ng-template swiperSlide *ngIf="groupedStories?.length > 10">
-        <div>
-          <ion-item button lines="none" (click)="showAllStories()">
-            <ion-avatar>
-              <img
-                [src]="auth.currentUserValue?.thumbnail"
-                alt="auth.currentUserValue?.name"
-              />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>{{ "ver-todas" | i18n }}</ion-label>
-        </div>
-      </ng-template>
-    </swiper>
+  <section id="stories">
+    <app-story-slider
+      [stories]="stories"
+      (refresh)="getStories()"
+    ></app-story-slider>
   </section>
-
-  <ion-item
-    lines="none"
-    (click)="showPages()"
-    button
-    detail="false"
-    *ngIf="pages"
-    class="section-header"
-  >
-    <ion-label color="light">
-      <h2 class="section">
-        <ion-text color="ligth"> {{ "pginas" | i18n }} </ion-text>
-      </h2>
-      <p class="subtitle" *ngIf="pages?.length">
-        <ion-text color="ligth">
-          {{ "encuentra-personas-con-que-compartes" | i18n }}
-        </ion-text>
-      </p>
-    </ion-label>
-    <ion-icon
-      *ngIf="pages?.length"
-      md="arrow-forward"
-      ios="chevron-forward"
-      slot="end"
-      color="light"
-    ></ion-icon>
-  </ion-item>
 
   <section id="pages" *ngIf="pages?.length">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6" size-md="4" size-lg="2" *ngFor="let page of pages">
-          <ion-card (click)="showPage(page.slug)">
-            <ion-img [src]="page.cover" [alt]="page.name"></ion-img>
-            <ion-card-header>
-              <ion-card-title>{{page.name}}</ion-card-title>
-            </ion-card-header>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </section>
-  <section *ngIf="!pages || !pages?.length" class="ion-padding">
-    <div class="ion-text-center register">
-      <p>{{ "aade-gustos-tu-perfil-para" | i18n }}</p>
-      <ion-button color="primary" (click)="editProfile()" shape="round"
-        >{{ "editar-perfil" | i18n }}</ion-button
+    <ion-item
+      lines="none"
+      (click)="showPages()"
+      button
+      detail="false"
+      class="section-header"
+    >
+      <ion-label color="light">
+        <h2 class="section">
+          <ion-text color="ligth"> {{ "pginas" | i18n }} </ion-text>
+        </h2>
+        <p class="subtitle">
+          <ion-text color="ligth">
+            {{ "conoce-personas-con-que-compartes" | i18n }}
+          </ion-text>
+        </p>
+      </ion-label>
+      <ion-icon
+        md="arrow-forward"
+        ios="chevron-forward"
+        slot="end"
+        color="light"
+      ></ion-icon>
+    </ion-item>
+    <ion-list>
+      <ion-item
+        button
+        detail="false"
+        *ngFor="let page of pages"
+        lines="none"
+        (click)="showPage(page.slug)"
       >
-    </div>
+        <ion-thumbnail slot="start">
+          <img
+            [src]="page.cover"
+            [alt]="page.name"
+            default="/assets/img/pages/default-games-page.jpg"
+          />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{page.name}}</h2>
+          <p>#{{page.slug}}</p>
+        </ion-label>
+        <ion-badge slot="end" mode="ios"> {{page.likes}} </ion-badge>
+      </ion-item>
+    </ion-list>
+  </section>
+
+  <section id="posts" *ngIf="posts?.length">
+    <ion-item lines="none" detail="false" class="section-header">
+      <ion-label color="light">
+        <h2 class="section">
+          <ion-text color="ligth">{{ "posts" | i18n }}</ion-text>
+        </h2>
+      </ion-label>
+    </ion-item>
+    <app-post
+      *ngFor="let post of posts"
+      [post]="post"
+      (deletePost)="removePost($event)"
+    ></app-post>
+    <ion-infinite-scroll (ionInfinite)="getMorePosts($event)" position="top">
+      <ion-infinite-scroll-content loadingSpinner="dots">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </section>
 </ion-content>
+<ion-fab slot="fixed" horizontal="end" vertical="bottom">
+  <ion-fab-button color="primary" (click)="newPost()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

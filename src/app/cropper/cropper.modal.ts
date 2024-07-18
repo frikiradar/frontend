@@ -6,12 +6,13 @@ import {
   ImageTransform,
 } from "ngx-image-cropper";
 import { SharedModule } from "../shared/shared.module";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "cropper-modal",
   templateUrl: "./cropper.modal.html",
   styleUrls: ["./cropper.modal.scss"],
-  imports: [ImageCropperComponent, SharedModule, IonicModule],
+  imports: [ImageCropperComponent, SharedModule, IonicModule, CommonModule],
   standalone: true,
 })
 export class CropperModal implements OnInit {
@@ -28,6 +29,13 @@ export class CropperModal implements OnInit {
 
   async ngOnInit() {
     this.imageChangedEvent = this.event;
+
+    if (this.square) {
+      this.aspectRatio = 1 / 1;
+      this.maintainAspectRatio = true;
+    } else {
+      this.maintainAspectRatio = false;
+    }
   }
 
   fileChangeEvent(event: any): void {

@@ -393,7 +393,9 @@ export class RadarPage {
 
           if ("username" in this.users[0]) {
             this.user = this.users[0];
-            this.userSvc.view(this.user.id);
+            if (!this.user.viewed) {
+              this.userSvc.view(this.user.id);
+            }
           }
         } else {
           if (event) {
@@ -587,7 +589,7 @@ export class RadarPage {
 
     if (user && "username" in user) {
       this.user = user;
-      if (this.user?.id) {
+      if (this.user?.id && !this.user.viewed) {
         this.userSvc.view(this.user?.id);
       }
       if (

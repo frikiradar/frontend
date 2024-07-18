@@ -78,54 +78,12 @@
   </ion-item>
 
   <div id="stories" *ngIf="auth.currentUserValue">
-    <div *ngIf="!stories">
-      <swiper [config]="storiesOpts" mode="md">
-        <ng-template swiperSlide *ngFor="let i of [].constructor(8)">
-          <div>
-            <ion-avatar>
-              <ion-skeleton-text
-                animated
-                style="width: 100%"
-              ></ion-skeleton-text>
-            </ion-avatar>
-            <ion-label>
-              <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-label>
-          </div>
-        </ng-template>
-      </swiper>
-    </div>
-    <swiper [config]="storiesOpts" mode="md" *ngIf="stories">
-      <ng-template swiperSlide>
-        <div>
-          <ion-item button lines="none" (click)="newStory()">
-            <ion-avatar>
-              <img
-                [src]="auth.currentUserValue?.thumbnail"
-                alt="auth.currentUserValue?.name"
-              />
-            </ion-avatar>
-            <ion-badge color="primary"
-              ><ion-icon name="add"></ion-icon
-            ></ion-badge>
-          </ion-item>
-          <ion-label>{{ "aadir" | i18n }}</ion-label>
-        </div>
-      </ng-template>
-      <ng-template
-        swiperSlide
-        *ngFor="let story of groupedStories; let i = index"
-      >
-        <div>
-          <ion-item button lines="none" (click)="showStories(story.user.id)">
-            <ion-avatar [ngClass]="story?.viewed ? '' : 'not-view'">
-              <img [src]="story.image" [alt]="story.text" />
-            </ion-avatar>
-          </ion-item>
-          <ion-label>{{story.user.username}}</ion-label>
-        </div>
-      </ng-template>
-    </swiper>
+    <app-story-slider
+      [stories]="stories"
+      [selected]="selectedStory"
+      [slug]="page.slug"
+      (refresh)="getStories()"
+    ></app-story-slider>
   </div>
 
   <div id="search" *ngIf="users?.length || showSkeleton; else noUsers">
@@ -187,3 +145,8 @@
     </ng-template>
   </div>
 </ion-content>
+<ion-fab slot="fixed" horizontal="end" vertical="bottom">
+  <ion-fab-button color="primary" (click)="newPost()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

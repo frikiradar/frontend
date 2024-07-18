@@ -79,7 +79,7 @@ export class ChatListComponent {
         }
 
         // Actualizar mensaje si es más reciente
-        if (message.id > chat.id) {
+        if (message.id !== chat.id) {
           chat.id = message.id;
           chat.text = message.deleted ? "" : message.text;
           chat.time_creation = message.time_creation;
@@ -140,9 +140,9 @@ export class ChatListComponent {
 
   async getLastMessages(cache = true, loading = true) {
     this.loading = loading;
-    if (cache) {
+    /*if (cache) {
       await this.getCachedMessages();
-    }
+    }*/
     const allChats = await this.chatSvc.getChats();
     this.loading = false;
     this.cd.detectChanges();

@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import {
@@ -21,12 +21,12 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./change-password.modal.scss"],
 })
 export class ChangePasswordModal {
-  public passForm: UntypedFormGroup;
+  public passForm: FormGroup;
   public clearOldPassword = false;
   public clearPassword = false;
 
   constructor(
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     private modalController: ModalController,
     private userSvc: UserService,
     private auth: AuthService,
@@ -35,11 +35,11 @@ export class ChangePasswordModal {
     private i18n: I18nService
   ) {
     this.passForm = fb.group({
-      oldPassword: new UntypedFormControl("", [
+      oldPassword: new FormControl("", [
         Validators.required,
         Validators.minLength(8),
       ]),
-      password: new UntypedFormControl("", [
+      password: new FormControl("", [
         Validators.required,
         Validators.minLength(8),
       ]),

@@ -33,6 +33,10 @@ import { DisableAccountPage } from "../settings/disable-account/disable-account.
 import { PaymentsModal } from "../settings/payments/payments.modal";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 import { I18nPipe } from "../i18n.pipe";
+import { PostComponent } from "../post/post.component";
+import { StorySliderComponent } from "../story/story-slider/story-slider.component";
+import { PostModal } from "../post/post-modal/post.modal";
+import { ViewPostModal } from "../post/view-post/view-post.modal";
 
 // install Swiper modules
 register();
@@ -65,6 +69,10 @@ register();
     DisableAccountPage,
     PaymentsModal,
     UnlimitedModal,
+    StorySliderComponent,
+    PostComponent,
+    PostModal,
+    ViewPostModal,
   ],
   imports: [
     FormsModule,
@@ -89,6 +97,10 @@ register();
     LinkyModule,
     AudioPlayerComponent,
     SwiperModule,
+    StorySliderComponent,
+    PostComponent,
+    PostModal,
+    ViewPostModal,
   ],
 })
 export class SharedModule {}

@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
@@ -28,7 +28,7 @@ export class EventModal {
   @ViewChild("imageInput", { static: false })
   imageInput: ElementRef;
 
-  public eventForm: UntypedFormGroup;
+  public eventForm: FormGroup;
   private imageFile: Blob;
   public editing = false;
   public src: SafeUrl = "";
@@ -40,7 +40,7 @@ export class EventModal {
   public country: Event["country"];
 
   constructor(
-    public formBuilder: UntypedFormBuilder,
+    public formBuilder: FormBuilder,
     private toast: ToastController,
     private modalController: ModalController,
     public utils: UtilsService,
@@ -49,21 +49,21 @@ export class EventModal {
     public auth: AuthService
   ) {
     this.eventForm = formBuilder.group({
-      title: new UntypedFormControl("", [Validators.required]),
-      description: new UntypedFormControl(""),
-      date: new UntypedFormControl("", [Validators.required]),
-      endDate: new UntypedFormControl(),
+      title: new FormControl("", [Validators.required]),
+      description: new FormControl(""),
+      date: new FormControl("", [Validators.required]),
+      endDate: new FormControl(),
       // repeat: new FormControl(),
-      url: new UntypedFormControl("", [Validators.required]),
-      price: new UntypedFormControl(0),
-      country: new UntypedFormControl(),
-      city: new UntypedFormControl(),
-      address: new UntypedFormControl(),
-      postal_code: new UntypedFormControl(),
-      contact_phone: new UntypedFormControl(),
-      contact_email: new UntypedFormControl(),
-      minage: new UntypedFormControl(0),
-      official: new UntypedFormControl(),
+      url: new FormControl("", [Validators.required]),
+      price: new FormControl(0),
+      country: new FormControl(),
+      city: new FormControl(),
+      address: new FormControl(),
+      postal_code: new FormControl(),
+      contact_phone: new FormControl(),
+      contact_email: new FormControl(),
+      minage: new FormControl(0),
+      official: new FormControl(),
     });
   }
 

@@ -8,7 +8,7 @@
         <ion-label>
           <h2>
             {{ story.user.id !== auth.currentUserValue.id ? story.user?.username
-            : ('Mi historia' | i18n) }}
+            : ('my-story' | i18n) }}
           </h2>
           <p>{{(story?.time_creation | niceDate)}}</p>
         </ion-label>
@@ -36,7 +36,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
+<ion-content id="stories" [fullscreen]="true">
   <swiper
     (swiper)="setSwiperInstance($event)"
     (touchStart)="touchStart()"
@@ -46,18 +46,21 @@
   >
     <ng-template swiperSlide *ngFor="let story of stories" class="story-slide">
       <img
+        *ngIf="story?.image"
         class="background-image"
         [src]="story?.image"
         [alt]="story?.user.username"
       />
-      <ion-card>
+      <div
+        class="background-color"
+        [ngStyle]="{'background': story.color}"
+      ></div>
+
+      <ion-card *ngIf="story.image">
         <ion-thumbnail>
           <img [src]="story?.image" [alt]="story?.user.username" />
         </ion-thumbnail>
-        <ion-card-content
-          class="story-text"
-          *ngIf="story.text || story?.comments.length > 0"
-        >
+        <ion-card-content *ngIf="story.text || story?.comments.length > 0">
           <p
             (click)="$event.stopImmediatePropagation(); openUrl($event);"
             [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions} | hashtag"
@@ -112,6 +115,13 @@
           </div>
         </ion-card-content>
       </ion-card>
+      <div
+        *ngIf="!story.image"
+        class="story-text"
+        [ngClass]="story.color == '#CFD8DC' ? 'dark' : 'light'"
+      >
+        {{story.text}}
+      </div>
       <div class="story-actions">
         <ion-buttons slot="start" ion-activatable>
           <ion-button
@@ -120,23 +130,13 @@
             shape="round"
           >
             <ion-icon
-              [color]="story?.like ? 'primary' : 'light'"
+              [color]="story?.like ? 'primary' : ''"
               [name]="story?.like ? 'heart' : 'heart-outline'"
               [@pulse]="story.like"
             ></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-label>{{story?.likeStories.length}}</ion-label>
-        <ion-buttons>
-          <ion-button
-            (click)="showViewsSheet($event)"
-            id="view-views"
-            shape="round"
-          >
-            <ion-icon name="eye"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-label>{{story?.viewStories.length}}</ion-label>
         <ion-buttons slot="end">
           <ion-button
             (click)="showCommentsSheet($event)"
@@ -147,26 +147,38 @@
           </ion-button>
         </ion-buttons>
         <ion-label>{{story.comments.length}}</ion-label>
+        <ion-buttons>
+          <ion-button
+            (click)="showViewsSheet($event)"
+            id="view-views"
+            shape="round"
+          >
+            <ion-icon name="stats-chart"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{story?.viewStories.length}}</ion-label>
       </div>
     </ng-template>
   </swiper>
 </ion-content>
 <ion-footer class="ion-no-border">
+  <ion-chip (click)="showPage(story.slug)" *ngIf="story.slug" class="story-slug"
+    >#{{story.slug}}</ion-chip
+  >
+
   <ion-item lines="none" id="text-input">
-    <form [formGroup]="commentForm" autocomplete="off">
-      <ion-item lines="none">
-        <ion-textarea
-          id="trigger-comment"
-          placeholder="{{ 'comment-story' | i18n }}"
-          autocapitalize="on"
-          (ionFocus)="commentFocus($event);"
-          rows="1"
-        >
-        </ion-textarea>
-      </ion-item>
-    </form>
+    <ion-item lines="none">
+      <ion-textarea
+        id="trigger-comment"
+        placeholder="{{ 'comment-story' | i18n }}"
+        autocapitalize="on"
+        (ionFocus)="commentFocus($event);"
+        rows="1"
+      >
+      </ion-textarea>
+    </ion-item>
     <ion-buttons ion-activatable slot="end">
-      <ion-button [disabled]="!comment.value" (click)="sendComment()">
+      <ion-button [disabled]="!textarea?.value" (click)="sendComment()">
         <ion-icon slot="icon-only" color="primary" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -224,7 +236,7 @@
       <p class="ion-padding">{{ "comentarios" | i18n }}</p>
       <ion-list
         id="usernames"
-        *ngIf="usernames?.length && comment?.value?.length > 3"
+        *ngIf="usernames?.length && textarea?.value?.length > 3"
       >
         <ion-item
           lines="none"
@@ -308,22 +320,19 @@
             [alt]="auth.currentUserValue.username"
           />
         </ion-avatar>
-        <form [formGroup]="commentForm" autocomplete="off">
-          <ion-item lines="none">
-            <ion-textarea
-              placeholder="{{ 'comment-story' | i18n }}"
-              autocapitalize="on"
-              (keydown.enter)="sendComment($event)"
-              (ionInput)="setWriting($event.detail.value)"
-              formControlName="comment"
-              #textarea
-              rows="1"
-            >
-            </ion-textarea>
-          </ion-item>
-        </form>
+        <ion-item lines="none">
+          <ion-textarea
+            placeholder="{{ 'comment-story' | i18n }}"
+            autocapitalize="on"
+            (keydown.enter)="sendComment($event)"
+            (ionInput)="setWriting($event.detail.value)"
+            #textarea
+            rows="1"
+          >
+          </ion-textarea>
+        </ion-item>
         <ion-buttons ion-activatable slot="end">
-          <ion-button [disabled]="!comment.value" (click)="sendComment()">
+          <ion-button [disabled]="!textarea.value" (click)="sendComment()">
             <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
           </ion-button>
         </ion-buttons>

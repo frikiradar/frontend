@@ -1,6 +1,19 @@
 ion-header ion-toolbar {
   position: absolute;
   --background: transparent !important;
+
+  ion-icon {
+    color: white;
+  }
+
+  h2,
+  p {
+    color: white !important;
+  }
+}
+
+ion-content#stories {
+  --background: black;
 }
 
 ion-footer {
@@ -46,6 +59,29 @@ swiper {
   object-fit: cover !important;
 }
 
+.background-color {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.story-text {
+  padding: 30px;
+  text-align: center;
+  font-size: 28px;
+  z-index: 1;
+
+  &.light {
+    color: #ffffff !important;
+  }
+
+  &.dark {
+    color: #000000 !important;
+  }
+}
+
 ion-card {
   align-self: center;
   box-shadow: none;
@@ -66,15 +102,18 @@ ion-card {
 }
 
 ion-card-content {
-  padding: 20px;
   width: 70%;
   text-align: left;
   text-shadow: 0px 0px 4px #000;
   position: absolute;
   bottom: 40px;
-  background: rgb(133 133 133 / 20%);
+  background: rgb(87 87 87 / 54%);
   border-radius: 20px;
   margin: 10px;
+
+  p {
+    color: white;
+  }
 }
 
 .story-actions {
@@ -91,29 +130,33 @@ ion-card-content {
 
   ion-icon {
     font-size: 32px !important;
+    color: white;
+  }
+
+  ion-label {
+    color: white;
   }
 }
 
 #text-input,
 #comment-input {
+  margin-bottom: 5px;
+
   ion-buttons {
     margin: 0;
   }
 
-  form {
-    width: 100%;
-    background: transparent;
-  }
-
   ion-item {
-    background: var(--ion-color-light);
+    background: white;
     border-radius: 30px;
     margin-left: 8px;
+    width: 100%;
+    border: 1px solid black;
   }
 
   ion-textarea {
-    --placeholder-color: var(--ion-color-medium) !important;
-    color: var(--ion-color-dark) !important;
+    --placeholder-color: #e91e62aa !important;
+    color: black !important;
     padding: 0px 0px 0px 15px;
     font-size: 12pt;
   }
@@ -145,18 +188,12 @@ ion-modal ion-avatar {
   margin-right: 10px;
 }
 
-.comments-modal,
-.comments,
-ion-footer {
+.comments {
   ion-list {
     background: transparent !important;
   }
 
   .text {
-    a {
-      color: #c4d83b !important;
-    }
-
     span {
       color: white;
       white-space: initial;
@@ -165,17 +202,27 @@ ion-footer {
 
   .note-date {
     font-size: 10px;
-    color: #bbbbbb;
+    color: white;
     margin-left: 10px;
   }
 
-  ion-item {
-    margin-top: 3px;
-    margin-bottom: 3px;
+  .show-more ion-label {
+    color: white !important;
+  }
+}
+
+.comments-modal {
+  .text {
+    span {
+      color: var(--ion-color-light);
+      white-space: initial;
+    }
   }
 
-  ion-avatar {
-    min-width: 40px;
+  .note-date {
+    font-size: 10px;
+    color: var(--ion-color-light);
+    margin-left: 10px;
   }
 }
 
@@ -184,4 +231,11 @@ ion-footer {
   bottom: 70px;
   right: 60px;
   left: 60px;
+}
+
+.story-slug {
+  position: absolute;
+  color: white;
+  right: 22px;
+  bottom: 70px;
 }

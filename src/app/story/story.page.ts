@@ -39,7 +39,7 @@ export class StoryPage implements OnInit {
   }
 
   async getStories() {
-    const stories = await this.storySvc.getAllStories();
+    const stories = await this.storySvc.getStories();
     this.stories = this.storySvc.orderStories(stories);
     this.groupedStories = this.storySvc.groupStories(this.stories);
     this.config.set("stories", this.groupedStories);

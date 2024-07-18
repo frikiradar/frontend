@@ -1,9 +1,5 @@
 ion-header {
   background: var(--ion-color-dark);
-
-  ion-input {
-    color: var(--ion-color-light) !important;
-  }
 }
 
 ion-content {
@@ -99,7 +95,32 @@ ion-content {
   }
 }
 
-ion-input {
-  --placeholder-color: rgb(124, 124, 124) !important;
-  padding-right: 20px !important;
+#search-input {
+  border: 1px solid var(--ion-color-light);
+  border-radius: 50px;
+  margin: 20px;
+
+  ion-icon {
+    margin-right: 15px;
+  }
+}
+
+#my-interests {
+  padding-top: 5px;
+}
+
+#my-interests,
+#other-interests {
+  ion-chip {
+    background: transparent;
+    border: 1px solid var(--ion-color-light);
+    ion-label {
+      color: var(--ion-color-light) !important;
+      min-height: 15px;
+    }
+
+    ion-note {
+      margin-left: 5px;
+    }
+  }
 }

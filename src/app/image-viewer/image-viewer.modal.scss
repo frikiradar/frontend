@@ -51,12 +51,7 @@ ion-footer p {
 }
 
 ion-toolbar {
-  background: transparent;
-}
-
-ion-header,
-ion-footer {
-  background: #00000055 !important;
+  --background: #00000070;
 }
 
 h2,

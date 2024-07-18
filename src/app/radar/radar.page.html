@@ -20,13 +20,13 @@
       <ion-button id="filter-options">
         <ion-icon slot="icon-only" name="filter"></ion-icon>
       </ion-button>
-      <ion-button (click)="notifications()">
-        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
-        <ion-badge slot="end" color="primary" *ngIf="counters?.notifications"
+      <ion-tab-button (click)="notifications()">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-badge mode="ios" color="primary" *ngIf="counters?.notifications"
           >{{ counters.notifications > 9 ? "+9" : counters.notifications
           }}</ion-badge
         >
-      </ion-button>
+      </ion-tab-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

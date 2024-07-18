@@ -1,8 +1,8 @@
 import { Component, Input, NgZone } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import {
@@ -32,7 +32,7 @@ export class RegisterComponent {
   @Input() provider: "google";
   @Input() credential: string;
 
-  public registerForm: UntypedFormGroup;
+  public registerForm: FormGroup;
   public today: number = Date.now();
   public clearPassword = false;
   public usernameSuggestion = "";
@@ -43,7 +43,7 @@ export class RegisterComponent {
   constructor(
     private alert: AlertController,
     private auth: AuthService,
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     private nav: NavController,
     private toast: ToastController,
     public userSvc: UserService,
@@ -54,23 +54,23 @@ export class RegisterComponent {
     private i18n: I18nService
   ) {
     this.registerForm = fb.group({
-      username: new UntypedFormControl("", [
+      username: new FormControl("", [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(20),
         Validators.pattern("[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+"),
       ]),
-      email: new UntypedFormControl("", [
+      email: new FormControl("", [
         this.email ? Validators.required : Validators.nullValidator,
         Validators.pattern(
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ),
       ]),
-      password: new UntypedFormControl("", [
+      password: new FormControl("", [
         this.credential ? Validators.required : Validators.nullValidator,
         Validators.minLength(8),
       ]),
-      birthday: new UntypedFormControl(
+      birthday: new FormControl(
         new Date(
           new Date().getFullYear() -
             18 +
@@ -85,8 +85,8 @@ export class RegisterComponent {
       lovegender: [""],
       meet: [""],
       referral: [""],
-      acceptos: new UntypedFormControl(false, Validators.requiredTrue),
-      age: new UntypedFormControl(false, Validators.requiredTrue),
+      acceptos: new FormControl(false, Validators.requiredTrue),
+      age: new FormControl(false, Validators.requiredTrue),
     });
 
     this.registerForm

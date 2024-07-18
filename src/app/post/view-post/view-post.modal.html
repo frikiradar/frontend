@@ -1,0 +1,14 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ "post-of" | i18n: {name: post.user.name} }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-post [post]="post" (deletePost)="removePost($event)"></app-post>
+</ion-content>
+<ion-footer></ion-footer>

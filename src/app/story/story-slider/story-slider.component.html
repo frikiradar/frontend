@@ -1,0 +1,50 @@
+<swiper [config]="storiesOpts" mode="md">
+  <ng-template swiperSlide>
+    <div>
+      <ion-item button lines="none" (click)="newStory()">
+        <ion-avatar>
+          <img
+            [src]="auth.currentUserValue?.thumbnail"
+            alt="auth.currentUserValue?.name"
+          />
+        </ion-avatar>
+        <ion-badge color="primary"><ion-icon name="add"></ion-icon></ion-badge>
+      </ion-item>
+      <ion-label>{{ "your-story" | i18n }}</ion-label>
+    </div>
+  </ng-template>
+  <ng-template swiperSlide *ngFor="let story of groupedStories; let i = index">
+    <div>
+      <ion-item button lines="none" (click)="showStories(story?.user?.id)">
+        <ion-avatar
+          [ngClass]="
+            story?.viewed || story?.user?.id === auth.currentUserValue?.id
+              ? ''
+              : 'not-view'
+          "
+        >
+          <img *ngIf="story.image" [src]="story?.image" [alt]="story?.text" />
+          <img
+            *ngIf="!story.image"
+            [src]="story?.user?.thumbnail"
+            [alt]="story?.user?.username"
+          />
+        </ion-avatar>
+      </ion-item>
+      <ion-label>{{ story?.user?.username }}</ion-label>
+    </div>
+  </ng-template>
+  <ng-template swiperSlide *ngIf="groupedStories?.length > 10">
+    <div>
+      <ion-item button lines="none" (click)="showAllStories()">
+        <ion-avatar>
+          <img
+            [src]="auth.currentUserValue?.thumbnail"
+            alt="auth.currentUserValue?.name"
+          />
+        </ion-avatar>
+      </ion-item>
+      <ion-label>{{ "ver-todas" | i18n }}</ion-label>
+    </div>
+  </ng-template>
+</swiper>

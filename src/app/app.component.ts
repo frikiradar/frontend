@@ -7,7 +7,7 @@ import {
   AppUpdate,
   AppUpdateAvailability,
 } from "@capawesome/capacitor-app-update";
-import { first } from "rxjs";
+import { distinctUntilChanged, map } from "rxjs";
 
 import { User } from "./models/user";
 import { AuthService } from "./services/auth.service";
@@ -57,7 +57,10 @@ export class AppComponent {
     await this.utils.toggleTheme(undefined, true);
 
     this.auth.currentUser
-      .pipe(first((u) => !!u?.id))
+      .pipe(
+        map((u) => u?.id), // Transforma el flujo para emitir solo el ID del usuario.
+        distinctUntilChanged() // Filtra los cambios que no alteran el ID del usuario.
+      )
       .subscribe(async (authUser) => {
         if (authUser) {
           const user = await this.auth.getAuthUser();
@@ -84,39 +87,42 @@ export class AppComponent {
   async networkStatus() {
     const network = await Network.getStatus();
     if (!network.connected) {
-      (
+      console.log(this.i18n.translate("no-internet-connection"));
+      /*(
         await this.toast.create({
           message: this.i18n.translate("no-internet-connection"),
           duration: 5000,
           position: "bottom",
           color: "danger",
         })
-      ).present();
+      ).present();*/
       this.internet = false;
     }
 
     Network.addListener("networkStatusChange", async (status) => {
       if (status.connected) {
         if (!this.internet) {
-          (
+          console.log(this.i18n.translate("internet-connection-restored"));
+          /*(
             await this.toast.create({
               message: this.i18n.translate("internet-connection-restored"),
               duration: 2000,
               position: "bottom",
               color: "success",
             })
-          ).present();
+          ).present();*/
         }
         this.internet = true;
       } else {
-        (
+        console.log(this.i18n.translate("internet-connection-lost"));
+        /*(
           await this.toast.create({
             message: this.i18n.translate("internet-connection-lost"),
             duration: 5000,
             position: "bottom",
             color: "danger",
           })
-        ).present();
+        ).present();*/
         this.internet = false;
       }
     });

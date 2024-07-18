@@ -1,4 +1,10 @@
 <ion-header class="ion-no-border">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-progress-bar
+    type="determinate"
+    color="dark"
+    *ngIf="!loading"
+  ></ion-progress-bar>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="back()">
@@ -10,7 +16,23 @@
 </ion-header>
 
 <ion-content>
-  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-item id="search-input" lines="none">
+    <ion-icon slot="start" name="search-outline"></ion-icon>
+    <ion-input
+      aria-label
+      type="search"
+      debounce="500"
+      placeholder="{{ 'busca-intereses' | i18n}}"
+      (ionInput)="filterPages($event.target.value)"
+      spellcheck="false"
+      color="light"
+      clearInput
+      #searchBar
+    ></ion-input>
+  </ion-item>
+  <ion-item lines="none" *ngIf="pages?.length">
+    <h4>{{ "my-interests" | i18n }}</h4>
+  </ion-item>
   <ion-list id="all-pages" *ngIf="!pages">
     <ion-item
       button
@@ -31,25 +53,64 @@
       </ion-label>
     </ion-item>
   </ion-list>
-  <ion-list id="all-pages" *ngIf="pages">
-    <ion-item
-      button
-      detail="false"
-      *ngFor="let page of pages"
-      lines="none"
-      (click)="showPage(page.slug)"
-    >
-      <ion-thumbnail slot="start">
-        <img
-          [src]="page.cover"
-          [alt]="page.name"
-          default="/assets/img/pages/default-games-page.jpg"
-        />
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{page.name}}</h2>
-        <p>#{{page.slug}}</p>
-      </ion-label>
+  <section id="all-pages" *ngIf="pages?.length">
+    <ion-list>
+      <ion-item
+        button
+        detail="false"
+        *ngFor="let page of pages"
+        lines="none"
+        (click)="showPage(page.slug)"
+      >
+        <ion-thumbnail slot="start">
+          <img
+            [src]="page.cover"
+            [alt]="page.name"
+            default="/assets/img/pages/default-games-page.jpg"
+          />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{page.name}}</h2>
+          <p>#{{page.slug}}</p>
+        </ion-label>
+        <ion-badge slot="end" mode="ios"> {{page.likes}} </ion-badge>
+      </ion-item>
+    </ion-list>
+  </section>
+
+  <section id="other-pages" *ngIf="otherPages?.length">
+    <ion-item lines="none">
+      <h4>{{ "explore-interests" | i18n }}</h4>
     </ion-item>
-  </ion-list>
+    <ion-list id="all-pages">
+      <ion-item
+        button
+        detail="false"
+        *ngFor="let page of otherPages"
+        lines="none"
+        (click)="showPage(page.slug)"
+      >
+        <ion-thumbnail slot="start">
+          <img
+            [src]="page.cover"
+            [alt]="page.name"
+            default="/assets/img/pages/default-games-page.jpg"
+          />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{page.name}}</h2>
+          <p>#{{page.slug}}</p>
+        </ion-label>
+        <ion-badge slot="end" mode="ios"> {{page.likes}} </ion-badge>
+      </ion-item>
+    </ion-list>
+    <ion-infinite-scroll
+      threshold="50%"
+      (ionInfinite)="addOtherPages($event)"
+      position="bottom"
+    >
+      <ion-infinite-scroll-content loadingSpinner="dots">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </section>
 </ion-content>

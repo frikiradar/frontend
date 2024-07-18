@@ -1,4 +1,14 @@
 ion-thumbnail {
-    --border-radius: 5px;
-    height: 75px;
+  --border-radius: 5px;
+  height: 75px;
+}
+
+#search-input {
+  border: 1px solid var(--ion-color-light);
+  border-radius: 50px;
+  margin: 20px;
+
+  ion-icon {
+    margin-right: 15px;
+  }
 }

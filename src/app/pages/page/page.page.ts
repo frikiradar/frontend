@@ -11,11 +11,10 @@ import { AuthService } from "../../services/auth.service";
 import { PageService } from "../../services/page.service";
 import { StoryService } from "../../services/story.service";
 import { TagService } from "../../services/tag.service";
-import { StoryModal } from "../../story/story-modal/story.modal";
-import { ViewStoriesModal } from "../../story/view-stories/view-stories.modal";
 import { NavService } from "src/app/services/navigation.service";
 import { UserService } from "src/app/services/user.service";
 import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
+import { PostModal } from "src/app/post/post-modal/post.modal";
 
 @Component({
   selector: "app-page",
@@ -26,7 +25,6 @@ export class PagePage {
   public page: Page;
   public tag: Tag;
   public stories: Story[];
-  public groupedStories: Story[];
   public showDescription = false;
   public events: Event[];
   public scrollPage = 1;
@@ -92,40 +90,6 @@ export class PagePage {
   async getStories() {
     const stories = await this.storySvc.getStoriesSlug(this.page.slug);
     this.stories = this.storySvc.orderStories(stories);
-    this.groupedStories = this.storySvc.groupStories(this.stories);
-  }
-
-  async newStory() {
-    const modal = await this.modalController.create({
-      component: StoryModal,
-      componentProps: { hash: `#${this.page.slug}` },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "vertical-modal",
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-    await this.getStories();
-  }
-
-  async showStories(id: User["id"]) {
-    let stories = this.stories.reverse().filter((s) => s.user.id === id);
-    stories = [
-      ...stories,
-      ...this.stories.reverse().filter((s) => s.user.id !== id),
-    ];
-    const modal = await this.modalController.create({
-      component: ViewStoriesModal,
-      componentProps: { stories },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "vertical-modal",
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-    await this.getStories();
   }
 
   async openViewer() {
@@ -233,6 +197,19 @@ export class PagePage {
 
   async showProfile(id: User["id"]) {
     this.router.navigate(["/profile", id]);
+  }
+
+  async newPost() {
+    const modal = await this.modalController.create({
+      component: PostModal,
+      componentProps: { slug: this.page.slug },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "vertical-modal",
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   back() {

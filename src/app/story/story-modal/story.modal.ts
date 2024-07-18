@@ -1,9 +1,4 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-} from "@angular/forms";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Keyboard } from "@capacitor/keyboard";
 import {
@@ -12,12 +7,15 @@ import {
   ToastController,
   isPlatform,
 } from "@ionic/angular";
+declare var EmojiMart: any; // Esto declara EmojiMart para TypeScript
 
-import { User } from "../../models/user";
 import { StoryService } from "../../services/story.service";
-import { UserService } from "../../services/user.service";
 import { UtilsService } from "../../services/utils.service";
 import { I18nService } from "src/app/services/i18n.service";
+import { Config, ConfigService } from "src/app/services/config.service";
+import runes from "runes";
+import { User } from "src/app/models/user";
+import { AuthService } from "src/app/services/auth.service";
 
 @Component({
   selector: "story-modal",
@@ -25,45 +23,85 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./story.modal.scss"],
 })
 export class StoryModal implements OnInit {
-  @Input() hash: string;
+  @Input() slug: string;
   @ViewChild("imageInput", { static: false })
   imageInput: ElementRef;
 
-  @ViewChild("textarea", { static: false })
-  textarea: IonTextarea;
+  @ViewChild("imageTextarea", { static: false })
+  imageTextarea: IonTextarea;
 
-  public storyForm: UntypedFormGroup;
-  get text() {
-    return this.storyForm.get("text");
-  }
-  public image: SafeUrl;
+  @ViewChild("storyTextarea", { static: false })
+  storyTextarea: IonTextarea;
+
+  public image: SafeUrl = undefined;
   public imageFile: Blob;
-  private inputAt = false;
-  private mention: string;
-  public userMentions: User["username"][] = [];
-  public usernames: User[];
-  private writing = false;
   public showBackdrop = false;
+  public storyText = "";
+  private backgroundColors = [
+    "#FF3380",
+    "#8E24AA",
+    "#00838F",
+    "#679267",
+    "#F6A700",
+    "#FF8333",
+    "#424242",
+    "#CFD8DC",
+  ];
+  public backgroundColor = this.backgroundColors[0];
+  public textColor: "light" | "dark" = "light";
+  public emojis = false;
+  public user: User;
 
   constructor(
     public modalController: ModalController,
-    public formBuilder: UntypedFormBuilder,
     private utils: UtilsService,
     private sanitizer: DomSanitizer,
     private storySvc: StoryService,
     private toast: ToastController,
-    private userSvc: UserService,
-    private i18n: I18nService
-  ) {
-    this.storyForm = formBuilder.group({
-      text: new UntypedFormControl(),
-    });
-  }
+    private i18n: I18nService,
+    private config: ConfigService,
+    private auth: AuthService
+  ) {}
 
   async ngOnInit() {
-    if (this.hash) {
-      this.text.setValue(this.hash + " ");
+    this.user = this.auth.currentUserValue;
+
+    setTimeout(() => {
+      this.storyTextarea.setFocus();
+    }, 500);
+  }
+
+  changeColor() {
+    // encontramos el index de la actual
+    const index = this.backgroundColors.indexOf(this.backgroundColor);
+    // si es el último, volvemos al primero
+    if (index == this.backgroundColors.length - 1) {
+      this.backgroundColor = this.backgroundColors[0];
+    } else {
+      // si no, avanzamos al siguiente
+      this.backgroundColor = this.backgroundColors[index + 1];
     }
+
+    // cambiamos el color del texto
+    if (["#CFD8DC"].includes(this.backgroundColor)) {
+      this.textColor = "dark";
+    } else {
+      this.textColor = "light";
+    }
+  }
+
+  inputTextarea(event) {
+    const maxLines = 10;
+    let lines = (event.target.value.match(/\n/g) || []).length + 1;
+
+    if (lines > maxLines) {
+      event.target.value = event.target.value.substring(
+        0,
+        event.target.value.lastIndexOf("\n")
+      );
+    }
+
+    this.storyText = event.target.value;
   }
 
   async selectPicture(type: "camera" | "gallery") {
@@ -117,6 +155,23 @@ export class StoryModal implements OnInit {
     }
     this.image = this.sanitizer.bypassSecurityTrustUrl(image);
     this.imageFile = await this.utils.urltoBlob(image);
+
+    this.backgroundColor = "#000000";
+
+    setTimeout(() => {
+      this.imageTextarea.setFocus();
+    }, 500);
+  }
+
+  removePicture() {
+    this.image = undefined;
+    this.imageFile = undefined;
+    this.imageInput.nativeElement.value = "";
+    this.backgroundColor = this.backgroundColors[0];
+
+    setTimeout(() => {
+      this.storyTextarea.setFocus();
+    }, 500);
   }
 
   async cropImagebyEvent(event: any) {
@@ -125,6 +180,8 @@ export class StoryModal implements OnInit {
       if (typeof src == "string") {
         const blob = await this.utils.urltoBlob(src);
         this.addPicture(blob);
+      } else {
+        this.removePicture();
       }
     } catch (e) {
       console.error(e);
@@ -141,10 +198,17 @@ export class StoryModal implements OnInit {
         })
       ).present();
       let text = "";
-      if (this.text.value) {
-        text = this.text.value.trim();
+      if (this.imageTextarea?.value) {
+        text = this.imageTextarea.value.trim();
+      } else if (this.storyTextarea?.value) {
+        text = this.storyTextarea.value.trim();
       }
-      await this.storySvc.sendStory(this.imageFile, text, this.userMentions);
+      await this.storySvc.sendStory(
+        this.imageFile,
+        text,
+        this.backgroundColor,
+        this.slug
+      );
       this.toast.dismiss();
       (
         await this.toast.create({
@@ -169,49 +233,73 @@ export class StoryModal implements OnInit {
     }
   }
 
-  setMention(username: string) {
-    this.usernames = [];
-    this.inputAt = false;
-    this.text.setValue(this.text.value.replace(this.mention, `@${username} `));
-    this.userMentions = [...this.userMentions, username];
-    this.textarea.setFocus();
-    if (isPlatform("capacitor")) {
-      Keyboard.show();
+  async emojiPicker() {
+    if (typeof EmojiMart !== "undefined") {
+      if (!this.emojis) {
+        this.emojis = true;
+        if (isPlatform("capacitor")) {
+          await Keyboard.hide();
+        }
+        const language = (await this.config.get(
+          "language"
+        )) as Config["language"];
+
+        const picker = new EmojiMart.Picker({
+          onEmojiSelect: (emoji) => {
+            // console.log(emoji);
+            this.addEmoji(emoji);
+          },
+          theme: "dark",
+          locale: language === "es" ? "es" : "en",
+          set: "native",
+          dynamicWidth: true,
+        });
+
+        const container = document.getElementById("emoji-picker-container");
+        if (container) {
+          container.appendChild(picker);
+          picker.style.width = "100%";
+        }
+      } else {
+        this.closeEmojis();
+      }
     }
   }
 
-  async setWriting(text: string) {
-    if (this.text.value) {
-      if (text.charAt(text.length - 1) == "@") {
-        this.inputAt = true;
-      }
-
-      if (this.inputAt) {
-        const pattern = /\B@[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+/gi;
-        const matches = text.match(pattern);
-        if (matches) {
-          this.mention = matches[matches.length - 1];
-        }
-
-        if (this.writing) {
-          return;
-        }
-        this.writing = true;
-
-        if (this.mention?.length > 3 && this.text.value.length > 3) {
-          this.usernames = await this.userSvc.searchUsernames(
-            this.mention.replace("@", "")
-          );
-        } else {
-          this.usernames = [];
-        }
-
-        setTimeout(async () => {
-          this.writing = false;
-        }, 500);
-      }
+  addEmoji(emoji: any) {
+    if (this.image) {
+      this.imageTextarea.value =
+        (this.imageTextarea.value ?? "") + emoji.native;
+      this.storyText = this.imageTextarea.value;
     } else {
-      this.usernames = [];
+      this.storyTextarea.value =
+        (this.storyTextarea.value ?? "") + emoji.native;
+      this.storyText = this.storyTextarea.value;
+    }
+  }
+
+  deleteText() {
+    const textRunes = runes(this.imageTextarea.value);
+    textRunes.pop();
+    this.imageTextarea.value = textRunes.join("");
+  }
+
+  closeEmojis() {
+    if (typeof EmojiMart !== undefined && this.emojis) {
+      this.emojis = false;
+      if (isPlatform("capacitor")) {
+        Keyboard.show();
+      }
+      const container = document.getElementById("emoji-picker-container");
+      if (container) {
+        container.innerHTML = "";
+      }
+
+      if (this.image) {
+        this.imageTextarea.setFocus();
+      } else {
+        this.storyTextarea.setFocus();
+      }
     }
   }
 

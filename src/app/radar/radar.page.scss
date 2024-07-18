@@ -1,13 +1,8 @@
 ion-toolbar {
   ion-badge {
     position: absolute;
-    left: 15px;
-    bottom: 5px;
-    border-radius: 15px;
-    z-index: 1;
-    width: 22px;
-    height: 22px;
-    border: 2px solid var(--ion-color-dark);
+    top: 8px;
+    left: 12px;
   }
 }
 
@@ -55,7 +50,7 @@ ion-toolbar {
 ion-card {
   --background: var(--ion-color-medium-dark);
   overflow: auto;
-  border-radius: 25px;
+  border-radius: 50px;
 
   &.md {
     height: 97%;
@@ -124,6 +119,7 @@ ion-card .info {
 
 .more ion-icon {
   width: 100%;
+  color: white;
 }
 
 ion-card-header {
@@ -231,7 +227,7 @@ ion-content {
           z-index: 1;
           width: 20px;
           height: 20px;
-          border: 2px solid #1f1f1f;
+          border: 2px solid #111111;
           bottom: 25px;
         }
       }

@@ -58,6 +58,7 @@ export class UtilsService {
 
     try {
       if (crop) {
+        console.log("Cropping image...");
         const res = await this.cropImage("", src, square);
         if (typeof res == "string") {
           src = res;
@@ -338,11 +339,11 @@ export class UtilsService {
       switch (theme) {
         case "dark":
           await NavigationBar.setColor({
-            color: "#1f1f1f",
+            color: "#111111",
             darkButtons: false,
           });
           await StatusBar.setStyle({ style: Style.Dark });
-          await StatusBar.setBackgroundColor({ color: "#1f1f1f" });
+          await StatusBar.setBackgroundColor({ color: "#111111" });
           break;
         case "light":
           await NavigationBar.setColor({ color: "#fafafa", darkButtons: true });
@@ -378,66 +379,13 @@ export class UtilsService {
           await StatusBar.setStyle({ style: Style.Light });
           await StatusBar.setBackgroundColor({ color: "#ffebee" });
           break;
-        case "transparent":
-          await this.transparentStatusBar();
-          await this.transparentNavigationBar();
-          break;
         default:
           await NavigationBar.setColor({
-            color: "#1f1f1f",
+            color: "#111111",
             darkButtons: false,
           });
           await StatusBar.setStyle({ style: Style.Dark });
-          await StatusBar.setBackgroundColor({ color: "#1f1f1f" });
-      }
-    }
-  }
-
-  async transparentStatusBar(hide = false) {
-    if (isPlatform("capacitor")) {
-      await SafeAreaController.injectCSSVariables();
-      StatusBar.setOverlaysWebView({ overlay: true });
-      StatusBar.setStyle({ style: Style.Dark });
-      if (hide) {
-        await StatusBar.hide();
-      } else {
-        await StatusBar.show();
-      }
-    }
-  }
-
-  async transparentNavigationBar(hide = false) {
-    if (isPlatform("capacitor")) {
-      await SafeAreaController.injectCSSVariables();
-      NavigationBar.setTransparency({ isTransparent: true });
-      if (hide) {
-        await NavigationBar.hide();
-      } else {
-        await NavigationBar.show();
-      }
-    }
-  }
-
-  async toggleTransparent(
-    type: "statusbar" | "navigationbar" | "both" = "both"
-  ) {
-    const isTransparent = document.body.classList.contains("transparent");
-    if (isTransparent) {
-      document.body.classList.toggle("transparent", false);
-      await this.toggleTheme();
-    } else {
-      document.body.classList.toggle("transparent", true);
-      switch (type) {
-        case "statusbar":
-          await this.transparentStatusBar();
-          break;
-        case "navigationbar":
-          await this.transparentNavigationBar();
-          break;
-        case "both":
-          await this.transparentStatusBar();
-          await this.transparentNavigationBar();
-          break;
+          await StatusBar.setBackgroundColor({ color: "#111111" });
       }
     }
   }

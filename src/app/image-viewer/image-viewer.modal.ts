@@ -78,10 +78,6 @@ export class ImageViewerModal {
     private utils: UtilsService
   ) {}
 
-  async ngOnInit() {
-    await this.utils.toggleTransparent();
-  }
-
   setSwiperInstance(swiper: SwiperCore) {
     this.slides = swiper;
   }
@@ -89,21 +85,10 @@ export class ImageViewerModal {
   toggleVisibility(event: any) {
     if (event instanceof PointerEvent) {
       this.isHidden = !this.isHidden;
-      if (this.isHidden) {
-        this.utils.transparentStatusBar(true);
-        this.utils.transparentNavigationBar(true);
-      } else {
-        this.utils.transparentStatusBar(false);
-        this.utils.transparentNavigationBar(false);
-      }
     }
   }
 
   back() {
     this.modalController.dismiss();
-  }
-
-  async ngOnDestroy() {
-    await this.utils.toggleTransparent();
   }
 }

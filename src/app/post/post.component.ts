@@ -1,0 +1,548 @@
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { Story } from "../models/story";
+import { Haptics, NotificationType } from "@capacitor/haptics";
+import { ImageViewerModal } from "../image-viewer/image-viewer.modal";
+import { StoryService } from "../services/story.service";
+import { User } from "../models/user";
+import { Router } from "@angular/router";
+import {
+  AlertController,
+  IonTextarea,
+  isPlatform,
+  ModalController,
+  ToastController,
+} from "@ionic/angular";
+import { UtilsService } from "../services/utils.service";
+import { UserService } from "../services/user.service";
+import { AuthService } from "../services/auth.service";
+import { I18nService } from "../services/i18n.service";
+import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
+import { Keyboard } from "@capacitor/keyboard";
+import { UrlService } from "../services/url.service";
+
+@Component({
+  selector: "app-post",
+  templateUrl: "./post.component.html",
+  styleUrls: ["./post.component.scss"],
+})
+export class PostComponent {
+  @Output() deletePost: EventEmitter<Story> = new EventEmitter();
+  @Input() post: Story;
+
+  @ViewChild("textarea", { static: false })
+  textarea: IonTextarea;
+
+  @ViewChild("postElement", { static: false }) postElement: ElementRef;
+  private observer: IntersectionObserver;
+
+  public selectedComment: Story["comments"][0];
+  public showCommentOptions = false;
+  public showOptions = false;
+  public showComments = false;
+  public showViews = false;
+
+  private inputAt = false;
+  private mention: string;
+  public userMentions: User["username"][] = [];
+  public usernames: User[];
+  private writing = false;
+
+  constructor(
+    private router: Router,
+    private storySvc: StoryService,
+    private modalController: ModalController,
+    private utils: UtilsService,
+    private userSvc: UserService,
+    public auth: AuthService,
+    private toast: ToastController,
+    private i18n: I18nService,
+    private alertCtrl: AlertController,
+    private urlSvc: UrlService
+  ) {
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (
+              !this.post.viewed &&
+              this.auth.currentUserValue.id !== this.post.user.id
+            ) {
+              this.storySvc.viewStory(this.post.id);
+            }
+          }
+        });
+      },
+      { threshold: 1 }
+    );
+  }
+
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.postElement.nativeElement) {
+        this.observer.observe(this.postElement.nativeElement);
+      }
+    }, 1000);
+  }
+
+  async showProfile() {
+    if (this.post.user.id !== 1) {
+      this.router.navigate(["/profile", this.post.user.id]);
+    }
+  }
+
+  async openViewer() {
+    const modal = await this.modalController.create({
+      component: ImageViewerModal,
+      componentProps: {
+        params: {
+          src: this.post.image,
+          title: this.post.user.username,
+          description: this.post.text,
+          date: this.utils.niceDate(this.post?.time_creation),
+        },
+      },
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "vertical-modal",
+    });
+
+    await modal.present();
+  }
+
+  async switchLikePost(event: Event) {
+    event.stopPropagation();
+    try {
+      // Envía la solicitud al servidor en segundo plano
+      if (this.post.like) {
+        this.post = await this.storySvc.unlike(this.post.id);
+        Haptics.notification({ type: NotificationType.Error });
+      } else {
+        this.post = await this.storySvc.like(this.post.id);
+        Haptics.notification({ type: NotificationType.Success });
+      }
+    } catch (error) {
+      console.error(`Error al cambiar el estado del "like": ${error}`);
+    }
+  }
+
+  async switchLikeComment(comment: Story["comments"][0]) {
+    const liked = comment.likes.some(
+      (l) => l.id === this.auth.currentUserValue.id
+    );
+
+    // Cambia el estado del "like" inmediatamente
+    this.post.comments = this.post.comments.map((c) => {
+      if (c.id === comment.id) {
+        c.like = !liked;
+      }
+      return c;
+    });
+
+    try {
+      // Envía la solicitud al servidor en segundo plano
+      if (liked) {
+        this.post = await this.storySvc.unlikeComment(comment.id);
+        this.post.comments = this.post.comments.map((c) => {
+          if (c.id === comment.id) {
+            c.like = false;
+          }
+          return c;
+        });
+      } else {
+        this.post = await this.storySvc.likeComment(comment.id);
+        this.post.like = true;
+        this.post.comments = this.post.comments.map((c) => {
+          if (c.id === comment.id) {
+            c.like = true;
+          }
+          return c;
+        });
+      }
+    } catch (error) {
+      // Si la solicitud falla, revierte el cambio y muestra un mensaje de error
+      this.post.comments = this.post.comments.map((c) => {
+        if (c.id === comment.id) {
+          c.like = liked;
+        }
+        return c;
+      });
+      console.error(
+        `Error al cambiar el estado del "like" del comentario: ${error}`
+      );
+    }
+  }
+
+  commentFocus(event?: CustomEvent) {
+    event?.stopPropagation();
+    if (event) {
+      const textarea = event.target as unknown as IonTextarea;
+      textarea.getInputElement().then((a) => a.blur());
+    }
+    this.showComments = true;
+    setTimeout(() => {
+      this.textarea.setFocus();
+      if (isPlatform("capacitor")) {
+        Keyboard.show();
+      }
+    }, 500);
+  }
+
+  showViewsSheet(event: Event) {
+    event.stopPropagation();
+    this.showViews = true;
+  }
+
+  closeViewsSheet() {
+    this.showViews = false;
+  }
+
+  showCommentsSheet(event: Event) {
+    event.stopPropagation();
+    this.showComments = true;
+  }
+
+  closeCommentsSheet() {
+    this.showComments = false;
+  }
+
+  showCommentOptionsSheet(comment: Story["comments"][0]) {
+    this.selectedComment = comment;
+    this.showCommentOptions = true;
+  }
+
+  closeCommentOptionsSheet() {
+    this.showCommentOptions = false;
+  }
+
+  showOptionsSheet() {
+    this.showOptions = true;
+  }
+
+  closeOptionsSheet() {
+    this.showOptions = false;
+  }
+
+  async sendComment(event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    const text = this.textarea.value.trim();
+    this.textarea.value = "";
+    this.post = await this.storySvc.commentStory(
+      this.post.id,
+      text,
+      this.userMentions
+    );
+  }
+
+  async setWriting(text: string) {
+    if (this.textarea.value) {
+      if (text.charAt(text.length - 1) == "@") {
+        this.inputAt = true;
+      }
+
+      if (this.inputAt) {
+        const pattern = /\B@[a-zA-Z0-9-_.À-ÿ\u00f1\u00d1 ]+/gi;
+        const matches = text.match(pattern);
+        if (matches) {
+          this.mention = matches[matches.length - 1];
+        }
+
+        if (this.writing) {
+          return;
+        }
+        this.writing = true;
+
+        if (this.mention?.length > 3 && this.textarea.value.length > 3) {
+          this.usernames = await this.userSvc.searchUsernames(
+            this.mention.replace("@", "")
+          );
+        } else {
+          this.usernames = [];
+        }
+
+        setTimeout(async () => {
+          this.writing = false;
+        }, 500);
+      }
+    } else {
+      this.usernames = [];
+    }
+  }
+
+  async deleteComment(comment: Story["comments"][0]) {
+    (
+      await this.toast.create({
+        message: this.i18n.translate("deleting-comment"),
+        position: "middle",
+        duration: 2000,
+      })
+    ).present();
+    try {
+      await this.storySvc.deleteComment(comment.id);
+      this.post.comments = this.post.comments.filter(
+        (c) => c.id !== comment.id
+      );
+
+      (
+        await this.toast.create({
+          message: this.i18n.translate("comment-deleted-successfully"),
+          position: "middle",
+          duration: 2000,
+        })
+      ).present();
+      this.showCommentOptions = false;
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: this.i18n.translate("error-deleting-comment"),
+          duration: 2000,
+          position: "middle",
+          color: "danger",
+        })
+      ).present();
+    }
+  }
+
+  async removePost() {
+    try {
+      await this.storySvc.deleteStory(this.post.id);
+      (
+        await this.toast.create({
+          message: this.i18n.translate("successfully-deleted"),
+          position: "middle",
+          duration: 2000,
+        })
+      ).present();
+    } catch (e) {
+      (
+        await this.toast.create({
+          message: this.i18n.translate("error-deleting-post"),
+          duration: 2000,
+          position: "middle",
+          color: "danger",
+        })
+      ).present();
+    }
+
+    this.closeOptionsSheet();
+    setTimeout(() => {
+      this.deletePost.emit(this.post);
+    }, 500);
+  }
+
+  async reportPost() {
+    this.closeOptionsSheet();
+    const alert = await this.alertCtrl.create({
+      header: this.i18n.translate("do-you-want-to-report-story", {
+        username: this.post.user.username,
+      }),
+      message: this.i18n.translate("we-will-review-the-case"),
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: this.i18n.translate("report-reason"),
+        },
+      ],
+      buttons: [
+        {
+          text: this.i18n.translate("cancel"),
+          role: "cancel",
+          cssClass: "secondary",
+        },
+        {
+          text: this.i18n.translate("report"),
+          role: "block",
+          handler: async (data: any) => {
+            if (data.note.trim().length) {
+              try {
+                await this.storySvc.report(this.post, data.note);
+                (
+                  await this.toast.create({
+                    message: this.i18n.translate("story-reported-successfully"),
+                    duration: 2000,
+                    position: "bottom",
+                  })
+                ).present();
+              } catch (e) {
+                (
+                  await this.toast.create({
+                    message: this.i18n.translate("error-reporting-story", {
+                      error: e,
+                    }),
+                    duration: 2000,
+                    position: "bottom",
+                    color: "danger",
+                  })
+                ).present();
+                alert.present();
+              }
+            } else {
+              (
+                await this.toast.create({
+                  message: this.i18n.translate(
+                    "report-message-cannot-be-blank"
+                  ),
+                  duration: 2000,
+                  position: "middle",
+                  color: "danger",
+                })
+              ).present();
+
+              this.reportPost();
+            }
+          },
+        },
+      ],
+      cssClass: "round-alert",
+    });
+
+    await alert.present();
+  }
+
+  async reportComment(comment: Story["comments"][0]) {
+    this.closeCommentOptionsSheet();
+
+    const alert = await this.alertCtrl.create({
+      header: this.i18n.translate("do-you-want-to-report-comment", {
+        username: comment.user.username,
+      }),
+      message: this.i18n.translate("we-will-review-the-case"),
+      inputs: [
+        {
+          name: "note",
+          type: "text",
+          placeholder: this.i18n.translate("report-reason"),
+        },
+      ],
+      buttons: [
+        {
+          text: this.i18n.translate("cancel"),
+          role: "cancel",
+          cssClass: "secondary",
+        },
+        {
+          text: this.i18n.translate("report"),
+          role: "block",
+          handler: async (data: any) => {
+            if (data.note.trim().length) {
+              try {
+                await this.storySvc.reportComment(comment.id, data.note);
+                (
+                  await this.toast.create({
+                    message: this.i18n.translate(
+                      "comment-reported-successfully"
+                    ),
+                    duration: 2000,
+                    position: "bottom",
+                  })
+                ).present();
+              } catch (e) {
+                (
+                  await this.toast.create({
+                    message: this.i18n.translate("error-reporting-comment", {
+                      error: e,
+                    }),
+                    duration: 2000,
+                    position: "bottom",
+                    color: "danger",
+                  })
+                ).present();
+                alert.present();
+              }
+            } else {
+              (
+                await this.toast.create({
+                  message: this.i18n.translate(
+                    "report-message-cannot-be-blank"
+                  ),
+                  duration: 2000,
+                  position: "middle",
+                  color: "danger",
+                })
+              ).present();
+
+              this.reportComment(comment);
+            }
+          },
+        },
+      ],
+      cssClass: "round-alert",
+    });
+
+    await alert.present();
+    await alert.onDidDismiss();
+  }
+
+  async blockUser(user: User) {
+    try {
+      await this.userSvc.block(user);
+    } catch (e) {
+      // No hacer nada
+    }
+    this.router.navigate(["/"]);
+  }
+
+  async viewCommentLikes(likes: Story["comments"][0]["likes"]) {
+    const modal = await this.modalController.create({
+      component: CommentLikesModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      componentProps: { likes },
+      cssClass: "medium-modal",
+    });
+
+    await modal.present();
+  }
+
+  async reply(comment: Story["comments"][0]) {
+    if (comment.user.id !== this.auth.currentUserValue.id) {
+      this.textarea.value = `@${comment.user.username} `;
+      this.setMention(comment.user.username);
+    }
+    this.commentFocus();
+    if (isPlatform("capacitor")) {
+      Keyboard.show();
+    }
+  }
+
+  setMention(username: string) {
+    this.usernames = [];
+    this.inputAt = false;
+    this.textarea.value = this.textarea.value.replace(
+      this.mention,
+      `@${username} `
+    );
+    this.userMentions = [...this.userMentions, username];
+    this.commentFocus();
+    if (isPlatform("capacitor")) {
+      Keyboard.show();
+    }
+  }
+
+  async openUrl(event: any) {
+    this.closeCommentsSheet();
+    await this.urlSvc.openUrl(event);
+  }
+
+  showPage(slug: string) {
+    this.router.navigate(["/page", slug]);
+  }
+
+  ngOnDestroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+}

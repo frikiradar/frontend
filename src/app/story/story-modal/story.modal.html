@@ -9,54 +9,76 @@
         ></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="publish()" [disabled]="!imageFile || showBackdrop">
-        <ion-label color="primary">{{ "publicar-historia" | i18n }}</ion-label>
-        <ion-icon color="primary" name="arrow-up-circle-outline"></ion-icon>
+    <ion-buttons slot="end" *ngIf="!image">
+      <ion-button (click)="selectPicture('gallery')">
+        <ion-icon slot="icon-only" name="image-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="selectPicture('camera')">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!emojis" (click)="emojiPicker()">
+        <ion-icon slot="icon-only" name="happy-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="emojis" (click)="closeEmojis()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="changeColor()">
+        <ion-icon slot="icon-only" name="color-palette-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="image">
+      <ion-button (click)="selectPicture('gallery')">
+        <ion-icon slot="icon-only" name="image-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="selectPicture('camera')">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!emojis" (click)="emojiPicker()">
+        <ion-icon slot="icon-only" name="happy-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="emojis" (click)="closeEmojis()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <form
-    [formGroup]="storyForm"
-    autocomplete="off"
-    class="ion-padding"
-    *ngIf="image"
-  >
-    <ion-thumbnail *ngIf="image">
+<ion-content [ngStyle]="{'--background': backgroundColor}">
+  <ion-item lines="none" class="ion-padding" *ngIf="image">
+    <ion-avatar slot="start">
+      <ion-img [src]="user?.avatar"></ion-img>
+    </ion-avatar>
+    <ion-textarea
+      placeholder="{{ 'escribe-tu-historia' | i18n }}"
+      id="image-textarea"
+      #imageTextarea
+      autoGrow="true"
+      rows="2"
+      maxlength="300"
+      [counter]="true"
+      (ionFocus)="closeEmojis()"
+      (ionInput)="inputTextarea($event)"
+    ></ion-textarea>
+  </ion-item>
+  <div id="image-preview" *ngIf="image">
+    <ion-thumbnail>
+      <ion-button size="small" shape="round" (click)="removePicture()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
       <img [src]="image" />
     </ion-thumbnail>
-    <ion-list
-      id="usernames"
-      *ngIf="usernames?.length && text?.value?.length > 3"
-    >
-      <ion-item
-        lines="none"
-        button
-        *ngFor="let u of usernames"
-        (click)="setMention(u.username)"
-      >
-        <ion-avatar>
-          <img [src]="u.thumbnail" />
-        </ion-avatar>
-        <ion-label>{{ u.username }}</ion-label>
-      </ion-item>
-    </ion-list>
-    <ion-item *ngIf="image">
-      <ion-textarea
-        placeholder="Escribe un comentario o describe la foto"
-        rows="3"
-        formControlName="text"
-        (ionChange)="setWriting($event.detail.value)"
-        #textarea
-      ></ion-textarea>
-    </ion-item>
-  </form>
-  <div *ngIf="!image" class="full-center ion-padding">
-    <ion-icon name="camera-outline"></ion-icon>
-    <h2>{{ "aade-una-imagen" | i18n }}</h2>
-    <p>{{ "haz-una-foto-selecciona-una" | i18n }}</p>
+  </div>
+  <div class="textarea-container" *ngIf="!image" (click)="closeEmojis()">
+    <ion-textarea
+      [ngClass]="textColor == 'light' ? 'light' : 'dark'"
+      id="story-textarea"
+      #storyTextarea
+      placeholder="{{ 'escribe-tu-historia' | i18n }}"
+      maxlength="300"
+      [(ngModel)]="textoEstado"
+      (ionInput)="inputTextarea($event)"
+      autoGrow="true"
+      rows="2"
+    ></ion-textarea>
   </div>
   <input
     type="file"
@@ -66,29 +88,34 @@
     name="avatar"
     (change)="cropImagebyEvent($event)"
   />
+
+  <div class="ion-padding" *ngIf="slug && image">
+    <ion-item lines="none">
+      <ion-label>
+        <h2>
+          {{ "publish-in" | i18n }}
+          <ion-chip class="slug"><ion-label>#{{slug}}</ion-label></ion-chip>
+        </h2>
+      </ion-label>
+    </ion-item>
+  </div>
 </ion-content>
-<ion-footer>
+<ion-footer class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="selectPicture('gallery')">
-        <ion-icon name="image-outline"></ion-icon>
-        <ion-label>{{ "galera" | i18n }}</ion-label>
-      </ion-button>
-      <!--<ion-button (click)="selectPicture('camera')">
-        <ion-icon name="camera-outline"></ion-icon>
-        <ion-label>{{ "cmara" | i18n }}</ion-label>
-      </ion-button>-->
-    </ion-buttons>
     <ion-buttons slot="end">
-      <!--<ion-button (click)="selectText()">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <ion-label>{{ "texto" | i18n }}</ion-label>
-      </ion-button>-->
-      <ion-button (click)="selectPicture('camera')">
-        <ion-icon name="camera-outline"></ion-icon>
-        <ion-label>{{ "cmara" | i18n }}</ion-label>
+      <ion-button
+        class="publish-button"
+        fill="solid"
+        shape="round"
+        color="primary"
+        (click)="publish()"
+        [disabled]="(!imageFile && !storyText) || showBackdrop "
+      >
+        <ion-label>{{ "publicar-historia" | i18n }}</ion-label>
+        <ion-icon slot="end" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <div id="emoji-picker-container"></div>
 </ion-footer>
 <ion-backdrop visible="true" *ngIf="showBackdrop"></ion-backdrop>

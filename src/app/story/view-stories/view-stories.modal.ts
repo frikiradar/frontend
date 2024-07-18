@@ -5,12 +5,6 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from "@angular/forms";
 import { Router } from "@angular/router";
 import { Keyboard } from "@capacitor/keyboard";
 import {
@@ -62,11 +56,6 @@ export class ViewStoriesModal implements OnInit {
   public showViews = false;
   public pulse: any;
 
-  public commentForm: UntypedFormGroup;
-  get comment() {
-    return this.commentForm.get("comment");
-  }
-
   private delay = 5000;
   private inputAt = false;
   private mention: string;
@@ -92,7 +81,6 @@ export class ViewStoriesModal implements OnInit {
     public thisModal: ModalController,
     private modalCreate: ModalController,
     private likeModal: ModalController,
-    public formBuilder: UntypedFormBuilder,
     private storySvc: StoryService,
     public userSvc: UserService,
     private toast: ToastController,
@@ -103,14 +91,9 @@ export class ViewStoriesModal implements OnInit {
     private alertCtrl: AlertController,
     private utils: UtilsService,
     private i18n: I18nService
-  ) {
-    this.commentForm = formBuilder.group({
-      comment: new UntypedFormControl("", [Validators.required]),
-    });
-  }
+  ) {}
 
   async ngOnInit() {
-    this.storySvc.setLikesStory(this.stories[0]);
     this.viewStory(this.stories[0]);
     this.story = this.stories[0];
     // await this.utils.toggleTransparent();
@@ -139,7 +122,6 @@ export class ViewStoriesModal implements OnInit {
   }
 
   slide(index: number) {
-    this.comment.setValue("");
     this.story = this.stories[index];
     this.cd.detectChanges();
     this.viewStory(this.stories[index]);
@@ -310,8 +292,8 @@ export class ViewStoriesModal implements OnInit {
       event.preventDefault();
     }
     this.slides.autoplay.stop();
-    const text = this.comment.value.trim();
-    this.comment.setValue("");
+    const text = this.textarea.value.trim();
+    this.textarea.value = "";
     this.story = await this.storySvc.commentStory(
       this.story.id,
       text,
@@ -537,7 +519,7 @@ export class ViewStoriesModal implements OnInit {
 
   async reply(comment: Story["comments"][0]) {
     if (comment.user.id !== this.auth.currentUserValue.id) {
-      this.comment.setValue(`@${comment.user.username} `);
+      this.textarea.value = `@${comment.user.username} `;
       this.setMention(comment.user.username);
     }
     this.commentFocus();
@@ -549,8 +531,9 @@ export class ViewStoriesModal implements OnInit {
   setMention(username: string) {
     this.usernames = [];
     this.inputAt = false;
-    this.comment.setValue(
-      this.comment.value.replace(this.mention, `@${username} `)
+    this.textarea.value = this.textarea.value.replace(
+      this.mention,
+      `@${username} `
     );
     this.userMentions = [...this.userMentions, username];
     this.commentFocus();
@@ -560,7 +543,7 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async setWriting(text: string) {
-    if (this.comment.value) {
+    if (this.textarea.value) {
       if (text.charAt(text.length - 1) == "@") {
         this.inputAt = true;
       }
@@ -577,7 +560,7 @@ export class ViewStoriesModal implements OnInit {
         }
         this.writing = true;
 
-        if (this.mention?.length > 3 && this.comment.value.length > 3) {
+        if (this.mention?.length > 3 && this.textarea.value.length > 3) {
           this.usernames = await this.userSvc.searchUsernames(
             this.mention.replace("@", "")
           );
@@ -643,6 +626,11 @@ export class ViewStoriesModal implements OnInit {
     return false;
   }
 
+  showPage(slug: string) {
+    this.close();
+    this.router.navigate(["/page", slug]);
+  }
+
   async close() {
     if (await this.modalCreate.getTop()) {
       await this.modalCreate.dismiss();
@@ -650,9 +638,5 @@ export class ViewStoriesModal implements OnInit {
     if (await this.thisModal.getTop()) {
       this.thisModal.dismiss();
     }
-  }
-
-  async ngOnDestroy() {
-    // await this.utils.toggleTransparent();
   }
 }

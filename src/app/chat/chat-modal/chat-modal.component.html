@@ -82,6 +82,10 @@
 </ion-header>
 
 <ion-content [scrollEvents]="true" (tap)="pressOptions = false">
+  <ion-infinite-scroll (ionInfinite)="loadChats($event)" position="top">
+    <ion-infinite-scroll-content loadingSpinner="dots">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
   <ion-list>
     <span
       class="bubble"
@@ -129,7 +133,7 @@
 
       <ion-item-sliding (ionDrag)="dragItem($event, message)">
         <ion-item-options side="start">
-          <ion-item-option color="#1f1f1f">
+          <ion-item-option color="#111111">
             <ion-icon
               slot="icon-only"
               name="arrow-undo-outline"
@@ -295,7 +299,9 @@
 
           <ion-card *ngIf="!message?.event">
             <div *ngIf="message.image">
-              <img (click)="openViewer(message)" [src]="message.image" />
+              <ion-thumbnail class="message-image">
+                <img (click)="openViewer(message)" [src]="message.image" />
+              </ion-thumbnail>
               <ion-note class="note-image" *ngIf="!message?.text">
                 <span *ngIf="message?.edited">{{ "editado" | i18n }}</span>
                 {{ message.time_creation | chatDate }}
@@ -387,10 +393,6 @@
       </ion-item-sliding>
     </span>
   </ion-list>
-  <ion-infinite-scroll (ionInfinite)="loadChats($event)" position="top">
-    <ion-infinite-scroll-content loadingSpinner="dots">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>
 <ion-footer
   *ngIf="

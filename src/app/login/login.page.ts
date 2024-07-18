@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -27,7 +27,7 @@ import { I18nService } from "../services/i18n.service";
   styleUrls: ["./login.page.scss"],
 })
 export class LoginPage {
-  public loginForm: UntypedFormGroup;
+  public loginForm: FormGroup;
   get usernameInput() {
     return this.loginForm.get("username");
   }
@@ -53,7 +53,7 @@ export class LoginPage {
     private alert: AlertController,
     private modalController: ModalController,
     private toast: ToastController,
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     private nav: NavService,
     public platform: Platform,
     private config: ConfigService,
@@ -65,11 +65,11 @@ export class LoginPage {
     }
 
     this.loginForm = fb.group({
-      username: new UntypedFormControl("", [
+      username: new FormControl("", [
         Validators.required,
         Validators.minLength(3),
       ]),
-      password: new UntypedFormControl("", [
+      password: new FormControl("", [
         this.insertPassword ? Validators.required : Validators.nullValidator,
         Validators.minLength(8),
       ]),

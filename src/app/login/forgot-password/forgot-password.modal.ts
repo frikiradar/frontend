@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -23,15 +23,15 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./forgot-password.modal.scss"],
 })
 export class ForgotPasswordModal {
-  public requestForm: UntypedFormGroup;
-  public passwordForm: UntypedFormGroup;
+  public requestForm: FormGroup;
+  public passwordForm: FormGroup;
 
   public step = 1;
   public clearPassword = false;
 
   constructor(
     navParams: NavParams,
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     private modalController: ModalController,
     private alert: AlertController,
     private auth: AuthService,
@@ -40,19 +40,19 @@ export class ForgotPasswordModal {
     private i18n: I18nService
   ) {
     this.requestForm = fb.group({
-      username: new UntypedFormControl("", [
+      username: new FormControl("", [
         Validators.required,
         Validators.minLength(3),
       ]),
     });
 
     this.passwordForm = fb.group({
-      code: new UntypedFormControl("", [
+      code: new FormControl("", [
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(6),
       ]),
-      password: new UntypedFormControl("", [
+      password: new FormControl("", [
         Validators.required,
         Validators.minLength(8),
       ]),

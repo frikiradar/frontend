@@ -29,7 +29,7 @@
         [color]="selected === 'chat' ? 'primary' : 'light'"
         [name]="'chatbubbles' + (selected === 'chat' ? '' : '-outline')"
       ></ion-icon>
-      <ion-badge color="primary" *ngIf="counters?.chats > 0"
+      <ion-badge color="primary" mode="ios" *ngIf="counters?.chats > 0"
         >{{ counters.chats }}</ion-badge
       >
     </ion-tab-button>

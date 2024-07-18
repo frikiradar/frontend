@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import { AlertController, ToastController } from "@ionic/angular";
@@ -20,13 +20,13 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./activate-account.page.scss"],
 })
 export class ActivateAccountPage {
-  public codeForm: UntypedFormGroup;
-  public emailForm: UntypedFormGroup;
+  public codeForm: FormGroup;
+  public emailForm: FormGroup;
   public user: User;
   public changingEmail = false;
 
   constructor(
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     private userSvc: UserService,
     private auth: AuthService,
     private alert: AlertController,
@@ -41,7 +41,7 @@ export class ActivateAccountPage {
     }
 
     this.codeForm = fb.group({
-      code: new UntypedFormControl("", [
+      code: new FormControl("", [
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(6),
@@ -49,7 +49,7 @@ export class ActivateAccountPage {
     });
 
     this.emailForm = fb.group({
-      email: new UntypedFormControl("", [
+      email: new FormControl("", [
         Validators.required,
         Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$"),
       ]),

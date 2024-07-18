@@ -24,7 +24,7 @@
         ><ion-icon name="add"></ion-icon
       ></ion-badge>
       <ion-label>
-        <h2>{{ "aadir-historia" | i18n }}</h2>
+        <h2>{{ "your-story" | i18n }}</h2>
       </ion-label>
     </ion-item>
     <ion-item
@@ -35,7 +35,12 @@
       (click)="showStories(story.user.id)"
     >
       <ion-avatar slot="start" [ngClass]="story?.viewed ? '' : 'not-view'">
-        <img [src]="story.image" [alt]="story.text" />
+        <img *ngIf="story.image" [src]="story.image" [alt]="story.text" />
+        <img
+          *ngIf="!story.image"
+          [src]="story.user.thumbnail"
+          [alt]="story.user.username"
+        />
       </ion-avatar>
       <ion-label>
         <h2>{{story.user.username}}</h2>

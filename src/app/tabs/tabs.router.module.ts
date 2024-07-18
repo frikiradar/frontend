@@ -45,6 +45,13 @@ const routes: Routes = [
                 (m) => m.ExplorePageModule
               ),
           },
+          {
+            path: "post/:id",
+            loadChildren: () =>
+              import("../explore/explore.module").then(
+                (m) => m.ExplorePageModule
+              ),
+          },
         ],
       },
       {

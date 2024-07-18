@@ -27,6 +27,20 @@ export class PageService {
     return (await this.rest.get(endpoint)) as Page[];
   }
 
+  async getOtherPages(limit?: number, page?: number) {
+    let endpoint = "";
+    if (limit) {
+      endpoint = `other-pages?limit=${limit}&page=${page}`;
+    } else {
+      endpoint = `other-pages`;
+    }
+    return (await this.rest.get(endpoint)) as Page[];
+  }
+
+  async searchPages(query: string) {
+    return (await this.rest.get(`pages-search?query=${query}`)) as Page[];
+  }
+
   async getPage(slug: Page["slug"]) {
     return (await this.rest.get(`page/${slug}`)) as Page;
   }

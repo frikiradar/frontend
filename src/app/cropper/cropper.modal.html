@@ -5,7 +5,7 @@
 </ion-header>
 <ion-content class="ion-padding">
   <image-cropper
-    style="background-color: black !important;"
+    style="background-color: black !important"
     class="full-center"
     [imageURL]="src"
     [imageChangedEvent]="imageChangedEvent"
@@ -18,40 +18,43 @@
     (imageCropped)="imageCropped($event)"
     (imageLoaded)="imageLoaded()"
     (loadImageFailed)="loadImageFailed()"
-    backgroundColor="#1f1f1f"
-    [transform]="transform"
+    backgroundColor="#000000"
+    allowMoveImage="true"
+    [(transform)]="transform"
   ></image-cropper>
   <!--<img [src]="croppedImage" />-->
 </ion-content>
 <ion-footer>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="cancel()">{{ "cancelar" | i18n }}</ion-button>
+      <ion-button shape="round" (click)="cancel()"
+        >{{ "cancelar" | i18n }}</ion-button
+      >
     </ion-buttons>
-    <ion-buttons id="transform">
+    <ion-buttons shape="round" id="transform">
       <ion-button (click)="rotateRight()">
         <ion-icon name="refresh"></ion-icon>
       </ion-button>
-      <ion-button (click)="flipH()">
+      <ion-button shape="round" (click)="flipH()">
         <ion-icon name="swap-horizontal"></ion-icon>
       </ion-button>
-      <ion-button (click)="flipV()">
+      <ion-button shape="round" (click)="flipV()">
         <ion-icon name="swap-vertical"></ion-icon>
       </ion-button>
-      <ion-button (click)="zoomIn()">
+      <ion-button shape="round" (click)="zoomIn()">
         <ion-icon name="add-circle-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="zoomOut()">
+      <ion-button shape="round" (click)="zoomOut()">
         <ion-icon name="remove-circle-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="toggleAspect()" *ngIf="!square">
+      <ion-button shape="round" (click)="toggleAspect()" *ngIf="!square">
         <ion-icon
           [src]="maintainAspectRatio ? '/assets/icon/crop_free_white_24dp.svg' : '/assets/icon/crop_square_white_24dp.svg'"
         ></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="ok()">{{ "ok" | i18n }}</ion-button>
+      <ion-button shape="round" (click)="ok()">{{ "ok" | i18n }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>

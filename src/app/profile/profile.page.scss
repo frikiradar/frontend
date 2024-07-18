@@ -2,7 +2,8 @@ ion-header ion-toolbar {
   position: absolute;
   --background: transparent !important;
 
-  .back {
+  .back,
+  .options {
     background: #2f2f2f87;
     height: 50px;
     width: 50px;
@@ -12,6 +13,103 @@ ion-header ion-toolbar {
   ion-icon {
     color: white !important;
   }
+}
+
+ion-card {
+  height: 600px;
+  --background: transparent;
+  overflow: auto;
+  margin: 0;
+  border-radius: 0 0 50px 50px;
+}
+
+ion-card-content {
+  p,
+  ion-label {
+    color: white !important;
+  }
+  white-space: pre-wrap;
+
+  padding: 0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding-bottom: 20px;
+  padding-top: 40px;
+
+  z-index: 1;
+  background: rgba(0, 0, 0, 0);
+  background: -moz-linear-gradient(
+    top,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.27) 27%,
+    rgba(19, 19, 19, 1) 100%
+  );
+  background: -webkit-gradient(
+    left top,
+    left bottom,
+    color-stop(0%, rgba(0, 0, 0, 0)),
+    color-stop(27%, rgba(0, 0, 0, 0.27)),
+    color-stop(100%, rgba(19, 19, 19, 1))
+  );
+  background: -webkit-linear-gradient(
+    top,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.27) 27%,
+    rgba(19, 19, 19, 1) 100%
+  );
+  background: -o-linear-gradient(
+    top,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.27) 27%,
+    rgba(19, 19, 19, 1) 100%
+  );
+  background: -ms-linear-gradient(
+    top,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.27) 27%,
+    rgba(19, 19, 19, 1) 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.27) 27%,
+    rgba(19, 19, 19, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#131313', GradientType=0 );
+}
+
+.background-image {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  overflow-y: hidden;
+
+  img {
+    object-fit: cover !important;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+swiper-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.images-slide::part(scrollbar) {
+  position: absolute;
+  left: 25px;
+  height: 5px;
+  width: 85%;
+  bottom: 110px;
 }
 
 swiper-slide img {
@@ -30,16 +128,11 @@ ion-list {
     color: var(--ion-color-light);
     margin-right: 15px;
   }
-
-  &.resume ion-label {
-    --color: var(--ion-color-light);
-    white-space: pre-wrap;
-  }
 }
 
 .match {
   position: absolute;
-  margin-top: -70px;
+  margin-top: -94px;
   color: white;
   font-size: 14px;
   border: 2px solid white;
@@ -59,9 +152,6 @@ ion-grid {
 }
 
 .resume {
-  padding-top: 0;
-  padding-bottom: 0;
-
   ion-badge {
     margin-left: 5px;
     border-radius: 15px;
@@ -71,18 +161,22 @@ ion-grid {
     padding: 0;
   }
 
-  ion-label {
-    color: var(--ion-color-light);
-    p {
-      color: #666666;
+  ion-chip {
+    background: transparent;
+    border: 1px solid var(--ion-color-light);
+    ion-label {
+      color: var(--ion-color-light) !important;
+      min-height: 15px;
     }
+  }
 
+  ion-label {
     .name {
       font-size: 24px;
     }
 
     .age {
-      font-size: 20px;
+      font-size: 16px;
     }
 
     ion-icon {
@@ -120,9 +214,10 @@ ion-item {
 
 #stories {
   position: absolute;
-  margin-top: -75px;
-  left: 15px;
   z-index: 1;
+  top: 420px;
+  text-align: right;
+  right: 8px;
 
   ion-avatar img {
     border: 2px solid white;
@@ -144,6 +239,7 @@ ion-item {
   background: #2f2f2fb8;
   border-radius: 50px;
   text-transform: none;
+  height: 50px;
 
   ion-icon {
     color: white !important;

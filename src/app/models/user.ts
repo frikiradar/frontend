@@ -46,6 +46,7 @@ export interface User {
   block: boolean;
   hide: boolean;
   chat: boolean;
+  viewed: boolean;
 
   banned: boolean;
   ban_reason?: string;

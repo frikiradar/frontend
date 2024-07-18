@@ -5,6 +5,9 @@ import { IonInput, NavController, ToastController } from "@ionic/angular";
 import { User } from "../models/user";
 import { UserService } from "../services/user.service";
 import { I18nService } from "../services/i18n.service";
+import { Page } from "../models/page";
+import { PageService } from "../services/page.service";
+import { Config, ConfigService } from "../services/config.service";
 
 @Component({
   selector: "app-search",
@@ -15,13 +18,20 @@ export class SearchPage implements OnInit {
   @ViewChild("searchBar", { static: true })
   searchBar: IonInput;
 
-  order: "distance" | "match" = "distance";
+  public pages: Page[];
+  public otherPages: Page[];
+  private notFilteredPages: Page[];
+  private notFilteredOtherPages: Page[];
+
+  public loading = true;
   query: string;
   public page = 1;
   users: User[];
   showSkeleton = false;
 
   constructor(
+    private pagesSvc: PageService,
+    private config: ConfigService,
     public userSvc: UserService,
     private router: Router,
     private route: ActivatedRoute,
@@ -35,10 +45,23 @@ export class SearchPage implements OnInit {
       this.query = this.route.snapshot.paramMap.get("query");
       this.searchBar.value = this.query;
       this.search();
+    } else {
+      this.getPages();
     }
+
+    this.loading = false;
+
     setTimeout(() => {
       this.searchBar.setFocus();
     }, 250);
+  }
+
+  async getPages() {
+    this.pages = await this.pagesSvc.getPages();
+    this.notFilteredPages = this.pages;
+    this.config.set("pages", this.pages);
+    this.otherPages = await this.pagesSvc.getOtherPages(15, 1);
+    this.notFilteredOtherPages = this.otherPages;
   }
 
   async search(event?: any, addpage = false) {
@@ -51,7 +74,7 @@ export class SearchPage implements OnInit {
       }
       let users = await this.userSvc.searchUsers(
         this.query.trim(),
-        this.order,
+        "distance",
         this.page
       );
 
@@ -100,10 +123,40 @@ export class SearchPage implements OnInit {
     }
   }
 
-  changeOrder(order: "distance" | "match") {
-    this.order = order;
-    this.page = 1;
-    this.search();
+  async addOtherPages(event: any) {
+    if (!this.query) {
+      this.page++;
+      const otherPages = await this.pagesSvc.getOtherPages(15, this.page);
+      this.otherPages = [...this.otherPages, ...otherPages];
+
+      if (event) {
+        event.target.complete();
+
+        if (otherPages.length < 15) {
+          event.target.disabled = true;
+        }
+      }
+    }
+  }
+
+  async filterPages(value: string) {
+    if (value) {
+      this.pages = this.notFilteredPages.filter((p) =>
+        p.name.toLowerCase().includes(value.toLowerCase())
+      );
+      this.otherPages = this.notFilteredOtherPages.filter((p) =>
+        p.name.toLowerCase().includes(value.toLowerCase())
+      );
+
+      let searchPages = await this.pagesSvc.searchPages(value);
+      searchPages = searchPages.filter(
+        (p) => !this.otherPages.find((op) => op.id === p.id)
+      );
+      this.otherPages = [...this.otherPages, ...searchPages];
+    } else {
+      this.pages = this.notFilteredPages;
+      this.otherPages = this.notFilteredOtherPages;
+    }
   }
 
   newSearch(query: string) {
@@ -119,6 +172,10 @@ export class SearchPage implements OnInit {
       await event.target.close();
       this.showProfile(id);
     }
+  }
+
+  async showPage(slug: Page["slug"]) {
+    this.router.navigate(["/page", slug]);
   }
 
   back() {

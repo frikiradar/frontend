@@ -1,36 +1,36 @@
-<ion-header>
+<ion-header class="ion-no-border">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-progress-bar
+    type="determinate"
+    color="dark"
+    *ngIf="!loading"
+  ></ion-progress-bar>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="back()">
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-title>{{ "search" | i18n }}</ion-title>
+  </ion-toolbar>
+</ion-header>
 
+<ion-content>
+  <ion-item id="search-input" lines="none">
+    <ion-icon slot="start" name="search-outline"></ion-icon>
     <ion-input
       aria-label
       type="search"
       debounce="500"
-      placeholder="{{ 'busca-gustos-username' | i18n}}"
+      placeholder="{{ 'busca-intereses' | i18n}}"
+      (ionInput)="filterPages($event.target.value)"
       (keyup.enter)="newSearch($event.target.value)"
       spellcheck="false"
       color="light"
       clearInput
       #searchBar
     ></ion-input>
-  </ion-toolbar>
-  <ion-segment (ionChange)="changeOrder($event.detail.value)" value="distance">
-    <ion-segment-button layout="icon-start" value="distance">
-      <ion-label>{{ "distancia" | i18n }}</ion-label>
-      <ion-icon name="navigate-outline"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button layout="icon-start" value="match">
-      <ion-label>{{ "afinidad" | i18n }}</ion-label>
-      <ion-icon name="heart-outline"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
-</ion-header>
-
-<ion-content>
+  </ion-item>
   <div *ngIf="users?.length || showSkeleton; else noUsers">
     <ion-list *ngIf="showSkeleton; else radarItems">
       <ion-item *ngFor="let i of [].constructor(8)" lines="full">
@@ -104,10 +104,46 @@
     </ng-template>
   </div>
   <ng-template #noUsers>
-    <div class="full-center ion-padding">
-      <ion-icon name="search-outline"></ion-icon>
-      <h2>{{ "sin-resultados" | i18n }}</h2>
-      <p>{{ "cambia-palabras-bsqueda-para-mejorar" | i18n }}</p>
+    <div id="my-interests" class="ion-padding" *ngIf="pages?.length">
+      <h2>{{ "my-interests" | i18n }}</h2>
+      <ion-label class="ion-text-wrap">
+        <ion-chip *ngFor="let page of pages" color="secondary">
+          <ion-avatar>
+            <img
+              [src]="page.cover"
+              [alt]="page.name"
+              default="/assets/img/pages/default-games-page.jpg"
+            />
+          </ion-avatar>
+          <ion-label (click)="showPage(page.slug)">{{ page.name }}</ion-label>
+          <ion-note>{{ page.likes }}</ion-note>
+        </ion-chip>
+      </ion-label>
+    </div>
+
+    <div id="other-interests" class="ion-padding" *ngIf="otherPages?.length">
+      <h2>{{ "explore-interests" | i18n }}</h2>
+      <ion-label class="ion-text-wrap">
+        <ion-chip *ngFor="let page of otherPages" color="secondary">
+          <ion-avatar>
+            <img
+              [src]="page.cover"
+              [alt]="page.name"
+              default="/assets/img/pages/default-games-page.jpg"
+            />
+          </ion-avatar>
+          <ion-label (click)="showPage(page.slug)">{{ page.name }}</ion-label>
+          <ion-note>{{ page.likes }}</ion-note>
+        </ion-chip>
+        <ion-infinite-scroll
+          threshold="50%"
+          (ionInfinite)="addOtherPages($event)"
+          position="bottom"
+        >
+          <ion-infinite-scroll-content loadingSpinner="dots">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-label>
     </div>
   </ng-template>
 </ion-content>

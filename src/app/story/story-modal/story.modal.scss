@@ -1,18 +1,106 @@
-ion-thumbnail {
-    width: auto;
-    height: auto;
-    --border-radius: 15px;
+ion-toolbar {
+  --background: #00000060;
+
+  ion-icon,
+  ion-label {
+    color: white !important;
+  }
+}
+
+ion-header {
+  --background: transparent;
 }
 
 ion-footer {
-    ion-icon {
-        margin-right: 5px;
-    }
+  --background: transparent;
+
+  ion-icon {
+    margin-right: 5px;
+  }
 }
 
-#usernames {
+ion-content {
+  --background: black;
+  --offset-bottom: 60px !important;
+  --offset-top: 60px !important;
+}
+
+.textarea-container {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.publish-button ion-label {
+  font-weight: bold;
+}
+
+#story-textarea {
+  padding: 30px;
+  text-align: center;
+  font-size: 28px;
+  --placeholder-color: #cfcfcf99 !important;
+
+  ::ng-deep .textarea-highlight {
+    background: transparent;
+  }
+
+  &.light {
+    color: #ffffff !important;
+  }
+
+  &.dark {
+    color: #000000 !important;
+  }
+}
+
+#image-preview {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  ion-button {
     position: absolute;
-    margin-top: -180px;
-    right: 60px;
-    left: 60px;
+    right: 25px;
+    margin-top: 10px;
+  }
+
+  ion-thumbnail {
+    padding: 20px;
+  }
+}
+
+#image-textarea {
+  --color: white !important;
+  color: white !important;
+}
+
+ion-thumbnail {
+  width: auto;
+  height: auto;
+  --border-radius: 15px;
+}
+
+#emoji-picker-container {
+  z-index: 10;
+}
+
+ion-chip.slug {
+  background: transparent;
+  border: 1px solid white;
+  ion-label {
+    color: white !important;
+    min-height: 15px;
+  }
+
+  ion-note {
+    margin-left: 5px;
+  }
 }

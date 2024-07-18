@@ -1,11 +1,10 @@
-::ng-deep {
-    image-cropper .overlay{
-        outline:none !important;
-    }
+#transform {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
 }
 
-#transform {
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
+image-cropper {
+  --cropper-outline-color: black;
+  --cropper-overlay-color: black;
 }

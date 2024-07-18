@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   Validators,
 } from "@angular/forms";
 import { AlertController, NavController } from "@ionic/angular";
@@ -16,17 +16,17 @@ import { I18nService } from "src/app/services/i18n.service";
   styleUrls: ["./two-step.page.scss"],
 })
 export class TwoStepPage implements OnInit {
-  public codeForm: UntypedFormGroup;
+  public codeForm: FormGroup;
 
   constructor(
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     private auth: AuthService,
     private alert: AlertController,
     private nav: NavController,
     private i18n: I18nService
   ) {
     this.codeForm = fb.group({
-      code: new UntypedFormControl("", [
+      code: new FormControl("", [
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(6),
