@@ -89,6 +89,11 @@ export class ExplorePage {
   }
 
   async getMorePosts(event) {
+    if (this.posts.length < 15) {
+      event.target.disabled = true;
+      return;
+    }
+
     this.page++;
     const posts = await this.storySvc.getPosts(this.page);
     this.posts = [...this.posts, ...posts];

@@ -326,6 +326,9 @@ export class RadarPage {
   async initSwiper() {
     const swiperContainer: SwiperContainer =
       document.querySelector("#radar-slide");
+    if (!swiperContainer) {
+      return;
+    }
     Object.assign(swiperContainer, this.slideOpts);
     swiperContainer.initialize();
     this.slides = swiperContainer.swiper;

@@ -93,10 +93,12 @@ export class PostComponent {
     }, 1000);
   }
 
-  async showProfile() {
-    if (this.post.user.id !== 1) {
-      this.router.navigate(["/profile", this.post.user.id]);
+  async showProfile(id?: number) {
+    if (id !== 1 || this.post.user.id !== 1) {
+      this.router.navigate(["/profile", id ?? this.post.user.id]);
     }
+
+    this.modalController.dismiss();
   }
 
   async openViewer() {
@@ -183,17 +185,19 @@ export class PostComponent {
 
   commentFocus(event?: CustomEvent) {
     event?.stopPropagation();
-    if (event) {
-      const textarea = event.target as unknown as IonTextarea;
-      textarea.getInputElement().then((a) => a.blur());
-    }
-    this.showComments = true;
     setTimeout(() => {
-      this.textarea.setFocus();
-      if (isPlatform("capacitor")) {
-        Keyboard.show();
-      }
-    }, 500);
+      this.textarea.getInputElement().then((inputElement) => {
+        inputElement.blur();
+        setTimeout(() => {
+          inputElement.focus();
+          const length = inputElement.value.length;
+          inputElement.setSelectionRange(length, length);
+          if (isPlatform("capacitor")) {
+            Keyboard.show();
+          }
+        }, 100);
+      });
+    }, 100);
   }
 
   showViewsSheet(event: Event) {
@@ -208,6 +212,8 @@ export class PostComponent {
   showCommentsSheet(event: Event) {
     event.stopPropagation();
     this.showComments = true;
+
+    this.commentFocus();
   }
 
   closeCommentsSheet() {

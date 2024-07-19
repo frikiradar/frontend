@@ -21,27 +21,60 @@ export class StoryService {
   ) {}
 
   async getStory(id: Story["id"]) {
-    return (await this.rest.get(`story/${id}`)) as Story;
+    const story = (await this.rest.get(`story/${id}`)) as Story;
+    return this.setLikes(story);
   }
 
   async getUserStories(id: User["id"]) {
-    return (await this.rest.get(`user-stories/${id}`)) as Story[];
+    const stories = (await this.rest.get(`user-stories/${id}`)) as Story[];
+
+    stories.map((p) => {
+      p = this.setLikes(p);
+    });
+
+    return stories;
   }
 
   async getStoriesSlug(slug: string) {
-    return (await this.rest.get(`stories-slug/${slug}`)) as Story[];
+    const stories = (await this.rest.get(`stories-slug/${slug}`)) as Story[];
+
+    stories.map((p) => {
+      p = this.setLikes(p);
+    });
+
+    return stories;
   }
 
   async getStories() {
-    return (await this.rest.get("stories")) as Story[];
+    const stories = (await this.rest.get("stories")) as Story[];
+
+    stories.map((p) => {
+      p = this.setLikes(p);
+    });
+
+    return stories;
   }
 
   async getPosts(page = 1) {
-    return (await this.rest.get(`posts?page=${page}`)) as Story[];
+    const posts = (await this.rest.get(`posts?page=${page}`)) as Story[];
+
+    posts.map((p) => {
+      p = this.setLikes(p);
+    });
+
+    return posts;
   }
 
   async getPostsSlug(slug: string, page = 1) {
-    return (await this.rest.get(`posts-slug/${slug}?page=${page}`)) as Story[];
+    const posts = (await this.rest.get(
+      `posts-slug/${slug}?page=${page}`
+    )) as Story[];
+
+    posts.map((p) => {
+      p = this.setLikes(p);
+    });
+
+    return posts;
   }
 
   orderStories(stories: Story[]) {
@@ -52,6 +85,21 @@ export class StoryService {
       );
     });
     return stories;
+  }
+
+  setLikes(story: Story) {
+    story.viewStories.map(
+      (v) =>
+        (v.user.like = story.likeStories.some((l) => l.user.id === v.user.id))
+    );
+
+    story.comments.map((c) => {
+      if (c.likes.some((l) => l.id === this.auth.currentUserValue.id)) {
+        c.like = true;
+      }
+    });
+
+    return story;
   }
 
   groupStories(stories: Story[]) {

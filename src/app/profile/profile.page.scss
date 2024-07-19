@@ -225,6 +225,7 @@ ion-item {
 }
 
 #description {
+  white-space: pre-wrap;
   margin: 10px 0;
   ion-icon {
     align-self: flex-start;

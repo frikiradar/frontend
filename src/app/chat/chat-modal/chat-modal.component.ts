@@ -523,6 +523,17 @@ export class ChatModalComponent implements OnInit {
 
   openUrl(event: any) {
     this.urlSvc.openUrl(event);
+
+    if (
+      event.srcElement.href &&
+      (event.target.className.includes("mention") ||
+        event.target.className.includes("hashtag"))
+    ) {
+      if (this.modalController.getTop()) {
+        this.modalController.dismiss();
+      }
+    }
+
     return false;
   }
 

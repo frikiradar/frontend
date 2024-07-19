@@ -64,6 +64,7 @@ export class PagePage {
     } else {
       this.page = await this.pageSvc.getPublicPage(slug);
     }
+
     this.searchProfiles();
 
     this.meta.addTags([

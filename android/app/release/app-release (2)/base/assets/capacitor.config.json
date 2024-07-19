@@ -1,0 +1,48 @@
+{
+	"appId": "com.frikiradar.app",
+	"appName": "frikiradar",
+	"webDir": "www",
+	"server": {
+		"hostname": "frikiradar.app",
+		"androidScheme": "https"
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": true,
+			"launchShowDuration": 1000,
+			"backgroundColor": "#111111",
+			"androidScaleType": "CENTER_CROP",
+			"splashFullScreen": false,
+			"splashImmersive": false,
+			"showSpinner": true,
+			"spinnerColor": "#ffffff"
+		},
+		"CodePush": {
+			"IOS_DEPLOY_KEY": "FdlQxj1MHcOlgOU1nk1I93uR_32hoXJV9KZeX",
+			"ANDROID_DEPLOY_KEY": "GrBUobh6JMEckfvM22iN2XxNe3l7l10TDpmIz",
+			"SERVER_URL": "https://codepush.appcenter.ms/"
+		},
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		},
+		"FirebaseMessaging": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		},
+		"GoogleAuth": {
+			"scopes": [
+				"profile",
+				"email"
+			],
+			"clientId": "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com",
+			"androidClientId": "431880368798-n70q3n4gglns667e49e40p26dc4lv0g5.apps.googleusercontent.com"
+		}
+	}
+}

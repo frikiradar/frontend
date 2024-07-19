@@ -27,9 +27,8 @@
       </ion-item>
     </ion-card-header>
     <ion-card-content>
-      <ion-thumbnail>
+      <ion-thumbnail *ngIf="post.image">
         <ion-img
-          *ngIf="post.image"
           [src]="post?.image"
           [alt]="post?.text"
           (click)="openViewer()"
