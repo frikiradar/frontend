@@ -6,7 +6,6 @@ import { Meta, Title } from "@angular/platform-browser";
 import { Page } from "../../models/page";
 import { Story } from "../../models/story";
 import { Tag } from "../../models/tags";
-import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
 import { PageService } from "../../services/page.service";
 import { StoryService } from "../../services/story.service";
@@ -25,20 +24,11 @@ export class PagePage {
   public page: Page;
   public tag: Tag;
   public stories: Story[];
+  public posts: Story[];
   public showDescription = false;
-  public events: Event[];
   public scrollPage = 1;
   public showSkeleton = false;
-  public users: User[];
-
-  public storiesOpts = {
-    slidesPerView: 6.5,
-    breakpoints: {
-      1024: {
-        slidesPerView: 10.5,
-      },
-    },
-  };
+  public loading = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,12 +50,13 @@ export class PagePage {
     if (this.auth.currentUserValue) {
       this.page = await this.pageSvc.getPage(slug);
       this.tag = this.auth.currentUserValue.tags.find((t) => t.slug === slug);
-      this.getStories();
+      await this.getStories();
+      await this.getPosts();
     } else {
       this.page = await this.pageSvc.getPublicPage(slug);
     }
 
-    this.searchProfiles();
+    this.loading = false;
 
     this.meta.addTags([
       {
@@ -91,6 +82,43 @@ export class PagePage {
   async getStories() {
     const stories = await this.storySvc.getStoriesSlug(this.page.slug);
     this.stories = this.storySvc.orderStories(stories);
+  }
+
+  async getPosts() {
+    this.posts = await this.storySvc.getPostsSlug(
+      this.page.slug,
+      this.scrollPage
+    );
+  }
+
+  async getMorePosts(event) {
+    if (this.posts?.length < 15) {
+      event.target.disabled = true;
+      return;
+    }
+
+    this.scrollPage++;
+    const posts = await this.storySvc.getPosts(this.scrollPage);
+    this.posts = [...posts, ...this.posts];
+
+    event.target.complete();
+
+    if (posts.length === 0) {
+      event.target.disabled = true;
+      return;
+    }
+  }
+
+  removePost(post: Story) {
+    this.posts = this.posts.filter((p) => p.id !== post.id);
+  }
+
+  trackByPostId(index: number, post: any): any {
+    return post.id;
+  }
+
+  search() {
+    this.router.navigate(["/search", this.page.name]);
   }
 
   async openViewer() {
@@ -164,42 +192,6 @@ export class PagePage {
     }
   }
 
-  search() {
-    this.router.navigate(["/search", this.page.name]);
-  }
-
-  async searchProfiles(event?: any, addpage = false) {
-    if (addpage) {
-      this.scrollPage++;
-    }
-    if (this.scrollPage === 1) {
-      this.showSkeleton = true;
-    }
-    let users = await this.userSvc.searchUsersBySlug(
-      this.page.slug,
-      "distance",
-      this.scrollPage
-    );
-
-    users = users.filter((u) => !u.hide);
-
-    this.showSkeleton = false;
-    this.users =
-      this.scrollPage === 1 ? (this.users = users) : [...this.users, ...users];
-
-    if (event) {
-      event.target.complete();
-
-      if (users.length < 15) {
-        event.target.disabled = true;
-      }
-    }
-  }
-
-  async showProfile(id: User["id"]) {
-    this.router.navigate(["/profile", id]);
-  }
-
   async newPost() {
     const modal = await this.modalController.create({
       component: PostModal,
@@ -211,6 +203,15 @@ export class PagePage {
 
     await modal.present();
     await modal.onDidDismiss();
+  }
+
+  async refresh(event) {
+    this.loading = true;
+    this.scrollPage = 1;
+    await this.getStories();
+    await this.getPosts();
+    event.target.complete();
+    this.loading = false;
   }
 
   back() {

@@ -20,6 +20,9 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-item lines="none" detail="false" class="section-header">
     <ion-label color="light">
       <h2 class="section">
@@ -83,7 +86,7 @@
     </ion-list>
   </section>
 
-  <section id="posts" *ngIf="posts?.length">
+  <section id="posts">
     <ion-item lines="none" detail="false" class="section-header">
       <ion-label color="light">
         <h2 class="section">
@@ -91,12 +94,13 @@
         </h2>
       </ion-label>
     </ion-item>
+
     <app-post
-      *ngFor="let post of posts"
+      *ngFor="let post of posts; trackBy: trackByPostId"
       [post]="post"
       (deletePost)="removePost($event)"
     ></app-post>
-    <ion-infinite-scroll (ionInfinite)="getMorePosts($event)" position="top">
+    <ion-infinite-scroll (ionInfinite)="getMorePosts($event)" position="bottom">
       <ion-infinite-scroll-content loadingSpinner="dots">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>

@@ -27,6 +27,13 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="refresh($event)"
+    *ngIf="auth.currentUserValue"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="user || loading; else noUser">
     <ion-list *ngIf="loading">
       <ion-item lines="none">
@@ -105,19 +112,6 @@
           </ion-item>
         </ion-card-content>
       </ion-card>
-      <div *ngIf="story" id="stories">
-        <ion-avatar
-          [ngClass]="story.viewed ? '' : 'not-view'"
-          (click)="showStories(story.user.id)"
-        >
-          <img *ngIf="story.image" [src]="story.image" [alt]="story?.text" />
-          <img
-            *ngIf="!story.image"
-            [src]="story.user.thumbnail"
-            [alt]="story.user.username"
-          />
-        </ion-avatar>
-      </div>
 
       <div
         *ngIf="user.match && user.id !== auth.currentUserValue.id"
@@ -128,6 +122,16 @@
 
       <div class="ion-padding">
         <ion-list class="resume">
+          <div
+            *ngIf="auth.currentUserValue && (auth.currentUserValue?.id == user?.id || stories?.length)"
+          >
+            <app-story-slider
+              [stories]="stories"
+              [slug]="page.slug"
+              (refresh)="getStories()"
+            ></app-story-slider>
+          </div>
+
           <ion-item
             lines="none"
             id="kokoro"
@@ -239,22 +243,22 @@
 
           <h2>{{ "buscando" | i18n }}</h2>
           <ion-item *ngIf="user?.connection?.length" lines="none">
-            <ion-icon name="search-outline"></ion-icon>
+            <ion-icon name="search"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip *ngFor="let connection of connections">
                 <ion-label>{{ connection }}</ion-label>
               </ion-chip>
-              <ion-chip *ngFor="let lovegender of user.lovegender">
+              <ion-chip *ngFor="let lovegender of lovegenders">
                 <ion-label>{{ lovegender | i18n }}</ion-label>
               </ion-chip>
             </ion-label>
           </ion-item>
         </ion-list>
 
-        <h2>{{ "interests" | i18n}}</h2>
+        <h2 *ngIf="tags?.length">{{ "interests" | i18n}}</h2>
         <ion-list class="tags">
           <ion-item *ngIf="getTagsCategory('games')?.length" lines="none">
-            <ion-icon name="game-controller-outline"></ion-icon>
+            <ion-icon name="game-controller"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('games')"
@@ -265,7 +269,7 @@
             </ion-label>
           </ion-item>
           <ion-item *ngIf="getTagsCategory('films')?.length" lines="none">
-            <ion-icon name="film-outline"></ion-icon>
+            <ion-icon name="film"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('films')"
@@ -276,7 +280,7 @@
             </ion-label>
           </ion-item>
           <ion-item *ngIf="getTagsCategory('books')?.length" lines="none">
-            <ion-icon name="book-outline"></ion-icon>
+            <ion-icon name="book"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('books')"
@@ -287,7 +291,7 @@
             </ion-label>
           </ion-item>
           <ion-item *ngIf="getTagsCategory('role')?.length" lines="none">
-            <ion-icon name="dice-outline"></ion-icon>
+            <ion-icon name="dice"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('role')"
@@ -298,7 +302,7 @@
             </ion-label>
           </ion-item>
           <ion-item *ngIf="getTagsCategory('music')?.length" lines="none">
-            <ion-icon name="headset-outline"></ion-icon>
+            <ion-icon name="headset"></ion-icon>
             <ion-label class="ion-text-wrap">
               <ion-chip
                 *ngFor="let tag of getTagsCategory('music')"
@@ -320,7 +324,21 @@
             </ion-label>
           </ion-item>
         </ion-list>
+
+        <h2 *ngIf="posts?.length">{{ "posts" | i18n}}</h2>
       </div>
+      <app-post
+        *ngFor="let post of posts; trackBy: trackByPostId"
+        [post]="post"
+        (deletePost)="removePost($event)"
+      ></app-post>
+      <ion-infinite-scroll
+        (ionInfinite)="getMorePosts($event)"
+        position="bottom"
+      >
+        <ion-infinite-scroll-content loadingSpinner="dots">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </div>
   </div>
   <ng-template #noUser>
@@ -372,3 +390,14 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>
+
+<ion-fab
+  slot="fixed"
+  horizontal="end"
+  vertical="bottom"
+  *ngIf="auth.currentUserValue?.id == user?.id"
+>
+  <ion-fab-button color="primary" (click)="newPost()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

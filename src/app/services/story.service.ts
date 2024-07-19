@@ -77,6 +77,18 @@ export class StoryService {
     return posts;
   }
 
+  async getUserPosts(id: User["id"], page = 1) {
+    const posts = (await this.rest.get(
+      `user-posts/${id}?page=${page}`
+    )) as Story[];
+
+    posts.map((p) => {
+      p = this.setLikes(p);
+    });
+
+    return posts;
+  }
+
   orderStories(stories: Story[]) {
     stories.sort((a, b) => {
       return (

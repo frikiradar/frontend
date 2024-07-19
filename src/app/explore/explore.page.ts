@@ -96,7 +96,7 @@ export class ExplorePage {
 
     this.page++;
     const posts = await this.storySvc.getPosts(this.page);
-    this.posts = [...this.posts, ...posts];
+    this.posts = [...posts, ...this.posts];
 
     event.target.complete();
 
@@ -104,19 +104,6 @@ export class ExplorePage {
       event.target.disabled = true;
       return;
     }
-  }
-
-  async newStory() {
-    const modal = await this.modalController.create({
-      component: StoryModal,
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "vertical-modal",
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-    await this.getStories();
   }
 
   async newPost() {
@@ -150,5 +137,18 @@ export class ExplorePage {
 
   removePost(post: Story) {
     this.posts = this.posts.filter((p) => p.id !== post.id);
+  }
+
+  trackByPostId(index: number, post: any): any {
+    return post.id;
+  }
+
+  async refresh(event) {
+    this.loading = true;
+    this.page = 1;
+    await this.getStories();
+    await this.getPosts();
+    event.target.complete();
+    this.loading = false;
   }
 }

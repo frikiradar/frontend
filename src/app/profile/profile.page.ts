@@ -33,6 +33,7 @@ import { AdService } from "../services/ad.service";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 import { I18nService } from "../services/i18n.service";
 import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
+import { PostModal } from "../post/post-modal/post.modal";
 
 @Component({
   selector: "app-profile",
@@ -43,7 +44,6 @@ import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
 export class ProfilePage {
   public user: User;
   public stories: Story[];
-  public story: Story;
   public likes: { delivered: Like[]; received: Like[] } = {
     delivered: undefined,
     received: undefined,
@@ -54,6 +54,9 @@ export class ProfilePage {
   public slides: Swiper;
   public languages: string[];
   public connections: string[];
+  public lovegenders: string[];
+  public posts: Story[] = [];
+  private page = 1;
 
   public sliderOpts: SwiperOptions = {
     keyboard: true,
@@ -128,8 +131,8 @@ export class ProfilePage {
 
       this.loading = false;
       if (this.auth.currentUserValue) {
-        this.stories = await this.storiesSvc.getUserStories(this.user.id);
-        this.story = this.stories[this.stories.length - 1];
+        await this.getStories();
+        await this.getPosts();
       }
 
       if (this.user.languages) {
@@ -144,6 +147,19 @@ export class ProfilePage {
           return this.i18n.translate(c);
         });
       }
+
+      if (this.user.lovegender) {
+        if (
+          !this.user.lovegender.length ||
+          this.user.lovegender.length >= this.userSvc.getGenders().length
+        ) {
+          this.lovegenders = [this.i18n.translate("any-gender")];
+        } else {
+          this.lovegenders = this.user.lovegender.map((l) => {
+            return this.i18n.translate(l);
+          });
+        }
+      }
     } catch (e) {
       this.loading = false;
     }
@@ -151,6 +167,28 @@ export class ProfilePage {
     await this.utils.delay(500);
     this.initSwiper();
     this.ad.resetReward();
+  }
+
+  async getStories() {
+    const stories = await this.storiesSvc.getUserStories(this.user.id);
+    this.stories = this.storiesSvc.orderStories(stories);
+  }
+
+  async getPosts() {
+    this.posts = await this.storiesSvc.getUserPosts(this.user.id);
+  }
+
+  async newPost() {
+    const modal = await this.modalController.create({
+      component: PostModal,
+      keyboardClose: true,
+      showBackdrop: true,
+      cssClass: "vertical-modal",
+    });
+
+    await modal.present();
+    await modal.onDidDismiss();
+    await this.getPosts();
   }
 
   initSwiper() {
@@ -429,6 +467,42 @@ export class ProfilePage {
       showBackdrop: true,
     });
     return await modal.present();
+  }
+
+  async getMorePosts(event) {
+    if (this.posts?.length < 15) {
+      event.target.disabled = true;
+      return;
+    }
+
+    this.page++;
+    const posts = await this.storiesSvc.getPosts(this.page);
+    this.posts = [...posts, ...this.posts];
+
+    event.target.complete();
+
+    if (posts.length === 0) {
+      event.target.disabled = true;
+      return;
+    }
+  }
+
+  removePost(post: Story) {
+    this.posts = this.posts.filter((p) => p.id !== post.id);
+  }
+
+  trackByPostId(index: number, post: any): any {
+    return post.id;
+  }
+
+  async refresh(event) {
+    this.loading = true;
+    this.page = 1;
+    this.user = await this.userSvc.getUser(this.user.id);
+    await this.getStories();
+    await this.getPosts();
+    event.target.complete();
+    this.loading = false;
   }
 
   back() {

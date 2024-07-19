@@ -626,8 +626,8 @@ export class ChatModalComponent implements OnInit {
     this.router.navigate(["/event", event.id]);
   }
 
-  trackByFn(index, item) {
-    return item.time_creation; // o cualquier propiedad única en tus objetos de mensaje
+  trackByFn(index: number, chat: Chat) {
+    return chat.time_creation; // o cualquier propiedad única en tus objetos de mensaje
   }
 
   async back() {

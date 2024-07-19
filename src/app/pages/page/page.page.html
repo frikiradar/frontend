@@ -1,5 +1,14 @@
 <ion-content [fullscreen]="true" *ngIf="page">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-header class="ion-no-border">
+    <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+    <ion-progress-bar
+      type="determinate"
+      color="dark"
+      *ngIf="!loading"
+    ></ion-progress-bar>
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-button (click)="back()">
@@ -80,70 +89,24 @@
   <div id="stories" *ngIf="auth.currentUserValue">
     <app-story-slider
       [stories]="stories"
-      [selected]="selectedStory"
       [slug]="page.slug"
       (refresh)="getStories()"
     ></app-story-slider>
   </div>
 
-  <div id="search" *ngIf="users?.length || showSkeleton; else noUsers">
-    <ion-list *ngIf="showSkeleton; else radarItems">
-      <ion-item *ngFor="let i of [].constructor(8)" lines="full">
-        <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-label>
-          <h2>
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </h2>
-          <h3>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-    <ng-template #radarItems>
-      <ion-list>
-        <ion-item
-          *ngFor="let user of users; "
-          button
-          (click)="showProfile(user.id)"
-          lines="full"
-        >
-          <ion-avatar slot="start">
-            <img
-              [src]="user?.thumbnail"
-              default="/assets/img/users/default.png"
-            />
-          </ion-avatar>
-          <ion-label>
-            <h2>
-              <span class="name">{{ user.name }}</span>
-              <span class="age">, {{ user.age }}</span>
-            </h2>
-            <h3>
-              <span *ngIf="user.distance !== undefined"
-                >{{"km-distancia" | i18n: {distance: user?.distance} }}</span
-              >
-            </h3>
-            <p class="description">{{ user.description }}</p>
-          </ion-label>
-          <div class="match full-center" slot="end">{{ user.match }}%</div>
-        </ion-item>
-        <ion-infinite-scroll
-          threshold="50%"
-          (ionInfinite)="searchProfiles($event, true)"
-          position="bottom"
-        >
-          <ion-infinite-scroll-content loadingSpinner="dots">
-          </ion-infinite-scroll-content>
-        </ion-infinite-scroll>
-      </ion-list>
-    </ng-template>
-  </div>
+  <ion-item lines="none" *ngIf="posts?.length">
+    <h2 *ngIf="posts?.length">{{ "posts" | i18n}}</h2>
+  </ion-item>
+
+  <app-post
+    *ngFor="let post of posts; trackBy: trackByPostId"
+    [post]="post"
+    (deletePost)="removePost($event)"
+  ></app-post>
+  <ion-infinite-scroll (ionInfinite)="getMorePosts($event)" position="bottom">
+    <ion-infinite-scroll-content loadingSpinner="dots">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
 <ion-fab slot="fixed" horizontal="end" vertical="bottom">
   <ion-fab-button color="primary" (click)="newPost()">
