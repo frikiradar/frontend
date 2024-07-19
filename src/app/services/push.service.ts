@@ -178,6 +178,8 @@ export class PushService {
   }
 
   async initWeb() {
+    await this.requestPermissions();
+
     const firebaseApp = initializeApp(environment.firebase);
     const analytics = getAnalytics(firebaseApp);
     const messaging = getMessaging(firebaseApp);
@@ -199,7 +201,8 @@ export class PushService {
   }
 
   async initCapacitor() {
-    await FirebaseMessaging.requestPermissions();
+    this.requestPermissions();
+
     const result = await FirebaseMessaging.getToken();
     await this.device.setDevice(result.token);
     this.setChannels();
@@ -291,6 +294,16 @@ export class PushService {
           });
         });
       });*/
+    }
+  }
+
+  async requestPermissions() {
+    if (isPlatform("capacitor")) {
+      const checkPermissions = await LocalNotifications.checkPermissions();
+      await LocalNotifications.requestPermissions();
+      console.log(checkPermissions);
+    } else {
+      // no es necesario
     }
   }
 }

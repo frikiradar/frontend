@@ -6,6 +6,7 @@ import { RequestGeolocationModal } from "../radar/request-geolocation-modal/requ
 import { ConfigService } from "./config.service";
 import { AuthService } from "./auth.service";
 import { I18nService } from "./i18n.service";
+import { PushService } from "./push.service";
 
 @Injectable({
   providedIn: "root",
@@ -18,7 +19,8 @@ export class GeolocationService {
     private config: ConfigService,
     private toastController: ToastController,
     private auth: AuthService,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private push: PushService
   ) {}
 
   async requestPermission() {
@@ -46,6 +48,7 @@ export class GeolocationService {
     city?: string;
     country?: string;
   }> {
+    await this.push.requestPermissions();
     const geoconfig = await this.config.get("geolocation");
     if (geoconfig === true) {
       return await this.getCoordinates();
