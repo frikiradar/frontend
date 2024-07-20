@@ -495,12 +495,10 @@ export class ProfilePage {
   }
 
   async refresh(event) {
-    this.loading = true;
     this.page = 1;
     await this.getStories();
     await this.getPosts();
     event.target.complete();
-    this.loading = false;
   }
 
   back() {

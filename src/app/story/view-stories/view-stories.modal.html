@@ -117,10 +117,20 @@
       </ion-card>
       <div
         *ngIf="!story.image"
-        class="story-text"
+        class="story-text-container"
         [ngClass]="story.color == '#CFD8DC' ? 'dark' : 'light'"
       >
-        {{story.text}}
+        <ion-thumbnail class="youtube" *ngIf="story.youtube">
+          <iframe
+            [src]="story.youtube"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+        </ion-thumbnail>
+        <span
+          class="story-text"
+          [innerHTML]="story.text | linky:{className: 'linkified'} | mentions:{mentions: story.mentions} | hashtag"
+        ></span>
       </div>
       <div class="story-actions">
         <ion-buttons slot="start" ion-activatable>

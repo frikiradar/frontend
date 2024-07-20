@@ -97,6 +97,15 @@ export class ViewStoriesModal implements OnInit {
     this.viewStory(this.stories[0]);
     this.story = this.stories[0];
     // await this.utils.toggleTransparent();
+
+    this.stories.map((story) => {
+      if (story.text && !story.image) {
+        story.youtube = this.utils.extractYoutubeLink(story.text);
+        this.cd.detectChanges();
+
+        return story;
+      }
+    });
   }
 
   ngAfterViewInit() {

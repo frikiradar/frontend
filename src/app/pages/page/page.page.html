@@ -33,17 +33,13 @@
       default="/assets/img/pages/default-games-page.jpg"
     />
   </ion-thumbnail>
-  <div id="add-tag" *ngIf="!tag" (click)="addTag()">
-    <ion-chip color="secondary">
-      <ion-label>{{page?.likes}} {{ 'likes' | i18n }}</ion-label>
-      <ion-icon name="heart-outline"></ion-icon>
-    </ion-chip>
-  </div>
-  <div id="add-tag" *ngIf="tag" (click)="search()">
-    <ion-chip color="secondary">
+  <div id="add-tag">
+    <ion-chip color="secondary" id="search-chip" (click)="search()">
       <ion-icon name="search"></ion-icon>
+    </ion-chip>
+    <ion-chip color="secondary" (click)="addTag()">
       <ion-label>{{page?.likes}} {{ 'likes' | i18n }}</ion-label>
-      <ion-icon name="heart"></ion-icon>
+      <ion-icon [name]="tag ? 'heart' : 'heart-outline'"></ion-icon>
     </ion-chip>
   </div>
   <div id="release">

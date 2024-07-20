@@ -44,6 +44,7 @@ export class PostModal {
   public user: User;
   public page = 1;
   private query: string;
+  public youtube: SafeUrl;
 
   constructor(
     private modalController: ModalController,
@@ -89,6 +90,10 @@ export class PostModal {
     }
 
     this.text = event.target.value;
+
+    if (!this.image) {
+      this.youtube = this.utils.extractYoutubeLink(this.text);
+    }
   }
 
   setFocus() {
@@ -142,6 +147,8 @@ export class PostModal {
     }
     this.image = this.sanitizer.bypassSecurityTrustUrl(image);
     this.imageFile = await this.utils.urltoBlob(image);
+
+    this.youtube = undefined;
   }
 
   removePicture() {
@@ -149,6 +156,8 @@ export class PostModal {
     this.imageFile = undefined;
     this.imageInput.nativeElement.value = "";
     this.textarea.setFocus();
+
+    this.youtube = this.utils.extractYoutubeLink(this.text);
   }
 
   async cropImagebyEvent(event: any) {

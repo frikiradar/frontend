@@ -1,3 +1,4 @@
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { User } from "./user";
 
 export interface Story {
@@ -27,4 +28,5 @@ export interface Story {
   slug?: string;
   color?: string;
   type?: "story" | "post";
+  youtube?: SafeResourceUrl;
 }

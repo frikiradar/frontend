@@ -47,6 +47,10 @@ ion-thumbnail#cover {
   height: fit-content;
   width: max-content;
 
+  #search-chip ion-icon {
+    margin: 0;
+  }
+
   ion-icon {
     color: white;
   }

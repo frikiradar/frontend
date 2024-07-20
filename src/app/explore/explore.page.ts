@@ -96,7 +96,7 @@ export class ExplorePage {
 
     this.page++;
     const posts = await this.storySvc.getPosts(this.page);
-    this.posts = [...posts, ...this.posts];
+    this.posts = [...this.posts, ...posts];
 
     event.target.complete();
 

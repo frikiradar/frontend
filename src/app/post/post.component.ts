@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -19,6 +20,7 @@ import {
   ModalController,
   ToastController,
 } from "@ionic/angular";
+
 import { UtilsService } from "../services/utils.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "../services/auth.service";
@@ -64,7 +66,8 @@ export class PostComponent {
     private toast: ToastController,
     private i18n: I18nService,
     private alertCtrl: AlertController,
-    private urlSvc: UrlService
+    private urlSvc: UrlService,
+    private cdr: ChangeDetectorRef
   ) {
     this.observer = new IntersectionObserver(
       (entries) => {
@@ -83,7 +86,12 @@ export class PostComponent {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.post.text && !this.post.image) {
+      this.post.youtube = this.utils.extractYoutubeLink(this.post.text);
+      this.cdr.detectChanges();
+    }
+  }
 
   ngAfterViewInit() {
     setTimeout(() => {

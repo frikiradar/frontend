@@ -141,49 +141,53 @@ export class PagePage {
 
   async addTag() {
     if (this.auth.currentUserValue) {
-      try {
-        const toast = await this.toast.create({
-          message: `Añadiendo etiqueta ${this.page.name}.`,
-          duration: 5000,
-          position: "top",
-          buttons: [
-            {
-              text: "Deshacer",
-              handler: () => {},
-            },
-          ],
-        });
-        toast.present();
+      if (!this.tag) {
+        try {
+          const toast = await this.toast.create({
+            message: `Añadiendo etiqueta ${this.page.name}.`,
+            duration: 5000,
+            position: "top",
+            buttons: [
+              {
+                text: "Deshacer",
+                handler: () => {},
+              },
+            ],
+          });
+          toast.present();
 
-        const log = await toast.onDidDismiss();
-        if (log.role === "timeout") {
-          this.tag = await this.tagSvc.addTag(
-            this.page.name,
-            this.page.category,
-            this.page.slug
-          );
+          const log = await toast.onDidDismiss();
+          if (log.role === "timeout") {
+            this.tag = await this.tagSvc.addTag(
+              this.page.name,
+              this.page.category,
+              this.page.slug
+            );
+            (
+              await this.toast.create({
+                message: `Etiqueta añadida ${this.page.name}.`,
+                duration: 5000,
+                position: "bottom",
+              })
+            ).present();
+          }
+
+          const user = this.auth.currentUserValue;
+          user.tags = [...[this.tag], ...user.tags];
+          this.auth.setAuthUser(user);
+        } catch (e) {
           (
             await this.toast.create({
-              message: `Etiqueta añadida ${this.page.name}.`,
+              message: `Error al añadir la etiqueta ${this.page.name}.`,
+              color: "danger",
               duration: 5000,
-              position: "bottom",
+              position: "middle",
             })
           ).present();
+          console.error(e);
         }
-
-        const user = this.auth.currentUserValue;
-        user.tags = [...[this.tag], ...user.tags];
-        this.auth.setAuthUser(user);
-      } catch (e) {
-        (
-          await this.toast.create({
-            message: `Error al añadir la etiqueta ${this.page.name}.`,
-            color: "danger",
-            duration: 5000,
-            position: "middle",
-          })
-        ).present();
-        console.error(e);
+      } else {
+        this.search();
       }
     } else {
       this.nav.navigateRoot(["/login"], {

@@ -69,6 +69,9 @@
     </ion-thumbnail>
   </div>
   <div class="textarea-container" *ngIf="!image" (click)="closeEmojis()">
+    <ion-thumbnail id="youtube" *ngIf="youtube">
+      <iframe [src]="youtube" frameborder="0" allowfullscreen></iframe>
+    </ion-thumbnail>
     <ion-textarea
       [ngClass]="textColor == 'light' ? 'light' : 'dark'"
       id="story-textarea"

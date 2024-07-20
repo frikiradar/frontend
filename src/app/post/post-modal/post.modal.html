@@ -44,12 +44,15 @@
     ></ion-textarea>
   </ion-item>
 
-  <div id="image-preview" *ngIf="image">
-    <ion-thumbnail>
+  <div id="image-preview" *ngIf="image || youtube">
+    <ion-thumbnail *ngIf="image">
       <ion-button size="small" shape="round" (click)="removePicture()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
       <img [src]="image" />
+    </ion-thumbnail>
+    <ion-thumbnail id="youtube" *ngIf="youtube">
+      <iframe [src]="youtube" frameborder="0" allowfullscreen></iframe>
     </ion-thumbnail>
   </div>
   <input

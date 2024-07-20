@@ -67,10 +67,7 @@ swiper {
   right: 0;
 }
 
-.story-text {
-  padding: 30px;
-  text-align: center;
-  font-size: 28px;
+.story-text-container {
   z-index: 1;
 
   &.light {
@@ -79,6 +76,27 @@ swiper {
 
   &.dark {
     color: #000000 !important;
+  }
+
+  ion-thumbnail.youtube {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    height: auto;
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      height: calc(100vw * 9 / 16);
+      max-height: 320px;
+      border-radius: 25px;
+    }
+  }
+
+  .story-text {
+    padding: 30px;
+    text-align: center;
+    font-size: 28px;
   }
 }
 

@@ -15,12 +15,12 @@ import {
   CameraResultType,
   CameraSource,
 } from "@capacitor/camera";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
 import { AuthService } from "./auth.service";
 import { Config, ConfigService } from "./config.service";
-import { SafeAreaController } from "@aashu-dubey/capacitor-statusbar-safe-area";
 import { I18nService } from "./i18n.service";
 import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 
@@ -35,7 +35,8 @@ export class UtilsService {
     private modalController: ModalController,
     private toast: ToastController,
     private config: ConfigService,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private sanitizer: DomSanitizer
   ) {}
 
   async takePicture(
@@ -663,5 +664,16 @@ export class UtilsService {
     const years = match[1] ? Number(match[1]) * 12 : 0; // Convertir años a meses
     const months = match[2] ? Number(match[2]) : 0;
     return years + months;
+  }
+
+  extractYoutubeLink(text: string): SafeResourceUrl {
+    const youtubeRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/g;
+    let match: RegExpExecArray;
+    while ((match = youtubeRegex.exec(text)) !== null) {
+      return this.sanitizer.bypassSecurityTrustResourceUrl(
+        `https://www.youtube.com/embed/${match[1]}`
+      );
+    }
   }
 }

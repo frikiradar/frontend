@@ -51,6 +51,7 @@ export class StoryModal implements OnInit {
   public textColor: "light" | "dark" = "light";
   public emojis = false;
   public user: User;
+  public youtube: SafeUrl;
 
   constructor(
     public modalController: ModalController,
@@ -102,6 +103,10 @@ export class StoryModal implements OnInit {
     }
 
     this.storyText = event.target.value;
+
+    if (!this.image) {
+      this.youtube = this.utils.extractYoutubeLink(this.storyText);
+    }
   }
 
   async selectPicture(type: "camera" | "gallery") {
@@ -161,6 +166,8 @@ export class StoryModal implements OnInit {
     setTimeout(() => {
       this.imageTextarea.setFocus();
     }, 500);
+
+    this.youtube = undefined;
   }
 
   removePicture() {
@@ -172,6 +179,8 @@ export class StoryModal implements OnInit {
     setTimeout(() => {
       this.storyTextarea.setFocus();
     }, 500);
+
+    this.youtube = this.utils.extractYoutubeLink(this.storyText);
   }
 
   async cropImagebyEvent(event: any) {
