@@ -18,12 +18,13 @@ ion-card {
   ion-card-content {
     ion-thumbnail {
       width: 100%;
-      height: calc(100vw - 30px);
+      height: auto; /* Permite que el height sea flexible */
+      max-height: 500px; /* Establece el máximo a 500px */
       --border-radius: 20px;
     }
 
     ion-img {
-      min-height: calc(100vw - 30px);
+      max-height: 500px; /* Establece un máximo de 500px para mantener la proporción */
     }
 
     p {

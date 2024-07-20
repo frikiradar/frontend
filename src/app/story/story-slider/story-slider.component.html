@@ -1,5 +1,8 @@
 <swiper [config]="storiesOpts" mode="md">
-  <ng-template swiperSlide>
+  <ng-template
+    swiperSlide
+    *ngIf="!user || auth.currentUserValue?.id === user?.id"
+  >
     <div>
       <ion-item button lines="none" (click)="newStory()">
         <ion-avatar>

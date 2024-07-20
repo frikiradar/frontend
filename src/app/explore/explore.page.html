@@ -20,94 +20,99 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <ion-item lines="none" detail="false" class="section-header">
-    <ion-label color="light">
-      <h2 class="section">
-        <ion-text color="ligth">{{ "historias-frikis" | i18n }}</ion-text>
-      </h2>
-    </ion-label>
-  </ion-item>
-  <section id="stories">
-    <app-story-slider
-      [stories]="stories"
-      (refresh)="getStories()"
-    ></app-story-slider>
-  </section>
-
-  <section id="pages" *ngIf="pages?.length">
-    <ion-item
-      lines="none"
-      (click)="showPages()"
-      button
-      detail="false"
-      class="section-header"
-    >
-      <ion-label color="light">
-        <h2 class="section">
-          <ion-text color="ligth"> {{ "pginas" | i18n }} </ion-text>
-        </h2>
-        <p class="subtitle">
-          <ion-text color="ligth">
-            {{ "conoce-personas-con-que-compartes" | i18n }}
-          </ion-text>
-        </p>
-      </ion-label>
-      <ion-icon
-        md="arrow-forward"
-        ios="chevron-forward"
-        slot="end"
-        color="light"
-      ></ion-icon>
-    </ion-item>
-    <ion-list>
-      <ion-item
-        button
-        detail="false"
-        *ngFor="let page of pages"
-        lines="none"
-        (click)="showPage(page.slug)"
-      >
-        <ion-thumbnail slot="start">
-          <img
-            [src]="page.cover"
-            [alt]="page.name"
-            default="/assets/img/pages/default-games-page.jpg"
-          />
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{page.name}}</h2>
-          <p>#{{page.slug}}</p>
-        </ion-label>
-        <ion-badge slot="end" mode="ios"> {{page.likes}} </ion-badge>
-      </ion-item>
-    </ion-list>
-  </section>
-
-  <section id="posts">
+  <div class="main-content">
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-item lines="none" detail="false" class="section-header">
       <ion-label color="light">
         <h2 class="section">
-          <ion-text color="ligth">{{ "posts" | i18n }}</ion-text>
+          <ion-text color="ligth">{{ "historias-frikis" | i18n }}</ion-text>
         </h2>
       </ion-label>
     </ion-item>
+    <section id="stories">
+      <app-story-slider
+        [stories]="stories"
+        (refresh)="getStories()"
+      ></app-story-slider>
+    </section>
 
-    <app-post
-      *ngFor="let post of posts; trackBy: trackByPostId"
-      [post]="post"
-      (deletePost)="removePost($event)"
-    ></app-post>
-    <ion-infinite-scroll (ionInfinite)="getMorePosts($event)" position="bottom">
-      <ion-infinite-scroll-content loadingSpinner="dots">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-  </section>
+    <section id="pages" *ngIf="pages?.length">
+      <ion-item
+        lines="none"
+        (click)="showPages()"
+        button
+        detail="false"
+        class="section-header"
+      >
+        <ion-label color="light">
+          <h2 class="section">
+            <ion-text color="ligth"> {{ "pginas" | i18n }} </ion-text>
+          </h2>
+          <p class="subtitle">
+            <ion-text color="ligth">
+              {{ "conoce-personas-con-que-compartes" | i18n }}
+            </ion-text>
+          </p>
+        </ion-label>
+        <ion-icon
+          md="arrow-forward"
+          ios="chevron-forward"
+          slot="end"
+          color="light"
+        ></ion-icon>
+      </ion-item>
+      <ion-list>
+        <ion-item
+          button
+          detail="false"
+          *ngFor="let page of pages"
+          lines="none"
+          (click)="showPage(page.slug)"
+        >
+          <ion-thumbnail slot="start">
+            <img
+              [src]="page.cover"
+              [alt]="page.name"
+              default="/assets/img/pages/default-games-page.jpg"
+            />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{page.name}}</h2>
+            <p>#{{page.slug}}</p>
+          </ion-label>
+          <ion-badge slot="end" mode="ios"> {{page.likes}} </ion-badge>
+        </ion-item>
+      </ion-list>
+    </section>
+
+    <section id="posts">
+      <ion-item lines="none" detail="false" class="section-header">
+        <ion-label color="light">
+          <h2 class="section">
+            <ion-text color="ligth">{{ "posts" | i18n }}</ion-text>
+          </h2>
+        </ion-label>
+      </ion-item>
+
+      <app-post
+        *ngFor="let post of posts; trackBy: trackByPostId"
+        [post]="post"
+        (deletePost)="removePost($event)"
+      ></app-post>
+      <ion-infinite-scroll
+        (ionInfinite)="getMorePosts($event)"
+        position="bottom"
+      >
+        <ion-infinite-scroll-content loadingSpinner="dots">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </section>
+  </div>
+  <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button color="primary" (click)="newPost()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
-<ion-fab slot="fixed" horizontal="end" vertical="bottom">
-  <ion-fab-button color="primary" (click)="newPost()">
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-</ion-fab>

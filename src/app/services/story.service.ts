@@ -115,23 +115,42 @@ export class StoryService {
   }
 
   groupStories(stories: Story[]) {
-    const groupedStories = [];
-    stories = stories?.reverse();
-    stories?.forEach((s) => {
-      if (!groupedStories.some((g) => g.user.id === s.user.id)) {
-        const filterStories = stories.filter((sf) => sf.user.id === s.user.id);
-        groupedStories.push(filterStories[0]);
-      }
-    });
+    if (!stories) {
+      return [];
+    }
 
-    return [
-      ...groupedStories.filter(
-        (s) => s.user.id === this.auth.currentUserValue.id
-      ),
-      ...groupedStories.filter(
-        (s) => s.user.id !== this.auth.currentUserValue.id
-      ),
-    ];
+    // Group stories by user
+    const groupedStories = stories.reduce((acc, story) => {
+      if (!acc[story.user.id]) {
+        acc[story.user.id] = [];
+      }
+      acc[story.user.id].push(story);
+      return acc;
+    }, {});
+
+    // Select the most recent story per user (highest ID)
+    const mostRecentStoryPerUser = Object.values(groupedStories).map(
+      (stories) => {
+        return stories.reduce((mostRecent: Story, current: Story) =>
+          current.id > mostRecent.id ? current : mostRecent
+        );
+      }
+    );
+
+    // Separate the stories of the current user
+    const currentUserStories = mostRecentStoryPerUser.filter(
+      (s) => s.user.id === this.auth.currentUserValue.id
+    );
+
+    // Stories of other users, ordered by story ID
+    const otherUsersStories = mostRecentStoryPerUser
+      .filter((s) => s.user.id !== this.auth.currentUserValue.id)
+      .sort((a, b) => b.id - a.id);
+
+    // Combine the lists, with the current user's stories first
+    const orderedStories = [...currentUserStories, ...otherUsersStories];
+
+    return orderedStories;
   }
 
   async sendStory(

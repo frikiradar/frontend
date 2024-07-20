@@ -170,8 +170,7 @@ export class ProfilePage {
   }
 
   async getStories() {
-    const stories = await this.storiesSvc.getUserStories(this.user.id);
-    this.stories = this.storiesSvc.orderStories(stories);
+    this.stories = await this.storiesSvc.getUserStories(this.user.id);
   }
 
   async getPosts() {
@@ -498,7 +497,6 @@ export class ProfilePage {
   async refresh(event) {
     this.loading = true;
     this.page = 1;
-    this.user = await this.userSvc.getUser(this.user.id);
     await this.getStories();
     await this.getPosts();
     event.target.complete();

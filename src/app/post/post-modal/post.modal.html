@@ -1,5 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-title>{{ "post" | i18n }}</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">
         <ion-icon
@@ -160,7 +161,7 @@
         (click)="publish()"
         [disabled]="(!imageFile && !text) || showBackdrop "
       >
-        <ion-label>{{ "post" | i18n }}</ion-label>
+        <ion-label>{{ "send-post" | i18n }}</ion-label>
         <ion-icon slot="end" name="send"></ion-icon>
       </ion-button>
     </ion-buttons>

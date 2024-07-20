@@ -91,7 +91,7 @@ export class UtilsService {
         square,
         aspectRatio,
       },
-      cssClass: "full-modal",
+      cssClass: "vertical-modal",
     });
     await modal.present();
 

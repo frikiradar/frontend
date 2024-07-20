@@ -5,8 +5,6 @@
 </ion-header>
 <ion-content class="ion-padding">
   <image-cropper
-    style="background-color: black !important"
-    class="full-center"
     [imageURL]="src"
     [imageChangedEvent]="imageChangedEvent"
     [maintainAspectRatio]="maintainAspectRatio"
@@ -19,7 +17,6 @@
     (imageLoaded)="imageLoaded()"
     (loadImageFailed)="loadImageFailed()"
     backgroundColor="#000000"
-    allowMoveImage="true"
     [(transform)]="transform"
   ></image-cropper>
   <!--<img [src]="croppedImage" />-->

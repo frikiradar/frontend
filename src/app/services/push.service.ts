@@ -88,6 +88,11 @@ export class PushService {
         description: this.i18n.translate("receive-kokoros-notifications"),
       },
       {
+        id: "suggestions",
+        name: this.i18n.translate("suggestions-notifications"),
+        description: this.i18n.translate("receive-suggestions-notifications"),
+      },
+      {
         id: "frikiradar",
         name: this.i18n.translate("frikiradar-notifications"),
         description: this.i18n.translate("frikiradar-info-notifications"),

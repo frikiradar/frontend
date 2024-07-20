@@ -1,5 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-title>{{ "story" | i18n }}</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">
         <ion-icon
@@ -77,7 +78,7 @@
       [(ngModel)]="textoEstado"
       (ionInput)="inputTextarea($event)"
       autoGrow="true"
-      rows="2"
+      rows="3"
     ></ion-textarea>
   </div>
   <input
