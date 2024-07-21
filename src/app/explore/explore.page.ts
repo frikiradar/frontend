@@ -1,11 +1,10 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 
 import { ConfigService } from "../services/config.service";
 import { AuthService } from "../services/auth.service";
 import { Story } from "../models/story";
 import { AnimateService } from "../services/animate.service";
-import { StoryModal } from "../story/story-modal/story.modal";
 import { ModalController } from "@ionic/angular";
 import { StoryService } from "../services/story.service";
 import { RulesPage } from "../rules/rules.page";
@@ -28,7 +27,6 @@ export class ExplorePage {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     public auth: AuthService,
     private config: ConfigService,
     private animate: AnimateService,
@@ -56,22 +54,6 @@ export class ExplorePage {
     await this.getStories();
     await this.getPages();
     await this.getPosts();
-
-    const id = this.route.snapshot.paramMap.get("id");
-    if (id) {
-      try {
-        const story = await this.storySvc.getStory(+id);
-
-        if (story.type === "story") {
-          this.storySvc.showStoriesModal([story]);
-        } else {
-          this.storySvc.showPostModal(story);
-        }
-      } catch (e) {
-        console.error("Historia no encontrada");
-      }
-    }
-
     this.loading = false;
   }
 

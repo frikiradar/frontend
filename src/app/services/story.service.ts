@@ -7,7 +7,6 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { ModalController } from "@ionic/angular";
-import { ViewPostModal } from "../post/view-post/view-post.modal";
 
 @Injectable({
   providedIn: "root",
@@ -233,19 +232,6 @@ export class StoryService {
     const modal = await this.modalController.create({
       component: ViewStoriesModal,
       componentProps: { stories },
-      keyboardClose: true,
-      showBackdrop: true,
-      cssClass: "vertical-modal",
-    });
-
-    await modal.present();
-    await modal.onDidDismiss();
-  }
-
-  async showPostModal(post: Story) {
-    const modal = await this.modalController.create({
-      component: ViewPostModal,
-      componentProps: { post },
       keyboardClose: true,
       showBackdrop: true,
       cssClass: "vertical-modal",

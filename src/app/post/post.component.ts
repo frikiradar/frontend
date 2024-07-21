@@ -86,7 +86,7 @@ export class PostComponent {
     );
   }
 
-  ngOnInit() {
+  ngOnChanges() {
     if (this.post.text && !this.post.image) {
       this.post.youtube = this.utils.extractYoutubeLink(this.post.text);
       this.cdr.detectChanges();

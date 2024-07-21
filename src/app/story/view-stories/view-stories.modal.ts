@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Keyboard } from "@capacitor/keyboard";
 import {
   AlertController,
@@ -35,6 +35,7 @@ import { transition, trigger, useAnimation } from "@angular/animations";
 import { pulse } from "ng-animate";
 import { UtilsService } from "src/app/services/utils.service";
 import { I18nService } from "src/app/services/i18n.service";
+import { NavService } from "src/app/services/navigation.service";
 
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
@@ -90,13 +91,22 @@ export class ViewStoriesModal implements OnInit {
     private cd: ChangeDetectorRef,
     private alertCtrl: AlertController,
     private utils: UtilsService,
-    private i18n: I18nService
+    private i18n: I18nService,
+    private route: ActivatedRoute,
+    private nav: NavService
   ) {}
 
   async ngOnInit() {
+    const param = this.route.snapshot.paramMap.get("id");
+    if (param) {
+      const id = +param;
+      this.story = await this.storySvc.getStory(id);
+      this.stories = [this.story];
+    } else {
+      this.story = this.stories[0];
+    }
+
     this.viewStory(this.stories[0]);
-    this.story = this.stories[0];
-    // await this.utils.toggleTransparent();
 
     this.stories.map((story) => {
       if (story.text && !story.image) {
@@ -110,7 +120,7 @@ export class ViewStoriesModal implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.slides.autoplay.start();
+      this.slides?.autoplay.start();
     }, 100);
   }
 
@@ -646,6 +656,12 @@ export class ViewStoriesModal implements OnInit {
     }
     if (await this.thisModal.getTop()) {
       this.thisModal.dismiss();
+    }
+
+    if (this.nav.canGoBack()) {
+      this.nav.back();
+    } else {
+      this.router.navigate(["/"]);
     }
   }
 }

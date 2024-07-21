@@ -139,6 +139,18 @@ const routes: Routes = [
       ),
   },
   {
+    path: "post/:id",
+    loadChildren: () =>
+      import("./post/post-page/post.module").then((m) => m.PostPageModule),
+  },
+  {
+    path: "story/:id",
+    loadChildren: () =>
+      import("./story/view-stories/view-stories.module").then(
+        (m) => m.StoryPageModule
+      ),
+  },
+  {
     path: "download",
     loadChildren: () =>
       import("./download/download.module").then((m) => m.DownloadPageModule),

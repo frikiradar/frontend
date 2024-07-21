@@ -5,10 +5,10 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ "post-of" | i18n: {name: post.user.name} }}</ion-title>
+    <ion-title>{{ "post-of" | i18n: {name: post?.user.name} }}</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content *ngIf="post">
   <app-post [post]="post" (deletePost)="removePost($event)"></app-post>
 </ion-content>
 <ion-footer></ion-footer>

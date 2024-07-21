@@ -16,7 +16,6 @@ import { ImagePreloadDirective } from "../shared/image-preload.directive";
 import { ChatInputComponent } from "../chat/chat-input/chat-input.component";
 import { MentionsPipe } from "../mentions.pipe";
 import { StoryModal } from "../story/story-modal/story.modal";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
 import { MenuModal } from "./../menu/menu.modal";
 import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 import { HashtagPipe } from "../hashtag.pipe";
@@ -36,7 +35,6 @@ import { I18nPipe } from "../i18n.pipe";
 import { PostComponent } from "../post/post.component";
 import { StorySliderComponent } from "../story/story-slider/story-slider.component";
 import { PostModal } from "../post/post-modal/post.modal";
-import { ViewPostModal } from "../post/view-post/view-post.modal";
 
 // install Swiper modules
 register();
@@ -58,7 +56,6 @@ register();
     ChatModalComponent,
     StoryModal,
     EventModal,
-    ViewStoriesModal,
     MenuModal,
     LikesModal,
     NotificationOptionsModal,
@@ -72,7 +69,6 @@ register();
     StorySliderComponent,
     PostComponent,
     PostModal,
-    ViewPostModal,
   ],
   imports: [
     FormsModule,
@@ -100,7 +96,6 @@ register();
     StorySliderComponent,
     PostComponent,
     PostModal,
-    ViewPostModal,
   ],
 })
 export class SharedModule {}

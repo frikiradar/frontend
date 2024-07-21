@@ -57,6 +57,10 @@ export class NavService {
     this.nav.navigateRoot(url, options);
   }
 
+  canGoBack(): boolean {
+    return this.history.length > 1;
+  }
+
   async backButtonStatus() {
     this.platform.backButton.subscribeWithPriority(1, async () => {
       this.back();

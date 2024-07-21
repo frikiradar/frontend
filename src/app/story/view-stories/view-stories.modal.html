@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" *ngIf="stories?.length">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button shape="round" (click)="showProfile(story?.user?.id)">
@@ -36,7 +36,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content id="stories" [fullscreen]="true">
+<ion-content id="stories" [fullscreen]="true" *ngIf="stories?.length">
   <swiper
     (swiper)="setSwiperInstance($event)"
     (touchStart)="touchStart()"
@@ -171,7 +171,7 @@
     </ng-template>
   </swiper>
 </ion-content>
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border" *ngIf="stories?.length">
   <ion-chip (click)="showPage(story.slug)" *ngIf="story.slug" class="story-slug"
     >#{{story.slug}}</ion-chip
   >
