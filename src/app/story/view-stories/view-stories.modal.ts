@@ -324,6 +324,8 @@ export class ViewStoriesModal implements OnInit {
   }
 
   async addStory() {
+    this.slides.autoplay.stop();
+
     const modal = await this.modalCreate.create({
       component: StoryModal,
       keyboardClose: true,
@@ -333,6 +335,8 @@ export class ViewStoriesModal implements OnInit {
 
     await modal.present();
     await modal.onDidDismiss();
+
+    this.slides.autoplay.start();
   }
 
   async removeStory(story: Story) {
@@ -653,12 +657,9 @@ export class ViewStoriesModal implements OnInit {
   async close() {
     if (await this.modalCreate.getTop()) {
       await this.modalCreate.dismiss();
-    }
-    if (await this.thisModal.getTop()) {
+    } else if (await this.thisModal.getTop()) {
       this.thisModal.dismiss();
-    }
-
-    if (this.nav.canGoBack()) {
+    } else if (this.nav.canGoBack()) {
       this.nav.back();
     } else {
       this.router.navigate(["/"]);

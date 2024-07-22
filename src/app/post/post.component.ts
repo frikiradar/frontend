@@ -134,16 +134,16 @@ export class PostComponent {
   async switchLikePost(event: Event) {
     event.stopPropagation();
     try {
-      // Envía la solicitud al servidor en segundo plano
+      let post = undefined;
       if (this.post.like) {
-        this.post = await this.storySvc.unlike(this.post.id);
+        post = await this.storySvc.unlike(this.post.id);
         Haptics.notification({ type: NotificationType.Error });
       } else {
-        this.post = await this.storySvc.like(this.post.id);
+        post = await this.storySvc.like(this.post.id);
         Haptics.notification({ type: NotificationType.Success });
       }
 
-      this.youtubePreview();
+      this.post = { ...post, youtube: this.post.youtube };
     } catch (error) {
       console.error(`Error al cambiar el estado del "like": ${error}`);
     }
