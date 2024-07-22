@@ -87,10 +87,7 @@ export class PostComponent {
   }
 
   ngOnChanges() {
-    if (this.post.text && !this.post.image) {
-      this.post.youtube = this.utils.extractYoutubeLink(this.post.text);
-      this.cdr.detectChanges();
-    }
+    this.youtubePreview();
   }
 
   ngAfterViewInit() {
@@ -99,6 +96,12 @@ export class PostComponent {
         this.observer.observe(this.postElement.nativeElement);
       }
     }, 1000);
+  }
+
+  youtubePreview() {
+    if (this.post.text && !this.post.image) {
+      this.post.youtube = this.utils.extractYoutubeLink(this.post.text);
+    }
   }
 
   async showProfile(id?: number) {
@@ -139,6 +142,8 @@ export class PostComponent {
         this.post = await this.storySvc.like(this.post.id);
         Haptics.notification({ type: NotificationType.Success });
       }
+
+      this.youtubePreview();
     } catch (error) {
       console.error(`Error al cambiar el estado del "like": ${error}`);
     }
@@ -177,6 +182,8 @@ export class PostComponent {
           return c;
         });
       }
+
+      this.youtubePreview();
     } catch (error) {
       // Si la solicitud falla, revierte el cambio y muestra un mensaje de error
       this.post.comments = this.post.comments.map((c) => {
@@ -257,6 +264,10 @@ export class PostComponent {
       text,
       this.userMentions
     );
+
+    this.userMentions = [];
+
+    this.youtubePreview();
   }
 
   async setWriting(text: string) {
