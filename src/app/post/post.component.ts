@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -36,7 +35,9 @@ import { UrlService } from "../services/url.service";
 })
 export class PostComponent {
   @Output() deletePost: EventEmitter<Story> = new EventEmitter();
+  @Output() showPost: EventEmitter<Story> = new EventEmitter();
   @Input() post: Story;
+  @Input() page = false;
 
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
@@ -47,7 +48,6 @@ export class PostComponent {
   public selectedComment: Story["comments"][0];
   public showCommentOptions = false;
   public showOptions = false;
-  public showComments = false;
   public showViews = false;
 
   private inputAt = false;
@@ -66,8 +66,7 @@ export class PostComponent {
     private toast: ToastController,
     private i18n: I18nService,
     private alertCtrl: AlertController,
-    private urlSvc: UrlService,
-    private cdr: ChangeDetectorRef
+    private urlSvc: UrlService
   ) {
     this.observer = new IntersectionObserver(
       (entries) => {
@@ -90,7 +89,15 @@ export class PostComponent {
     this.youtubePreview();
   }
 
-  ngAfterViewInit() {
+  async ngOnInit() {
+    if (this.page) {
+      setTimeout(() => {
+        this.textarea.setFocus();
+      }, 100);
+    }
+  }
+
+  async ngAfterViewInit() {
     setTimeout(() => {
       if (this.postElement.nativeElement) {
         this.observer.observe(this.postElement.nativeElement);
@@ -109,10 +116,13 @@ export class PostComponent {
       this.router.navigate(["/profile", id ?? this.post.user.id]);
     }
 
-    this.modalController.dismiss();
+    if (await this.modalController.getTop()) {
+      this.modalController.dismiss();
+    }
   }
 
-  async openViewer() {
+  async openViewer(event: Event) {
+    event.stopPropagation();
     const modal = await this.modalController.create({
       component: ImageViewerModal,
       componentProps: {
@@ -200,19 +210,17 @@ export class PostComponent {
 
   commentFocus(event?: CustomEvent) {
     event?.stopPropagation();
-    setTimeout(() => {
-      this.textarea.getInputElement().then((inputElement) => {
-        inputElement.blur();
-        setTimeout(() => {
-          inputElement.focus();
-          const length = inputElement.value.length;
-          inputElement.setSelectionRange(length, length);
-          if (isPlatform("capacitor")) {
-            Keyboard.show();
-          }
-        }, 100);
-      });
-    }, 100);
+    this.textarea.getInputElement().then((inputElement) => {
+      inputElement.blur();
+      setTimeout(() => {
+        inputElement.focus();
+        const length = inputElement.value.length;
+        inputElement.setSelectionRange(length, length);
+        if (isPlatform("capacitor")) {
+          Keyboard.show();
+        }
+      }, 100);
+    });
   }
 
   showViewsSheet(event: Event) {
@@ -224,18 +232,8 @@ export class PostComponent {
     this.showViews = false;
   }
 
-  showCommentsSheet(event: Event) {
-    event.stopPropagation();
-    this.showComments = true;
-
-    this.commentFocus();
-  }
-
-  closeCommentsSheet() {
-    this.showComments = false;
-  }
-
-  showCommentOptionsSheet(comment: Story["comments"][0]) {
+  showCommentOptionsSheet(comment: Story["comments"][0], event) {
+    event.preventDefault();
     this.selectedComment = comment;
     this.showCommentOptions = true;
   }
@@ -305,65 +303,104 @@ export class PostComponent {
     }
   }
 
-  async deleteComment(comment: Story["comments"][0]) {
-    (
-      await this.toast.create({
-        message: this.i18n.translate("deleting-comment"),
-        position: "middle",
-        duration: 2000,
-      })
-    ).present();
-    try {
-      await this.storySvc.deleteComment(comment.id);
-      this.post.comments = this.post.comments.filter(
-        (c) => c.id !== comment.id
-      );
+  async deleteComment(comment: Story["comments"][0], event: Event) {
+    event.preventDefault();
+    let undo = false;
 
-      (
-        await this.toast.create({
-          message: this.i18n.translate("comment-deleted-successfully"),
-          position: "middle",
-          duration: 2000,
-        })
-      ).present();
+    const undoToast = await this.toast.create({
+      message: this.i18n.translate("deleting-comment"),
+      position: "bottom",
+      duration: 5000,
+      buttons: [
+        {
+          text: this.i18n.translate("undo"),
+          handler: async () => {
+            undo = true;
+            this.closeCommentOptionsSheet();
+          },
+        },
+      ],
+    });
+
+    undoToast.present();
+
+    setTimeout(async () => {
+      if (!undo) {
+        try {
+          await this.storySvc.deleteComment(comment.id);
+          this.post.comments = this.post.comments.filter(
+            (c) => c.id !== comment.id
+          );
+
+          (
+            await this.toast.create({
+              message: this.i18n.translate("comment-deleted-successfully"),
+              position: "middle",
+              duration: 2000,
+            })
+          ).present();
+        } catch (e) {
+          (
+            await this.toast.create({
+              message: this.i18n.translate("error-deleting-comment"),
+              duration: 2000,
+              position: "middle",
+              color: "danger",
+            })
+          ).present();
+        }
+      }
       this.showCommentOptions = false;
-    } catch (e) {
-      (
-        await this.toast.create({
-          message: this.i18n.translate("error-deleting-comment"),
-          duration: 2000,
-          position: "middle",
-          color: "danger",
-        })
-      ).present();
-    }
+    }, 5000);
   }
 
   async removePost() {
-    try {
-      await this.storySvc.deleteStory(this.post.id);
-      (
-        await this.toast.create({
-          message: this.i18n.translate("successfully-deleted"),
-          position: "middle",
-          duration: 2000,
-        })
-      ).present();
-    } catch (e) {
-      (
-        await this.toast.create({
-          message: this.i18n.translate("error-deleting-post"),
-          duration: 2000,
-          position: "middle",
-          color: "danger",
-        })
-      ).present();
-    }
+    let undo = false;
 
-    this.closeOptionsSheet();
-    setTimeout(() => {
-      this.deletePost.emit(this.post);
-    }, 500);
+    const undoToast = await this.toast.create({
+      message: this.i18n.translate("post-will-be-deleted"),
+      position: "bottom",
+      duration: 5000, // 5 segundos para deshacer
+      buttons: [
+        {
+          text: this.i18n.translate("undo"),
+          handler: () => {
+            undo = true;
+            this.closeOptionsSheet();
+          },
+        },
+      ],
+    });
+
+    undoToast.present();
+
+    setTimeout(async () => {
+      if (!undo) {
+        try {
+          await this.storySvc.deleteStory(this.post.id);
+          (
+            await this.toast.create({
+              message: this.i18n.translate("successfully-deleted"),
+              position: "middle",
+              duration: 2000,
+            })
+          ).present();
+        } catch (e) {
+          (
+            await this.toast.create({
+              message: this.i18n.translate("error-deleting-post"),
+              duration: 2000,
+              position: "middle",
+              color: "danger",
+            })
+          ).present();
+        }
+        this.closeOptionsSheet();
+        setTimeout(() => {
+          this.deletePost.emit(this.post);
+        }, 500);
+      }
+    }, 5000);
   }
 
   async reportPost() {
@@ -436,7 +473,11 @@ export class PostComponent {
     await alert.present();
   }
 
-  async reportComment(comment: Story["comments"][0]) {
+  async reportComment(comment: Story["comments"][0], event?: Event) {
+    if (event) {
+      event.preventDefault();
+    }
+
     this.closeCommentOptionsSheet();
 
     const alert = await this.alertCtrl.create({
@@ -531,6 +572,11 @@ export class PostComponent {
     await modal.present();
   }
 
+  showPostPage(event: Event) {
+    event.stopPropagation();
+    this.showPost.emit(this.post);
+  }
+
   async reply(comment: Story["comments"][0]) {
     if (comment.user.id !== this.auth.currentUserValue.id) {
       this.textarea.value = `@${comment.user.username} `;
@@ -557,11 +603,25 @@ export class PostComponent {
   }
 
   async openUrl(event: any) {
-    this.closeCommentsSheet();
-    await this.urlSvc.openUrl(event);
+    this.urlSvc.openUrl(event);
+
+    if (
+      event.srcElement.href &&
+      (event.target.className.includes("mention") ||
+        event.target.className.includes("hashtag"))
+    ) {
+      if (await this.modalController.getTop()) {
+        this.modalController.dismiss();
+      }
+    }
+
+    return false;
   }
 
-  showPage(slug: string) {
+  async showPage(slug: string) {
+    if (await this.modalController.getTop()) {
+      this.modalController.dismiss();
+    }
     this.router.navigate(["/page", slug]);
   }
 

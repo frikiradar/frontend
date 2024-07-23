@@ -152,6 +152,10 @@ export class ChatModalComponent implements OnInit {
   }
 
   async initUser() {
+    if (!this.auth.currentUserValue) {
+      return;
+    }
+
     this.page = 1;
     this.messages = [];
     this.conversationId = this.chatSvc.getConversationId(
@@ -521,7 +525,7 @@ export class ChatModalComponent implements OnInit {
     }
   }
 
-  openUrl(event: any) {
+  async openUrl(event: any) {
     this.urlSvc.openUrl(event);
 
     if (
@@ -529,7 +533,7 @@ export class ChatModalComponent implements OnInit {
       (event.target.className.includes("mention") ||
         event.target.className.includes("hashtag"))
     ) {
-      if (this.modalController.getTop()) {
+      if (await this.modalController.getTop()) {
         this.modalController.dismiss();
       }
     }
@@ -641,7 +645,7 @@ export class ChatModalComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.chatSvc.userOffline(this.auth.currentUserValue.id, this.userId);
+    this.chatSvc.userOffline(this.auth?.currentUserValue?.id, this.userId);
     if (this.chatSubscription) {
       this.chatSubscription.unsubscribe();
     }

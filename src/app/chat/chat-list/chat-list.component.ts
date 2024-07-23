@@ -2,7 +2,6 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
   Output,
 } from "@angular/core";
 import { ToastController } from "@ionic/angular";
@@ -76,6 +75,8 @@ export class ChatListComponent {
         // Actualizar último login si el usuario está en línea
         if (message.status === "online") {
           chat.user.last_login = new Date();
+        } else if (message.status === "offline") {
+          chat.user.last_login = message.user.last_login;
         }
 
         // Actualizar mensaje si es más reciente

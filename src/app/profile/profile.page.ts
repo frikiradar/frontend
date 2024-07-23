@@ -191,6 +191,10 @@ export class ProfilePage {
   }
 
   initSwiper() {
+    if (!this.user) {
+      return;
+    }
+
     const swiperContainer: SwiperContainer =
       document.querySelector("#swiper-profile");
     Object.assign(swiperContainer, this.sliderOpts);

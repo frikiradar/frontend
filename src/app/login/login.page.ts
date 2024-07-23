@@ -155,7 +155,8 @@ export class LoginPage {
       console.error(error);
       if (
         error.toString().includes("popup_closed_by_user") ||
-        error.toString().includes("12501")
+        error.toString().includes("12501") ||
+        error.toString().includes("grantOfflineAccess")
       ) {
         const alert = await this.alert.create({
           header: this.i18n.translate("google-sign-in-error"),
@@ -165,6 +166,9 @@ export class LoginPage {
         });
 
         await alert.present();
+        alert.onDidDismiss().then(() => {
+          window.location.reload();
+        });
       }
     }
   }

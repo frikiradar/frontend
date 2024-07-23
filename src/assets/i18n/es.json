@@ -330,7 +330,7 @@
   "comentarios": "Comentarios",
   "reply": "Responder",
   "delete": "Eliminar",
-  "no-hay-comentarios": "No hay comentarios",
+  "no-hay-comentarios": "Todavía no hay comentarios. Se la primera persona en comentar.",
   "eliminar-historia": "Eliminar la historia",
   "reportar-historia": "Reportar la historia",
   "delete-post": "Eliminar publicación",
@@ -649,6 +649,7 @@
   "post-published-successfully": "Publicado correctamente",
   "error-publishing-your-story": "Error al publicar tu historia",
   "error-publishing-your-post": "Error al guardar tu publicación",
+  "post-will-be-deleted": "Eliminando publicación...",
   "error-deleting-post": "Error al eliminar la publicación",
   "main-page-frikiradar-dating-app-for-geeks": "Página principal, frikiradar, la app de citas para frikis",
   "find-people-nearby-with-same-tastes": "Encuentra personas cerca de ti con tus mismos gustos",
@@ -891,5 +892,7 @@
   "likes": "me gusta",
   "food": "Comida",
   "chat-connection-error": "Error de conexión con el servidor de chat.",
-  "chat-connection-restored": "¡Conexión con el servidor de chat restablecida!"
+  "chat-connection-restored": "¡Conexión con el servidor de chat restablecida!",
+  "show-all": "Mostrar todo",
+  "for-you": "Para ti"
 }

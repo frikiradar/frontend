@@ -12,6 +12,7 @@ import { NavService } from "../services/navigation.service";
 import { PostModal } from "../post/post-modal/post.modal";
 import { PageService } from "../services/page.service";
 import { Page } from "../models/page";
+import { PostPage } from "../post/post-page/post.page";
 
 @Component({
   selector: "app-explore",
@@ -109,6 +110,16 @@ export class ExplorePage {
     this.router.navigate(["/page", id]);
   }
 
+  async showPost(post: Story) {
+    const modal = await this.modalController.create({
+      component: PostPage,
+      componentProps: { id: post.id },
+      cssClass: "vertical-modal",
+    });
+
+    await modal.present();
+  }
+
   search() {
     this.router.navigate(["/search"]);
   }
@@ -124,6 +135,10 @@ export class ExplorePage {
   trackByPostId(index: number, post: any): any {
     return post.id;
   }
+
+  showAllPosts() {}
+
+  showForMePosts() {}
 
   async refresh(event) {
     this.loading = true;

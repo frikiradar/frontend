@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { ModalController } from "@ionic/angular";
 import { Story } from "src/app/models/story";
 import { NavService } from "src/app/services/navigation.service";
 import { StoryService } from "src/app/services/story.service";
@@ -17,12 +18,12 @@ export class PostPage {
   constructor(
     private storySvc: StoryService,
     private nav: NavService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
     const param = this.route.snapshot.paramMap.get("id");
-    let id: number = undefined;
     if (param) {
       this.id = +param;
     }
@@ -39,11 +40,15 @@ export class PostPage {
     }
   }
 
-  close() {
-    if (this.nav.canGoBack()) {
-      this.nav.back();
+  async close() {
+    if (await this.modalController.getTop()) {
+      this.modalController.dismiss();
     } else {
-      this.nav.navigateRoot("/");
+      if (this.nav.canGoBack()) {
+        this.nav.back();
+      } else {
+        this.nav.navigateRoot("/");
+      }
     }
   }
 }

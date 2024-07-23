@@ -1,3 +1,18 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+#page-comments {
+  padding-bottom: 70px;
+}
+
+ion-footer {
+  position: fixed;
+  bottom: 0;
+  background: var(--ion-color-dark);
+}
+
 ion-card {
   --background: transparent;
 
@@ -88,6 +103,7 @@ ion-modal ion-avatar {
 
 #comment-input {
   margin-bottom: 5px;
+  margin-top: 5px;
 
   ion-buttons {
     margin: 0;

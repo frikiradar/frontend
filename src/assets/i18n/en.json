@@ -330,7 +330,7 @@
     "comentarios": "Comments",
     "reply": "Reply",
     "delete": "Delete",
-    "no-hay-comentarios": "No comments",
+    "no-hay-comentarios": "There are no comments yet. Be the first to comment.",
     "eliminar-historia": "Delete story",
     "reportar-historia": "Report story",
     "delete-post": "Delete post",
@@ -649,6 +649,7 @@
     "post-published-successfully": "Post published successfully",
     "error-publishing-your-story": "Error publishing your story",
     "error-publishing-your-post": "Error publishing your post",
+    "post-will-be-deleted": "Deleting post...",
     "error-deleting-post": "Error deleting the post",
     "main-page-frikiradar-dating-app-for-geeks": "Main page, frikiradar, the dating app for geeks",
     "find-people-nearby-with-same-tastes": "Find people nearby with the same tastes",
@@ -891,5 +892,7 @@
     "likes": "likes",
     "food": "Food",
     "chat-connection-error": "Chat server connection error",
-    "chat-connection-restored": "Chat server connection restored!"
+    "chat-connection-restored": "Chat server connection restored!",
+    "show-all": "Show all",
+    "for-you": "For you"
 }
