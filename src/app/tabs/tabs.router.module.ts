@@ -29,13 +29,13 @@ const routes: Routes = [
         ],
       },
       {
-        path: "explore",
+        path: "community",
         children: [
           {
             path: "",
             loadChildren: () =>
-              import("../explore/explore.module").then(
-                (m) => m.ExplorePageModule
+              import("../community/community.module").then(
+                (m) => m.CommunityPageModule
               ),
           },
         ],

@@ -230,7 +230,7 @@ export class UtilsService {
 
     if (isPlatform("hybrid")) {
       const options = {
-        title: this.i18n.translate("share"),
+        // title: this.i18n.translate("share"),
         text: message, // not supported on some apps (Facebook, Instagram)
         url: `${url}?referrer=${referrer}`,
         dialogTitle: this.i18n.translate("choose-app-and-help-us-grow"), // Android only, you can override the default share sheet title,

@@ -5,7 +5,7 @@ import { ConfigService } from "../services/config.service";
 import { AuthService } from "../services/auth.service";
 import { Story } from "../models/story";
 import { AnimateService } from "../services/animate.service";
-import { IonInfiniteScroll, ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 import { StoryService } from "../services/story.service";
 import { RulesPage } from "../rules/rules.page";
 import { NavService } from "../services/navigation.service";
@@ -15,11 +15,11 @@ import { Page } from "../models/page";
 import { PostPage } from "../post/post-page/post.page";
 
 @Component({
-  selector: "app-explore",
-  templateUrl: "./explore.page.html",
-  styleUrls: ["./explore.page.scss"],
+  selector: "app-community",
+  templateUrl: "./community.page.html",
+  styleUrls: ["./community.page.scss"],
 })
-export class ExplorePage {
+export class CommunityPage {
   public stories: Story[];
   public posts: Story[];
   public pages: Page[];
