@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { ConfigService } from "../services/config.service";
 import { AuthService } from "../services/auth.service";
 import { Story } from "../models/story";
 import { AnimateService } from "../services/animate.service";
-import { ModalController } from "@ionic/angular";
+import { IonInfiniteScroll, ModalController } from "@ionic/angular";
 import { StoryService } from "../services/story.service";
 import { RulesPage } from "../rules/rules.page";
 import { NavService } from "../services/navigation.service";
@@ -72,20 +72,14 @@ export class ExplorePage {
   }
 
   async getMorePosts(event) {
-    if (this.posts.length < 15) {
-      event.target.disabled = true;
-      return;
-    }
-
     this.page++;
     const posts = await this.storySvc.getPosts(this.page);
     this.posts = [...this.posts, ...posts];
 
     event.target.complete();
 
-    if (posts.length === 0) {
+    if (posts.length < 15) {
       event.target.disabled = true;
-      return;
     }
   }
 

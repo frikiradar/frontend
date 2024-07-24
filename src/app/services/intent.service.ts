@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Intent, SendIntent } from "send-intent";
-import { AlertController, ModalController } from "@ionic/angular";
+import { AlertController, isPlatform, ModalController } from "@ionic/angular";
 import { PostModal } from "../post/post-modal/post.modal";
 import { StoryModal } from "../story/story-modal/story.modal";
+import { I18nService } from "./i18n.service";
 
 @Injectable({
   providedIn: "root",
@@ -10,10 +11,15 @@ import { StoryModal } from "../story/story-modal/story.modal";
 export class IntentService {
   constructor(
     private modalController: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private i18n: I18nService
   ) {}
 
   async init() {
+    if (!isPlatform("capacitor")) {
+      return;
+    }
+
     SendIntent.checkSendIntentReceived()
       .then(async (result: Intent) => {
         if (result) {
@@ -33,22 +39,23 @@ export class IntentService {
           }
 
           const alert = await this.alertController.create({
-            header: "Selecciona",
-            message: "¿Quieres crear un post o una historia?",
+            header: this.i18n.translate("choose"),
+            message: this.i18n.translate("choose-post-or-story"),
             buttons: [
               {
-                text: "Post",
+                text: this.i18n.translate("post"),
                 handler: () => {
                   this.createModal("post", imageUrl, text);
                 },
               },
               {
-                text: "Historia",
+                text: this.i18n.translate("your-story"),
                 handler: () => {
-                  this.createModal("historia", imageUrl, text);
+                  this.createModal("story", imageUrl, text);
                 },
               },
             ],
+            cssClass: "round-alert",
           });
 
           await alert.present();
@@ -57,7 +64,7 @@ export class IntentService {
       .catch((err) => console.error(err));
   }
 
-  async createModal(type: "post" | "historia", imageUrl: string, text: string) {
+  async createModal(type: "post" | "story", imageUrl: string, text: string) {
     const modal = await this.modalController.create({
       component: type == "post" ? PostModal : StoryModal, // Asumiendo que este componente puede manejar ambos tipos, de lo contrario, especifica el componente adecuado
       keyboardClose: true,

@@ -249,7 +249,7 @@
               </ion-label>
             </ion-item>
 
-            <h2>{{ "buscando" | i18n }}</h2>
+            <h2 *ngIf="user?.connection?.length">{{ "buscando" | i18n }}</h2>
             <ion-item *ngIf="user?.connection?.length" lines="none">
               <ion-icon name="search"></ion-icon>
               <ion-label class="ion-text-wrap">

@@ -142,6 +142,7 @@ const routes: Routes = [
     path: "post/:id",
     loadChildren: () =>
       import("./post/post-page/post.module").then((m) => m.PostPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: "story/:id",

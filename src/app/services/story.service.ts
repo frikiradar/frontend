@@ -1,4 +1,7 @@
 import { Injectable } from "@angular/core";
+import { ModalController } from "@ionic/angular";
+import { firstValueFrom } from "rxjs";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { Story } from "../models/story";
 import { User } from "../models/user";
@@ -6,7 +9,11 @@ import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
-import { ModalController } from "@ionic/angular";
+import { environment } from "src/environments/environment";
+
+const httpOptions = {
+  headers: new HttpHeaders({ "Content-Type": "application/json" }),
+};
 
 @Injectable({
   providedIn: "root",
@@ -16,12 +23,23 @@ export class StoryService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private http: HttpClient
   ) {}
 
   async getStory(id: Story["id"]) {
     const story = (await this.rest.get(`story/${id}`)) as Story;
     return this.setLikes(story);
+  }
+
+  async getPublicStory(id: Story["id"]) {
+    try {
+      return (await firstValueFrom(
+        this.http.get(`${environment.root}api/public-story/${id}`, httpOptions)
+      )) as Story;
+    } catch (e) {
+      throw new Error("No se puede obtener la historia");
+    }
   }
 
   async getUserStories(id: User["id"]) {
@@ -193,11 +211,13 @@ export class StoryService {
   }
 
   async like(id: Story["id"]) {
-    return (await this.rest.put("like-story", { story: id })) as Story;
+    const story = (await this.rest.put("like-story", { story: id })) as Story;
+    return this.setLikes(story);
   }
 
   async unlike(id: Story["id"]) {
-    return (await this.rest.delete(`like-story/${id}`)) as Story;
+    const story = (await this.rest.delete(`like-story/${id}`)) as Story;
+    return this.setLikes(story);
   }
 
   async commentStory(
@@ -205,19 +225,25 @@ export class StoryService {
     text: Story["text"],
     mentions?: User["username"][]
   ) {
-    return (await this.rest.put("comment-story", {
+    const story = (await this.rest.put("comment-story", {
       story: id,
       text,
       mentions,
     })) as Story;
+
+    return this.setLikes(story);
   }
 
-  likeComment(id: Story["comments"][0]["id"]) {
-    return this.rest.put("like-comment", { comment: id }) as Promise<Story>;
+  async likeComment(id: Story["comments"][0]["id"]) {
+    const story = (await this.rest.put("like-comment", {
+      comment: id,
+    })) as Story;
+    return this.setLikes(story);
   }
 
-  unlikeComment(id: Story["comments"][0]["id"]) {
-    return this.rest.delete(`like-comment/${id}`) as Promise<Story>;
+  async unlikeComment(id: Story["comments"][0]["id"]) {
+    const story = (await this.rest.delete(`like-comment/${id}`)) as Story;
+    return this.setLikes(story);
   }
 
   deleteComment(id: Story["id"]) {

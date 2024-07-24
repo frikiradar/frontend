@@ -27,6 +27,7 @@ import { I18nService } from "../services/i18n.service";
 import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 import { Keyboard } from "@capacitor/keyboard";
 import { UrlService } from "../services/url.service";
+import { NavService } from "../services/navigation.service";
 
 @Component({
   selector: "app-post",
@@ -61,18 +62,20 @@ export class PostComponent {
     private storySvc: StoryService,
     private modalController: ModalController,
     private utils: UtilsService,
-    private userSvc: UserService,
+    public userSvc: UserService,
     public auth: AuthService,
     private toast: ToastController,
     private i18n: I18nService,
     private alertCtrl: AlertController,
-    private urlSvc: UrlService
+    private urlSvc: UrlService,
+    private nav: NavService
   ) {
     this.observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (
+              this.auth.currentUserValue &&
               !this.post.viewed &&
               this.auth.currentUserValue.id !== this.post.user.id
             ) {
@@ -92,7 +95,9 @@ export class PostComponent {
   async ngOnInit() {
     if (this.page) {
       setTimeout(() => {
-        this.textarea.setFocus();
+        if (this.textarea) {
+          this.textarea.setFocus();
+        }
       }, 100);
     }
   }
@@ -142,6 +147,11 @@ export class PostComponent {
   }
 
   async switchLikePost(event: Event) {
+    if (!this.auth.currentUserValue) {
+      this.redirectToLogin();
+      return;
+    }
+
     event.stopPropagation();
     try {
       let post = undefined;
@@ -160,6 +170,11 @@ export class PostComponent {
   }
 
   async switchLikeComment(comment: Story["comments"][0]) {
+    if (!this.auth.currentUserValue) {
+      this.redirectToLogin();
+      return;
+    }
+
     const liked = comment.likes.some(
       (l) => l.id === this.auth.currentUserValue.id
     );
@@ -224,6 +239,11 @@ export class PostComponent {
   }
 
   showViewsSheet(event: Event) {
+    if (!this.auth.currentUserValue) {
+      this.redirectToLogin();
+      return;
+    }
+
     event.stopPropagation();
     this.showViews = true;
   }
@@ -233,6 +253,10 @@ export class PostComponent {
   }
 
   showCommentOptionsSheet(comment: Story["comments"][0], event) {
+    if (!this.auth.currentUserValue) {
+      return;
+    }
+
     event.preventDefault();
     this.selectedComment = comment;
     this.showCommentOptions = true;
@@ -573,11 +597,30 @@ export class PostComponent {
   }
 
   showPostPage(event: Event) {
+    if (!this.auth.currentUserValue) {
+      this.redirectToLogin();
+      return;
+    }
+
     event.stopPropagation();
     this.showPost.emit(this.post);
   }
 
+  sharePost(event: Event) {
+    event.stopPropagation();
+    const url = `https://frikiradar.app/post/${this.post.id}`;
+    const text =
+      this.i18n.translate("check-out-this-post-on-frikiradar") +
+      (this.post.text ? ": " + this.post.text : "");
+    this.utils.share(url, text);
+  }
+
   async reply(comment: Story["comments"][0]) {
+    if (!this.auth.currentUserValue) {
+      this.redirectToLogin();
+      return;
+    }
+
     if (comment.user.id !== this.auth.currentUserValue.id) {
       this.textarea.value = `@${comment.user.username} `;
       this.setMention(comment.user.username);
@@ -623,6 +666,12 @@ export class PostComponent {
       this.modalController.dismiss();
     }
     this.router.navigate(["/page", slug]);
+  }
+
+  redirectToLogin() {
+    this.nav.navigateRoot(["/login"], {
+      queryParams: { returnUrl: this.router.url },
+    });
   }
 
   ngOnDestroy() {

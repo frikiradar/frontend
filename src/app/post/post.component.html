@@ -1,5 +1,5 @@
 <div #postElement class="wrapper">
-  <div class="container">
+  <div id="container">
     <ion-card>
       <ion-card-header>
         <ion-label
@@ -10,20 +10,42 @@
           >#{{ post.slug }}</ion-label
         >
         <ion-item lines="none" button>
+          <ion-icon
+            *ngIf="userSvc.getRoleIcon(post.user)"
+            [name]="userSvc.getRoleIcon(post.user)"
+            [src]="userSvc.getRoleIcon(post.user)"
+            slot="icon-only"
+            size="small"
+            [color]="userSvc.getRoleColor(post.user)"
+            (click)="userSvc.showRole(post.user)"
+          ></ion-icon>
           <ion-avatar slot="start" (click)="showProfile()">
             <img [src]="post?.user?.thumbnail" [alt]="post?.user?.name" />
           </ion-avatar>
-          <ion-label>
+          <ion-label (click)="showProfile()">
             <h2 class="post-name">{{ post?.user?.name }}</h2>
             <p class="post-username">&#64;{{ post?.user?.username }}</p>
             <ion-note class="post-date">
               · {{ post?.time_creation | chatDate }}</ion-note
             >
           </ion-label>
-          <ion-buttons slot="end" class="post-options">
+          <ion-buttons
+            slot="end"
+            class="post-options"
+            *ngIf="auth.currentUserValue"
+          >
             <ion-button (click)="showOptionsSheet()" fill="clear" color="light">
               <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
             </ion-button>
+            <ion-icon
+              *ngIf="userSvc.getRoleIcon(post.user)"
+              [name]="userSvc.getRoleIcon(post.user)"
+              [src]="userSvc.getRoleIcon(post.user)"
+              slot="icon-only"
+              size="small"
+              [color]="userSvc.getRoleColor(post.user)"
+              (click)="userSvc.showRole(post.user)"
+            ></ion-icon>
           </ion-buttons>
         </ion-item>
       </ion-card-header>
@@ -83,12 +105,24 @@
                 <ion-label>{{ post.viewStories.length }}</ion-label>
               </ion-button>
             </ion-col>
+            <ion-col class="ion-text-center">
+              <ion-button
+                fill="clear"
+                shape="round"
+                color="light"
+                (click)="sharePost($event)"
+              >
+                <ion-icon name="share-social" slot="start"></ion-icon>
+              </ion-button>
+            </ion-col>
           </ion-row>
         </ion-buttons>
       </ion-card-content>
     </ion-card>
     <div *ngIf="page" id="page-comments" class="comments-modal">
-      <p class="ion-padding">{{ "comentarios" | i18n }}</p>
+      <p class="ion-padding" *ngIf="post?.comments.length">
+        {{ "comentarios" | i18n }}
+      </p>
       <ion-list
         id="usernames"
         *ngIf="usernames?.length && textarea?.value?.length > 3"
@@ -146,7 +180,7 @@
               >
               &nbsp;&nbsp;&nbsp;
               <span
-                *ngIf="auth.currentUserValue.id !== comment.user.id"
+                *ngIf="auth?.currentUserValue?.id !== comment.user.id"
                 button
                 (click)="reply(comment)"
                 >{{ "reply" | i18n }}</span
@@ -168,12 +202,14 @@
           </ion-note>
         </ion-item>
       </ion-list>
-      <ion-item *ngIf="post?.comments.length == 0" color="dark" lines="none">
+      <div class="full-center ion-padding" *ngIf="post?.comments.length == 0">
+        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+        <h2>{{ "comment-post" | i18n }}</h2>
         <p>{{ "no-hay-comentarios" | i18n }}</p>
-      </ion-item>
+      </div>
     </div>
   </div>
-  <ion-footer>
+  <ion-footer *ngIf="auth.currentUserValue">
     <ion-item id="comment-input" lines="none" *ngIf="page">
       <ion-avatar slot="start">
         <img

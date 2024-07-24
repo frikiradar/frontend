@@ -41,7 +41,8 @@ export class AuthGuard {
     } else if (
       state.url.includes("/profile") ||
       state.url.includes("/page") ||
-      state.url.includes("/unsubscribe")
+      state.url.includes("/unsubscribe") ||
+      state.url.includes("/post")
     ) {
       return true;
     }

@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ModalController } from "@ionic/angular";
 import { Story } from "src/app/models/story";
+import { AuthService } from "src/app/services/auth.service";
 import { NavService } from "src/app/services/navigation.service";
 import { StoryService } from "src/app/services/story.service";
 
@@ -19,7 +20,8 @@ export class PostPage {
     private storySvc: StoryService,
     private nav: NavService,
     private route: ActivatedRoute,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private auth: AuthService
   ) {}
 
   async ngOnInit() {
@@ -28,7 +30,11 @@ export class PostPage {
       this.id = +param;
     }
 
-    this.post = await this.storySvc.getStory(this.id);
+    if (this.auth.currentUserValue) {
+      this.post = await this.storySvc.getStory(this.id);
+    } else {
+      this.post = await this.storySvc.getPublicStory(this.id);
+    }
   }
 
   async removePost(event: Event) {
