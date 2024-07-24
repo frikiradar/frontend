@@ -28,6 +28,7 @@ import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 import { Keyboard } from "@capacitor/keyboard";
 import { UrlService } from "../services/url.service";
 import { NavService } from "../services/navigation.service";
+import { Meta, Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-post",
@@ -68,7 +69,9 @@ export class PostComponent {
     private i18n: I18nService,
     private alertCtrl: AlertController,
     private urlSvc: UrlService,
-    private nav: NavService
+    private nav: NavService,
+    private meta: Meta,
+    private title: Title
   ) {
     this.observer = new IntersectionObserver(
       (entries) => {
@@ -108,6 +111,29 @@ export class PostComponent {
         this.observer.observe(this.postElement.nativeElement);
       }
     }, 1000);
+
+    this.meta.addTags([
+      {
+        name: "keywords",
+        content:
+          "frikiradar, friki, red social, citas, " + this.post?.user.name,
+      },
+      { name: "robots", content: "index, follow" },
+      { name: "author", content: "frikiradar" },
+      { charset: "UTF-8" },
+      {
+        property: "og:image",
+        content: this.post?.image ?? (this.post?.user.avatar as string),
+      },
+    ]);
+
+    this.title.setTitle(
+      "Publicación de " + this.post?.user.username + " en frikiradar"
+    );
+    this.meta.updateTag({
+      name: "description",
+      content: this.post?.text,
+    });
   }
 
   youtubePreview() {
