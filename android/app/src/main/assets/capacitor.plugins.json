@@ -92,6 +92,10 @@
 		"classpath": "nl.raphael.settings.NativeSettingsPlugin"
 	},
 	{
+		"pkg": "send-intent",
+		"classpath": "de.mindlib.sendIntent.SendIntent"
+	},
+	{
 		"pkg": "@capacitor/device",
 		"classpath": "com.capacitorjs.plugins.device.DevicePlugin"
 	},

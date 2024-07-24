@@ -32,6 +32,7 @@ dependencies {
     implementation project(':mozartec-capacitor-microphone')
     implementation project(':revenuecat-purchases-capacitor')
     implementation project(':capacitor-native-settings')
+    implementation project(':send-intent')
     implementation project(':capacitor-device')
     implementation project(':capacitor-dialog')
     implementation project(':capacitor-filesystem')

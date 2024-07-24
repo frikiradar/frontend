@@ -22,6 +22,7 @@ import { StoreService } from "./services/store.service";
 import { GoogleAuthService } from "./services/google-auth.service";
 import { I18nService } from "./services/i18n.service";
 import { ChatService } from "./services/chat.service";
+import { IntentService } from "./services/intent.service";
 
 @Component({
   selector: "app-root",
@@ -45,7 +46,8 @@ export class AppComponent {
     private store: StoreService,
     private googleAuth: GoogleAuthService,
     private i18n: I18nService,
-    private chatSvc: ChatService
+    private chatSvc: ChatService,
+    private intent: IntentService
   ) {}
 
   async ngAfterViewInit() {
@@ -75,6 +77,8 @@ export class AppComponent {
           this.adService.init();
           // Init store
           this.store.init();
+          // InitSendIntent
+          this.intent.init();
         }
       });
 

@@ -11,10 +11,10 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="selectPicture('gallery')">
+      <ion-button (click)="selectPicture('gallery')" *ngIf="!intent">
         <ion-icon slot="icon-only" name="image-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="selectPicture('camera')">
+      <ion-button (click)="selectPicture('camera')" *ngIf="!intent">
         <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
       </ion-button>
       <ion-button *ngIf="!emojis" (click)="emojiPicker()">

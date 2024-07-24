@@ -1,4 +1,10 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+} from "@angular/core";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Keyboard } from "@capacitor/keyboard";
 import {
@@ -8,6 +14,8 @@ import {
   ToastController,
 } from "@ionic/angular";
 import runes from "runes";
+import { Filesystem } from "@capacitor/filesystem";
+
 import { Page } from "src/app/models/page";
 import { User } from "src/app/models/user";
 import { AuthService } from "src/app/services/auth.service";
@@ -24,7 +32,10 @@ declare var EmojiMart: any; // Esto declara EmojiMart para TypeScript
   styleUrls: ["./post.modal.scss"],
 })
 export class PostModal {
-  @Input() slug: string;
+  @Input() public slug: string;
+  @Input() imageUrl: string;
+  @Input() public text: string;
+  @Input() public intent = false;
 
   @ViewChild("textarea", { static: false })
   textarea: IonTextarea;
@@ -39,7 +50,6 @@ export class PostModal {
   public image: SafeUrl = undefined;
   public imageFile: Blob;
   public showBackdrop = false;
-  public text: string;
   public emojis = false;
   public user: User;
   public page = 1;
@@ -55,7 +65,8 @@ export class PostModal {
     private storySvc: StoryService,
     private config: ConfigService,
     private auth: AuthService,
-    private pagesSvc: PageService
+    private pagesSvc: PageService,
+    private cd: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -67,6 +78,22 @@ export class PostModal {
 
     if (!this.slug) {
       this.getPages();
+    }
+  }
+
+  async ngAfterViewInit() {
+    if (this.imageUrl) {
+      let resultUrl = decodeURIComponent(this.imageUrl);
+      const base64 = await Filesystem.readFile({ path: resultUrl });
+      if (typeof base64.data == "string") {
+        const blob = this.utils.base64toBlob(base64.data);
+        this.addPicture(blob);
+      }
+    }
+
+    if (this.text) {
+      this.textarea.value = this.text;
+      this.youtube = this.utils.extractYoutubeLink(this.text);
     }
   }
 
@@ -147,6 +174,8 @@ export class PostModal {
     }
     this.image = this.sanitizer.bypassSecurityTrustUrl(image);
     this.imageFile = await this.utils.urltoBlob(image);
+
+    this.cd.detectChanges();
 
     this.youtube = undefined;
   }

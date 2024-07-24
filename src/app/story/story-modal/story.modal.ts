@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { Keyboard } from "@capacitor/keyboard";
 import {
@@ -8,6 +15,7 @@ import {
   isPlatform,
 } from "@ionic/angular";
 declare var EmojiMart: any; // Esto declara EmojiMart para TypeScript
+import { Filesystem } from "@capacitor/filesystem";
 
 import { StoryService } from "../../services/story.service";
 import { UtilsService } from "../../services/utils.service";
@@ -24,6 +32,10 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class StoryModal implements OnInit {
   @Input() slug: string;
+  @Input() imageUrl: string;
+  @Input() public text: string;
+  @Input() public intent = false;
+
   @ViewChild("imageInput", { static: false })
   imageInput: ElementRef;
 
@@ -36,7 +48,6 @@ export class StoryModal implements OnInit {
   public image: SafeUrl = undefined;
   public imageFile: Blob;
   public showBackdrop = false;
-  public storyText = "";
   private backgroundColors = [
     "#FF3380",
     "#8E24AA",
@@ -61,7 +72,8 @@ export class StoryModal implements OnInit {
     private toast: ToastController,
     private i18n: I18nService,
     private config: ConfigService,
-    private auth: AuthService
+    private auth: AuthService,
+    private cd: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -70,6 +82,25 @@ export class StoryModal implements OnInit {
     setTimeout(() => {
       this.storyTextarea.setFocus();
     }, 500);
+  }
+
+  async ngAfterViewInit() {
+    if (this.text) {
+      setTimeout(() => {
+        this.storyTextarea.value = this.text;
+      }, 500);
+
+      this.youtube = this.utils.extractYoutubeLink(this.text);
+    }
+
+    if (this.imageUrl) {
+      let resultUrl = decodeURIComponent(this.imageUrl);
+      const base64 = await Filesystem.readFile({ path: resultUrl });
+      if (typeof base64.data == "string") {
+        const blob = this.utils.base64toBlob(base64.data);
+        await this.addPicture(blob);
+      }
+    }
   }
 
   changeColor() {
@@ -102,10 +133,10 @@ export class StoryModal implements OnInit {
       );
     }
 
-    this.storyText = event.target.value;
+    this.text = event.target.value;
 
     if (!this.image) {
-      this.youtube = this.utils.extractYoutubeLink(this.storyText);
+      this.youtube = this.utils.extractYoutubeLink(this.text);
     }
   }
 
@@ -161,6 +192,8 @@ export class StoryModal implements OnInit {
     this.image = this.sanitizer.bypassSecurityTrustUrl(image);
     this.imageFile = await this.utils.urltoBlob(image);
 
+    this.cd.detectChanges();
+
     this.backgroundColor = "#000000";
 
     setTimeout(() => {
@@ -168,6 +201,8 @@ export class StoryModal implements OnInit {
     }, 500);
 
     this.youtube = undefined;
+
+    this.imageTextarea.value = this.text;
   }
 
   removePicture() {
@@ -180,7 +215,8 @@ export class StoryModal implements OnInit {
       this.storyTextarea.setFocus();
     }, 500);
 
-    this.youtube = this.utils.extractYoutubeLink(this.storyText);
+    this.storyTextarea.value = this.text;
+    this.youtube = this.utils.extractYoutubeLink(this.text);
   }
 
   async cropImagebyEvent(event: any) {
@@ -279,11 +315,11 @@ export class StoryModal implements OnInit {
     if (this.image) {
       this.imageTextarea.value =
         (this.imageTextarea.value ?? "") + emoji.native;
-      this.storyText = this.imageTextarea.value;
+      this.text = this.imageTextarea.value;
     } else {
       this.storyTextarea.value =
         (this.storyTextarea.value ?? "") + emoji.native;
-      this.storyText = this.storyTextarea.value;
+      this.text = this.storyTextarea.value;
     }
   }
 
