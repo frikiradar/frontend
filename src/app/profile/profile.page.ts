@@ -409,34 +409,30 @@ export class ProfilePage {
   }
 
   async showTag(tag: Tag) {
-    if (tag.category.name === "games" || tag.category.name === "films") {
-      try {
-        if (tag.slug) {
-          this.router.navigate(["/page", tag.slug]);
-        } else {
-          (
-            await this.toast.create({
-              message: this.i18n.translate("creating-page"),
-              position: "middle",
-            })
-          ).present();
-          const page = await this.pageSvc.setPage(tag.id);
-          this.toast.dismiss();
-          this.user.tags.map((t) => {
-            if (t.id === tag.id) {
-              t.slug = page.slug;
-            }
-          });
-          if (this.auth.currentUserValue.id === this.user.id) {
-            this.auth.setAuthUser(this.user);
-          }
-          this.router.navigate(["/page", page.slug]);
-        }
-      } catch (e) {
+    try {
+      if (tag.slug) {
+        this.router.navigate(["/page", tag.slug]);
+      } else {
+        (
+          await this.toast.create({
+            message: this.i18n.translate("creating-page"),
+            position: "middle",
+          })
+        ).present();
+        const page = await this.pageSvc.setPage(tag.id);
         this.toast.dismiss();
-        this.router.navigate(["/search", tag.name]);
+        this.user.tags.map((t) => {
+          if (t.id === tag.id) {
+            t.slug = page.slug;
+          }
+        });
+        if (this.auth.currentUserValue.id === this.user.id) {
+          this.auth.setAuthUser(this.user);
+        }
+        this.router.navigate(["/page", page.slug]);
       }
-    } else {
+    } catch (e) {
+      this.toast.dismiss();
       this.router.navigate(["/search", tag.name]);
     }
   }

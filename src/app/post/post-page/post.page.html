@@ -5,7 +5,9 @@
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ "post-of" | i18n: {name: post?.user.name} }}</ion-title>
+    <ion-title *ngIf="post?.user"
+      >{{ "post-of" | i18n }} {{post?.user.name}}</ion-title
+    >
   </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="post">

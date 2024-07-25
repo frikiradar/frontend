@@ -413,3 +413,11 @@ body.transparent {
     padding-bottom: var(--safe-area-inset-bottom);
   }
 }
+
+ion-select-popover {
+  background: var(--ion-color-dark);
+
+  ion-radio {
+    color: var(--ion-color-light);
+  }
+}

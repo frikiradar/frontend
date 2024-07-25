@@ -94,6 +94,19 @@
             <ion-text color="ligth">{{ "posts" | i18n }}</ion-text>
           </h2>
         </ion-label>
+        <ion-select
+          slot="end"
+          interface="popover"
+          (ionChange)="filterPosts($event.detail.value)"
+          [value]="postFilter"
+        >
+          <ion-select-option value="show-all">
+            {{ "show-all" | i18n }}
+          </ion-select-option>
+          <ion-select-option value="for-you">
+            {{ "for-you" | i18n }}
+          </ion-select-option>
+        </ion-select>
       </ion-item>
 
       <!--<ion-item lines="none" id="post-filters">
@@ -119,7 +132,6 @@
         *ngFor="let post of posts; trackBy: trackByPostId"
         [post]="post"
         (deletePost)="removePost($event)"
-        (showPost)="showPost($event)"
       ></app-post>
       <ion-infinite-scroll
         (ionInfinite)="getMorePosts($event)"

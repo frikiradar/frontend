@@ -37,7 +37,6 @@ import { Meta, Title } from "@angular/platform-browser";
 })
 export class PostComponent {
   @Output() deletePost: EventEmitter<Story> = new EventEmitter();
-  @Output() showPost: EventEmitter<Story> = new EventEmitter();
   @Input() post: Story;
   @Input() page = false;
 
@@ -629,7 +628,7 @@ export class PostComponent {
     }
 
     event.stopPropagation();
-    this.showPost.emit(this.post);
+    this.router.navigate(["/post", this.post.id]);
   }
 
   sharePost(event: Event) {

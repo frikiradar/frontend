@@ -72,8 +72,10 @@ export class StoryService {
     return stories;
   }
 
-  async getPosts(page = 1) {
-    const posts = (await this.rest.get(`posts?page=${page}`)) as Story[];
+  async getPosts(page = 1, filter: "for-you" | "show-all" = "show-all") {
+    const posts = (await this.rest.get(
+      `posts?page=${page}&filter=${filter}`
+    )) as Story[];
 
     posts.map((p) => {
       p = this.setLikes(p);

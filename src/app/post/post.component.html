@@ -123,23 +123,6 @@
       <p class="ion-padding" *ngIf="post?.comments.length">
         {{ "comentarios" | i18n }}
       </p>
-      <ion-list
-        id="usernames"
-        *ngIf="usernames?.length && textarea?.value?.length > 3"
-      >
-        <ion-item
-          lines="none"
-          button
-          detail="false"
-          *ngFor="let u of usernames"
-          (click)="setMention(u.username)"
-        >
-          <ion-avatar>
-            <img [src]="u.thumbnail" />
-          </ion-avatar>
-          <ion-label>{{ u.username }}</ion-label>
-        </ion-item>
-      </ion-list>
       <ion-list *ngIf="post?.comments.length > 0">
         <ion-item
           *ngFor="let comment of post.comments"
@@ -210,6 +193,23 @@
     </div>
   </div>
   <ion-footer *ngIf="auth.currentUserValue">
+    <ion-list
+      id="usernames"
+      *ngIf="usernames?.length && textarea?.value?.length > 3"
+    >
+      <ion-item
+        lines="none"
+        button
+        detail="false"
+        *ngFor="let u of usernames"
+        (click)="setMention(u.username)"
+      >
+        <ion-avatar>
+          <img [src]="u.thumbnail" default="/assets/img/users/default.png" />
+        </ion-avatar>
+        <ion-label>{{ u.username }}</ion-label>
+      </ion-item>
+    </ion-list>
     <ion-item id="comment-input" lines="none" *ngIf="page">
       <ion-avatar slot="start">
         <img

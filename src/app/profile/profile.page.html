@@ -261,6 +261,22 @@
                 </ion-chip>
               </ion-label>
             </ion-item>
+
+            <h2 *ngIf="getTagsCategory('hobbies')?.length">
+              {{ "hobbies" | i18n }}
+            </h2>
+            <ion-item
+              class="resume"
+              *ngIf="getTagsCategory('hobbies')?.length"
+              lines="none"
+            >
+              <ion-icon src="/assets/icon/heart_plus.svg"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <ion-chip *ngFor="let tag of getTagsCategory('hobbies')">
+                  <ion-label (click)="showTag(tag)">{{ tag.name }}</ion-label>
+                </ion-chip>
+              </ion-label>
+            </ion-item>
           </ion-list>
 
           <h2 *ngIf="user?.tags?.length">{{ "interests" | i18n}}</h2>

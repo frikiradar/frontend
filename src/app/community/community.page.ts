@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { ConfigService } from "../services/config.service";
@@ -12,7 +12,6 @@ import { NavService } from "../services/navigation.service";
 import { PostModal } from "../post/post-modal/post.modal";
 import { PageService } from "../services/page.service";
 import { Page } from "../models/page";
-import { PostPage } from "../post/post-page/post.page";
 
 @Component({
   selector: "app-community",
@@ -25,6 +24,8 @@ export class CommunityPage {
   public pages: Page[];
   public loading = true;
   private page = 1;
+  public postFilter: "for-you" | "show-all" = "show-all";
+  private canLoadMore: boolean = true;
 
   constructor(
     private router: Router,
@@ -68,18 +69,23 @@ export class CommunityPage {
   }
 
   async getPosts() {
-    this.posts = await this.storySvc.getPosts();
+    this.posts = await this.storySvc.getPosts(this.page, this.postFilter);
   }
 
   async getMorePosts(event) {
+    if (!this.canLoadMore) {
+      event.target.complete();
+      return;
+    }
+
     this.page++;
-    const posts = await this.storySvc.getPosts(this.page);
+    const posts = await this.storySvc.getPosts(this.page, this.postFilter);
     this.posts = [...this.posts, ...posts];
 
     event.target.complete();
 
     if (posts.length < 15) {
-      event.target.disabled = true;
+      this.canLoadMore = false;
     }
   }
 
@@ -104,16 +110,6 @@ export class CommunityPage {
     this.router.navigate(["/page", id]);
   }
 
-  async showPost(post: Story) {
-    const modal = await this.modalController.create({
-      component: PostPage,
-      componentProps: { id: post.id },
-      cssClass: "vertical-modal",
-    });
-
-    await modal.present();
-  }
-
   search() {
     this.router.navigate(["/search"]);
   }
@@ -130,9 +126,12 @@ export class CommunityPage {
     return post.id;
   }
 
-  showAllPosts() {}
-
-  showForMePosts() {}
+  async filterPosts(filter: "for-you" | "show-all") {
+    this.postFilter = filter;
+    this.page = 1;
+    this.canLoadMore = true;
+    await this.getPosts();
+  }
 
   async refresh(event) {
     this.loading = true;
@@ -141,5 +140,6 @@ export class CommunityPage {
     await this.getPosts();
     event.target.complete();
     this.loading = false;
+    this.canLoadMore = true;
   }
 }
