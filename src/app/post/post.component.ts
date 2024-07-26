@@ -24,7 +24,6 @@ import { UtilsService } from "../services/utils.service";
 import { UserService } from "../services/user.service";
 import { AuthService } from "../services/auth.service";
 import { I18nService } from "../services/i18n.service";
-import { CommentLikesModal } from "../story/comment-likes/comment-likes.modal";
 import { Keyboard } from "@capacitor/keyboard";
 import { UrlService } from "../services/url.service";
 import { NavService } from "../services/navigation.service";
@@ -48,6 +47,7 @@ export class PostComponent {
 
   public selectedComment: Story["comments"][0];
   public showCommentOptions = false;
+  public showCommentLikes = false;
   public showOptions = false;
   public showViews = false;
 
@@ -609,16 +609,18 @@ export class PostComponent {
     this.router.navigate(["/"]);
   }
 
-  async viewCommentLikes(likes: Story["comments"][0]["likes"]) {
-    const modal = await this.modalController.create({
-      component: CommentLikesModal,
-      keyboardClose: true,
-      showBackdrop: true,
-      componentProps: { likes },
-      cssClass: "medium-modal",
-    });
+  async viewCommentLikesSheet(comment: Story["comments"][0], event: Event) {
+    if (!this.auth.currentUserValue) {
+      return;
+    }
 
-    await modal.present();
+    event.preventDefault();
+    this.selectedComment = comment;
+    this.showCommentLikes = true;
+  }
+
+  async closeCommentLikesSheet() {
+    this.showCommentLikes = false;
   }
 
   showPostPage(event: Event) {

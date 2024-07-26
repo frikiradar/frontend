@@ -41,6 +41,7 @@ ion-card {
     ion-thumbnail#youtube {
       position: relative;
       height: calc(100vw * 9 / 16);
+      max-height: 400px;
 
       iframe {
         width: 100%;
@@ -67,6 +68,7 @@ ion-card {
 
 .post-slug {
   font-size: 14px;
+  cursor: pointer;
 }
 
 ion-modal ion-avatar {

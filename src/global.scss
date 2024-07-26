@@ -421,3 +421,19 @@ ion-select-popover {
     color: var(--ion-color-light);
   }
 }
+
+@media (min-width: 768px) {
+  ion-content {
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    display: flex; /* Activa Flexbox */
+  }
+
+  .main-content {
+    max-width: 768px; /* Limita el ancho del contenido */
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 100vh; /* Asegura que el contenedor tenga al menos el alto de la pantalla */
+    flex-direction: column; /* Organiza los elementos en columna */
+  }
+}

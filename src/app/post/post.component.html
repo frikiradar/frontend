@@ -158,7 +158,7 @@
               <span
                 *ngIf="comment?.likes.length"
                 button
-                (click)="viewCommentLikes(comment.likes)"
+                (click)="viewCommentLikesSheet(comment, $event)"
                 >{{ comment.likes.length }} kokoros</span
               >
               &nbsp;&nbsp;&nbsp;
@@ -373,3 +373,31 @@
     </ng-template>
   </ion-modal>
 </div>
+
+<ion-modal
+  [initialBreakpoint]="0.4"
+  [breakpoints]="[0, 0.4, 0.6]"
+  cssClass="sheet-modal"
+  [isOpen]="showCommentLikes"
+  (ionModalDidDismiss)="closeCommentLikesSheet()"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-list>
+        <ion-item
+          *ngFor="let like of selectedComment.likes"
+          button
+          (click)="showProfile(like.id)"
+          lines="none"
+        >
+          <ion-avatar>
+            <img [src]="like.thumbnail" />
+          </ion-avatar>
+          <ion-label>
+            {{ like.name }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

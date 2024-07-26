@@ -11,9 +11,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="post">
-  <app-post
-    [post]="post"
-    [page]="true"
-    (deletePost)="removePost($event)"
-  ></app-post>
+  <div class="main-content">
+    <app-post
+      [post]="post"
+      [page]="true"
+      (deletePost)="removePost($event)"
+    ></app-post>
+  </div>
 </ion-content>

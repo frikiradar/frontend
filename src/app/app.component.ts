@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Network } from "@capacitor/network";
 import { AlertController, ToastController, isPlatform } from "@ionic/angular";
-import { App } from "@capacitor/app";
+import { App, URLOpenListenerEvent } from "@capacitor/app";
 import { InAppReview } from "@capacitor-community/in-app-review";
 import {
   AppUpdate,
@@ -23,6 +23,7 @@ import { GoogleAuthService } from "./services/google-auth.service";
 import { I18nService } from "./services/i18n.service";
 import { ChatService } from "./services/chat.service";
 import { IntentService } from "./services/intent.service";
+import { UrlService } from "./services/url.service";
 
 @Component({
   selector: "app-root",
@@ -47,16 +48,28 @@ export class AppComponent {
     private googleAuth: GoogleAuthService,
     private i18n: I18nService,
     private chatSvc: ChatService,
-    private intent: IntentService
+    private intent: IntentService,
+    private url: UrlService
   ) {}
 
-  async ngAfterViewInit() {
+  async ngOnInit() {
     await this.i18n.init();
     this.initializeApp();
   }
 
+  /*async ngAfterViewInit() {
+    await this.i18n.init();
+    this.initializeApp();
+  }*/
+
   async initializeApp() {
     await this.utils.toggleTheme(undefined, true);
+
+    App.addListener("appUrlOpen", async (data: URLOpenListenerEvent) => {
+      if (data.url) {
+        await this.url.openUrl(data.url);
+      }
+    });
 
     this.auth.currentUser
       .pipe(
