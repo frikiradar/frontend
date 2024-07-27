@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Browser } from "@capacitor/browser";
+import { NavService } from "./navigation.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class UrlService {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private nav: NavService) {}
 
   async openUrl(event: string | any) {
     let url = "";
@@ -25,7 +26,7 @@ export class UrlService {
     if (url) {
       url = this.convertUrl(url);
       if (url.charAt(0) == "/") {
-        this.router.navigate([url]);
+        this.nav.navigateRoot(url);
       } else {
         Browser.open({ url });
         return;
@@ -52,6 +53,8 @@ export class UrlService {
     // si estoy en app y recibo https://frikiradar.app/albertoi -> convierto a /albertoi
     if (url.includes("https://frikiradar.app/")) {
       url = url.replace("https://frikiradar.app/", "/");
+      // quitar referrer
+      url = url.split("?")[0];
     }
 
     return url;

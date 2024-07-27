@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Network } from "@capacitor/network";
-import { AlertController, ToastController, isPlatform } from "@ionic/angular";
+import { AlertController, isPlatform, ToastController } from "@ionic/angular";
 import { App, URLOpenListenerEvent } from "@capacitor/app";
 import { InAppReview } from "@capacitor-community/in-app-review";
 import {
@@ -67,6 +67,7 @@ export class AppComponent {
 
     App.addListener("appUrlOpen", async (data: URLOpenListenerEvent) => {
       if (data.url) {
+        console.log("appUrlOpen", data.url);
         await this.url.openUrl(data.url);
       }
     });
@@ -96,7 +97,7 @@ export class AppComponent {
       });
 
     this.loadConfig();
-    this.networkStatus();
+    // this.networkStatus();
     this.googleAuth.init();
     this.nav.backButtonStatus();
   }
@@ -105,14 +106,14 @@ export class AppComponent {
     const network = await Network.getStatus();
     if (!network.connected) {
       console.log(this.i18n.translate("no-internet-connection"));
-      /*(
+      (
         await this.toast.create({
           message: this.i18n.translate("no-internet-connection"),
           duration: 5000,
           position: "bottom",
           color: "danger",
         })
-      ).present();*/
+      ).present();
       this.internet = false;
     }
 
@@ -120,26 +121,26 @@ export class AppComponent {
       if (status.connected) {
         if (!this.internet) {
           console.log(this.i18n.translate("internet-connection-restored"));
-          /*(
+          (
             await this.toast.create({
               message: this.i18n.translate("internet-connection-restored"),
               duration: 2000,
               position: "bottom",
               color: "success",
             })
-          ).present();*/
+          ).present();
         }
         this.internet = true;
       } else {
         console.log(this.i18n.translate("internet-connection-lost"));
-        /*(
+        (
           await this.toast.create({
             message: this.i18n.translate("internet-connection-lost"),
             duration: 5000,
             position: "bottom",
             color: "danger",
           })
-        ).present();*/
+        ).present();
         this.internet = false;
       }
     });

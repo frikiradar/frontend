@@ -60,10 +60,10 @@ export class PagesPage implements OnInit {
   async filterPages(value: string) {
     this.query = value;
     if (value) {
-      this.pages = this.notFilteredPages.filter((p) =>
+      this.pages = this.notFilteredPages?.filter((p) =>
         p.name.toLowerCase().includes(value.toLowerCase())
       );
-      this.otherPages = this.notFilteredOtherPages.filter((p) =>
+      this.otherPages = this.notFilteredOtherPages?.filter((p) =>
         p.name.toLowerCase().includes(value.toLowerCase())
       );
 

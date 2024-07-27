@@ -14,7 +14,6 @@
   },
   "private": true,
   "dependencies": {
-    "@aashu-dubey/capacitor-statusbar-safe-area": "^3.0.0",
     "@angular/animations": "^18.0.5",
     "@angular/common": "^18.0.5",
     "@angular/core": "^18.0.5",
@@ -66,7 +65,7 @@
     "send-intent": "^6.0.0",
     "socket.io-client": "^4.7.5",
     "swiper": "^8.4.6",
-    "swiper-new": "npm:swiper@^11.1.5",
+    "swiper-new": "npm:swiper@^11.1.8",
     "tslib": "2.6.3",
     "zone.js": "~0.14.4"
   },

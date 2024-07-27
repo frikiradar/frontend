@@ -112,7 +112,7 @@
             <img
               [src]="page.cover"
               [alt]="page.name"
-              default="/assets/img/pages/default-games-page.jpg"
+              [default]="'/assets/img/pages/default-' + page.category + '-page.svg'"
             />
           </ion-avatar>
           <ion-label (click)="showPage(page.slug)">{{ page.name }}</ion-label>
@@ -129,7 +129,7 @@
             <img
               [src]="page.cover"
               [alt]="page.name"
-              default="/assets/img/pages/default-games-page.jpg"
+              [default]="'/assets/img/pages/default-' + page.category + '-page.svg'"
             />
           </ion-avatar>
           <ion-label (click)="showPage(page.slug)">{{ page.name }}</ion-label>

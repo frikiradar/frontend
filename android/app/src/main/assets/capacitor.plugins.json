@@ -1,9 +1,5 @@
 [
 	{
-		"pkg": "@aashu-dubey/capacitor-statusbar-safe-area",
-		"classpath": "dev.ashu.capacitor.statusbar.safearea.SafeAreaPlugin"
-	},
-	{
 		"pkg": "@capacitor-community/in-app-review",
 		"classpath": "com.getcapacitor.community.inappreview.InAppReviewPlugin"
 	},

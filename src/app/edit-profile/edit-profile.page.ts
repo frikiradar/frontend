@@ -56,6 +56,9 @@ export class EditProfilePage {
   food: IonInput;
   @ViewChild("role", { static: true })
   role: IonInput;
+  @ViewChild("hobbies", { static: true })
+  hobbies: IonInput;
+
   @ViewChild("imageInput", { static: true })
   imageInput: ElementRef;
 
@@ -320,6 +323,7 @@ export class EditProfilePage {
       this.films.value =
       this.books.value =
       this.food.value =
+      this.hobbies.value =
         "";
   }
 

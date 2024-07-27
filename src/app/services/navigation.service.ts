@@ -32,9 +32,15 @@ export class NavService {
     if (this.router.url == "/edit-profile") {
       this.router.navigateByUrl("/profile");
     } else if (this.router.url == "/profile") {
-      this.router.navigateByUrl("/");
+      this.router.navigateByUrl("/tabs/radar");
     } else if (currentUrl.startsWith("/tabs/chat")) {
-      this.router.navigateByUrl("/");
+      this.router.navigateByUrl("/tabs/radar");
+    } else if (
+      currentUrl.startsWith("/post") ||
+      currentUrl.startsWith("/story") ||
+      currentUrl.startsWith("/page")
+    ) {
+      this.router.navigateByUrl("/tabs/radar");
     } else if (
       currentUrl.startsWith("/tabs/radar") ||
       currentUrl.startsWith("/login") ||
@@ -49,7 +55,7 @@ export class NavService {
       this.history.pop();
       this.nav.back();
     } else {
-      this.router.navigateByUrl("/");
+      this.router.navigateByUrl("/tabs/radar");
     }
   }
 

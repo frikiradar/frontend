@@ -15,6 +15,11 @@ export class AuthGuard {
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    // TODO: Check if the app was opened from a URL
+    /*if (await this.appurlopen.getInitialUrl(route)) {
+      return false;
+    }*/
+
     const currentUser = this.auth.currentUserValue;
     if (currentUser) {
       if (currentUser.google_token) {

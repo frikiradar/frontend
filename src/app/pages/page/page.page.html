@@ -23,14 +23,14 @@
     id="artwork"
     [src]="page.artwork"
     [alt]="page?.name"
-    default="/assets/img/pages/default-games-page.jpg"
+    default="/assets/img/pages/default-games-page.svg"
   />
   <ion-thumbnail id="cover">
     <img
       (click)="openViewer((page.cover ? page.cover : '/assets/img/pages/default-games-page.jpg'), page.name)"
       [src]="page.cover"
       [alt]="page?.name"
-      default="/assets/img/pages/default-games-page.jpg"
+      default="/assets/img/pages/default-games-page.svg"
     />
   </ion-thumbnail>
   <div id="add-tag">

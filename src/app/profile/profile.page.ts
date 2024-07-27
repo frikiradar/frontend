@@ -89,10 +89,17 @@ export class ProfilePage {
     const param = this.route.snapshot.paramMap.get("id");
     let id = undefined;
     if (!param) {
-      id = this.auth.currentUserValue.id;
-      this.auth.currentUser.subscribe(async (authUser) => {
-        this.user = { ...this.user, ...authUser };
-      });
+      if (!this.auth.currentUserValue) {
+        this.router.navigate(["/login"], {
+          queryParams: { returnUrl: this.router.url },
+        });
+        return;
+      } else {
+        id = this.auth.currentUserValue.id;
+        this.auth.currentUser.subscribe(async (authUser) => {
+          this.user = { ...this.user, ...authUser };
+        });
+      }
     } else {
       if (param.toLowerCase() === "frikiradar" || +param == 1) {
         this.router.navigate(["/profile"]);

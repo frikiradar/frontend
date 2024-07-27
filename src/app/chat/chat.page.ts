@@ -9,6 +9,10 @@ import { ConfigService } from "../services/config.service";
 import { ChatModalComponent } from "./chat-modal/chat-modal.component";
 import { ChatService } from "../services/chat.service";
 import { Subscription } from "rxjs";
+import {
+  NotificationCounters,
+  NotificationService,
+} from "../services/notification.service";
 
 @Component({
   selector: "app-chat",
@@ -26,7 +30,8 @@ export class ChatPage implements OnInit {
     public auth: AuthService,
     private modalController: ModalController,
     private config: ConfigService,
-    private chatSvc: ChatService
+    private chatSvc: ChatService,
+    private notificationSvc: NotificationService
   ) {}
 
   async ngOnInit() {
@@ -75,6 +80,13 @@ export class ChatPage implements OnInit {
   backToList() {
     this.userId = null;
     this.chatSvc.selectUser(null);
+
+    this.notificationSvc
+      .getUnread()
+      .then((notification: NotificationCounters) => {
+        this.notificationSvc.setNotification(notification);
+      });
+
     if (this.routeSub) {
       this.routeSub.unsubscribe();
     }
