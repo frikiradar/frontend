@@ -15,6 +15,7 @@ export class PostPage {
   @Input() id: Story["id"];
 
   public post: Story;
+  public loading = true;
 
   constructor(
     private storySvc: StoryService,
@@ -30,11 +31,17 @@ export class PostPage {
       this.id = +param;
     }
 
-    if (this.auth.currentUserValue) {
-      this.post = await this.storySvc.getStory(this.id);
-    } else {
-      this.post = await this.storySvc.getPublicStory(this.id);
+    try {
+      if (this.auth.currentUserValue) {
+        this.post = await this.storySvc.getStory(this.id);
+      } else {
+        this.post = await this.storySvc.getPublicStory(this.id);
+      }
+    } catch (e) {
+      console.error(e);
     }
+
+    this.loading = false;
   }
 
   async removePost(event: Event) {

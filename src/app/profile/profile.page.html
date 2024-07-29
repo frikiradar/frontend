@@ -132,12 +132,12 @@
             <div
               *ngIf="auth.currentUserValue && (auth.currentUserValue?.id == user?.id || stories?.length)"
             >
-              <app-story-slider
+              <app-story-mini-slider
                 [stories]="stories"
                 [slug]="page.slug"
                 [user]="user"
                 (refresh)="getStories()"
-              ></app-story-slider>
+              ></app-story-mini-slider>
             </div>
 
             <ion-item

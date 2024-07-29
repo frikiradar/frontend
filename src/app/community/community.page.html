@@ -32,10 +32,10 @@
       </ion-label>
     </ion-item>
     <section id="stories">
-      <app-story-slider
+      <app-story-mini-slider
         [stories]="stories"
         (refresh)="getStories()"
-      ></app-story-slider>
+      ></app-story-mini-slider>
     </section>
 
     <section id="pages" *ngIf="pages?.length">

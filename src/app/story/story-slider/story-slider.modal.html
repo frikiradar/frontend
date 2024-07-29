@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border" *ngIf="stories?.length">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button shape="round" (click)="showProfile(activeStory?.user?.id)">
+        <ion-avatar>
+          <img
+            [src]="activeStory.user?.thumbnail"
+            [alt]="activeStory.user?.username"
+          />
+        </ion-avatar>
+        <ion-label>
+          <h2>
+            {{ activeStory.user.id !== auth.currentUserValue.id ?
+            activeStory.user?.username : ('my-story' | i18n) }}
+          </h2>
+          <p>{{(activeStory?.time_creation | niceDate)}}</p>
+        </ion-label>
+      </ion-button>
+      <ion-icon
+        *ngIf="userSvc.getRoleIcon(activeStory.user)"
+        [name]="userSvc.getRoleIcon(activeStory.user)"
+        [src]="userSvc.getRoleIcon(activeStory.user)"
+        slot="icon-only"
+        size="small"
+        [color]="userSvc.getRoleColor(activeStory.user)"
+        (click)="userSvc.showRole(activeStory.user)"
+      ></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="viewOptions()">
+        <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+      </ion-button>
+      <ion-button (click)="addStory()">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content id="stories" [fullscreen]="true" *ngIf="stories?.length">
+  <swiper
+    (swiper)="setSwiperInstance($event)"
+    (touchStart)="touchStart()"
+    (touchEnd)="touchEnd()"
+    (click)="tap($event)"
+    [config]="slideOpts"
+  >
+    <ng-template swiperSlide *ngFor="let story of stories" class="story-slide">
+      <app-story
+        [story]="story"
+        [slides]="slides"
+        [showComments]="story.id === activeStory.id && showComments"
+        [showOptions]="story.id === activeStory.id && showOptions"
+        (removeEvent)="removeStory($event)"
+        (closeEvent)="close()"
+      ></app-story>
+    </ng-template>
+  </swiper>
+</ion-content>
+<ion-footer class="ion-no-border" *ngIf="stories?.length">
+  <ion-item lines="none" id="text-input">
+    <ion-item lines="none">
+      <ion-textarea
+        id="trigger-comment"
+        placeholder="{{ 'comment-story' | i18n }}"
+        autocapitalize="on"
+        (ionFocus)="commentFocus($event);"
+        rows="1"
+      >
+      </ion-textarea>
+    </ion-item>
+    <ion-buttons ion-activatable slot="end">
+      <ion-button [disabled]="!textarea?.value" (click)="sendComment()">
+        <ion-icon slot="icon-only" color="primary" name="send"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+</ion-footer>

@@ -1,21 +1,21 @@
 import { Component, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
-import { Story } from "../models/story";
-import { User } from "../models/user";
-import { AuthService } from "../services/auth.service";
-import { Config, ConfigService } from "../services/config.service";
-import { NavService } from "../services/navigation.service";
-import { StoryService } from "../services/story.service";
-import { StoryModal } from "./story-modal/story.modal";
-import { ViewStoriesModal } from "./view-stories/view-stories.modal";
+import { Story } from "../../models/story";
+import { User } from "../../models/user";
+import { AuthService } from "../../services/auth.service";
+import { Config, ConfigService } from "../../services/config.service";
+import { NavService } from "../../services/navigation.service";
+import { StoryService } from "../../services/story.service";
+import { StoryModal } from "../story-modal/story.modal";
+import { StorySliderModal } from "../story-slider/story-slider.modal";
 
 @Component({
-  selector: "app-story",
-  templateUrl: "./story.page.html",
-  styleUrls: ["./story.page.scss"],
+  selector: "app-story-list",
+  templateUrl: "./story-list.page.html",
+  styleUrls: ["./story-list.page.scss"],
 })
-export class StoryPage implements OnInit {
+export class StoryListPage implements OnInit {
   public stories: Story[];
   public groupedStories: Story[];
   public loading = true;
@@ -55,7 +55,7 @@ export class StoryPage implements OnInit {
     ];
 
     const modal = await this.modalController.create({
-      component: ViewStoriesModal,
+      component: StorySliderModal,
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,

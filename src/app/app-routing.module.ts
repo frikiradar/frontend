@@ -71,7 +71,9 @@ const routes: Routes = [
   {
     path: "story",
     loadChildren: () =>
-      import("./story/story.module").then((m) => m.StoryPageModule),
+      import("./story/story-list/story-list.module").then(
+        (m) => m.StoryListPageModule
+      ),
     canActivate: [AuthGuard],
   },
   {
@@ -147,9 +149,7 @@ const routes: Routes = [
   {
     path: "story/:id",
     loadChildren: () =>
-      import("./story/view-stories/view-stories.module").then(
-        (m) => m.StoryPageModule
-      ),
+      import("./story/story-page/story.module").then((m) => m.StoryPageModule),
   },
   {
     path: "download",

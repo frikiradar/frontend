@@ -95,13 +95,13 @@ export class PostComponent {
   }
 
   async ngOnInit() {
-    if (this.page) {
+    /*if (this.page) {
       setTimeout(() => {
         if (this.textarea) {
           this.textarea.setFocus();
         }
       }, 100);
-    }
+    }*/
   }
 
   async ngAfterViewInit() {
@@ -181,11 +181,13 @@ export class PostComponent {
     try {
       let post = undefined;
       if (this.post.like) {
-        post = await this.storySvc.unlike(this.post.id);
+        this.post.like = false;
         Haptics.notification({ type: NotificationType.Error });
+        post = await this.storySvc.unlike(this.post.id);
       } else {
-        post = await this.storySvc.like(this.post.id);
+        this.post.like = true;
         Haptics.notification({ type: NotificationType.Success });
+        post = await this.storySvc.like(this.post.id);
       }
 
       this.post = { ...post, youtube: this.post.youtube };

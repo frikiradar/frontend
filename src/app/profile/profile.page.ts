@@ -26,7 +26,7 @@ import { StoryService } from "../services/story.service";
 import { UrlService } from "../services/url.service";
 import { UserService } from "../services/user.service";
 import { UtilsService } from "../services/utils.service";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { StorySliderModal } from "../story/story-slider/story-slider.modal";
 import { AuthService } from "./../services/auth.service";
 import { LikesModal } from "./likes-modal/likes.modal";
 import { AdService } from "../services/ad.service";
@@ -448,7 +448,7 @@ export class ProfilePage {
     let stories = this.stories.filter((s) => s.user.id === id);
     stories = [...stories, ...this.stories.filter((s) => s.user.id !== id)];
     const modal = await this.modalController.create({
-      component: ViewStoriesModal,
+      component: StorySliderModal,
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,

@@ -1,4 +1,10 @@
 <ion-header class="ion-no-border">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-progress-bar
+    type="determinate"
+    color="dark"
+    *ngIf="!loading"
+  ></ion-progress-bar>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button (click)="close()">
@@ -10,12 +16,19 @@
     >
   </ion-toolbar>
 </ion-header>
-<ion-content *ngIf="post">
-  <div class="main-content">
+<ion-content>
+  <div *ngIf="post; else notFoundTemplate" class="main-content">
     <app-post
       [post]="post"
       [page]="true"
       (deletePost)="removePost($event)"
     ></app-post>
   </div>
+  <ng-template #notFoundTemplate>
+    <div class="full-center ion-padding" *ngIf="!loading">
+      <ion-icon name="skull"></ion-icon>
+      <h2>{{ "not-found" | i18n }}</h2>
+      <p>{{"post-could-have-been-removed" | i18n}}</p>
+    </div>
+  </ng-template>
 </ion-content>

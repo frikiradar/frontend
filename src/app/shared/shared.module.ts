@@ -33,8 +33,10 @@ import { PaymentsModal } from "../settings/payments/payments.modal";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 import { I18nPipe } from "../i18n.pipe";
 import { PostComponent } from "../post/post.component";
-import { StorySliderComponent } from "../story/story-slider/story-slider.component";
+import { StoryMiniSliderComponent } from "../story/story-mini-slider/story-mini-slider.component";
 import { PostModal } from "../post/post-modal/post.modal";
+import { StoryComponent } from "../story/story.component";
+import { StorySliderModal } from "../story/story-slider/story-slider.modal";
 
 // install Swiper modules
 register();
@@ -66,8 +68,10 @@ register();
     DisableAccountPage,
     PaymentsModal,
     UnlimitedModal,
-    StorySliderComponent,
+    StoryMiniSliderComponent,
     PostComponent,
+    StoryComponent,
+    StorySliderModal,
     PostModal,
   ],
   imports: [
@@ -93,8 +97,9 @@ register();
     LinkyModule,
     AudioPlayerComponent,
     SwiperModule,
-    StorySliderComponent,
+    StoryMiniSliderComponent,
     PostComponent,
+    StoryComponent,
     PostModal,
   ],
 })

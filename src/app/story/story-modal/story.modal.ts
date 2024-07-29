@@ -251,7 +251,9 @@ export class StoryModal implements OnInit {
       await this.storySvc.sendStory(
         this.imageFile,
         text,
-        this.backgroundColor,
+        this.backgroundColors.includes(this.backgroundColor)
+          ? this.backgroundColor
+          : undefined,
         this.slug
       );
       this.toast.dismiss();

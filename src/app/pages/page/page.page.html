@@ -83,11 +83,11 @@
   </ion-item>
 
   <div id="stories" *ngIf="auth.currentUserValue">
-    <app-story-slider
+    <app-story-mini-slider
       [stories]="stories"
       [slug]="page.slug"
       (refresh)="getStories()"
-    ></app-story-slider>
+    ></app-story-mini-slider>
   </div>
 
   <ion-item lines="none" *ngIf="posts?.length">

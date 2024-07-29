@@ -1,6 +1,11 @@
 import { Component } from "@angular/core";
 import { Network } from "@capacitor/network";
-import { AlertController, isPlatform, ToastController } from "@ionic/angular";
+import {
+  AlertController,
+  isPlatform,
+  ModalController,
+  ToastController,
+} from "@ionic/angular";
 import { App, URLOpenListenerEvent } from "@capacitor/app";
 import { InAppReview } from "@capacitor-community/in-app-review";
 import {
@@ -49,7 +54,8 @@ export class AppComponent {
     private i18n: I18nService,
     private chatSvc: ChatService,
     private intent: IntentService,
-    private url: UrlService
+    private url: UrlService,
+    private modalCtrl: ModalController
   ) {}
 
   async ngOnInit() {
@@ -68,6 +74,10 @@ export class AppComponent {
     App.addListener("appUrlOpen", async (data: URLOpenListenerEvent) => {
       if (data.url) {
         console.log("appUrlOpen", data.url);
+        if (await this.modalCtrl.getTop()) {
+          await this.modalCtrl.dismiss();
+        }
+
         await this.url.openUrl(data.url);
       }
     });

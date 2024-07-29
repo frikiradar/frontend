@@ -1,0 +1,81 @@
+<ion-header class="ion-no-border">
+  <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+  <ion-progress-bar
+    type="determinate"
+    color="dark"
+    *ngIf="!loading"
+  ></ion-progress-bar>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="story">
+      <ion-button shape="round" (click)="showProfile(story?.user?.id)">
+        <ion-avatar>
+          <img [src]="story.user?.thumbnail" [alt]="story.user?.username" />
+        </ion-avatar>
+        <ion-label>
+          <h2>
+            {{ story.user.id !== auth.currentUserValue.id ? story.user?.username
+            : ('my-story' | i18n) }}
+          </h2>
+          <p>{{(story?.time_creation | niceDate)}}</p>
+        </ion-label>
+      </ion-button>
+      <ion-icon
+        *ngIf="userSvc.getRoleIcon(story.user)"
+        [name]="userSvc.getRoleIcon(story.user)"
+        [src]="userSvc.getRoleIcon(story.user)"
+        slot="icon-only"
+        size="small"
+        [color]="userSvc.getRoleColor(story.user)"
+        (click)="userSvc.showRole(story.user)"
+      ></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="viewOptions()" *ngIf="story">
+        <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+      </ion-button>
+      <ion-button (click)="addStory()" *ngIf="story">
+        <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content id="stories" [fullscreen]="true">
+  <div *ngIf="story; else notFoundTemplate" class="main-content">
+    <app-story
+      [story]="story"
+      [(showComments)]="showComments"
+      [(showOptions)]="showOptions"
+      (removeEvent)="removeStory($event)"
+      (closeEvent)="close()"
+    ></app-story>
+  </div>
+  <ng-template #notFoundTemplate>
+    <div class="full-center ion-padding" *ngIf="!loading">
+      <ion-icon name="skull"></ion-icon>
+      <h2>{{ "not-found" | i18n }}</h2>
+      <p>{{"post-could-have-been-removed" | i18n}}</p>
+    </div>
+  </ng-template>
+</ion-content>
+<ion-footer class="ion-no-border" *ngIf="story">
+  <ion-item lines="none" id="text-input">
+    <ion-item lines="none">
+      <ion-textarea
+        id="trigger-comment"
+        placeholder="{{ 'comment-story' | i18n }}"
+        autocapitalize="on"
+        (ionFocus)="commentFocus($event);"
+        rows="1"
+      >
+      </ion-textarea>
+    </ion-item>
+    <ion-buttons ion-activatable slot="end">
+      <ion-button [disabled]="!textarea?.value">
+        <ion-icon slot="icon-only" color="primary" name="send"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+</ion-footer>

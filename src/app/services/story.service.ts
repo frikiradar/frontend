@@ -8,7 +8,7 @@ import { User } from "../models/user";
 import { AuthService } from "./auth.service";
 import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
-import { ViewStoriesModal } from "../story/view-stories/view-stories.modal";
+import { StorySliderModal } from "../story/story-slider/story-slider.modal";
 import { environment } from "src/environments/environment";
 
 const httpOptions = {
@@ -258,7 +258,7 @@ export class StoryService {
 
   async showStoriesModal(stories: Story[]) {
     const modal = await this.modalController.create({
-      component: ViewStoriesModal,
+      component: StorySliderModal,
       componentProps: { stories },
       keyboardClose: true,
       showBackdrop: true,
