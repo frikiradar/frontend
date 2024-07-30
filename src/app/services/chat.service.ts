@@ -13,7 +13,7 @@ import { RestService } from "./rest.service";
 import { UploadService } from "./upload.service";
 import { environment } from "src/environments/environment";
 import { App } from "@capacitor/app";
-import { isPlatform, ToastController } from "@ionic/angular";
+import { isPlatform } from "@ionic/angular";
 import { I18nService } from "./i18n.service";
 
 @Injectable({
@@ -35,7 +35,6 @@ export class ChatService {
     private rest: RestService,
     private uploadSvc: UploadService,
     private auth: AuthService,
-    private toastController: ToastController,
     private i18n: I18nService
   ) {
     App.addListener("appStateChange", async ({ isActive }) => {
@@ -53,6 +52,11 @@ export class ChatService {
   }
 
   async init() {
+    if (this.socket && this.socket.connected) {
+      // console.log("Socket ya conectado.");
+      return;
+    }
+
     this.socket = io(environment.socketUrl, {
       secure: true,
       reconnection: true,
@@ -60,6 +64,7 @@ export class ChatService {
       reconnectionDelayMax: 5000,
       reconnectionAttempts: Infinity,
     });
+
     this.socket.emit("join", this.auth.currentUserValue.id);
 
     // Modo fallback

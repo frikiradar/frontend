@@ -152,11 +152,14 @@ export class ChatListComponent {
       allChats[0].id !== this.allChats[0].id ||
       allChats[0].count !== this.allChats[0].count
     ) {
+      if (this.allChats?.length > 0) {
+        // Se ha desincronizado, reiniciamos conexión con servidor de chat
+        this.chatSvc.socket.disconnect();
+        await this.chatSvc.init();
+      }
+
       const chats = this.sortChats(allChats);
       await this.setChats(chats);
-      // Se ha desincronizado, reiniciamos conexión con servidor de chat
-      this.chatSvc.socket.disconnect();
-      await this.chatSvc.init();
     } else {
       // console.log(this.allChats[0], allChats[0]);
     }

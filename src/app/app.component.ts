@@ -63,11 +63,6 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  /*async ngAfterViewInit() {
-    await this.i18n.init();
-    this.initializeApp();
-  }*/
-
   async initializeApp() {
     await this.utils.toggleTheme(undefined, true);
 

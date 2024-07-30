@@ -78,6 +78,7 @@
           ></ion-chip>
           <span *ngIf="!slug">general</span>
         </h2>
+        <p>{{ "publish-in-description" | i18n }}</p>
       </ion-label>
     </ion-item>
 
@@ -97,7 +98,7 @@
     <div id="my-interests" *ngIf="pages?.length && !slug">
       <ion-item lines="none">
         <ion-label>
-          <h2>{{ "my-interests" | i18n }}</h2>
+          <h2>{{ "my-pages" | i18n }}</h2>
         </ion-label>
       </ion-item>
       <ion-label class="interests ion-text-wrap">
@@ -120,7 +121,7 @@
     <div id="other-interests" *ngIf="otherPages?.length && !slug">
       <ion-item lines="none">
         <ion-label>
-          <h2>{{ "explore-interests" | i18n }}</h2>
+          <h2>{{ "other-pages" | i18n }}</h2>
         </ion-label>
       </ion-item>
       <ion-label class="interests ion-text-wrap">
