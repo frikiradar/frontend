@@ -8,14 +8,11 @@ import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 export class AppUrlOpenService {
   constructor(private url: UrlService) {}
 
-  async getInitialUrl(route: ActivatedRouteSnapshot): Promise<boolean> {
-    if (!route.url.length) {
-      const launchUrl = await App.getLaunchUrl();
-      if (launchUrl) {
-        await this.url.openUrl(launchUrl.url);
-
-        return true;
-      }
+  async getInitialUrl(): Promise<boolean> {
+    const launchUrl = await App.getLaunchUrl();
+    if (launchUrl && launchUrl.url) {
+      await this.url.openUrl(launchUrl.url);
+      return true;
     }
 
     return false;

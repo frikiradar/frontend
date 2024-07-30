@@ -4,6 +4,7 @@ import { NavController } from "@ionic/angular";
 
 import { AuthService } from "./../services/auth.service";
 import { GoogleAuthService } from "../services/google-auth.service";
+import { AppUrlOpenService } from "../services/appurlopen.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthGuard {
@@ -11,14 +12,20 @@ export class AuthGuard {
     private auth: AuthService,
     private googleAuth: GoogleAuthService,
     private nav: NavController,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private appurlopen: AppUrlOpenService
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     // TODO: Check if the app was opened from a URL
-    /*if (await this.appurlopen.getInitialUrl(route)) {
-      return false;
-    }*/
+    if (state.url === "/") {
+      if (await this.appurlopen.getInitialUrl()) {
+        return false;
+      } else {
+        this.nav.navigateRoot("/tabs/radar");
+        return true;
+      }
+    }
 
     const currentUser = this.auth.currentUserValue;
     if (currentUser) {

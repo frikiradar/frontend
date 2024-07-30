@@ -62,11 +62,6 @@ const routes: Routes = [
       },
     ],
   },
-  {
-    path: "",
-    redirectTo: "/tabs/radar",
-    pathMatch: "full",
-  },
 ];
 
 @NgModule({
