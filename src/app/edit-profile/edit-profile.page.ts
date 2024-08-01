@@ -317,14 +317,6 @@ export class EditProfilePage {
         }
       });
     }
-    this.role.value =
-      this.music.value =
-      this.games.value =
-      this.films.value =
-      this.books.value =
-      this.food.value =
-      this.hobbies.value =
-        "";
   }
 
   async removeTag(id: number) {

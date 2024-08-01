@@ -55,7 +55,7 @@ export class ChatListComponent {
     this.chatSvc.currentMessage.subscribe(async (message) => {
       if (!message) return;
 
-      const chats = this.chats;
+      let chats = this.chats;
       const chatIndex = chats?.findIndex(
         (m) => m.conversationId === message.conversationId
       );
@@ -114,7 +114,8 @@ export class ChatListComponent {
           user: newUser,
           count: message.fromuser.id !== this.auth.currentUserValue.id ? 1 : 0,
         };
-        await this.setChats([newChat, ...chats]);
+
+        await this.setChats([newChat, ...(chats ?? [])]);
       }
     });
 

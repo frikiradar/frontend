@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Router } from "@angular/router";
-import { App, URLOpenListenerEvent } from "@capacitor/app";
+import { App } from "@capacitor/app";
 import { UrlService } from "./url.service";
-import { FirebaseMessaging } from "@capacitor-firebase/messaging";
 
 @Injectable({ providedIn: "root" })
 export class AppUrlOpenService {

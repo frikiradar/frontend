@@ -283,19 +283,17 @@ export class ChatModalComponent implements OnInit {
     } else if (!message.writing) {
       // Si el mensaje no es mio, lo añado a la lista y lo marco como leído
       // Si ya existe el mensaje, lo actualizo
-      const index = this.messages.findIndex(
-        (m) => m.id === message.id || m.tmp_id === message.tmp_id
-      );
+      if (!message.time_read && this.canRead) {
+        message.time_read = new Date();
+        message = await this.chatSvc.readChat(message);
+      }
+
+      const index = this.messages.findIndex((m) => m.id === message.id);
 
       if (index !== -1) {
         this.messages[index] = message;
       } else {
         this.messages = [...this.messages, message];
-      }
-
-      if (!message.time_read && this.canRead) {
-        message.time_read = new Date();
-        this.chatSvc.readChat(message);
       }
     }
 

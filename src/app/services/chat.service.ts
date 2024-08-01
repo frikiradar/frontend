@@ -68,7 +68,7 @@ export class ChatService {
     this.socket.emit("join", this.auth.currentUserValue.id);
 
     // Modo fallback
-    this.firebaseListener();
+    // this.firebaseListener();
 
     this.socket.onAny((event, ...args) => {
       console.log("onAny", event, args);
@@ -261,10 +261,10 @@ export class ChatService {
     return (await this.rest.put("update-message", { id, text })) as Chat;
   }
 
-  async readChat(message: Chat) {
+  async readChat(message: Chat): Promise<Chat> {
     // Eliminar la notificación
     this.socket.emit("read", message);
-    await this.rest.get(`read-chat/${message.id}`);
+    return this.rest.get(`read-chat/${message.id}`);
   }
 
   async userOnline(fromuserid: number, touserid: number) {

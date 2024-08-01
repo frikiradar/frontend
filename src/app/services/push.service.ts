@@ -1,7 +1,15 @@
 import { Injectable } from "@angular/core";
+import { isPlatform } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { LocalNotifications } from "@capacitor/local-notifications";
-import { isPlatform } from "@ionic/angular";
+import { PushNotifications } from "@capacitor/push-notifications";
+import { getMessaging } from "firebase/messaging";
+import { getToken, onMessage } from "firebase/messaging";
+import { FirebaseMessaging, Visibility } from "@capacitor-firebase/messaging";
+import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
+import { getAnalytics } from "firebase/analytics";
+import { SwPush } from "@angular/service-worker";
+import { initializeApp } from "firebase/app";
 
 import { AuthService } from "./auth.service";
 import { DeviceService } from "./device.service";
@@ -9,14 +17,7 @@ import {
   NotificationCounters,
   NotificationService,
 } from "./notification.service";
-import { SwPush } from "@angular/service-worker";
-import { initializeApp } from "firebase/app";
 import { environment } from "src/environments/environment";
-import { getMessaging } from "firebase/messaging";
-import { getToken, onMessage } from "firebase/messaging";
-import { FirebaseMessaging, Visibility } from "@capacitor-firebase/messaging";
-import { FirebaseAnalytics } from "@capacitor-firebase/analytics";
-import { getAnalytics } from "firebase/analytics";
 import { I18nService } from "./i18n.service";
 import { ChatService } from "./chat.service";
 
@@ -206,13 +207,18 @@ export class PushService {
   }
 
   async initCapacitor() {
-    this.requestPermissions();
+    await this.requestPermissions();
 
     const result = await FirebaseMessaging.getToken();
     await this.device.setDevice(result.token);
     this.setChannels();
 
+    PushNotifications.addListener("pushNotificationReceived", (payload) => {
+      console.log("Push Notification received", payload);
+    });
+
     FirebaseMessaging.addListener("notificationReceived", (payload) => {
+      console.log("Notification received", payload);
       const notification = payload.notification;
       const data = notification.data as {
         message: string;
@@ -232,7 +238,11 @@ export class PushService {
       }
     });
 
+    /*
+    /*  Remplazado por PushNotifications.addListener("pushNotificationActionPerformed", (payload) => {});
+    /*
     FirebaseMessaging.addListener("notificationActionPerformed", (payload) => {
+      console.log("Notification action performed", payload);
       const notification = payload.notification;
       const data = notification.data as {
         message: string;
@@ -248,11 +258,27 @@ export class PushService {
           notifications: [notification],
         });
       }
-    });
+    });*/
+
+    PushNotifications.addListener(
+      "pushNotificationActionPerformed",
+      (payload) => {
+        console.log("Push Notification action performed", payload);
+        if (payload.actionId == "tap") {
+          let url = payload.notification.data.url;
+          this.router.navigate([url]);
+
+          FirebaseMessaging.removeDeliveredNotifications({
+            notifications: [payload.notification],
+          });
+        }
+      }
+    );
 
     LocalNotifications.addListener(
       "localNotificationActionPerformed",
       (payload) => {
+        console.log("Local Notification action performed", payload);
         if (payload.actionId == "tap") {
           let url = payload.notification.extra.url;
           this.router.navigate([url]);
@@ -304,9 +330,15 @@ export class PushService {
 
   async requestPermissions() {
     if (isPlatform("capacitor")) {
-      const checkPermissions = await LocalNotifications.checkPermissions();
-      await LocalNotifications.requestPermissions();
-      console.log(checkPermissions);
+      let permStatus = await PushNotifications.checkPermissions();
+
+      if (permStatus.receive === "prompt") {
+        permStatus = await PushNotifications.requestPermissions();
+      }
+
+      if (permStatus.receive !== "granted") {
+        throw new Error("User denied permissions!");
+      }
     } else {
       // no es necesario
     }

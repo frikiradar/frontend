@@ -361,7 +361,7 @@
           <ion-icon
             name="add-circle"
             slot="end"
-            (click)="addTag(hobbies.value, 'hobbies')"
+            (click)="addTag(hobbies.value, 'hobbies'); hobbies.value = ''"
           ></ion-icon>
         </ion-item>
         <ion-item lines="none">
@@ -397,7 +397,7 @@
           <ion-icon
             name="add-circle"
             slot="end"
-            (click)="addTag(games.value, 'games')"
+            (click)="addTag(games.value, 'games'); games.value = ''"
           ></ion-icon>
         </ion-item>
         <ion-item lines="none">
@@ -434,7 +434,7 @@
           <ion-icon
             name="add-circle"
             slot="end"
-            (click)="addTag(films.value, 'films')"
+            (click)="addTag(films.value, 'films'); films.value = ''"
           ></ion-icon>
         </ion-item>
         <ion-item lines="none">
@@ -471,7 +471,7 @@
           <ion-icon
             name="add-circle"
             slot="end"
-            (click)="addTag(books.value, 'books')"
+            (click)="addTag(books.value, 'books'); books.value = ''"
           ></ion-icon>
         </ion-item>
         <ion-item lines="none">
@@ -508,7 +508,7 @@
           <ion-icon
             name="add-circle"
             slot="end"
-            (click)="addTag(role.value, 'role')"
+            (click)="addTag(role.value, 'role'); role.value = ''"
           ></ion-icon>
         </ion-item>
         <ion-item lines="none">
@@ -545,7 +545,7 @@
           <ion-icon
             name="add-circle"
             slot="end"
-            (click)="addTag(music.value, 'music')"
+            (click)="addTag(music.value, 'music'); music.value = ''"
           ></ion-icon>
         </ion-item>
         <ion-item lines="none">
@@ -582,7 +582,7 @@
           <ion-icon
             name="add-circle"
             slot="end"
-            (click)="addTag(food.value, 'food')"
+            (click)="addTag(food.value, 'food'); food.value = ''"
           ></ion-icon>
         </ion-item>
         <ion-item lines="none">
