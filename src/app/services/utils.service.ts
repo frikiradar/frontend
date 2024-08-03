@@ -15,7 +15,11 @@ import {
   CameraResultType,
   CameraSource,
 } from "@capacitor/camera";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import {
+  DomSanitizer,
+  SafeHtml,
+  SafeResourceUrl,
+} from "@angular/platform-browser";
 
 import { CropperModal } from "../cropper/cropper.modal";
 import { WebcamModal } from "../webcam/webcam.modal";
@@ -674,6 +678,35 @@ export class UtilsService {
       return this.sanitizer.bypassSecurityTrustResourceUrl(
         `https://www.youtube.com/embed/${match[1]}`
       );
+    }
+  }
+
+  extractFacebookLink(text: string): SafeHtml {
+    const facebookRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:facebook\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|fb\.watch\/)([a-zA-Z0-9_-]+)/g;
+    let match: RegExpExecArray;
+    while ((match = facebookRegex.exec(text)) !== null) {
+      const url = `https://www.facebook.com/facebook/videos/${match[1]}/`;
+      const html = `
+        <div class="fb-video" data-href="${url}" data-width="500" data-show-text="false">
+          <div class="fb-xfbml-parse-ignore">
+            <blockquote cite="${url}">
+              <a href="${url}">Watch Video</a>
+            </blockquote>
+          </div>
+        </div>`;
+      return this.sanitizer.bypassSecurityTrustHtml(html);
+    }
+  }
+
+  extractInstagramLink(text: string): SafeHtml {
+    const instagramRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:instagram\.com\/(?:p|tv|reel)\/([a-zA-Z0-9_-]+))/g;
+    let match: RegExpExecArray;
+    while ((match = instagramRegex.exec(text)) !== null) {
+      const url = `https://www.instagram.com/p/${match[1]}/embed`;
+      const html = `<iframe src="${url}" width="400" height="480" frameborder="0" allowfullscreen></iframe>`;
+      return this.sanitizer.bypassSecurityTrustHtml(html);
     }
   }
 }

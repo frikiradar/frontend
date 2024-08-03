@@ -4,6 +4,10 @@
 }
 
 .story-text-container {
+  width: 90vw;
+  max-width: 500px;
+  overflow: hidden;
+
   &.light {
     color: #ffffff !important;
   }
@@ -15,7 +19,6 @@
   ion-thumbnail.youtube {
     position: relative;
     width: 100%;
-    padding: 20px;
     height: auto;
 
     iframe {
@@ -28,7 +31,6 @@
   }
 
   .story-text {
-    padding: 30px;
     text-align: center;
     font-size: 28px;
   }

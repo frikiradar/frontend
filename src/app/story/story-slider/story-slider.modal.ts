@@ -64,23 +64,12 @@ export class StorySliderModal implements OnInit {
     private router: Router,
     public auth: AuthService,
     private cd: ChangeDetectorRef,
-    private utils: UtilsService,
     private nav: NavService
   ) {}
 
   async ngOnInit() {
     this.activeStory = this.stories[0];
-
     this.viewStory(this.stories[0]);
-
-    this.stories.map((story) => {
-      if (story.text && !story.image) {
-        story.youtube = this.utils.extractYoutubeLink(story.text);
-        this.cd.detectChanges();
-
-        return story;
-      }
-    });
   }
 
   ngAfterViewInit() {

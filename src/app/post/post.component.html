@@ -64,6 +64,7 @@
           [innerHTML]="
             post?.text | linky : { className: 'linkified' } | mentions | hashtag
           "
+          (click)="$event.stopImmediatePropagation(); openUrl($event)"
         ></p>
         <ion-note slot="end"></ion-note>
         <ion-buttons>

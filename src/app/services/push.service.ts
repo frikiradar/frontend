@@ -213,6 +213,10 @@ export class PushService {
     await this.device.setDevice(result.token);
     this.setChannels();
 
+    this.swPush.messages.subscribe((payload) => {
+      console.log("Push Notification received", payload);
+    });
+
     PushNotifications.addListener("pushNotificationReceived", (payload) => {
       console.log("Push Notification received", payload);
     });

@@ -29,4 +29,6 @@ export interface Story {
   color?: string;
   type?: "story" | "post";
   youtube?: SafeResourceUrl;
+  instagram?: SafeResourceUrl;
+  facebook?: SafeResourceUrl;
 }

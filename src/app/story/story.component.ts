@@ -72,6 +72,8 @@ export class StoryComponent {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
+    this.youtubePreview();
+
     if (changes.showComments?.currentValue) {
       this.showComments = changes.showComments.currentValue;
       setTimeout(() => {
@@ -99,6 +101,29 @@ export class StoryComponent {
       text,
       this.userMentions
     );
+
+    this.userMentions = [];
+
+    this.youtubePreview();
+  }
+
+  youtubePreview() {
+    if (this.story.text && !this.story.image && !this.story.youtube) {
+      this.story.youtube = this.utils.extractYoutubeLink(this.story.text);
+
+      if (this.story.youtube) {
+        const youtubeLink = this.story.text.match(
+          /https?:\/\/(?:www\.|m\.)?(youtube\.com|youtu\.be)\/[^\s]+/g
+        );
+
+        if (
+          this.story.text.startsWith(youtubeLink[0]) ||
+          this.story.text.endsWith(youtubeLink[0])
+        ) {
+          this.story.text = this.story.text.replace(youtubeLink[0], "");
+        }
+      }
+    }
   }
 
   async reply(comment: Story["comments"][0]) {
@@ -294,6 +319,8 @@ export class StoryComponent {
           return c;
         });
       }
+
+      this.youtubePreview();
     } catch (error) {
       // Si la solicitud falla, revierte el cambio y muestra un mensaje de error
       this.story.comments = this.story.comments.map((c) => {

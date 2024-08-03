@@ -92,6 +92,7 @@
           | mentions : { mentions: story.mentions }
           | hashtag
       "
+      (click)="$event.stopImmediatePropagation(); openUrl($event)"
     ></span>
   </div>
   <div class="background-color" [ngStyle]="{ background: story.color }"></div>
