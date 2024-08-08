@@ -1,10 +1,5 @@
 <ion-header class="ion-no-border">
   <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
-  <ion-progress-bar
-    type="determinate"
-    color="dark"
-    *ngIf="!loading"
-  ></ion-progress-bar>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="story">
       <ion-button shape="round" (click)="showProfile(story?.user?.id)">
@@ -42,7 +37,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content id="stories" [fullscreen]="true">
+<ion-content id="stories">
   <div *ngIf="story; else notFoundTemplate" class="main-content">
     <app-story
       [story]="story"
