@@ -138,21 +138,21 @@ export class PostComponent {
   youtubePreview() {
     if (this.post.text && !this.post.image && !this.post.youtube) {
       this.post.youtube = this.utils.extractYoutubeLink(this.post.text);
+    }
+
+    // si el link de youtube está al final o al principio del texto lo sustituimos por ""
+    if (this.post.youtube) {
+      // Extraemos el identificador del video de YouTube de this.post.text usando un regex
+      const youtubeLink = this.post.text.match(
+        /https?:\/\/(?:www\.|m\.)?(youtube\.com|youtu\.be)\/[^\s]+/g
+      );
 
       // si el link de youtube está al final o al principio del texto lo sustituimos por ""
-      if (this.post.youtube) {
-        // Extraemos el identificador del video de YouTube de this.post.text usando un regex
-        const youtubeLink = this.post.text.match(
-          /https?:\/\/(?:www\.|m\.)?(youtube\.com|youtu\.be)\/[^\s]+/g
-        );
-
-        // si el link de youtube está al final o al principio del texto lo sustituimos por ""
-        if (
-          this.post.text.startsWith(youtubeLink[0]) ||
-          this.post.text.endsWith(youtubeLink[0])
-        ) {
-          this.post.text = this.post.text.replace(youtubeLink[0], "");
-        }
+      if (
+        this.post.text.startsWith(youtubeLink[0]) ||
+        this.post.text.endsWith(youtubeLink[0])
+      ) {
+        this.post.text = this.post.text.replace(youtubeLink[0], "");
       }
     }
   }
@@ -207,6 +207,8 @@ export class PostComponent {
       }
 
       this.post = { ...post, youtube: this.post.youtube };
+
+      this.youtubePreview();
     } catch (error) {
       console.error(`Error al cambiar el estado del "like": ${error}`);
     }
