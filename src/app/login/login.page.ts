@@ -122,7 +122,10 @@ export class LoginPage {
 
   async loginWithGoogle() {
     try {
-      await this.googleAuth.logout();
+      const isLoggedIn = await this.googleAuth.checkGoogleLogin();
+      if (isLoggedIn) {
+        await this.googleAuth.logout();
+      }
     } catch (e) {
       console.error(e);
     }

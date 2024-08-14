@@ -178,7 +178,12 @@ export class AppComponent {
       });
 
       await alert.present();
-    } else if (openTimes >= 3 && !config.review && isPlatform("capacitor")) {
+    } else if (
+      openTimes >= 3 &&
+      !config.review &&
+      isPlatform("capacitor") &&
+      this.auth.currentUserValue.gender === "woman"
+    ) {
       const alert = await this.alert.create({
         header: this.i18n.translate("join-the-battle"),
         message: this.i18n.translate("rate-frikiradar-message"),
