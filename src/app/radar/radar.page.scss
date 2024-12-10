@@ -6,9 +6,12 @@ ion-toolbar {
   }
 }
 
-swiper#radar-slide {
-  display: flex;
-  height: 100%;
+#radar-container {
+  display: unset;
+}
+
+#radar-slide {
+  display: unset;
 
   ::ng-deep {
     .swiper-slide {
@@ -20,7 +23,7 @@ swiper#radar-slide {
   }
 }
 
-swiper.images-slide {
+.images-slide {
   position: absolute;
   bottom: 0;
   top: 0;
@@ -48,7 +51,6 @@ ion-card {
   --background: var(--ion-color-medium-dark);
   overflow: auto;
   border-radius: 50px;
-  width: 100%;
 
   &.md {
     height: 97%;
@@ -59,7 +61,7 @@ ion-card {
   }
 }
 
-.images-slide ::ng-deep .swiper-scrollbar {
+.images-slide::part(scrollbar) {
   position: absolute;
   left: 25px;
   z-index: 50;

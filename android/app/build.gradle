@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace("com.frikiradar.app")
+    namespace "com.frikiradar.app"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.frikiradar.app"

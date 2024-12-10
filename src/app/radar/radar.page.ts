@@ -9,13 +9,10 @@ import {
 } from "@ionic/angular";
 import { ScrollDetail } from "@ionic/core";
 import { first } from "rxjs";
-import SwiperCore, {
-  SwiperOptions,
-  EffectCoverflow,
-  Mousewheel,
-  Scrollbar,
-  Swiper,
-} from "swiper";
+import { SwiperOptions } from "swiper-new/types";
+import { Swiper } from "swiper-new";
+import { EffectCoverflow } from "swiper-new/modules";
+import { SwiperContainer } from "swiper-new/element";
 import { Haptics } from "@capacitor/haptics";
 
 import { User } from "../models/user";
@@ -34,8 +31,6 @@ import { Ad } from "../models/ad";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 import { I18nService } from "../services/i18n.service";
 
-SwiperCore.use([EffectCoverflow, Mousewheel, Scrollbar]);
-
 @Component({
   selector: "app-radar",
   templateUrl: "./radar.page.html",
@@ -48,12 +43,13 @@ export class RadarPage {
   radarlist: IonContent;
 
   public counters: NotificationCounters;
-  public slides: SwiperCore;
+  public slides: Swiper;
   public allUsersLoaded = false;
   public filterOptions = false;
   public language = this.i18n.currentLanguage;
 
   public slideOpts: SwiperOptions = {
+    modules: [EffectCoverflow],
     slidesPerView: 1,
     breakpoints: {
       1920: {
@@ -70,20 +66,7 @@ export class RadarPage {
       },
     },
     grabCursor: true,
-    lazy: true,
-    preloadImages: false,
     effect: "coverflow",
-    mousewheel: true,
-  };
-
-  public slideImagesOpts: SwiperOptions = {
-    slidesPerView: 1,
-    grabCursor: false,
-    lazy: true,
-    preloadImages: false,
-    watchSlidesProgress: true,
-    scrollbar: true,
-    allowTouchMove: false,
   };
 
   public hide = false;
@@ -140,68 +123,67 @@ export class RadarPage {
     });
   }
 
-  setSwiperInstance(swiper: SwiperCore) {
-    this.slides = swiper;
-  }
-
   async tap(event: any, user: User) {
-    if (event[0] instanceof Swiper) {
-      const slide = event[0];
-      const centerStart = screen.width / 2;
-      const centerEnd = screen.width / 2;
-      let currentX: number;
+    if (
+      event.target.parentElement.parentElement.parentElement.tagName ==
+      "SWIPER-CONTAINER"
+    ) {
+      const swiperContainer = event.target.parentElement.parentElement
+        .parentElement as SwiperContainer;
+      const swiper = swiperContainer.swiper;
+      const imageElement = event.target;
+      const imageRect = imageElement.getBoundingClientRect();
 
-      if (event[1] instanceof TouchEvent) {
-        currentX = slide.touches.currentX;
-      } else if (event[1] instanceof PointerEvent) {
-        currentX = event[1].clientX;
-      }
+      const centerStart = imageRect.left + imageRect.width / 2;
+      const centerEnd = imageRect.left + imageRect.width / 2;
+
+      let currentX = swiper.touches.currentX;
 
       if (user.images?.length > 0 && currentX !== undefined) {
         if (currentX > centerEnd) {
-          if (!slide.isEnd) {
-            slide.slideNext();
+          if (!swiper.isEnd) {
+            swiper.slideNext();
             await Haptics.vibrate({ duration: 10 });
           }
         } else if (currentX < centerStart) {
-          if (!slide.isBeginning) {
-            slide.slidePrev();
+          if (!swiper.isBeginning) {
+            swiper.slidePrev();
             await Haptics.vibrate({ duration: 10 });
           }
-        } else if (event[1] instanceof TouchEvent) {
-          this.showProfile(user.id);
         }
-      } else if (event[1] instanceof TouchEvent) {
+      } else {
         this.showProfile(user.id);
       }
+    } else {
+      this.showProfile(user.id);
     }
   }
 
   async tapTutorial(event: any) {
-    if (event[0] instanceof Swiper) {
-      const slide = event[0];
-      const centerStart = screen.width / 2; // 50px para el centro
-      const centerEnd = screen.width / 2; // 50px para el centro
-      let currentX: number;
-      let currentY: number;
+    if (
+      event.target.parentElement.parentElement.parentElement.tagName ==
+      "SWIPER-CONTAINER"
+    ) {
+      const swiperContainer = event.target.parentElement.parentElement
+        .parentElement as SwiperContainer;
+      const swiper = swiperContainer.swiper;
+      const imageElement = event.target;
+      const imageRect = imageElement.getBoundingClientRect();
 
-      if (event[1] instanceof TouchEvent) {
-        currentX = slide.touches.currentX;
-        currentY = slide.touches.currentY;
-      } else if (event[1] instanceof PointerEvent) {
-        currentX = event[1].clientX;
-        currentY = event[1].clientY;
-      }
+      let currentX = swiper.touches.currentX;
+      let currentY = swiper.touches.currentY;
+      let centerStart = imageRect.left + imageRect.width / 3;
+      let centerEnd = imageRect.left + (imageRect.width / 3) * 2;
 
       if (currentY < screen.height / 2) {
         if (currentX > centerEnd) {
-          if (!slide.isEnd) {
-            slide.slideNext();
+          if (!swiper.isEnd) {
+            swiper.slideNext();
             await Haptics.vibrate({ duration: 10 });
           }
         } else if (currentX < centerStart) {
-          if (!slide.isBeginning) {
-            slide.slidePrev();
+          if (!swiper.isBeginning) {
+            swiper.slidePrev();
             await Haptics.vibrate({ duration: 10 });
           }
         }
@@ -234,6 +216,7 @@ export class RadarPage {
       .subscribe(async (user) => {
         this.authUser = user;
         await this.initGeolocation();
+        this.initSwiper();
       });
   }
 
@@ -338,6 +321,21 @@ export class RadarPage {
       this.slides?.slideTo(0);
     }
     await this.getRadarUsers();
+  }
+
+  async initSwiper() {
+    const swiperContainer: SwiperContainer =
+      document.querySelector("#radar-slide");
+    if (!swiperContainer) {
+      return;
+    }
+    Object.assign(swiperContainer, this.slideOpts);
+    swiperContainer.initialize();
+    this.slides = swiperContainer.swiper;
+
+    this.slides.on("slideNextTransitionEnd", async () => {
+      await this.slide();
+    });
   }
 
   async getRadarUsers(event?: any) {
@@ -476,6 +474,9 @@ export class RadarPage {
 
       radar_config.view = this.view;
       radar_config.range = -1;
+
+      await this.utils.delay(500);
+      this.initSwiper();
     }
     this.config.set("radar_config", radar_config);
 
