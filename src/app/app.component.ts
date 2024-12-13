@@ -86,10 +86,10 @@ export class AppComponent {
         if (authUser) {
           const user = await this.auth.getAuthUser();
           this.auth.setAuthUser(user);
+          // Iniciar notificaciones
+          await this.initNotifications();
           // Init chat
           this.chatSvc.init();
-          // Iniciar notificaciones
-          this.initNotifications();
           // Contar veces abierto
           this.countOpenTimes();
           // Mostrar publicidad
@@ -312,7 +312,7 @@ export class AppComponent {
   async initNotifications() {
     await this.push.init();
     if (!isPlatform("capacitor")) {
-      this.sw.init();
+      await this.sw.init();
     }
   }
 }

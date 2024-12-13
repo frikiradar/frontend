@@ -80,7 +80,6 @@ export class RadarPage {
   users: (User | Ad)[] = [];
   public user: User;
   public view: "cards" | "list";
-  public showBackdrop = false;
   public loading = true;
   public extended = true;
   public searchOptions = {
@@ -92,6 +91,7 @@ export class RadarPage {
     fake_location: false,
   };
   public connections: string[];
+  public geolocationTries = 0;
 
   public location = {
     country: "",
@@ -223,9 +223,7 @@ export class RadarPage {
   async initGeolocation() {
     if (!this.auth.isDemo()) {
       try {
-        this.showBackdrop = true;
         const geolocation = await this.geolocationSvc.getGeolocation();
-        this.showBackdrop = false;
         const oldCoordinates = this.authUser.coordinates;
         const oldCountry = this.authUser.country;
         const oldCity = this.authUser.city;
@@ -270,7 +268,11 @@ export class RadarPage {
         }
       } catch (e) {
         console.error(e);
-        // tienes que aprobar permisos
+        this.geolocationTries++;
+        if (this.geolocationTries < 3) {
+          this.utils.delay(1000);
+          await this.initGeolocation();
+        }
       }
 
       this.authUser = this.auth.currentUserValue;
