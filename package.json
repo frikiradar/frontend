@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:android": "ng build && npx cap copy android"
+    "build:android": "ng build && npx cap copy android",
+    "build:ios": "ng build && npx cap copy ios"
   },
   "private": true,
   "dependencies": {
