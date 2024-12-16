@@ -11,9 +11,10 @@ import { AuthService } from "src/app/services/auth.service";
 import { User } from "src/app/models/user";
 
 @Component({
-  selector: "request-geolocation-modal",
-  templateUrl: "./request-geolocation.modal.html",
-  styleUrls: ["./request-geolocation.modal.scss"],
+    selector: "request-geolocation-modal",
+    templateUrl: "./request-geolocation.modal.html",
+    styleUrls: ["./request-geolocation.modal.scss"],
+    standalone: false
 })
 export class RequestGeolocationModal {
   public view: "request" | "force" = "request";

@@ -16,9 +16,10 @@ import { ImageViewerModal } from "src/app/image-viewer/image-viewer.modal";
 import { PostModal } from "src/app/post/post-modal/post.modal";
 
 @Component({
-  selector: "app-page",
-  templateUrl: "./page.page.html",
-  styleUrls: ["./page.page.scss"],
+    selector: "app-page",
+    templateUrl: "./page.page.html",
+    styleUrls: ["./page.page.scss"],
+    standalone: false
 })
 export class PagePage {
   public page: Page;

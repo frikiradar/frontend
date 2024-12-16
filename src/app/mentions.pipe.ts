@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "mentions",
+    name: "mentions",
+    standalone: false
 })
 export class MentionsPipe implements PipeTransform {
   transform(value: any, data?: any) {

@@ -5,9 +5,10 @@ import { User } from "../../models/user";
 import { AuthService } from "../../services/auth.service";
 
 @Component({
-  selector: "verification-modal",
-  templateUrl: "./verification.modal.html",
-  styleUrls: ["./verification.modal.scss"],
+    selector: "verification-modal",
+    templateUrl: "./verification.modal.html",
+    styleUrls: ["./verification.modal.scss"],
+    standalone: false
 })
 export class VerificationModal implements OnInit {
   public user: User;

@@ -4,9 +4,10 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from "ngx-webcam";
 import { Observable, Subject } from "rxjs";
 
 @Component({
-  selector: "webcam-modal",
-  templateUrl: "./webcam.modal.html",
-  styleUrls: ["./webcam.modal.scss"],
+    selector: "webcam-modal",
+    templateUrl: "./webcam.modal.html",
+    styleUrls: ["./webcam.modal.scss"],
+    standalone: false
 })
 export class WebcamModal {
   @Input() src: string;

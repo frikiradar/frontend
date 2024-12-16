@@ -20,9 +20,10 @@ import { Config, ConfigService } from "src/app/services/config.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "app-register",
-  templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"],
+    selector: "app-register",
+    templateUrl: "./register.component.html",
+    styleUrls: ["./register.component.scss"],
+    standalone: false
 })
 export class RegisterComponent {
   @Input() username: string;

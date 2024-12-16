@@ -6,9 +6,10 @@ import { User } from "../../models/user";
 import { BannedMessagesModal } from "./banned-messages/banned-messages.modal";
 
 @Component({
-  selector: "banned-users-modal",
-  templateUrl: "./banned-users.modal.html",
-  styleUrls: ["./banned-users.modal.scss"],
+    selector: "banned-users-modal",
+    templateUrl: "./banned-users.modal.html",
+    styleUrls: ["./banned-users.modal.scss"],
+    standalone: false
 })
 export class BannedUsersModal implements OnInit {
   public users: User[];

@@ -11,9 +11,10 @@ import { AdminService } from "src/app/services/admin.service";
 import { AuthService } from "src/app/services/auth.service";
 
 @Component({
-  selector: "global-notifications",
-  templateUrl: "./global-notifications.modal.html",
-  styleUrls: ["./global-notifications.modal.scss"],
+    selector: "global-notifications",
+    templateUrl: "./global-notifications.modal.html",
+    styleUrls: ["./global-notifications.modal.scss"],
+    standalone: false
 })
 export class GlobalNotificationsModal implements OnInit {
   public user: User;

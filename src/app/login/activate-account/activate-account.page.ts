@@ -15,9 +15,10 @@ import { UserService } from "../../services/user.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "activate-account-app",
-  templateUrl: "./activate-account.page.html",
-  styleUrls: ["./activate-account.page.scss"],
+    selector: "activate-account-app",
+    templateUrl: "./activate-account.page.html",
+    styleUrls: ["./activate-account.page.scss"],
+    standalone: false
 })
 export class ActivateAccountPage {
   public codeForm: FormGroup;

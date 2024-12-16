@@ -26,9 +26,10 @@ import { User } from "src/app/models/user";
 import { AuthService } from "src/app/services/auth.service";
 
 @Component({
-  selector: "story-modal",
-  templateUrl: "./story.modal.html",
-  styleUrls: ["./story.modal.scss"],
+    selector: "story-modal",
+    templateUrl: "./story.modal.html",
+    styleUrls: ["./story.modal.scss"],
+    standalone: false
 })
 export class StoryModal implements OnInit {
   @Input() slug: string;

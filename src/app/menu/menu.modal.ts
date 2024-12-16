@@ -9,9 +9,10 @@ import { UserService } from "../services/user.service";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
 @Component({
-  selector: "menu-modal",
-  templateUrl: "./menu.modal.html",
-  styleUrls: ["./menu.modal.scss"],
+    selector: "menu-modal",
+    templateUrl: "./menu.modal.html",
+    styleUrls: ["./menu.modal.scss"],
+    standalone: false
 })
 export class MenuModal implements OnInit {
   constructor(

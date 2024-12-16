@@ -11,9 +11,10 @@ import { StoryModal } from "../story-modal/story.modal";
 import { StorySliderModal } from "../story-slider/story-slider.modal";
 
 @Component({
-  selector: "app-story-list",
-  templateUrl: "./story-list.page.html",
-  styleUrls: ["./story-list.page.scss"],
+    selector: "app-story-list",
+    templateUrl: "./story-list.page.html",
+    styleUrls: ["./story-list.page.scss"],
+    standalone: false
 })
 export class StoryListPage implements OnInit {
   public stories: Story[];

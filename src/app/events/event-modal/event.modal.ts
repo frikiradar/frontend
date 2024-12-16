@@ -16,9 +16,10 @@ import { EventService } from "src/app/services/event.service";
 import { UtilsService } from "src/app/services/utils.service";
 
 @Component({
-  selector: "event-modal",
-  templateUrl: "./event.modal.html",
-  styleUrls: ["./event.modal.scss"],
+    selector: "event-modal",
+    templateUrl: "./event.modal.html",
+    styleUrls: ["./event.modal.scss"],
+    standalone: false
 })
 export class EventModal {
   @Input() event: Event;

@@ -11,9 +11,10 @@ import { UtilsService } from "../services/utils.service";
 import { EventModal } from "./event-modal/event.modal";
 
 @Component({
-  selector: "app-events",
-  templateUrl: "./events.page.html",
-  styleUrls: ["./events.page.scss"],
+    selector: "app-events",
+    templateUrl: "./events.page.html",
+    styleUrls: ["./events.page.scss"],
+    standalone: false
 })
 export class EventsPage implements OnInit {
   public type: "suggested" | "online" | "near" | "my" = "suggested";

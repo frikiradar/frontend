@@ -10,9 +10,10 @@ import { PageService } from "../services/page.service";
 import { Config, ConfigService } from "../services/config.service";
 
 @Component({
-  selector: "app-search",
-  templateUrl: "./search.page.html",
-  styleUrls: ["./search.page.scss"],
+    selector: "app-search",
+    templateUrl: "./search.page.html",
+    styleUrls: ["./search.page.scss"],
+    standalone: false
 })
 export class SearchPage implements OnInit {
   @ViewChild("searchBar", { static: true })

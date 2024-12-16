@@ -36,10 +36,11 @@ import { ChatModalComponent } from "../chat/chat-modal/chat-modal.component";
 import { PostModal } from "../post/post-modal/post.modal";
 
 @Component({
-  selector: "app-profile",
-  templateUrl: "./profile.page.html",
-  styleUrls: ["./profile.page.scss"],
-  animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])],
+    selector: "app-profile",
+    templateUrl: "./profile.page.html",
+    styleUrls: ["./profile.page.scss"],
+    animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])],
+    standalone: false
 })
 export class ProfilePage {
   public user: User;

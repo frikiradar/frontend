@@ -5,9 +5,10 @@ import { IonRange } from "@ionic/angular";
 import { UtilsService } from "../services/utils.service";
 
 @Component({
-  selector: "audio-player",
-  templateUrl: "./audio-player.component.html",
-  styleUrls: ["./audio-player.component.scss"]
+    selector: "audio-player",
+    templateUrl: "./audio-player.component.html",
+    styleUrls: ["./audio-player.component.scss"],
+    standalone: false
 })
 export class AudioPlayerComponent implements OnInit {
   @Input() src: string;

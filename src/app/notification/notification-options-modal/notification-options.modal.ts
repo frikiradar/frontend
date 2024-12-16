@@ -4,9 +4,10 @@ import { Component, Input, OnInit } from "@angular/core";
 import { Notification } from "src/app/models/notification";
 
 @Component({
-  selector: "app-notification-options-modal",
-  templateUrl: "./notification-options.modal.html",
-  styleUrls: ["./notification-options.modal.scss"],
+    selector: "app-notification-options-modal",
+    templateUrl: "./notification-options.modal.html",
+    styleUrls: ["./notification-options.modal.scss"],
+    standalone: false
 })
 export class NotificationOptionsModal {
   @Input() notification: Notification;

@@ -17,9 +17,10 @@ import { UserService } from "./../../services/user.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "change-username-modal",
-  templateUrl: "./change-username.modal.html",
-  styleUrls: ["./change-username.modal.scss"],
+    selector: "change-username-modal",
+    templateUrl: "./change-username.modal.html",
+    styleUrls: ["./change-username.modal.scss"],
+    standalone: false
 })
 export class ChangeUsernameModal {
   public usernameForm: FormGroup;

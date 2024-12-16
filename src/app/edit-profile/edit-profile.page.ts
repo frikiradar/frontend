@@ -29,9 +29,10 @@ import { Haptics } from "@capacitor/haptics";
 import { I18nService } from "../services/i18n.service";
 
 @Component({
-  selector: "app-edit-profile",
-  templateUrl: "./edit-profile.page.html",
-  styleUrls: ["./edit-profile.page.scss"],
+    selector: "app-edit-profile",
+    templateUrl: "./edit-profile.page.html",
+    styleUrls: ["./edit-profile.page.scss"],
+    standalone: false
 })
 export class EditProfilePage {
   get minage() {

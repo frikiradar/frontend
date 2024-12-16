@@ -15,9 +15,10 @@ import { UrlService } from "src/app/services/url.service";
 import { UserService } from "src/app/services/user.service";
 
 @Component({
-  selector: "app-banned-messages",
-  templateUrl: "./banned-messages.modal.html",
-  styleUrls: ["./banned-messages.modal.scss"],
+    selector: "app-banned-messages",
+    templateUrl: "./banned-messages.modal.html",
+    styleUrls: ["./banned-messages.modal.scss"],
+    standalone: false
 })
 export class BannedMessagesModal implements OnInit {
   @Input() id: User["id"];

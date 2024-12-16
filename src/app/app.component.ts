@@ -31,8 +31,9 @@ import { IntentService } from "./services/intent.service";
 import { UrlService } from "./services/url.service";
 
 @Component({
-  selector: "app-root",
-  templateUrl: "app.component.html",
+    selector: "app-root",
+    templateUrl: "app.component.html",
+    standalone: false
 })
 export class AppComponent {
   currentUser: User;

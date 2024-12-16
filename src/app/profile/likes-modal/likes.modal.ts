@@ -8,9 +8,10 @@ import { LikeService } from "src/app/services/like.service";
 import { NavService } from "src/app/services/navigation.service";
 
 @Component({
-  selector: "profile-likes-modal",
-  templateUrl: "./likes.modal.html",
-  styleUrls: ["./likes.modal.scss"],
+    selector: "profile-likes-modal",
+    templateUrl: "./likes.modal.html",
+    styleUrls: ["./likes.modal.scss"],
+    standalone: false
 })
 export class LikesModal {
   @Input() likes: { delivered: Like[]; received: Like[] };

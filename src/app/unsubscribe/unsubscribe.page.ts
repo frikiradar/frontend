@@ -5,9 +5,10 @@ import { Component, OnInit } from "@angular/core";
 import { I18nService } from "../services/i18n.service";
 
 @Component({
-  selector: "app-unsubscribe",
-  templateUrl: "./unsubscribe.page.html",
-  styleUrls: ["./unsubscribe.page.scss"],
+    selector: "app-unsubscribe",
+    templateUrl: "./unsubscribe.page.html",
+    styleUrls: ["./unsubscribe.page.scss"],
+    standalone: false
 })
 export class UnsubscribePage implements OnInit {
   constructor(

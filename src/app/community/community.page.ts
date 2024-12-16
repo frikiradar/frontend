@@ -14,9 +14,10 @@ import { PageService } from "../services/page.service";
 import { Page } from "../models/page";
 
 @Component({
-  selector: "app-community",
-  templateUrl: "./community.page.html",
-  styleUrls: ["./community.page.scss"],
+    selector: "app-community",
+    templateUrl: "./community.page.html",
+    styleUrls: ["./community.page.scss"],
+    standalone: false
 })
 export class CommunityPage {
   public stories: Story[];

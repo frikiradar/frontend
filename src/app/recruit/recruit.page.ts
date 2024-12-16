@@ -5,9 +5,10 @@ import { AuthService } from "../services/auth.service";
 import { NavService } from "../services/navigation.service";
 
 @Component({
-  selector: "recruit-modal",
-  templateUrl: "./recruit.page.html",
-  styleUrls: ["./recruit.page.scss"],
+    selector: "recruit-modal",
+    templateUrl: "./recruit.page.html",
+    styleUrls: ["./recruit.page.scss"],
+    standalone: false
 })
 export class RecruitPage implements OnInit {
   public user: User;

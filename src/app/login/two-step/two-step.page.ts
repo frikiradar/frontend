@@ -11,9 +11,10 @@ import { AuthService } from "../../services/auth.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "two-step-app",
-  templateUrl: "./two-step.page.html",
-  styleUrls: ["./two-step.page.scss"],
+    selector: "two-step-app",
+    templateUrl: "./two-step.page.html",
+    styleUrls: ["./two-step.page.scss"],
+    standalone: false
 })
 export class TwoStepPage implements OnInit {
   public codeForm: FormGroup;

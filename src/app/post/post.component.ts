@@ -30,9 +30,10 @@ import { NavService } from "../services/navigation.service";
 import { Meta, Title } from "@angular/platform-browser";
 
 @Component({
-  selector: "app-post",
-  templateUrl: "./post.component.html",
-  styleUrls: ["./post.component.scss"],
+    selector: "app-post",
+    templateUrl: "./post.component.html",
+    styleUrls: ["./post.component.scss"],
+    standalone: false
 })
 export class PostComponent {
   @Output() deletePost: EventEmitter<Story> = new EventEmitter();

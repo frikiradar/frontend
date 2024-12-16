@@ -16,9 +16,10 @@ import { UserService } from "./../../services/user.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "change-password-modal",
-  templateUrl: "./change-password.modal.html",
-  styleUrls: ["./change-password.modal.scss"],
+    selector: "change-password-modal",
+    templateUrl: "./change-password.modal.html",
+    styleUrls: ["./change-password.modal.scss"],
+    standalone: false
 })
 export class ChangePasswordModal {
   public passForm: FormGroup;

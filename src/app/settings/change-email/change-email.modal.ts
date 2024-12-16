@@ -17,9 +17,10 @@ import { UserService } from "./../../services/user.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "change-email-modal",
-  templateUrl: "./change-email.modal.html",
-  styleUrls: ["./change-email.modal.scss"],
+    selector: "change-email-modal",
+    templateUrl: "./change-email.modal.html",
+    styleUrls: ["./change-email.modal.scss"],
+    standalone: false
 })
 export class ChangeEmailModal {
   public emailForm: FormGroup;

@@ -9,9 +9,10 @@ import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth.service";
 
 @Component({
-  selector: "app-story-mini-slider",
-  templateUrl: "./story-mini-slider.component.html",
-  styleUrls: ["./story-mini-slider.component.scss"],
+    selector: "app-story-mini-slider",
+    templateUrl: "./story-mini-slider.component.html",
+    styleUrls: ["./story-mini-slider.component.scss"],
+    standalone: false
 })
 export class StoryMiniSliderComponent {
   @Output() refresh: EventEmitter<void> = new EventEmitter();

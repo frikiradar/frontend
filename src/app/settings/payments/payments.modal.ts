@@ -5,9 +5,10 @@ import { Payment } from "src/app/models/payment";
 import { PaymentService } from "src/app/services/payment.service";
 
 @Component({
-  selector: "payments-modal",
-  templateUrl: "./payments.modal.html",
-  styleUrls: ["./payments.modal.scss"],
+    selector: "payments-modal",
+    templateUrl: "./payments.modal.html",
+    styleUrls: ["./payments.modal.scss"],
+    standalone: false
 })
 export class PaymentsModal implements OnInit {
   payments: Payment[];

@@ -18,9 +18,10 @@ import { AuthService } from "./../../services/auth.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "forgot-password-modal",
-  templateUrl: "./forgot-password.modal.html",
-  styleUrls: ["./forgot-password.modal.scss"],
+    selector: "forgot-password-modal",
+    templateUrl: "./forgot-password.modal.html",
+    styleUrls: ["./forgot-password.modal.scss"],
+    standalone: false
 })
 export class ForgotPasswordModal {
   public requestForm: FormGroup;

@@ -32,9 +32,10 @@ import { UnlimitedModal } from "../unlimited/unlimited.modal";
 import { I18nService } from "../services/i18n.service";
 
 @Component({
-  selector: "app-radar",
-  templateUrl: "./radar.page.html",
-  styleUrls: ["./radar.page.scss"],
+    selector: "app-radar",
+    templateUrl: "./radar.page.html",
+    styleUrls: ["./radar.page.scss"],
+    standalone: false
 })
 export class RadarPage {
   @ViewChild("range", { static: false })

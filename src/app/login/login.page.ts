@@ -22,9 +22,10 @@ import { GoogleAuthService } from "../services/google-auth.service";
 import { I18nService } from "../services/i18n.service";
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.page.html",
-  styleUrls: ["./login.page.scss"],
+    selector: "app-login",
+    templateUrl: "./login.page.html",
+    styleUrls: ["./login.page.scss"],
+    standalone: false
 })
 export class LoginPage {
   public loginForm: FormGroup;

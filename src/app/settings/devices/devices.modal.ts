@@ -13,9 +13,10 @@ import { DeviceService } from "./../../services/device.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "devices-modal",
-  templateUrl: "./devices.modal.html",
-  styleUrls: ["./devices.modal.scss"],
+    selector: "devices-modal",
+    templateUrl: "./devices.modal.html",
+    styleUrls: ["./devices.modal.scss"],
+    standalone: false
 })
 export class DevicesSettingsModal implements OnInit {
   public devices: Device[];

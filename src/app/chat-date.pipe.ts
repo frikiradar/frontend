@@ -3,7 +3,8 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { I18nService } from "./services/i18n.service";
 
 @Pipe({
-  name: "chatDate",
+    name: "chatDate",
+    standalone: false
 })
 export class ChatDatePipe implements PipeTransform {
   constructor(private i18n: I18nService) {} // Inyecta el servicio de i18n

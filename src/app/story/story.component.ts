@@ -31,10 +31,11 @@ import { UrlService } from "../services/url.service";
 import { UtilsService } from "../services/utils.service";
 
 @Component({
-  selector: "app-story",
-  templateUrl: "./story.component.html",
-  styleUrls: ["./story.component.scss"],
-  animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])],
+    selector: "app-story",
+    templateUrl: "./story.component.html",
+    styleUrls: ["./story.component.scss"],
+    animations: [trigger("pulse", [transition("* => *", useAnimation(pulse))])],
+    standalone: false
 })
 export class StoryComponent {
   @Input() story: Story;

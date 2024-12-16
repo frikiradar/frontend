@@ -40,9 +40,10 @@ import { Subscription } from "rxjs";
 import { PushService } from "src/app/services/push.service";
 
 @Component({
-  selector: "app-chat-modal",
-  templateUrl: "./chat-modal.component.html",
-  styleUrls: ["./chat-modal.component.scss"],
+    selector: "app-chat-modal",
+    templateUrl: "./chat-modal.component.html",
+    styleUrls: ["./chat-modal.component.scss"],
+    standalone: false
 })
 export class ChatModalComponent implements OnInit {
   @Output() backToList = new EventEmitter();

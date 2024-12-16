@@ -27,9 +27,10 @@ import { UtilsService } from "src/app/services/utils.service";
 declare var EmojiMart: any; // Esto declara EmojiMart para TypeScript
 
 @Component({
-  selector: "post-modal",
-  templateUrl: "./post.modal.html",
-  styleUrls: ["./post.modal.scss"],
+    selector: "post-modal",
+    templateUrl: "./post.modal.html",
+    styleUrls: ["./post.modal.scss"],
+    standalone: false
 })
 export class PostModal {
   @Input() public slug: string;

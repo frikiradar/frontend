@@ -7,9 +7,10 @@ import { NavService } from "src/app/services/navigation.service";
 import { StoryService } from "src/app/services/story.service";
 
 @Component({
-  selector: "post-page",
-  templateUrl: "./post.page.html",
-  styleUrls: ["./post.page.scss"],
+    selector: "post-page",
+    templateUrl: "./post.page.html",
+    styleUrls: ["./post.page.scss"],
+    standalone: false
 })
 export class PostPage {
   @Input() id: Story["id"];

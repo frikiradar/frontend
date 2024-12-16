@@ -28,9 +28,10 @@ import { NavService } from "src/app/services/navigation.service";
 SwiperCore.use([SwiperKeyboard, Pagination, Autoplay, Mousewheel]);
 
 @Component({
-  selector: "story-slider-modal",
-  templateUrl: "./story-slider.modal.html",
-  styleUrls: ["./story-slider.modal.scss"],
+    selector: "story-slider-modal",
+    templateUrl: "./story-slider.modal.html",
+    styleUrls: ["./story-slider.modal.scss"],
+    standalone: false
 })
 export class StorySliderModal implements OnInit {
   @Input() stories: Story[];

@@ -7,7 +7,8 @@ import {
 } from "@angular/core";
 
 @Directive({
-  selector: "img[default]",
+    selector: "img[default]",
+    standalone: false
 })
 export class ImagePreloadDirective {
   constructor(

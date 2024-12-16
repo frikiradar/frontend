@@ -2,9 +2,10 @@ import { Component } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 
 @Component({
-  selector: "credits-modal",
-  templateUrl: "./credits.modal.html",
-  styleUrls: ["./credits.modal.scss"],
+    selector: "credits-modal",
+    templateUrl: "./credits.modal.html",
+    styleUrls: ["./credits.modal.scss"],
+    standalone: false
 })
 export class CreditsModal {
   constructor(private modalController: ModalController) {}

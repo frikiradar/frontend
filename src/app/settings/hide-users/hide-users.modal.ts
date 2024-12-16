@@ -5,9 +5,10 @@ import { UserService } from "../../services/user.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "hide-users-modal",
-  templateUrl: "./hide-users.modal.html",
-  styleUrls: ["./hide-users.modal.scss"],
+    selector: "hide-users-modal",
+    templateUrl: "./hide-users.modal.html",
+    styleUrls: ["./hide-users.modal.scss"],
+    standalone: false
 })
 export class HideUsersModal implements OnInit {
   public users: User[];

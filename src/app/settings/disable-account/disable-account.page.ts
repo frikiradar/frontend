@@ -18,9 +18,10 @@ import { NavService } from "src/app/services/navigation.service";
 import { I18nService } from "src/app/services/i18n.service";
 
 @Component({
-  selector: "app-disable-account",
-  templateUrl: "./disable-account.page.html",
-  styleUrls: ["./disable-account.page.scss"],
+    selector: "app-disable-account",
+    templateUrl: "./disable-account.page.html",
+    styleUrls: ["./disable-account.page.scss"],
+    standalone: false
 })
 export class DisableAccountPage {
   public disableForm: FormGroup;

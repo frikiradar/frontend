@@ -7,9 +7,10 @@ import { ModalController } from "@ionic/angular";
 import { UnlimitedModal } from "../unlimited/unlimited.modal";
 
 @Component({
-  selector: "app-ad",
-  templateUrl: "./ad.component.html",
-  styleUrls: ["./ad.component.scss"],
+    selector: "app-ad",
+    templateUrl: "./ad.component.html",
+    styleUrls: ["./ad.component.scss"],
+    standalone: false
 })
 export class AdComponent {
   @Input() ad: Ad;

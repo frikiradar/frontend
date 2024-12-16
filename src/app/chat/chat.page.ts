@@ -15,9 +15,10 @@ import {
 } from "../services/notification.service";
 
 @Component({
-  selector: "app-chat",
-  templateUrl: "./chat.page.html",
-  styleUrls: ["./chat.page.scss"],
+    selector: "app-chat",
+    templateUrl: "./chat.page.html",
+    styleUrls: ["./chat.page.scss"],
+    standalone: false
 })
 export class ChatPage implements OnInit {
   @Input() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();

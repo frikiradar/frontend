@@ -10,9 +10,10 @@ import { UserService } from "src/app/services/user.service";
 import { StoryModal } from "../story-modal/story.modal";
 
 @Component({
-  selector: "story-page",
-  templateUrl: "./story.page.html",
-  styleUrls: ["./story.page.scss"],
+    selector: "story-page",
+    templateUrl: "./story.page.html",
+    styleUrls: ["./story.page.scss"],
+    standalone: false
 })
 export class StoryPage {
   @Input() id: Story["id"];

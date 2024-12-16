@@ -11,9 +11,10 @@ import { UrlService } from "../services/url.service";
 import { NavService } from "../services/navigation.service";
 
 @Component({
-  selector: "app-notification",
-  templateUrl: "./notification.page.html",
-  styleUrls: ["./notification.page.scss"],
+    selector: "app-notification",
+    templateUrl: "./notification.page.html",
+    styleUrls: ["./notification.page.scss"],
+    standalone: false
 })
 export class NotificationPage implements OnInit {
   public notifications: Notification[] = undefined;

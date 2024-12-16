@@ -17,9 +17,10 @@ import { UtilsService } from "../services/utils.service";
 import { I18nService } from "../services/i18n.service";
 
 @Component({
-  selector: "options-popover",
-  templateUrl: "./options-popover.html",
-  styleUrls: ["./options-popover.scss"],
+    selector: "options-popover",
+    templateUrl: "./options-popover.html",
+    styleUrls: ["./options-popover.scss"],
+    standalone: false
 })
 export class OptionsPopover {
   public user: User;

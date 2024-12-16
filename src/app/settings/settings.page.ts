@@ -20,9 +20,10 @@ import { ConfigService, Config } from "../services/config.service";
 import { I18nService } from "../services/i18n.service";
 
 @Component({
-  selector: "app-settings",
-  templateUrl: "./settings.page.html",
-  styleUrls: ["./settings.page.scss"],
+    selector: "app-settings",
+    templateUrl: "./settings.page.html",
+    styleUrls: ["./settings.page.scss"],
+    standalone: false
 })
 export class SettingsPage implements OnInit {
   public user: User;

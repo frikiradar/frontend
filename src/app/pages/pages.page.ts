@@ -7,9 +7,10 @@ import { NavService } from "../services/navigation.service";
 import { PageService } from "../services/page.service";
 
 @Component({
-  selector: "app-pages",
-  templateUrl: "./pages.page.html",
-  styleUrls: ["./pages.page.scss"],
+    selector: "app-pages",
+    templateUrl: "./pages.page.html",
+    styleUrls: ["./pages.page.scss"],
+    standalone: false
 })
 export class PagesPage implements OnInit {
   public pages: Page[];

@@ -14,9 +14,10 @@ import { UrlService } from "src/app/services/url.service";
 import { AuthService } from "../../services/auth.service";
 
 @Component({
-  selector: "banned-account-app",
-  templateUrl: "./banned-account.page.html",
-  styleUrls: ["./banned-account.page.scss"],
+    selector: "banned-account-app",
+    templateUrl: "./banned-account.page.html",
+    styleUrls: ["./banned-account.page.scss"],
+    standalone: false
 })
 export class BannedAccountPage {
   public chatForm: FormGroup;

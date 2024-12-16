@@ -14,41 +14,30 @@ import { UtilsService } from "../services/utils.service";
 SwiperCore.use([Keyboard, Mousewheel, Zoom]);
 
 @Component({
-  selector: "image-viewer-modal",
-  templateUrl: "./image-viewer.modal.html",
-  styleUrls: ["./image-viewer.modal.scss"],
-  animations: [
-    trigger("slideUp", [
-      state(
-        "hide",
-        style({
-          transform: "translateY(-100%)",
-        })
-      ),
-      state(
-        "show",
-        style({
-          transform: "translateY(0)",
-        })
-      ),
-      transition("show <=> hide", animate("0.25s ease-in-out")),
-    ]),
-    trigger("slideDown", [
-      state(
-        "hide",
-        style({
-          transform: "translateY(100%)",
-        })
-      ),
-      state(
-        "show",
-        style({
-          transform: "translateY(0)",
-        })
-      ),
-      transition("show <=> hide", animate("0.25s ease-in-out")),
-    ]),
-  ],
+    selector: "image-viewer-modal",
+    templateUrl: "./image-viewer.modal.html",
+    styleUrls: ["./image-viewer.modal.scss"],
+    animations: [
+        trigger("slideUp", [
+            state("hide", style({
+                transform: "translateY(-100%)",
+            })),
+            state("show", style({
+                transform: "translateY(0)",
+            })),
+            transition("show <=> hide", animate("0.25s ease-in-out")),
+        ]),
+        trigger("slideDown", [
+            state("hide", style({
+                transform: "translateY(100%)",
+            })),
+            state("show", style({
+                transform: "translateY(0)",
+            })),
+            transition("show <=> hide", animate("0.25s ease-in-out")),
+        ]),
+    ],
+    standalone: false
 })
 export class ImageViewerModal {
   @Input() params: {

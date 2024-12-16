@@ -18,9 +18,10 @@ import { I18nService } from "src/app/services/i18n.service";
 import { App } from "@capacitor/app";
 
 @Component({
-  selector: "app-chat-list",
-  templateUrl: "./chat-list.component.html",
-  styleUrls: ["./chat-list.component.scss"],
+    selector: "app-chat-list",
+    templateUrl: "./chat-list.component.html",
+    styleUrls: ["./chat-list.component.scss"],
+    standalone: false
 })
 export class ChatListComponent {
   @Output() userChangeEvent: EventEmitter<User["id"]> = new EventEmitter();

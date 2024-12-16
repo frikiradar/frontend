@@ -5,9 +5,10 @@ import { Config, ConfigService } from "../services/config.service";
 import { NavService } from "../services/navigation.service";
 
 @Component({
-  selector: "app-rules",
-  templateUrl: "./rules.page.html",
-  styleUrls: ["./rules.page.scss"],
+    selector: "app-rules",
+    templateUrl: "./rules.page.html",
+    styleUrls: ["./rules.page.scss"],
+    standalone: false
 })
 export class RulesPage implements OnInit {
   public accepted = false;

@@ -17,9 +17,10 @@ import { Payment } from "../models/payment";
 import { I18nService } from "../services/i18n.service";
 
 @Component({
-  selector: "unlimited-modal",
-  templateUrl: "./unlimited.modal.html",
-  styleUrls: ["./unlimited.modal.scss"],
+    selector: "unlimited-modal",
+    templateUrl: "./unlimited.modal.html",
+    styleUrls: ["./unlimited.modal.scss"],
+    standalone: false
 })
 export class UnlimitedModal {
   @Input() topic: "ad" | "location" | "radar" | "filter" | "theme" | "default" =

@@ -8,9 +8,10 @@ import { BannedUsersModal } from "./banned-users/banned-users.modal";
 import { GlobalNotificationsModal } from "./global-notifications/global-notifications.modal";
 
 @Component({
-  selector: "app-admin",
-  templateUrl: "./admin.page.html",
-  styleUrls: ["./admin.page.scss"],
+    selector: "app-admin",
+    templateUrl: "./admin.page.html",
+    styleUrls: ["./admin.page.scss"],
+    standalone: false
 })
 export class AdminPage implements OnInit {
   public user: User;

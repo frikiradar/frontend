@@ -14,9 +14,10 @@ import { Page } from "src/app/models/page";
 import { User } from "src/app/models/user";
 
 @Component({
-  selector: "app-event",
-  templateUrl: "./event.page.html",
-  styleUrls: ["./event.page.scss"],
+    selector: "app-event",
+    templateUrl: "./event.page.html",
+    styleUrls: ["./event.page.scss"],
+    standalone: false
 })
 export class EventPage implements OnInit {
   public event: Event;
