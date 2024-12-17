@@ -11,18 +11,18 @@ PODS:
     - Capacitor
   - CapacitorBrowser (6.0.4):
     - Capacitor
-  - CapacitorCamera (6.1.1):
+  - CapacitorCamera (6.1.2):
     - Capacitor
   - CapacitorClipboard (6.0.2):
     - Capacitor
   - CapacitorCommunityInAppReview (6.0.0):
     - Capacitor
   - CapacitorCordova (6.2.0)
-  - CapacitorDevice (6.0.1):
+  - CapacitorDevice (6.0.2):
     - Capacitor
-  - CapacitorDialog (6.0.1):
+  - CapacitorDialog (6.0.2):
     - Capacitor
-  - CapacitorFilesystem (6.0.1):
+  - CapacitorFilesystem (6.0.2):
     - Capacitor
   - CapacitorFirebaseAnalytics (6.2.0):
     - Capacitor
@@ -149,7 +149,7 @@ PODS:
   - RevenuecatPurchasesCapacitor (9.0.8):
     - Capacitor
     - PurchasesHybridCommon (= 13.12.0)
-  - SendIntent (6.0.2):
+  - SendIntent (6.0.3):
     - Capacitor
 
 DEPENDENCIES:
@@ -265,13 +265,13 @@ SPEC CHECKSUMS:
   Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
   CapacitorApp: 2a8c3a0b0814322e5e6e15fe595f02c3808f0f8b
   CapacitorBrowser: ef0529d16cd8839281050c350e7bbee4f5c6d65f
-  CapacitorCamera: b9904b48258a91a48930e72a400638a5fc223b27
+  CapacitorCamera: 9052bd3f464f135ba983feccd8ac1266272f0549
   CapacitorClipboard: 55e0a514f1e97b1409d533266c119dcbff3e78c3
   CapacitorCommunityInAppReview: c69a9392f39a10f28092d823cfa979637f4fa079
   CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
-  CapacitorDevice: 7097a1deb4224b77fd13a6e60a355d0062a5d772
-  CapacitorDialog: ad752191fdb22a8d0ac199b0754b8a021d86dbf9
-  CapacitorFilesystem: 37fb3aa5c945b4539ab11c74a5c57925a302bf24
+  CapacitorDevice: 1a215717f0b5061503b21a03508b0ec458a57d78
+  CapacitorDialog: e966e2261e1c74a8a502e610dd66b4f97ec6fcca
+  CapacitorFilesystem: c832a3f6d4870c3872688e782ae8e33665e6ecbf
   CapacitorFirebaseAnalytics: a9558546924f35870dd4cb55c694faf9920aa2ff
   CapacitorFirebaseMessaging: 4bb5b6311580e50dd152412276c9249d43de83c7
   CapacitorGeolocation: d994ee64ee41909e2089e575c9d3a976007c2812
@@ -304,7 +304,7 @@ SPEC CHECKSUMS:
   PurchasesHybridCommon: 34be8fccff5e253c67ab624965e2cbda7f640632
   RevenueCat: 459e3e60c895e20c0e7a2d767bece11140854306
   RevenuecatPurchasesCapacitor: 0f77c93cc0cca1262d21c46cf827891039b3f6da
-  SendIntent: 4e2c74ca3e147bce2b4a8ae49813e74e9e3b1161
+  SendIntent: 11aca22f5a2992dfd0bb661db87af3891a32006b
 
 PODFILE CHECKSUM: f9f00d701a00119e5da40b0b6864740b05ff6598
 
