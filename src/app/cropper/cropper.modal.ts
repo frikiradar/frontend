@@ -9,10 +9,11 @@ import { SharedModule } from "../shared/shared.module";
 import { CommonModule } from "@angular/common";
 
 @Component({
-    selector: "cropper-modal",
-    templateUrl: "./cropper.modal.html",
-    styleUrls: ["./cropper.modal.scss"],
-    imports: [ImageCropperComponent, SharedModule, IonicModule, CommonModule]
+  selector: "cropper-modal",
+  templateUrl: "./cropper.modal.html",
+  styleUrls: ["./cropper.modal.scss"],
+  imports: [ImageCropperComponent, SharedModule, IonicModule, CommonModule],
+  standalone: true,
 })
 export class CropperModal implements OnInit {
   @Input() src: string;
