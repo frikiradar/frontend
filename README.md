@@ -38,10 +38,6 @@ La web corporativa estuvo en frikiradar.com y la aplicación PWA en frikiradar.a
 ![Logotipo](src/assets/img/logo/logo-horizontal.png)
 
 ### Capturas de pantalla
-Puedes añadir aquí hasta 4 capturas representativas del proyecto en la carpeta que prefieras:
-
-(puedes copiar este bloque HTML en el README)
-
 <p align="center"> <a href="src/assets/screenshots/captura1.png" target="_blank"><img src="src/assets/screenshots/captura1.png" width="200"/></a> <a href="src/assets/screenshots/captura2.png" target="_blank"><img src="src/assets/screenshots/captura2.png" width="200"/></a> <a href="src/assets/screenshots/captura3.png" target="_blank"><img src="src/assets/screenshots/captura3.png" width="200"/></a> <a href="src/assets/screenshots/captura4.png" target="_blank"><img src="src/assets/screenshots/captura4.png" width="200"/></a> </p>
 
 El proyecto integraba tecnología PWA y notificaciones push, permitiendo instalación en dispositivos y experiencia mejorada en móviles.
