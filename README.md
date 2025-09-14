@@ -44,4 +44,4 @@ El proyecto integraba tecnología PWA y notificaciones push, permitiendo instala
 
 ## Contacto
 Alberto Oishii (albertooishii@gmail.com)
-Este proyecto es solo para consulta y aprendizaje. No se recomienda su uso comercial ni productivo.
+Este proyecto es solo para consulta y aprendizaje. No se permite su uso comercial ni productivo.
