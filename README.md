@@ -1,4 +1,9 @@
 # Frikiradar Frontend
+
+![Licencia CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)
+![Estado del proyecto: Descontinuado](https://img.shields.io/badge/Estado-Descontinuado-red)
+![Framework principal: Angular](https://img.shields.io/badge/Framework-Angular-blue)
+
 Proyecto histórico, actualmente sin soporte activo. Este repositorio se conserva solo como referencia y consulta.
 
 ## ¿Qué es Frikiradar?
@@ -43,5 +48,18 @@ La web corporativa estuvo en frikiradar.com y la aplicación PWA en frikiradar.a
 El proyecto integraba tecnología PWA y notificaciones push, permitiendo instalación en dispositivos y experiencia mejorada en móviles.
 
 ## Contacto
-Alberto Oishii (albertooishii@gmail.com)
-Este proyecto es solo para consulta y aprendizaje. No se permite su uso comercial ni productivo.
+- Alberto Oishii (albertooishii@gmail.com)
+
+## Licencia
+
+Este proyecto es solo para **consulta y aprendizaje**.  
+No se permite su uso comercial ni productivo.  
+
+Se publica bajo la licencia **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**.  
+
+👉 Esto significa que puedes consultar, compartir y adaptar el código únicamente para fines **no comerciales**, siempre que:  
+- Des crédito al autor original.  
+- Indiques si realizas cambios.  
+- Compartas las obras derivadas bajo la misma licencia.  
+
+📌 Queda prohibido el uso de este proyecto con fines comerciales o en entornos productivos.
